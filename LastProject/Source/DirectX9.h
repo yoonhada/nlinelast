@@ -20,8 +20,8 @@ public:
 	HRESULT	Create( HWND a_hWnd ); ///< 초기화
 	VOID	Release(); ///< 오브젝트들 제거
 
-	HRESULT beginScene(); ///< 렌더링 시작
-	HRESULT	endScene(); ///< 렌더링 끝
+	VOID beginScene(); ///< 렌더링 시작
+	VOID endScene(); ///< 렌더링 끝
 
 	LPDIRECT3DDEVICE9 GetDevice()	{ return m_pD3dDevice; } ///< 디바이스를 얻어낸다.
 	D3DPRESENT_PARAMETERS GetD3dpp() { return m_D3dpp; } ///< 디바이스 구조체 반환

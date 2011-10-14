@@ -153,8 +153,6 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 				m_bRbutton = FALSE;
 			}
 
-			CDebugConsole::GetInstance()->Messagef( L"%d\n", m_bRbutton );
-
 			if( GetAsyncKeyState( VK_END ) )
 			{
 				m_bENdbutton = TRUE;

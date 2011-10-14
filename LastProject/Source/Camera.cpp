@@ -23,6 +23,7 @@ VOID CCamera::Clear()
 	m_vEye		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vDir		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_fZoom		= 15.0f;
+	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
 	m_fPitch	= 0.0f;
 	m_fLock		= (D3DX_PI/2) - 0.05f;
@@ -113,4 +114,100 @@ D3DXVECTOR3 CCamera::SpringDamp(
 	vDisp *= fForceMag * CFrequency::GetInstance()->getFrametime();
 
 	return a_vCurPos += vDisp;
+}
+
+VOID CCamera::UpdateMatrix()
+{
+	D3DXMATRIXA16 matVPInv;
+
+	D3DXMatrixMultiply( &matVPInv, &m_matView, CMatrices::GetInstance()->Get_matProj() );
+	D3DXMatrixInverse( &matVPInv, NULL, &matVPInv );
+
+	D3DXVECTOR3 vZ = D3DXVECTOR3(m_matView._13, m_matView._23, m_matView._33);
+	FLOAT		fNear = 0.1f;
+	FLOAT		fFar	  = 10000.0f;
+	D3DXVECTOR3 vEye = m_vEye;
+
+	// Near
+	D3DXVECTOR3 vNear;
+	FLOAT		fDNear;
+
+	vNear = -vZ;
+	fDNear = -D3DXVec3Dot( &vNear, &vEye ) + fNear;
+	m_Frst[1] = D3DXPLANE( vNear.x, vNear.y, vNear.z, fDNear );
+
+	// Far
+	D3DXVECTOR3 vFar;
+	FLOAT		fDfar;
+
+	vFar = vZ;
+	fDfar = -D3DXVec3Dot( &vFar, &vEye ) - fFar;
+	m_Frst[1] = D3DXPLANE( vFar.x, vFar.y, vFar.z, fDfar );
+
+	// Left, Right, Up, Down
+	D3DXVECTOR3 vPyr[4];
+	vPyr[0] = D3DXVECTOR3( -1.0f, -1.0f, 0.0f );
+	vPyr[1] = D3DXVECTOR3( -1.0f,  1.0f, 0.0f );
+	vPyr[2] = D3DXVECTOR3(  1.0f,  1.0f, 0.0f );
+	vPyr[3] = D3DXVECTOR3(  1.0f, -1.0f, 0.0f );
+
+	// UnProjection, UnView
+	for( INT Loop=0; Loop<4; ++Loop )
+	{
+		D3DXVec3TransformCoord( &vPyr[Loop], &vPyr[Loop], &matVPInv );
+	}
+
+	// 얻어진 월드 좌표로 프러스텀 평면 만들기, 벡터는 안에서 밖으로
+	D3DXPlaneFromPoints( &m_Frst[2], vPyr+0, vPyr+1, &vEye ); ///< left
+	D3DXPlaneFromPoints( &m_Frst[3], vPyr+2, vPyr+3, &vEye ); ///< right
+	D3DXPlaneFromPoints( &m_Frst[4], vPyr+1, vPyr+2, &vEye ); ///< up
+	D3DXPlaneFromPoints( &m_Frst[5], vPyr+3, vPyr+0, &vEye ); ///< down
+
+}
+
+BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera )
+{
+	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), a_vPosCamera);
+	std::vector<CBoundBox*>::iterator Iter;
+
+	BOOL bColl = TRUE;
+	if ( vecBoundBox )
+	{
+		int i = 0;
+		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
+		{
+			if( CPhysics::GetInstance()->Collision( a_vPosChar, a_vPosCamera, ( *Iter ) ) )
+			{
+				bColl = FALSE;
+				break;
+			}
+		}
+	}
+
+	return bColl;
+}
+
+VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera )
+{
+	if ( Collision( a_vPosChar, a_vPosCamera ) == FALSE )
+	{
+		if(m_fZoom > 15.0f )
+		{
+			m_fZoomReduce += 1.0f;
+		
+
+			m_fZoom -= m_fZoomReduce;
+		}
+
+		SetCamera();
+
+		CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
+	}
+	else
+	{
+		m_fZoom += m_fZoomReduce;
+		m_fZoomReduce = 0.0f;
+	}
+
+	//CDebugConsole::GetInstance()->Messagef( L"OUT : %f / %f\n", m_fZoomReduce, m_fZoom );
 }

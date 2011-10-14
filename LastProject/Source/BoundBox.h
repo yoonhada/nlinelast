@@ -7,14 +7,14 @@
 
 #pragma once
 
-class CCharactor;
-
 /**
 @class	CBoundBox
 @date	2011/09/20
 @author	yoonhada@gmail.com	
 @brief	충돌 클래스
 */
+class CCharactor;
+
 class CBoundBox : public IObject
 {
 public:
@@ -24,22 +24,29 @@ public:
 	CBoundBox(CCharactor* = NULL);
 	virtual ~CBoundBox(void);
 
-	VOID Clear()						{};
+	VOID Clear();
 	HRESULT Create()					{ return S_OK; }
 	HRESULT Release()					{ return S_OK; }
 	VOID Update()						{};
 	VOID Render()						{};
 
 	// Get
-	RECT GetRect();
+	FRECT GetFRect();
 	FLOAT GetWidth();
 	FLOAT GetHeight();
-	D3DXVECTOR3 GetPosition();
+	D3DXVECTOR3 GetPosition(INT = -1);
+	D3DXVECTOR3 GetAxisDir(INT n)		{ return m_vAxisDir[n]; }
+	D3DXMATRIXA16 GetAxisMat();
+
 	FLOAT GetSize(INT n);
+	FLOAT GetRadius();
+	FLOAT GetRadiusLong();
+	FLOAT GetRadiusShort();
 
 	// Set
 	VOID SetSize(INT n, float f)		{ m_fSize[n] = f; }
-	VOID SetPosition(D3DXVECTOR3 v)		{ m_vPosition = v; }		///< 중심좌표
+	VOID SetPosition(D3DXVECTOR3 v)		{ m_vPosition = v; }	///< 중심좌표
+	VOID SetAngle(FLOAT fAngle);								///< y축회전
 
 private:
 	CCharactor * m_pCharactors;

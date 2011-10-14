@@ -7,12 +7,22 @@
 #pragma once
 
 class CBoundBox;
+
+typedef struct _FRECT
+{
+	FLOAT left;
+	FLOAT top;
+	FLOAT right;
+	FLOAT bottom;
+} FRECT;
+
+
 class CTree : public CSingleton<CTree>
 {
 	friend class CSingleton<CTree>;
 	struct NODE
 	{
-		enum { TL, TR, BL, BR };
+		enum { LT, RT, LB, RB };
 		NODE* _children[4];
 		D3DXVECTOR3 _pos[4];
 
@@ -20,16 +30,12 @@ class CTree : public CSingleton<CTree>
 
 		NODE()
 		{ 
-			_children[TR] = _children[TL] = _children[BL] = _children[BR] = NULL; 
+			_children[RT] = _children[LT] = _children[LB] = _children[RB] = NULL; 
 			ZeroMemory( &_children, sizeof(_children) );
 		}
-		RECT GetRect()	
+		FRECT GetRect()	
 		{
-			RECT rect = {
-				static_cast< LONG >( _pos[0].x), 
-				static_cast< LONG >( _pos[0].z), 
-				static_cast< LONG >( _pos[3].x), 
-				static_cast< LONG >( _pos[3].z) };
+			FRECT rect = { _pos[0].x, _pos[0].z, _pos[3].x, _pos[3].z };
 			return rect;
 		}
 	};
@@ -37,6 +43,8 @@ class CTree : public CSingleton<CTree>
 private:	
 	NODE * m_pRoot;		///< 루트
 	NODE * m_pCurr;		///< 커서 
+
+	std::vector <CBoundBox*> _data;
 
 	VOID CreateChild( NODE *pNode, FLOAT fLeft, FLOAT fTop, FLOAT fRight, FLOAT fBottom, INT nDeep );
 	BOOL IsRect( NODE *, CBoundBox *);
@@ -63,7 +71,7 @@ public:
 	HRESULT Create( FLOAT fRange, INT nDeep );
 	VOID InsertObject( NODE *pNode, CBoundBox * pCube );
 	VOID RemoveObject( NODE *pNode, CBoundBox * pCube );
-	std::vector <CBoundBox*> * GetVector( NODE *pNode, D3DXVECTOR3 vPos );
-
-	std::vector <CBoundBox*> _data;
+	VOID RemoveAll( );
+	std::vector <CBoundBox*> * GetMapVector( NODE *pNode, D3DXVECTOR3 vPos );
+	std::vector <CBoundBox*> * GetChaVector(  )		{ return &_data; }
 };

@@ -129,7 +129,7 @@ VOID CMainManage::CreateCharactor()
 		else
 			m_pCharactors[Loop].UpdateByValue( vec[Loop], fYawZero + Loop );
 
-		CTree::GetInstance()->_data.push_back( m_pCharactors[Loop].GetBoundBox() );
+		CTree::GetInstance()->GetChaVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 
 		D3DXVECTOR3 vec1 = m_pCharactors[Loop].GetBoundBox()->GetPosition();
 	}
@@ -219,6 +219,8 @@ VOID	CMainManage::Update()
 	m_pCamera->SetView( m_pCharactors[0].Get_CharaPos(), m_pCharactors[0].Get_PreControl(), 10.0f, fZoom, 
 		m_pCharactors[0].Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
+
+	m_pCamera->CheckObjectCollision( m_pCharactors[0].Get_CharaPos(), m_pCamera->GetEye() );
 
 	FLOAT fYawZero = 1.0f;
 
