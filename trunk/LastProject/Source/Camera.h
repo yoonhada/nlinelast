@@ -30,10 +30,14 @@ public:
 
 	D3DXMATRIXA16*	GetView()		{ return &m_matView; }
 	D3DXMATRIXA16*	GetInvView()	{ return &m_matInvView; }
+	VOID UpdateMatrix();
+	
+	VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera );
 
-protected:
+private:
 	VOID Clear();
 	VOID SetCamera();
+	BOOL Collision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera );
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice;              
 
@@ -47,6 +51,7 @@ protected:
 	D3DXVECTOR3		m_vDir;
 	D3DXVECTOR3		m_vEye;
 	FLOAT			m_fZoom;            ///< 캐릭터와 카메라의 거리
+	FLOAT			m_fZoomReduce;		///< 카메라와 오브젝트 충돌시 거리 감소치
 	FLOAT			m_fYaw;             ///< X축 회전
 	FLOAT			m_fPitch;			///< Y축 회전
 
@@ -58,6 +63,9 @@ protected:
 		FLOAT		a_fSpringConst,
 		FLOAT		a_fDampConst,
 		FLOAT		a_fSpringLength );
+
+	// 프러스텀
+	D3DXPLANE m_Frst[6];
 
 };
 

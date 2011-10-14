@@ -118,7 +118,7 @@ VOID CDirectX9::Release()
 	@return	VOID
 	@brief	렌더링 시작
 */
-HRESULT CDirectX9::beginScene()
+VOID CDirectX9::beginScene()
 {
 	// Clear
 	m_pD3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
@@ -126,10 +126,8 @@ HRESULT CDirectX9::beginScene()
 	// Begin Scene
 	if ( !SUCCEEDED( m_pD3dDevice->BeginScene() ) )
 	{
-		return E_FAIL;
+		return;
 	}
-
-	return S_OK;
 }
 
 
@@ -138,13 +136,11 @@ HRESULT CDirectX9::beginScene()
 	@return	VOID
 	@brief	렌더링 끝
 */
-HRESULT CDirectX9::endScene()
+VOID CDirectX9::endScene()
 {
 	// End Scene
 	m_pD3dDevice->EndScene();
 
 	// 후면 버퍼 -> 실제 화면
 	m_pD3dDevice->Present( NULL, NULL, NULL, NULL );
-
-	return S_OK;
 }

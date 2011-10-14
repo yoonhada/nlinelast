@@ -267,7 +267,7 @@ VOID CMonster::Collision(D3DXVECTOR3& vControl)
 	for ( int i = 0; i < 6; ++i )
 		bbThis.SetSize( i, m_pBoundBox->GetSize( i ) );
 
-	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetVector(CTree::GetInstance()->GetRoot(), vControl);
+	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vControl);
 	std::vector<CBoundBox*>::iterator Iter;
 
 	BOOL bColl = TRUE;
@@ -284,13 +284,13 @@ VOID CMonster::Collision(D3DXVECTOR3& vControl)
 		}
 	}
 
-	if ( bColl == TRUE || !CTree::GetInstance()->_data.empty() )
+	if ( bColl == TRUE || !CTree::GetInstance()->GetChaVector()->empty() )
 	{
-		Iter = CTree::GetInstance()->_data.begin();
-		if( CTree::GetInstance()->_data.size() > 0 )
+		Iter = CTree::GetInstance()->GetChaVector()->begin();
+		if( CTree::GetInstance()->GetChaVector()->size() > 0 )
 			Iter++;
 
-		for ( ; Iter != CTree::GetInstance()->_data.end(); Iter++ )
+		for ( ; Iter != CTree::GetInstance()->GetChaVector()->end(); Iter++ )
 		{
 			if( CPhysics::GetInstance()->Collision( &bbThis, ( *Iter ) ) )
 			{

@@ -186,10 +186,8 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	fwscanf( pFile, L"%d", &iTemp );
 	fwscanf( pFile, L"%s", szTemp );
 
-	//INT iTotalBoxSize = (iTemp * iTemp * iTemp);
-
 	// 버텍스, 인덱스 버퍼 생성
-	if( FAILED( m_pD3dDevice->CreateVertexBuffer( /*iTotalBoxSize*/ CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
 		0, CCube::CUBEVERTEX::FVF, D3DPOOL_MANAGED, &m_pTotalVB, NULL ) ) )
 	{
 		MessageBox(GHWND, L"Vertex Buffer Failed", NULL, MB_OK);
@@ -333,7 +331,7 @@ VOID CCharactor::Collision(D3DXVECTOR3& vControl)
 	for ( int i = 0; i < 6; ++i )
 		bbThis.SetSize( i, m_pBoundBox->GetSize( i ) );
 
-	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetVector(CTree::GetInstance()->GetRoot(), vControl);
+	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vControl);
 	std::vector<CBoundBox*>::iterator Iter;
 
 	BOOL bColl = TRUE;
@@ -350,13 +348,13 @@ VOID CCharactor::Collision(D3DXVECTOR3& vControl)
 		}
 	}
 
-	if ( bColl == TRUE || !CTree::GetInstance()->_data.empty() )
+	if ( bColl == TRUE || !CTree::GetInstance()->GetChaVector()->empty() )
 	{
-		Iter = CTree::GetInstance()->_data.begin();
-		if( CTree::GetInstance()->_data.size() > 0 )
+		Iter = CTree::GetInstance()->GetChaVector()->begin();
+		if( CTree::GetInstance()->GetChaVector()->size() > 0 )
 			Iter++;
 
-		for ( ; Iter != CTree::GetInstance()->_data.end(); Iter++ )
+		for ( ; Iter != CTree::GetInstance()->GetChaVector()->end(); Iter++ )
 		{
 			if( CPhysics::GetInstance()->Collision( &bbThis, ( *Iter ) ) )
 			{
