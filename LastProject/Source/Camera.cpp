@@ -22,7 +22,7 @@ VOID CCamera::Clear()
 	m_vPreLook  = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vEye		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vDir		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-	m_fZoom		= 15.0f;
+	m_fZoom		= 50.0f;
 	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
 	m_fPitch	= 0.0f;
@@ -56,7 +56,7 @@ VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook
 	m_vLook = SpringDamp( m_vLook, a_vLook, a_vPreLook, 10.0f, 1.0f, 1.0f );
 	//m_vLook  = a_vLook;
 	m_vLook.y = a_fY;
-	m_fZoom  = a_fZoom;
+	//m_fZoom  = a_fZoom;
 	m_fYaw   = a_fYaw;
 	m_fPitch += a_fPitch;
 	
@@ -192,27 +192,37 @@ BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera )
 
 VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera )
 {
+	static BOOL bCheck = FALSE;
 	if ( Collision( a_vPosCamera ) == FALSE )
 	{
-		/*if(m_fZoom - m_fZoomReduce > 15.0f )
+		if( m_fZoom > 15.0f && bCheck==FALSE )
 		{
-			CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
-			m_fZoomReduce += 1.0f;
-		}*/
+			//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
+			m_fZoom -= 1.0f;
+		}
 
-		m_fZoomReduce += 1.0f;
-		m_fZoom -= m_fZoomReduce;
+		//bCheck = FALSE;
 
-		SetCamera();
+		//m_fZoomReduce += 1.0f;
+		//m_fZoom -= m_fZoomReduce;
 
-		//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
-		//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
+		//SetCamera();
+
+		CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
+		CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
 	}
 	else
 	{
-		m_fZoom += m_fZoomReduce;
-		m_fZoomReduce = 0.0f;
+		if( m_fZoom < 50.0f )
+		{
+			m_fZoom += 0.1f;
+			bCheck = TRUE;
+		}
+
+		
+		//m_fZoom += m_fZoomReduce;
+		//m_fZoomReduce = 0.0f;
 	}
 
-	//CDebugConsole::GetInstance()->Messagef( L"OUT : %f / %f\n", m_fZoomReduce, m_fZoom );
+	CDebugConsole::GetInstance()->Messagef( L"OUT : %f / %f\n", m_fZoomReduce, m_fZoom );
 }

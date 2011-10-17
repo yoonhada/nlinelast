@@ -7,6 +7,9 @@
 
 #include "stdafx.h"
 
+// 네트워크
+#include "Network.h"
+
 HRESULT CWinBase::Create()
 {
 	m_lpszTitle = TEXT("LastProject"); 

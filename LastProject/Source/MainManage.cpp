@@ -123,7 +123,7 @@ VOID CMainManage::CreateCharactor()
 	for(INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 	{
 		m_pCharactors[Loop].Create( m_pD3dDevice, m_pMatrices );
-		m_pCharactors[Loop].Load( L"Data/CharData/15Box.txt" );
+		m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
 		if (Loop == 0)	 
 			m_pCharactors[Loop].UpdateByInput( );
 		else

@@ -7,6 +7,22 @@ class CPacket;
 class CNetwork
 {
 public:
+	enum MESSAGE_ID
+	{
+		MSG_START = 0,
+		MSG_CS_LOGON,
+		MSG_CS_CHAT,
+		MSG_CS_MOVE,
+		///
+		///
+		MSG_SC_LOGON = 100,
+		MSG_SC_NEWUSER,
+		MSG_SC_CHAT,
+		MSG_SC_MOVE,
+		MSG_END,
+
+	};
+
 	SOCKET	m_socket;
 	BOOL	m_bStop;
 	HANDLE	m_hRecvThread;
