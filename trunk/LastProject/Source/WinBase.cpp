@@ -27,6 +27,14 @@ HRESULT CWinBase::Create()
 	CTextureManage::GetInstance();
 	CInput::GetInstance();
 
+	// 네트워크
+	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
+
+	m_pNetwork = new CNetwork;
+	m_pNetwork->CreateSocket();
+	m_pNetwork->ConnectToServer( "210.109.3.165", 20202 );
+	m_pNetwork->csLOGON();
+
 	return S_OK;
 }
 
@@ -39,6 +47,9 @@ HRESULT CWinBase::Release()
 	CFrequency::DestoryInstance();
 	CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
+
+	WSACleanup();
+	delete m_pNetwork;
 
 	return S_OK;
 }
@@ -183,11 +194,14 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 VOID CWinBase::Update()
 {
-	GetInstance()->m_pManage->Update();
+	
 	CFrequency::GetInstance()->Update();
 	TCHAR buf[256];
 	swprintf( buf, 256, TEXT( "%0.4f" ), CFrequency::GetInstance()->getFrequency() );
 	SetWindowText( GetInstance()->m_hWnd, buf );
+
+	GetInstance()->m_pNetwork->Update();
+	GetInstance()->m_pManage->Update();
 }
 
 VOID CWinBase::Render()

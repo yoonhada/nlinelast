@@ -55,6 +55,10 @@ private:
 	DWORD m_dwThreadID;	 ///< 쓰레드
 	HANDLE m_hThread;	 ///< 쓰레드
 
+	//네트워크
+	WSADATA m_wsadata;
+	CNetwork* m_pNetwork;
+
 private:
 	static VOID Update();
 	static VOID Render();

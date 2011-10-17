@@ -32,12 +32,12 @@ public:
 	D3DXMATRIXA16*	GetInvView()	{ return &m_matInvView; }
 	VOID UpdateMatrix();
 	
-	VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera );
+	VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera );
 
 private:
 	VOID Clear();
 	VOID SetCamera();
-	BOOL Collision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera );
+	BOOL Collision( const D3DXVECTOR3& a_vPosCamera );
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice;              
 

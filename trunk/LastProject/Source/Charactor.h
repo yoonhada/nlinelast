@@ -75,6 +75,7 @@ public:
 	VOID UpdateByInput( );
 	VOID UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
+	VOID UpdateOtherPlayer();
 	VOID Render();
 
 	VOID TestBreakCube();
@@ -116,6 +117,7 @@ private:
 
 	D3DXVECTOR3 m_vPreControl; ///< 캐릭터 이전 위치 저장
 	D3DXVECTOR3 m_vControl;  ///< 캐릭터 위치
+	D3DXVECTOR3 m_vLerpControl; ///< 캐릭터 보간 위치
 	FLOAT		m_fAngle;	 ///< 캐릭터 각도
 	D3DXVECTOR3 m_vFowardVector; /// 캐릭터 전진 이동 벡터
 	D3DXVECTOR3 m_vSideStepVector; /// 캐릭터 좌우 이동 벡터

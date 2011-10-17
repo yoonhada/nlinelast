@@ -38,8 +38,8 @@ VOID CCharactor::Clear()
 	m_iAliveCount = 0;
 	m_bAliveCheck = TRUE;
 
-	m_vPreControl = D3DXVECTOR3(120.0f, 0.0f, 0.0f);
-	m_vControl = D3DXVECTOR3(120.0f, 0.0f, 0.0f);
+	m_vPreControl = D3DXVECTOR3(200.0f, 0.0f, 0.0f);
+	m_vControl = D3DXVECTOR3(200.0f, 0.0f, 0.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
@@ -459,12 +459,25 @@ VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 {
+	m_vPreControl = m_vControl;
 	m_vControl = a_vControl;
+
 	m_fAngle = a_fAngle;
 
-	Set_ControlTranslate( 0, m_vControl.x );
-	Set_ControlTranslate( 1, m_vControl.y );
-	Set_ControlTranslate( 2, m_vControl.z );
+	CFrequency::GetInstance()->setTime( 0.0f );
+}
+
+VOID CCharactor::UpdateOtherPlayer()
+{
+
+	CFrequency::GetInstance()->setPlusTime();
+	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, CFrequency::GetInstance()->getTime() / 0.1f );
+	CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
+	CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
+
+	Set_ControlTranslate( 0, m_vLerpControl.x );
+	Set_ControlTranslate( 1, m_vLerpControl.y );
+	Set_ControlTranslate( 2, m_vLerpControl.z );
 	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
 }

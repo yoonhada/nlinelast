@@ -41,6 +41,12 @@ private:
 
 	VOID CreateCharactor();
 
+public:
+	CCharactor* Get_Charactor()
+	{
+		return m_pCharactors;
+	}
+
 };
 
 #endif

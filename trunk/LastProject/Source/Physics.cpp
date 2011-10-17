@@ -93,7 +93,7 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
 	FRECT rect = _pCube->GetFRect();
 
 	if ( ( rect.left < vPos.x ) && ( vPos.x < rect.right ) &&
-		 ( rect.bottom < vPos.y ) && ( vPos.y < rect.top ) )
+		 ( rect.bottom < vPos.z ) && ( vPos.z < rect.top ) )
 		 return TRUE;
 
 	return FALSE;
