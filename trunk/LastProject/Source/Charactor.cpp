@@ -472,8 +472,8 @@ VOID CCharactor::UpdateOtherPlayer()
 
 	CFrequency::GetInstance()->setPlusTime();
 	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, CFrequency::GetInstance()->getTime() / 0.1f );
-	CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
-	CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
+	//CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
+	//CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
 
 	Set_ControlTranslate( 0, m_vLerpControl.x );
 	Set_ControlTranslate( 1, m_vLerpControl.y );

@@ -71,9 +71,6 @@
 #include "Map.h"
 #include "MainManage.h"
 
-// 네트워크
-#include "Network.h"
-
 // DirectX
 #include "DirectX9.h"
 
