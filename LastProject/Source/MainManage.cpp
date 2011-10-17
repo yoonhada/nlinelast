@@ -206,6 +206,8 @@ VOID	CMainManage::Update()
 	//m_pCharactors[0].UpdateByInput( CInput::GetInstance()->Get_Pos(),  CInput::GetInstance()->Get_MouseYRotate() );
 	m_pCharactors[0].Update();
 
+	//CDebugConsole::GetInstance()->Messagef( L"POS : %f %f %f\n", m_pCharactors[0].Get_CharaPos().x, m_pCharactors[0].Get_CharaPos().z, m_pCharactors[0].Get_CharaAngle() );
+
 	static FLOAT fZoom = 50.0f;
 	if( CInput::GetInstance()->Get_Homebutton() == TRUE )
 	{
@@ -220,16 +222,18 @@ VOID	CMainManage::Update()
 		m_pCharactors[0].Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
-	m_pCamera->CheckObjectCollision( m_pCharactors[0].Get_CharaPos(), m_pCamera->GetEye() );
+	m_pCamera->CheckObjectCollision( m_pCamera->GetEye() );
 
 	FLOAT fYawZero = 1.0f;
 
-	for( INT Loop=1; Loop<m_iMaxCharaNum; ++Loop )
-	{		
-		//다른 플레이어는 값으로 이동
-		m_pCharactors[Loop].UpdateByValue( D3DXVECTOR3( static_cast<FLOAT>(Loop)*-60.0f, 0.0f, 0.0f ), 1.0f+static_cast<FLOAT>(Loop) );		
-		m_pCharactors[Loop].Update();
-	}
+	m_pCharactors[1].UpdateOtherPlayer();
+
+	//for( INT Loop=2; Loop<m_iMaxCharaNum; ++Loop )
+	//{		
+	//	//다른 플레이어는 값으로 이동
+	//	m_pCharactors[Loop].UpdateByValue( D3DXVECTOR3( static_cast<FLOAT>(Loop)*-60.0f, 0.0f, 0.0f ), 1.0f+static_cast<FLOAT>(Loop) );		
+	//	m_pCharactors[Loop].Update();
+	//}
 
 	static FLOAT TimeElapsed = 0.0f;
 	static FLOAT fMonsterRun = 0.0f;

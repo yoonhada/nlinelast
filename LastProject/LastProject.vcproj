@@ -515,6 +515,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Network"
+			>
+			<File
+				RelativePath=".\Source\Network.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Network.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Packet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Packet.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

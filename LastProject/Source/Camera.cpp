@@ -53,7 +53,7 @@ void CCamera::SetCamera()
 
 VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
 {
-	m_vLook = SpringDamp( m_vLook, a_vLook, a_vPreLook, 10.0f, 50.0f, 10.0f );
+	m_vLook = SpringDamp( m_vLook, a_vLook, a_vPreLook, 10.0f, 1.0f, 1.0f );
 	//m_vLook  = a_vLook;
 	m_vLook.y = a_fY;
 	m_fZoom  = a_fZoom;
@@ -165,8 +165,11 @@ VOID CCamera::UpdateMatrix()
 
 }
 
-BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera )
+BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera )
 {
+
+	//CDebugConsole::GetInstance()->Messagef( L"Pos : %f / %f / %f\n", a_vPosCamera.x, a_vPosCamera.y, a_vPosCamera.z );
+
 	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), a_vPosCamera);
 	std::vector<CBoundBox*>::iterator Iter;
 
@@ -176,7 +179,7 @@ BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPo
 		int i = 0;
 		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
 		{
-			if( CPhysics::GetInstance()->Collision( a_vPosChar, a_vPosCamera, ( *Iter ) ) )
+			if( CPhysics::GetInstance()->Collision( a_vPosCamera, ( *Iter ) ) )
 			{
 				bColl = FALSE;
 				break;
@@ -187,21 +190,23 @@ BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPo
 	return bColl;
 }
 
-VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosChar, const D3DXVECTOR3& a_vPosCamera )
+VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera )
 {
-	if ( Collision( a_vPosChar, a_vPosCamera ) == FALSE )
+	if ( Collision( a_vPosCamera ) == FALSE )
 	{
-		if(m_fZoom > 15.0f )
+		/*if(m_fZoom - m_fZoomReduce > 15.0f )
 		{
+			CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
 			m_fZoomReduce += 1.0f;
-		
+		}*/
 
-			m_fZoom -= m_fZoomReduce;
-		}
+		m_fZoomReduce += 1.0f;
+		m_fZoom -= m_fZoomReduce;
 
 		SetCamera();
 
-		CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
+		//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
 	}
 	else
 	{

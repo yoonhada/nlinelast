@@ -9,13 +9,17 @@
 
 // Window 라이브러리
 #pragma comment ( lib, "winmm.lib" )
+#pragma comment( lib, "ws2_32.lib" )
 
 // TBB 라이브러리
 //#pragma  comment ( lib, "tbb.lib" )
 
 
 // 헤더
+#include <winsock2.h>
 #include <Windows.h>
+#include <process.h>
+
 //#include <WindowsX.h>
 //#include <CommCtrl.h>
 //#include <process.h>
@@ -66,6 +70,9 @@
 // Manage
 #include "Map.h"
 #include "MainManage.h"
+
+// 네트워크
+#include "Network.h"
 
 // DirectX
 #include "DirectX9.h"
