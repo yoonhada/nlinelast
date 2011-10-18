@@ -109,6 +109,21 @@ public:
 		m_vControl = m_vPreControl = a_vControl;
 	}
 
+	VOID Set_ClientNumber( INT a_iClientNumber )
+	{
+		m_iClientNumber = a_iClientNumber;
+	}
+
+	VOID Set_Active( BOOL a_bActive )
+	{
+		m_bActive = a_bActive;
+	}
+
+	const BOOL Get_Active()
+	{
+		return m_bActive;
+	}
+
 
 private:
 	VOID _LoadRelease();
@@ -161,6 +176,9 @@ private:
 	BOOL m_bAliveCheck;
 
 	CBoundBox * m_pBoundBox;
+
+	//애니메이션 변수
+	FLOAT m_fAniAngle;
 };
 
 #endif

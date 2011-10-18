@@ -50,6 +50,8 @@ VOID CCharactor::Clear()
 	m_bMatMonster = FALSE;
 	m_iClientNumber = 0;
 	m_bActive = FALSE;
+
+	m_fAniAngle = 0.0f;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
@@ -391,6 +393,8 @@ VOID CCharactor::UpdateByInput(  )
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
 		vControl += (m_vFowardVector * a_vControl.z);
+
+		Animate();
 	}
 	// 谅快 贸府
 	if( a_vControl.x != 0)
@@ -403,14 +407,14 @@ VOID CCharactor::UpdateByInput(  )
 	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
 	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
-	m_vPreControl = vControl;
+	//m_vPreControl = vControl;
 
 	Collision(vControl);
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
-	Set_ControlRotate( 1, m_fAngle );
+	Set_ControlRotate( 1, m_fAngle + m_fAniAngle );
 	Calcul_MatWorld();
 }
 
@@ -436,8 +440,6 @@ VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
 		m_vControl += (m_vFowardVector * a_vControl.z);
 		vControl += (m_vFowardVector * a_vControl.z);
-
-		Animate();
 	}
 	//谅快 贸府
 	if( a_vControl.x != 0)
@@ -495,26 +497,27 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 
 VOID CCharactor::Animate()
 {
-	static FLOAT fAniAngle = 0.0f;
 	static BOOL bCheck = FALSE;
-	if( fAniAngle > 1.5f && bCheck == FALSE )
+
+	if( m_fAniAngle < 0.8f && bCheck == FALSE )
 	{
-		fAniAngle += 0.1f;
+		m_fAniAngle += 5.0f * CFrequency::GetInstance()->getFrametime();
 	}
 	else
 	{
 		bCheck = TRUE;
 
-		if( fAniAngle > -1.5f )
+		if( m_fAniAngle > -0.8f )
 		{
-			fAniAngle -= 0.1f;
+			m_fAniAngle -= 5.0f * CFrequency::GetInstance()->getFrametime();
 		}
 		else
 		{
 			bCheck = FALSE;
 		}
 	}
-	Set_ControlRotate( 1, m_fAngle + fAniAngle );
+
+	//CDebugConsole::GetInstance()->Messagef( L"%f \n", m_fAniAngle );
 }
 
 VOID CCharactor::Update()
@@ -559,8 +562,7 @@ VOID CCharactor::Render()
 	
 
 	//a_SetupMatrices.SetupModeltoWorld( m_zGrid.Get_MatWorld() );
-	//m_zGrid.Draw();
-	
+	//m_zGrid.Draw();	
 }
 
 VOID CCharactor::TestBreakCubeAll()

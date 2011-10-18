@@ -86,9 +86,9 @@ VOID CNetwork::Update()
 	if( time > 0.1f )
 	{
 		// 이동 데이터 서버로 보내기
-		csMOVE( CMainManage::GetInstance()->Get_Charactor()->Get_CharaPos().x,
-			CMainManage::GetInstance()->Get_Charactor()->Get_CharaPos().z,
-			CMainManage::GetInstance()->Get_Charactor()->Get_CharaAngle() );
+		csMOVE( CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
+			CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().z,
+			CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaAngle() );
 
 		time = 0.0f;
 	}
@@ -160,12 +160,15 @@ VOID CNetwork::scMOVE( CPacket& pk )
 	pk.ReadString( szMove, 128 );
 
 	FLOAT x, z, angle;
-	sscanf( szMove, "%f %f %f", &x, &z, &angle );
+	INT number;
+	sscanf( szMove, "%f %f %f %d", &x, &z, &angle, &number  );
 
 	m_vMove = D3DXVECTOR3( x, 0.0f, z );
 
-	//CDebugConsole::GetInstance()->Messagef( L"Recv Pos : %f %f %f \n", x, z, angle );
-	CMainManage::GetInstance()->Get_Charactor()[1].UpdateByValue( m_vMove, angle );
+	
+	CMainManage::GetInstance()->Get_Charactors()[number].UpdateByValue( m_vMove, angle );
+
+	CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
 
 	// 이동 데이터 처리
 }
@@ -175,14 +178,18 @@ VOID CNetwork::scNEWUSER( CPacket& pk )
 {
 	// 유저 접속 처리
 	//cout << "NEW USER" << endl;
-	FLOAT x,z;
+	INT iNumber;
 	CHAR szMsg[128];
 
 	pk.ReadString( szMsg, 128 );
 
-	sscanf( szMsg, "%f %f", &x, &z );
+	//static INT iTotalPlayerNumber = 1;
 
-	CMainManage::GetInstance()->Get_Charactor()[1].UpdateByValue( D3DXVECTOR3( x, 0.0f, z ), 0.0f );
+	sscanf( szMsg, "%d", &iNumber );
+
+	CMainManage::GetInstance()->Get_Charactors()[iNumber].Set_Active( TRUE );
+
+	CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , iNumber );
 }
 
 
@@ -202,6 +209,20 @@ VOID CNetwork::csLOGON()
 
 	SendToSever( pk );
 
+}
+
+VOID CNetwork::scInitData( CPacket& pk )
+{
+	CHAR Temp[128];
+	pk.ReadString( Temp, 128 );
+
+	INT iHost = 0, iNumber = 0;
+	sscanf( Temp, "%d %d", &iHost, &iNumber );
+
+	CMainManage::GetInstance()->Set_Host( iHost );
+	CMainManage::GetInstance()->Set_ClientNumber( iNumber );
+
+	CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , iHost, iNumber );
 }
 
 
@@ -249,6 +270,10 @@ VOID CNetwork::ProcessPacket( CPacket& pk )
 	// 로그온 처리
 	case MSG_CS_LOGON:
 		scLOGON( pk );
+		break;
+
+	case MSG_SC_INITDATA:
+		scInitData( pk );
 		break;
 
 	// 새로운 유저 추가 처리

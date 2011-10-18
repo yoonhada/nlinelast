@@ -19,8 +19,11 @@ VOID	CMainManage::Clear()
 {
 	m_pD3dDevice = NULL;
 	m_pBill = NULL;
-	m_iMaxCharaNum = 4;
+	m_pMyCharactor = NULL;
+	m_pCharactors = NULL;
+	m_iMaxCharaNum = 3;
 	m_bHost = FALSE;
+	m_iClientNumber = 0;
 }
 
 HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
@@ -67,6 +70,8 @@ HRESULT CMainManage::Release()
 
 	SAFE_DELETE ( m_pGrid );
 
+	SAFE_DELETE( m_pMyCharactor );
+
 	SAFE_DELETE_ARRAY( m_pCharactors );
 
 	SAFE_DELETE( m_pMonster );
@@ -111,30 +116,41 @@ VOID CMainManage::CreateCharactor()
 {
 	const INT nChar = 5;
 	D3DXVECTOR3 vec[nChar] = { 
-		D3DXVECTOR3(  0.0f, 0.0f,  0.0f ), 
 		D3DXVECTOR3( 230.0f, 0.0f,  0.0f ), 
 		D3DXVECTOR3( 260.0f, 0.0f,  0.0f ), 
 		D3DXVECTOR3( 290.0f, 0.0f,  0.0f ), 
+		D3DXVECTOR3( 310.0f, 0.0f,  0.0f ), 
 		D3DXVECTOR3(  0.0f, 0.0f,100.0f ) 
 	};
 
 	//캐릭터 생성
 	FLOAT fYawZero = 1.0f;
+	m_pMyCharactor = new CCharactor;
+	m_pMyCharactor->Create( m_pD3dDevice, m_pMatrices );
+	m_pMyCharactor->Load( L"Data/CharData/N_0.csav" );
+
+	CTree::GetInstance()->GetChaVector()->push_back( m_pMyCharactor->GetBoundBox() );
+
 	m_pCharactors = new CCharactor[m_iMaxCharaNum];
+	
 	for(INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 	{
 		m_pCharactors[Loop].Create( m_pD3dDevice, m_pMatrices );
 		if(Loop == 0)
+		{
 			m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
+		}
 		else if(Loop == 1)
+		{
 			m_pCharactors[Loop].Load( L"Data/CharData/I_0.csav" );
+		}
 		else
+		{
 			m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
+		}
 		
-		if (Loop == 0)	 
-			m_pCharactors[Loop].UpdateByInput( );
-		else
-			m_pCharactors[Loop].Set_Position( vec[Loop] );
+		
+		m_pCharactors[Loop].Set_Position( vec[Loop] );
 
 		CTree::GetInstance()->GetChaVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 
@@ -145,37 +161,6 @@ VOID CMainManage::CreateCharactor()
 	FLOAT fMoveSpeed = 50.0f;
 	FLOAT fRotateSpeed = 150.0f; 
 	CInput::GetInstance()->Update( fMoveSpeed, fRotateSpeed, CFrequency::GetInstance()->getFrametime() );
-
-
-	//////////////////////////////////////////////////////////////////////////
-
-	//const INT nChar = 5;
-	//FLOAT fMoveSpeed = 50.0f;
-	//FLOAT fRotateSpeed = 150.0f; 
-
-	//D3DXVECTOR3 vec[nChar] = { 
-	//	D3DXVECTOR3(  0.0f, 0.0f,  0.0f ), 
-	//	D3DXVECTOR3( 30.0f, 0.0f,  0.0f ), 
-	//	D3DXVECTOR3( 60.0f, 0.0f,  0.0f ), 
-	//	D3DXVECTOR3( 90.0f, 0.0f,  0.0f ), 
-	//	D3DXVECTOR3(  0.0f, 0.0f,100.0f ) 
-	//};
-
-	//// 인풋 업데이트
-	//CInput::GetInstance()->Update( fMoveSpeed, fRotateSpeed, CFrequency::GetInstance()->getFrametime() );
-
-	//// 케릭터 생성
-	//FLOAT fYawZero = 1.0f;
-	//CCharactor * pObj;
-	//for (int i = 0; i < nChar; ++i)
-	//{
-	//	pObj = CreateObject( i + PAPA );
-	//	pObj->Create( m_pD3dDevice, m_pMatrices, L"Data/CharData/15Box.txt" );
-	//	if (i == 0)		pObj->UpdateByInput( CInput::GetInstance()->Get_Pos(), CInput::GetInstance()->Get_MouseYRotate() );
-	//	else			pObj->UpdateByValue( vec[i], fYawZero + i );
-	//	pObj->Update();
-	//	m_vector.push_back( pObj );
-	//}
 }
 
 VOID	CMainManage::Update()
@@ -209,29 +194,26 @@ VOID	CMainManage::Update()
 	CInput::GetInstance()->Update( 50.0f, 150.0f, CFrequency::GetInstance()->getFrametime() );
 
 	// 캐릭터: 인풋 값 받아오기
-	m_pCharactors[0].UpdateByInput( );
-	//m_pCharactors[0].UpdateByInput( CInput::GetInstance()->Get_Pos(),  CInput::GetInstance()->Get_MouseYRotate() );
-	m_pCharactors[0].Update();
-
-	////CDebugConsole::GetInstance()->Messagef( L"POS : %f %f %f\n", m_pCharactors[0].Get_CharaPos().x, m_pCharactors[0].Get_CharaPos().z, m_pCharactors[0].Get_CharaAngle() );
-
+	m_pMyCharactor->UpdateByInput();
+	
 	//카메라: 캐릭터 위치,각도 받아오기
-	m_pCamera->SetView( m_pCharactors[0].Get_CharaPos(), m_pCharactors[0].Get_PreControl(), 10.0f, 50.0f, 
-		m_pCharactors[0].Get_CharaAngle(),
+	m_pCamera->SetView( m_pMyCharactor->Get_CharaPos(), m_pMyCharactor->Get_PreControl(), 10.0f, 50.0f, 
+		m_pMyCharactor->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
 	m_pCamera->CheckObjectCollision( m_pCamera->GetEye() );
 
 	FLOAT fYawZero = 1.0f;
 
-	m_pCharactors[1].UpdateOtherPlayer();
-
-	//for( INT Loop=2; Loop<m_iMaxCharaNum; ++Loop )
-	//{		
-	//	//다른 플레이어는 값으로 이동
-	//	m_pCharactors[Loop].UpdateByValue( D3DXVECTOR3( static_cast<FLOAT>(Loop)*-60.0f, 0.0f, 0.0f ), 1.0f+static_cast<FLOAT>(Loop) );		
-	//	m_pCharactors[Loop].Update();
-	//}
+	for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
+	{	
+		//다른 플레이어는 값으로 이동
+		//if( m_pCharactors[Loop].Get_Active() )
+		//{
+			//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
+			m_pCharactors[Loop].UpdateOtherPlayer();
+		//}
+	}
 
 	static FLOAT TimeElapsed = 0.0f;
 	static FLOAT fMonsterRun = 0.0f;
@@ -242,9 +224,7 @@ VOID	CMainManage::Update()
 		TimeElapsed = 0.0f;
 	}
 
-	//m_pMonster->UpdateByValue( CInput::GetInstance()->Get_Pos(), CInput::GetInstance()->Get_MouseYRotate() );
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 1.0f), fMonsterRun );
-	//m_pMonster->UpdateByValue( D3DXVECTOR3( 0.0f, 0.0f, fMonsterRun ), 0.0f );
 	m_pMonster->Update();
 
 	if ( CInput::GetInstance()->Get_Lbutton() )
@@ -252,15 +232,14 @@ VOID	CMainManage::Update()
 
 		//m_pMonster->TestBreakCube();
 
-
 		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 		{	
-#ifdef _DEBUG
 			if (Loop == 0 || Loop == 1)
-#endif
-				m_pCharactors[Loop].TestBreakCubeAll();
+			{
+				//m_pCharactors[Loop].TestBreakCubeAll();
+			}
 		}
-		// YOON
+		
 		// 빌보드 작업
 		if (m_pBill == NULL)
 		{
@@ -278,7 +257,7 @@ VOID	CMainManage::Update()
 			D3DXVECTOR3 vec(0, 20, 0);
 			m_pBill->SetInverMatrix( *m_pCamera->GetInvView() );
 			m_pBill->SetWorldMatirx( *m_pCamera->GetView() );
-			m_pBill->SetPosition( m_pCharactors[0].Get_CharaPos() + vec );
+			m_pBill->SetPosition( m_pCharactors[m_iClientNumber].Get_CharaPos() + vec );
 			m_pBill->Update();
 		}
 		else
@@ -290,7 +269,6 @@ VOID	CMainManage::Update()
 
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );
-	//m_pMap->Update();
 
 	m_pMap->Set_ControlTranslate( 1, -0.5f );
 	m_pMap->Calcul_MatWorld();
@@ -303,10 +281,16 @@ VOID	CMainManage::Render()
 	m_pMatrices->SetupModeltoWorld( m_pMap->Get_MatWorld() );
 	m_pMap->Render();
 
-	m_pCharactors[0].Render();
-	for( INT Loop=1; Loop<m_iMaxCharaNum; ++Loop )
+	m_pMyCharactor->Render();
+
+	for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 	{
-		m_pCharactors[Loop].Render();
+		
+		//if( m_pCharactors[Loop].Get_Active() )
+		//{
+			m_pCharactors[Loop].Render();
+		//}
+		
 	}
 
 	m_pMonster->Render();

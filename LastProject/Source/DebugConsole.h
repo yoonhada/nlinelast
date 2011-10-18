@@ -21,7 +21,7 @@ private:
 	VOID		Release();
 
 public:
-	//	//CDebugConsole::GetInstance()->Message( " " );
+		//CDebugConsole::GetInstance()->Message( " " );
 	VOID	Messagef( LPWSTR str, ... );
 	VOID	Messagef( LPSTR str, ... );
 	VOID	Message( LPWSTR str );

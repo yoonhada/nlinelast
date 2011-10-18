@@ -16,6 +16,7 @@ public:
 		///
 		///
 		MSG_SC_LOGON = 100,
+		MSG_SC_INITDATA,
 		MSG_SC_NEWUSER,
 		MSG_SC_CHAT,
 		MSG_SC_MOVE,
@@ -49,6 +50,7 @@ public:
 	VOID scNEWUSER( CPacket& pk );
 
 	VOID csLOGON();
+	VOID scInitData( CPacket& pk );
 	VOID csCHAT();
 	VOID csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle );
 
