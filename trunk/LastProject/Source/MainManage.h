@@ -41,6 +41,8 @@ private:
 
 	VOID CreateCharactor();
 
+	BOOL m_bHost;
+
 public:
 	CCharactor* Get_Charactor()
 	{

@@ -1,7 +1,7 @@
 #include "Stdafx.h"
 #include "Camera.h"
 
-CCamera::CCamera()
+CCamera::CCamera() : m_fMinZoom(15.0f), m_fMaxZoom(50.0f)
 {
 	Clear();
 }
@@ -53,10 +53,20 @@ void CCamera::SetCamera()
 
 VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
 {
+	static FLOAT fZoom = m_fMaxZoom;
+	if( CInput::GetInstance()->Get_Homebutton() == TRUE )
+	{
+		fZoom += 1.0f;
+	}
+	if( CInput::GetInstance()->Get_Endbutton() == TRUE )
+	{
+		fZoom -= 1.0f;
+	}
+
 	m_vLook = SpringDamp( m_vLook, a_vLook, a_vPreLook, 10.0f, 1.0f, 1.0f );
 	//m_vLook  = a_vLook;
 	m_vLook.y = a_fY;
-	//m_fZoom  = a_fZoom;
+	//m_fZoom  = fZoom;
 	m_fYaw   = a_fYaw;
 	m_fPitch += a_fPitch;
 	
@@ -168,7 +178,7 @@ VOID CCamera::UpdateMatrix()
 BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera )
 {
 
-	//CDebugConsole::GetInstance()->Messagef( L"Pos : %f / %f / %f\n", a_vPosCamera.x, a_vPosCamera.y, a_vPosCamera.z );
+	////CDebugConsole::GetInstance()->Messagef( L"Pos : %f / %f / %f\n", a_vPosCamera.x, a_vPosCamera.y, a_vPosCamera.z );
 
 	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), a_vPosCamera);
 	std::vector<CBoundBox*>::iterator Iter;
@@ -195,10 +205,10 @@ VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera )
 	static BOOL bCheck = FALSE;
 	if ( Collision( a_vPosCamera ) == FALSE )
 	{
-		if( m_fZoom > 15.0f && bCheck==FALSE )
+		if( m_fZoom > m_fMinZoom )
 		{
-			//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
-			m_fZoom -= 1.0f;
+			////CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
+			m_fZoom -= 5.0f;
 		}
 
 		//bCheck = FALSE;
@@ -208,15 +218,14 @@ VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera )
 
 		//SetCamera();
 
-		CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
-		CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
+		//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
 	}
 	else
 	{
-		if( m_fZoom < 50.0f )
+		if( m_fZoom < m_fMaxZoom )
 		{
-			m_fZoom += 0.1f;
-			bCheck = TRUE;
+			m_fZoom += 5.0f;
 		}
 
 		
@@ -224,5 +233,5 @@ VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera )
 		//m_fZoomReduce = 0.0f;
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"OUT : %f / %f\n", m_fZoomReduce, m_fZoom );
+	//CDebugConsole::GetInstance()->Messagef( L"OUT : %f / %f\n", m_fZoomReduce, m_fZoom );
 }

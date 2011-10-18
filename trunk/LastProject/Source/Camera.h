@@ -52,6 +52,8 @@ private:
 	D3DXVECTOR3		m_vEye;
 	FLOAT			m_fZoom;            ///< 캐릭터와 카메라의 거리
 	FLOAT			m_fZoomReduce;		///< 카메라와 오브젝트 충돌시 거리 감소치
+	const FLOAT		m_fMinZoom;			///< 줌 최소치
+	const FLOAT		m_fMaxZoom;			///< 줌 최대치
 	FLOAT			m_fYaw;             ///< X축 회전
 	FLOAT			m_fPitch;			///< Y축 회전
 

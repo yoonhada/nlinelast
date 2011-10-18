@@ -20,6 +20,7 @@ VOID	CMainManage::Clear()
 	m_pD3dDevice = NULL;
 	m_pBill = NULL;
 	m_iMaxCharaNum = 4;
+	m_bHost = FALSE;
 }
 
 HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
@@ -111,9 +112,9 @@ VOID CMainManage::CreateCharactor()
 	const INT nChar = 5;
 	D3DXVECTOR3 vec[nChar] = { 
 		D3DXVECTOR3(  0.0f, 0.0f,  0.0f ), 
-		D3DXVECTOR3( 300.0f, 0.0f,  0.0f ), 
-		D3DXVECTOR3( 600.0f, 0.0f,  0.0f ), 
-		D3DXVECTOR3( 900.0f, 0.0f,  0.0f ), 
+		D3DXVECTOR3( 230.0f, 0.0f,  0.0f ), 
+		D3DXVECTOR3( 260.0f, 0.0f,  0.0f ), 
+		D3DXVECTOR3( 290.0f, 0.0f,  0.0f ), 
 		D3DXVECTOR3(  0.0f, 0.0f,100.0f ) 
 	};
 
@@ -123,15 +124,21 @@ VOID CMainManage::CreateCharactor()
 	for(INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 	{
 		m_pCharactors[Loop].Create( m_pD3dDevice, m_pMatrices );
-		m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
+		if(Loop == 0)
+			m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
+		else if(Loop == 1)
+			m_pCharactors[Loop].Load( L"Data/CharData/I_0.csav" );
+		else
+			m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
+		
 		if (Loop == 0)	 
 			m_pCharactors[Loop].UpdateByInput( );
 		else
-			m_pCharactors[Loop].UpdateByValue( vec[Loop], fYawZero + Loop );
+			m_pCharactors[Loop].Set_Position( vec[Loop] );
 
 		CTree::GetInstance()->GetChaVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 
-		D3DXVECTOR3 vec1 = m_pCharactors[Loop].GetBoundBox()->GetPosition();
+		//D3DXVECTOR3 vec1 = m_pCharactors[Loop].GetBoundBox()->GetPosition();
 	}
 
 	// 인풋 업데이트
@@ -206,19 +213,10 @@ VOID	CMainManage::Update()
 	//m_pCharactors[0].UpdateByInput( CInput::GetInstance()->Get_Pos(),  CInput::GetInstance()->Get_MouseYRotate() );
 	m_pCharactors[0].Update();
 
-	//CDebugConsole::GetInstance()->Messagef( L"POS : %f %f %f\n", m_pCharactors[0].Get_CharaPos().x, m_pCharactors[0].Get_CharaPos().z, m_pCharactors[0].Get_CharaAngle() );
+	////CDebugConsole::GetInstance()->Messagef( L"POS : %f %f %f\n", m_pCharactors[0].Get_CharaPos().x, m_pCharactors[0].Get_CharaPos().z, m_pCharactors[0].Get_CharaAngle() );
 
-	static FLOAT fZoom = 50.0f;
-	if( CInput::GetInstance()->Get_Homebutton() == TRUE )
-	{
-		fZoom += 1.0f;
-	}
-	if( CInput::GetInstance()->Get_Endbutton() == TRUE )
-	{
-		fZoom -= 1.0f;
-	}
 	//카메라: 캐릭터 위치,각도 받아오기
-	m_pCamera->SetView( m_pCharactors[0].Get_CharaPos(), m_pCharactors[0].Get_PreControl(), 10.0f, fZoom, 
+	m_pCamera->SetView( m_pCharactors[0].Get_CharaPos(), m_pCharactors[0].Get_PreControl(), 10.0f, 50.0f, 
 		m_pCharactors[0].Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
@@ -251,10 +249,6 @@ VOID	CMainManage::Update()
 
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
-		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
-		{		
-			//m_pCharactor[Loop].TestBreakCube();
-		}
 
 		//m_pMonster->TestBreakCube();
 
@@ -262,9 +256,9 @@ VOID	CMainManage::Update()
 		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 		{	
 #ifdef _DEBUG
-			if (Loop == 0)
+			if (Loop == 0 || Loop == 1)
 #endif
-				m_pCharactors[Loop].TestBreakCube();
+				m_pCharactors[Loop].TestBreakCubeAll();
 		}
 		// YOON
 		// 빌보드 작업

@@ -63,9 +63,9 @@ BOOL ASEParser::LoadFile( LPWSTR _FileName )
 	Cleanup();
 
 	
-	CDebugConsole::GetInstance()->Messagef( L"ASEParser\n" );
-	CDebugConsole::GetInstance()->Message( _FileName );
-	CDebugConsole::GetInstance()->Messagef( L"\n" );
+	//CDebugConsole::GetInstance()->Messagef( L"ASEParser\n" );
+	//CDebugConsole::GetInstance()->Message( _FileName );
+	//CDebugConsole::GetInstance()->Messagef( L"\n" );
 
 	FILE*	fp;
 	fp = _wfopen( _FileName, L"rt" );
@@ -150,7 +150,7 @@ BOOL ASEParser::CountGeometry( FILE* _fp )
 
 	}
 	m_iNumGeomObject = nCount;
-	CDebugConsole::GetInstance()->Messagef( L"GEOMOBJECT_COUNT : %d\n", m_iNumGeomObject );
+	//CDebugConsole::GetInstance()->Messagef( L"GEOMOBJECT_COUNT : %d\n", m_iNumGeomObject );
 
 	m_pGeomObjectData = new GEOMOBJECTDATA[ m_iNumGeomObject ];
 
@@ -163,11 +163,11 @@ BOOL ASEParser::CheckFile( FILE* _fp, LPWSTR _sLine )
 {
 	if( 0 == wcsnicmp( _sLine, m_pKeyword[ ASEKEY::ASCIIEXPORT ].sKey, m_pKeyword[ ASEKEY::ASCIIEXPORT ].iKey ) )
 	{
-		CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : SUCCESS \n" );
+		//CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : SUCCESS \n" );
 		return TRUE;
 	}
 	
-	CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : FAIL \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : FAIL \n" );
 
 	MessageBox( NULL, L"ASE FileÀÌ ¾Æ´Õ´Ï´Ù", NULL, MB_OK );
 
@@ -202,7 +202,7 @@ BOOL ASEParser::GetMaterialCount( LPWSTR _sLine )
 		swscanf( _sLine, L"%*s %d", &nCount );
 
 		m_iNumMaterial = nCount;
-		CDebugConsole::GetInstance()->Messagef( L"*MATERIAL_COUNT %d\n", m_iNumMaterial );
+		//CDebugConsole::GetInstance()->Messagef( L"*MATERIAL_COUNT %d\n", m_iNumMaterial );
 
 		m_pMaterialData = new MATERIALDATA[ m_iNumMaterial ];
 
@@ -269,7 +269,7 @@ BOOL ASEParser::GetBitmap( LPWSTR _sLine )
 
 		TCHAR	str[ 516 ];
 		wsprintf( str, L"*BITMAP : %s\n", Name );
-		CDebugConsole::GetInstance()->Message( str );
+		//CDebugConsole::GetInstance()->Message( str );
 		
 		return TRUE;
 	}
@@ -317,7 +317,7 @@ BOOL ASEParser::GetNodeName( LPWSTR _sLine )
 
 		TCHAR	str[ 516 ];
 		wsprintf( str, L"NODE_NAME : %s\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pNodeName );
-		CDebugConsole::GetInstance()->Message( str );
+		//CDebugConsole::GetInstance()->Message( str );
 
 		return TRUE;
 	}//	End keyword[ 1 ]
@@ -380,7 +380,7 @@ BOOL ASEParser::GetMeshNumVertex( LPWSTR _sLine )
 
 		m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshVertex	=	NumVertex;
 
-		CDebugConsole::GetInstance()->Messagef( L"MESH_NUMVERTEX : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshVertex );
+		//CDebugConsole::GetInstance()->Messagef( L"MESH_NUMVERTEX : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshVertex );
 		
 		return TRUE;
 	}//	End Keyword[ 3 ]
@@ -396,7 +396,7 @@ BOOL ASEParser::GetMeshNumFaces( LPWSTR _sLine )
 
 		m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshFace	=	NumIndex;
 
-		CDebugConsole::GetInstance()->Messagef( L"MESH_NUMINDEX : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshFace );
+		//CDebugConsole::GetInstance()->Messagef( L"MESH_NUMINDEX : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshFace );
 
 		return TRUE;
 	}//	End Keyword[ 4 ]
@@ -449,7 +449,7 @@ BOOL ASEParser::BeginMeshFaceList( FILE* _fp, LPWSTR _sLine )
 			INT _0 = 0, _1 = 0, _2 = 0;
 			swscanf( _sLine, L"%*s %d: %*s %d %*s %d %*s %d", &nIndex, &_0, &_1, &_2 );
 
-			//CDebugConsole::GetInstance()->Messagef( L" MESH_FACE : %d A : %d B : %d C : %d\n", nIndex, _0, _1, _2 );
+			////CDebugConsole::GetInstance()->Messagef( L" MESH_FACE : %d A : %d B : %d C : %d\n", nIndex, _0, _1, _2 );
 
 			m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshFace[ nIndex ]._0 = _0;
 			m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshFace[ nIndex ]._1 = _2;
@@ -471,7 +471,7 @@ BOOL ASEParser::GetMeshNumTVertex( LPWSTR _sLine )
 		m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshTVertex	=	NumTVertex;
 		m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshTVertex		=	new VERTEX[ NumTVertex ];
 
-		//CDebugConsole::GetInstance()->Messagef( L"MESH_NUMTVERTEX : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshTVertex );
+		////CDebugConsole::GetInstance()->Messagef( L"MESH_NUMTVERTEX : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshTVertex );
 
 		return TRUE;
 	}
@@ -492,7 +492,7 @@ BOOL ASEParser::BeginMeshTVertexList( FILE* _fp, LPWSTR _sLine )
 			FLOAT	u = 0.0f, v = 0.0f, w = 0.0f;
 			swscanf( _sLine, L"%*s %d  %f %f %f", &nIndex, &u, &v, &w );
 
-			//CDebugConsole::GetInstance()->Messagef( L" MESH_FACE : %d A : %d B : %d C : %d\n", nIndex, _0, _1, _2 );
+			////CDebugConsole::GetInstance()->Messagef( L" MESH_FACE : %d A : %d B : %d C : %d\n", nIndex, _0, _1, _2 );
 
 			m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshTVertex[ nIndex ].texcoord.x = u;
 			m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshTVertex[ nIndex ].texcoord.y = 1.0f - v;
@@ -515,7 +515,7 @@ BOOL ASEParser::GetMeshNumTFaces( LPWSTR _sLine )
 		m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshTFace	=	NumTFaces;
 		m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshTFace		=	new INDEX[ NumTFaces ];
 
-		CDebugConsole::GetInstance()->Messagef( L"MESH_NUMTFACES : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshTFace );
+		//CDebugConsole::GetInstance()->Messagef( L"MESH_NUMTFACES : %d\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].iNumMeshTFace );
 
 		return TRUE;
 	}
@@ -536,7 +536,7 @@ BOOL ASEParser::BeginMeshTFaceList( FILE* _fp, LPWSTR _sLine )
 			INT _0 = 0, _1 = 0, _2 = 0;
 			swscanf( _sLine, L"%*s %d %d %d %d", &nTIndex, &_0, &_1, &_2 );
 
-			//CDebugConsole::GetInstance()->Messagef( L" MESH_FACE : %d A : %d B : %d C : %d\n", nIndex, _0, _1, _2 );
+			////CDebugConsole::GetInstance()->Messagef( L" MESH_FACE : %d A : %d B : %d C : %d\n", nIndex, _0, _1, _2 );
 
 			m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshTFace[ nTIndex ]._0 = _0;
 			m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pMeshTFace[ nTIndex ]._1 = _2;

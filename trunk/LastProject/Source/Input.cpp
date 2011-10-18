@@ -87,7 +87,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			// Y축 회전 값
 			m_fYRotate = fYaw;
 			m_fXRotate = fPitch;
-			//CDebugConsole::GetInstance()->Messagef( "Input : %f\n", m_fYRotate );
+			////CDebugConsole::GetInstance()->Messagef( "Input : %f\n", m_fYRotate );
 
 			// 마우스를 윈도우의 중앙으로 초기화
 			// 마우스를 나타나지 않게 않다.

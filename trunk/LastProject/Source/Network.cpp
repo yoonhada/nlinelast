@@ -164,7 +164,7 @@ VOID CNetwork::scMOVE( CPacket& pk )
 
 	m_vMove = D3DXVECTOR3( x, 0.0f, z );
 
-	CDebugConsole::GetInstance()->Messagef( L"Recv Pos : %f %f %f \n", x, z, angle );
+	//CDebugConsole::GetInstance()->Messagef( L"Recv Pos : %f %f %f \n", x, z, angle );
 	CMainManage::GetInstance()->Get_Charactor()[1].UpdateByValue( m_vMove, angle );
 
 	// 이동 데이터 처리

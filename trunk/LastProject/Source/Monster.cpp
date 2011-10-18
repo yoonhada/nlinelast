@@ -256,7 +256,7 @@ VOID CMonster::Load( WCHAR* a_pFileName )
 		m_pBox[Loop].Load( wchTemp );
 	}
 
-	MessageBox( GHWND, L"Monster Load OK", NULL, MB_OK );
+	//MessageBox( GHWND, L"Monster Load OK", NULL, MB_OK );
 }
 
 VOID CMonster::Collision(D3DXVECTOR3& vControl)
@@ -303,7 +303,7 @@ VOID CMonster::Collision(D3DXVECTOR3& vControl)
 	if ( bColl )
 		m_vControl = vControl;
 
-	//CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f, %f, %f\n", vControl.x, vControl.x, vControl.x );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f, %f, %f\n", vControl.x, vControl.x, vControl.x );
 }
 
 VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime )
@@ -641,7 +641,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		m_fAngle = 0.0f;
 	}
 
-	//CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
 
 	D3DXVECTOR3 vControl = m_vControl;
@@ -663,8 +663,8 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		//m_vControl += (m_vSideStepVector * a_vControl.x);
 		vControl += (m_vSideStepVector * a_vControl.x);
 	}
-	//CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-	//CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
 	Collision(vControl);
 

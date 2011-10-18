@@ -79,6 +79,7 @@ public:
 	VOID Render();
 
 	VOID TestBreakCube();
+	VOID TestBreakCubeAll();
 
 	const D3DXVECTOR3& Get_CharaPos()
 	{
@@ -96,9 +97,16 @@ public:
 	VOID Collision(D3DXVECTOR3& vControl);
 	VOID Load( WCHAR* a_pFileName );
 
+	// 
 	const D3DXVECTOR3& Get_PreControl()
 	{
 		return m_vPreControl;
+	}
+
+	// 초기 위치 강제 세팅
+	VOID Set_Position( const D3DXVECTOR3& a_vControl )
+	{
+		m_vControl = m_vPreControl = a_vControl;
 	}
 
 
@@ -108,8 +116,12 @@ private:
 	VOID _CreateBase( INT a_iBoxSize, WCHAR* a_pCharaName );
 	VOID _CreateAniFrame( INT a_iFrameNum, INT a_iSrcFrameNum = EnumCharFrame::BASE, BOOL a_LoadMode = FALSE );
 	CCharCube* _CreateCube();
+	VOID Animate();
 	
 	HRESULT InitTexture(  DWORD a_Color, DWORD a_OutLineColor  );
+
+	INT	m_iClientNumber;
+	BOOL m_bActive;
 
 	INT m_iSelectedFrameNum;
 	INT m_iMaxCubeCount;
@@ -119,13 +131,14 @@ private:
 	D3DXVECTOR3 m_vControl;  ///< 캐릭터 위치
 	D3DXVECTOR3 m_vLerpControl; ///< 캐릭터 보간 위치
 	FLOAT		m_fAngle;	 ///< 캐릭터 각도
-	D3DXVECTOR3 m_vFowardVector; /// 캐릭터 전진 이동 벡터
-	D3DXVECTOR3 m_vSideStepVector; /// 캐릭터 좌우 이동 벡터
+	FLOAT		m_fNetTime;  ///< 네트워크 전송 위치 보정 시간
+	D3DXVECTOR3 m_vFowardVector; ///< 캐릭터 전진 이동 벡터
+	D3DXVECTOR3 m_vSideStepVector; ///< 캐릭터 좌우 이동 벡터
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 	LPDIRECT3DVERTEXBUFFER9 m_pTotalVB;   ///< 큐브 통합 버텍스
 	LPDIRECT3DINDEXBUFFER9  m_pTotalIB;   ///< 큐브 인덱스
-	LPDIRECT3DTEXTURE9		m_pTexture;
+	LPDIRECT3DTEXTURE9		m_pTexture;   ///< 큐브 통합 텍스쳐
 
 	Object* m_pObject;
 	CCharCube* m_pCreateCube;
@@ -140,7 +153,7 @@ private:
 	CMatrices* m_pMatrices;				///< 행렬 클래스 포인터
 	D3DXMATRIXA16 m_matMultWorld;		///< 적용할 최종 행렬
 	D3DXMATRIXA16 m_matMonster;			///< 몬스터용 행렬
-	BOOL		  m_bMatMonster;
+	BOOL		  m_bMatMonster;		///< 몬스터 행렬 쓸지 안쓸지 체크
 	D3DXMATRIXA16 m_matControl;         ///< 조작 행렬
 
 	INT m_iLoop;

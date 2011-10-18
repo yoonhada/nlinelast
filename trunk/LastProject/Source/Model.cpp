@@ -129,7 +129,7 @@ VOID CModel::Render()
 	}
 }
 
-VOID CModel::CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIXA16& a_matChara )
+VOID CModel::CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIXA16& a_matChara, const FLOAT fPow )
 {
 	INT nMax = 0;
 	DWORD dwColor = 0xFF000000;
@@ -152,7 +152,7 @@ VOID CModel::CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIX
 	pQube->SetPosition( vec );
 	//vec = a_pCube->Get_Pos( a_iFrameNum );
 	//D3DXVec3Normalize(&vec, &vec);
-	pQube->RandMome( vMome );
+	pQube->RandMome( vMome * fPow );
 	pQube->RanderRotate();
 	pQube->Create( m_pd3dDevice, m_pTotalVB, m_pTotalIB, 0, 0, 0.5f );
 	pQube->InitTexture( dwColor, dwOutLine1 );

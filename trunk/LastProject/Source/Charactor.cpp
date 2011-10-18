@@ -48,6 +48,8 @@ VOID CCharactor::Clear()
 	D3DXMatrixIdentity( &m_matControl );
 
 	m_bMatMonster = FALSE;
+	m_iClientNumber = 0;
+	m_bActive = FALSE;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
@@ -367,7 +369,7 @@ VOID CCharactor::Collision(D3DXVECTOR3& vControl)
 	if ( bColl )
 		m_vControl = vControl;
 
-	//CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f, %f, %f\n", vControl.x, vControl.x, vControl.x );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f, %f, %f\n", vControl.x, vControl.x, vControl.x );
 }
 
 VOID CCharactor::UpdateByInput(  )
@@ -379,7 +381,7 @@ VOID CCharactor::UpdateByInput(  )
 	// 360도 넘으면 라디언 0으로 초기화
 	ABSDEF( m_fAngle ) > 6.2831853f ? m_fAngle = 0.0f : NULL;
 
-	//CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
 	D3DXVECTOR3 vControl = m_vControl;
 	// 전진 후진 처리
@@ -398,8 +400,8 @@ VOID CCharactor::UpdateByInput(  )
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		vControl += (m_vSideStepVector * a_vControl.x);
 	}
-	// CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-	// CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
+	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
+	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
 	m_vPreControl = vControl;
 
@@ -417,12 +419,12 @@ VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	
 	m_fAngle += a_fAngle;
 	// 360도 넘으면 라디언 0으로 초기화
-	if( m_fAngle > 6.2831853 || m_fAngle < -6.2831853 )
+	if( ABSDEF(m_fAngle) > 6.2831853 )
 	{
 		m_fAngle = 0.0f;
 	}
 
-	//CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
 	
 	D3DXVECTOR3 vControl = m_vControl;
@@ -434,6 +436,8 @@ VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
 		m_vControl += (m_vFowardVector * a_vControl.z);
 		vControl += (m_vFowardVector * a_vControl.z);
+
+		Animate();
 	}
 	//좌우 처리
 	if( a_vControl.x != 0)
@@ -444,8 +448,8 @@ VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		m_vControl += (m_vSideStepVector * a_vControl.x);
 		vControl += (m_vSideStepVector * a_vControl.x);
 	}
-	//CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-	//CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
 	Collision(vControl);
 
@@ -464,16 +468,17 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	m_fAngle = a_fAngle;
 
-	CFrequency::GetInstance()->setTime( 0.0f );
+	m_fNetTime = 0.0f;
+	//CFrequency::GetInstance()->setTime( 0.0f );
 }
 
 VOID CCharactor::UpdateOtherPlayer()
 {
 
-	CFrequency::GetInstance()->setPlusTime();
-	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, CFrequency::GetInstance()->getTime() / 0.1f );
-	//CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
-	//CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
+	m_fNetTime += CFrequency::GetInstance()->getFrametime();
+	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / 0.1f );
+	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
+	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
 
 	Set_ControlTranslate( 0, m_vLerpControl.x );
 	Set_ControlTranslate( 1, m_vLerpControl.y );
@@ -486,6 +491,30 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 {
 	m_matMonster = a_matMonster;
 	m_bMatMonster = TRUE;
+}
+
+VOID CCharactor::Animate()
+{
+	static FLOAT fAniAngle = 0.0f;
+	static BOOL bCheck = FALSE;
+	if( fAniAngle > 1.5f && bCheck == FALSE )
+	{
+		fAniAngle += 0.1f;
+	}
+	else
+	{
+		bCheck = TRUE;
+
+		if( fAniAngle > -1.5f )
+		{
+			fAniAngle -= 0.1f;
+		}
+		else
+		{
+			bCheck = FALSE;
+		}
+	}
+	Set_ControlRotate( 1, m_fAngle + fAniAngle );
 }
 
 VOID CCharactor::Update()
@@ -532,6 +561,37 @@ VOID CCharactor::Render()
 	//a_SetupMatrices.SetupModeltoWorld( m_zGrid.Get_MatWorld() );
 	//m_zGrid.Draw();
 	
+}
+
+VOID CCharactor::TestBreakCubeAll()
+{
+	if( m_bAliveCheck == TRUE )
+	{
+		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
+		{
+			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			{
+				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+			}
+
+			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
+			{
+				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
+
+				if( m_bMatMonster )
+				{
+					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, 2.0f );
+				}
+				else
+				{
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
+				}
+			}
+		}
+	}
+
+	m_bAliveCheck=FALSE;
 }
 
 VOID CCharactor::TestBreakCube()
@@ -608,11 +668,6 @@ VOID CCharactor::TestBreakCube()
 
 HRESULT CCharactor::InitTexture( DWORD a_Color, DWORD a_OutLineColor )
 {
-
-	/*if( FAILED( D3DXCreateTextureFromFile( GD3D9DEVICE, L"Media/TerrainTexture/test.bmp", &m_pTexture ) ) )
-	{
-		return E_FAIL;
-	}*/
 
 	LPBYTE pData;	
 	LPDWORD pDWord;
