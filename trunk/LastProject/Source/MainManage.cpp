@@ -234,10 +234,7 @@ VOID	CMainManage::Update()
 
 		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 		{	
-			if (Loop == 0 || Loop == 1)
-			{
-				//m_pCharactors[Loop].TestBreakCubeAll();
-			}
+			m_pCharactors[Loop].TestBreakCubeAll();
 		}
 		
 		// ºôº¸µå ÀÛ¾÷

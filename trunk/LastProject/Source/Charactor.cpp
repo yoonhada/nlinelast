@@ -394,7 +394,7 @@ VOID CCharactor::UpdateByInput(  )
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
 		vControl += (m_vFowardVector * a_vControl.z);
 
-		Animate();
+		
 	}
 	// ÁÂ¿ì Ã³¸®
 	if( a_vControl.x != 0)
@@ -403,6 +403,31 @@ VOID CCharactor::UpdateByInput(  )
 		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		vControl += (m_vSideStepVector * a_vControl.x);
+
+		
+	}
+
+	if( a_vControl.z != 0 || a_vControl.x != 0 )
+	{
+		Animate();
+	}
+	else
+	{
+		if( m_fAniAngle < 0.1f && m_fAniAngle > -0.1f )
+		{
+			m_fAniAngle = 0.0f;
+		}
+		else
+		{
+			if( m_fAniAngle < 0.1f)
+			{
+				m_fAniAngle += 5.0f * CFrequency::GetInstance()->getFrametime();
+			}
+			else if (m_fAniAngle > -0.1f )
+			{
+				m_fAniAngle -= 5.0f * CFrequency::GetInstance()->getFrametime();
+			}
+		}
 	}
 	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
 	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );

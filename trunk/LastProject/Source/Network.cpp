@@ -108,7 +108,10 @@ VOID CNetwork::Update()
 		ProcessPacket( *it );
 	}
 
+	CDebugConsole::GetInstance()->Messagef( L"Vector Size : %d\n", m_VectorPackets.size() );
 	m_VectorPackets.clear();
+	//m_VectorPackets.erase( m_VectorPackets.begin(), m_VectorPackets.end() );
+	CDebugConsole::GetInstance()->Messagef( L"Vector Size Clear : %d\n", m_VectorPackets.size() );
 
 	LeaveCriticalSection( &m_cs );
 
