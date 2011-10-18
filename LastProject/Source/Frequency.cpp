@@ -10,7 +10,6 @@
 CFrequency::CFrequency() : m_fFrequency( 0.0f ) 
 						 , m_fFrametime( 0.0f ) 
 						 , m_nFrames( 0 )
-						 , m_fTime( 0.0f )
 {
 	QueryPerformanceFrequency( &Frequency );
 }

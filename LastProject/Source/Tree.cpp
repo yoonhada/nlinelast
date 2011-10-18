@@ -81,29 +81,29 @@ VOID CTree::InsertObject( NODE * pNode, CBoundBox * pCube )
 	{
 		if ( pNode->_children[NODE::LT] == NULL )
 		{
-			//CDebugConsole::GetInstance()->Messagef( "PUSH\n");
+			////CDebugConsole::GetInstance()->Messagef( "PUSH\n");
 			pNode->_data.push_back( pCube );
 			return;
 		}
 
 		if ( IsRect( pNode->_children[NODE::LT], pCube ) )
 		{
-			//CDebugConsole::GetInstance()->Messagef( "LT - ");
+			////CDebugConsole::GetInstance()->Messagef( "LT - ");
 			InsertObject( pNode->_children[NODE::LT], pCube );
 		}
 		if ( IsRect( pNode->_children[NODE::RT], pCube ) )
 		{
-			//CDebugConsole::GetInstance()->Messagef( "RT - ");
+			////CDebugConsole::GetInstance()->Messagef( "RT - ");
 			InsertObject( pNode->_children[NODE::RT], pCube );
 		}
 		if ( IsRect( pNode->_children[NODE::LB], pCube ) )
 		{
-			//CDebugConsole::GetInstance()->Messagef( "LB - ");
+			////CDebugConsole::GetInstance()->Messagef( "LB - ");
 			InsertObject( pNode->_children[NODE::LB], pCube );
 		}
 		if ( IsRect( pNode->_children[NODE::RB], pCube ) )
 		{
-			//CDebugConsole::GetInstance()->Messagef( "RB - ");
+			////CDebugConsole::GetInstance()->Messagef( "RB - ");
 			InsertObject( pNode->_children[NODE::RB], pCube );
 		}
 	}

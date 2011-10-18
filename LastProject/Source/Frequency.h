@@ -22,10 +22,6 @@ public:
 	VOID Update();
 	FLOAT getFrequency()	{ return m_fFrequency <= 0 ? 1 : m_fFrequency; }
 	FLOAT getFrametime()	{ return m_fFrametime; }
-	
-	FLOAT getTime()					{ return m_fTime; }
-	VOID setPlusTime()				{ m_fTime += m_fFrametime; }
-	VOID setTime( FLOAT a_fTime )	{ m_fTime = a_fTime; }
 
 private:
 	CFrequency();
@@ -37,8 +33,6 @@ private:
 	INT m_nFrames;
 	FLOAT m_fFrequency;
 	FLOAT m_fFrametime;
-
-	FLOAT m_fTime;
 };
 
 #endif

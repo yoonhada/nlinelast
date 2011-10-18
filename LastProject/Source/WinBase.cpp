@@ -25,7 +25,7 @@ HRESULT CWinBase::Create()
 	
 	m_pDX9 = new CDirectX9;
 	m_pManage = CMainManage::GetInstance();
-	CDebugConsole::GetInstance();
+	//CDebugConsole::GetInstance();
 	CFrequency::GetInstance();
 	CTextureManage::GetInstance();
 	CInput::GetInstance();
@@ -46,7 +46,7 @@ HRESULT CWinBase::Release()
 	SAFE_DELETE( m_pDX9 );
 	CMatrices::DestoryInstance();
 	m_pManage->DestoryInstance();
-	CDebugConsole::DestoryInstance();
+	//CDebugConsole::DestoryInstance();
 	CFrequency::DestoryInstance();
 	CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
