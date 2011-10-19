@@ -45,7 +45,7 @@ private:
 	VOID CreateCharactor();
 
 	BOOL m_bHost;
-	INT m_iClientNumber;
+	WORD m_iClientNumber;
 
 public:
 	CCharactor* Get_Charactors()
@@ -63,12 +63,12 @@ public:
 		m_bHost = a_bHost;
 	}
 
-	VOID Set_ClientNumber( INT a_iClientNumber )
+	VOID Set_ClientNumber( WORD a_iClientNumber )
 	{
 		m_iClientNumber = a_iClientNumber;
 	}
 
-	INT Get_ClientNumber()
+	WORD Get_ClientNumber()
 	{
 		return m_iClientNumber;
 	}

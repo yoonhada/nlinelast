@@ -456,52 +456,50 @@ VOID CCharactor::UpdateByInput(  )
 	Calcul_MatWorld();
 }
 
-VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
-{
-	
-	m_fAngle += a_fAngle;
-	// 360도 넘으면 라디언 0으로 초기화
-	if( ABSDEF(m_fAngle) > 6.2831853 )
-	{
-		m_fAngle = 0.0f;
-	}
-
-	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
-
-	
-	D3DXVECTOR3 vControl = m_vControl;
-	//전진 후진 처리
-	if( a_vControl.z != 0 )
-	{
-		D3DXMatrixRotationY( &m_matControl, m_fAngle );
-		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
-		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-		m_vControl += (m_vFowardVector * a_vControl.z);
-		vControl = (m_vFowardVector * a_vControl.z);
-	}
-	//좌우 처리
-	if( a_vControl.x != 0)
-	{
-		D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
-		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
-		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
-		m_vControl += (m_vSideStepVector * a_vControl.x);
-		vControl += (m_vSideStepVector * a_vControl.x);
-	}
-	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
-
-	Collision(vControl);
-	m_vPreControl = m_vControl;
-	m_vControl += vControl;
-
-	Set_ControlTranslate( 0, m_vControl.x );
-	Set_ControlTranslate( 1, m_vControl.y );
-	Set_ControlTranslate( 2, m_vControl.z );
-	Set_ControlRotate( 1, m_fAngle );
-	Calcul_MatWorld();
-	
-}
+//VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
+//{
+//	
+//	m_fAngle += a_fAngle;
+//	// 360도 넘으면 라디언 0으로 초기화
+//	if( ABSDEF(m_fAngle) > 6.2831853 )
+//	{
+//		m_fAngle = 0.0f;
+//	}
+//
+//	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
+//
+//	
+//	//D3DXVECTOR3 vControl = m_vControl;
+//	//전진 후진 처리
+//	if( a_vControl.z != 0 )
+//	{
+//		D3DXMatrixRotationY( &m_matControl, m_fAngle );
+//		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
+//		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
+//		m_vControl += (m_vFowardVector * a_vControl.z);
+//		m_vPreControl += (m_vFowardVector * a_vControl.z);
+//	}
+//	//좌우 처리
+//	if( a_vControl.x != 0)
+//	{
+//		D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
+//		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
+//		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
+//		m_vControl += (m_vSideStepVector * a_vControl.x);
+//		m_vPreControl += (m_vSideStepVector * a_vControl.x);
+//	}
+//	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
+//	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
+//
+//	Collision();
+//
+//	Set_ControlTranslate( 0, m_vControl.x );
+//	Set_ControlTranslate( 1, m_vControl.y );
+//	Set_ControlTranslate( 2, m_vControl.z );
+//	Set_ControlRotate( 1, m_fAngle );
+//	Calcul_MatWorld();
+//	
+//}
 
 VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 {
@@ -518,7 +516,7 @@ VOID CCharactor::UpdateOtherPlayer()
 {
 
 	m_fNetTime += CFrequency::GetInstance()->getFrametime();
-	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / 0.1f );
+	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / 0.25f );
 	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
 	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
 
@@ -533,6 +531,9 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 {
 	m_matMonster = a_matMonster;
 	m_bMatMonster = TRUE;
+
+	D3DXVec3TransformCoord( &m_vPreControl, &m_vPreControl, &Get_MatWorld() );
+	D3DXVec3TransformCoord( &m_vPreControl, &m_vPreControl, &m_matMonster );
 }
 
 VOID CCharactor::Animate()

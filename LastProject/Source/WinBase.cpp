@@ -26,17 +26,36 @@ HRESULT CWinBase::Create()
 	m_pDX9 = new CDirectX9;
 	m_pManage = CMainManage::GetInstance();
 	//CDebugConsole::GetInstance();
+	CDebugConsole::GetInstance();
 	CFrequency::GetInstance();
 	CTextureManage::GetInstance();
 	CInput::GetInstance();
 
 	// 네트워크
-	//WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
+	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
+	m_pNetwork = new CNetwork;
+	m_pNetwork->CreateSocket();
+	
+	// 파일에서 IP 받아오기
+	FILE* pFile;
+	
+	pFile = _wfopen( L"Data/IP.txt", L"r" );
 
-	//m_pNetwork = new CNetwork;
-	//m_pNetwork->CreateSocket();
-	//m_pNetwork->ConnectToServer( "210.109.3.165", 20202 );
-	//m_pNetwork->csLOGON();
+	if( NULL == pFile )
+	{
+		MessageBox(GHWND, L"IP File Load Error", NULL, MB_OK);
+		return E_FAIL;
+	}
+
+	fseek( pFile, 0L, SEEK_SET );
+
+	CHAR szTemp[255];
+	fscanf( pFile, "%s", szTemp );
+
+	fclose(pFile);
+
+	m_pNetwork->ConnectToServer( szTemp, 20202 );
+	m_pNetwork->csLOGON();
 
 	return S_OK;
 }
@@ -46,13 +65,13 @@ HRESULT CWinBase::Release()
 	SAFE_DELETE( m_pDX9 );
 	CMatrices::DestoryInstance();
 	m_pManage->DestoryInstance();
-	//CDebugConsole::DestoryInstance();
+	CDebugConsole::DestoryInstance();
 	CFrequency::DestoryInstance();
 	CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
 
-	//WSACleanup();
-	//delete m_pNetwork;
+	WSACleanup();
+	delete m_pNetwork;
 
 	return S_OK;
 }
@@ -203,7 +222,7 @@ VOID CWinBase::Update()
 	swprintf( buf, 256, TEXT( "%0.4f" ), CFrequency::GetInstance()->getFrequency() );
 	SetWindowText( GetInstance()->m_hWnd, buf );
 
-	//GetInstance()->m_pNetwork->Update();
+	GetInstance()->m_pNetwork->Update();
 	GetInstance()->m_pManage->Update();
 }
 

@@ -83,7 +83,7 @@ VOID CNetwork::Update()
 	static FLOAT time = 0.0f;
 	time += CFrequency::GetInstance()->getFrametime();
 
-	if( time > 0.1f )
+	if( time > 0.25f )
 	{
 		// 이동 데이터 서버로 보내기
 		csMOVE( CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
@@ -108,10 +108,9 @@ VOID CNetwork::Update()
 		ProcessPacket( *it );
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Vector Size : %d\n", m_VectorPackets.size() );
+	
 	m_VectorPackets.clear();
 	//m_VectorPackets.erase( m_VectorPackets.begin(), m_VectorPackets.end() );
-	CDebugConsole::GetInstance()->Messagef( L"Vector Size Clear : %d\n", m_VectorPackets.size() );
 
 	LeaveCriticalSection( &m_cs );
 
@@ -159,19 +158,26 @@ VOID CNetwork::scCHAT( CPacket& pk )
 
 VOID CNetwork::scMOVE( CPacket& pk )
 {
-	CHAR szMove[128] = { 0, };
-	pk.ReadString( szMove, 128 );
-
 	FLOAT x, z, angle;
-	INT number;
-	sscanf( szMove, "%f %f %f %d", &x, &z, &angle, &number  );
+	WORD number;
+
+	pk.Read( &number );
+	pk.Read( &x );
+	pk.Read( &z );
+	pk.Read( &angle );
 
 	m_vMove = D3DXVECTOR3( x, 0.0f, z );
 
+	for( INT Loop=0; Loop<3; ++Loop )
+	{
+		if( CMainManage::GetInstance()->Get_Charactors()[Loop].Get_ClientNumber() == number  )
+		{
+			CMainManage::GetInstance()->Get_Charactors()[Loop].UpdateByValue( m_vMove, angle );
+			CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
+			break;
+		}
+	}
 	
-	CMainManage::GetInstance()->Get_Charactors()[number].UpdateByValue( m_vMove, angle );
-
-	CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
 
 	// 이동 데이터 처리
 }
@@ -180,21 +186,54 @@ VOID CNetwork::scMOVE( CPacket& pk )
 VOID CNetwork::scNEWUSER( CPacket& pk )
 {
 	// 유저 접속 처리
-	//cout << "NEW USER" << endl;
-	INT iNumber;
-	CHAR szMsg[128];
+	WORD wNumber;
+	pk.Read( &wNumber );
 
-	pk.ReadString( szMsg, 128 );
+	for( INT Loop=0; Loop<3; ++Loop )
+	{
+		if( CMainManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
+		{
+			CMainManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
+			CMainManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( wNumber );
+			break;
+		}
+	}
 
-	//static INT iTotalPlayerNumber = 1;
-
-	sscanf( szMsg, "%d", &iNumber );
-
-	CMainManage::GetInstance()->Get_Charactors()[iNumber].Set_Active( TRUE );
-
-	CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , iNumber );
+	CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
 }
 
+VOID CNetwork::scInitData( CPacket& pk )
+{
+	bool host;
+	WORD user_no;
+	WORD userCount;
+	WORD user_list;
+
+	pk.Read( &host );
+	pk.Read( &user_no );
+	pk.Read( &userCount );
+
+	CMainManage::GetInstance()->Set_Host( host );
+	CMainManage::GetInstance()->Set_ClientNumber( user_no );
+	CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
+
+	// 유저수 만큼 루프
+	for( WORD i=0; i<userCount; ++i )
+	{
+		pk.Read( &user_list );
+
+		for( INT Loop=0; Loop<3; ++Loop )
+		{
+			if( CMainManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
+			{
+				CMainManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
+				CMainManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( user_list );
+				break;
+			}
+		}
+
+	}
+}
 
 VOID CNetwork::csLOGON()
 {
@@ -214,19 +253,7 @@ VOID CNetwork::csLOGON()
 
 }
 
-VOID CNetwork::scInitData( CPacket& pk )
-{
-	CHAR Temp[128];
-	pk.ReadString( Temp, 128 );
 
-	INT iHost = 0, iNumber = 0;
-	sscanf( Temp, "%d %d", &iHost, &iNumber );
-
-	CMainManage::GetInstance()->Set_Host( iHost );
-	CMainManage::GetInstance()->Set_ClientNumber( iNumber );
-
-	CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , iHost, iNumber );
-}
 
 
 VOID CNetwork::csCHAT()
@@ -252,11 +279,11 @@ VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
 	WORD wMsgID = MSG_CS_MOVE;
 	pk.Write( wMsgSize );
 	pk.Write( wMsgID );
-
-	CHAR szMove[128];
-	sprintf( szMove, "%f %f %f", x, z, angle ); 
-
-	pk.WriteString( szMove, strlen( szMove ) );
+	pk.Write( CMainManage::GetInstance()->Get_ClientNumber() );
+	pk.Write( x );
+	pk.Write( z );
+	pk.Write( angle );
+	pk.CalcSize();
 
 	SendToSever( pk );
 }

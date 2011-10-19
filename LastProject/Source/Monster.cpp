@@ -22,6 +22,7 @@ VOID CMonster::Clear()
 	m_iFrameMax = 10;
 	m_iSelectedFrameNum = 0;
 	D3DXMatrixIdentity( &m_matControl );
+	m_vPreControl = D3DXVECTOR3(300.0f, 0.0f, 100.0f);
 	m_vControl = D3DXVECTOR3(300.0f, 0.0f, 100.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -40,8 +41,8 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 		m_pBox[LoopBox].Create( m_pD3dDevice, m_pMatrices );
 	}
 
-	m_pBoundBox = new CBoundBox(&m_pBox[2]);
-	m_pBoundBox->Create();
+	//m_pBoundBox = new CBoundBox(&m_pBox[2]);
+	//m_pBoundBox->Create();
 
 	for( INT LoopFrame=0; LoopFrame<m_iFrameMax; ++LoopFrame )
 	{
@@ -50,6 +51,11 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 
 	//WCHAR* ptr = wcstok( a_pFileName, L"." );
 	Load( a_pFileName );
+
+	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	{
+		//CTree::GetInstance()->GetChaVector()->push_back( m_pBox[Loop].GetBoundBox() );
+	}
 
 	return S_OK;
 }
@@ -73,7 +79,7 @@ VOID CMonster::Realese()
 		m_pFrame=NULL;
 	}
 
-	SAFE_DELETE(m_pBoundBox);
+	//SAFE_DELETE(m_pBoundBox);
 }
 
 VOID CMonster::Load( WCHAR* a_pFileName )
@@ -257,54 +263,6 @@ VOID CMonster::Load( WCHAR* a_pFileName )
 	}
 
 	//MessageBox( GHWND, L"Monster Load OK", NULL, MB_OK );
-}
-
-VOID CMonster::Collision(D3DXVECTOR3& vControl)
-{
-
-	// 케릭터 이동
-	CBoundBox bbThis;
-	bbThis.SetPosition( vControl );
-	for ( int i = 0; i < 6; ++i )
-		bbThis.SetSize( i, m_pBoundBox->GetSize( i ) );
-
-	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vControl);
-	std::vector<CBoundBox*>::iterator Iter;
-
-	BOOL bColl = TRUE;
-	if ( vecBoundBox )
-	{
-		int i = 0;
-		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); Iter++ )
-		{
-			if( CPhysics::GetInstance()->Collision( &bbThis, ( *Iter ) ) )
-			{
-				bColl = FALSE;
-				break;
-			}
-		}
-	}
-
-	if ( bColl == TRUE || !CTree::GetInstance()->GetChaVector()->empty() )
-	{
-		Iter = CTree::GetInstance()->GetChaVector()->begin();
-		if( CTree::GetInstance()->GetChaVector()->size() > 0 )
-			Iter++;
-
-		for ( ; Iter != CTree::GetInstance()->GetChaVector()->end(); Iter++ )
-		{
-			if( CPhysics::GetInstance()->Collision( &bbThis, ( *Iter ) ) )
-			{
-				bColl = FALSE;
-				break;
-			}
-		}
-	}
-
-	if ( bColl )
-		m_vControl = vControl;
-
-	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f, %f, %f\n", vControl.x, vControl.x, vControl.x );
 }
 
 VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime )
@@ -645,7 +603,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
 
-	D3DXVECTOR3 vControl = m_vControl;
+	//D3DXVECTOR3 vControl = m_vControl;
 	//전진 후진 처리
 	if( a_vControl.z != 0 )
 	{
@@ -653,7 +611,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
 		//m_vControl += (m_vFowardVector * a_vControl.z);
-		vControl += (m_vFowardVector * a_vControl.z);
+		m_vPreControl += (m_vFowardVector * a_vControl.z);
 	}
 	//좌우 처리
 	if( a_vControl.x != 0)
@@ -662,12 +620,21 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		//m_vControl += (m_vSideStepVector * a_vControl.x);
-		vControl += (m_vSideStepVector * a_vControl.x);
+		m_vPreControl += (m_vSideStepVector * a_vControl.x);
 	}
 	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
 	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
-	Collision(vControl);
+	BOOL bCol = FALSE;
+	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	{
+		bCol = m_pBox[Loop].Collision();
+		if( bCol == TRUE )
+		{
+			m_vControl = m_vPreControl;
+			break;
+		}
+	}
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );

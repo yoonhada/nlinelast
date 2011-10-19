@@ -157,7 +157,7 @@ VOID CMainManage::CreateCharactor()
 		}
 		else
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/E_0.csav" );
 		}
 		
 		
