@@ -34,14 +34,14 @@ public:
 	FRECT GetFRect();
 	FLOAT GetWidth();
 	FLOAT GetHeight();
-	D3DXVECTOR3 GetPosition(INT = -1);
-	D3DXVECTOR3 GetAxisDir(INT n)		{ return m_vAxisDir[n]; }
-	D3DXMATRIXA16 GetAxisMat();
+	D3DXVECTOR3 GetPosition(INT = -1) const;
+	D3DXVECTOR3 GetAxisDir(INT n) const 	{ return m_vAxisDir[n]; }
+	D3DXMATRIXA16 GetAxisMat() const;
 
-	FLOAT GetSize(INT n);
-	FLOAT GetRadius();
-	FLOAT GetRadiusLong();
-	FLOAT GetRadiusShort();
+	FLOAT GetSize(INT n) const;
+	FLOAT GetRadius() const;
+	FLOAT GetRadiusLong() const;
+	FLOAT GetRadiusShort() const;
 
 	// Set
 	VOID SetSize(INT n, float f)		{ m_fSize[n] = f; }

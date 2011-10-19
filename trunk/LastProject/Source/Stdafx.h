@@ -19,6 +19,7 @@
 #include <winsock2.h>
 #include <Windows.h>
 #include <process.h>
+#include <assert.h>
 
 //#include <WindowsX.h>
 //#include <CommCtrl.h>

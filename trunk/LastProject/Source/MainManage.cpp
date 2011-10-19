@@ -4,6 +4,7 @@
 #include "BillBoard.h"
 #include "Charactor.h"
 #include "Camera.h"
+#include "Axis.h"
 
 CMainManage::CMainManage()
 {
@@ -21,6 +22,8 @@ VOID	CMainManage::Clear()
 	m_pBill = NULL;
 	m_pMyCharactor = NULL;
 	m_pCharactors = NULL;
+	m_pAxis = NULL;
+
 	m_iMaxCharaNum = 3;
 	m_bHost = FALSE;
 	m_iClientNumber = 0;
@@ -33,7 +36,13 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pMatrices = CMatrices::GetInstance();
 
 	//飘府 积己
-	CTree::GetInstance()->Create( 1000.0f, 4 );
+	FLOAT fSize = 1000.0f;
+	INT nDeep = 4;
+	CTree::GetInstance()->Create( fSize, nDeep );
+#ifdef _DEBUG
+	m_pAxis = new Axis( m_pD3dDevice );
+	m_pAxis->Create( fSize, nDeep );
+#endif
 
 	//墨皋扼 积己
 	m_pCamera = new CCamera;
@@ -82,6 +91,8 @@ HRESULT CMainManage::Release()
 
 	SAFE_DELETE( m_pBill );
 
+	SAFE_DELETE( m_pAxis );
+
 	CTree::DestoryInstance();
 
 	return S_OK;
@@ -120,7 +131,7 @@ VOID CMainManage::CreateCharactor()
 		D3DXVECTOR3( 260.0f, 0.0f,  0.0f ), 
 		D3DXVECTOR3( 290.0f, 0.0f,  0.0f ), 
 		D3DXVECTOR3( 310.0f, 0.0f,  0.0f ), 
-		D3DXVECTOR3(  0.0f, 0.0f,100.0f ) 
+		D3DXVECTOR3(  0.0f, 0.0f, 100.0f ) 
 	};
 
 	//某腐磐 积己
@@ -274,6 +285,10 @@ VOID	CMainManage::Update()
 VOID	CMainManage::Render()
 {
 	m_pLight->EnableLight();
+
+#ifdef _DEBUG
+	m_pAxis->Render();
+#endif
 
 	m_pMatrices->SetupModeltoWorld( m_pMap->Get_MatWorld() );
 	m_pMap->Render();

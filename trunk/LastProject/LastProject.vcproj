@@ -535,6 +535,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Debug"
+			>
+			<File
+				RelativePath=".\Source\Axis.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Axis.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

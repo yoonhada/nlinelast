@@ -40,7 +40,7 @@ VOID CBoundBox::Clear()
 	m_fSize[0] = m_fSize[1] = m_fSize[2] = m_fSize[3] = m_fSize[4] = m_fSize[5] = 0;
 }
 
-D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint)
+D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 {
 	D3DXVECTOR3 vRet;
 
@@ -120,22 +120,22 @@ FRECT CBoundBox::GetFRect()
 		vec.z + GetSize( CBoundBox::PLUSZ  ), 
 		vec.x + GetSize( CBoundBox::PLUSX  ), 
 		vec.z + GetSize( CBoundBox::MINUSZ ) };
-	
-	return rect;
+
+		return rect;
 }
 
-FLOAT CBoundBox::GetSize(INT n)			
+FLOAT CBoundBox::GetSize(INT n) const
 {
 	if (m_pCharactors)		return ( n < 3 ) ? -7.5f : 7.5f;
 	else					return ( m_fSize[n] );
 }
 
-FLOAT CBoundBox::GetRadius()
+FLOAT CBoundBox::GetRadius() const
 {
 	return sqrt( GetRadiusLong() * GetRadiusLong() + GetRadiusShort() * GetRadiusShort() );
 }
 
-FLOAT CBoundBox::GetRadiusLong()
+FLOAT CBoundBox::GetRadiusLong() const
 {
 	FLOAT fRet = 0;
 
@@ -150,7 +150,7 @@ FLOAT CBoundBox::GetRadiusLong()
 	return fRet;
 }
 
-FLOAT CBoundBox::GetRadiusShort()
+FLOAT CBoundBox::GetRadiusShort() const
 {
 	FLOAT fRet = FLT_MAX;
 
@@ -175,7 +175,7 @@ VOID CBoundBox::SetAngle(FLOAT fAngle)
 	m_vAxisDir[2].z =  cosf(fAngle);
 }						///< yÃàÈ¸Àü
 
-D3DXMATRIXA16 CBoundBox::GetAxisMat()
+D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 {
 	return D3DXMATRIXA16(
 		m_vAxisDir[0].x, m_vAxisDir[1].x, m_vAxisDir[2].x, 0, 

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 CPhysics::CPhysics( void )
-// : m_vGAccel( 0.0f, 0.0027240694f, 0.0f )		///< 9.80665 * ( 1/60( f/s ) )^2
 : m_vGAccel( 0.0f, 0.0108962777f, 0.0f )		///< 9.80665 * ( 1/30( f/s ) )^2
 , m_fElastic( 0.5f )							///< 탄성도
 , m_fAirRegistance( 0.99f )						///< 공기저항
@@ -13,8 +12,11 @@ CPhysics::~CPhysics( void )
 {
 }
 
-BOOL CPhysics::IntersectTri(D3DXVECTOR3 &v0, D3DXVECTOR3 &v1, D3DXVECTOR3 &v2, 
-							const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vDirection)
+BOOL CPhysics::IntersectTri(const D3DXVECTOR3 &v0, 
+							const D3DXVECTOR3 &v1, 
+							const D3DXVECTOR3 &v2, 
+							const D3DXVECTOR3 &vBegin, 
+							const D3DXVECTOR3 &vDirection)
 {
 	BOOL bColl = FALSE;
 	FLOAT fu, fv, fd;
@@ -32,7 +34,7 @@ BOOL CPhysics::IntersectTri(D3DXVECTOR3 &v0, D3DXVECTOR3 &v1, D3DXVECTOR3 &v2,
 	return bColl;
 }
 
-VOID CPhysics::Reflect( D3DXVECTOR3& _vOut, D3DXVECTOR3& _vN, D3DXVECTOR3& _vP )
+VOID CPhysics::Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP )
 {
 	D3DXVECTOR3 vN;
 	D3DXVec3Normalize( &vN, &_vN );
@@ -40,20 +42,25 @@ VOID CPhysics::Reflect( D3DXVECTOR3& _vOut, D3DXVECTOR3& _vN, D3DXVECTOR3& _vP )
 	_vOut = 2.0f * ( D3DXVec3Dot( &-_vP, &vN ) * vN ) + _vP;
 }
 
-///< Point To Point
-//BOOL CPhysics::Collision(D3DXVECTOR3& V1, D3DXVECTOR3& V2, FLOAT fEpsilon=0.0001f )
-//{
-//	BOOL bRet = FALSE;
-//
-//	if( fabsf(V2.x - V1.x) < fEpsilon &&
-//		fabsf(V2.y - V1.y) < fEpsilon &&
-//		fabsf(V2.z - V1.z) < fEpsilon )
-//		bRet = TRUE;
-//
-//	return bRet;
-//}
+VOID CPhysics::Sliding( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP )
+{
+	D3DXVECTOR3 vN;
+	D3DXVec3Normalize( &vN, &_vN );
 
-///< Sphere To Sphere
+	// P - n ( n * P )
+	_vOut = _vP - D3DXVec3Dot( &_vP, &vN ) * vN;
+}
+
+VOID CPhysics::Sliding( D3DXVECTOR3& _vOut )
+{
+	D3DXVECTOR3 vP = _vOut;
+	D3DXVECTOR3 vN;
+	D3DXVec3Normalize( &vN, &m_vColNormal );
+
+	// P - n ( n * P )
+	_vOut = vP - D3DXVec3Dot( &vP, &vN ) * vN;
+}
+
 BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1, 
 						 const D3DXVECTOR3* SphereCenter2, FLOAT sphereRadius2 )
 {
@@ -70,54 +77,18 @@ BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1,
 	return bRet;
 }
 
-///< Line to Plane
-//BOOL CPhysics::Collision( D3DXVECTOR3& vPos, D3DXVECTOR3& vMon, D3DXPLANE& plane )
-//{
-//	// vPos 현재좌표
-//	// vMon 이동후 좌표
-//	// plane 충돌검출 평면
-//	// vOut 출력할 반사벡터
-//	FLOAT D1 = D3DXPlaneDotCoord( &plane, &vPos );
-//	FLOAT D2 = D3DXPlaneDotCoord( &plane, &vMon );
-//
-//	if ( D1 * D2 <= 0 )		
-//	{
-//		return TRUE;
-//	}
-//
-//	return FALSE;
-//}
-//
 BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
 {
 	FRECT rect = _pCube->GetFRect();
 
 	if ( ( rect.left < vPos.x ) && ( vPos.x < rect.right ) &&
-		 ( rect.bottom < vPos.z ) && ( vPos.z < rect.top ) )
-		 return TRUE;
+		( rect.bottom < vPos.z ) && ( vPos.z < rect.top ) )
+		return TRUE;
 
 	return FALSE;
 }
 
-BOOL CPhysics::Collision( CBoundBox* _pCube1, const D3DXVECTOR3 &vDirection, CBoundBox* _pCube2 )
-{
-	FLOAT fDistance, fRadius, fRadius1, fRadius2;
-	D3DXVECTOR3 vDistance = _pCube2->GetPosition() - ( _pCube1->GetPosition() + vDirection );
-	fDistance = vDistance.x * vDistance.x + vDistance.y * vDistance.y + vDistance.z * vDistance.z;
-	fRadius1 = _pCube1->GetRadiusLong();
-	fRadius2 = _pCube2->GetRadiusLong();
-	fRadius =	fRadius1 * fRadius1 + fRadius1 * fRadius1 + fRadius1 * fRadius1 + 
-				fRadius2 * fRadius2 + fRadius2 * fRadius2 + fRadius2 * fRadius2;
-	
-	if ( fDistance >= fRadius ) 
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL CPhysics::Collision( CBoundBox* _pCube1, CBoundBox* _pCube2 )
+BOOL CPhysics::Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 )
 {
 	const FLOAT fCutOff = 0.999999f; 
 	D3DXVECTOR3 vDiff = _pCube1->GetPosition() - _pCube2->GetPosition(); 
@@ -133,7 +104,7 @@ BOOL CPhysics::Collision( CBoundBox* _pCube1, CBoundBox* _pCube2 )
 		c[0][i] = D3DXVec3Dot( &(_pCube1->GetAxisDir( 0 )), &(_pCube2->GetAxisDir( i )) ); 
 		absc[0][i] = ABSDEF( c[0][i] ); 
 	} 
-	
+
 	d[0] = D3DXVec3Dot( &vDiff, &_pCube1->GetAxisDir( 0 ) ); 
 	r = ABSDEF(d[0]);
 	r1 = _pCube1->GetSize(3);
@@ -159,83 +130,110 @@ BOOL CPhysics::Collision( CBoundBox* _pCube1, CBoundBox* _pCube2 )
 	return TRUE;
 }
 
-BOOL CPhysics::Collision( const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vDirection, CBoundBox *_pCube )
+BOOL CPhysics::Collision( const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube )
 {
+	D3DXVECTOR3 vDir = vBegin + vDirection;
 	D3DXVECTOR3 v0, v1, v2;
+	D3DXVECTOR3 v[8];//0, v1, v2;
+	//D3DXVECTOR3 vD;
 
-	// Front
-	v0 = _pCube->GetPosition( 3 );
-	v1 = _pCube->GetPosition( 2 );
-	v2 = _pCube->GetPosition( 6 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
-	//v0 = _pCube->GetPosition( 3 );
-	v1 = _pCube->GetPosition( 6 );
-	v2 = _pCube->GetPosition( 7 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
+	//    v0----- v1
+	//   /|      /|
+	//  v3------v2|
+	//  | |     | |
+	//  | |v4---|-|v5
+	//  |/      |/
+	//  v7------v6
 
-	// Back
-	v0 = _pCube->GetPosition( 0 );
-	v1 = _pCube->GetPosition( 4 );
-	v2 = _pCube->GetPosition( 5 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
-	//v0 = _pCube->GetPosition( 0 );
-	v1 = _pCube->GetPosition( 5 );
-	v2 = _pCube->GetPosition( 1 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
+	for ( int i = 0; i < 8; ++i )
+	{
+		v[i] = _pCube->GetPosition( i );
+	}
 
-	// Left
-	v0 = _pCube->GetPosition( 0 );
-	v1 = _pCube->GetPosition( 3 );
-	v2 = _pCube->GetPosition( 7 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
-	//v0 = _pCube->GetPosition( 0 );
-	v1 = _pCube->GetPosition( 7 );
-	v2 = _pCube->GetPosition( 4 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
+	// Plane A+B+C+D
+	// A = Nx
+	// B = Ny
+	// C = Nz
+	// D = -(NdotX)
 
-	// Right
-	v0 = _pCube->GetPosition( 1 );
-	v1 = _pCube->GetPosition( 5 );
-	v2 = _pCube->GetPosition( 6 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
-	//v0 = _pCube->GetPosition( 1 );
-	v1 = _pCube->GetPosition( 6 );
-	v2 = _pCube->GetPosition( 2 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
+	INT nVI[6][3] = 
+	{
+		{ 3, 2, 6 },	// Front(3-2-6)
+		{ 1, 0, 4 }, 	// Back	(1-0-4)
+		{ 0, 3, 7 },	// Left	(0-3-7)
+		{ 2, 1, 5 },	// Right(2-1-5)
+		{ 0, 1, 2 },	// Up	(0-1-2)
+		{ 4, 7, 6 },	// Down	(4-7-6)
+	};
 
-	// Up
-	v0 = _pCube->GetPosition( 0 );
-	v1 = _pCube->GetPosition( 1 );
-	v2 = _pCube->GetPosition( 2 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
-	//v0 = _pCube->GetPosition( 0 );
-	v1 = _pCube->GetPosition( 2 );
-	v2 = _pCube->GetPosition( 3 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
+	INT nCount = 0;
+	D3DXPLANE Plane;
+	for (int i = 0; i < 6; ++i)
+	{
+		D3DXPlaneFromPoints(&Plane, &v[nVI[i][0]], &v[nVI[i][1]], &v[nVI[i][2]] );	
+		if (  D3DXPlaneDotCoord( &Plane, &vDir ) <= 0 )
+		{
+			if ( D3DXPlaneDotCoord( &Plane, &vBegin )  > 0 )
+				m_vColNormal = D3DXVECTOR3( Plane.a, Plane.b, Plane.c );
 
-	// Down
-	v0 = _pCube->GetPosition( 4 );
-	v1 = _pCube->GetPosition( 7 );
-	v2 = _pCube->GetPosition( 6 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
-	//v0 = _pCube->GetPosition( 4 );
-	v1 = _pCube->GetPosition( 6 );
-	v2 = _pCube->GetPosition( 5 );
-	if( IntersectTri(v0, v1, v2, vBegin, vDirection) )
-		return TRUE;
+			nCount++;
+		}
+	}
 
-
-
-	return FALSE;
+	if (nCount == 6)	return TRUE;
+	else				return FALSE;
 }
+
+BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 )
+{
+	std::vector<CBoundBox*> * vecBoundBox;
+	std::vector<CBoundBox*>::iterator Iter;
+
+	D3DXVECTOR3 vDir;
+	for ( int i = 0; i < 8; ++i )
+	{
+		vDir = _pCube1->GetPosition(i) + vDirection;
+		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
+
+		if ( vecBoundBox != NULL && vecBoundBox->size() )
+		{
+			Iter = vecBoundBox->begin();
+			while ( Iter != vecBoundBox->end() )
+			{
+				if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), vDirection, ( *Iter ) ) )
+				{
+					CPhysics::GetInstance()->Sliding( vDirection );
+				}
+				Iter++;
+			}
+		}
+	}
+
+	for ( int i = 0; i < 8; ++i )
+	{
+		vDir = _pCube1->GetPosition(i) + vDirection;
+		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
+
+		if ( vecBoundBox != NULL && vecBoundBox->size() )
+		{
+			Iter = vecBoundBox->begin();
+			while ( Iter != vecBoundBox->end() )
+			{
+				if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), vDirection, ( *Iter ) ) )
+				{
+					CPhysics::GetInstance()->Sliding( vDirection );
+				}
+				Iter++;
+			}
+		}
+	}
+	//
+	//BOOL CPhysics::Collision( const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube )
+	//	if( Collision(_pCube1->) || Collision() )
+	//		return TRUE;
+	//
+	//	return FALSE;
+
+	return TRUE;
+}
+

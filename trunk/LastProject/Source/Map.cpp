@@ -141,7 +141,8 @@ VOID Map::CreateDataFromBBX( const INT _Index )
 VOID Map::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 {
 	InitASE( _ASEFileName );
-	InitBBX( _BBXFileName );
+	if ( _BBXFileName )
+		InitBBX( _BBXFileName );
 }
 
 VOID Map::Update()
