@@ -21,8 +21,6 @@ public:
 
 private:
 
-	VOID Collision(D3DXVECTOR3& vControl);
-
 	VOID AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
 	VOID AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
 	VOID AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
@@ -147,14 +145,15 @@ private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 	CMatrices*				m_pMatrices;
 
-	D3DXVECTOR3 m_vControl;  ///< 캐릭터 위치
-	FLOAT		m_fAngle;	 ///< 캐릭터 각도
-	D3DXVECTOR3 m_vFowardVector; /// 캐릭터 전진 이동 벡터
-	D3DXVECTOR3 m_vSideStepVector; /// 캐릭터 좌우 이동 벡터
+	D3DXVECTOR3 m_vPreControl; ///< 몬스터 이전 위치
+	D3DXVECTOR3 m_vControl;  ///< 몬스터 위치
+	FLOAT		m_fAngle;	 ///< 몬스터 각도
+	D3DXVECTOR3 m_vFowardVector; /// 몬스터 전진 이동 벡터
+	D3DXVECTOR3 m_vSideStepVector; /// 몬스터 좌우 이동 벡터
 
 	D3DXMATRIXA16 m_matControl;         ///< 조작 행렬
 
-	CBoundBox * m_pBoundBox;
+	//CBoundBox * m_pBoundBox;
 
 };
 

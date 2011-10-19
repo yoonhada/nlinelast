@@ -67,3 +67,9 @@ BOOL CPacket::ReadString( CHAR* pOut, WORD wMaxSize )
 
 	return TRUE;
 }
+
+VOID CPacket::CalcSize()
+{
+	WORD wSize = m_DataSize;
+	memcpy( &m_Buff, &wSize, sizeof( WORD ) );
+}

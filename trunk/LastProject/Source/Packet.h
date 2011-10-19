@@ -22,6 +22,7 @@ public:
 
 	BOOL	ReadString( CHAR* pOut, WORD wMaxSize );	// wMaxSize : pOut의 최대크기
 	BOOL	WriteString( CHAR* pData, WORD wSize );
+	VOID	CalcSize();
 
 
 	template<typename T>

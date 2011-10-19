@@ -74,7 +74,7 @@ public:
 	HRESULT Release();
 	VOID Update();
 	VOID UpdateByInput( );
-	VOID UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
+	//VOID UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID UpdateOtherPlayer();
 	VOID Render();
@@ -110,9 +110,14 @@ public:
 		m_vControl = m_vPreControl = a_vControl;
 	}
 
-	VOID Set_ClientNumber( INT a_iClientNumber )
+	VOID Set_ClientNumber( WORD a_iClientNumber )
 	{
 		m_iClientNumber = a_iClientNumber;
+	}
+
+	WORD Get_ClientNumber()
+	{
+		return m_iClientNumber;
 	}
 
 	VOID Set_Active( BOOL a_bActive )
@@ -136,13 +141,14 @@ private:
 	
 	HRESULT InitTexture(  DWORD a_Color, DWORD a_OutLineColor  );
 
-	INT	m_iClientNumber;
+	WORD	m_iClientNumber;
 	BOOL m_bActive;
 
 	INT m_iSelectedFrameNum;
 	INT m_iMaxCubeCount;
 	INT m_iBoxLimit;
 
+	D3DXVECTOR3 m_vColissionControl; ///< 캐릭터 충돌용 위치
 	D3DXVECTOR3 m_vPreControl; ///< 캐릭터 이전 위치 저장
 	D3DXVECTOR3 m_vControl;  ///< 캐릭터 위치
 	D3DXVECTOR3 m_vLerpControl; ///< 캐릭터 보간 위치
