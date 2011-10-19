@@ -311,6 +311,14 @@
 					RelativePath=".\Source\Monster.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Weapon.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Weapon.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Cube"

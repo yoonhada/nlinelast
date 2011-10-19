@@ -28,9 +28,9 @@ CQube::~CQube()
 
 VOID CQube::Update()
 {
-	D3DXVECTOR3 vec;
-	//std::vector <CQube*> * vectorCube;
-	//std::vector <CQube*>::iterator iterCube;
+	D3DXVECTOR3 vDir;
+	std::vector<CBoundBox*> * vecBoundBox;
+	std::vector<CBoundBox*>::iterator Iter;
 
 	// 속도를 위해 소멸속도 단순 계산
 	FLOAT fLen = ABSDEF( m_vAccelerate.x ) + ABSDEF( m_vAccelerate.y ) + ABSDEF( m_vAccelerate.z );
@@ -40,21 +40,28 @@ VOID CQube::Update()
 		return;
 	}
 
-	//< 간단 0 인 위치 체크.
 	// 가속도 갱신
 	m_vAccelerate *= CPhysics::GetInstance()->m_fAirRegistance;
 	m_vMomentum -= CPhysics::GetInstance()->m_vGAccel;
 
 	// 이동후 위치 갱신
-	vec = m_vPos + m_vAccelerate + m_vMomentum;
+	vDir = /*m_vPos + */m_vAccelerate + m_vMomentum;
 
-	//vectorCube = CTree::GetInstance()->GetVector(CTree::GetInstance()->GetRoot(), m_vPos);
-	//if ( vectorCube != NULL && vectorCube->size() )
-	//{
-	//	// 충돌체크
-	//	iterCube = vectorCube->begin();
-	//	while ( iterCube != vectorCube->end() )
-	//	{
+	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), m_vPos + vDir);
+	if ( vecBoundBox != NULL && vecBoundBox->size() )
+	{
+		Iter = vecBoundBox->begin();
+		while ( Iter != vecBoundBox->end() )
+		{
+			if( CPhysics::GetInstance()->Collision( m_vPos, vDir, ( *Iter ) ) )
+			{
+				CPhysics::GetInstance()->Reflect( vDir );
+			}
+			Iter++;
+		}
+	}
+
+	vDir += m_vPos;
 	//		if ( CPhysics::GetInstance()->Collision( this, *iterCube ) )
 	//		{
 	//			D3DXVECTOR3 vec = ( *iterCube )->GetPosition() - m_vPos;
@@ -69,21 +76,21 @@ VOID CQube::Update()
 	//}
 
 	// 지면체크
-	if (vec.y < 0.0f /* - ( m_fHeight - 2.0f )*/ )
+	if (vDir.y < 0.0f /* - ( m_fHeight - 2.0f )*/ )
 	{
-		vec.y = m_fLongSize -vec.y;
+		vDir.y = m_fLongSize -vDir.y;
 		m_vMomentum.y *= -1.0f;
 		m_vAccelerate.y *= -1.0f;
 		m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
 		m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
-		vec = m_vPos + m_vMomentum;
+		vDir = m_vPos + m_vMomentum;
 
 		//회전량의 방향성 추가		
 		m_vRotateTemp.x = -( m_vAccelerate + m_vMomentum ).z * CPhysics::GetInstance()->m_fElastic;
 		m_vRotateTemp.z = -( m_vAccelerate + m_vMomentum ).x * CPhysics::GetInstance()->m_fElastic;
 	}
 
-	m_vPos = vec;
+	m_vPos = vDir;
 
 	//D3DXMATRIXA16 mat;
 	//D3DXMatrixIdentity( &m_matWorld );
