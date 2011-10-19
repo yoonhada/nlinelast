@@ -12,6 +12,7 @@
 
 #include "CharCube.h"
 #include "Model.h"
+#include "Weapon.h"
 
 //class MatrixMult
 //{
@@ -176,6 +177,7 @@ private:
 	BOOL m_bAliveCheck;
 
 	CBoundBox * m_pBoundBox;
+	CWeapon * m_pWeapon;
 
 	//애니메이션 변수
 	FLOAT m_fAniAngle;

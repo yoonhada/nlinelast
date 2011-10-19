@@ -30,6 +30,7 @@ VOID CCharactor::Clear()
 
 	m_pObject = NULL;
 	m_pCreateCube = NULL;
+	m_pWeapon = NULL;
 
 	m_iCubeVectorSize = -1;
 	m_iBoxSize = -1;
@@ -67,6 +68,13 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatric
 	//m_pGrid->Create( m_pD3dDevice );
 
 	m_pModel = new CModel( m_pD3dDevice );
+	
+	if( !m_bMatMonster )
+	{
+		m_pWeapon = new CWeapon( m_pD3dDevice );
+		m_pWeapon->SetType( 0 );
+		m_pWeapon->Create();
+	}
 
 	return S_OK;
 }
@@ -81,6 +89,7 @@ HRESULT CCharactor::Release()
 	SAFE_RELEASE( m_pTotalVB );
 	SAFE_RELEASE( m_pTotalIB );
 	SAFE_DELETE( m_pBoundBox );
+	SAFE_DELETE( m_pWeapon );
 
 	return S_OK;
 }
@@ -353,13 +362,9 @@ BOOL CCharactor::Collision(D3DXVECTOR3& vDirection)
 				if( CPhysics::GetInstance()->Collision( bbThis.GetPosition(i), vDirection, ( *Iter ) ) )
 				{
 					CPhysics::GetInstance()->Sliding( vDirection );
-
-					//return TRUE;
 				}
 				Iter++;
 			}
-
-			CDebugConsole::GetInstance()->Messagef( L"\n" );
 		}
 	}
 

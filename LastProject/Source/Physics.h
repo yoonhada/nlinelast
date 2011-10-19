@@ -14,6 +14,7 @@ public:
 	CPhysics( void );
 	virtual ~CPhysics( void );
 
+	VOID Reflect( D3DXVECTOR3& _vOut );
 	VOID Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP );
 	VOID Sliding( D3DXVECTOR3& _vOut );
 	VOID Sliding( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP );

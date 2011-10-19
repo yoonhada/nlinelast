@@ -261,6 +261,7 @@ VOID CMonster::Load( WCHAR* a_pFileName )
 
 VOID CMonster::Collision(D3DXVECTOR3& vControl)
 {
+
 	// 케릭터 이동
 	CBoundBox bbThis;
 	bbThis.SetPosition( vControl );

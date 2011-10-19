@@ -42,6 +42,16 @@ VOID CPhysics::Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVE
 	_vOut = 2.0f * ( D3DXVec3Dot( &-_vP, &vN ) * vN ) + _vP;
 }
 
+VOID CPhysics::Reflect( D3DXVECTOR3& _vOut )
+{
+	D3DXVECTOR3 vP = _vOut;
+	D3DXVECTOR3 vN;
+	D3DXVec3Normalize( &vN, &m_vColNormal );
+	
+	// 2( ( N*L )N ) - L
+	_vOut = 2.0f * ( D3DXVec3Dot( &-vP, &vN ) * vN ) + vP;
+}
+
 VOID CPhysics::Sliding( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP )
 {
 	D3DXVECTOR3 vN;

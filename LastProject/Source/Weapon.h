@@ -6,28 +6,34 @@
 */
 
 #pragma once
-class CWeapon : public virtual IObject
+class Map;
+
+class CWeapon : public Map
 {
 private:
-	const INT m_nFrame;
-	INT m_nType;
+	INT m_nFrame;
+	INT m_nAKeyFrameTime;
+	INT m_nBKeyFrameTime;
+	INT m_nWeaponType;
 	INT m_nState;
-	INT m_nKeyFrame;
-	// 0x01 A
-	// 0x10 B
+	INT m_nDelay;
 
 public:
 	enum _WEAPON { NONE, HAMMER, FRYPEN, GUITAR, CANDY };
-	CWeapon( );
+	CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice );
+
 	virtual ~CWeapon();
 
-	virtual VOID Clear()			{}
+	virtual VOID Clear();
 	virtual HRESULT Create();
 	virtual HRESULT Release();
 	virtual VOID Render();
 	virtual VOID Update();
 
-	VOID SetType(INT _nType)		{ m_nType = _nType; };
+	VOID SetType(INT nType)		{ m_nWeaponType = nType; }
 	VOID SetKeyA();
 	VOID SetKeyB();
+
+	// Get 
+	INT GetKeyFrame()			{ return m_nFrame; }
 };
