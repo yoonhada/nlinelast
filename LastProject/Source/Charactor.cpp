@@ -327,51 +327,57 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	
 }
 
-VOID CCharactor::Collision(D3DXVECTOR3& vControl)
+BOOL CCharactor::Collision(D3DXVECTOR3& vDirection)
 {
-	// 케릭터 이동
-	CBoundBox bbThis;
-	bbThis.SetPosition( vControl );
-	for ( int i = 0; i < 6; ++i )
-		bbThis.SetSize( i, m_pBoundBox->GetSize( i ) );
-
-	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vControl);
+	BOOL bColl = FALSE;
+	std::vector<CBoundBox*> * vecBoundBox;
 	std::vector<CBoundBox*>::iterator Iter;
 
-	BOOL bColl = TRUE;
-	if ( vecBoundBox )
+	CBoundBox bbThis(this);
+
+	INT i = -1;
+	D3DXVECTOR3 vDir;
+
+	// 맵충돌
+	for ( int i = 0; i < 4; ++i)
 	{
-		int i = 0;
-		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); Iter++ )
+		vDir = bbThis.GetPosition(i) + vDirection;
+
+		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
+		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
-			if( CPhysics::GetInstance()->Collision( &bbThis, ( *Iter ) ) )
+			Iter = vecBoundBox->begin();
+			while ( Iter != vecBoundBox->end() )
 			{
-				bColl = FALSE;
-				break;
+				(*Iter)->SetAngle( m_fAngle );
+				if( CPhysics::GetInstance()->Collision( bbThis.GetPosition(i), vDirection, ( *Iter ) ) )
+				{
+					CPhysics::GetInstance()->Sliding( vDirection );
+
+					//return TRUE;
+				}
+				Iter++;
 			}
+
+			CDebugConsole::GetInstance()->Messagef( L"\n" );
 		}
 	}
 
-	if ( bColl == TRUE || !CTree::GetInstance()->GetChaVector()->empty() )
+	vecBoundBox = CTree::GetInstance()->GetChaVector( );
+	if ( vecBoundBox != NULL && vecBoundBox->size() )
 	{
-		Iter = CTree::GetInstance()->GetChaVector()->begin();
-		if( CTree::GetInstance()->GetChaVector()->size() > 0 )
+		Iter = vecBoundBox->begin();
+		Iter++;
+		while ( Iter != vecBoundBox->end() )
+		{
+			if( CPhysics::GetInstance()->Collision( &vDir, bbThis.GetRadius(), &( *Iter )->GetPosition(), ( *Iter )->GetRadius() ) )
+			{
+				return TRUE;
+			}
 			Iter++;
-
-		for ( ; Iter != CTree::GetInstance()->GetChaVector()->end(); Iter++ )
-		{
-			if( CPhysics::GetInstance()->Collision( &bbThis, ( *Iter ) ) )
-			{
-				bColl = FALSE;
-				break;
-			}
 		}
 	}
-
-	if ( bColl )
-		m_vControl = vControl;
-
-	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f, %f, %f\n", vControl.x, vControl.x, vControl.x );
+	return FALSE;
 }
 
 VOID CCharactor::UpdateByInput(  )
@@ -385,14 +391,14 @@ VOID CCharactor::UpdateByInput(  )
 
 	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
-	D3DXVECTOR3 vControl = m_vControl;
+	D3DXVECTOR3 vControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
 	// 전진 후진 처리
 	if( a_vControl.z != 0 )
 	{
 		D3DXMatrixRotationY( &m_matControl, m_fAngle );
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-		vControl += (m_vFowardVector * a_vControl.z);
+		vControl = (m_vFowardVector * a_vControl.z);
 
 		
 	}
@@ -435,6 +441,8 @@ VOID CCharactor::UpdateByInput(  )
 	//m_vPreControl = vControl;
 
 	Collision(vControl);
+	m_vPreControl = m_vControl;
+	m_vControl += vControl;
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
@@ -464,7 +472,7 @@ VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
 		m_vControl += (m_vFowardVector * a_vControl.z);
-		vControl += (m_vFowardVector * a_vControl.z);
+		vControl = (m_vFowardVector * a_vControl.z);
 	}
 	//좌우 처리
 	if( a_vControl.x != 0)
@@ -479,6 +487,8 @@ VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
 	Collision(vControl);
+	m_vPreControl = m_vControl;
+	m_vControl += vControl;
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );

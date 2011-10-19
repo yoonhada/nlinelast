@@ -94,7 +94,7 @@ public:
 	VOID UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster );
 
 	CBoundBox * GetBoundBox()			{ return m_pBoundBox; }
-	VOID Collision(D3DXVECTOR3& vControl);
+	BOOL Collision(D3DXVECTOR3& vDirection);
 	VOID Load( WCHAR* a_pFileName );
 
 	// 

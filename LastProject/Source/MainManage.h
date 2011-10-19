@@ -5,6 +5,7 @@ class CMonster;
 class CBillBoard;
 class CCharactor;
 class CCamera;
+class Axis;
 
 class CMainManage : public CSingleton<CMainManage>
 {
@@ -39,6 +40,7 @@ private:
 	INT m_iMaxCharaNum;
 
 	CBillBoard* m_pBill;
+	Axis* m_pAxis;
 
 	VOID CreateCharactor();
 
