@@ -212,7 +212,7 @@ VOID	CMainManage::Update()
 		m_pMyCharactor->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
-	m_pCamera->CheckObjectCollision( m_pCamera->GetEye() );
+	m_pCamera->CheckObjectCollision( m_pCamera->GetEye(), m_pMyCharactor->Get_CharaPos(), m_pMyCharactor->Get_CharaAngle() );
 
 	FLOAT fYawZero = 1.0f;
 
@@ -241,7 +241,7 @@ VOID	CMainManage::Update()
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
 
-		//m_pMonster->TestBreakCube();
+		m_pMyCharactor->TestBreakCube();
 
 		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 		{	

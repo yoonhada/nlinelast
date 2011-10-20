@@ -83,7 +83,7 @@ VOID CNetwork::Update()
 	static FLOAT time = 0.0f;
 	time += CFrequency::GetInstance()->getFrametime();
 
-	if( time > 0.25f )
+	if( time > NETWORK_RECV_TIME )
 	{
 		// 이동 데이터 서버로 보내기
 		csMOVE( CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,

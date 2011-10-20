@@ -336,7 +336,7 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	
 }
 
-BOOL CCharactor::Collision(D3DXVECTOR3& vDirection)
+BOOL CCharactor::Collision()
 {
 	BOOL bColl = FALSE;
 	std::vector<CBoundBox*> * vecBoundBox;
@@ -350,7 +350,7 @@ BOOL CCharactor::Collision(D3DXVECTOR3& vDirection)
 	// 맵충돌
 	for ( int i = 0; i < 4; ++i)
 	{
-		vDir = bbThis.GetPosition(i) + vDirection;
+		vDir = bbThis.GetPosition(i) + m_vColissionControl;
 
 		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
@@ -359,9 +359,9 @@ BOOL CCharactor::Collision(D3DXVECTOR3& vDirection)
 			while ( Iter != vecBoundBox->end() )
 			{
 				(*Iter)->SetAngle( m_fAngle );
-				if( CPhysics::GetInstance()->Collision( bbThis.GetPosition(i), vDirection, ( *Iter ) ) )
+				if( CPhysics::GetInstance()->Collision( bbThis.GetPosition(i), m_vColissionControl, ( *Iter ) ) )
 				{
-					CPhysics::GetInstance()->Sliding( vDirection );
+					CPhysics::GetInstance()->Sliding( m_vColissionControl );
 				}
 				Iter++;
 			}
@@ -375,9 +375,9 @@ BOOL CCharactor::Collision(D3DXVECTOR3& vDirection)
 		Iter++;
 		while ( Iter != vecBoundBox->end() )
 		{
-			if( CPhysics::GetInstance()->Collision( &bbThis, vDirection, ( *Iter ) ) )
+			if( CPhysics::GetInstance()->Collision( &bbThis, m_vColissionControl, ( *Iter ) ) )
 			{
-				vDirection = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				return TRUE;
 			}
 			Iter++;
@@ -397,14 +397,14 @@ VOID CCharactor::UpdateByInput(  )
 
 	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
-	D3DXVECTOR3 vControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
+	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
 	// 전진 후진 처리
 	if( a_vControl.z != 0 )
 	{
 		D3DXMatrixRotationY( &m_matControl, m_fAngle );
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-		vControl = (m_vFowardVector * a_vControl.z);
+		m_vColissionControl = (m_vFowardVector * a_vControl.z);
 
 		
 	}
@@ -414,7 +414,7 @@ VOID CCharactor::UpdateByInput(  )
 		D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
 		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
-		vControl += (m_vSideStepVector * a_vControl.x);
+		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
 
 		
 	}
@@ -446,9 +446,9 @@ VOID CCharactor::UpdateByInput(  )
 
 	//m_vPreControl = vControl;
 
-	Collision(vControl);
+	Collision();
 	m_vPreControl = m_vControl;
-	m_vControl += vControl;
+	m_vControl += m_vColissionControl;
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
@@ -517,7 +517,7 @@ VOID CCharactor::UpdateOtherPlayer()
 {
 
 	m_fNetTime += CFrequency::GetInstance()->getFrametime();
-	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / 0.25f );
+	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
 	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
 	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
 
