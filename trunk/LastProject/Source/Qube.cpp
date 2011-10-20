@@ -56,24 +56,37 @@ VOID CQube::Update()
 			if( CPhysics::GetInstance()->Collision( m_vPos, vDir, ( *Iter ) ) )
 			{
 				CPhysics::GetInstance()->Reflect( vDir );
+				CPhysics::GetInstance()->Reflect( m_vAccelerate );
+				CPhysics::GetInstance()->Reflect( m_vMomentum );
+				m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
+				m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
 			}
 			Iter++;
 		}
 	}
 
-	vDir += m_vPos;
-	//		if ( CPhysics::GetInstance()->Collision( this, *iterCube ) )
+	//vDir += m_vPos;
+
+	//vecBoundBox = CTree::GetInstance()->GetChaVector();
+	//if ( vecBoundBox != NULL && vecBoundBox->size() )
+	//{
+	//	Iter = vecBoundBox->begin();
+	//	while ( Iter != vecBoundBox->end() )
+	//	{
+	//		if( CPhysics::GetInstance()->Collision( m_vPos, vDir, ( *Iter ) ) )
 	//		{
-	//			D3DXVECTOR3 vec = ( *iterCube )->GetPosition() - m_vPos;
-	//			CPhysics::GetInstance()->Reflect( m_vMomentum, vec, m_vMomentum );
+	//			CPhysics::GetInstance()->Reflect( vDir );
+	//			CPhysics::GetInstance()->Reflect( m_vAccelerate );
+	//			CPhysics::GetInstance()->Reflect( m_vMomentum );
 	//			m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
 	//			m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
-	//			vec = m_vPos + m_vMomentum;
 	//		}
-
-	//		iterCube++;
+	//		Iter++;
 	//	}
 	//}
+
+
+	vDir += m_vPos;
 
 	// 지면체크
 	if (vDir.y < 0.0f /* - ( m_fHeight - 2.0f )*/ )
@@ -89,6 +102,9 @@ VOID CQube::Update()
 		m_vRotateTemp.x = -( m_vAccelerate + m_vMomentum ).z * CPhysics::GetInstance()->m_fElastic;
 		m_vRotateTemp.z = -( m_vAccelerate + m_vMomentum ).x * CPhysics::GetInstance()->m_fElastic;
 	}
+
+
+
 
 	m_vPos = vDir;
 
