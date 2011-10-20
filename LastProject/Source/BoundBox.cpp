@@ -93,6 +93,7 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
 			break;
 		}
+		D3DXVec3TransformCoord( &vRet, &vRet, &GetAxisMat() );
 		vRet = GetPosition() + vRet;
 	}
 

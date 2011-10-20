@@ -375,8 +375,9 @@ BOOL CCharactor::Collision(D3DXVECTOR3& vDirection)
 		Iter++;
 		while ( Iter != vecBoundBox->end() )
 		{
-			if( CPhysics::GetInstance()->Collision( &vDir, bbThis.GetRadius(), &( *Iter )->GetPosition(), ( *Iter )->GetRadius() ) )
+			if( CPhysics::GetInstance()->Collision( &bbThis, vDirection, ( *Iter ) ) )
 			{
+				vDirection = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				return TRUE;
 			}
 			Iter++;

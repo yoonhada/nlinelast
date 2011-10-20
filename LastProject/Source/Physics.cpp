@@ -100,44 +100,7 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 )
 {
-	const FLOAT fCutOff = 0.999999f; 
-	D3DXVECTOR3 vDiff = _pCube1->GetPosition() - _pCube2->GetPosition(); 
-
-	FLOAT c[3][3];
-	FLOAT absc[3][3];
-	FLOAT d[3];
-	FLOAT r, r1, r2;
-
-
-	for( int i = 0 ; i < 3 ; ++i ) 
-	{ 
-		c[0][i] = D3DXVec3Dot( &(_pCube1->GetAxisDir( 0 )), &(_pCube2->GetAxisDir( i )) ); 
-		absc[0][i] = ABSDEF( c[0][i] ); 
-	} 
-
-	d[0] = D3DXVec3Dot( &vDiff, &_pCube1->GetAxisDir( 0 ) ); 
-	r = ABSDEF(d[0]);
-	r1 = _pCube1->GetSize(3);
-	r2 = _pCube2->GetSize(3) * absc[0][0] + _pCube2->GetSize(4) * absc[0][1] + _pCube2->GetSize(5) * absc[0][2];
-
-	if ( r > r1 + r2 )
-		return FALSE;
-
-	for( int i = 0 ; i < 3 ; ++i ) 
-	{ 
-		c[2][i] = D3DXVec3Dot( &(_pCube1->GetAxisDir( 2 )), &(_pCube2->GetAxisDir( i )) ); 
-		absc[2][i] = ABSDEF( c[2][i] ); 
-	} 
-
-	d[2] = D3DXVec3Dot( &vDiff, &_pCube1->GetAxisDir( 2 ) ); 
-	r = ABSDEF(d[2]);
-	r1 = _pCube1->GetSize(3);
-	r2 = _pCube2->GetSize(3) * absc[2][2] + _pCube2->GetSize(4) * absc[2][1] + _pCube2->GetSize(5) * absc[2][2];
-
-	if ( r > r1 + r2 )
-		return FALSE;
-
-	return TRUE;
+	return FALSE;
 }
 
 BOOL CPhysics::Collision( const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube )
@@ -187,63 +150,31 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vDirecti
 				m_vColNormal = D3DXVECTOR3( Plane.a, Plane.b, Plane.c );
 
 			nCount++;
+			continue;
 		}
+		return FALSE;
 	}
 
-	if (nCount == 6)	return TRUE;
-	else				return FALSE;
+	return TRUE;
 }
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 )
 {
-	std::vector<CBoundBox*> * vecBoundBox;
-	std::vector<CBoundBox*>::iterator Iter;
-
-	D3DXVECTOR3 vDir;
-	for ( int i = 0; i < 8; ++i )
+	for ( int i = 0; i < 8; ++i)
 	{
-		vDir = _pCube1->GetPosition(i) + vDirection;
-		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
-
-		if ( vecBoundBox != NULL && vecBoundBox->size() )
+		if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), vDirection, _pCube2 ) )
 		{
-			Iter = vecBoundBox->begin();
-			while ( Iter != vecBoundBox->end() )
-			{
-				if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), vDirection, ( *Iter ) ) )
-				{
-					CPhysics::GetInstance()->Sliding( vDirection );
-				}
-				Iter++;
-			}
+			return TRUE;
+		}
+	}
+	for ( int i = 0; i < 8; ++i)
+	{
+		if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(i), -vDirection, _pCube1 ) )
+		{
+			return TRUE;
 		}
 	}
 
-	for ( int i = 0; i < 8; ++i )
-	{
-		vDir = _pCube1->GetPosition(i) + vDirection;
-		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
-
-		if ( vecBoundBox != NULL && vecBoundBox->size() )
-		{
-			Iter = vecBoundBox->begin();
-			while ( Iter != vecBoundBox->end() )
-			{
-				if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), vDirection, ( *Iter ) ) )
-				{
-					CPhysics::GetInstance()->Sliding( vDirection );
-				}
-				Iter++;
-			}
-		}
-	}
-	//
-	//BOOL CPhysics::Collision( const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube )
-	//	if( Collision(_pCube1->) || Collision() )
-	//		return TRUE;
-	//
-	//	return FALSE;
-
-	return TRUE;
+	return FALSE;
 }
 

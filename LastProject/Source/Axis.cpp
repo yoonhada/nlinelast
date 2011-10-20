@@ -164,6 +164,8 @@ VOID Axis::Update()
 */
 VOID Axis::Render()
 {
+	INT nSize = (int)(pow( 2.0f, m_nDeep ) + 0.5f) + 1;
+	UINT uLength = nSize * 4 * sizeof( VERTEX );
 	
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity( &matWorld );
@@ -172,5 +174,5 @@ VOID Axis::Render()
 	m_pd3dDevice->SetStreamSource( 0, m_pVB, 0, sizeof( VERTEX ) );
 	m_pd3dDevice->SetFVF( VERTEX::FVF );
 
-	m_pd3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, 20 );
+	m_pd3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, nSize * 2 );
 }
