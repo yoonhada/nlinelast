@@ -32,5 +32,6 @@ extern FLOAT FastRand2();
 // 네트워크
 #define BUF_SIZE	2048
 #define PACKET_SIZE 1024
+#define NETWORK_RECV_TIME 0.25f
 
 #endif

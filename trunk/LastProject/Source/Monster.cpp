@@ -628,7 +628,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	BOOL bCol = FALSE;
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
-		bCol = m_pBox[Loop].Collision( m_vPreControl );
+		bCol = m_pBox[Loop].Collision();
 		if( bCol == TRUE )
 		{
 			m_vControl = m_vPreControl;
