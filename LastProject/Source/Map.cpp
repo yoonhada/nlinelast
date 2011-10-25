@@ -3,14 +3,13 @@
 #include "ASEParser.h"
 #include "BBXParser.h"
 
-//	BoundBox
-//#include "BoundBox.h"
-//#include "Tree.h"
-//	End
+#define ANI_1 0
+#define ANI_2 1
+#define ANI_3 2
 
 VOID Map::Initialize()
 {
-	m_pASEData			= NULL;
+	m_pASEData		= NULL;
 	m_pBBXData		= NULL;
 
 	m_pASEParser	= NULL;
@@ -34,17 +33,6 @@ VOID Map::Release()
 		delete m_pASEParser;
 	if( m_pBBXParser != NULL )
 		delete m_pBBXParser;
-
-	for( std::vector<CBoundBox*>::iterator iter=m_pBoundBoxVector.begin(); iter!=m_pBoundBoxVector.end(); ++iter)
-	{
-		delete *iter;
-	}
-
-	if ( m_pBoundBoxVector.empty() == FALSE )
-	{
-		m_pBoundBoxVector.clear();
-		m_pBoundBoxVector.erase( m_pBoundBoxVector.begin(), m_pBoundBoxVector.end() );
-	}
 
 }
 
@@ -93,7 +81,7 @@ VOID Map::CreateDataFromASE( const INT _Index )
 	lstrcpy( m_pASEData[ _Index ].aObjectName, GeomObjectData.pNodeName );
 	lstrcpy( m_pASEData[ _Index ].aTextureFileName, MaterialData.pTextureFileName );
 
-	m_pASEData[ _Index ].iNumVertex	=	GeomObjectData.iNumVertex;
+	m_pASEData[ _Index ].iNumVertex		=	GeomObjectData.iNumVertex;
 	m_pASEData[ _Index ].iNumIndex		=	GeomObjectData.iNumIndex;
 
 	CreateVB( &m_pASEData[ _Index ].pVB, m_pASEData[ _Index ].iNumVertex, sizeof( ASEParser::VERTEX ), ASEParser::VERTEX::FVF );
@@ -102,7 +90,8 @@ VOID Map::CreateDataFromASE( const INT _Index )
 	CreateIB( &m_pASEData[ _Index ].pIB, m_pASEData[ _Index ].iNumIndex, sizeof( ASEParser::INDEX ) );
 	SetIB( m_pASEData[ _Index ].pIB, GeomObjectData.pIndex, m_pASEData[ _Index ].iNumIndex, sizeof( ASEParser::INDEX ) );
 
-	LoadTextureFromFile( &m_pASEData[ _Index ].pTex, MaterialData.pTextureFileName );
+	if( MaterialData.pTextureFileName != NULL )
+		LoadTextureFromFile( &m_pASEData[ _Index ].pTex, MaterialData.pTextureFileName );
 }
 
 VOID Map::CreateDataFromBBX( const INT _Index )
@@ -119,34 +108,45 @@ VOID Map::CreateDataFromBBX( const INT _Index )
 	CreateIB( &m_pBBXData[ _Index ].pIB, m_pBBXData[ _Index ].iNumIndex, sizeof( BBXParser::INDEX ) );
 	SetIB( m_pBBXData[ _Index ].pIB, BBXData.aIndex, m_pBBXData[ _Index ].iNumIndex, sizeof( BBXParser::INDEX ) );
 
-	//	BoundBox
-	CBoundBox* pBoundBox = new CBoundBox();
-	
-	pBoundBox->SetSize( 0, BBXData.Info.fMinusSize[ 0 ] );
-	pBoundBox->SetSize( 1, BBXData.Info.fMinusSize[ 1 ] );
-	pBoundBox->SetSize( 2, BBXData.Info.fMinusSize[ 2 ] );
+	////	BoundBox
+	//CBoundBox* pBoundBox = new CBoundBox();
+	//
+	//pBoundBox->SetSize( 0, BBXData.Info.fMinusSize[ 0 ] );
+	//pBoundBox->SetSize( 1, BBXData.Info.fMinusSize[ 1 ] );
+	//pBoundBox->SetSize( 2, BBXData.Info.fMinusSize[ 2 ] );
 
-	pBoundBox->SetSize( 3, BBXData.Info.fPlusSize[ 0 ] );
-	pBoundBox->SetSize( 4, BBXData.Info.fPlusSize[ 1 ] );
-	pBoundBox->SetSize( 5, BBXData.Info.fPlusSize[ 2 ] );
+	//pBoundBox->SetSize( 3, BBXData.Info.fPlusSize[ 0 ] );
+	//pBoundBox->SetSize( 4, BBXData.Info.fPlusSize[ 1 ] );
+	//pBoundBox->SetSize( 5, BBXData.Info.fPlusSize[ 2 ] );
 
-	pBoundBox->SetPosition( BBXData.Info.vPivot );
+	//pBoundBox->SetPosition( BBXData.Info.vPivot );
 
-	CTree::GetInstance()->InsertObject( CTree::GetInstance()->GetRoot(), pBoundBox );
-
-	m_pBoundBoxVector.push_back(pBoundBox);
-	//	End
+	//CTree::InsertObject( CTree::GetRoot(), pBoundBox );
+	////	End
 }
 
 VOID Map::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 {
 	InitASE( _ASEFileName );
-	if ( _BBXFileName )
+
+	//m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 100, TRUE );
+	m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
+	m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
+
+	if( _BBXFileName != NULL )
 		InitBBX( _BBXFileName );
 }
 
 VOID Map::Update()
 {
+	m_pASEParser->FrameMove();
+
+	if( GetKeyState( '1' ) & 0x8000 )
+		m_pASEParser->SetAnimation( ANI_1 );
+	if( GetKeyState( '2' ) & 0x8000 )
+		m_pASEParser->SetAnimation( ANI_2 );
+	if( GetKeyState( '3' ) & 0x8000 )
+		m_pASEParser->SetAnimation( ANI_3 );
 }
 
 
@@ -155,10 +155,19 @@ VOID Map::RenderASEData( INT _Index )
 	if( m_pASEData[ _Index ].pTex != NULL )
 		m_pd3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
 
+	D3DXMATRIX matWorld;
+	D3DXMatrixIdentity( &matWorld );
+	m_pASEParser->GetAniTrack( matWorld, _Index );
+	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+
 	m_pd3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
 	m_pd3dDevice->SetFVF( ASEParser::VERTEX::FVF );
 	m_pd3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
 	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
+
+	D3DXMATRIX matIdentity;
+	D3DXMatrixIdentity( &matIdentity );
+	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
 
 }
 

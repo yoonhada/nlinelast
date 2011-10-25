@@ -69,7 +69,6 @@
 #include "BoundBox.h"
 
 // Manage
-#include "Map.h"
 #include "MainManage.h"
 
 // DirectX

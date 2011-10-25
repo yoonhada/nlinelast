@@ -52,7 +52,7 @@ VOID CCharactor::Clear()
 	m_iClientNumber = 0;
 	m_bActive = FALSE;
 
-	m_fAniAngle = 0.0f;
+	m_fAniAngleY = 0.0f;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
@@ -425,19 +425,19 @@ VOID CCharactor::UpdateByInput(  )
 	}
 	else
 	{
-		if( m_fAniAngle < 0.1f && m_fAniAngle > -0.1f )
+		if( m_fAniAngleY < 0.1f && m_fAniAngleY > -0.1f )
 		{
-			m_fAniAngle = 0.0f;
+			m_fAniAngleY = 0.0f;
 		}
 		else
 		{
-			if( m_fAniAngle < 0.1f)
+			if( m_fAniAngleY < 0.1f)
 			{
-				m_fAniAngle += 5.0f * CFrequency::GetInstance()->getFrametime();
+				m_fAniAngleY += 5.0f * CFrequency::GetInstance()->getFrametime();
 			}
-			else if (m_fAniAngle > -0.1f )
+			else if (m_fAniAngleY > -0.1f )
 			{
-				m_fAniAngle -= 5.0f * CFrequency::GetInstance()->getFrametime();
+				m_fAniAngleY -= 5.0f * CFrequency::GetInstance()->getFrametime();
 			}
 		}
 	}
@@ -453,7 +453,7 @@ VOID CCharactor::UpdateByInput(  )
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
-	Set_ControlRotate( 1, m_fAngle + m_fAniAngle );
+	Set_ControlRotate( 1, m_fAngle + m_fAniAngleY );
 	Calcul_MatWorld();
 }
 
@@ -541,17 +541,17 @@ VOID CCharactor::Animate()
 {
 	static BOOL bCheck = FALSE;
 
-	if( m_fAniAngle < 0.8f && bCheck == FALSE )
+	if( m_fAniAngleY < 0.5f && bCheck == FALSE )
 	{
-		m_fAniAngle += 5.0f * CFrequency::GetInstance()->getFrametime();
+		m_fAniAngleY += 5.0f * CFrequency::GetInstance()->getFrametime();
 	}
 	else
 	{
 		bCheck = TRUE;
 
-		if( m_fAniAngle > -0.8f )
+		if( m_fAniAngleY > -0.5f )
 		{
-			m_fAniAngle -= 5.0f * CFrequency::GetInstance()->getFrametime();
+			m_fAniAngleY -= 5.0f * CFrequency::GetInstance()->getFrametime();
 		}
 		else
 		{

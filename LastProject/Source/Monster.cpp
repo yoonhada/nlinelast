@@ -411,6 +411,11 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 				m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
 			}
 		}
+		// 0이면 초기화
+		else
+		{
+			m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] = 0.0f;
+		}
 	}
 
 	switch(a_iXYZ)
@@ -573,6 +578,11 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 			{
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
 			}
+		}
+		// 0이면 초기화
+		else
+		{
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] = 0.0f;
 		}
 	}
 

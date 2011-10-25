@@ -6,7 +6,8 @@
 */
 
 #pragma once
-class Map;
+//class Map;
+#include "Map.h"
 
 class CWeapon : public Map
 {
