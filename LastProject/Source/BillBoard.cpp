@@ -67,10 +67,10 @@ HRESULT CBillBoard::Create()
 {
 	Release();
 	Clear();
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"Bill1.jpg", &m_pTexBillboard[0] );		// Äô
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"Bill2.jpg", &m_pTexBillboard[1] );		// ±â´ö
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"Bill3.jpg", &m_pTexBillboard[2] );		// ´ö
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"Bill4.jpg", &m_pTexBillboard[3] );		// ´õ·¯
+	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill1.jpg", &m_pTexBillboard[0] );		// Äô
+	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill2.jpg", &m_pTexBillboard[1] );		// ±â´ö
+	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill3.jpg", &m_pTexBillboard[2] );		// ´ö
+	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill4.jpg", &m_pTexBillboard[3] );		// ´õ·¯
 	return S_OK;
 }
 
