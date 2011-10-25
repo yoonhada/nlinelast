@@ -6,6 +6,7 @@ class CBillBoard;
 class CCharactor;
 class CCamera;
 class Axis;
+class Map;
 
 class CMainManage : public CSingleton<CMainManage>
 {

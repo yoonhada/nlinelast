@@ -186,7 +186,7 @@ private:
 	CWeapon * m_pWeapon;
 
 	//애니메이션 변수
-	FLOAT m_fAniAngle;
+	FLOAT m_fAniAngleY;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "Charactor.h"
 #include "Camera.h"
 #include "Axis.h"
+#include "Map.h"
 
 CMainManage::CMainManage()
 {
@@ -65,7 +66,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//맵 생성
 	m_pMap = new Map( m_pD3dDevice );
-	m_pMap->Create( L"ASE File/Stage4_1011.ASE", L"ASE File/Stage4_1011.BBX" );
+	m_pMap->Create( L"ASE File/Stage4.ASE", NULL );
 
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
@@ -138,7 +139,7 @@ VOID CMainManage::CreateCharactor()
 	FLOAT fYawZero = 1.0f;
 	m_pMyCharactor = new CCharactor;
 	m_pMyCharactor->Create( m_pD3dDevice, m_pMatrices );
-	m_pMyCharactor->Load( L"Data/CharData/N_0.csav" );
+	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
 
 	CTree::GetInstance()->GetChaVector()->push_back( m_pMyCharactor->GetBoundBox() );
 
@@ -149,15 +150,15 @@ VOID CMainManage::CreateCharactor()
 		m_pCharactors[Loop].Create( m_pD3dDevice, m_pMatrices );
 		if(Loop == 0)
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/N_0.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/thick_bone.csav" );
 		}
 		else if(Loop == 1)
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/I_0.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/ADDLE_0.csav" );
 		}
 		else
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/E_0.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
 		}
 		
 		
@@ -280,6 +281,8 @@ VOID	CMainManage::Update()
 
 	m_pMap->Set_ControlTranslate( 1, -0.5f );
 	m_pMap->Calcul_MatWorld();
+
+	m_pMap->Update();
 }
 
 VOID	CMainManage::Render()

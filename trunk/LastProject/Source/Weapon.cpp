@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "Map.h"
 #include "Weapon.h"
 
 CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
