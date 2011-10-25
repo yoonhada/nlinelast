@@ -589,7 +589,7 @@ VOID CCharactor::Render()
 			{
 				D3DXMatrixMultiply( &m_matMultWorld, &m_matMultWorld, &m_matMonster);
 			}
-			m_pMatrices->SetupModeltoWorld( m_matMultWorld );
+			m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_matMultWorld );
 			//m_pMatrices->SetupModeltoWorld( m_vectorCube[Loop]->Get_MatWorld() );
 			m_vectorCube[Loop]->Render();
 		}

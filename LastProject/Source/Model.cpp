@@ -114,7 +114,8 @@ VOID CModel::Render()
 			( *m_iterQube )->Update();
 			//( *m_iterQube )->Calcul_MatWorld();
 			//D3DXMatrixMultiply( &m_matMultMatrix, &( *m_iterQube )->Get_MatWorld(), &( *m_iterQube )->GetCharMatrix()  );
-			CMatrices::GetInstance()->SetupModeltoWorld( ( *m_iterQube )->Get_MatWorld() );
+			m_pd3dDevice->SetTransform( D3DTS_WORLD, &(*m_iterQube )->Get_MatWorld() );
+			//CMatrices::GetInstance()->SetupModeltoWorld( ( *m_iterQube )->Get_MatWorld() );
 			( *m_iterQube )->Render();
 		}
 		else 
