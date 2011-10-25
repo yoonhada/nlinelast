@@ -26,7 +26,6 @@ public:
 	VOID Clear();
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, FLOAT a_fAspect );
 
-	VOID SetupModeltoWorld( const D3DXMATRIXA16& a_matWorld );
 	VOID SetupProjection();
 
 	const D3DXMATRIXA16* Get_matProj()

@@ -277,12 +277,12 @@ VOID	CMainManage::Update()
 	}
 
 
-	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );
+	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
+
+	m_pMap->Update();
 
 	m_pMap->Set_ControlTranslate( 1, -0.5f );
 	m_pMap->Calcul_MatWorld();
-
-	m_pMap->Update();
 }
 
 VOID	CMainManage::Render()
@@ -293,7 +293,7 @@ VOID	CMainManage::Render()
 	m_pAxis->Render();
 #endif
 
-	m_pMatrices->SetupModeltoWorld( m_pMap->Get_MatWorld() );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pMap->Get_MatWorld() );
 	m_pMap->Render();
 
 	m_pMyCharactor->Render();
