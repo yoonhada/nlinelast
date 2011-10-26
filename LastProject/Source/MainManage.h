@@ -74,6 +74,8 @@ public:
 		return m_iClientNumber;
 	}
 
+	VOID Attack();
+
 };
 
 #endif

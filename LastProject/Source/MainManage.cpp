@@ -175,6 +175,55 @@ VOID CMainManage::CreateCharactor()
 	CInput::GetInstance()->Update( fMoveSpeed, fRotateSpeed, CFrequency::GetInstance()->getFrametime() );
 }
 
+VOID CMainManage::Attack()
+{
+#ifdef _YOON
+	if ( CInput::GetInstance()->Get_Lbutton() )
+		m_pMyCharactor->BreakCube(D3DXVECTOR3(0, 14, -7));
+#endif
+
+	if ( m_pMyCharactor->GetWeaponState() )			// CInput::GetInstance()->Get_Lbutton() )
+	{
+		//D3DXVECTOR3 vTemp = m_pMyCharactor->Get_CharaPos() + ;
+		//m_pMyCharactor->World2Model(vTemp);
+		//m_pMyCharactor->BreakCube(D3DXVECTOR3(0, 14, -7));
+
+		//m_pCharactors[0].TestBreakCubeAll();
+
+
+		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
+		{	
+			//m_pCharactors[Loop].TestBreakCubeAll();
+		}
+
+		// 빌보드 작업
+		if (m_pBill == NULL)
+		{
+			m_pBill = new CBillBoard( m_pD3dDevice );
+			m_pBill->Create();
+			m_pBill->SetType( static_cast<INT>( 4 * FastRand2() ) );
+			m_pBill->SetLife(200);
+		}
+	}
+
+	if ( m_pBill )
+	{
+		if( m_pBill->IsLife())
+		{
+			D3DXVECTOR3 vec(0, 20, 0);
+			m_pBill->SetInverMatrix( *m_pCamera->GetInvView() );
+			m_pBill->SetWorldMatirx( *m_pCamera->GetView() );
+			m_pBill->SetPosition( m_pCharactors[m_iClientNumber].Get_CharaPos() + vec );
+			m_pBill->Update();
+		}
+		else
+		{
+			delete m_pBill;
+			m_pBill = NULL;
+		}
+	}
+}
+
 VOID	CMainManage::Update()
 {
 	// 맵 로드
@@ -207,9 +256,13 @@ VOID	CMainManage::Update()
 
 	// 캐릭터: 인풋 값 받아오기
 	m_pMyCharactor->UpdateByInput();
-	
+	m_pMyCharactor->Update();
+
 	//카메라: 캐릭터 위치,각도 받아오기
-	m_pCamera->SetView( m_pMyCharactor->Get_CharaPos(), m_pMyCharactor->Get_PreControl(), 10.0f, 50.0f, 
+	m_pCamera->SetView( 
+		m_pMyCharactor->Get_CharaPos(), 
+		m_pMyCharactor->Get_PreControl(), 
+		10.0f, 75.0f, 
 		m_pMyCharactor->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
@@ -239,43 +292,7 @@ VOID	CMainManage::Update()
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 1.0f), fMonsterRun );
 	m_pMonster->Update();
 
-	if ( CInput::GetInstance()->Get_Lbutton() )
-	{
-
-		m_pMyCharactor->TestBreakCube();
-
-		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
-		{	
-			m_pCharactors[Loop].TestBreakCubeAll();
-		}
-		
-		// 빌보드 작업
-		if (m_pBill == NULL)
-		{
-			m_pBill = new CBillBoard( m_pD3dDevice );
-			m_pBill->Create();
-			m_pBill->SetType( static_cast<INT>( 4 * FastRand2() ) );
-			m_pBill->SetLife(200);
-		}
-	}
-
-	if ( m_pBill )
-	{
-		if( m_pBill->IsLife())
-		{
-			D3DXVECTOR3 vec(0, 20, 0);
-			m_pBill->SetInverMatrix( *m_pCamera->GetInvView() );
-			m_pBill->SetWorldMatirx( *m_pCamera->GetView() );
-			m_pBill->SetPosition( m_pCharactors[m_iClientNumber].Get_CharaPos() + vec );
-			m_pBill->Update();
-		}
-		else
-		{
-			delete m_pBill;
-			m_pBill = NULL;
-		}
-	}
-
+	Attack();
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 

@@ -49,6 +49,7 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 		if ( m_pCharactors )		
 		{
 			vRet = m_pCharactors->Get_CharaPos(); 
+			vRet.y += ABSDEF( GetSize(CBoundBox::MINUSY) );
 		}
 		else					
 		{

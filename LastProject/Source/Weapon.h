@@ -32,8 +32,8 @@ public:
 	virtual VOID Update();
 
 	VOID SetType(INT nType)		{ m_nWeaponType = nType; }
-	VOID SetKeyA();
-	VOID SetKeyB();
+	INT SetKeyA();
+	INT SetKeyB();
 
 	// Get 
 	INT GetKeyFrame()			{ return m_nFrame; }
