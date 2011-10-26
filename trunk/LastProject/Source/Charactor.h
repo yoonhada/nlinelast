@@ -10,9 +10,10 @@
 
 //using namespace tbb;
 
-#include "CharCube.h"
-#include "Model.h"
-#include "Weapon.h"
+class CCharCube;
+class CModel;
+class CWeapon;
+class CShadowCell;
 
 //class MatrixMult
 //{
@@ -138,7 +139,7 @@ private:
 	VOID _LoadRelease();
 	VOID _SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor );
 	VOID _CreateBase( INT a_iBoxSize, WCHAR* a_pCharaName );
-	VOID _CreateAniFrame( INT a_iFrameNum, INT a_iSrcFrameNum = EnumCharFrame::BASE, BOOL a_LoadMode = FALSE );
+	VOID _CreateAniFrame( INT a_iFrameNum, INT a_iSrcFrameNum = 0, BOOL a_LoadMode = FALSE );
 	CCharCube* _CreateCube();
 	VOID Animate();
 	
@@ -192,6 +193,10 @@ private:
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;
+
+private:
+	CShadowCell* m_pShadowCell;
+
 };
 
 #endif

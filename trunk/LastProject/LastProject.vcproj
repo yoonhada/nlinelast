@@ -312,6 +312,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\ShadowCell.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\ShadowCell.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Weapon.cpp"
 					>
 				</File>

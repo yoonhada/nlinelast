@@ -100,10 +100,10 @@ VOID CBillBoard::Update()
 VOID CBillBoard::Render()
 {
 	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHAREF, (DWORD)0x0000009 );
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
+	//m_pd3dDevice->SetRenderState( D3DRS_ALPHAREF, (DWORD)0x0000009 );
+	//m_pd3dDevice->SetRenderState( D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
 
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, TRUE );
+	//m_pd3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, TRUE );
 	m_pd3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCCOLOR );
 	m_pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ONE );
 	m_pd3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );
@@ -116,7 +116,7 @@ VOID CBillBoard::Render()
 
 	m_pd3dDevice->SetTexture( 0, NULL );
 	m_pd3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, FALSE );
+	//m_pd3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, FALSE );
 
 	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
 	m_pd3dDevice->SetTransform( D3DTS_WORLD, &m_matWorld ); 

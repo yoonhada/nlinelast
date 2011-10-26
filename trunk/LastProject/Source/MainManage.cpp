@@ -66,7 +66,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//맵 생성
 	m_pMap = new Map( m_pD3dDevice );
-	m_pMap->Create( L"ASE File/Stage4.ASE", NULL );
+	m_pMap->Create( L"ASE File/Stage4_Alpha.ASE", L"ASE File/Stage4_Alpha.BBX" );
 
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
@@ -150,7 +150,7 @@ VOID CMainManage::CreateCharactor()
 		m_pCharactors[Loop].Create( m_pD3dDevice, m_pMatrices );
 		if(Loop == 0)
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/thick_bone.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/mom_final.csav" );
 		}
 		else if(Loop == 1)
 		{
@@ -193,7 +193,7 @@ VOID CMainManage::Attack()
 
 		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 		{	
-			//m_pCharactors[Loop].TestBreakCubeAll();
+			m_pCharactors[Loop].TestBreakCubeAll();
 		}
 
 #ifndef _YOON
@@ -301,9 +301,6 @@ VOID	CMainManage::Update()
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 
 	m_pMap->Update();
-
-	m_pMap->Set_ControlTranslate( 1, -0.5f );
-	m_pMap->Calcul_MatWorld();
 }
 
 VOID	CMainManage::Render()

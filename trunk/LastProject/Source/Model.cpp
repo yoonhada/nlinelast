@@ -83,7 +83,7 @@ VOID CModel::Render()
 		if ( ( *m_iterQube ) != NULL && ( *m_iterQube )->GetVisiable() )
 		{
 			( *m_iterQube )->Update( m_pParentBB );
-			CMatrices::GetInstance()->SetupModeltoWorld( ( *m_iterQube )->Get_MatWorld() );
+			m_pd3dDevice->SetTransform( D3DTS_WORLD, &( *m_iterQube )->Get_MatWorld() );
 			( *m_iterQube )->Render();
 		}
 		else 
