@@ -189,7 +189,7 @@ BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_v
 		//int i = 0;
 		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
 		{
-			(*Iter)->SetAngle( a_fAngleChara );
+			//(*Iter)->SetAngle( a_fAngleChara );
 			if( CPhysics::GetInstance()->Collision( a_vPosCamera, a_vPosCharactor,  ( *Iter ) ) )
 			{
 				bColl = FALSE;
@@ -207,7 +207,7 @@ BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_v
 		//int i = 0;
 		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
 		{
-			(*Iter)->SetAngle( a_fAngleChara );
+			//(*Iter)->SetAngle( a_fAngleChara );
 			if( CPhysics::GetInstance()->Collision( a_vPosCamera, a_vPosCharactor,  ( *Iter ) ) )
 			{
 				bColl = FALSE;
