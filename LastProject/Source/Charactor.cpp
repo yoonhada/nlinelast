@@ -8,6 +8,11 @@
 #include "stdafx.h"
 #include "Charactor.h"
 
+#include "CharCube.h"
+#include "Model.h"
+#include "Weapon.h"
+#include "ShadowCell.h"
+
 CCharactor::CCharactor()
 {
 	Clear();
@@ -78,6 +83,19 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatric
 		m_pWeapon->Create();
 	}
 
+	m_pShadowCell = new CShadowCell;
+	m_pShadowCell->Create( m_pD3dDevice, 
+						   -1.0f, -1.0f, -1.0f,
+						    1.0f, -1.0f, -1.0f,
+							1.0f, -1.0f,  1.0f,
+						   -1.0f, -1.0f,  1.0f,
+							0.0f, 0.0f,
+							1.0f, 0.0f,
+							1.0f, 1.0f,
+							0.0f, 1.0f,
+							L"Img/shadow.tga"
+						  );
+
 	return S_OK;
 }
 
@@ -92,6 +110,7 @@ HRESULT CCharactor::Release()
 	SAFE_RELEASE( m_pTotalIB );
 	SAFE_DELETE( m_pBoundBox );
 	SAFE_DELETE( m_pWeapon );
+	SAFE_DELETE( m_pShadowCell );
 
 	return S_OK;
 }
@@ -619,8 +638,17 @@ VOID CCharactor::Render()
 	m_pModel->Render();
 	
 	m_pWeapon->Update();
-	m_pMatrices->SetupModeltoWorld( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() ) );
 	m_pWeapon->Render();
+
+	m_pShadowCell->Set_ControlScale( 0, 5.0f );
+	m_pShadowCell->Set_ControlScale( 2, 5.0f );
+	m_pShadowCell->Set_ControlTranslate( 0, m_vControl.x );
+	m_pShadowCell->Set_ControlTranslate( 1, 0.51f );
+	m_pShadowCell->Set_ControlTranslate( 2, m_vControl.z );
+	m_pShadowCell->Calcul_MatWorld();
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pShadowCell->Get_MatWorld() );
+	m_pShadowCell->Render();
 
 	m_pD3dDevice->SetTexture( 0, NULL );
 
@@ -638,7 +666,7 @@ VOID CCharactor::World2Model(D3DXVECTOR3& _vPosition)
 VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 {
 #ifdef _YOON
-	m_pModel->CreateRandom( m_vectorCube[0], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
+	m_pModel->CreateRandom( m_vectorCube[1], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
 #else
 	for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
 	{
