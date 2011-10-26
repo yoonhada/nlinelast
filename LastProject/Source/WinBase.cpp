@@ -30,11 +30,14 @@ HRESULT CWinBase::Create()
 	CFrequency::GetInstance();
 	CTextureManage::GetInstance();
 	CInput::GetInstance();
+	CPhysics::GetInstance();
 
 	// 네트워크
-	//WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
-	//m_pNetwork = new CNetwork;
-	//m_pNetwork->CreateSocket();
+#ifndef _YOON
+	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
+	m_pNetwork = new CNetwork;
+	m_pNetwork->CreateSocket();
+#endif
 	
 	// 파일에서 IP 받아오기
 	FILE* pFile;
@@ -54,8 +57,10 @@ HRESULT CWinBase::Create()
 
 	fclose(pFile);
 
-	//m_pNetwork->ConnectToServer( szTemp, 20202 );
-	//m_pNetwork->csLOGON();
+#ifndef _YOON
+	m_pNetwork->ConnectToServer( szTemp, 20202 );
+	m_pNetwork->csLOGON();
+#endif
 
 	return S_OK;
 }
@@ -69,9 +74,12 @@ HRESULT CWinBase::Release()
 	CFrequency::DestoryInstance();
 	CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
+	CPhysics::DestoryInstance();
 
-	//WSACleanup();
-	//delete m_pNetwork;
+#ifndef _YOON
+	WSACleanup();
+	delete m_pNetwork;
+#endif
 
 	return S_OK;
 }
@@ -222,7 +230,9 @@ VOID CWinBase::Update()
 	swprintf( buf, 256, TEXT( "%0.4f" ), CFrequency::GetInstance()->getFrequency() );
 	SetWindowText( GetInstance()->m_hWnd, buf );
 
-	//GetInstance()->m_pNetwork->Update();
+#ifndef _YOON
+	GetInstance()->m_pNetwork->Update();
+#endif
 	GetInstance()->m_pManage->Update();
 }
 
