@@ -54,6 +54,7 @@ VOID CCharactor::Clear()
 
 	m_fAniAngleY = 0.0f;
 	m_nWeaponState = 0;
+	m_nWeaponState = 0;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
@@ -344,13 +345,11 @@ BOOL CCharactor::Collision()
 	std::vector<CBoundBox*> * vecBoundBox;
 	std::vector<CBoundBox*>::iterator Iter;
 
-	INT i = -1;
+	INT i;
 	D3DXVECTOR3 vDir, vPos;
 
 	// ¸ÊÃæµ¹
-
-	//m_pBoundBox->SetAngle(m_fAngle);
-	for ( int i = 0; i < 8; ++i)
+	for ( i = 0; i < 8; ++i)
 	{
 		vPos = m_pBoundBox->GetPosition(i);
 		vDir = vPos + m_vColissionControl;
@@ -365,12 +364,19 @@ BOOL CCharactor::Collision()
 				{
 					CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
 					CPhysics::GetInstance()->Sliding( m_vColissionControl );
+					bColl = TRUE;
 				}
 				Iter++;
 			}
 		}
+
+		if (bColl)
+		{
+			break;
+		}
 	}
 
+#ifndef _YOON
 	vecBoundBox = CTree::GetInstance()->GetChaVector( );
 	if ( vecBoundBox != NULL && vecBoundBox->size() )
 	{
@@ -386,7 +392,7 @@ BOOL CCharactor::Collision()
 			Iter++;
 		}
 	}
-
+#endif
 	return FALSE;
 }
 
@@ -450,6 +456,7 @@ VOID CCharactor::UpdateByInput(  )
 
 	//m_vPreControl = vControl;
 
+	m_pBoundBox->SetAngle( m_fAngle );
 	Collision();
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
@@ -630,7 +637,9 @@ VOID CCharactor::World2Model(D3DXVECTOR3& _vPosition)
 
 VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 {
-#ifndef _YOON
+#ifdef _YOON
+	m_pModel->CreateRandom( m_vectorCube[0], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
+#else
 	for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
 	{
 		if( m_vectorCube[Loop] == NULL ) 
@@ -642,8 +651,6 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
 		}
 	}
-#else
-	m_pModel->CreateRandom( m_vectorCube[3310], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
 #endif
 }
 
