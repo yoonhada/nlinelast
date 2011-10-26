@@ -196,6 +196,7 @@ VOID CMainManage::Attack()
 			//m_pCharactors[Loop].TestBreakCubeAll();
 		}
 
+#ifndef _YOON
 		// ºôº¸µå ÀÛ¾÷
 		if (m_pBill == NULL)
 		{
@@ -221,6 +222,7 @@ VOID CMainManage::Attack()
 			delete m_pBill;
 			m_pBill = NULL;
 		}
+#endif
 	}
 }
 
@@ -289,8 +291,10 @@ VOID	CMainManage::Update()
 		TimeElapsed = 0.0f;
 	}
 
+#ifndef _YOON
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 1.0f), fMonsterRun );
 	m_pMonster->Update();
+#endif
 
 	Attack();
 
@@ -327,11 +331,12 @@ VOID	CMainManage::Render()
 
 	m_pMonster->Render();
 
+#ifdef _YOON
 	if( m_pBill && m_pBill->IsLife() )
 	{
 		m_pBill->Render();
 	}
-
+#endif // _YOON
 	//m_pMatrices->SetupModeltoWorld( m_pGrid->Get_MatWorld() );
 	//m_pGrid->Render();
 

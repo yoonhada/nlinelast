@@ -76,15 +76,14 @@ VOID CModel::Render()
 	m_pd3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
 	m_pd3dDevice->SetIndices( m_pTotalIB );
 
-	// Qube Ã³¸®
+	// Qube o??
 	m_iterQube = m_vectorQube.begin();
 	while( m_iterQube != m_vectorQube.end() )
 	{
 		if ( ( *m_iterQube ) != NULL && ( *m_iterQube )->GetVisiable() )
 		{
 			( *m_iterQube )->Update( m_pParentBB );
-			m_pd3dDevice->SetTransform( D3DTS_WORLD, &(*m_iterQube )->Get_MatWorld() );
-			//CMatrices::GetInstance()->SetupModeltoWorld( ( *m_iterQube )->Get_MatWorld() );
+			CMatrices::GetInstance()->SetupModeltoWorld( ( *m_iterQube )->Get_MatWorld() );
 			( *m_iterQube )->Render();
 		}
 		else 
@@ -112,11 +111,18 @@ VOID CModel::CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIX
 	D3DXVec3TransformCoord( &vec, &a_pCube->Get_Pos( a_iFrameNum ), &a_matChara );
 	dwColor = a_pCube->Get_Color( a_iFrameNum );
 
-	vMome = D3DXVECTOR3( 0.0f, 0.0f, -1.0f );
+	D3DXMATRIXA16 mat = a_matChara;
+	mat._41 = 0.0f;
+	mat._42 = 0.0f;
+	mat._43 = 0.0f;
+
+	vMome = D3DXVECTOR3( 0.0f, 0.0f, -2.0f );
+	D3DXVec3TransformCoord( &vMome, &vMome, &mat );
+	
 
 	pQube = new CQube;
 	pQube->SetPosition( vec );
-	pQube->RandMome( vMome * fPow );
+	pQube->RandMome( vMome, fPow );
 	pQube->RanderRotate();
 	pQube->Create( m_pd3dDevice, m_pTotalVB, m_pTotalIB, 0, 0, 0.5f );
 	pQube->InitTexture( dwColor, dwOutLine1 );
