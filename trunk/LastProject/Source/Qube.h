@@ -18,15 +18,13 @@ private:
 	D3DXVECTOR3 m_vMomentum;		///< 중력 가속도 누적
 	D3DXVECTOR3 m_vAccelerate;		///< 가속도
 	const FLOAT m_fItemLift;		///< 최소 가속도 
-	INT m_nType;
-	FLOAT m_fLongSize;				///< 큐브 대각선
 	//VOID Translate();
 
 public:
 	CQube();
 	virtual ~CQube();
 
-	VOID Update();
+	VOID Update( CBoundBox * pBB );
 	VOID RandMome( D3DXVECTOR3 vMomentum, FLOAT fRate = 1.0f );
 
 private:
@@ -38,6 +36,12 @@ private:
 	FLOAT m_fSize;					///< 큐브 반지름
 	D3DXMATRIXA16 m_matChara;		///< 생성 당시 캐릭터 월드 매트릭스 행렬 저장
 	FLOAT m_fHeight;					///< 바닥으로 부터의 높이 보정값
+
+
+	// 속도를 위한 임시 저장소
+	D3DXVECTOR3 vDir;
+	std::vector<CBoundBox*> * vecBoundBox;
+	std::vector<CBoundBox*>::iterator Iter;
 
 public:
 	// Get

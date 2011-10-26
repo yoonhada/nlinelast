@@ -31,7 +31,6 @@ HRESULT CWeapon::Release()
 HRESULT CWeapon::Create()
 {
 	assert(m_nWeaponType != -1);
-	Clear();
 
 	// 한번에 읽어서 로딩????
 	// 개별파일로 만들어 로딩????
@@ -88,7 +87,7 @@ HRESULT CWeapon::Create()
 	return S_OK;
 }
 
-VOID CWeapon::SetKeyA()
+INT CWeapon::SetKeyA()
 {
 	// 콤보
 	if ( ( 0 < m_nFrame && m_nFrame <= m_nDelay && 
@@ -98,9 +97,11 @@ VOID CWeapon::SetKeyA()
 		m_nState = ( m_nState & 0x0F0F ) + 0x0001;
 		m_nFrame = m_nAKeyFrameTime;
 	}
+
+	return m_nState;
 }
 
-VOID CWeapon::SetKeyB()
+INT CWeapon::SetKeyB()
 {
 	// 콤보
 	if ( ( 0 < m_nFrame && m_nFrame <= m_nDelay && 
@@ -110,6 +111,8 @@ VOID CWeapon::SetKeyB()
 		m_nState = ( m_nState & 0x0F0F ) + 0x0100;
 		m_nFrame = m_nBKeyFrameTime;
 	}
+
+	return m_nState;
 }
 
 VOID CWeapon::Update()

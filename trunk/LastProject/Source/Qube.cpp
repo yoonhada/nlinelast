@@ -7,13 +7,11 @@ CQube::CQube()
 : m_fItemLift( 0.005f )
 , m_vMomentum( 0.0f, 0.0f, 0.0f )
 , m_vAccelerate( 0.0f, 0.0f, 0.0f )
-, m_nType( 0 )
 , m_bVisiable( TRUE )
 , m_fSize( 0.5f )
 , m_fHeight( 0.0f )
 {
 	//Create( _pd3dDevice, a_pVB, a_pIB, a_iStartVB, a_iStartIB, a_fCubeSize );
-	m_fLongSize = pow(m_fSize, 0.3333333333f);
 	m_vPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	ZeroMemory( &m_vAxisDir, sizeof(m_vAxisDir) );
 	m_vRotateTemp = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -26,12 +24,9 @@ CQube::~CQube()
 	//Release();
 }
 
-VOID CQube::Update()
+//VOID CQube::Update()
+VOID CQube::Update( CBoundBox * pBB )
 {
-	D3DXVECTOR3 vDir;
-	std::vector<CBoundBox*> * vecBoundBox;
-	std::vector<CBoundBox*>::iterator Iter;
-
 	// 속도를 위해 소멸속도 단순 계산
 	FLOAT fLen = ABSDEF( m_vAccelerate.x ) + ABSDEF( m_vAccelerate.y ) + ABSDEF( m_vAccelerate.z );
 	if ( m_fItemLift > fLen )
@@ -40,22 +35,20 @@ VOID CQube::Update()
 		return;
 	}
 
-	// 가속도 갱신
-	m_vAccelerate *= CPhysics::GetInstance()->m_fAirRegistance;
-	m_vMomentum -= CPhysics::GetInstance()->m_vGAccel;
+	m_vAccelerate *= CPhysics::GetInstance()->m_fAirRegistance;		// 가속도 공기저항 감속
+	m_vMomentum -= CPhysics::GetInstance()->m_vGAccel;				// 누적 중력가속도 
 
-	// 이동후 위치 갱신
-	vDir = /*m_vPos + */m_vAccelerate + m_vMomentum;
-
-	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), m_vPos + vDir);
-	if ( vecBoundBox != NULL && vecBoundBox->size() )
+	// 이동값 갱신
+	vDir = m_vPos + m_vAccelerate + m_vMomentum;
+	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir );
+	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{
+		vDir = m_vAccelerate + m_vMomentum;
 		Iter = vecBoundBox->begin();
 		while ( Iter != vecBoundBox->end() )
 		{
 			if( CPhysics::GetInstance()->Collision( m_vPos, vDir, ( *Iter ) ) )
 			{
-				CPhysics::GetInstance()->Reflect( vDir );
 				CPhysics::GetInstance()->Reflect( m_vAccelerate );
 				CPhysics::GetInstance()->Reflect( m_vMomentum );
 				m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
@@ -65,61 +58,59 @@ VOID CQube::Update()
 		}
 	}
 
-	//vDir += m_vPos;
-
-	//vecBoundBox = CTree::GetInstance()->GetChaVector();
-	//if ( vecBoundBox != NULL && vecBoundBox->size() )
-	//{
-	//	Iter = vecBoundBox->begin();
-	//	while ( Iter != vecBoundBox->end() )
-	//	{
-	//		if( CPhysics::GetInstance()->Collision( m_vPos, vDir, ( *Iter ) ) )
-	//		{
-	//			CPhysics::GetInstance()->Reflect( vDir );
-	//			CPhysics::GetInstance()->Reflect( m_vAccelerate );
-	//			CPhysics::GetInstance()->Reflect( m_vMomentum );
-	//			m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
-	//			m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
-	//		}
-	//		Iter++;
-	//	}
-	//}
-
-
-	vDir += m_vPos;
-
-	// 지면체크
-	if (vDir.y < 0.0f /* - ( m_fHeight - 2.0f )*/ )
+	vecBoundBox = CTree::GetInstance()->GetChaVector();
+	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{
-		vDir.y = m_fLongSize -vDir.y;
-		m_vMomentum.y *= -1.0f;
-		m_vAccelerate.y *= -1.0f;
-		m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
-		m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
-		vDir = m_vPos + m_vMomentum;
+		vDir = m_vAccelerate + m_vMomentum;
+		Iter = vecBoundBox->begin();
+		while ( Iter != vecBoundBox->end() )
+		{			
+			if ( ( *Iter ) == pBB )
+			{
+				Iter++;
+				continue;
+			}
 
-		//회전량의 방향성 추가		
-		m_vRotateTemp.x = -( m_vAccelerate + m_vMomentum ).z * CPhysics::GetInstance()->m_fElastic;
-		m_vRotateTemp.z = -( m_vAccelerate + m_vMomentum ).x * CPhysics::GetInstance()->m_fElastic;
+			if( CPhysics::GetInstance()->Collision( m_vPos, vDir, ( *Iter ) ) )
+			{
+				CPhysics::GetInstance()->Reflect( m_vAccelerate );
+				CPhysics::GetInstance()->Reflect( m_vMomentum );
+				m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
+				m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
+			}
+
+			Iter++;
+		}
 	}
 
+	// 지면체크
+	vDir = m_vPos + m_vAccelerate + m_vMomentum;
+	if ( vDir.y < m_fSize )
+	{
+		vDir.y = 2.0f * m_fSize - vDir.y ;
+		m_vMomentum.y *= -1.0f;
+		m_vAccelerate.y *= -1.0f;
 
+		//회전량의 방향성 추가		
+		//m_vRotateTemp.x = -m_vAccelerate.z * CPhysics::GetInstance()->m_fElastic;
+		//m_vRotateTemp.z = -m_vAccelerate.x * CPhysics::GetInstance()->m_fElastic;
 
+		m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
+		//m_vRotateTemp = CPhysics::GetInstance()->m_fElastic;
+		//vDir = m_vPos + m_vMomentum;
+	}
 
 	m_vPos = vDir;
 
-	//D3DXMATRIXA16 mat;
-	//D3DXMatrixIdentity( &m_matWorld );
-	m_vRotate += m_vRotateTemp;
-	Set_ControlRotate( 0, m_vRotate.x );
-	Set_ControlRotate( 1, m_vRotate.y );
-	Set_ControlRotate( 2, m_vRotate.z );
+	//m_vRotate += m_vRotateTemp;
+	//Set_ControlRotate( 0, m_vRotate.x );
+	//Set_ControlRotate( 1, m_vRotate.y );
+	//Set_ControlRotate( 2, m_vRotate.z );
 	Set_ControlTranslate( 0, m_vPos.x );
 	Set_ControlTranslate( 1, m_vPos.y );
 	Set_ControlTranslate( 2, m_vPos.z );
 
 	Calcul_MatWorld();
-
 	//m_pd3dDevice->SetTransform( D3DTS_WORLD, &m_matWorld );
 }
 

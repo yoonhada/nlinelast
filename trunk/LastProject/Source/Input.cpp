@@ -114,19 +114,15 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			if ( GetAsyncKeyState( 'D' ) )
 			{
 				m_vPos.x = a_fCameraMoveSpeed * a_fFrameTime;
-
 			}
 
 			if ( GetAsyncKeyState( 'W' ) )
 			{
-
 				m_vPos.z = a_fCameraMoveSpeed * a_fFrameTime;
-
 			}
 
 			if ( GetAsyncKeyState( 'S' ) )
 			{
-
 				m_vPos.z = -a_fCameraMoveSpeed * a_fFrameTime;
 			}
 

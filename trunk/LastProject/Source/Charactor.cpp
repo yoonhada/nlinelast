@@ -53,6 +53,7 @@ VOID CCharactor::Clear()
 	m_bActive = FALSE;
 
 	m_fAniAngleY = 0.0f;
+	m_nWeaponState = 0;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
@@ -181,6 +182,7 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	// 바운드 박스 파일에서 읽기로 수정.
 	m_pBoundBox = new CBoundBox(this);
 	m_pBoundBox->Create();
+	m_pModel->SetCharType( m_pBoundBox );
 
 	FILE* pFile;
 
@@ -342,25 +344,26 @@ BOOL CCharactor::Collision()
 	std::vector<CBoundBox*> * vecBoundBox;
 	std::vector<CBoundBox*>::iterator Iter;
 
-	CBoundBox bbThis(this);
-
 	INT i = -1;
-	D3DXVECTOR3 vDir;
+	D3DXVECTOR3 vDir, vPos;
 
 	// 맵충돌
-	for ( int i = 0; i < 4; ++i)
-	{
-		vDir = bbThis.GetPosition(i) + m_vColissionControl;
 
+	//m_pBoundBox->SetAngle(m_fAngle);
+	for ( int i = 0; i < 8; ++i)
+	{
+		vPos = m_pBoundBox->GetPosition(i);
+		vDir = vPos + m_vColissionControl;
 		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
-		if ( vecBoundBox != NULL && vecBoundBox->size() )
-		{
+		if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
+		{			
+			vDir = m_vColissionControl;
 			Iter = vecBoundBox->begin();
 			while ( Iter != vecBoundBox->end() )
 			{
-				(*Iter)->SetAngle( m_fAngle );
-				if( CPhysics::GetInstance()->Collision( bbThis.GetPosition(i), m_vColissionControl, ( *Iter ) ) )
+				if( CPhysics::GetInstance()->Collision( vPos, vDir, ( *Iter ) ) )
 				{
+					CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
 					CPhysics::GetInstance()->Sliding( m_vColissionControl );
 				}
 				Iter++;
@@ -375,7 +378,7 @@ BOOL CCharactor::Collision()
 		Iter++;
 		while ( Iter != vecBoundBox->end() )
 		{
-			if( CPhysics::GetInstance()->Collision( &bbThis, m_vColissionControl, ( *Iter ) ) )
+			if( CPhysics::GetInstance()->Collision( m_pBoundBox, m_vColissionControl, ( *Iter ) ) )
 			{
 				m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				return TRUE;
@@ -383,6 +386,7 @@ BOOL CCharactor::Collision()
 			Iter++;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -564,6 +568,15 @@ VOID CCharactor::Animate()
 
 VOID CCharactor::Update()
 {
+	if ( CInput::GetInstance()->Get_Lbutton() )
+	{
+		m_nWeaponState = m_pWeapon->SetKeyA();
+	}
+	if ( CInput::GetInstance()->Get_Rbutton() )
+	{
+		m_nWeaponState = m_pWeapon->SetKeyB();
+	}
+
 	//parallel_for( blocked_range<size_t>(0, m_iCubeVectorSize ), MatrixMult( m_vectorCube, Get_MatWorld(), m_iSelectedFrameNum ) );
 }
 
@@ -597,14 +610,41 @@ VOID CCharactor::Render()
 	}
 
 	m_pModel->Render();
+	
+	m_pWeapon->Update();
+	m_pMatrices->SetupModeltoWorld( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
+	m_pWeapon->Render();
 
 	m_pD3dDevice->SetTexture( 0, NULL );
 
-	
-	
-
 	//a_SetupMatrices.SetupModeltoWorld( m_zGrid.Get_MatWorld() );
 	//m_zGrid.Draw();	
+}
+
+VOID CCharactor::World2Model(D3DXVECTOR3& _vPosition)
+{
+	D3DXMATRIXA16 matInv = m_pWeapon->Get_MatWorld() * Get_MatWorld();	
+	D3DXMatrixInverse( &matInv, NULL, &matInv );
+	D3DXVec3TransformCoord( &_vPosition, &_vPosition, &matInv );
+}
+
+VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
+{
+#ifndef _YOON
+	for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
+	{
+		if( m_vectorCube[Loop] == NULL ) 
+			continue; 
+		D3DXVECTOR3 v = m_vectorCube[Loop]->Get_Pos(m_iSelectedFrameNum);
+		if( v == _vPosition && m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) )
+		{
+			m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
+		}
+	}
+#else
+	m_pModel->CreateRandom( m_vectorCube[3310], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
+#endif
 }
 
 VOID CCharactor::TestBreakCubeAll()
@@ -640,12 +680,11 @@ VOID CCharactor::TestBreakCubeAll()
 
 VOID CCharactor::TestBreakCube()
 {
-	
-
 	if( m_bAliveCheck == TRUE )
 	{
-		if( m_vectorCube[m_iLoop] != NULL &&  m_vectorCube[m_iLoop]->Get_Visible( m_iSelectedFrameNum ) == TRUE
-			&&  m_vectorCube[m_iLoop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
+		if( m_vectorCube[m_iLoop] != NULL &&  
+			m_vectorCube[m_iLoop]->Get_Visible( m_iSelectedFrameNum ) == TRUE &&  
+			m_vectorCube[m_iLoop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
 		{
 			m_vectorCube[m_iLoop]->Set_Visible( m_iSelectedFrameNum, 2 );
 			if( m_bMatMonster )

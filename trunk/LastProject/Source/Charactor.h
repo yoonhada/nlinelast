@@ -79,6 +79,8 @@ public:
 	VOID UpdateOtherPlayer();
 	VOID Render();
 
+	VOID World2Model(D3DXVECTOR3& _vPosition);
+	VOID BreakCube(D3DXVECTOR3& _vPosition);
 	VOID TestBreakCube();
 	VOID TestBreakCubeAll();
 
@@ -130,6 +132,7 @@ public:
 		return m_bActive;
 	}
 
+	INT GetWeaponState()	{ return m_nWeaponState; }
 
 private:
 	VOID _LoadRelease();
@@ -184,6 +187,8 @@ private:
 
 	CBoundBox * m_pBoundBox;
 	CWeapon * m_pWeapon;
+
+	INT m_nWeaponState;
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;

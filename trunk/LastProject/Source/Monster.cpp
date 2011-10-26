@@ -753,7 +753,7 @@ VOID CMonster::Update()
 
 		//if ( CInput::GetInstance()->Get_Lbutton() )
 		//{
-		m_pBox[Loop].TestBreakCube();
+		//m_pBox[Loop].TestBreakCube();
 		//}
 
 	}
