@@ -60,7 +60,7 @@ HRESULT CWeapon::Create()
 	}
 
 	m_pMap->AddAnimationData( ASEANI_IDLE, 0, 0, 0, TRUE );
-	m_pMap->AddAnimationData(ASEANI_POST_IDLE, 1, 1, 30, FALSE);
+	m_pMap->AddAnimationData(ASEANI_POST_IDLE, 1, 1, 15, FALSE);
 
 
 	m_nState = 0;
@@ -71,14 +71,15 @@ HRESULT CWeapon::Create()
 
 INT CWeapon::SetKeyA()
 {
-	m_nState = 1;
-	//if ( ( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x000F ) == 0x0001 ) || 
-	//	 ( ( m_nState & 0x000F ) == 0x0000 ) )
-	//{
-	//	m_nState = ( m_nState & 0x0F0F ) + 0x0001;
-	//	m_nFrame = m_WeaponType.nAKeyFrameTime;
-	//}
-	m_pMap->SetAnimation( m_nState );
+	if ( ( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x000F ) == 0x0001 ) || 
+		 ( ( m_nState & 0x000F ) == 0x0000 ) )
+	{
+		m_nState = ( m_nState & 0x0F0F ) + 0x0001;
+		m_nFrame = m_WeaponType.nAKeyFrameTime;
+
+		m_pMap->SetAnimation( m_nState );
+	}
+	
 	return m_nState;
 }
 
@@ -128,15 +129,15 @@ VOID CWeapon::Update()
 	//	m_pMap->SetAnimation( 0 );
 	//}
 
-	//m_pMap->Set_ControlScale( 0, 0 );
+	m_pMap->Set_ControlScale( 0, 0.5f );
 	//m_pMap->Set_ControlScale( 1, 0 );
-	//m_pMap->Set_ControlScale( 2, 0 );
+	m_pMap->Set_ControlScale( 2, 0.5f );
 	m_pMap->Set_ControlRotate( 0, 0 );
 	m_pMap->Set_ControlRotate( 1, 0 );
 	m_pMap->Set_ControlRotate( 2, 0 );
-	m_pMap->Set_ControlTranslate( 0, 0 );
-	m_pMap->Set_ControlTranslate( 1, 0 );
-	m_pMap->Set_ControlTranslate( 2, 0 );
+	m_pMap->Set_ControlTranslate( 0, -4.5f );
+	m_pMap->Set_ControlTranslate( 1, -5.0f );
+	m_pMap->Set_ControlTranslate( 2, 0.0f );
 
 	m_pMap->Calcul_MatWorld();
 };
@@ -149,4 +150,7 @@ const D3DXMATRIXA16& CWeapon::Get_MatWorld()
 VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 {
 	m_pMap->Render( _matCharacter );
+	if ( (m_nFrame--) == 0 )
+		m_nState = 0;
+		
 }
