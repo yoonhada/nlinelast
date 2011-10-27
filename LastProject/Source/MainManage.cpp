@@ -190,13 +190,13 @@ VOID CMainManage::Attack()
 
 		//m_pCharactors[0].TestBreakCubeAll();
 
-
+#ifndef _YOON
 		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 		{	
 			m_pCharactors[Loop].TestBreakCubeAll();
 		}
 
-#ifndef _YOON
+
 		// ºôº¸µå ÀÛ¾÷
 		if (m_pBill == NULL)
 		{
@@ -291,10 +291,8 @@ VOID	CMainManage::Update()
 		TimeElapsed = 0.0f;
 	}
 
-#ifndef _YOON
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 1.0f), fMonsterRun );
 	m_pMonster->Update();
-#endif
 
 	Attack();
 
