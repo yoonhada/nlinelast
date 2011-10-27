@@ -165,3 +165,16 @@ VOID CWeapon::Render()
 		m_nState = 0x0000;
 	}
 }
+
+VOID CWeapon::Render( D3DXMATRIX _matCharacter )
+{
+	if ( m_nFrame > 0 )
+	{
+		Map::Render( _matCharacter );
+		m_nFrame--;
+	}
+	else
+	{
+		m_nState = 0x0000;
+	}
+}

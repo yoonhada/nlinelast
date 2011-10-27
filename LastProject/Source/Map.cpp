@@ -140,10 +140,6 @@ VOID Map::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 {
 	InitASE( _ASEFileName );
 
-	m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 300, TRUE );
-	m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
-	m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
-
 	if( _BBXFileName != NULL )
 		InitBBX( _BBXFileName );
 }
@@ -151,13 +147,6 @@ VOID Map::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 VOID Map::Update()
 {
 	m_pASEParser->FrameMove();
-
-	if( GetKeyState( '1' ) & 0x8000 )
-		m_pASEParser->SetAnimation( ANI_1 );
-	if( GetKeyState( '2' ) & 0x8000 )
-		m_pASEParser->SetAnimation( ANI_2 );
-	if( GetKeyState( '3' ) & 0x8000 )
-		m_pASEParser->SetAnimation( ANI_3 );
 }
 
 
@@ -182,6 +171,30 @@ VOID Map::RenderASEData( INT _Index )
 
 }
 
+VOID Map::RenderASEData( INT _Index, D3DXMATRIX _matCharacter )
+{
+	if( m_pASEData[ _Index ].pTex != NULL )
+		m_pd3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
+
+	D3DXMATRIX matWorld;
+	D3DXMatrixIdentity( &matWorld );
+	m_pASEParser->GetAniTrack( matWorld, _Index );
+	
+	//	New
+	matWorld = matWorld * _matCharacter;
+	//	End
+	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+
+	m_pd3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
+	m_pd3dDevice->SetFVF( ASEParser::VERTEX::FVF );
+	m_pd3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
+	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
+
+	D3DXMATRIX matIdentity;
+	D3DXMatrixIdentity( &matIdentity );
+	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
+}
+
 VOID Map::RenderBBXData( INT _Index )
 {
 	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
@@ -200,6 +213,34 @@ VOID Map::Render()
 		RenderASEData( i );
 	for( INT i=0 ; i<m_iNumBBXData ; i++ )
 		RenderBBXData( i );
+}
+
+VOID Map::Render( D3DXMATRIX& _matCharacter )
+{
+	for( INT i=0 ; i<m_iNumASEData ; i++ )
+		RenderASEData( i, _matCharacter );
+	for( INT i=0 ; i<m_iNumBBXData ; i++ )
+		RenderBBXData( i );
+}
+
+BOOL Map::AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop )
+{
+	//	Sample
+	//m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 100, TRUE );
+	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
+	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
+
+	if( m_pASEParser->AddAnimationData( _dType, _dID, _iStartFrame, _iEndFrame, _bLoop ) )
+		return TRUE;
+
+	return FALSE;
+}
+BOOL Map::SetAnimation( DWORD _dID )
+{
+	if( m_pASEParser->SetAnimation( _dID ) )
+		return TRUE;
+
+	return FALSE;
 }
 
 HRESULT	Map::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )

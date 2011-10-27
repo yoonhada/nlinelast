@@ -29,6 +29,7 @@ public:
 	virtual HRESULT Create();
 	virtual HRESULT Release();
 	virtual VOID Render();
+	virtual VOID Render( D3DXMATRIX _matCharacter );
 	virtual VOID Update();
 
 	VOID SetType(INT nType)		{ m_nWeaponType = nType; }

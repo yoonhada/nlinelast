@@ -640,8 +640,8 @@ VOID CCharactor::Render()
 	m_pModel->Render();
 	
 	m_pWeapon->Update();
-	m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() ) );
-	m_pWeapon->Render();
+	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() ) );
+	m_pWeapon->Render( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
 
 	m_pShadowCell->Set_ControlScale( 0, 5.0f );
 	m_pShadowCell->Set_ControlScale( 2, 5.0f );
