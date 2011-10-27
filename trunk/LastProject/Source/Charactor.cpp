@@ -58,8 +58,6 @@ VOID CCharactor::Clear()
 	m_bActive = FALSE;
 
 	m_fAniAngleY = 0.0f;
-	m_nWeaponState = 0;
-	m_nWeaponState = 0;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
@@ -76,13 +74,6 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatric
 
 	m_pModel = new CModel( m_pD3dDevice );
 	
-	if( !m_bMatMonster )
-	{
-		m_pWeapon = new CWeapon( m_pD3dDevice );
-		m_pWeapon->SetType( 0 );
-		m_pWeapon->Create();
-	}
-
 	m_pShadowCell = new CShadowCell;
 	m_pShadowCell->Create( m_pD3dDevice, 
 						   -1.0f, -1.0f, -1.0f,
@@ -98,6 +89,14 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatric
 
 	return S_OK;
 }
+
+VOID CCharactor::CreateWeapon( INT nType )
+{
+	m_pWeapon = new CWeapon( m_pD3dDevice );
+	m_pWeapon->SetType( nType );
+	m_pWeapon->Create();
+}
+
 
 HRESULT CCharactor::Release()
 {
@@ -598,11 +597,11 @@ VOID CCharactor::Update()
 {
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
-		m_nWeaponState = m_pWeapon->SetKeyA();
+		m_pWeapon->SetKeyA();
 	}
 	if ( CInput::GetInstance()->Get_Rbutton() )
 	{
-		m_nWeaponState = m_pWeapon->SetKeyB();
+		m_pWeapon->SetKeyB();
 	}
 
 	//parallel_for( blocked_range<size_t>(0, m_iCubeVectorSize ), MatrixMult( m_vectorCube, Get_MatWorld(), m_iSelectedFrameNum ) );
@@ -639,9 +638,12 @@ VOID CCharactor::Render()
 
 	m_pModel->Render();
 	
-	m_pWeapon->Update();
-	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() ) );
-	m_pWeapon->Render( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
+	if (m_pWeapon)
+	{
+		m_pWeapon->Update();
+		//m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() ) );
+		m_pWeapon->Render( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
+	}
 
 	m_pShadowCell->Set_ControlScale( 0, 5.0f );
 	m_pShadowCell->Set_ControlScale( 2, 5.0f );
@@ -667,9 +669,6 @@ VOID CCharactor::World2Model(D3DXVECTOR3& _vPosition)
 
 VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 {
-#ifdef _YOON
-	m_pModel->CreateRandom( m_vectorCube[1], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
-#else
 	for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
 	{
 		if( m_vectorCube[Loop] == NULL ) 
@@ -678,10 +677,9 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 		if( v == _vPosition && m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) )
 		{
 			m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
-			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld() );
 		}
 	}
-#endif
 }
 
 VOID CCharactor::TestBreakCubeAll()
@@ -702,11 +700,11 @@ VOID CCharactor::TestBreakCubeAll()
 				if( m_bMatMonster )
 				{
 					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, 2.0f );
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld );
 				}
 				else
 				{
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), 2.0f );
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld() );
 				}
 			}
 		}
