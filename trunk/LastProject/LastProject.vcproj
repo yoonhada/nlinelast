@@ -173,10 +173,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\MemoryMng.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Source\Stdafx.cpp"
 				>
 			</File>
@@ -426,14 +422,6 @@
 				Name="Singleton"
 				>
 				<File
-					RelativePath=".\Source\DebugConsole.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\DebugConsole.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Frequency.cpp"
 					>
 				</File>
@@ -560,6 +548,18 @@
 			</File>
 			<File
 				RelativePath=".\Source\Axis.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\DebugConsole.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\DebugConsole.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\MemoryMng.h"
 				>
 			</File>
 		</Filter>

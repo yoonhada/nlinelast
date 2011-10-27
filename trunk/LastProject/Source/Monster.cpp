@@ -260,6 +260,8 @@ VOID CMonster::Load( WCHAR* a_pFileName )
 	{
 		wsprintf(wchTemp, L"%s_%d.csav", a_pFileName, Loop);
 		m_pBox[Loop].Load( wchTemp );
+
+		CTree::GetInstance()->GetChaVector()->push_back( m_pBox[Loop].GetBoundBox() );
 	}
 
 	//MessageBox( GHWND, L"Monster Load OK", NULL, MB_OK );

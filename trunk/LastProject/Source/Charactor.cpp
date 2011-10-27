@@ -563,8 +563,10 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 	m_matMonster = a_matMonster;
 	m_bMatMonster = TRUE;
 
-	D3DXVec3TransformCoord( &m_vPreControl, &m_vPreControl, &Get_MatWorld() );
+	//D3DXVec3TransformCoord( &m_vPreControl, &m_vPreControl, &Get_MatWorld() );
 	D3DXVec3TransformCoord( &m_vPreControl, &m_vPreControl, &m_matMonster );
+	//D3DXVec3TransformCoord( &m_vControl, &m_vControl, &Get_MatWorld() );
+	D3DXVec3TransformCoord( &m_vControl, &m_vControl, &m_matMonster );
 }
 
 VOID CCharactor::Animate()
