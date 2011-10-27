@@ -58,7 +58,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//몬스터 생성
 	m_pMonster = new CMonster;
-	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/testNew" );
+	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
 
 	//조명 생성
 	m_pLight = new CLight;
@@ -178,11 +178,6 @@ VOID CMainManage::CreateCharactor()
 
 VOID CMainManage::Attack()
 {
-#ifdef _YOON
-	if ( CInput::GetInstance()->Get_Lbutton() )
-		m_pMyCharactor->BreakCube(D3DXVECTOR3(0, 14, -7));
-#endif
-
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
 		//D3DXVECTOR3 vTemp = m_pMyCharactor->Get_CharaPos() + ;
@@ -191,40 +186,38 @@ VOID CMainManage::Attack()
 
 		//m_pCharactors[0].TestBreakCubeAll();
 
-#ifndef _YOON
 		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 		{	
 			m_pCharactors[Loop].TestBreakCubeAll();
 		}
 
 
-		// 빌보드 작업
-		if (m_pBill == NULL)
-		{
-			m_pBill = new CBillBoard( m_pD3dDevice );
-			m_pBill->Create();
-			m_pBill->SetType( static_cast<INT>( 4 * FastRand2() ) );
-			m_pBill->SetLife(200);
-		}
+		//// 빌보드 작업
+		//if (m_pBill == NULL)
+		//{
+		//	m_pBill = new CBillBoard( m_pD3dDevice );
+		//	m_pBill->Create();
+		//	m_pBill->SetType( static_cast<INT>( 4 * FastRand2() ) );
+		//	m_pBill->SetLife(200);
+		//}
 	}
 
-	if ( m_pBill )
-	{
-		if( m_pBill->IsLife())
-		{
-			D3DXVECTOR3 vec(0, 20, 0);
-			m_pBill->SetInverMatrix( *m_pCamera->GetInvView() );
-			m_pBill->SetWorldMatirx( *m_pCamera->GetView() );
-			m_pBill->SetPosition( m_pCharactors[m_iClientNumber].Get_CharaPos() + vec );
-			m_pBill->Update();
-		}
-		else
-		{
-			delete m_pBill;
-			m_pBill = NULL;
-		}
-#endif
-	}
+	//if ( m_pBill )
+	//{
+	//	if( m_pBill->IsLife())
+	//	{
+	//		D3DXVECTOR3 vec(0, 20, 0);
+	//		m_pBill->SetInverMatrix( *m_pCamera->GetInvView() );
+	//		m_pBill->SetWorldMatirx( *m_pCamera->GetView() );
+	//		m_pBill->SetPosition( m_pCharactors[m_iClientNumber].Get_CharaPos() + vec );
+	//		m_pBill->Update();
+	//	}
+	//	else
+	//	{
+	//		delete m_pBill;
+	//		m_pBill = NULL;
+	//	}
+	//}
 }
 
 VOID	CMainManage::Update()
