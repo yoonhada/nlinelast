@@ -25,7 +25,7 @@ public:
 	virtual ~CQube();
 
 	VOID Update( CBoundBox * pBB );
-	VOID RandMome( D3DXVECTOR3 vMomentum, FLOAT fRate = 1.0f );
+	VOID RandMome( D3DXVECTOR3 vMomentum, FLOAT fRate = 0.5f );
 
 private:
 	D3DXVECTOR3 m_vPos;				///< 중심좌표
@@ -40,6 +40,9 @@ private:
 
 	// 속도를 위한 임시 저장소
 	D3DXVECTOR3 vDir;
+	D3DXVECTOR3 vMomentum;
+	D3DXVECTOR3 vAccelerate;
+
 	std::vector<CBoundBox*> * vecBoundBox;
 	std::vector<CBoundBox*>::iterator Iter;
 

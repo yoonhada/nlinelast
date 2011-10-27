@@ -41,6 +41,7 @@ public:
 	VOID		Render( D3DXMATRIX& _matCharacter );
 	VOID		Release();
 
+public:
 	BOOL		AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
 	BOOL		SetAnimation( DWORD _dID );
 

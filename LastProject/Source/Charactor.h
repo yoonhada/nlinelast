@@ -72,6 +72,8 @@ public:
 	VOID Clear();
 	HRESULT Create() { return S_OK; }
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices );
+	VOID CreateWeapon( INT nType );
+
 	HRESULT Release();
 	VOID Update();
 	VOID UpdateByInput( );
@@ -133,8 +135,6 @@ public:
 		return m_bActive;
 	}
 
-	INT GetWeaponState()	{ return m_nWeaponState; }
-
 private:
 	VOID _LoadRelease();
 	VOID _SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor );
@@ -188,8 +188,6 @@ private:
 
 	CBoundBox * m_pBoundBox;
 	CWeapon * m_pWeapon;
-
-	INT m_nWeaponState;
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;

@@ -140,6 +140,7 @@ VOID CMainManage::CreateCharactor()
 	m_pMyCharactor = new CCharactor;
 	m_pMyCharactor->Create( m_pD3dDevice, m_pMatrices );
 	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
+	m_pMyCharactor->CreateWeapon( 0 );
 
 	CTree::GetInstance()->GetChaVector()->push_back( m_pMyCharactor->GetBoundBox() );
 
@@ -160,7 +161,7 @@ VOID CMainManage::CreateCharactor()
 		{
 			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
 		}
-		
+		m_pCharactors[Loop].CreateWeapon( Loop + 1 );
 		
 		m_pCharactors[Loop].Set_Position( vec[Loop] );
 
@@ -182,7 +183,7 @@ VOID CMainManage::Attack()
 		m_pMyCharactor->BreakCube(D3DXVECTOR3(0, 14, -7));
 #endif
 
-	if ( m_pMyCharactor->GetWeaponState() )			// CInput::GetInstance()->Get_Lbutton() )
+	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
 		//D3DXVECTOR3 vTemp = m_pMyCharactor->Get_CharaPos() + ;
 		//m_pMyCharactor->World2Model(vTemp);
@@ -279,6 +280,7 @@ VOID	CMainManage::Update()
 		//{
 			//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
 			m_pCharactors[Loop].UpdateOtherPlayer();
+			m_pCharactors[Loop].Update();
 		//}
 	}
 
