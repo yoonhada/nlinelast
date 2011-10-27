@@ -16,6 +16,7 @@ private:
 	VOID		CreateDataFromASE( const INT _Index );
 	VOID		CreateDataFromBBX( const INT _Index );
 	VOID		RenderASEData( INT _Index );
+	VOID		RenderASEData( INT _Index, D3DXMATRIX _matCharacter );
 	VOID		RenderBBXData( INT _Index );
 
 	HRESULT		CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF );
@@ -37,7 +38,11 @@ public:
 	VOID		Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName );
 	VOID		Update();
 	VOID		Render();
+	VOID		Render( D3DXMATRIX& _matCharacter );
 	VOID		Release();
+
+	BOOL		AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
+	BOOL		SetAnimation( DWORD _dID );
 
 private:
 	typedef struct _DATA
