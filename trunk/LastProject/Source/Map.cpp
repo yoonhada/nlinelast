@@ -34,6 +34,16 @@ VOID Map::Release()
 	if( m_pBBXParser != NULL )
 		delete m_pBBXParser;
 
+	for( std::vector<CBoundBox*>::iterator iter=m_pBoundBoxVector.begin(); iter!=m_pBoundBoxVector.end(); ++iter)
+	{
+		delete *iter;
+	}
+
+	if ( m_pBoundBoxVector.empty() == FALSE )
+	{
+		m_pBoundBoxVector.clear();
+		m_pBoundBoxVector.erase( m_pBoundBoxVector.begin(), m_pBoundBoxVector.end() );
+	}
 }
 
 VOID Map::InitASE( LPWSTR _ASEFileName )
@@ -108,21 +118,22 @@ VOID Map::CreateDataFromBBX( const INT _Index )
 	CreateIB( &m_pBBXData[ _Index ].pIB, m_pBBXData[ _Index ].iNumIndex, sizeof( BBXParser::INDEX ) );
 	SetIB( m_pBBXData[ _Index ].pIB, BBXData.aIndex, m_pBBXData[ _Index ].iNumIndex, sizeof( BBXParser::INDEX ) );
 
-	////	BoundBox
-	//CBoundBox* pBoundBox = new CBoundBox();
-	//
-	//pBoundBox->SetSize( 0, BBXData.Info.fMinusSize[ 0 ] );
-	//pBoundBox->SetSize( 1, BBXData.Info.fMinusSize[ 1 ] );
-	//pBoundBox->SetSize( 2, BBXData.Info.fMinusSize[ 2 ] );
+	//	BoundBox
+	CBoundBox* pBoundBox = new CBoundBox();
+	
+	pBoundBox->SetSize( 0, BBXData.Info.fMinusSize[ 0 ] );
+	pBoundBox->SetSize( 1, BBXData.Info.fMinusSize[ 1 ] );
+	pBoundBox->SetSize( 2, BBXData.Info.fMinusSize[ 2 ] );
 
-	//pBoundBox->SetSize( 3, BBXData.Info.fPlusSize[ 0 ] );
-	//pBoundBox->SetSize( 4, BBXData.Info.fPlusSize[ 1 ] );
-	//pBoundBox->SetSize( 5, BBXData.Info.fPlusSize[ 2 ] );
+	pBoundBox->SetSize( 3, BBXData.Info.fPlusSize[ 0 ] );
+	pBoundBox->SetSize( 4, BBXData.Info.fPlusSize[ 1 ] );
+	pBoundBox->SetSize( 5, BBXData.Info.fPlusSize[ 2 ] );
 
-	//pBoundBox->SetPosition( BBXData.Info.vPivot );
+	pBoundBox->SetPosition( BBXData.Info.vPivot );
 
-	//CTree::InsertObject( CTree::GetRoot(), pBoundBox );
-	////	End
+	CTree::GetInstance()->InsertObject( CTree::GetInstance()->GetRoot(), pBoundBox );
+	m_pBoundBoxVector.push_back(pBoundBox);
+	//	End
 }
 
 VOID Map::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )

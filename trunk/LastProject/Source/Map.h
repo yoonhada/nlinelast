@@ -75,6 +75,7 @@ private:
 
 	ASEParser*				m_pASEParser;
 	BBXParser*				m_pBBXParser;
+	std::vector<CBoundBox*> m_pBoundBoxVector;
 	
 public:
 
