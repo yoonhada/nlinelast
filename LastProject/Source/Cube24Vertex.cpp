@@ -448,7 +448,6 @@ VOID CCube::Render()
 
 	//m_pD3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE);
 	//m_pD3dDevice->SetTexture( 0, NULL );
-	
 }
 
 #endif

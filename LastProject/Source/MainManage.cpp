@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Axis.h"
 #include "Map.h"
+#include "Weapon.h"
 
 CMainManage::CMainManage()
 {
@@ -67,7 +68,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	//맵 생성
 	m_pMap = new Map( m_pD3dDevice );
 	m_pMap->Create( L"ASE File/Stage4_Alpha.ASE", L"ASE File/Stage4_Alpha.BBX" );
-	m_pMap->AddAnimationData( 1000, 0, 0, 100, TRUE );
+	m_pMap->AddAnimationData( 1000, 0, 0, 300, TRUE );
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
@@ -128,19 +129,19 @@ VOID CMainManage::CreateCharactor()
 {
 	const INT nChar = 5;
 	D3DXVECTOR3 vec[nChar] = { 
-		D3DXVECTOR3( 230.0f, 0.0f,  0.0f ), 
-		D3DXVECTOR3( 260.0f, 0.0f,  0.0f ), 
-		D3DXVECTOR3( 290.0f, 0.0f,  0.0f ), 
-		D3DXVECTOR3( 310.0f, 0.0f,  0.0f ), 
+		D3DXVECTOR3( -130.0f, 0.0f,100.0f ), 
+		D3DXVECTOR3( -160.0f, 0.0f,100.0f ), 
+		D3DXVECTOR3( -190.0f, 0.0f,100.0f ), 
+		D3DXVECTOR3( -210.0f, 0.0f,100.0f ), 
 		D3DXVECTOR3(  0.0f, 0.0f, 100.0f ) 
 	};
 
 	//캐릭터 생성
 	FLOAT fYawZero = 1.0f;
-	m_pMyCharactor = new CCharactor;
-	m_pMyCharactor->Create( m_pD3dDevice, m_pMatrices );
+	m_pMyCharactor = new CCharactor( m_pD3dDevice, m_pMatrices );
+	m_pMyCharactor->Create();
 	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
-	m_pMyCharactor->CreateWeapon( 0 );
+	m_pMyCharactor->CreateWeapon( CWeapon::SPANNER );
 
 	CTree::GetInstance()->GetChaVector()->push_back( m_pMyCharactor->GetBoundBox() );
 
@@ -161,10 +162,9 @@ VOID CMainManage::CreateCharactor()
 		{
 			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
 		}
-		m_pCharactors[Loop].CreateWeapon( Loop + 1 );
-		
-		m_pCharactors[Loop].Set_Position( vec[Loop] );
 
+		m_pCharactors[Loop].CreateWeapon( CWeapon::SPANNER + Loop + 1 );
+		m_pCharactors[Loop].Set_Position( vec[Loop] );
 		CTree::GetInstance()->GetChaVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 
 		//D3DXVECTOR3 vec1 = m_pCharactors[Loop].GetBoundBox()->GetPosition();
@@ -176,76 +176,32 @@ VOID CMainManage::CreateCharactor()
 	CInput::GetInstance()->Update( fMoveSpeed, fRotateSpeed, CFrequency::GetInstance()->getFrametime() );
 }
 
-VOID CMainManage::Attack()
-{
-	if ( CInput::GetInstance()->Get_Lbutton() )
-	{
-		//D3DXVECTOR3 vTemp = m_pMyCharactor->Get_CharaPos() + ;
-		//m_pMyCharactor->World2Model(vTemp);
-		//m_pMyCharactor->BreakCube(D3DXVECTOR3(0, 14, -7));
-
-		//m_pCharactors[0].TestBreakCubeAll();
-
-		for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
-		{	
-			m_pCharactors[Loop].TestBreakCubeAll();
-		}
-
-
-		//// 빌보드 작업
-		//if (m_pBill == NULL)
-		//{
-		//	m_pBill = new CBillBoard( m_pD3dDevice );
-		//	m_pBill->Create();
-		//	m_pBill->SetType( static_cast<INT>( 4 * FastRand2() ) );
-		//	m_pBill->SetLife(200);
-		//}
-	}
-
-	//if ( m_pBill )
-	//{
-	//	if( m_pBill->IsLife())
-	//	{
-	//		D3DXVECTOR3 vec(0, 20, 0);
-	//		m_pBill->SetInverMatrix( *m_pCamera->GetInvView() );
-	//		m_pBill->SetWorldMatirx( *m_pCamera->GetView() );
-	//		m_pBill->SetPosition( m_pCharactors[m_iClientNumber].Get_CharaPos() + vec );
-	//		m_pBill->Update();
-	//	}
-	//	else
-	//	{
-	//		delete m_pBill;
-	//		m_pBill = NULL;
-	//	}
-	//}
-}
-
 VOID	CMainManage::Update()
 {
 	// 맵 로드
-	if( CInput::GetInstance()->Get_F9button() == TRUE )
-	{
-		OPENFILENAME OFN;
-		WCHAR lpstrFile[MAX_PATH]=L"";
+	//if( CInput::GetInstance()->Get_F9button() == TRUE )
+	//{
+	//	OPENFILENAME OFN;
+	//	WCHAR lpstrFile[MAX_PATH]=L"";
 
-		memset(&OFN, 0, sizeof(OPENFILENAME));
-		OFN.lStructSize = sizeof(OPENFILENAME);
-		OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
-		OFN.lpstrFilter=TEXT("ASE 파일(*.ASE)\0*.ASE\0");
-		OFN.lpstrFile=lpstrFile;
-		OFN.nMaxFile=MAX_PATH;
-		if (GetSaveFileName(&OFN)!=0)
-		{
-			WCHAR* ptr = wcstok( lpstrFile, L"." );
-			WCHAR Temp[255];
-			WCHAR Temp2[255];
-			wsprintf( Temp, L"%s.ASE", ptr );
-			wsprintf( Temp2, L"%s.BBX", ptr );
-			//m_pMap->Release();
-			m_pMap->Create( Temp, Temp2 );
-			//m_CharEdit.Load( OFN.lpstrFile );
-		}
-	}
+	//	memset(&OFN, 0, sizeof(OPENFILENAME));
+	//	OFN.lStructSize = sizeof(OPENFILENAME);
+	//	OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
+	//	OFN.lpstrFilter=TEXT("ASE 파일(*.ASE)\0*.ASE\0");
+	//	OFN.lpstrFile=lpstrFile;
+	//	OFN.nMaxFile=MAX_PATH;
+	//	if (GetSaveFileName(&OFN)!=0)
+	//	{
+	//		WCHAR* ptr = wcstok( lpstrFile, L"." );
+	//		WCHAR Temp[255];
+	//		WCHAR Temp2[255];
+	//		wsprintf( Temp, L"%s.ASE", ptr );
+	//		wsprintf( Temp2, L"%s.BBX", ptr );
+	//		//m_pMap->Release();
+	//		m_pMap->Create( Temp, Temp2 );
+	//		//m_CharEdit.Load( OFN.lpstrFile );
+	//	}
+	//}
 
 	//인풋 업데이트
 	CInput::GetInstance()->Update( 50.0f, 150.0f, CFrequency::GetInstance()->getFrametime() );
@@ -289,8 +245,6 @@ VOID	CMainManage::Update()
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 1.0f), fMonsterRun );
 	m_pMonster->Update();
 
-	Attack();
-
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 
 	m_pMap->Update();
@@ -320,15 +274,4 @@ VOID	CMainManage::Render()
 	}
 
 	m_pMonster->Render();
-
-#ifdef _YOON
-	if( m_pBill && m_pBill->IsLife() )
-	{
-		m_pBill->Render();
-	}
-#endif // _YOON
-	//m_pMatrices->SetupModeltoWorld( m_pGrid->Get_MatWorld() );
-	//m_pGrid->Render();
-
-	
 }

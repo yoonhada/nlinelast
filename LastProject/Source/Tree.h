@@ -44,7 +44,8 @@ private:
 	NODE * m_pRoot;		///< 루트
 	NODE * m_pCurr;		///< 커서 
 
-	std::vector <CBoundBox*> _data;
+	std::vector <CBoundBox*> _vecCha;
+	std::vector <CBoundBox*> _vecAtk;
 
 	VOID CreateChild( NODE *pNode, FLOAT fLeft, FLOAT fTop, FLOAT fRight, FLOAT fBottom, INT nDeep );
 	BOOL IsRect( NODE *, CBoundBox *);
@@ -73,5 +74,6 @@ public:
 	VOID RemoveObject( NODE *pNode, CBoundBox * pCube );
 	VOID RemoveAll( );
 	std::vector <CBoundBox*> * GetMapVector( NODE *pNode, D3DXVECTOR3 vPos );
-	std::vector <CBoundBox*> * GetChaVector(  )		{ return &_data; }
+	std::vector <CBoundBox*> * GetChaVector()		{ return &_vecCha; }
+	std::vector <CBoundBox*> * GetAtkVector()		{ return &_vecAtk; }
 };

@@ -153,7 +153,7 @@ private:
 
 	D3DXMATRIXA16 m_matControl;         ///< 조작 행렬
 
-	//CBoundBox * m_pBoundBox;
+	//CBoundBox m_pBoundBox;
 
 };
 
