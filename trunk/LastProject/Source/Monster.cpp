@@ -639,7 +639,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
 	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
-	BOOL bCol = FALSE;
+	/*BOOL bCol = FALSE;
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
 		if( !m_pBox[Loop].Collision() )
@@ -647,8 +647,10 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 			m_vControl = m_vPreControl;
 			break;
 		}
-	}
+	}*/
 	//AtkCollision();
+
+	m_vControl = m_vPreControl;
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
@@ -755,12 +757,13 @@ VOID CMonster::Update()
 		//m_pBox[Loop].Update();
 		m_pBox[Loop].Calcul_MatWorld();
 		m_pBox[Loop].UpdateMonsterMatrix( Get_MatWorld() );
+	}
 
-		//if ( CInput::GetInstance()->Get_Lbutton() )
-		//{
-		//m_pBox[Loop].TestBreakCube();
-		//}
-
+	static INT TempLoop = 0;
+	if ( CInput::GetInstance()->Get_Lbutton() )
+	{
+		m_pBox[TempLoop].TestBreakCubeAll();
+		if(TempLoop < 7) ++TempLoop;
 	}
 }
 

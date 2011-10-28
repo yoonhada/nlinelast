@@ -507,11 +507,11 @@ VOID CCharactor::UpdateByInput(  )
 		{
 			if( m_fAniAngleY < 0.1f)
 			{
-				m_fAniAngleY += 5.0f * CFrequency::GetInstance()->getFrametime();
+				m_fAniAngleY += 3.0f * CFrequency::GetInstance()->getFrametime();
 			}
 			else if (m_fAniAngleY > -0.1f )
 			{
-				m_fAniAngleY -= 5.0f * CFrequency::GetInstance()->getFrametime();
+				m_fAniAngleY -= 3.0f * CFrequency::GetInstance()->getFrametime();
 			}
 		}
 	}
@@ -618,17 +618,19 @@ VOID CCharactor::Animate()
 {
 	static BOOL bCheck = FALSE;
 
-	if( m_fAniAngleY < 0.5f && bCheck == FALSE )
+	if( m_fAniAngleY < 0.4f && bCheck == FALSE )
 	{
-		m_fAniAngleY += 5.0f * CFrequency::GetInstance()->getFrametime();
+		m_fAniAngleY += 3.0f * CFrequency::GetInstance()->getFrametime();
+		//m_iSelectedFrameNum = 1;
 	}
 	else
 	{
 		bCheck = TRUE;
 
-		if( m_fAniAngleY > -0.5f )
+		if( m_fAniAngleY > -0.4f )
 		{
-			m_fAniAngleY -= 5.0f * CFrequency::GetInstance()->getFrametime();
+			m_fAniAngleY -= 3.0f * CFrequency::GetInstance()->getFrametime();
+			//m_iSelectedFrameNum = 2;
 		}
 		else
 		{

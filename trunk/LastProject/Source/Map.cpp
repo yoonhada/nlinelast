@@ -226,9 +226,9 @@ VOID Map::Render( D3DXMATRIX& _matCharacter )
 BOOL Map::AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop )
 {
 	//	Sample
-	//AddAnimationData( ASEANI_IDLE, ANI_1, 0, 100, TRUE );
-	//AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
-	//AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
+	//m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 300, TRUE );
+	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
+	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
 
 	if( m_pASEParser->AddAnimationData( _dType, _dID, _iStartFrame, _iEndFrame, _bLoop ) )
 		return TRUE;
