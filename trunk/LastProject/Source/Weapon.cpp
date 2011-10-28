@@ -3,6 +3,7 @@
 #include "ASEParser.h"
 #include "BBXParser.h"
 #include "Weapon.h"
+#include "CharCube.h"
 
 CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
 {
@@ -31,36 +32,49 @@ HRESULT CWeapon::Create()
 {
 	switch ( m_WeaponType.nWeaponType )
 	{
-	case 0:
+		
+	case SPANNER:
 		m_pMap->Create( L"ASE File/Spanner.ASE", NULL );
-		m_WeaponType.nAKeyFrameTime = 20;		
-		m_WeaponType.nBKeyFrameTime = 50;
+		m_WeaponType.nAKeyFrameBegin = 1;		
+		m_WeaponType.nAKeyFrameTime  = 299;		
+		m_WeaponType.nBKeyFrameBegin = 30;
+		m_WeaponType.nBKeyFrameTime  = 10;
 		m_WeaponType.nDelay = 12;
 		break;
-	case 1:
+	case FRYPEN:
 		m_pMap->Create( L"ASE File/FlyingFan.ASE", NULL );
-		m_WeaponType.nAKeyFrameTime = 20;
-		m_WeaponType.nBKeyFrameTime = 50;
+		m_WeaponType.nAKeyFrameBegin = 1;		
+		m_WeaponType.nAKeyFrameTime  = 299;		
+		m_WeaponType.nBKeyFrameBegin = 30;
+		m_WeaponType.nBKeyFrameTime  = 10;
 		m_WeaponType.nDelay = 12;
 		break;
-	case 2:
+	case GUITAR:
 		m_pMap->Create( L"ASE File/Guitar.ASE", NULL );
-		m_WeaponType.nAKeyFrameTime = 20;
-		m_WeaponType.nBKeyFrameTime = 50;
+		m_WeaponType.nAKeyFrameBegin = 1;		
+		m_WeaponType.nAKeyFrameTime  = 299;		
+		m_WeaponType.nBKeyFrameBegin = 30;
+		m_WeaponType.nBKeyFrameTime  = 10;
 		m_WeaponType.nDelay = 50;
 		break;
-	case 3:
+	case MAGICSTICK:
 		m_pMap->Create( L"ASE File/MagicStick.ASE", NULL );
-		m_WeaponType.nAKeyFrameTime = 20;
-		m_WeaponType.nBKeyFrameTime = 50;
+		m_WeaponType.nAKeyFrameBegin = 1;		
+		m_WeaponType.nAKeyFrameTime  = 299;		
+		m_WeaponType.nBKeyFrameBegin = 30;
+		m_WeaponType.nBKeyFrameTime  = 10;
 		m_WeaponType.nDelay = 12;
 		break;
 	default:
 		break;
 	}
 
-	m_pMap->AddAnimationData( ASEANI_IDLE, 0, 0, 0, TRUE );
-	m_pMap->AddAnimationData(ASEANI_POST_IDLE, 1, 1, 15, FALSE);
+	
+	m_pMap->AddAnimationData( IDLE,		 EnumCharFrame::BASE, 0, 0, TRUE );
+	m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, 
+		m_WeaponType.nAKeyFrameBegin, m_WeaponType.nAKeyFrameTime, FALSE);
+	m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, 
+		m_WeaponType.nBKeyFrameBegin, m_WeaponType.nAKeyFrameTime, FALSE);
 
 
 	m_nState = 0;
@@ -69,76 +83,92 @@ HRESULT CWeapon::Create()
 	return S_OK;
 }
 
-INT CWeapon::SetKeyA()
+VOID CWeapon::SetKeyA( const D3DXVECTOR3& vPos )
 {
-	if ( ( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x000F ) == 0x0001 ) || 
-		 ( ( m_nState & 0x000F ) == 0x0000 ) )
+	if ( ( m_nState & 0x000F ) == 0x0000 )	//( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x000F ) == 0x0001 ) || 
 	{
 		m_nState = ( m_nState & 0x0F0F ) + 0x0001;
 		m_nFrame = m_WeaponType.nAKeyFrameTime;
 
-		m_pMap->SetAnimation( m_nState );
+		m_pMap->SetAnimation( EnumCharFrame::ATTACK1 );
+		m_WeaponType.AKeyBB( vPos );
 	}
-	
-	return m_nState;
 }
 
-INT CWeapon::SetKeyB()
+VOID CWeapon::SetKeyB( const D3DXVECTOR3& vPos )
 {
-	// ÄÞº¸
-	if ( ( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x0F00 ) == 0x0100 ) || 
-		 ( ( m_nState & 0x0F00 ) == 0x0000 ) )
+	if (  ( m_nState & 0x0F00 ) == 0x0000 ) // ( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x0F00 ) == 0x0100 ) || 
 	{
 		m_nState = ( m_nState & 0x0F0F ) + 0x0100;
 		m_nFrame = m_WeaponType.nBKeyFrameTime;
-	}
 
-	return m_nState;
+		m_pMap->SetAnimation( EnumCharFrame::ATTACK2 );
+		m_WeaponType.BKeyBB( vPos );
+	}
 }
 
 VOID CWeapon::Update()
-{	
-	FLOAT fCharSize = 20;
-	FLOAT fWeapSize = 10;
+{
+#ifdef _GRAP
+	if( CInput::GetInstance()->Get_F9button() )
+	{
+		CInput::GetInstance()->Set_F9button(FALSE);
+		OPENFILENAME OFN;
+		WCHAR lpstrFile[MAX_PATH]=L"";
+
+		memset(&OFN, 0, sizeof(OPENFILENAME));
+		OFN.lStructSize = sizeof(OPENFILENAME);
+		OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
+		OFN.lpstrFilter=TEXT("ASE ÆÄÀÏ(*.ASE)\0*.ASE\0");
+		OFN.lpstrFile=lpstrFile;
+		OFN.nMaxFile=MAX_PATH;
+		if (GetOpenFileName(&OFN)!=0)
+		{
+			WCHAR* ptr = wcstok( lpstrFile, L"." );
+			WCHAR Temp[255];
+			wsprintf( Temp, L"%s.ASE", ptr );
+
+			m_pMap->Create( Temp, NULL );
+			m_WeaponType.nAKeyFrameBegin = 1;		
+			m_WeaponType.nAKeyFrameTime  = 299;		
+			m_WeaponType.nBKeyFrameBegin = 30;
+			m_WeaponType.nBKeyFrameTime  = 10;
+			m_WeaponType.nDelay = 12;
+
+			m_pMap->AddAnimationData( IDLE,		 EnumCharFrame::BASE, 0, 0, TRUE );
+			m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, 
+				m_WeaponType.nAKeyFrameBegin, m_WeaponType.nAKeyFrameTime, FALSE);
+			m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, 
+				m_WeaponType.nBKeyFrameBegin, m_WeaponType.nAKeyFrameTime, FALSE);
+
+		}
+	}
+#endif // _GRAP
+
+	if ( m_nFrame == ( m_nFrame * 0.666f ) )
+	{
+		CTree::GetInstance()->GetAtkVector()->push_back(&m_WeaponType.pBBA);
+	}
+	else if ( m_nFrame == 0 )
+	{
+		m_nState = 0;
+	}
+	else
+	{
+		m_nFrame--;
+	}
+	
+	//m_pMap->Set_ControlScale( 0, 0f );
+	//m_pMap->Set_ControlScale( 1, 0 );
+	//m_pMap->Set_ControlScale( 2, 0f );
+	//m_pMap->Set_ControlRotate( 0, 0 );
+	//m_pMap->Set_ControlRotate( 1, 0 );
+	//m_pMap->Set_ControlRotate( 2, 0 );
+	//m_pMap->Set_ControlTranslate( 0, 0 );
+	//m_pMap->Set_ControlTranslate( 1, 0 );
+	//m_pMap->Set_ControlTranslate( 2, 0 );
 
 	m_pMap->Update();
-	
-	//if ( ( m_nState & 0x000F ) == 0x0001 ) 
-	//{
-	//	m_pMap->SetAnimation( 1 );
-	//}
-	//else if ( ( m_nState & 0x000F ) == 0x0002 ) 
-	//{
-	//	m_pMap->SetAnimation( 2 );
-	//}
-	//else
-	//{
-	//	m_pMap->SetAnimation( 0 );
-	//}
-
-	//if ( ( m_nState & 0x0F00 ) == 0x0100 ) 
-	//{
-	//	m_pMap->SetAnimation( 3 );
-	//}
-	//else if ( ( m_nState & 0x0F00 ) == 0x0200 )
-	//{
-	//	m_pMap->SetAnimation( 4 );
-	//}
-	//else 
-	//{
-	//	m_pMap->SetAnimation( 0 );
-	//}
-
-	m_pMap->Set_ControlScale( 0, 0.5f );
-	//m_pMap->Set_ControlScale( 1, 0 );
-	m_pMap->Set_ControlScale( 2, 0.5f );
-	m_pMap->Set_ControlRotate( 0, 0 );
-	m_pMap->Set_ControlRotate( 1, 0 );
-	m_pMap->Set_ControlRotate( 2, 0 );
-	m_pMap->Set_ControlTranslate( 0, -4.5f );
-	m_pMap->Set_ControlTranslate( 1, -5.0f );
-	m_pMap->Set_ControlTranslate( 2, 0.0f );
-
 	m_pMap->Calcul_MatWorld();
 };
 
@@ -149,8 +179,5 @@ const D3DXMATRIXA16& CWeapon::Get_MatWorld()
 
 VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 {
-	m_pMap->Render( _matCharacter );
-	if ( (m_nFrame--) == 0 )
-		m_nState = 0;
-		
+	m_pMap->Render( _matCharacter );	
 }

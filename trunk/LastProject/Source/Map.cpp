@@ -235,6 +235,20 @@ BOOL Map::AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, IN
 
 	return FALSE;
 }
+
+BOOL Map::AddAnimationData2( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iFrameTime, BOOL _bLoop )
+{
+	//	Sample
+	//AddAnimationData( ASEANI_IDLE, ANI_1, 0, 100, TRUE );
+	//AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
+	//AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
+
+	if( m_pASEParser->AddAnimationData( _dType, _dID, _iStartFrame, _iStartFrame + _iFrameTime, _bLoop ) )
+		return TRUE;
+
+	return FALSE;
+}
+
 BOOL Map::SetAnimation( DWORD _dID )
 {
 	if( m_pASEParser->SetAnimation( _dID ) )

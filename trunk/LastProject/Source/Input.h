@@ -64,6 +64,11 @@ public:
 		return m_bF9button;
 	}
 
+	VOID Set_F9button(BOOL b)
+	{
+		m_bF9button = b;
+	}
+
 
 private:
 	LPDIRECT3DDEVICE9 m_pD3dDevice;

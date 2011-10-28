@@ -18,6 +18,13 @@ CCharactor::CCharactor()
 	Clear();
 }
 
+CCharactor::CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
+: m_pD3dDevice(a_pD3dDevice)
+, m_pMatrices(a_pMatrices)
+{
+	Clear();
+}
+
 CCharactor::~CCharactor()
 {
 	Release();
@@ -60,6 +67,33 @@ VOID CCharactor::Clear()
 	m_fAniAngleY = 0.0f;
 }
 
+HRESULT CCharactor::Create()
+{
+	InitTexture( 0xFFFFFFFF, 0xFF000000 );
+
+	//Load( a_pzFileName );
+
+	//m_pGrid = new CGrid;
+	//m_pGrid->Create( m_pD3dDevice );
+
+	m_pModel = new CModel( m_pD3dDevice );
+
+	m_pShadowCell = new CShadowCell;
+	m_pShadowCell->Create( m_pD3dDevice, 
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		L"Img/shadow.tga"
+		);
+
+	return S_OK;
+}
+
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
 {
 	m_pD3dDevice = a_pD3dDevice;
@@ -86,7 +120,6 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatric
 							0.0f, 1.0f,
 							L"Img/shadow.tga"
 						  );
-
 	return S_OK;
 }
 
@@ -394,7 +427,6 @@ BOOL CCharactor::Collision()
 		}
 	}
 
-#ifndef _YOON
 	vecBoundBox = CTree::GetInstance()->GetChaVector( );
 	if ( vecBoundBox != NULL && vecBoundBox->size() )
 	{
@@ -410,7 +442,25 @@ BOOL CCharactor::Collision()
 			Iter++;
 		}
 	}
-#endif
+
+	//vecBoundBox = CTree::GetInstance()->GetAtkVector();
+	//if ( vecBoundBox != NULL && vecBoundBox->size() )
+	//{
+	//	Iter = vecBoundBox->begin();
+	//	while ( Iter != vecBoundBox->end() )
+	//	{
+	//		if( CPhysics::GetInstance()->Collision( m_pBoundBox, m_vColissionControl, ( *Iter ) ) )
+	//		{
+	//			m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//			return TRUE;
+	//		}
+
+	//		Iter++;
+	//	}
+	//}
+	//vecBoundBox->clear();
+
+
 	return FALSE;
 }
 
@@ -432,9 +482,7 @@ VOID CCharactor::UpdateByInput(  )
 		D3DXMatrixRotationY( &m_matControl, m_fAngle );
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-		m_vColissionControl = (m_vFowardVector * a_vControl.z);
-
-		
+		m_vColissionControl = (m_vFowardVector * a_vControl.z);	
 	}
 	// ÁÂ¿ì Ã³¸®
 	if( a_vControl.x != 0)
@@ -443,8 +491,6 @@ VOID CCharactor::UpdateByInput(  )
 		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
-
-		
 	}
 
 	if( a_vControl.z != 0 || a_vControl.x != 0 )
@@ -596,15 +642,16 @@ VOID CCharactor::Animate()
 VOID CCharactor::Update()
 {
 	if ( CInput::GetInstance()->Get_Lbutton() )
-	{
-		m_pWeapon->SetKeyA();
+	{		
+		m_pWeapon->SetKeyA( Get_CharaPos() );
 	}
 	if ( CInput::GetInstance()->Get_Rbutton() )
 	{
-		m_pWeapon->SetKeyB();
+		m_pWeapon->SetKeyB( Get_CharaPos() );
 	}
 
-	//parallel_for( blocked_range<size_t>(0, m_iCubeVectorSize ), MatrixMult( m_vectorCube, Get_MatWorld(), m_iSelectedFrameNum ) );
+	if(m_pWeapon)	
+		m_pWeapon->Update();
 }
 
 VOID CCharactor::Render()
@@ -638,12 +685,8 @@ VOID CCharactor::Render()
 
 	m_pModel->Render();
 	
-	if (m_pWeapon)
-	{
-		m_pWeapon->Update();
-		//m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() ) );
+	if(m_pWeapon)	
 		m_pWeapon->Render( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
-	}
 
 	m_pShadowCell->Set_ControlScale( 0, 5.0f );
 	m_pShadowCell->Set_ControlScale( 2, 5.0f );

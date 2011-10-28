@@ -35,13 +35,6 @@ VOID CTree::Release()
 {
 	if ( m_pCurr->_children[NODE::LT] == NULL )
 	{
-		//std::vector <CBoundBox*>::iterator Iter = m_pCurr->_data.begin();
-		//while( Iter != m_pCurr->_data.end() )
-		//{
-		//	SAFE_DELETE ( ( *Iter ) );
-		//	Iter++;
-		//}
-		//m_pCurr->_data.erase( m_pCurr->_data.begin(), m_pCurr->_data.end() );
 		SAFE_DELETE(m_pCurr);
 	}
 	else
@@ -81,29 +74,24 @@ VOID CTree::InsertObject( NODE * pNode, CBoundBox * pCube )
 	{
 		if ( pNode->_children[NODE::LT] == NULL )
 		{
-			////CDebugConsole::GetInstance()->Messagef( "PUSH\n");
 			pNode->_data.push_back( pCube );
 			return;
 		}
 
 		if ( IsRect( pNode->_children[NODE::LT], pCube ) )
 		{
-			////CDebugConsole::GetInstance()->Messagef( "LT - ");
 			InsertObject( pNode->_children[NODE::LT], pCube );
 		}
 		if ( IsRect( pNode->_children[NODE::RT], pCube ) )
 		{
-			////CDebugConsole::GetInstance()->Messagef( "RT - ");
 			InsertObject( pNode->_children[NODE::RT], pCube );
 		}
 		if ( IsRect( pNode->_children[NODE::LB], pCube ) )
 		{
-			////CDebugConsole::GetInstance()->Messagef( "LB - ");
 			InsertObject( pNode->_children[NODE::LB], pCube );
 		}
 		if ( IsRect( pNode->_children[NODE::RB], pCube ) )
 		{
-			////CDebugConsole::GetInstance()->Messagef( "RB - ");
 			InsertObject( pNode->_children[NODE::RB], pCube );
 		}
 	}
@@ -164,10 +152,6 @@ VOID CTree::RemoveAll( )
 		}
 	}
 }
-
-/************************************************************************/
-/*                                                                      */
-/************************************************************************/
 
 VOID CTree::CreateChild( NODE *pNode, FLOAT fLeft, FLOAT fTop, FLOAT fRight, FLOAT fBottom, INT nDeep )
 {
