@@ -67,7 +67,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	//맵 생성
 	m_pMap = new Map( m_pD3dDevice );
 	m_pMap->Create( L"ASE File/Stage4_Alpha.ASE", L"ASE File/Stage4_Alpha.BBX" );
-
+	m_pMap->AddAnimationData( 1000, 0, 0, 100, TRUE );
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
