@@ -192,6 +192,7 @@ private:
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;
+	FLOAT m_fAniAngleJump;
 
 private:
 	CShadowCell* m_pShadowCell;

@@ -160,7 +160,7 @@ VOID CMainManage::CreateCharactor()
 		}
 		else
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/APPA_0.csav" );
 		}
 
 		m_pCharactors[Loop].CreateWeapon( CWeapon::SPANNER + Loop + 1 );
@@ -242,7 +242,7 @@ VOID	CMainManage::Update()
 		TimeElapsed = 0.0f;
 	}
 
-	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 1.0f), fMonsterRun );
+	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.1f), fMonsterRun );
 	m_pMonster->Update();
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
