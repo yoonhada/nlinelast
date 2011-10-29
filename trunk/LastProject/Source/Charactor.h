@@ -15,6 +15,8 @@ class CModel;
 class CWeapon;
 class CShadowCell;
 
+class OctTree;
+
 //class MatrixMult
 //{
 //public:
@@ -177,7 +179,7 @@ private:
 	std::vector< CCharCube* > m_vectorCube;
 	//std::vector <CCharCube*>::iterator m_iterCube;
 
-	CMatrices* m_pMatrices;				///< 행렬 클래스 포인터
+	CMatrices*    m_pMatrices;			///< 행렬 클래스 포인터
 	D3DXMATRIXA16 m_matMultWorld;		///< 적용할 최종 행렬
 	D3DXMATRIXA16 m_matMonster;			///< 몬스터용 행렬
 	BOOL		  m_bMatMonster;		///< 몬스터 행렬 쓸지 안쓸지 체크
@@ -189,6 +191,7 @@ private:
 
 	CBoundBox * m_pBoundBox;
 	CWeapon * m_pWeapon;
+	OctTree * m_pOctTree;
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;

@@ -20,15 +20,15 @@ typedef struct _FRECT
 class CTree : public CSingleton<CTree>
 {
 	friend class CSingleton<CTree>;
-	struct NODE
+	typedef struct _NODE
 	{
 		enum { LT, RT, LB, RB };
-		NODE* _children[4];
+		_NODE* _children[4];
 		D3DXVECTOR3 _pos[4];
 
 		std::vector <CBoundBox*> _data;
 
-		NODE()
+		_NODE()
 		{ 
 			_children[RT] = _children[LT] = _children[LB] = _children[RB] = NULL; 
 			ZeroMemory( &_children, sizeof(_children) );
@@ -38,7 +38,7 @@ class CTree : public CSingleton<CTree>
 			FRECT rect = { _pos[0].x, _pos[0].z, _pos[3].x, _pos[3].z };
 			return rect;
 		}
-	};
+	}NODE;
 
 private:	
 	NODE * m_pRoot;		///< ·çÆ®

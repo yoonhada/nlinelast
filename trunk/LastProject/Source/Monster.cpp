@@ -759,12 +759,15 @@ VOID CMonster::Update()
 		m_pBox[Loop].UpdateMonsterMatrix( Get_MatWorld() );
 	}
 
+#ifndef _DEBUG
 	static INT TempLoop = 0;
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
 		m_pBox[TempLoop].TestBreakCubeAll();
 		if(TempLoop < 7) ++TempLoop;
 	}
+#endif
+
 }
 
 VOID CMonster::Render()

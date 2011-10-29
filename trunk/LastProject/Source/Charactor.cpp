@@ -13,6 +13,8 @@
 #include "Weapon.h"
 #include "ShadowCell.h"
 
+#include "OctTree.h"
+
 CCharactor::CCharactor()
 {
 	Clear();
@@ -43,6 +45,7 @@ VOID CCharactor::Clear()
 	m_pObject = NULL;
 	m_pCreateCube = NULL;
 	m_pWeapon = NULL;
+	m_pOctTree = NULL;
 
 	m_iCubeVectorSize = -1;
 	m_iBoxSize = -1;
@@ -91,6 +94,9 @@ HRESULT CCharactor::Create()
 		L"Img/shadow.tga"
 		);
 
+	D3DXVECTOR3 vArea( 15.0f, 15.0f, 15.0f );
+	m_pOctTree = new OctTree();
+	m_pOctTree->Build( 4, -vArea, vArea );
 	return S_OK;
 }
 
