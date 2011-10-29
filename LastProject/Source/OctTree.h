@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef _OCTTREE_H_
-#define _OCTTREE_H_
-
 #include <list>
 
 class OctTree
@@ -70,5 +67,3 @@ private:
 public:
 
 };
-
-#endif
