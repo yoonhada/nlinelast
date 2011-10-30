@@ -149,6 +149,7 @@ HRESULT CCharactor::Release()
 	SAFE_DELETE( m_pBoundBox );
 	SAFE_DELETE( m_pWeapon );
 	SAFE_DELETE( m_pShadowCell );
+	SAFE_DELETE( m_pOctTree );
 
 	return S_OK;
 }
