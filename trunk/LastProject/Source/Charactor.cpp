@@ -628,7 +628,7 @@ VOID CCharactor::Animate()
 	if( m_fAniAngleY < 0.4f && bCheck == FALSE )
 	{
 		m_fAniAngleY += 3.0f * CFrequency::GetInstance()->getFrametime();
-		//m_iSelectedFrameNum = 1;
+		m_iSelectedFrameNum = 1;
 	}
 	else
 	{
@@ -637,7 +637,7 @@ VOID CCharactor::Animate()
 		if( m_fAniAngleY > -0.4f )
 		{
 			m_fAniAngleY -= 3.0f * CFrequency::GetInstance()->getFrametime();
-			//m_iSelectedFrameNum = 2;
+			m_iSelectedFrameNum = 3;
 		}
 		else
 		{
