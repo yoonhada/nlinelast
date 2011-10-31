@@ -104,6 +104,7 @@ public:
 
 	CBoundBox * GetBoundBox()			{ return m_pBoundBox; }
 	BOOL Collision();
+	BOOL AtkCollision();
 	VOID Load( WCHAR* a_pFileName );
 
 	// 
@@ -199,6 +200,13 @@ private:
 
 private:
 	CShadowCell* m_pShadowCell;
+
+#ifdef _ALPHAMON
+public:
+	VOID SetMon(BOOL b)		{ m_bMatMonster = b; }
+	VOID UpdateOtherPlayer2();
+
+#endif
 
 };
 

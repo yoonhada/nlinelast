@@ -248,8 +248,13 @@ VOID OctTree::GenerateBoundBox( OctTree::LPAREALIST& _pAreaList, LPD3DXVECTOR3 _
 		Traverse( _pvVertex[ i ] );
 
 	GetBoundBox( _pAreaList );
-
 }
+
+VOID OctTree::GenerateIndex( D3DXVECTOR3& _pvVertex )
+{
+	Traverse( _pvVertex );
+}
+
 
 VOID OctTree::Traverse( D3DXVECTOR3 _Vertex )
 {

@@ -38,6 +38,8 @@ private:
 
 	Map* m_pMap;
 
+	CCharactor* m_pAlphaMon;
+
 	INT m_iMaxCharaNum;
 
 	CBillBoard* m_pBill;
