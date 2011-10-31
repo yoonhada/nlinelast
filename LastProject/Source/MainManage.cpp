@@ -24,6 +24,7 @@ VOID	CMainManage::Clear()
 	m_pBill = NULL;
 	m_pMyCharactor = NULL;
 	m_pCharactors = NULL;
+	m_pAlphaMon = NULL;
 	m_pAxis = NULL;
 
 	m_iMaxCharaNum = 3;
@@ -61,6 +62,14 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pMonster = new CMonster;
 	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
 
+#ifdef _ALPHAMON
+	m_pAlphaMon = new CCharactor;
+	m_pAlphaMon->Create( m_pD3dDevice, m_pMatrices );
+	m_pAlphaMon->Load( L"Data/CharData/35Box.txt" );
+	m_pAlphaMon->Set_Position( D3DXVECTOR3(-100.0f, 0.0f, 0.0f) );
+	CTree::GetInstance()->GetChaVector()->push_back( m_pAlphaMon->GetBoundBox() );
+#endif
+
 	//조명 생성
 	m_pLight = new CLight;
 	m_pLight->Create( m_pD3dDevice );
@@ -94,6 +103,8 @@ HRESULT CMainManage::Release()
 	SAFE_DELETE( m_pBill );
 
 	SAFE_DELETE( m_pAxis );
+
+	SAFE_DELETE( m_pAlphaMon );
 
 	CTree::DestoryInstance();
 
@@ -229,7 +240,7 @@ VOID	CMainManage::Update()
 		//{
 			//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
 			m_pCharactors[Loop].UpdateOtherPlayer();
-			m_pCharactors[Loop].Update();
+			//m_pCharactors[Loop].Update();
 		//}
 	}
 
@@ -241,6 +252,13 @@ VOID	CMainManage::Update()
 		fMonsterRun = 0.5f * CFrequency::GetInstance()->getFrametime();
 		TimeElapsed = 0.0f;
 	}
+
+#ifdef _ALPHAMON
+	m_pAlphaMon->SetMon(TRUE);
+	m_pAlphaMon->UpdateOtherPlayer2( );
+	m_pAlphaMon->SetMon(FALSE);
+	//m_pAlphaMon->Update();
+#endif
 
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.1f), fMonsterRun );
 	m_pMonster->Update();
@@ -272,6 +290,9 @@ VOID	CMainManage::Render()
 		//}
 		
 	}
+#ifdef _ALPHAMON
+	m_pAlphaMon->Render();
+#endif
 
 	m_pMonster->Render();
 }

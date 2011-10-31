@@ -55,6 +55,7 @@ public:
 	VOID		Build( INT _iLevel, D3DXVECTOR3 _vMin, D3DXVECTOR3 _vMax );
 	VOID		Build( INT _iLevel, LPD3DXVECTOR3 _pvVertex, INT _iSize );
 	VOID		GenerateBoundBox( LPAREALIST& _pAreaList, LPD3DXVECTOR3 _pvVertex, INT _iSize );
+	VOID		GenerateIndex( D3DXVECTOR3& _pvVertex );
 
 private:
 	enum { LUF = 0, LUB, LDF, LDB, RUF, RUB, RDF, RDB };

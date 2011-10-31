@@ -94,7 +94,7 @@ HRESULT CCharactor::Create()
 		L"Img/shadow.tga"
 		);
 
-	D3DXVECTOR3 vArea( 15.0f, 15.0f, 15.0f );
+	D3DXVECTOR3 vArea( 7.0f, 7.0f, 7.0f );
 	m_pOctTree = new OctTree();
 	m_pOctTree->Build( 4, -vArea, vArea );
 	return S_OK;
@@ -239,6 +239,8 @@ CCharCube* CCharactor::_CreateCube()
 VOID CCharactor::Load( WCHAR* a_pFileName )
 {
 	// 바운드 박스 파일에서 읽기로 수정.
+	D3DXVECTOR3 vMin( 99999.0f,  99999.0f,  99999.0f);
+	D3DXVECTOR3 vMax(-99999.0f, -99999.0f, -99999.0f);
 	m_pBoundBox = new CBoundBox(this);
 	m_pBoundBox->Create();
 	m_pModel->SetCharType( m_pBoundBox );
@@ -259,6 +261,14 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	WCHAR szTemp[255];
 	fwscanf( pFile, L"%d", &iTemp );
 	fwscanf( pFile, L"%s", szTemp );
+	
+	FLOAT fSize = 0.5f * iTemp;
+	m_pBoundBox->SetSize(0, -fSize);
+	m_pBoundBox->SetSize(1, -fSize);
+	m_pBoundBox->SetSize(2, -fSize);
+	m_pBoundBox->SetSize(3,  fSize);
+	m_pBoundBox->SetSize(4,  fSize);
+	m_pBoundBox->SetSize(5,  fSize);
 
 	// 버텍스, 인덱스 버퍼 생성
 	if( FAILED( m_pD3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
@@ -434,26 +444,11 @@ BOOL CCharactor::Collision()
 		}
 	}
 
-	vecBoundBox = CTree::GetInstance()->GetChaVector( );
-	if ( vecBoundBox != NULL && vecBoundBox->size() )
-	{
-		Iter = vecBoundBox->begin();
-		Iter++;
-		while ( Iter != vecBoundBox->end() )
-		{
-			if( CPhysics::GetInstance()->Collision( m_pBoundBox, m_vColissionControl, ( *Iter ) ) )
-			{
-				m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				return TRUE;
-			}
-			Iter++;
-		}
-	}
-
-	//vecBoundBox = CTree::GetInstance()->GetAtkVector();
+	//vecBoundBox = CTree::GetInstance()->GetChaVector( );
 	//if ( vecBoundBox != NULL && vecBoundBox->size() )
 	//{
 	//	Iter = vecBoundBox->begin();
+	//	Iter++;
 	//	while ( Iter != vecBoundBox->end() )
 	//	{
 	//		if( CPhysics::GetInstance()->Collision( m_pBoundBox, m_vColissionControl, ( *Iter ) ) )
@@ -461,12 +456,38 @@ BOOL CCharactor::Collision()
 	//			m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	//			return TRUE;
 	//		}
-
 	//		Iter++;
 	//	}
 	//}
-	//vecBoundBox->clear();
 
+	return FALSE;
+}
+
+BOOL CCharactor::AtkCollision()
+{
+	BOOL bColl = FALSE;
+	std::vector<CBoundBox*> * vecBoundBox;
+	std::vector<CBoundBox*>::iterator Iter;
+
+	D3DXVECTOR3 vDir, vPos;
+
+	if (m_bMatMonster == TRUE)
+	{
+		vecBoundBox = CTree::GetInstance()->GetAtkVector();
+		if ( vecBoundBox != NULL && vecBoundBox->size() )
+		{
+  			Iter = vecBoundBox->begin();
+			//CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\n", m_pBoundBox->GetPosition().x, m_pBoundBox->GetPosition().y, m_pBoundBox->GetPosition().z);
+			//CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\n", ( *Iter )->GetPosition().x, ( *Iter )->GetPosition().y, ( *Iter )->GetPosition().z);
+			if( CPhysics::GetInstance()->Collision( m_pBoundBox, ( *Iter ) ) )
+			{
+				CDebugConsole::GetInstance()->Messagef("ATK\n" );
+				return TRUE;
+			}
+		}
+
+		CTree::GetInstance()->GetAtkVector()->clear();
+	}
 
 	return FALSE;
 }
@@ -610,6 +631,23 @@ VOID CCharactor::UpdateOtherPlayer()
 	Calcul_MatWorld();
 }
 
+#ifdef _ALPHAMON
+VOID CCharactor::UpdateOtherPlayer2()
+{
+	AtkCollision();
+	m_fNetTime += CFrequency::GetInstance()->getFrametime();
+	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
+	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
+	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
+
+	Set_ControlTranslate( 0, m_vLerpControl.x );
+	Set_ControlTranslate( 1, m_vLerpControl.y );
+	Set_ControlTranslate( 2, m_vLerpControl.z );
+	Set_ControlRotate( 1, m_fAngle );
+	Calcul_MatWorld();
+}
+#endif // _ALPHAMON
+
 VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 {
 	m_matMonster = a_matMonster;
@@ -651,12 +689,16 @@ VOID CCharactor::Animate()
 VOID CCharactor::Update()
 {
 	if ( CInput::GetInstance()->Get_Lbutton() )
-	{		
-		m_pWeapon->SetKeyA( Get_CharaPos() );
+	{
+		D3DXVECTOR3 vDir = Get_CharaPos();
+		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
+		m_pWeapon->SetKeyA( vDir, Get_MatWorld() );
 	}
 	if ( CInput::GetInstance()->Get_Rbutton() )
 	{
-		m_pWeapon->SetKeyB( Get_CharaPos() );
+		D3DXVECTOR3 vDir = Get_CharaPos();
+		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
+		m_pWeapon->SetKeyB( vDir, Get_MatWorld() );
 	}
 
 	if(m_pWeapon)	

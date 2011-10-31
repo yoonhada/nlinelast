@@ -103,14 +103,16 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 
 FLOAT CBoundBox::GetWidth()
 {
-	if (m_pCharactors)		return 15.0f;
-	else					return ( ABSDEF(m_fSize[PLUSX]) - ABSDEF(m_fSize[MINUSX]) );
+	//if (m_pCharactors)		return 15.0f;
+	//else					
+	return ( ABSDEF(m_fSize[PLUSX]) - ABSDEF(m_fSize[MINUSX]) );
 }
 
 FLOAT CBoundBox::GetHeight()
 {
-	if (m_pCharactors)		return 15.0f;
-	else					return ( ABSDEF(m_fSize[PLUSZ] - ABSDEF(m_fSize[MINUSZ]) ) );
+	//if (m_pCharactors)		return 15.0f;
+	//else					
+	return ( ABSDEF(m_fSize[PLUSZ] - ABSDEF(m_fSize[MINUSZ]) ) );
 }
 
 FRECT CBoundBox::GetFRect()
@@ -128,8 +130,9 @@ FRECT CBoundBox::GetFRect()
 
 FLOAT CBoundBox::GetSize(INT n) const
 {
-	if (m_pCharactors)		return ( n < 3 ) ? -7.5f : 7.5f;
-	else					return ( m_fSize[n] );
+	//if (m_pCharactors)		return ( n < 3 ) ? -7.5f : 7.5f;
+	//else					
+	return ( m_fSize[n] );
 }
 
 FLOAT CBoundBox::GetRadius() const

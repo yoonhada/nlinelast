@@ -82,5 +82,5 @@
 
 #define _YOON
 //#define _GRAP
-
+#define _ALPHAMON
 #endif

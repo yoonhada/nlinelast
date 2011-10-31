@@ -119,8 +119,24 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 )
 {
+	for ( int i = 0; i < 8; ++i)
+	{
+		if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), D3DXVECTOR3(0, 0, 0), _pCube2 ) )
+		{
+			return TRUE;
+		}
+	}
+	for ( int i = 0; i < 8; ++i)
+	{
+		if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(i), D3DXVECTOR3(0, 0, 0), _pCube1 ) )
+		{
+			return TRUE;
+		}
+	}
+
 	return FALSE;
 }
+
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 )
 {
@@ -141,7 +157,6 @@ BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, con
 
 	return FALSE;
 }
-
 
 /************************************************************************/
 /*                                                                      */
