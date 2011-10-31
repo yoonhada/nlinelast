@@ -479,7 +479,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 	return FALSE;
 }
 
-BOOL CCharactor::AtkCollision()
+BOOL CCharactor::CollisionAtk()
 {
 	BOOL bColl = FALSE;
 	std::vector<CBoundBox*> * vecBoundBox;
@@ -493,11 +493,10 @@ BOOL CCharactor::AtkCollision()
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
   			Iter = vecBoundBox->begin();
-			//CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\n", m_pBoundBox->GetPosition().x, m_pBoundBox->GetPosition().y, m_pBoundBox->GetPosition().z);
-			//CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\n", ( *Iter )->GetPosition().x, ( *Iter )->GetPosition().y, ( *Iter )->GetPosition().z);
 			if( CPhysics::GetInstance()->Collision( m_pBoundBox, ( *Iter ) ) )
 			{
-				CDebugConsole::GetInstance()->Messagef("ATK\n" );
+				CDebugConsole::GetInstance()->Messagef( "ATK\n" );
+				//CTree::GetInstance()->GetAtkVector()->clear();
 				return TRUE;
 			}
 		}
@@ -607,7 +606,6 @@ VOID CCharactor::UpdateOtherPlayer()
 #ifdef _ALPHAMON
 VOID CCharactor::UpdateOtherPlayer2()
 {
-	AtkCollision();
 	m_fNetTime += CFrequency::GetInstance()->getFrametime();
 	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
 	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
@@ -618,6 +616,11 @@ VOID CCharactor::UpdateOtherPlayer2()
 	Set_ControlTranslate( 2, m_vLerpControl.z );
 	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
+
+	if ( CollisionAtk() )
+	{
+		//BreakCube(			)
+	}
 }
 #endif // _ALPHAMON
 
@@ -678,13 +681,13 @@ VOID CCharactor::Update()
 	{
 		D3DXVECTOR3 vDir = Get_CharaPos();
 		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
-		m_pWeapon->SetKeyA( vDir, Get_MatWorld() );
+		m_pWeapon->SetKeyA( vDir, Get_CharaAngle() );
 	}
 	if ( CInput::GetInstance()->Get_Rbutton() )
 	{
 		D3DXVECTOR3 vDir = Get_CharaPos();
 		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
-		m_pWeapon->SetKeyB( vDir, Get_MatWorld() );
+		m_pWeapon->SetKeyB( vDir, Get_CharaAngle() );
 	}
 
 	if(m_pWeapon)	

@@ -628,7 +628,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
 	}
-	CDebugConsole::GetInstance()->Messagef( L"CharCollision Pos: %f %f %f\n", m_vColissionControl.x, m_vColissionControl.y, m_vColissionControl.z );
+	//CDebugConsole::GetInstance()->Messagef( L"CharCollision Pos: %f %f %f\n", m_vColissionControl.x, m_vColissionControl.y, m_vColissionControl.z );
 
 	BOOL bCol = FALSE;
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
@@ -637,9 +637,9 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		if( m_pBox[Loop].Collision( m_vColissionControl ) == TRUE )
 		{
 			bCol = TRUE;
-			CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d\n ", Loop, bCol );
+			//CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d\n ", Loop, bCol );
 			//m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
+			//CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
 			break;
 		}
 	}
