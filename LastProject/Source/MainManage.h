@@ -21,8 +21,6 @@ public:
 	VOID	Update();
 	VOID	Render();
 
-	CCharactor* CreateObject( INT a_iId );
-
 private:
 	enum ClassType { NONE, CHARACTOR, MONSTER };
 

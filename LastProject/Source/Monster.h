@@ -147,6 +147,7 @@ private:
 
 	D3DXVECTOR3 m_vPreControl; ///< 몬스터 이전 위치
 	D3DXVECTOR3 m_vControl;  ///< 몬스터 위치
+	D3DXVECTOR3 m_vColissionControl; ///< 몬스터 충돌용 위치
 	FLOAT		m_fAngle;	 ///< 몬스터 각도
 	D3DXVECTOR3 m_vFowardVector; /// 몬스터 전진 이동 벡터
 	D3DXVECTOR3 m_vSideStepVector; /// 몬스터 좌우 이동 벡터

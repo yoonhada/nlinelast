@@ -111,31 +111,6 @@ HRESULT CMainManage::Release()
 	return S_OK;
 }
 
-CCharactor* CMainManage::CreateObject( INT a_iId )
-{
-	//IObject* pObject = NULL;
-	CCharactor* pCharactor = NULL;
-	CMonster* pMonster = NULL;
-
-	switch(a_iId)
-	{
-	case CHARACTOR:
-		pCharactor = new CCharactor;
-		pCharactor->Create( m_pD3dDevice, m_pMatrices );
-		//pObject = pCharactor;
-		break;
-	case MONSTER:
-		pMonster = new CMonster;
-		pMonster->Create( m_pD3dDevice, L"Data/CharData/test" );
-		//pObject = pCharactor;
-		break;
-	default:
-		MessageBox( GHWND, L"Error Invalid Class ID", NULL, MB_OK );
-	};
-
-	return pCharactor;
-}
-
 VOID CMainManage::CreateCharactor()
 {
 	const INT nChar = 5;
@@ -163,7 +138,7 @@ VOID CMainManage::CreateCharactor()
 		m_pCharactors[Loop].Create( m_pD3dDevice, m_pMatrices );
 		if(Loop == 0)
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/mom_final.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/MOM.csav" );
 		}
 		else if(Loop == 1)
 		{
