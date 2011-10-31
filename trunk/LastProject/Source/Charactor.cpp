@@ -487,7 +487,7 @@ BOOL CCharactor::AtkCollision()
 
 	D3DXVECTOR3 vDir, vPos;
 
-	if (m_bMatMonster == TRUE)
+	if (m_bMonster == TRUE)
 	{
 		vecBoundBox = CTree::GetInstance()->GetAtkVector();
 		if ( vecBoundBox != NULL && vecBoundBox->size() )

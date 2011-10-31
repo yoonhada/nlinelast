@@ -204,7 +204,7 @@ private:
 
 #ifdef _ALPHAMON
 public:
-	VOID SetMon(BOOL b)		{ m_bMatMonster = b; }
+	VOID SetMon(BOOL b)		{ m_bMonster = b; }
 	VOID UpdateOtherPlayer2();
 
 #endif
