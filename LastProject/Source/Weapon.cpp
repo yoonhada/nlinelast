@@ -19,7 +19,8 @@ CWeapon::~CWeapon()
 
 VOID CWeapon::Clear()
 {
-	ZeroMemory( &m_WeaponType, sizeof( m_WeaponType ) );
+	//ZeroMemory( &m_WeaponType, sizeof( m_WeaponType ) );
+	//m_WeaponType.pBBA.Clear();
 }
 
 HRESULT CWeapon::Release()
@@ -121,11 +122,13 @@ HRESULT CWeapon::Create()
 
 	m_nState = 0;
 	m_nFrame = 0;
+	m_WeaponType.vDir[0] = D3DXVECTOR3(-1.0f,    0,  0 );
+	m_WeaponType.vDir[1] = D3DXVECTOR3(-0.2f, -1.0f, 0 );
 
 	return S_OK;
 }
 
-VOID CWeapon::SetKeyA( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat )
+VOID CWeapon::SetKeyA( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 {
 	if ( ( m_nState & 0x000F ) == 0x0000 )	//( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x000F ) == 0x0001 ) || 
 	{
@@ -133,11 +136,11 @@ VOID CWeapon::SetKeyA( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat )
 		m_nFrame = m_WeaponType.nFrameTime[m_WeaponType.nType];
 
 		m_pMap->SetAnimation( EnumCharFrame::ATTACK1 );
-		m_WeaponType.AKeyBB( vPos, mat );
+		m_WeaponType.AKeyBB( vPos, fAngle );
 	}
 }
 
-VOID CWeapon::SetKeyB( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat )
+VOID CWeapon::SetKeyB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 {
 	if (  ( m_nState & 0x0F00 ) == 0x0000 ) // ( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x0F00 ) == 0x0100 ) || 
 	{
@@ -145,7 +148,7 @@ VOID CWeapon::SetKeyB( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat )
 		m_nFrame = m_WeaponType.nFrameTime[m_WeaponType.nType];
 
 		m_pMap->SetAnimation( EnumCharFrame::ATTACK2 );
-		m_WeaponType.BKeyBB( vPos, mat );
+		m_WeaponType.BKeyBB( vPos, fAngle );
 	}
 }
 

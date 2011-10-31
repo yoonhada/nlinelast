@@ -173,7 +173,7 @@ VOID CNetwork::scMOVE( CPacket& pk )
 		if( CMainManage::GetInstance()->Get_Charactors()[Loop].Get_ClientNumber() == number  )
 		{
 			CMainManage::GetInstance()->Get_Charactors()[Loop].UpdateByValue( m_vMove, angle );
-			CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
+			//CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
 			break;
 		}
 	}
@@ -199,7 +199,7 @@ VOID CNetwork::scNEWUSER( CPacket& pk )
 		}
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
+	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
 }
 
 VOID CNetwork::scInitData( CPacket& pk )
@@ -215,7 +215,7 @@ VOID CNetwork::scInitData( CPacket& pk )
 
 	CMainManage::GetInstance()->Set_Host( host );
 	CMainManage::GetInstance()->Set_ClientNumber( user_no );
-	CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
+	//CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
 
 	// 유저수 만큼 루프
 	for( WORD i=0; i<userCount; ++i )

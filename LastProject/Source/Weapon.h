@@ -15,21 +15,18 @@ typedef struct _WEAPONTYPE
 	INT nFrameTime[10];
 	INT nFrameAtk[10];
 	INT nDelay[10];
+	D3DXVECTOR3 vDir[10];
 
 	CBoundBox pBBA;
 
-	VOID AKeyBB( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat )
+	VOID AKeyBB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	{
-		D3DXMATRIXA16 mat1 = mat;
-		mat1._41 = 0.0f;
-		mat1._42 = 0.0f;
-		mat1._43 = 0.0f;
 		D3DXVECTOR3 vMax( 9.0f, 0.5f,  4.0f );
 		D3DXVECTOR3 vMin(-9.0f,-0.5f, 20.0f );
-		D3DXVec3TransformCoord( &vMax, &vMax, &mat1 );
-		D3DXVec3TransformCoord( &vMin, &vMin, &mat1 );
 		
 		pBBA.SetPosition( vPos );
+		pBBA.SetAngle( fAngle );
+
 		pBBA.SetSize( 0, vMin.x );
 		pBBA.SetSize( 1, vMin.y );
 		pBBA.SetSize( 2, vMin.z );
@@ -38,18 +35,14 @@ typedef struct _WEAPONTYPE
 		pBBA.SetSize( 4, vMax.y );
 		pBBA.SetSize( 5, vMax.z );
 	}
-	VOID BKeyBB( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat )
+	VOID BKeyBB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	{
-		D3DXMATRIXA16 mat1 = mat;
-		mat1._41 = 0.0f;
-		mat1._42 = 0.0f;
-		mat1._43 = 0.0f;
 		D3DXVECTOR3 vMax( 0.5f,  9.0f, 4.0f );
 		D3DXVECTOR3 vMin(-0.5f, -9.0f, 20.0f );
-		D3DXVec3TransformCoord( &vMax, &vMax, &mat1 );
-		D3DXVec3TransformCoord( &vMin, &vMin, &mat1 );
 
 		pBBA.SetPosition( vPos );
+		pBBA.SetAngle( fAngle );
+
 		pBBA.SetSize( 0, vMin.x );
 		pBBA.SetSize( 1, vMin.y );
 		pBBA.SetSize( 2, vMin.z );
@@ -85,8 +78,8 @@ public:
 
 	VOID Render( D3DXMATRIX _matCharacter );
 	VOID SetType(INT nType)		{ m_WeaponType.nType = nType; }
-	VOID SetKeyA( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat );
-	VOID SetKeyB( const D3DXVECTOR3& vPos, const D3DXMATRIXA16& mat );
+	VOID SetKeyA( const D3DXVECTOR3& vPos, const FLOAT fAngle );
+	VOID SetKeyB( const D3DXVECTOR3& vPos, const FLOAT fAngle );
 
 	const D3DXMATRIXA16& Get_MatWorld();
 
