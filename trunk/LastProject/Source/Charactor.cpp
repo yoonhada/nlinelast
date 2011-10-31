@@ -63,7 +63,7 @@ VOID CCharactor::Clear()
 	D3DXMatrixIdentity( &m_matMultWorld );
 	D3DXMatrixIdentity( &m_matControl );
 
-	m_bMatMonster = FALSE;
+	m_bMonster = FALSE;
 	m_iClientNumber = 0;
 	m_bActive = FALSE;
 
@@ -407,7 +407,7 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	
 }
 
-BOOL CCharactor::Collision()
+BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 {
 	BOOL bColl = FALSE;
 	std::vector<CBoundBox*> * vecBoundBox;
@@ -420,18 +420,18 @@ BOOL CCharactor::Collision()
 	for ( i = 0; i < 8; ++i)
 	{
 		vPos = m_pBoundBox->GetPosition(i);
-		vDir = vPos + m_vColissionControl;
+		vDir = vPos + a_vCollisionControl;
 		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
 		if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 		{			
-			vDir = m_vColissionControl;
+			vDir = a_vCollisionControl;
 			Iter = vecBoundBox->begin();
 			while ( Iter != vecBoundBox->end() )
 			{
 				if( CPhysics::GetInstance()->Collision( vPos, vDir, ( *Iter ) ) )
 				{
-					CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
-					CPhysics::GetInstance()->Sliding( m_vColissionControl );
+					//CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
+					CPhysics::GetInstance()->Sliding( a_vCollisionControl );
 					bColl = TRUE;
 				}
 				Iter++;
@@ -444,7 +444,23 @@ BOOL CCharactor::Collision()
 		}
 	}
 
-	//vecBoundBox = CTree::GetInstance()->GetChaVector( );
+	vecBoundBox = CTree::GetInstance()->GetChaVector( );
+	if ( vecBoundBox != NULL && vecBoundBox->size() )
+	{
+		Iter = vecBoundBox->begin();
+		Iter++;
+		while ( Iter != vecBoundBox->end() )
+		{
+			if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
+			{
+				a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				return TRUE;
+			}
+			Iter++;
+		}
+	}
+
+	//vecBoundBox = CTree::GetInstance()->GetAtkVector();
 	//if ( vecBoundBox != NULL && vecBoundBox->size() )
 	//{
 	//	Iter = vecBoundBox->begin();
@@ -536,10 +552,12 @@ VOID CCharactor::UpdateByInput(  )
 			if( m_fAniAngleY < 0.1f)
 			{
 				m_fAniAngleY += 3.0f * CFrequency::GetInstance()->getFrametime();
+				m_iSelectedFrameNum = 3;
 			}
 			else if (m_fAniAngleY > -0.1f )
 			{
 				m_fAniAngleY -= 3.0f * CFrequency::GetInstance()->getFrametime();
+				m_iSelectedFrameNum = 1;
 			}
 		}
 	}
@@ -549,7 +567,7 @@ VOID CCharactor::UpdateByInput(  )
 	//m_vPreControl = vControl;
 
 	m_pBoundBox->SetAngle( m_fAngle );
-	Collision();
+	Collision( m_vColissionControl );
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
 
@@ -559,51 +577,6 @@ VOID CCharactor::UpdateByInput(  )
 	Set_ControlRotate( 1, m_fAngle + m_fAniAngleY );
 	Calcul_MatWorld();
 }
-
-//VOID CCharactor::UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
-//{
-//	
-//	m_fAngle += a_fAngle;
-//	// 360도 넘으면 라디언 0으로 초기화
-//	if( ABSDEF(m_fAngle) > 6.2831853 )
-//	{
-//		m_fAngle = 0.0f;
-//	}
-//
-//	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
-//
-//	
-//	//D3DXVECTOR3 vControl = m_vControl;
-//	//전진 후진 처리
-//	if( a_vControl.z != 0 )
-//	{
-//		D3DXMatrixRotationY( &m_matControl, m_fAngle );
-//		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
-//		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-//		m_vControl += (m_vFowardVector * a_vControl.z);
-//		m_vPreControl += (m_vFowardVector * a_vControl.z);
-//	}
-//	//좌우 처리
-//	if( a_vControl.x != 0)
-//	{
-//		D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
-//		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
-//		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
-//		m_vControl += (m_vSideStepVector * a_vControl.x);
-//		m_vPreControl += (m_vSideStepVector * a_vControl.x);
-//	}
-//	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-//	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
-//
-//	Collision();
-//
-//	Set_ControlTranslate( 0, m_vControl.x );
-//	Set_ControlTranslate( 1, m_vControl.y );
-//	Set_ControlTranslate( 2, m_vControl.z );
-//	Set_ControlRotate( 1, m_fAngle );
-//	Calcul_MatWorld();
-//	
-//}
 
 VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 {
@@ -648,15 +621,27 @@ VOID CCharactor::UpdateOtherPlayer2()
 }
 #endif // _ALPHAMON
 
+VOID CCharactor::UpdateMonsterPos( const D3DXVECTOR3& a_vPrePos, const D3DXVECTOR3& a_vPos, const FLOAT a_fAngle )
+{
+	//m_vPreControl = a_vPrePos;
+	//m_vControl = a_vPos;
+
+	//m_fAngle = a_fAngle;
+}
+
 VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 {
 	m_matMonster = a_matMonster;
-	m_bMatMonster = TRUE;
+	m_bMonster = TRUE;
 
-	//D3DXVec3TransformCoord( &m_vPreControl, &m_vPreControl, &Get_MatWorld() );
+	D3DXVECTOR3 TempVector( 0.0f, 0.0f, 0.0f );
+
+	D3DXVec3TransformCoord( &m_vPreControl, &TempVector, &Get_MatWorld() );
 	D3DXVec3TransformCoord( &m_vPreControl, &m_vPreControl, &m_matMonster );
-	//D3DXVec3TransformCoord( &m_vControl, &m_vControl, &Get_MatWorld() );
+	D3DXVec3TransformCoord( &m_vControl, &TempVector, &Get_MatWorld() );
 	D3DXVec3TransformCoord( &m_vControl, &m_vControl, &m_matMonster );
+
+	m_vColissionControl = m_vControl;
 }
 
 VOID CCharactor::Animate()
@@ -666,7 +651,7 @@ VOID CCharactor::Animate()
 	if( m_fAniAngleY < 0.4f && bCheck == FALSE )
 	{
 		m_fAniAngleY += 3.0f * CFrequency::GetInstance()->getFrametime();
-		m_iSelectedFrameNum = 1;
+		m_iSelectedFrameNum = 3;
 	}
 	else
 	{
@@ -675,7 +660,7 @@ VOID CCharactor::Animate()
 		if( m_fAniAngleY > -0.4f )
 		{
 			m_fAniAngleY -= 3.0f * CFrequency::GetInstance()->getFrametime();
-			m_iSelectedFrameNum = 3;
+			m_iSelectedFrameNum = 1;
 		}
 		else
 		{
@@ -688,6 +673,7 @@ VOID CCharactor::Animate()
 
 VOID CCharactor::Update()
 {
+
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
 		D3DXVECTOR3 vDir = Get_CharaPos();
@@ -723,7 +709,7 @@ VOID CCharactor::Render()
 		{
 			D3DXMatrixMultiply( &m_matMultWorld, &m_vectorCube[Loop]->Get_Matrix( m_iSelectedFrameNum ), &Get_MatWorld() );
 			//m_matMultWorld = m_vectorCube[Loop]->Get_Matrix( m_iSelectedFrameNum ) * Get_MatWorld();
-			if( m_bMatMonster )
+			if( m_bMonster )
 			{
 				D3DXMatrixMultiply( &m_matMultWorld, &m_matMultWorld, &m_matMonster);
 			}
@@ -739,8 +725,8 @@ VOID CCharactor::Render()
 	if(m_pWeapon)	
 		m_pWeapon->Render( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
 
-	m_pShadowCell->Set_ControlScale( 0, 5.0f );
-	m_pShadowCell->Set_ControlScale( 2, 5.0f );
+	m_pShadowCell->Set_ControlScale( 0, 10.0f );
+	m_pShadowCell->Set_ControlScale( 2, 10.0f );
 	m_pShadowCell->Set_ControlTranslate( 0, m_vControl.x );
 	m_pShadowCell->Set_ControlTranslate( 1, 0.51f );
 	m_pShadowCell->Set_ControlTranslate( 2, m_vControl.z );
@@ -791,7 +777,7 @@ VOID CCharactor::TestBreakCubeAll()
 			{
 				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
 
-				if( m_bMatMonster )
+				if( m_bMonster )
 				{
 					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
 					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld );
@@ -816,7 +802,7 @@ VOID CCharactor::TestBreakCube()
 			m_vectorCube[m_iLoop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
 		{
 			m_vectorCube[m_iLoop]->Set_Visible( m_iSelectedFrameNum, 2 );
-			if( m_bMatMonster )
+			if( m_bMonster )
 			{
 				D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
 				m_pModel->CreateRandom( m_vectorCube[m_iLoop], m_iSelectedFrameNum, m_matMultWorld );

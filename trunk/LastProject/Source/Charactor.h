@@ -100,10 +100,11 @@ public:
 		return m_fAngle;
 	}
 
+	VOID UpdateMonsterPos( const D3DXVECTOR3& a_vPrePos, const D3DXVECTOR3& a_vPos, const FLOAT a_fAngle );
 	VOID UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster );
 
 	CBoundBox * GetBoundBox()			{ return m_pBoundBox; }
-	BOOL Collision();
+	BOOL Collision( D3DXVECTOR3& a_vCollisionControl );
 	BOOL AtkCollision();
 	VOID Load( WCHAR* a_pFileName );
 
@@ -183,7 +184,7 @@ private:
 	CMatrices*    m_pMatrices;			///< 행렬 클래스 포인터
 	D3DXMATRIXA16 m_matMultWorld;		///< 적용할 최종 행렬
 	D3DXMATRIXA16 m_matMonster;			///< 몬스터용 행렬
-	BOOL		  m_bMatMonster;		///< 몬스터 행렬 쓸지 안쓸지 체크
+	BOOL		  m_bMonster;			///< 몬스터인지 아닌지 체크
 	D3DXMATRIXA16 m_matControl;         ///< 조작 행렬
 
 	INT m_iLoop;

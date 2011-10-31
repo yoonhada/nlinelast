@@ -27,6 +27,7 @@ VOID CMonster::Clear()
 	m_vControl = D3DXVECTOR3(300.0f, 0.0f, 100.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
 }
 
@@ -56,7 +57,7 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
-		//CTree::GetInstance()->GetChaVector()->push_back( m_pBox[Loop].GetBoundBox() );
+		CTree::GetInstance()->GetChaVector()->push_back( m_pBox[Loop].GetBoundBox() );
 	}
 
 	return S_OK;
@@ -64,12 +65,8 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 
 VOID CMonster::Realese()
 {
-	if( m_pBox != NULL )
-	{
-		delete []m_pBox;
-		m_pBox=NULL;
-	}
-
+	SAFE_DELETE_ARRAY(m_pBox);
+	
 	if( m_pFrame != NULL )
 	{
 		for( INT LoopFrame=0; LoopFrame<m_iFrameMax; ++LoopFrame )
@@ -607,107 +604,158 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 
 VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 {
+
 	m_fAngle += a_fAngle;
 	// 360도 넘으면 라디언 0으로 초기화
-	if( m_fAngle > 6.2831853 || m_fAngle < -6.2831853 )
-	{
-		m_fAngle = 0.0f;
-	}
+	ABSDEF( m_fAngle ) > 6.2831853f ? m_fAngle = 0.0f : NULL;
 
 	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
-
-	//D3DXVECTOR3 vControl = m_vControl;
-	//전진 후진 처리
+	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
+	// 전진 후진 처리
 	if( a_vControl.z != 0 )
 	{
 		D3DXMatrixRotationY( &m_matControl, m_fAngle );
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-		//m_vControl += (m_vFowardVector * a_vControl.z);
-		m_vPreControl += (m_vFowardVector * a_vControl.z);
+		m_vColissionControl = (m_vFowardVector * a_vControl.z);	
 	}
-	//좌우 처리
+	// 좌우 처리
 	if( a_vControl.x != 0)
 	{
 		D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
 		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
-		//m_vControl += (m_vSideStepVector * a_vControl.x);
-		m_vPreControl += (m_vSideStepVector * a_vControl.x);
+		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
 	}
-	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-	////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
+	CDebugConsole::GetInstance()->Messagef( L"CharCollision Pos: %f %f %f\n", m_vColissionControl.x, m_vColissionControl.y, m_vColissionControl.z );
 
-	/*BOOL bCol = FALSE;
+	BOOL bCol = FALSE;
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
-		if( !m_pBox[Loop].Collision() )
+		//m_pBox[Loop].GetBoundBox()->SetAngle( m_pBox[Loop].Get_CharaAngle() );
+		if( m_pBox[Loop].Collision( m_vColissionControl ) == TRUE )
 		{
-			m_vControl = m_vPreControl;
+			bCol = TRUE;
+			CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d\n ", Loop, bCol );
+			//m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
 			break;
 		}
-	}*/
+	}
 	//AtkCollision();
 
-	m_vControl = m_vPreControl;
+	m_vPreControl = m_vControl;
+	m_vControl += m_vColissionControl;
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
 	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
+
+	//m_fAngle += a_fAngle;
+	//// 360도 넘으면 라디언 0으로 초기화
+	//if( m_fAngle > 6.2831853 || m_fAngle < -6.2831853 )
+	//{
+	//	m_fAngle = 0.0f;
+	//}
+
+	//////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
+
+
+	////D3DXVECTOR3 vControl = m_vControl;
+	////전진 후진 처리
+	//if( a_vControl.z != 0 )
+	//{
+	//	D3DXMatrixRotationY( &m_matControl, m_fAngle );
+	//	m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
+	//	D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
+	//	//m_vControl += (m_vFowardVector * a_vControl.z);
+	//	m_vPreControl += (m_vFowardVector * a_vControl.z);
+	//}
+	////좌우 처리
+	//if( a_vControl.x != 0)
+	//{
+	//	D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
+	//	m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
+	//	D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
+	//	//m_vControl += (m_vSideStepVector * a_vControl.x);
+	//	m_vPreControl += (m_vSideStepVector * a_vControl.x);
+	//}
+	//////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
+	//////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
+
+	//BOOL bCol = FALSE;
+	//for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	//{
+	//	if( m_pBox[Loop].Collision() )
+	//	{
+	//		bCol = TRUE;
+	//		CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d / ", Loop, bCol );
+	//		break;
+	//	}
+
+	//	CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
+	//}
+	////AtkCollision();
+
+	//if( bCol == FALSE )
+	//{
+	//	m_vControl = m_vPreControl;
+	//}
+
+	//Set_ControlTranslate( 0, m_vControl.x );
+	//Set_ControlTranslate( 1, m_vControl.y );
+	//Set_ControlTranslate( 2, m_vControl.z );
+	//Set_ControlRotate( 1, m_fAngle );
+	//Calcul_MatWorld();
 }
 
 VOID CMonster::Update()
 {
-	/*Set_ControlTranslate( 0, m_vControl.x );
-	Set_ControlTranslate( 1, m_vControl.y );
-	Set_ControlTranslate( 2, m_vControl.z );
-	Set_ControlRotate( 1, m_fAngle );
-	Calcul_MatWorld();*/
-
-	float fFrametime = CFrequency::GetInstance()->getFrametime();
-
 	if( m_pFrame[m_iSelectedFrameNum].m_bAnimation == TRUE )
 	{
 		AnimationTotalTrans( 0, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.x, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.x, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.x, 
 			m_pFrame[m_iSelectedFrameNum].m_bTransXReplay, 
-			fFrametime );
+			CFrequency::GetInstance()->getFrametime() );
 		AnimationTotalTrans( 1, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.y, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.y, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.y, 
 			m_pFrame[m_iSelectedFrameNum].m_bTransYReplay, 
-			fFrametime );
+			CFrequency::GetInstance()->getFrametime() );
 		AnimationTotalTrans( 2, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.z, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.z, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.z, 
 			m_pFrame[m_iSelectedFrameNum].m_bTransZReplay, 
-			fFrametime );
+			CFrequency::GetInstance()->getFrametime() );
 
 		AnimationTotalRotate( 0, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.x, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.x, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.x, 
 			m_pFrame[m_iSelectedFrameNum].m_bRotateXReplay, 
-			fFrametime );
+			CFrequency::GetInstance()->getFrametime() );
 
 		AnimationTotalRotate( 1, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.y, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.y, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.y, 
 			m_pFrame[m_iSelectedFrameNum].m_bRotateYReplay, 
-			fFrametime );
+			CFrequency::GetInstance()->getFrametime() );
 
 		AnimationTotalRotate( 2, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.z, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.z, 
 			m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.z, 
 			m_pFrame[m_iSelectedFrameNum].m_bRotateZReplay, 
-			fFrametime );
+			CFrequency::GetInstance()->getFrametime() );
 	}
 
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
+		m_pBox[Loop].UpdateMonsterPos( m_vPreControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, 
+									   m_vControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, m_fAngle );
+
 		m_pBox[Loop].Set_ControlTranslate( 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.x );
 		m_pBox[Loop].Set_ControlTranslate( 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.y );
 		m_pBox[Loop].Set_ControlTranslate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.z );
@@ -721,37 +769,37 @@ VOID CMonster::Update()
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.x, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.x, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransXReplay, 
-				fFrametime );
+				CFrequency::GetInstance()->getFrametime() );
 
 			AnimationTrans( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.y, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.y, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.y, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransYReplay, 
-				fFrametime );
+				CFrequency::GetInstance()->getFrametime() );
 
 			AnimationTrans( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.z, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.z, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.z, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransZReplay, 
-				fFrametime );
+				CFrequency::GetInstance()->getFrametime() );
 
 			AnimationRotate( Loop, 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.x, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.x, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateXReplay, 
-				fFrametime );
+				CFrequency::GetInstance()->getFrametime() );
 
 			AnimationRotate( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.y, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.y, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.y, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateYReplay, 
-				fFrametime );
+				CFrequency::GetInstance()->getFrametime() );
 
 			AnimationRotate( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.z, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.z, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.z, 
 				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateZReplay, 
-				fFrametime );
+				CFrequency::GetInstance()->getFrametime() );
 		}
 
 		//m_pBox[Loop].Update();
