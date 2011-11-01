@@ -619,7 +619,7 @@ VOID CCharactor::UpdateOtherPlayer2()
 
 	if ( CollisionAtk() )
 	{
-		//BreakCube(			)
+		BreakQube();
 	}
 }
 #endif // _ALPHAMON
@@ -760,9 +760,82 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 		if( v == _vPosition && m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) )
 		{
 			m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
-			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld() );
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 		}
 	}
+}
+
+VOID CCharactor::BreakQube()
+{
+	INT Loop, nNeighbor;
+	D3DXVECTOR3 vPos;
+
+	if( m_bAliveCheck == TRUE )
+	{
+		std::vector<CBoundBox*> * vecBoundBox;
+		std::vector<CBoundBox*>::iterator Iter;
+
+		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
+		{
+			if( m_vectorCube[Loop] == NULL )
+				continue;
+
+			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			{
+				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+			}
+			else
+			{
+				vecBoundBox = CTree::GetInstance()->GetAtkVector();
+				if ( vecBoundBox != NULL && vecBoundBox->size() )
+				{
+					BOOL bRet = FALSE;
+					Iter = vecBoundBox->begin();
+
+					do 
+					{
+						vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
+						D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
+						if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), m_pBoundBox) )
+						{
+							bRet = TRUE;
+							BreakListMake( Loop, (*Iter) );
+
+							for (int i = 0; i < 6; ++i )
+							{
+								nNeighbor = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, i);
+
+								if (nNeighbor > 0 && m_vectorCube[nNeighbor]->Get_Visible( m_iSelectedFrameNum ) )
+								{
+									m_BreakList.push_back(nNeighbor);
+								}
+							}
+						}
+
+					} while ( bRet );
+				}
+			}
+		}
+	}
+	CTree::GetInstance()->GetAtkVector()->clear();
+}
+
+VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
+{
+	m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
+#ifndef _ALPHAMON
+	if( m_bMonster )
+	{
+		D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, pBB->GetDirection() );
+	}
+	else
+	{
+		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), pBB->GetDirection() );
+	}
+#else
+	m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), pBB->GetDirection() );
+#endif 	
 }
 
 VOID CCharactor::TestBreakCubeAll()
@@ -783,11 +856,11 @@ VOID CCharactor::TestBreakCubeAll()
 				if( m_bMonster )
 				{
 					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld );
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 				}
 				else
 				{
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld() );
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 				}
 			}
 		}
@@ -808,11 +881,11 @@ VOID CCharactor::TestBreakCube()
 			if( m_bMonster )
 			{
 				D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-				m_pModel->CreateRandom( m_vectorCube[m_iLoop], m_iSelectedFrameNum, m_matMultWorld );
+				m_pModel->CreateRandom( m_vectorCube[m_iLoop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 			}
 			else
 			{
-				m_pModel->CreateRandom( m_vectorCube[m_iLoop], m_iSelectedFrameNum, Get_MatWorld() );
+				m_pModel->CreateRandom( m_vectorCube[m_iLoop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 			}
 			
 			for(INT Loop=0; Loop<6; ++Loop)

@@ -34,6 +34,7 @@ CBoundBox::~CBoundBox(void)
 VOID CBoundBox::Clear()
 {
 	m_vPosition = D3DXVECTOR3(0, 0, 0);
+	m_vDirection = D3DXVECTOR3(0, 0, 0);
 	m_vAxisDir[0] = D3DXVECTOR3(1, 0, 0);
 	m_vAxisDir[1] = D3DXVECTOR3(0, 1, 0);
 	m_vAxisDir[2] = D3DXVECTOR3(0, 0, 1);

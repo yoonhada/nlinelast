@@ -97,7 +97,11 @@ VOID CModel::Render()
 	}
 }
 
-VOID CModel::CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIXA16& a_matChara, const FLOAT fPow )
+VOID CModel::CreateRandom( CCharCube* a_pCube, 
+						   INT a_iFrameNum, 
+						   const D3DXMATRIXA16& a_matChara, 
+						   const D3DXVECTOR3& a_vMome, 
+						   const FLOAT fPow )
 {
 
 	INT nMax = 0;
@@ -106,7 +110,8 @@ VOID CModel::CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIX
 	DWORD dwOutLine2 = 0xFF000000;
 	CQube * pQube = NULL;
 
-	D3DXVECTOR3 vec, vMome;
+	D3DXVECTOR3 vec;
+	D3DXVECTOR3 vMome = a_vMome;
 
 	D3DXVec3TransformCoord( &vec, &a_pCube->Get_Pos( a_iFrameNum ), &a_matChara );
 	dwColor = a_pCube->Get_Color( a_iFrameNum );
@@ -116,7 +121,7 @@ VOID CModel::CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIX
 	mat._42 = 0.0f;
 	mat._43 = 0.0f;
 
-	vMome = D3DXVECTOR3( 0.0f, 0.0f, -1.5f );
+	//vMome = D3DXVECTOR3( 0.0f, 0.0f, -1.5f );
 	D3DXVec3TransformCoord( &vMome, &vMome, &mat );
 	
 

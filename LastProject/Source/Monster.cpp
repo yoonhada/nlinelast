@@ -812,7 +812,7 @@ VOID CMonster::Update()
 		m_pBox[Loop].UpdateMonsterMatrix( Get_MatWorld() );
 	}
 
-#ifndef _DEBUG
+#ifndef _YOON
 	static INT TempLoop = 0;
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{

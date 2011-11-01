@@ -34,6 +34,8 @@ typedef struct _WEAPONTYPE
 		pBBA.SetSize( 3, vMax.x );
 		pBBA.SetSize( 4, vMax.y );
 		pBBA.SetSize( 5, vMax.z );
+
+		pBBA.SetDirection( vDir[0] );
 	}
 	VOID BKeyBB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	{
@@ -50,6 +52,8 @@ typedef struct _WEAPONTYPE
 		pBBA.SetSize( 3, vMax.x );
 		pBBA.SetSize( 4, vMax.y );
 		pBBA.SetSize( 5, vMax.z );
+
+		pBBA.SetDirection( vDir[1] );
 	}
 
 }WEAPONTYPE;
