@@ -630,23 +630,28 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	}
 	//CDebugConsole::GetInstance()->Messagef( L"CharCollision Pos: %f %f %f\n", m_vColissionControl.x, m_vColissionControl.y, m_vColissionControl.z );
 
-	BOOL bCol = FALSE;
-	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
-	{
-		//m_pBox[Loop].GetBoundBox()->SetAngle( m_pBox[Loop].Get_CharaAngle() );
-		if( m_pBox[Loop].Collision( m_vColissionControl ) == TRUE )
-		{
-			bCol = TRUE;
-			//CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d\n ", Loop, bCol );
-			//m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			//CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
-			break;
-		}
-	}
+	//BOOL bCol = FALSE;
+	//for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	//{
+	//	//m_pBox[Loop].GetBoundBox()->SetAngle( m_pBox[Loop].Get_CharaAngle() );
+	//	if( m_pBox[Loop].Collision( m_vColissionControl ) == TRUE )
+	//	{
+	//		bCol = TRUE;
+	//		//CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d\n ", Loop, bCol );
+	//		//m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//		
+	//		//CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
+	//		break;
+	//	}
+	//}
 	//AtkCollision();
+
+	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
+
+	CDebugInterface::GetInstance()->AddMessageVector( "MonsterPos", m_vControl );
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );

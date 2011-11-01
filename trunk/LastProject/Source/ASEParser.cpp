@@ -118,7 +118,7 @@ BOOL ASEParser::LoadFile( LPWSTR _FileName )
 
 	//	파일명 확인
 	//CDebugConsole::GetInstance()->Messagef( L"ASEParser\n" );
-	//CDebugConsole::GetInstance()->Message( _FileName );
+	////CDebugConsole::GetInstance()->Message( _FileName );
 	//CDebugConsole::GetInstance()->Messagef( L"\n" );
 
 	FILE*	fp;
@@ -140,10 +140,10 @@ BOOL ASEParser::LoadFile( LPWSTR _FileName )
 	}
 	
 	//	test
-	//CDebugConsole::GetInstance()->Message( L"Start TMProcessing\n" );
+	////CDebugConsole::GetInstance()->Message( L"Start TMProcessing\n" );
 	TMProcessing();
 	//	test
-	//CDebugConsole::GetInstance()->Message( L"Start TFACEProcessing\n" );
+	////CDebugConsole::GetInstance()->Message( L"Start TFACEProcessing\n" );
 	TFaceProcessing();
 		
 	fclose( fp );
@@ -612,7 +612,7 @@ BOOL ASEParser::GetBitmap( LPWSTR _sLine )
 
 		TCHAR	str[ 516 ];
 		wsprintf( str, L"*BITMAP : %s\n", Name );
-		//CDebugConsole::GetInstance()->Message( str );
+		////CDebugConsole::GetInstance()->Message( str );
 		
 		return TRUE;
 	}
@@ -663,7 +663,7 @@ BOOL ASEParser::GetNodeName( LPWSTR _sLine )
 
 		TCHAR	str[ 516 ];
 		wsprintf( str, L"NODE_NAME : %s\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pNodeName );
-		//CDebugConsole::GetInstance()->Message( str );
+		////CDebugConsole::GetInstance()->Message( str );
 
 		return TRUE;
 	}//	End keyword[ 1 ]
@@ -683,7 +683,7 @@ BOOL ASEParser::GetNodeParentName( LPWSTR _sLine )
 
 		TCHAR	str[ 516 ];
 		wsprintf( str, L"NODE_PARENT_NAME : %s\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pNodeParentName );
-		//CDebugConsole::GetInstance()->Message( str );
+		////CDebugConsole::GetInstance()->Message( str );
 
 		return TRUE;
 	}//	End keyword[ 1 ]
@@ -1360,7 +1360,7 @@ BOOL ASEParser::SetAnimation( DWORD _dID )
 
 	if( m_mapAnimation.end() == itE )
 	{
-		//CDebugConsole::GetInstance()->Message( L"SetAnimation() failed..." );
+		////CDebugConsole::GetInstance()->Message( L"SetAnimation() failed..." );
 		return FALSE;
 	}
 

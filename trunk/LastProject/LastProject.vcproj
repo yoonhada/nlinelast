@@ -559,6 +559,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\DebugInterface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\DebugInterface.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\MemoryMng.h"
 				>
 			</File>
