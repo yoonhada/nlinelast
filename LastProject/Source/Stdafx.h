@@ -14,6 +14,10 @@
 // TBB 라이브러리
 //#pragma  comment ( lib, "tbb.lib" )
 
+// AntTwearBar 라이브러리
+#pragma comment (lib, "AntTweakBar.lib")
+#include "AntTweakBar.h"
+
 
 // 헤더
 #include <winsock2.h>
@@ -56,6 +60,7 @@
 #include "Physics.h"
 #include "TextureManage.h"
 #include "Input.h"
+#include "DebugInterface.h"
 
 // None Sigleton Module
 #include "Light.h"

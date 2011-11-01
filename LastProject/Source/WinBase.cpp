@@ -75,6 +75,7 @@ HRESULT CWinBase::Release()
 	CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
 	CPhysics::DestoryInstance();
+	CDebugInterface::DestoryInstance();
 
 #ifndef _YOON
 	WSACleanup();
@@ -122,6 +123,8 @@ BOOL CWinBase::InitInstance(HINSTANCE hInstance, INT nCmdShow)
 	m_pManage->Create( m_pDX9->GetDevice() );
 
 	CInput::GetInstance()->Create( m_pDX9->GetDevice(), m_hWnd );
+
+	CDebugInterface::GetInstance()->Create( m_pDX9->GetDevice() );
 
 	return TRUE;
 }
@@ -192,10 +195,13 @@ DWORD WINAPI CWinBase::ThreadFunc(LPVOID pTemp)
 
 LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	/*if( TwEventWin( hWnd, message, wParam, lParam ) )
+
+#ifdef _DEBUG
+	if( TwEventWin( hWnd, message, wParam, lParam ) )
 	{
 		return 0;
-	}*/
+	}
+#endif
 
 	switch (message) 
 	{

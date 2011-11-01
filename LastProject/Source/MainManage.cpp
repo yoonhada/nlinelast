@@ -270,4 +270,9 @@ VOID	CMainManage::Render()
 #endif
 
 	m_pMonster->Render();
+
+#ifdef _DEBUG
+	TwDraw();
+#endif
+
 }

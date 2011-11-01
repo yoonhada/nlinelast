@@ -48,7 +48,7 @@ BOOL BBXParser::LoadFile( LPWSTR _FileName )
 	Cleanup();
 
 	//CDebugConsole::GetInstance()->Messagef( L"BBXParser\n" );
-	//CDebugConsole::GetInstance()->Message( _FileName );
+	////CDebugConsole::GetInstance()->Message( _FileName );
 	//CDebugConsole::GetInstance()->Messagef( L"\n" );
 
 	FILE*	fp;
@@ -159,7 +159,7 @@ BOOL BBXParser::GetBoundBoxName( LPWSTR _sLine )
 
 		TCHAR str[ 1024 ];
 		wsprintf( str, L"*NAME : %s\n", Name );
-		//CDebugConsole::GetInstance()->Message( str );
+		////CDebugConsole::GetInstance()->Message( str );
 
 		return TRUE;
 	}
