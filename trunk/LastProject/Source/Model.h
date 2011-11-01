@@ -37,7 +37,7 @@ public:
 	virtual VOID Render();
 	virtual VOID Update();
 
-	VOID CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIXA16& a_matChara, const FLOAT fPow = 1.0f );
+	VOID CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIXA16& a_matChara, const D3DXVECTOR3& a_vMome, const FLOAT fPow = 1.0f );
 
 	VOID SetCharType( CBoundBox * pBB )		
 	{

@@ -122,8 +122,8 @@ HRESULT CWeapon::Create()
 
 	m_nState = 0;
 	m_nFrame = 0;
-	m_WeaponType.vDir[0] = D3DXVECTOR3(-1.0f,    0,  0 );
-	m_WeaponType.vDir[1] = D3DXVECTOR3(-0.2f, -1.0f, 0 );
+	m_WeaponType.vDir[0] = D3DXVECTOR3(-1.0f,  0.0f, 0.0f );
+	m_WeaponType.vDir[1] = D3DXVECTOR3(-0.2f, -1.0f, 0.0f );
 
 	return S_OK;
 }

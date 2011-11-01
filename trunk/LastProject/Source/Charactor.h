@@ -8,6 +8,7 @@
 #ifndef _CHARECTOR_H_
 #define _CHARECTOR_H_
 
+#include <list>
 //using namespace tbb;
 
 class CCharCube;
@@ -87,8 +88,11 @@ public:
 
 	VOID World2Model(D3DXVECTOR3& _vPosition);
 	VOID BreakCube(D3DXVECTOR3& _vPosition);
+	VOID BreakQube();
 	VOID TestBreakCube();
 	VOID TestBreakCubeAll();
+	VOID BreakListMake(INT, CBoundBox *);
+	std::list<INT> m_BreakList;
 
 	const D3DXVECTOR3& Get_CharaPos()
 	{
