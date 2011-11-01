@@ -574,6 +574,70 @@
 		<Filter
 			Name="AI"
 			>
+			<File
+				RelativePath=".\Source\Battle.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Battle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Chase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Chase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Dash.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Dash.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Melee.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Melee.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Seek.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Seek.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Spin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Spin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\State.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\StateMachine.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Stiffen.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Stiffen.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
