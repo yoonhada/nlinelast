@@ -32,6 +32,8 @@ VOID CInput::Clear()
 	m_fXRotate = 0.0f;
 
 	D3DXMatrixIdentity( &m_matMatrix );
+
+	m_bF8button = m_bF9button = FALSE;
 }
 
 
@@ -62,7 +64,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 {
 	if( GetFocus() == m_hWnd )
 	{
-		if ( !GetAsyncKeyState( VK_LSHIFT ) )
+		if ( !( GetAsyncKeyState( VK_LSHIFT ) || GetAsyncKeyState( VK_CONTROL ) ) )
 		{
 			GetCursorPos( &m_MousePosOld );
 			// 마우스의 변화값
@@ -175,6 +177,14 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 				m_bF9button = FALSE;
 			}
 
+			if( ( GetAsyncKeyState( VK_F8 ) & 0x0001 ) == TRUE )
+			{
+				m_bF8button = TRUE;
+			}
+			else
+			{
+				m_bF8button = FALSE;
+			}
 			
 		}
 	}

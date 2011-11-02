@@ -119,31 +119,26 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 )
 {
-	//CDebugConsole::GetInstance()->Messagef( "x %0.2f ", _pCube2->GetSize(0) );		
-	//CDebugConsole::GetInstance()->Messagef( "y %0.2f ", _pCube2->GetSize(1) );		
-	//CDebugConsole::GetInstance()->Messagef( "z %0.2f ", _pCube2->GetSize(2) );		
-	//CDebugConsole::GetInstance()->Messagef( "x %0.2f ", _pCube2->GetSize(3) );		
-	//CDebugConsole::GetInstance()->Messagef( "y %0.2f ", _pCube2->GetSize(4) );		
-	//CDebugConsole::GetInstance()->Messagef( "z %0.2f ", _pCube2->GetSize(5) );		
-	//CDebugConsole::GetInstance()->Messagef( "\n" );		
-	for ( int i = 0; i < 8; ++i)
-	{		
-		if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), D3DXVECTOR3(0, 0, 0), _pCube2 ) )
-		{
-			return TRUE;
-		}
-	}
-	for ( int i = 0; i < 8; ++i)
-	{
-		if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(i), D3DXVECTOR3(0, 0, 0), _pCube1 ) )
-		{
-			return TRUE;
-		}
-	}
+	//    v0----- v1
+	//   /|      /|
+	//  v3------v2|
+	//  | |     | |
+	//  | |v4---|-|v5
+	//  |/      |/
+	//  v7------v6
 
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(2),  _pCube2->GetPosition(1) - _pCube2->GetPosition(2), _pCube1 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(3),  _pCube2->GetPosition(0) - _pCube2->GetPosition(3), _pCube1 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(6),  _pCube2->GetPosition(5) - _pCube2->GetPosition(6), _pCube1 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(7),  _pCube2->GetPosition(4) - _pCube2->GetPosition(7), _pCube1 ) )		{ return TRUE; }
+																							 
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(2),  _pCube1->GetPosition(1) - _pCube1->GetPosition(2), _pCube2 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(3),  _pCube1->GetPosition(0) - _pCube1->GetPosition(3), _pCube2 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(6),  _pCube1->GetPosition(5) - _pCube1->GetPosition(6), _pCube2 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(7),  _pCube1->GetPosition(4) - _pCube1->GetPosition(7), _pCube2 ) )		{ return TRUE; }
+	
 	return FALSE;
 }
-
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 )
 {

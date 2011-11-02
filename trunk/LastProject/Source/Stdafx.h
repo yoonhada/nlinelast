@@ -85,7 +85,4 @@
 // 보안함수 경고 무시
 #pragma warning( disable:4996 )
 
-#define _YOON
-//#define _GRAP
-#define _ALPHAMON
 #endif
