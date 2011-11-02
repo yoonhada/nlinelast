@@ -25,12 +25,13 @@ HRESULT CWinBase::Create()
 	
 	m_pDX9 = new CDirectX9;
 	m_pManage = CMainManage::GetInstance();
-	//CDebugConsole::GetInstance();
 	CDebugConsole::GetInstance();
+	CDebugConsole::GetInstance()->SetPosition( CDebugConsole::CSL_TR, TRUE );
 	CFrequency::GetInstance();
 	CTextureManage::GetInstance();
 	CInput::GetInstance();
 	CPhysics::GetInstance();
+	CTree::GetInstance();
 
 	// 네트워크
 #ifndef _YOON
@@ -75,6 +76,7 @@ HRESULT CWinBase::Release()
 	CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
 	CPhysics::DestoryInstance();
+	CTree::DestoryInstance();
 	CDebugInterface::DestoryInstance();
 
 #ifndef _YOON

@@ -29,6 +29,9 @@ VOID CMonster::Clear()
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
+	m_iChangeAnimationEndCheck = 0;
+	m_iNextFrame = 0;
+	m_bChangingAnimation = FALSE;
 }
 
 HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
@@ -459,7 +462,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] = a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] = a_fStart;
 			}
 		}
 	}
@@ -486,7 +489,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] = a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] = a_fStart;
 			}
 		}
 	}
@@ -535,7 +538,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] = a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] = a_fStart;
 			}
 		}
 	}
@@ -562,7 +565,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] =  a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] =  a_fStart;
 			}
 		}
 	}
@@ -599,7 +602,229 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 		m_pBox[a_iLoopNum].Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fCharEditorRotate.z + m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] );
 		break;
 	}
+}
 
+VOID CMonster::InterpolationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime )
+{
+	//시작이 끝 보다 작을때
+	if( a_fStart < a_fEnd)
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] <= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] += a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작이 끝보다 클때
+	else if( a_fStart > a_fEnd )
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] >= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작과 끝이 같으면
+	else
+	{
+		// 애니메이션 끝낫다
+		m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[a_iXYZ] = FALSE;
+	}
+
+	switch(a_iXYZ)
+	{
+	case 0:
+		Set_ControlTranslate( 0, m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] );
+		break;
+	case 1:
+		Set_ControlTranslate( 1, m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] );
+		break;
+	case 2:
+		Set_ControlTranslate( 2, m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] );
+		break;
+	}
+}
+
+VOID CMonster::InterpolationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime )
+{
+	//시작이 끝 보다 작을때
+	if( a_fStart < a_fEnd)
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] <= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] += a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작이 끝보다 클때
+	else if( a_fStart > a_fEnd )
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] >= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작과 끝이 같으면
+	else
+	{
+		// 애니메이션 끝낫다
+		m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[a_iXYZ] = FALSE;
+	}
+
+	switch(a_iXYZ)
+	{
+	case 0:
+		Set_ControlRotate( 0, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		break;
+	case 1:
+		Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		break;
+	case 2:
+		Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		break;
+	}
+	
+}
+
+VOID CMonster::InterpolationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime )
+{
+	//FLOAT fLength = ABSDEF( ABSDEF(a_fStart) - ABSDEF(a_fEnd) );
+	//FLOAT fSpeed = m_fMaxInterpolationLength / fLength;
+
+	//시작이 끝 보다 작을때
+	if( a_fStart < a_fEnd)
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] <= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniTransEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] += a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniTransEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작이 끝보다 클때
+	else if( a_fStart > a_fEnd )
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] >= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniTransEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniTransEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작과 끝이 같으면
+	else
+	{
+		// 애니메이션 끝낫다
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniTransEndCheck[a_iXYZ] = FALSE;
+	}
+
+	switch(a_iXYZ)
+	{
+	case 0:
+		m_pBox[a_iLoopNum].Set_ControlTranslate( 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fCharEditorTranslate.x + m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] );
+		break;
+	case 1:
+		m_pBox[a_iLoopNum].Set_ControlTranslate( 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fCharEditorTranslate.y + m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] );
+		break;
+	case 2:
+		m_pBox[a_iLoopNum].Set_ControlTranslate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fCharEditorTranslate.z + m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] );
+		break;
+	}
+}
+
+VOID CMonster::InterpolationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime )
+{
+	//m_fLengthRotate = ABSDEF( ABSDEF(a_fStart) + ABSDEF(a_fEnd) );
+	//m_fSpeedRotate = m_fMaxInterpolationLength / m_fLengthRotate;
+
+	//CDebugConsole::GetInstance()->Messagef( L"fLen : %f / interLen : %f / fspeed : %f\n", fLength, m_fMaxInterpolationLength, fSpeed );
+
+	//시작이 끝 보다 작을때
+	if( a_fStart < a_fEnd)
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] <= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] += a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작이 끝보다 클때
+	else if( a_fStart > a_fEnd )
+	{
+		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] >= a_fEnd )
+		{
+			// 애니메이션 안끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] = TRUE;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+		}
+		else
+		{
+			// 애니메이션 끝낫다
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] = FALSE;
+		}
+	}
+	//시작과 끝이 같으면
+	else
+	{
+		// 애니메이션 끝낫다
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] = FALSE;
+	}
+
+	switch(a_iXYZ)
+	{
+	case 0:
+		m_pBox[a_iLoopNum].Set_ControlRotate( 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fCharEditorRotate.x + m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] );
+		break;
+	case 1:
+		m_pBox[a_iLoopNum].Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fCharEditorRotate.y + m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] );
+		break;
+	case 2:
+		m_pBox[a_iLoopNum].Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fCharEditorRotate.z + m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] );
+		break;
+	}
+
+	//CDebugConsole::GetInstance()->Messagef( L"a_iLoopNum : %d / Rotation XYZ : %d / EndCheck : %d\n", a_iLoopNum, a_iXYZ, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] );
 }
 
 VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
@@ -648,119 +873,158 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
+	FLOAT fTemp = 11.0f;
+	CDebugInterface::GetInstance()->AddMessageFloat( "TempAngle", fTemp );
+
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
 
 	CDebugInterface::GetInstance()->AddMessageVector( "MonsterPos", m_vControl );
+
+	D3DXVECTOR3 Temp(10.0f,10.0f,10.f);
+	CDebugInterface::GetInstance()->AddMessageVector( "TempPos", Temp );
 
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
 	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
-
-	//m_fAngle += a_fAngle;
-	//// 360도 넘으면 라디언 0으로 초기화
-	//if( m_fAngle > 6.2831853 || m_fAngle < -6.2831853 )
-	//{
-	//	m_fAngle = 0.0f;
-	//}
-
-	//////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
-
-
-	////D3DXVECTOR3 vControl = m_vControl;
-	////전진 후진 처리
-	//if( a_vControl.z != 0 )
-	//{
-	//	D3DXMatrixRotationY( &m_matControl, m_fAngle );
-	//	m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
-	//	D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-	//	//m_vControl += (m_vFowardVector * a_vControl.z);
-	//	m_vPreControl += (m_vFowardVector * a_vControl.z);
-	//}
-	////좌우 처리
-	//if( a_vControl.x != 0)
-	//{
-	//	D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
-	//	m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
-	//	D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
-	//	//m_vControl += (m_vSideStepVector * a_vControl.x);
-	//	m_vPreControl += (m_vSideStepVector * a_vControl.x);
-	//}
-	//////CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-	//////CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
-
-	//BOOL bCol = FALSE;
-	//for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
-	//{
-	//	if( m_pBox[Loop].Collision() )
-	//	{
-	//		bCol = TRUE;
-	//		CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d / ", Loop, bCol );
-	//		break;
-	//	}
-
-	//	CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
-	//}
-	////AtkCollision();
-
-	//if( bCol == FALSE )
-	//{
-	//	m_vControl = m_vPreControl;
-	//}
-
-	//Set_ControlTranslate( 0, m_vControl.x );
-	//Set_ControlTranslate( 1, m_vControl.y );
-	//Set_ControlTranslate( 2, m_vControl.z );
-	//Set_ControlRotate( 1, m_fAngle );
-	//Calcul_MatWorld();
 }
 
-VOID CMonster::Update()
+VOID CMonster::ChangeAnimation( INT a_iAniNum )
 {
-	if( m_pFrame[m_iSelectedFrameNum].m_bAnimation == TRUE )
-	{
-		AnimationTotalTrans( 0, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.x, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.x, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.x, 
-			m_pFrame[m_iSelectedFrameNum].m_bTransXReplay, 
-			CFrequency::GetInstance()->getFrametime() );
-		AnimationTotalTrans( 1, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.y, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.y, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.y, 
-			m_pFrame[m_iSelectedFrameNum].m_bTransYReplay, 
-			CFrequency::GetInstance()->getFrametime() );
-		AnimationTotalTrans( 2, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.z, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.z, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.z, 
-			m_pFrame[m_iSelectedFrameNum].m_bTransZReplay, 
-			CFrequency::GetInstance()->getFrametime() );
+	m_bChangingAnimation = TRUE;
+	m_iNextFrame = a_iAniNum;
 
-		AnimationTotalRotate( 0, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.x, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.x, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.x, 
-			m_pFrame[m_iSelectedFrameNum].m_bRotateXReplay, 
-			CFrequency::GetInstance()->getFrametime() );
-
-		AnimationTotalRotate( 1, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.y, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.y, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.y, 
-			m_pFrame[m_iSelectedFrameNum].m_bRotateYReplay, 
-			CFrequency::GetInstance()->getFrametime() );
-
-		AnimationTotalRotate( 2, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.z, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.z, 
-			m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.z, 
-			m_pFrame[m_iSelectedFrameNum].m_bRotateZReplay, 
-			CFrequency::GetInstance()->getFrametime() );
-	}
+	D3DXVECTOR3 vTransLength(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 vRotateLength(0.0f, 0.0f, 0.0f);
 
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
-		m_pBox[Loop].UpdateMonsterPos( m_vPreControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, 
-									   m_vControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, m_fAngle );
+		m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.x = m_pFrame[m_iSelectedFrameNum].m_fTrans[0];
+		m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.y = m_pFrame[m_iSelectedFrameNum].m_fTrans[1];
+		m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_fTrans[2];
 
+		m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.x = m_pFrame[m_iSelectedFrameNum].m_fRotation[0];
+		m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y = m_pFrame[m_iSelectedFrameNum].m_fRotation[1];
+		m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_fRotation[2];
+		
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[0];
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[1];
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[2];
+
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.x = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[0];
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.y = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[1];
+		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[2];
+		
+		vTransLength.x = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.x );
+		vTransLength.y = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.y );
+		vTransLength.z = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.z );
+
+		vRotateLength.x = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.x ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.x );
+		vRotateLength.y = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.y ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.y );
+		vRotateLength.z = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.z ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.z );
+
+		vTransLength.x = ABSDEF(vTransLength.x);
+		vTransLength.y = ABSDEF(vTransLength.y);
+		vTransLength.z = ABSDEF(vTransLength.z);
+
+		vRotateLength.x = ABSDEF(vRotateLength.x);
+		vRotateLength.y = ABSDEF(vRotateLength.y);
+		vRotateLength.z = ABSDEF(vRotateLength.z);
+		
+		if( m_fMaxInterpolationLength < vTransLength.x )
+		{
+			m_fMaxInterpolationLength = vTransLength.x;
+		}
+
+		if( m_fMaxInterpolationLength < vTransLength.y )
+		{
+			m_fMaxInterpolationLength = vTransLength.y;
+		}
+
+		if( m_fMaxInterpolationLength < vTransLength.z )
+		{
+			m_fMaxInterpolationLength = vTransLength.z;
+		}
+
+		if( m_fMaxInterpolationLength < vRotateLength.x )
+		{
+			m_fMaxInterpolationLength = vRotateLength.x;
+			if( m_fMaxInterpolationLength > 10.0f ) CDebugConsole::GetInstance()->Messagef( L" RotLenX : %f \n ", m_fMaxInterpolationLength );
+		}
+
+		if( m_fMaxInterpolationLength < vRotateLength.y )
+		{
+			m_fMaxInterpolationLength = vRotateLength.y;
+			if( m_fMaxInterpolationLength > 10.0f ) CDebugConsole::GetInstance()->Messagef( L" RotLenY : %f \n ", m_fMaxInterpolationLength );
+		}
+
+		if( m_fMaxInterpolationLength < vRotateLength.z )
+		{
+			m_fMaxInterpolationLength = vRotateLength.z;
+			if( m_fMaxInterpolationLength > 10.0f ) CDebugConsole::GetInstance()->Messagef( L" RotLenZ : %f \n ", m_fMaxInterpolationLength );
+		}
+	}
+
+	
+}
+
+VOID CMonster::AniInterpolation()
+{
+
+	//CDebugConsole::GetInstance()->Messagef( L"InterLength : %f \n", m_fMaxInterpolationLength );
+
+	m_iChangeAnimationEndCheck = 0;
+
+	FLOAT Speed = 3.0f;
+
+	InterpolationTotalTrans( 0, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.x, 
+		m_pFrame[m_iNextFrame].m_vAniTransStartValue.x, 
+		Speed, 
+		FALSE, 
+		CFrequency::GetInstance()->getFrametime() );
+
+	InterpolationTotalTrans( 1, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.y, 
+		m_pFrame[m_iNextFrame].m_vAniTransStartValue.y, 
+		Speed, 
+		FALSE, 
+		CFrequency::GetInstance()->getFrametime() );
+
+	InterpolationTotalTrans( 2, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.z, 
+		m_pFrame[m_iNextFrame].m_vAniTransStartValue.z, 
+		Speed, 
+		FALSE, 
+		CFrequency::GetInstance()->getFrametime() );
+
+	InterpolationTotalRotate( 0, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.x, 
+		m_pFrame[m_iNextFrame].m_vAniRotateStartValue.x, 
+		Speed, 
+		FALSE, 
+		CFrequency::GetInstance()->getFrametime() );
+
+	InterpolationTotalRotate( 1, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y, 
+		m_pFrame[m_iNextFrame].m_vAniRotateStartValue.y, 
+		Speed, 
+		FALSE, 
+		CFrequency::GetInstance()->getFrametime() );
+
+	InterpolationTotalRotate( 2, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z, 
+		m_pFrame[m_iNextFrame].m_vAniRotateStartValue.z, 
+		Speed, 
+		FALSE, 
+		CFrequency::GetInstance()->getFrametime() );
+
+	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[0];
+	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[1];
+	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[2];
+
+	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[0];
+	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[1];
+	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[2];
+
+	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	{
 		m_pBox[Loop].Set_ControlTranslate( 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.x );
 		m_pBox[Loop].Set_ControlTranslate( 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.y );
 		m_pBox[Loop].Set_ControlTranslate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.z );
@@ -768,51 +1032,190 @@ VOID CMonster::Update()
 		m_pBox[Loop].Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.y );
 		m_pBox[Loop].Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.z );
 
+		m_pBox[Loop].UpdateMonsterPos( m_vPreControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, 
+			m_vControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, m_fAngle );
+
 		if( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAnimation == TRUE )
 		{
-			AnimationTrans( Loop, 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.x, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.x, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.x, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransXReplay, 
+			InterpolationTrans( Loop, 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x, 
+				( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.x, 
+				Speed, 
+				FALSE, 
 				CFrequency::GetInstance()->getFrametime() );
 
-			AnimationTrans( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.y, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.y, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.y, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransYReplay, 
+			InterpolationTrans( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y, 
+				( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.y, 
+				Speed, 
+				FALSE, 
 				CFrequency::GetInstance()->getFrametime() );
 
-			AnimationTrans( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.z, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.z, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.z, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransZReplay, 
+			InterpolationTrans( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z, 
+				( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.z, 
+				Speed,
+				FALSE, 
 				CFrequency::GetInstance()->getFrametime() );
 
-			AnimationRotate( Loop, 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.x, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.x, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateXReplay, 
+			InterpolationRotate( Loop, 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.x, 
+				( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.x, 
+				Speed,
+				FALSE, 
 				CFrequency::GetInstance()->getFrametime() );
 
-			AnimationRotate( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.y, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.y, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.y, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateYReplay, 
+			InterpolationRotate( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.y, 
+				( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.y, 
+				Speed,
+				FALSE, 
 				CFrequency::GetInstance()->getFrametime() );
 
-			AnimationRotate( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.z, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.z, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.z, 
-				m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateZReplay, 
+			InterpolationRotate( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.z, 
+				( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.z, 
+				Speed,
+				FALSE, 
 				CFrequency::GetInstance()->getFrametime() );
 		}
 
 		//m_pBox[Loop].Update();
 		m_pBox[Loop].Calcul_MatWorld();
 		m_pBox[Loop].UpdateMonsterMatrix( Get_MatWorld() );
+
+		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniRotateEndCheck[0];
+		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniRotateEndCheck[1];
+		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniRotateEndCheck[2];
+
+		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[0];
+		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[1];
+		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[2];
+		
+		//CDebugConsole::GetInstance()->Messagef( L"AniEndCheck : %d\n", m_iChangeAnimationEndCheck );
 	}
 
-#ifndef _YOON
+	if( m_iChangeAnimationEndCheck == 0 )
+	{
+		m_iSelectedFrameNum = m_iNextFrame;
+		m_bChangingAnimation = FALSE;
+
+		for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+		{
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[0] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.x;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[1] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.y;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[2] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.z;
+
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[0] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[1] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.y;
+			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[2] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.z;
+		}
+
+	}	
+}
+
+VOID CMonster::Update()
+{
+	//CDebugConsole::GetInstance()->Messagef( L"ChangingAnimation : %d\n", m_bChangingAnimation );
+
+	if( m_bChangingAnimation == FALSE )
+	{
+		if( m_pFrame[m_iSelectedFrameNum].m_bAnimation == TRUE )
+		{
+			AnimationTotalTrans( 0, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.x, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.x, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.x, 
+				m_pFrame[m_iSelectedFrameNum].m_bTransXReplay, 
+				CFrequency::GetInstance()->getFrametime() );
+			AnimationTotalTrans( 1, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.y, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.y, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.y, 
+				m_pFrame[m_iSelectedFrameNum].m_bTransYReplay, 
+				CFrequency::GetInstance()->getFrametime() );
+			AnimationTotalTrans( 2, m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.z, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniTransEndValue.z, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniTransSpeed.z, 
+				m_pFrame[m_iSelectedFrameNum].m_bTransZReplay, 
+				CFrequency::GetInstance()->getFrametime() );
+
+			AnimationTotalRotate( 0, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.x, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.x, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.x, 
+				m_pFrame[m_iSelectedFrameNum].m_bRotateXReplay, 
+				CFrequency::GetInstance()->getFrametime() );
+
+			AnimationTotalRotate( 1, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.y, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.y, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.y, 
+				m_pFrame[m_iSelectedFrameNum].m_bRotateYReplay, 
+				CFrequency::GetInstance()->getFrametime() );
+
+			AnimationTotalRotate( 2, m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.z, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniRotateEndValue.z, 
+				m_pFrame[m_iSelectedFrameNum].m_vAniRotateSpeed.z, 
+				m_pFrame[m_iSelectedFrameNum].m_bRotateZReplay, 
+				CFrequency::GetInstance()->getFrametime() );
+		}
+
+		for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+		{
+			m_pBox[Loop].UpdateMonsterPos( m_vPreControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, 
+				m_vControl + m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate, m_fAngle );
+
+			m_pBox[Loop].Set_ControlTranslate( 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.x );
+			m_pBox[Loop].Set_ControlTranslate( 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.y );
+			m_pBox[Loop].Set_ControlTranslate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.z );
+			m_pBox[Loop].Set_ControlRotate( 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.x );
+			m_pBox[Loop].Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.y );
+			m_pBox[Loop].Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.z );
+
+			if( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAnimation == TRUE )
+			{
+				AnimationTrans( Loop, 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.x, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.x, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.x, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransXReplay, 
+					CFrequency::GetInstance()->getFrametime() );
+
+				AnimationTrans( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.y, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.y, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.y, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransYReplay, 
+					CFrequency::GetInstance()->getFrametime() );
+
+				AnimationTrans( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.z, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransEndValue.z, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSpeed.z, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bTransZReplay, 
+					CFrequency::GetInstance()->getFrametime() );
+
+				AnimationRotate( Loop, 0, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.x, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.x, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateXReplay, 
+					CFrequency::GetInstance()->getFrametime() );
+
+				AnimationRotate( Loop, 1, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.y, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.y, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.y, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateYReplay, 
+					CFrequency::GetInstance()->getFrametime() );
+
+				AnimationRotate( Loop, 2, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.z, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateEndValue.z, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSpeed.z, 
+					m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bRotateZReplay, 
+					CFrequency::GetInstance()->getFrametime() );
+			}
+
+			//CDebugConsole::GetInstance()->Messagef( L"Loop : %d / Start : %f \n", Loop, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x );
+			//CDebugConsole::GetInstance()->Messagef( L"Loop : %d / End : %f \n", Loop, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x );
+
+			//m_pBox[Loop].Update();
+			m_pBox[Loop].Calcul_MatWorld();
+			m_pBox[Loop].UpdateMonsterMatrix( Get_MatWorld() );
+		}
+	}
+	else
+	{
+		AniInterpolation();
+	}
+
+#ifndef _DEBUG
 	static INT TempLoop = 0;
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{

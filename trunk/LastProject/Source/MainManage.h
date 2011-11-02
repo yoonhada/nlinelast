@@ -48,6 +48,9 @@ private:
 	BOOL m_bHost;
 	WORD m_iClientNumber;
 
+	//·Î°í
+	CCharactor* m_pLogo;
+
 public:
 	CCharactor* Get_Charactors()
 	{

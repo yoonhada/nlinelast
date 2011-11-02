@@ -144,6 +144,11 @@ public:
 		return m_bActive;
 	}
 
+	const BOOL Get_bMonster()
+	{
+		return m_bMonster;
+	}
+
 private:
 	VOID _LoadRelease();
 	VOID _SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor );

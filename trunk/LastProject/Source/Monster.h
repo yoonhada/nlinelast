@@ -18,13 +18,21 @@ public:
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName );
 	VOID Realese();
 	VOID Load( WCHAR* a_pFileName );
+	VOID ChangeAnimation( INT a_iAniNum );
 
 private:
+	VOID AniInterpolation();
 
 	VOID AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
 	VOID AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
 	VOID AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
 	VOID AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
+
+	VOID InterpolationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
+	VOID InterpolationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
+	VOID InterpolationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
+	VOID InterpolationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
+
 
 	//몬스터 관리
 	INT	  m_iCharEditorMax;				///< 몬스터 박스 최대 갯수
@@ -60,6 +68,11 @@ private:
 		BOOL		m_bTransReplay[3];
 		FLOAT		m_fRotation[3];
 		BOOL		m_bRotReplay[3];
+		BOOL		m_bAniRotateEndCheck[3];
+		
+		BOOL		m_bAniTransEndCheck[3];
+		D3DXVECTOR3 m_vAniTransSave;
+		D3DXVECTOR3 m_vAniRotateSave;
 
 		BoxData()
 		{
@@ -86,6 +99,8 @@ private:
 			ZeroMemory( m_fRotation, sizeof(m_fRotation) );
 			ZeroMemory( m_bTransReplay, sizeof(m_bTransReplay) );
 			ZeroMemory( m_bRotReplay, sizeof(m_bRotReplay) );
+			ZeroMemory( m_bAniRotateEndCheck, sizeof(m_bAniRotateEndCheck) );
+			ZeroMemory( m_bAniTransEndCheck, sizeof(m_bAniTransEndCheck) );
 		}
 	};
 
@@ -112,6 +127,11 @@ private:
 		BOOL		m_bTransReplay[3];
 		FLOAT		m_fRotation[3];
 		BOOL		m_bRotReplay[3];
+		BOOL		m_bAniRotateEndCheck[3];
+		
+		BOOL		m_bAniTransEndCheck[3];
+		D3DXVECTOR3 m_vAniTransSave;
+		D3DXVECTOR3 m_vAniRotateSave;
 
 		BoxData*	m_pBoxData;
 
@@ -137,6 +157,8 @@ private:
 			ZeroMemory( m_fRotation, sizeof(m_fRotation) );
 			ZeroMemory( m_bTransReplay, sizeof(m_bTransReplay) );
 			ZeroMemory( m_bRotReplay, sizeof(m_bRotReplay) );
+			ZeroMemory( m_bAniRotateEndCheck, sizeof(m_bAniRotateEndCheck) );
+			ZeroMemory( m_bAniTransEndCheck, sizeof(m_bAniTransEndCheck) );
 		}
 	};
 
@@ -145,16 +167,25 @@ private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 	CMatrices*				m_pMatrices;
 
-	D3DXVECTOR3 m_vPreControl; ///< 몬스터 이전 위치
-	D3DXVECTOR3 m_vControl;  ///< 몬스터 위치
-	D3DXVECTOR3 m_vColissionControl; ///< 몬스터 충돌용 위치
-	FLOAT		m_fAngle;	 ///< 몬스터 각도
-	D3DXVECTOR3 m_vFowardVector; /// 몬스터 전진 이동 벡터
-	D3DXVECTOR3 m_vSideStepVector; /// 몬스터 좌우 이동 벡터
+	D3DXVECTOR3 m_vPreControl;			  ///< 몬스터 이전 위치
+	D3DXVECTOR3 m_vControl;				  ///< 몬스터 위치
+	D3DXVECTOR3 m_vColissionControl;      ///< 몬스터 충돌용 위치
+	FLOAT		m_fAngle;				  ///< 몬스터 각도
+	D3DXVECTOR3 m_vFowardVector;		  /// 몬스터 전진 이동 벡터
+	D3DXVECTOR3 m_vSideStepVector;		  /// 몬스터 좌우 이동 벡터
 
-	D3DXMATRIXA16 m_matControl;         ///< 조작 행렬
+	D3DXMATRIXA16 m_matControl;           ///< 조작 행렬
 
 	//CBoundBox m_pBoundBox;
+
+	INT m_iChangeAnimationEndCheck;
+	INT m_iNextFrame;
+	BOOL m_bChangingAnimation;
+	FLOAT m_fMaxInterpolationLength;
+
+	FLOAT m_fLengthRotate;
+	FLOAT m_fSpeedRotate;
+
 
 };
 

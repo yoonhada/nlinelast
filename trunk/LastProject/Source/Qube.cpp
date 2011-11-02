@@ -58,7 +58,7 @@ VOID CQube::Update( CBoundBox * pBB )
 		}
 	}
 
-	vecBoundBox = CTree::GetInstance()->GetChaVector();
+	/*vecBoundBox = CTree::GetInstance()->GetChaVector();
 	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{
 		vDir = m_vAccelerate + m_vMomentum;
@@ -81,7 +81,7 @@ VOID CQube::Update( CBoundBox * pBB )
 
 			Iter++;
 		}
-	}
+	}*/
 
 	// 지면체크
 	vDir = m_vPos + m_vAccelerate + m_vMomentum;

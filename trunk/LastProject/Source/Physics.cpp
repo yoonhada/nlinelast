@@ -119,13 +119,13 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 )
 {
-	CDebugConsole::GetInstance()->Messagef( "x %0.2f ", _pCube2->GetSize(0) );		
-	CDebugConsole::GetInstance()->Messagef( "y %0.2f ", _pCube2->GetSize(1) );		
-	CDebugConsole::GetInstance()->Messagef( "z %0.2f ", _pCube2->GetSize(2) );		
-	CDebugConsole::GetInstance()->Messagef( "x %0.2f ", _pCube2->GetSize(3) );		
-	CDebugConsole::GetInstance()->Messagef( "y %0.2f ", _pCube2->GetSize(4) );		
-	CDebugConsole::GetInstance()->Messagef( "z %0.2f ", _pCube2->GetSize(5) );		
-	CDebugConsole::GetInstance()->Messagef( "\n" );		
+	//CDebugConsole::GetInstance()->Messagef( "x %0.2f ", _pCube2->GetSize(0) );		
+	//CDebugConsole::GetInstance()->Messagef( "y %0.2f ", _pCube2->GetSize(1) );		
+	//CDebugConsole::GetInstance()->Messagef( "z %0.2f ", _pCube2->GetSize(2) );		
+	//CDebugConsole::GetInstance()->Messagef( "x %0.2f ", _pCube2->GetSize(3) );		
+	//CDebugConsole::GetInstance()->Messagef( "y %0.2f ", _pCube2->GetSize(4) );		
+	//CDebugConsole::GetInstance()->Messagef( "z %0.2f ", _pCube2->GetSize(5) );		
+	//CDebugConsole::GetInstance()->Messagef( "\n" );		
 	for ( int i = 0; i < 8; ++i)
 	{		
 		if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), D3DXVECTOR3(0, 0, 0), _pCube2 ) )
