@@ -34,4 +34,12 @@ extern FLOAT FastRand2();
 #define PACKET_SIZE 1024
 #define NETWORK_RECV_TIME 0.25f
 
+// File
+#define WEAPONFILE L".\\WeaponFile.ini"
+
+// Debug
+#define _YOON
+//#define _GRAP
+#define _ALPHAMON
+
 #endif

@@ -14,13 +14,13 @@ CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
 
 CWeapon::~CWeapon()
 {
+	if ( m_WeaponType.nType == SPANNER )
+		PrivateProfile( WRITE );
 	Release();
 }
 
 VOID CWeapon::Clear()
 {
-	//ZeroMemory( &m_WeaponType, sizeof( m_WeaponType ) );
-	//m_WeaponType.pBBA.Clear();
 }
 
 HRESULT CWeapon::Release()
@@ -30,100 +30,83 @@ HRESULT CWeapon::Release()
 	return S_OK;
 }
 
+VOID CWeapon::PrivateProfile(BOOL bRW)
+{
+	if( bRW == READ )
+	{
+		m_WeaponType.nFrameBegin[0] = GetPrivateProfileInt( L"Frame", L"Begin0",	 0, WEAPONFILE );
+		m_WeaponType.nFrameBegin[1] = GetPrivateProfileInt( L"Frame", L"Begin1",	 0, WEAPONFILE );
+		m_WeaponType.nFrameBegin[2] = GetPrivateProfileInt( L"Frame", L"Begin2",	10, WEAPONFILE );
+		m_WeaponType.nFrameBegin[3] = GetPrivateProfileInt( L"Frame", L"Begin3",	20, WEAPONFILE );
+		m_WeaponType.nFrameTime[0]  = GetPrivateProfileInt( L"Frame", L"Time0",		10, WEAPONFILE );
+		m_WeaponType.nFrameTime[1]  = GetPrivateProfileInt( L"Frame", L"Time1",		10, WEAPONFILE );
+		m_WeaponType.nFrameTime[2]  = GetPrivateProfileInt( L"Frame", L"Time2",		10, WEAPONFILE );
+		m_WeaponType.nFrameTime[3]  = GetPrivateProfileInt( L"Frame", L"Time3",		10, WEAPONFILE );
+		m_WeaponType.nFrameAtk[0]   = GetPrivateProfileInt( L"Frame", L"Atk0",		 4, WEAPONFILE );
+		m_WeaponType.nFrameAtk[1]   = GetPrivateProfileInt( L"Frame", L"Atk1",		 4, WEAPONFILE );
+		m_WeaponType.nFrameAtk[2]   = GetPrivateProfileInt( L"Frame", L"Atk2",		 4, WEAPONFILE );
+		m_WeaponType.nFrameAtk[3]   = GetPrivateProfileInt( L"Frame", L"Atk3",		 4, WEAPONFILE );
+		m_WeaponType.nDelay[0]		= GetPrivateProfileInt( L"Frame", L"Delay0",	10, WEAPONFILE );
+		m_WeaponType.nDelay[1]		= GetPrivateProfileInt( L"Frame", L"Delay1",	10, WEAPONFILE );
+		m_WeaponType.nDelay[2]		= GetPrivateProfileInt( L"Frame", L"Delay2",	10, WEAPONFILE );
+		m_WeaponType.nDelay[3]		= GetPrivateProfileInt( L"Frame", L"Delay3",	10, WEAPONFILE );
+
+		m_pMap->AddAnimationData ( IDLE,		 EnumCharFrame::BASE, m_WeaponType.nFrameBegin[0], m_WeaponType.nFrameBegin[0], TRUE );
+		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, m_WeaponType.nFrameBegin[1], m_WeaponType.nFrameTime[1], FALSE);
+		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, m_WeaponType.nFrameBegin[2], m_WeaponType.nFrameTime[2], FALSE);
+
+		m_nState = 0;
+		m_nFrame = 0;
+		m_WeaponType.vDir[0] = D3DXVECTOR3(-1.0f,  0.0f, 0.0f );
+		m_WeaponType.vDir[1] = D3DXVECTOR3(-0.2f, -1.0f, 0.0f );
+
+	}
+	else
+	{
+		WCHAR buf[256];
+		wsprintf( buf, L"%d", m_WeaponType.nFrameBegin[0] ); WritePrivateProfileString( L"Frame", L"Begin0",	buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameBegin[1] ); WritePrivateProfileString( L"Frame", L"Begin1",	buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameBegin[2] ); WritePrivateProfileString( L"Frame", L"Begin2",	buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameBegin[3] ); WritePrivateProfileString( L"Frame", L"Begin3",	buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameTime[0] );  WritePrivateProfileString( L"Frame", L"Time0",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameTime[1] );  WritePrivateProfileString( L"Frame", L"Time1",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameTime[2] );  WritePrivateProfileString( L"Frame", L"Time2",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameTime[3] );  WritePrivateProfileString( L"Frame", L"Time3",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameAtk[0] );   WritePrivateProfileString( L"Frame", L"Atk0",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameAtk[1] );   WritePrivateProfileString( L"Frame", L"Atk1",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameAtk[2] );   WritePrivateProfileString( L"Frame", L"Atk2",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nFrameAtk[3] );   WritePrivateProfileString( L"Frame", L"Atk3",		buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nDelay[0] );	     WritePrivateProfileString( L"Frame", L"Delay0",	buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nDelay[1] );	     WritePrivateProfileString( L"Frame", L"Delay1",	buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nDelay[2] );	     WritePrivateProfileString( L"Frame", L"Delay2",	buf, WEAPONFILE );
+		wsprintf( buf, L"%d", m_WeaponType.nDelay[3] );	     WritePrivateProfileString( L"Frame", L"Delay3",	buf, WEAPONFILE );
+	}
+}
+
 HRESULT CWeapon::Create()
 {
 	switch ( m_WeaponType.nType )
 	{
-		
 	case SPANNER:
-		m_pMap->Create( L"ASE File/Spanner.ASE", NULL );
-		m_WeaponType.nFrameBegin[0] = 0;		
-		m_WeaponType.nFrameBegin[1] = 0;		
-		m_WeaponType.nFrameBegin[2] = 20;		
-		m_WeaponType.nFrameBegin[3] = 30;		
-		m_WeaponType.nFrameTime[0]  = 0;		
-		m_WeaponType.nFrameTime[1]  = 12;		
-		m_WeaponType.nFrameTime[2]  = 12;		
-		m_WeaponType.nFrameTime[3]  = 12;
-		m_WeaponType.nFrameAtk[0] = static_cast<INT>(m_WeaponType.nFrameTime[0] * 0.6f);
-		m_WeaponType.nFrameAtk[1] = static_cast<INT>(m_WeaponType.nFrameTime[1] * 0.6f);
-		m_WeaponType.nFrameAtk[2] = static_cast<INT>(m_WeaponType.nFrameTime[2] * 0.6f);
-		m_WeaponType.nFrameAtk[3] = static_cast<INT>(m_WeaponType.nFrameTime[3] * 0.6f);
-		m_WeaponType.nDelay[0] = 12;
-		m_WeaponType.nDelay[1] = 12;
-		m_WeaponType.nDelay[2] = 12;
-		m_WeaponType.nDelay[3] = 12;
+		m_pMap->Create( L"ASE File/Spanner.ASE", NULL );		
+		PrivateProfile();
 		break;
 	case FRYPEN:
 		m_pMap->Create( L"ASE File/FlyingFan.ASE", NULL );
-		m_WeaponType.nFrameBegin[0] = 0;		
-		m_WeaponType.nFrameBegin[1] = 0;		
-		m_WeaponType.nFrameBegin[2] = 20;		
-		m_WeaponType.nFrameBegin[3] = 30;		
-		m_WeaponType.nFrameTime[0]  = 12;		
-		m_WeaponType.nFrameTime[1]  = 12;		
-		m_WeaponType.nFrameTime[2]  = 12;		
-		m_WeaponType.nFrameTime[3]  = 12;		
-		m_WeaponType.nFrameAtk[0] = static_cast<INT>(m_WeaponType.nFrameTime[0] * 0.6f);
-		m_WeaponType.nFrameAtk[1] = static_cast<INT>(m_WeaponType.nFrameTime[1] * 0.6f);
-		m_WeaponType.nFrameAtk[2] = static_cast<INT>(m_WeaponType.nFrameTime[2] * 0.6f);
-		m_WeaponType.nFrameAtk[3] = static_cast<INT>(m_WeaponType.nFrameTime[3] * 0.6f);
-		m_WeaponType.nDelay[0] = 12;
-		m_WeaponType.nDelay[1] = 12;
-		m_WeaponType.nDelay[2] = 12;
-		m_WeaponType.nDelay[3] = 12;
+		PrivateProfile();
 		break;
 	case GUITAR:
 		m_pMap->Create( L"ASE File/Guitar.ASE", NULL );
-		m_WeaponType.nFrameBegin[0] = 0;		
-		m_WeaponType.nFrameBegin[1] = 0;		
-		m_WeaponType.nFrameBegin[2] = 20;		
-		m_WeaponType.nFrameBegin[3] = 30;		
-		m_WeaponType.nFrameTime[0]  = 12;		
-		m_WeaponType.nFrameTime[1]  = 12;		
-		m_WeaponType.nFrameTime[2]  = 12;		
-		m_WeaponType.nFrameTime[3]  = 12;	
-		m_WeaponType.nFrameAtk[0] = static_cast<INT>(m_WeaponType.nFrameTime[0] * 0.6f);
-		m_WeaponType.nFrameAtk[1] = static_cast<INT>(m_WeaponType.nFrameTime[1] * 0.6f);
-		m_WeaponType.nFrameAtk[2] = static_cast<INT>(m_WeaponType.nFrameTime[2] * 0.6f);
-		m_WeaponType.nFrameAtk[3] = static_cast<INT>(m_WeaponType.nFrameTime[3] * 0.6f);
-		m_WeaponType.nDelay[0] = 12;
-		m_WeaponType.nDelay[1] = 12;
-		m_WeaponType.nDelay[2] = 12;
-		m_WeaponType.nDelay[3] = 12;
+		PrivateProfile();
 		break;
 	case MAGICSTICK:
 		m_pMap->Create( L"ASE File/MagicStick.ASE", NULL );
-		m_WeaponType.nFrameBegin[0] = 0;		
-		m_WeaponType.nFrameBegin[1] = 0;		
-		m_WeaponType.nFrameBegin[2] = 20;		
-		m_WeaponType.nFrameBegin[3] = 30;		
-		m_WeaponType.nFrameTime[0]  = 12;		
-		m_WeaponType.nFrameTime[1]  = 12;		
-		m_WeaponType.nFrameTime[2]  = 12;		
-		m_WeaponType.nFrameTime[3]  = 12;	
-		m_WeaponType.nFrameAtk[0] = static_cast<INT>(m_WeaponType.nFrameTime[0] * 0.6f);
-		m_WeaponType.nFrameAtk[1] = static_cast<INT>(m_WeaponType.nFrameTime[1] * 0.6f);
-		m_WeaponType.nFrameAtk[2] = static_cast<INT>(m_WeaponType.nFrameTime[2] * 0.6f);
-		m_WeaponType.nFrameAtk[3] = static_cast<INT>(m_WeaponType.nFrameTime[3] * 0.6f);
-		m_WeaponType.nDelay[0] = 12;
-		m_WeaponType.nDelay[1] = 12;
-		m_WeaponType.nDelay[2] = 12;
-		m_WeaponType.nDelay[3] = 12;
+		PrivateProfile();
 		break;
 	default:
 		break;
 	}
 
-	
-	m_pMap->AddAnimationData ( IDLE,		 EnumCharFrame::BASE, m_WeaponType.nFrameBegin[0], m_WeaponType.nFrameBegin[0], TRUE );
-	m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, m_WeaponType.nFrameBegin[1], m_WeaponType.nFrameTime[1], FALSE);
-	m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, m_WeaponType.nFrameBegin[2], m_WeaponType.nFrameTime[2], FALSE);
-
-	m_nState = 0;
-	m_nFrame = 0;
-	m_WeaponType.vDir[0] = D3DXVECTOR3(-1.0f,  0.0f, 0.0f );
-	m_WeaponType.vDir[1] = D3DXVECTOR3(-0.2f, -1.0f, 0.0f );
 
 	return S_OK;
 }
@@ -154,49 +137,50 @@ VOID CWeapon::SetKeyB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 
 VOID CWeapon::Update()
 {
-//#ifdef _GRAP
-//	if( CInput::GetInstance()->Get_F9button() )
-//	{
-//		CInput::GetInstance()->Set_F9button(FALSE);
-//		OPENFILENAME OFN;
-//		WCHAR lpstrFile[MAX_PATH]=L"";
-//
-//		memset(&OFN, 0, sizeof(OPENFILENAME));
-//		OFN.lStructSize = sizeof(OPENFILENAME);
-//		OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
-//		OFN.lpstrFilter=TEXT("ASE 파일(*.ASE)\0*.ASE\0");
-//		OFN.lpstrFile=lpstrFile;
-//		OFN.nMaxFile=MAX_PATH;
-//		if (GetOpenFileName(&OFN)!=0)
-//		{
-//			WCHAR* ptr = wcstok( lpstrFile, L"." );
-//			WCHAR Temp[255];
-//			wsprintf( Temp, L"%s.ASE", ptr );
-//
-//			m_pMap->Create( Temp, NULL );
-//			m_WeaponType.nAKeyFrameBegin = 1;		
-//			m_WeaponType.nAKeyFrameTime  = 299;		
-//			m_WeaponType.nBKeyFrameBegin = 30;
-//			m_WeaponType.nBKeyFrameTime  = 10;
-//			m_WeaponType.nDelay = 12;
-//
-//			m_pMap->AddAnimationData( IDLE,		 EnumCharFrame::BASE, 0, 0, TRUE );
-//			m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, 
-//				m_WeaponType.nAKeyFrameBegin, m_WeaponType.nAKeyFrameTime, FALSE);
-//			m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, 
-//				m_WeaponType.nBKeyFrameBegin, m_WeaponType.nAKeyFrameTime, FALSE);
-//
-//		}
-//	}
-//#endif // _GRAP
+#ifdef _GRAP
+	if( CInput::GetInstance()->Get_F9button() )
+	{
+		CInput::GetInstance()->Set_F9button(FALSE);
+		OPENFILENAME OFN;
+		WCHAR lpstrFile[MAX_PATH]=L"";
 
-	if ( ( m_nFrame == m_WeaponType.nFrameAtk[m_WeaponType.nType] ) && m_nFrame != 0 )
-	{
-		CTree::GetInstance()->GetAtkVector()->push_back(&m_WeaponType.pBBA);
-		m_nFrame--;
+		memset(&OFN, 0, sizeof(OPENFILENAME));
+		OFN.lStructSize = sizeof(OPENFILENAME);
+		OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
+		OFN.lpstrFilter=TEXT("ASE 파일(*.ASE)\0*.ASE\0");
+		OFN.lpstrFile=lpstrFile;
+		OFN.nMaxFile=MAX_PATH;
+		if (GetOpenFileName(&OFN)!=0)
+		{
+			WCHAR* ptr = wcstok( lpstrFile, L"." );
+			WCHAR Temp[255];
+			wsprintf( Temp, L"%s.ASE", ptr );
+
+			m_pMap->Create( Temp, NULL );
+			m_WeaponType.nFrameBegin[0] = 0;
+			m_WeaponType.nFrameTime[0]  = 200;
+			m_WeaponType.nFrameAtk[0]   = 40;
+			m_WeaponType.nDelay[0]		= 20;
+
+			m_pMap->AddAnimationData( IDLE,		 EnumCharFrame::BASE, 0, 0, TRUE );
+			m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, m_WeaponType.nFrameBegin[0], m_WeaponType.nFrameTime[0], FALSE);
+			m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, m_WeaponType.nFrameBegin[0], m_WeaponType.nFrameTime[0], FALSE);
+
+		}
 	}
-	else if ( m_nFrame != 0 )
+	if( CInput::GetInstance()->Get_F8button() )
 	{
+		PrivateProfile( READ );
+	}
+#endif // _GRAP
+
+	if ( m_nFrame != 0 )
+	{
+		if ( m_nFrame == m_WeaponType.nFrameAtk[m_WeaponType.nType] )
+		{
+			CTree::GetInstance()->GetAtkVector()->push_back(&m_WeaponType.pBBA);
+		}
+
 		m_nFrame--;
 	}
 	else

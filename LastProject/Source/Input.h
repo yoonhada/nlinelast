@@ -69,6 +69,11 @@ public:
 		m_bF9button = b;
 	}
 
+	BOOL Get_F8button()
+	{
+		return m_bF8button;
+	}
+
 
 private:
 	LPDIRECT3DDEVICE9 m_pD3dDevice;
@@ -86,6 +91,7 @@ private:
 	BOOL		m_bENdbutton;
 	BOOL		m_bHomebutton;
 	BOOL		m_bF9button;
+	BOOL		m_bF8button;
 	//FLOAT		m_fXPos;						///< X축 이동
 	//FLOAT		m_fZPos;						///< Z축 이동
 
