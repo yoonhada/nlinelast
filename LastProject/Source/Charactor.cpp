@@ -495,7 +495,7 @@ BOOL CCharactor::CollisionAtk()
   			Iter = vecBoundBox->begin();
 			if( CPhysics::GetInstance()->Collision( m_pBoundBox, ( *Iter ) ) )
 			{
-				CDebugConsole::GetInstance()->Messagef( "ATK\n" );
+				//CDebugConsole::GetInstance()->Messagef( "ATK\n" );
 				//CTree::GetInstance()->GetAtkVector()->clear();
 				return TRUE;
 			}

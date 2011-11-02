@@ -258,6 +258,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Map.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Map.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\NormalLine.cpp"
 					>
 				</File>
@@ -513,11 +521,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\Map.cpp"
+				RelativePath=".\Source\SceneManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\Map.h"
+				RelativePath=".\Source\SceneManager.h"
 				>
 			</File>
 		</Filter>

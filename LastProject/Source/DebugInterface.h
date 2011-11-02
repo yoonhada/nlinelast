@@ -3,6 +3,7 @@
 
 class CDebugInterface : public CSingleton<CDebugInterface>
 {
+	friend class CSingleton<CDebugInterface>;
 public:
 	CDebugInterface();
 	~CDebugInterface();
@@ -18,8 +19,18 @@ private:
 	VOID CreateDebugInterface();
 
 	TwBar *m_barDebug;
-	INT	   m_iDebugBarCount;
-	BOOL   m_bAddOK[255];
+
+	D3DXVECTOR3 m_vDebug;
+	FLOAT		m_fDebug;
+
+	std::vector<D3DXVECTOR3*> m_vDebugVector;
+	std::vector<FLOAT>		 m_fDebugVector;
+
+	INT m_iVectorCount;
+	INT	m_iFloatCount;
+	
+	INT m_iFloatAddCount;
+	INT m_iVectorAddCount;
 
 };
 

@@ -30,6 +30,8 @@ VOID	CMainManage::Clear()
 	m_iMaxCharaNum = 3;
 	m_bHost = FALSE;
 	m_iClientNumber = 0;
+
+	m_pLogo = NULL;
 }
 
 HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
@@ -81,6 +83,46 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
+	m_pLogo = new CCharactor[6];
+	D3DXVECTOR3 vec[6] = { 
+		D3DXVECTOR3( -130.0f, 0.0f, 200.0f ), 
+		D3DXVECTOR3( -160.0f, 0.0f, 200.0f ), 
+		D3DXVECTOR3( -190.0f, 0.0f, 200.0f ), 
+		D3DXVECTOR3( -220.0f, 0.0f, 200.0f ), 
+		D3DXVECTOR3( -250.0f, 0.0f, 200.0f ), 
+		D3DXVECTOR3( -280.0f, 0.0f, 200.0f ) 
+	};
+	for(INT Loop=0; Loop<6; ++Loop )
+	{
+		m_pLogo[Loop].Create( m_pD3dDevice, m_pMatrices );
+		if(Loop == 0)
+		{
+			m_pLogo[Loop].Load( L"Data/Logo/N.csav" );
+		}
+		else if(Loop == 1)
+		{
+			m_pLogo[Loop].Load( L"Data/Logo/-.csav" );
+		}
+		else if(Loop == 2)
+		{
+			m_pLogo[Loop].Load( L"Data/Logo/L.csav" );
+		}
+		else if(Loop == 3)
+		{
+			m_pLogo[Loop].Load( L"Data/Logo/I.csav" );
+		}
+		else if(Loop == 4)
+		{
+			m_pLogo[Loop].Load( L"Data/Logo/N.csav" );
+		}
+		else if(Loop == 5)
+		{
+			m_pLogo[Loop].Load( L"Data/Logo/E.csav" );
+		}
+
+		m_pLogo[Loop].Set_Position( vec[Loop] );
+	}
+
 	return S_OK;
 }
 
@@ -106,7 +148,7 @@ HRESULT CMainManage::Release()
 
 	SAFE_DELETE( m_pAlphaMon );
 
-	CTree::DestoryInstance();
+	SAFE_DELETE_ARRAY( m_pLogo );
 
 	return S_OK;
 }
@@ -219,6 +261,15 @@ VOID	CMainManage::Update()
 		//}
 	}
 
+	for( INT Loop=0; Loop<6; ++Loop )
+	{
+		m_pLogo[Loop].UpdateOtherPlayer();
+		if( CInput::GetInstance()->Get_Lbutton() )
+		{
+			//m_pLogo[Loop].TestBreakCubeAll();
+		}
+	}
+
 	static FLOAT TimeElapsed = 0.0f;
 	static FLOAT fMonsterRun = 0.0f;
 	TimeElapsed += CFrequency::GetInstance()->getFrametime();
@@ -235,8 +286,18 @@ VOID	CMainManage::Update()
 	//m_pAlphaMon->Update();
 #endif
 
-	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.1f), fMonsterRun );
+	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), fMonsterRun );
 	m_pMonster->Update();
+
+	if( CInput::GetInstance()->Get_Lbutton() )
+	{
+		m_pMonster->ChangeAnimation( 1 );
+	}
+
+	if( CInput::GetInstance()->Get_Rbutton() )
+	{
+		m_pMonster->ChangeAnimation( 0 );
+	}
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 
@@ -264,6 +325,11 @@ VOID	CMainManage::Render()
 			m_pCharactors[Loop].Render();
 		//}
 		
+	}
+
+	for( INT Loop=0; Loop<6; ++Loop )
+	{
+		m_pLogo[Loop].Render();
 	}
 #ifdef _ALPHAMON
 	m_pAlphaMon->Render();
