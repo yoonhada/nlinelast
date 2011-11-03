@@ -225,9 +225,9 @@ VOID CWeapon::Update()
 		m_nState = 0;
 	}
 	
-	//m_pMap->Set_ControlScale( 0, 0.875f );
-	//m_pMap->Set_ControlScale( 1, 0.875f );
-	//m_pMap->Set_ControlScale( 2, 0.875f );
+	m_pMap->Set_ControlScale( 0, 0.75f );
+	m_pMap->Set_ControlScale( 1, 0.75f );
+	m_pMap->Set_ControlScale( 2, 0.75f );
 	//m_pMap->Set_ControlRotate( 0, 0 );
 	//m_pMap->Set_ControlRotate( 1, 0 );
 	//m_pMap->Set_ControlRotate( 2, 0 );
