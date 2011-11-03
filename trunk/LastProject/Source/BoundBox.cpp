@@ -171,10 +171,9 @@ FLOAT CBoundBox::GetRadiusShort() const
 	return fRet;
 }
 
-
-
 VOID CBoundBox::SetAngle(FLOAT fAngle)
 {
+	// z 축 뒤집혀서 OpenGL 꺼 사용
 	m_vAxisDir[0].x =  cosf( fAngle );
 	m_vAxisDir[0].z =  sinf( fAngle );
 	m_vAxisDir[2].x = -sinf( fAngle );

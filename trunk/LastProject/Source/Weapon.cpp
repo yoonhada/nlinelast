@@ -34,40 +34,41 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 {
 	if( bRW == READ )
 	{
+		m_pMap->CleanupAnimationData();
 		m_WeaponType.nFrameBegin[0] = GetPrivateProfileInt( L"Frame", L"Begin0",	  0, WEAPONFILE );
 		m_WeaponType.nFrameBegin[1] = GetPrivateProfileInt( L"Frame", L"Begin1",	  0, WEAPONFILE );
 		m_WeaponType.nFrameBegin[2] = GetPrivateProfileInt( L"Frame", L"Begin2",	 25, WEAPONFILE );
 		m_WeaponType.nFrameBegin[3] = GetPrivateProfileInt( L"Frame", L"Begin3",	 49, WEAPONFILE );
-		m_WeaponType.nFrameBegin[4] = GetPrivateProfileInt( L"Frame", L"Begin3",	 73, WEAPONFILE );
-		m_WeaponType.nFrameBegin[5] = GetPrivateProfileInt( L"Frame", L"Begin3",	 96, WEAPONFILE );
-		m_WeaponType.nFrameBegin[6] = GetPrivateProfileInt( L"Frame", L"Begin3",	119, WEAPONFILE );
-		m_WeaponType.nFrameBegin[7] = GetPrivateProfileInt( L"Frame", L"Begin3",	141, WEAPONFILE );
+		m_WeaponType.nFrameBegin[4] = GetPrivateProfileInt( L"Frame", L"Begin4",	 73, WEAPONFILE );
+		m_WeaponType.nFrameBegin[5] = GetPrivateProfileInt( L"Frame", L"Begin5",	 96, WEAPONFILE );
+		m_WeaponType.nFrameBegin[6] = GetPrivateProfileInt( L"Frame", L"Begin6",	119, WEAPONFILE );
+		m_WeaponType.nFrameBegin[7] = GetPrivateProfileInt( L"Frame", L"Begin7",	141, WEAPONFILE );
 		m_WeaponType.nFrameTime[0]  = GetPrivateProfileInt( L"Frame", L"Time0",		200, WEAPONFILE );
 		m_WeaponType.nFrameTime[1]  = GetPrivateProfileInt( L"Frame", L"Time1",		 24, WEAPONFILE );
 		m_WeaponType.nFrameTime[2]  = GetPrivateProfileInt( L"Frame", L"Time2",		 24, WEAPONFILE );
 		m_WeaponType.nFrameTime[3]  = GetPrivateProfileInt( L"Frame", L"Time3",		 24, WEAPONFILE );
-		m_WeaponType.nFrameTime[4]  = GetPrivateProfileInt( L"Frame", L"Time3",		 23, WEAPONFILE );
-		m_WeaponType.nFrameTime[5]  = GetPrivateProfileInt( L"Frame", L"Time3",		 23, WEAPONFILE );
-		m_WeaponType.nFrameTime[6]  = GetPrivateProfileInt( L"Frame", L"Time3",		 23, WEAPONFILE );
-		m_WeaponType.nFrameTime[7]  = GetPrivateProfileInt( L"Frame", L"Time3",		 23, WEAPONFILE );
+		m_WeaponType.nFrameTime[4]  = GetPrivateProfileInt( L"Frame", L"Time4",		 23, WEAPONFILE );
+		m_WeaponType.nFrameTime[5]  = GetPrivateProfileInt( L"Frame", L"Time5",		 23, WEAPONFILE );
+		m_WeaponType.nFrameTime[6]  = GetPrivateProfileInt( L"Frame", L"Time6",		 23, WEAPONFILE );
+		m_WeaponType.nFrameTime[7]  = GetPrivateProfileInt( L"Frame", L"Time7",		 23, WEAPONFILE );
 		m_WeaponType.nFrameAtk[0]   = GetPrivateProfileInt( L"Frame", L"Atk0",		 10, WEAPONFILE );
 		m_WeaponType.nFrameAtk[1]   = GetPrivateProfileInt( L"Frame", L"Atk1",		 10, WEAPONFILE );
 		m_WeaponType.nFrameAtk[2]   = GetPrivateProfileInt( L"Frame", L"Atk2",		 10, WEAPONFILE );
 		m_WeaponType.nFrameAtk[3]   = GetPrivateProfileInt( L"Frame", L"Atk3",		 10, WEAPONFILE );
-		m_WeaponType.nFrameAtk[4]   = GetPrivateProfileInt( L"Frame", L"Atk3",		 10, WEAPONFILE );
-		m_WeaponType.nFrameAtk[5]   = GetPrivateProfileInt( L"Frame", L"Atk3",		 10, WEAPONFILE );
-		m_WeaponType.nFrameAtk[6]   = GetPrivateProfileInt( L"Frame", L"Atk3",		 10, WEAPONFILE );
-		m_WeaponType.nFrameAtk[7]   = GetPrivateProfileInt( L"Frame", L"Atk3",		 10, WEAPONFILE );
+		m_WeaponType.nFrameAtk[4]   = GetPrivateProfileInt( L"Frame", L"Atk4",		 10, WEAPONFILE );
+		m_WeaponType.nFrameAtk[5]   = GetPrivateProfileInt( L"Frame", L"Atk5",		 10, WEAPONFILE );
+		m_WeaponType.nFrameAtk[6]   = GetPrivateProfileInt( L"Frame", L"Atk6",		 10, WEAPONFILE );
+		m_WeaponType.nFrameAtk[7]   = GetPrivateProfileInt( L"Frame", L"Atk7",		 10, WEAPONFILE );
 		m_WeaponType.nDelay[0]		= GetPrivateProfileInt( L"Frame", L"Delay0",	 14, WEAPONFILE );
 		m_WeaponType.nDelay[1]		= GetPrivateProfileInt( L"Frame", L"Delay1",	 14, WEAPONFILE );
 		m_WeaponType.nDelay[2]		= GetPrivateProfileInt( L"Frame", L"Delay2",	 14, WEAPONFILE );
 		m_WeaponType.nDelay[3]		= GetPrivateProfileInt( L"Frame", L"Delay3",	 14, WEAPONFILE );
-		m_WeaponType.nDelay[4]		= GetPrivateProfileInt( L"Frame", L"Delay3",	 14, WEAPONFILE );
-		m_WeaponType.nDelay[5]		= GetPrivateProfileInt( L"Frame", L"Delay3",	 14, WEAPONFILE );
-		m_WeaponType.nDelay[6]		= GetPrivateProfileInt( L"Frame", L"Delay3",	 14, WEAPONFILE );
-		m_WeaponType.nDelay[7]		= GetPrivateProfileInt( L"Frame", L"Delay3",	 14, WEAPONFILE );
+		m_WeaponType.nDelay[4]		= GetPrivateProfileInt( L"Frame", L"Delay4",	 14, WEAPONFILE );
+		m_WeaponType.nDelay[5]		= GetPrivateProfileInt( L"Frame", L"Delay5",	 14, WEAPONFILE );
+		m_WeaponType.nDelay[6]		= GetPrivateProfileInt( L"Frame", L"Delay6",	 14, WEAPONFILE );
+		m_WeaponType.nDelay[7]		= GetPrivateProfileInt( L"Frame", L"Delay7",	 14, WEAPONFILE );
 
-		m_pMap->AddAnimationData ( IDLE,	  EnumCharFrame::BASE,		m_WeaponType.nFrameBegin[0], m_WeaponType.nFrameBegin[0], TRUE );
+		m_pMap->AddAnimationData ( IDLE,	  EnumCharFrame::BASE,		m_WeaponType.nFrameBegin[0], m_WeaponType.nFrameTime[0], TRUE );
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1,	m_WeaponType.nFrameBegin[1], m_WeaponType.nFrameTime[1], FALSE);
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2,	m_WeaponType.nFrameBegin[2], m_WeaponType.nFrameTime[2], FALSE);
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::A,			m_WeaponType.nFrameBegin[3], m_WeaponType.nFrameTime[3], FALSE);
@@ -78,8 +79,8 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 
 		m_nState = 0;
 		m_nFrame = 0;
-		m_WeaponType.vDir[0] = D3DXVECTOR3(-1.0f,  0.0f, 0.0f );
-		m_WeaponType.vDir[1] = D3DXVECTOR3(-0.2f, -1.0f, 0.0f );
+		m_WeaponType.vDir[0] = D3DXVECTOR3(-0.4f, -1.3f, 0.0f );
+		m_WeaponType.vDir[1] = D3DXVECTOR3( 1.2f,  0.0f, 0.0f );
 
 	}
 	else
