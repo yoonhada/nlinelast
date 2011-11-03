@@ -257,6 +257,11 @@ BOOL Map::SetAnimation( DWORD _dID )
 	return FALSE;
 }
 
+VOID Map::CleanupAnimationData()
+{
+	m_pASEParser->CleanupAnimationData();
+}
+
 HRESULT	Map::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
 {
 	if( FAILED( m_pd3dDevice->CreateVertexBuffer(	_nVertex * _Size,

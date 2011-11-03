@@ -77,6 +77,7 @@ public:
 	//	Animation Test
 	BOOL		AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
 	BOOL		SetAnimation( DWORD _dID );
+	VOID		CleanupAnimationData();
 	//	End
 	
 private:
