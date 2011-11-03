@@ -761,58 +761,52 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 
 VOID CCharactor::BreakQube()
 {
-//	INT Loop, nNeighbor;
-//	D3DXVECTOR3 vPos;
-//
-//	if( m_bAliveCheck == TRUE )
-//	{
-//		std::vector<CBoundBox*> * vecBoundBox;
-//		std::vector<CBoundBox*>::iterator Iter;
-//
-//		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
-//		{
-//			if( m_vectorCube[Loop] == NULL )
-//				continue;
-//
-//			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
-//			{
-//				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
-//			}
-//			else
-//			{
-//				vecBoundBox = CTree::GetInstance()->GetAtkVector();
-//				if ( vecBoundBox != NULL && vecBoundBox->size() )
-//				{
-//					BOOL bRet = FALSE;
-//					Iter = vecBoundBox->begin();
-//
-//					//do 
-//					//{
-//						vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-//						D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
-//						if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), m_pBoundBox) )
-//						{
-//							bRet = TRUE;
-//							BreakListMake( Loop, (*Iter) );
-//
-//							for (int i = 0; i < 6; ++i )
-//							{
-//								nNeighbor = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, i);
-//
-//								if (nNeighbor > 0 && m_vectorCube[nNeighbor]->Get_Visible( m_iSelectedFrameNum ) )
-//								{
-//									BreakListMake( nNeighbor, (*Iter) );
-//									//m_BreakList.push_back(nNeighbor);
-//								}
-//							}
-//							break;
-//						}
-//
-////					} while ( bRet );
-//				}
-//			}
-//		}
-//	}
+	INT Loop, nNeighbor;
+	D3DXVECTOR3 vPos;
+
+	if( m_bAliveCheck == TRUE )
+	{
+		std::vector<CBoundBox*> * vecBoundBox;
+		std::vector<CBoundBox*>::iterator Iter;
+
+		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
+		{
+			if( m_vectorCube[Loop] == NULL )
+				continue;
+
+			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			{
+				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+			}
+			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) )
+			{
+				vecBoundBox = CTree::GetInstance()->GetAtkVector();
+				if ( vecBoundBox != NULL && vecBoundBox->size() )
+				{
+					Iter = vecBoundBox->begin();
+
+					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
+					D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
+					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
+					{
+						BreakListMake( Loop, (*Iter) );
+
+						//for (int i = 0; i < 6; ++i )
+						//{
+						//	nNeighbor = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, i);
+
+						//	if (nNeighbor > 0 && m_vectorCube[nNeighbor]->Get_Visible( m_iSelectedFrameNum ) )
+						//	{
+						//		BreakListMake( nNeighbor, (*Iter) );
+						//		//m_BreakList.push_back(nNeighbor);
+						//	}
+						//}
+						//break;
+					}
+				}
+			}
+		}
+	}
 	CTree::GetInstance()->GetAtkVector()->clear();
 }
 
@@ -820,10 +814,7 @@ VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 {
 	D3DXVECTOR3 vDir = pBB->GetDirection();
 	D3DXMATRIXA16 mat = Get_MatWorld();
-	mat._41 = 0.0f;
-	mat._42 = 0.0f;
-	mat._43 = 0.0f;
-	D3DXVec3TransformCoord( &vDir, &vDir, &Get_MatWorld() );
+	D3DXVec3TransformCoord( &vDir, &vDir, &(pBB->GetAxisMat()) );
 
 	m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
 #ifndef _ALPHAMON
