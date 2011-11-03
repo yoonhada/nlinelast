@@ -27,6 +27,11 @@ VOID	CMainManage::Clear()
 	m_pAlphaMon = NULL;
 	m_pAxis = NULL;
 
+	for( INT i=0; i<4; ++i )
+	{
+		m_pCharactorList[i] = NULL;
+	}
+
 	m_iMaxCharaNum = 3;
 	m_bHost = FALSE;
 	m_iClientNumber = 0;
@@ -59,6 +64,10 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//캐릭터 생성
 	CreateCharactor();
+	m_pCharactorList[0] = m_pMyCharactor;
+	m_pCharactorList[1] = &m_pCharactors[0];
+	m_pCharactorList[2] = &m_pCharactors[1];
+	m_pCharactorList[3] = &m_pCharactors[2];
 
 	//몬스터 생성
 	m_pMonster = new CMonster;
@@ -169,6 +178,7 @@ VOID CMainManage::CreateCharactor()
 	FLOAT fYawZero = 1.0f;
 	m_pMyCharactor = new CCharactor( m_pD3dDevice, m_pMatrices );
 	m_pMyCharactor->Create();
+	m_pMyCharactor->Set_Active( TRUE );
 	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
 	m_pMyCharactor->CreateWeapon( CWeapon::SPANNER );
 

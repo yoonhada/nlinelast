@@ -4,6 +4,8 @@
 #include "Charactor.h"
 #include "Weapon.h"
 
+#include "Seek.h"
+
 CMonster::CMonster()
 {
 	Clear();
@@ -32,6 +34,9 @@ VOID CMonster::Clear()
 	m_iChangeAnimationEndCheck = 0;
 	m_iNextFrame = 0;
 	m_bChangingAnimation = FALSE;
+
+	m_iTarget = -1;
+	m_fTargetDistance = 0.0f;
 }
 
 HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
@@ -63,6 +68,10 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 		CTree::GetInstance()->GetChaVector()->push_back( m_pBox[Loop].GetBoundBox() );
 	}
 
+	// AI
+	m_pStateMachine = new StateMachine<CMonster>( this );
+	m_pStateMachine->SetCurrentState( Seek::GetInstance() );
+
 	return S_OK;
 }
 
@@ -82,6 +91,8 @@ VOID CMonster::Realese()
 	}
 
 	//SAFE_DELETE(m_pBoundBox);
+
+	SAFE_DELETE( m_pStateMachine );
 }
 
 VOID CMonster::Load( WCHAR* a_pFileName )
@@ -1256,6 +1267,10 @@ VOID CMonster::Update()
 		if(TempLoop < 7) ++TempLoop;
 	}
 #endif
+
+
+	// AI
+	m_pStateMachine->Update();
 
 }
 

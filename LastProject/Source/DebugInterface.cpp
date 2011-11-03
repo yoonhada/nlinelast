@@ -50,7 +50,6 @@ VOID CDebugInterface::CreateDebugInterface()
 
 VOID CDebugInterface::AddMessageFloat( CHAR* a_szLabel, FLOAT& a_fValue )
 {
-
 	CHAR szTemp[255];
 	CHAR szTempLabel[255];
 	sprintf( szTemp, "%s", a_szLabel  );
@@ -61,34 +60,13 @@ VOID CDebugInterface::AddMessageFloat( CHAR* a_szLabel, FLOAT& a_fValue )
 	
 	//이미 있는 Var인지 체크 하기
 	if ( strcmpi( szTemp, szGetLabel ) != 0 )
-	{
-		m_fDebugVector.push_back( a_fValue );
-		
-		TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &m_fDebugVector[m_iFloatCount], szTempLabel );
-		
-		++m_iFloatCount;
-	}
-	else 
-	{
-		if( m_fDebugVector.size() > 0 )
-		{
-			m_fDebugVector[m_iFloatAddCount] = a_fValue;
-			//CDebugConsole::GetInstance()->Messagef( L"%f\n", m_fDebugVector[m_iFloatAddCount] );
-			if( m_iFloatAddCount < m_iFloatCount-1 )
-			{
-				++m_iFloatAddCount;
-			}
-			else
-			{
-				m_iFloatAddCount = 0;
-			}
-		}
+	{				
+		TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &a_fValue, szTempLabel );
 	}
 }
 
 VOID CDebugInterface::AddMessageVector( CHAR* a_szLabel, D3DXVECTOR3& a_vValue )
 {
-
 	CHAR szTemp[255];
 	CHAR szTempLabel[255];
 	CHAR szGetLabel[255];
@@ -102,44 +80,18 @@ VOID CDebugInterface::AddMessageVector( CHAR* a_szLabel, D3DXVECTOR3& a_vValue )
 
 		//이미 있는 Var인지 체크 하기
 		if ( strcmpi( szTemp, szGetLabel ) != 0 )
-		{
-			if(Loop == 0)
-			{
-				m_vDebugVector.push_back( &a_vValue );
-			}
-
+		{				
 			switch(Loop)
 			{
 			case 0:
-				TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &m_vDebugVector[m_iVectorCount]->x, szTempLabel );
+				TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &a_vValue.x, szTempLabel );
 				break;
 			case 1:
-				TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &m_vDebugVector[m_iVectorCount]->y, szTempLabel );
+				TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &a_vValue.y, szTempLabel );
 				break;
 			case 2:
-				TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &m_vDebugVector[m_iVectorCount]->z, szTempLabel );
+				TwAddVarRO( m_barDebug, szTempLabel, TW_TYPE_FLOAT, &a_vValue.z, szTempLabel );
 				break;
-			}
-
-			if(Loop == 2)
-			{
-				++m_iVectorCount;
-			}
-			
-		}
-		else
-		{
-			if( m_vDebugVector.size() > 0 && Loop == 0 )
-			{
-				m_vDebugVector[m_iVectorAddCount] = &a_vValue;
-				if( m_iVectorAddCount < m_iVectorCount-1 )
-				{
-					++m_iVectorAddCount;
-				}
-				else
-				{
-					m_iVectorAddCount = 0;
-				}
 			}
 		}
 	}

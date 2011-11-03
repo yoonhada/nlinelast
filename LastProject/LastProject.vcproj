@@ -610,6 +610,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\LockOn.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\LockOn.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Melee.cpp"
 				>
 			</File>

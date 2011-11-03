@@ -34,6 +34,8 @@ private:
 	CMonster* m_pMonster;
 	CLight* m_pLight;
 
+	CCharactor* m_pCharactorList[4];
+
 	Map* m_pMap;
 
 	CCharactor* m_pAlphaMon;
@@ -60,6 +62,11 @@ public:
 	CCharactor* Get_MyCharactor()
 	{
 		return m_pMyCharactor;
+	}
+
+	CCharactor** Get_CharactorList()
+	{
+		return m_pCharactorList;
 	}
 
 	VOID Set_Host( BOOL a_bHost )
