@@ -21,8 +21,10 @@ typedef struct _WEAPONTYPE
 
 	VOID AKeyBB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	{
-		D3DXVECTOR3 vMax(-0.5f,  9.0f, -4.0f );
-		D3DXVECTOR3 vMin( 0.5f, -9.0f,-20.0f );
+		D3DXVECTOR3 vMax(-3.0f, 9.0f, -4.0f );
+		D3DXVECTOR3 vMin(-6.0f,-9.0f,-20.0f );
+		//D3DXVECTOR3 vMax(-0.5f,  9.0f, -4.0f );
+		//D3DXVECTOR3 vMin( 0.5f, -9.0f,-20.0f );
 		
 		pBBA.SetPosition( vPos );
 		pBBA.SetAngle( fAngle );
@@ -39,8 +41,8 @@ typedef struct _WEAPONTYPE
 	}
 	VOID BKeyBB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	{
-		D3DXVECTOR3 vMax( 9.0f, 0.5f, -4.0f );
-		D3DXVECTOR3 vMin(-9.0f,-0.5f,-20.0f );
+		D3DXVECTOR3 vMax( 9.0f, 1.5f, -4.0f );
+		D3DXVECTOR3 vMin(-9.0f,-1.5f,-20.0f );
 
 		pBBA.SetPosition( vPos );
 		pBBA.SetAngle( fAngle );
