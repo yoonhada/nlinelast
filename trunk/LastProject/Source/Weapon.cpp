@@ -14,7 +14,7 @@ CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
 
 CWeapon::~CWeapon()
 {
-	if ( m_WeaponType.nType == SPANNER )
+	if ( m_WeaponType.nType > NONE )
 		PrivateProfile( WRITE );
 	Release();
 }
@@ -225,9 +225,9 @@ VOID CWeapon::Update()
 		m_nState = 0;
 	}
 	
-	//m_pMap->Set_ControlScale( 0, 0f );
-	//m_pMap->Set_ControlScale( 1, 0 );
-	//m_pMap->Set_ControlScale( 2, 0f );
+	//m_pMap->Set_ControlScale( 0, 0.875f );
+	//m_pMap->Set_ControlScale( 1, 0.875f );
+	//m_pMap->Set_ControlScale( 2, 0.875f );
 	//m_pMap->Set_ControlRotate( 0, 0 );
 	//m_pMap->Set_ControlRotate( 1, 0 );
 	//m_pMap->Set_ControlRotate( 2, 0 );
