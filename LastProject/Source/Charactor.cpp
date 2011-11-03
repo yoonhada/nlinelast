@@ -673,7 +673,7 @@ VOID CCharactor::Update()
 		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
 		m_pWeapon->SetKeyB( vDir, m_fAngle );
 	}
-
+#ifdef _DEBUG
 	for ( int i = 0; i < 10; ++i )
 	{
 		if ( CInput::GetInstance()->m_bNumKeybutton[i] )
@@ -683,6 +683,7 @@ VOID CCharactor::Update()
 			m_pWeapon->SetKeyNum( i, vDir, m_fAngle );
 		}
 	}
+#endif // _DEBUG
 
 	if(m_pWeapon)	
 		m_pWeapon->Update();
