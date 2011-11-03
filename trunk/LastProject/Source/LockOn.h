@@ -1,23 +1,23 @@
-#ifndef _BATTLE_H_
-#define _BATTLE_H_
+#ifndef _LOCKON_H_
+#define _LOCKON_H_
 
 #include "State.h"
 #include "Monster.h"
 
 
-class Battle : public State<CMonster>
+class LockOn : public State<CMonster>
 {
 private:
-	Battle(){}
+	LockOn(){}
 
-	Battle( const Battle& rhs );
-	Battle& operator=( const Battle& rhs );
+	LockOn( const LockOn& rhs );
+	LockOn& operator=( const LockOn& rhs );
 
 
 public:
-	virtual ~Battle(){}
+	virtual ~LockOn(){}
 
-	static Battle* GetInstance();
+	static LockOn* GetInstance();
 
 	virtual VOID Enter( CMonster* pMonster );
 	virtual VOID Execute( CMonster* pMonster );

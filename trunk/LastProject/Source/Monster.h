@@ -1,6 +1,8 @@
 #ifndef _Monster_H_
 #define _Monster_H_
 
+#include "StateMachine.h"
+
 class CCharactor;
 
 class CMonster : public CObjectSRT
@@ -34,6 +36,19 @@ public:
 		return m_bAnimationEndCheck;
 	}
 
+	VOID Set_Angle( FLOAT a_fAngle )				{ m_fAngle = a_fAngle; }
+	VOID Set_Target( INT a_iTarget )				{ m_iTarget = a_iTarget; }
+	VOID Set_TargetDistance( FLOAT a_fDistance )	{ m_fTargetDistance = a_fDistance; }
+	VOID Set_iSelectedFrameNum( INT a_iAniNum )		{ m_iSelectedFrameNum = a_iAniNum; }
+
+	StateMachine<CMonster>* GetFSM() const	{ return m_pStateMachine; }
+	D3DXVECTOR3& Get_Pos()					{ return m_vControl; }
+	INT Get_Target()						{ return m_iTarget; }
+	INT Get_iSelectedFrameNum()				{ return m_iSelectedFrameNum; }
+	FLOAT Get_TargetDistance()				{ return m_fTargetDistance; }
+	FLOAT Get_Angle()						{ return m_fAngle; }
+
+
 private:
 	VOID AniInterpolation();
 
@@ -56,6 +71,14 @@ private:
 	INT	  m_iFrameMax;					///< 프레임 최대 갯수
 	INT	  m_iSelectedFrameNum;			///< 현재 선택중인 프레임 넘버
 	CCharactor* m_pBox;					///< 캐릭터 박스
+
+	// AI 관리
+	StateMachine<CMonster>* m_pStateMachine;
+
+	// 타겟
+	INT m_iTarget;
+	FLOAT m_fTargetDistance;
+
 
 	struct BoxData
 	{

@@ -1,29 +1,65 @@
-//#include "stdafx.h"
-//
-//#include "Stiffen.h"
-//
-//
-//Stiffen& Stiffen::GetInstance()
-//{
-//	static Stiffen Instance;
-//
-//	return &Instance;
-//}
-//
-//
-//VOID Stiffen::Enter( Miner* pMiner )
-//{
-//
-//}
-//
-//
-//VOID Stiffen::Execute( Miner* pMiner )
-//{
-//
-//}
-//
-//
-//VOID Stiffen::Exit( Miner* pMiner )
-//{
-//
-//}
+#include "stdafx.h"
+
+#include "Stiffen.h"
+#include "Battle.h"
+#include "Seek.h"
+
+#include "Monster.h"
+#include "Frequency.h"
+
+
+Stiffen* Stiffen::GetInstance()
+{
+	static Stiffen Instance;
+
+	return &Instance;
+}
+
+
+VOID Stiffen::Enter( CMonster* pMonster )
+{
+
+}
+
+
+VOID Stiffen::Execute( CMonster* pMonster )
+{
+/*
+	static BOOL bEndAni = FALSE;
+
+	// 애니메이션이 끝날때까지 대기
+	static FLOAT fAniTime = 0.0f;
+	fAniTime += CFrequency::GetInstance()->getFrametime();
+	if( fAniTime >= 4.0f )
+	{
+		fAniTime = 0.0f;
+		bEndAni = TRUE;
+
+		pMonster->Set_iSelectedFrameNum( 0 );
+	}
+
+	// 애니메이션이 끝나면 일정시간 경직상태가 된다.
+	static FLOAT fTime = 0.0f;
+*/
+	if( pMonster->Get_AnimationEndCheck() == FALSE )
+	{
+//		fTime += CFrequency::GetInstance()->getFrametime();
+//		if( fTime >= 1.0f )
+//		{
+//			fTime = 0.0f;
+//			bEndAni = FALSE;
+
+			// 애니메이션 0번 복구
+			pMonster->ChangeAnimation( 0 );
+
+			// 경직상태가 끝나면 다시 전투 상태로
+			pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+//		}
+	}
+}
+
+
+VOID Stiffen::Exit( CMonster* pMonster )
+{
+
+}
