@@ -67,7 +67,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 #ifdef _ALPHAMON
 	m_pAlphaMon = new CCharactor;
 	m_pAlphaMon->Create( m_pD3dDevice, m_pMatrices );
-	m_pAlphaMon->Load( L"Data/CharData/35Box.txt" );
+	m_pAlphaMon->Load( L"Data/CharData/15Box.txt" );
 	m_pAlphaMon->Set_Position( D3DXVECTOR3(-100.0f, 0.0f, 0.0f) );
 	CTree::GetInstance()->GetChaVector()->push_back( m_pAlphaMon->GetBoundBox() );
 #endif
@@ -83,7 +83,8 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
-	m_pLogo = new CCharactor[6];
+	//로고
+	/*m_pLogo = new CCharactor[6];
 	D3DXVECTOR3 vec[6] = { 
 		D3DXVECTOR3( -130.0f, 0.0f, 200.0f ), 
 		D3DXVECTOR3( -160.0f, 0.0f, 200.0f ), 
@@ -121,7 +122,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 		}
 
 		m_pLogo[Loop].Set_Position( vec[Loop] );
-	}
+	}*/
 
 	return S_OK;
 }
@@ -261,14 +262,15 @@ VOID	CMainManage::Update()
 		//}
 	}
 
-	for( INT Loop=0; Loop<6; ++Loop )
-	{
-		m_pLogo[Loop].UpdateOtherPlayer();
-		if( CInput::GetInstance()->Get_Lbutton() )
-		{
-			//m_pLogo[Loop].TestBreakCubeAll();
-		}
-	}
+	////로고
+	//for( INT Loop=0; Loop<6; ++Loop )
+	//{
+	//	m_pLogo[Loop].UpdateOtherPlayer();
+	//	if( CInput::GetInstance()->Get_Lbutton() )
+	//	{
+	//		//m_pLogo[Loop].TestBreakCubeAll();
+	//	}
+	//}
 
 	static FLOAT TimeElapsed = 0.0f;
 	static FLOAT fMonsterRun = 0.0f;
@@ -286,12 +288,12 @@ VOID	CMainManage::Update()
 	//m_pAlphaMon->Update();
 #endif
 
-	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), fMonsterRun );
+	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pMonster->Update();
 
 	if( CInput::GetInstance()->Get_Lbutton() )
 	{
-		m_pMonster->ChangeAnimation( 1 );
+		m_pMonster->ChangeAnimation( 2 );
 	}
 
 	if( CInput::GetInstance()->Get_Rbutton() )
@@ -327,10 +329,11 @@ VOID	CMainManage::Render()
 		
 	}
 
-	for( INT Loop=0; Loop<6; ++Loop )
+	//로고
+	/*for( INT Loop=0; Loop<6; ++Loop )
 	{
 		m_pLogo[Loop].Render();
-	}
+	}*/
 #ifdef _ALPHAMON
 	m_pAlphaMon->Render();
 #endif

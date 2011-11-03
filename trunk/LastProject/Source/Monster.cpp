@@ -277,6 +277,7 @@ VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FL
 		if(m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] <= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_bTransReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] += a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -286,6 +287,7 @@ VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FL
 				if(m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] >= a_fStart && m_pFrame[m_iSelectedFrameNum].m_bTransReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -294,7 +296,8 @@ VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FL
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] = a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] = a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -304,6 +307,7 @@ VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FL
 		if(m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] >= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_bTransReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -313,6 +317,7 @@ VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FL
 				if(m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] <= a_fStart && m_pFrame[m_iSelectedFrameNum].m_bTransReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] += a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -321,7 +326,8 @@ VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FL
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] = a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_fTrans[a_iXYZ] = a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -353,6 +359,7 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] <= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_bRotReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] += a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -362,6 +369,7 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 				if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] >= a_fStart && m_pFrame[m_iSelectedFrameNum].m_bRotReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -370,7 +378,8 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] = a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] = a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -380,6 +389,7 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] >= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_bRotReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -389,6 +399,7 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 				if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] <= a_fStart && m_pFrame[m_iSelectedFrameNum].m_bRotReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] += a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -397,7 +408,8 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 			}
 			else
 			{
-				m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] = a_fStart;
+				//m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] = a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -445,6 +457,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] <= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bTransReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] += a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -454,6 +467,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 				if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] >= a_fStart && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bTransReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -463,6 +477,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 			else
 			{
 				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] = a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -472,6 +487,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] >= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bTransReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -481,6 +497,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 				if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] <= a_fStart && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bTransReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] += a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -490,6 +507,7 @@ VOID CMonster::AnimationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT
 			else
 			{
 				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fTrans[a_iXYZ] = a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -521,6 +539,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] <= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bRotReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] += a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -530,6 +549,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 				if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] >= a_fStart && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bRotReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -539,6 +559,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 			else
 			{
 				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] = a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -548,6 +569,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 		if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] >= a_fEnd && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bRotReplay[a_iXYZ] == FALSE)
 		{
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
+			m_bAnimationEndCheck = TRUE;
 		}
 		else
 		{
@@ -557,6 +579,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 				if(m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] <= a_fStart && m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bRotReplay[a_iXYZ] == TRUE)
 				{
 					m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] += a_fSpeed * a_fFrameTime;
+					m_bAnimationEndCheck = TRUE;
 				}
 				else
 				{
@@ -566,6 +589,7 @@ VOID CMonster::AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOA
 			else
 			{
 				//m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_fRotation[a_iXYZ] =  a_fStart;
+				m_bAnimationEndCheck = FALSE;
 			}
 		}
 	}
@@ -662,7 +686,7 @@ VOID CMonster::InterpolationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEn
 	//시작이 끝 보다 작을때
 	if( a_fStart < a_fEnd)
 	{
-		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] <= a_fEnd )
+		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] < a_fEnd )
 		{
 			// 애니메이션 안끝낫다
 			m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[a_iXYZ] = TRUE;
@@ -677,7 +701,7 @@ VOID CMonster::InterpolationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEn
 	//시작이 끝보다 클때
 	else if( a_fStart > a_fEnd )
 	{
-		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] >= a_fEnd )
+		if(m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] > a_fEnd )
 		{
 			// 애니메이션 안끝낫다
 			m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[a_iXYZ] = TRUE;
@@ -1094,6 +1118,14 @@ VOID CMonster::AniInterpolation()
 		m_iSelectedFrameNum = m_iNextFrame;
 		m_bChangingAnimation = FALSE;
 
+		m_pFrame[m_iSelectedFrameNum].m_fTrans[0] = m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.x;
+		m_pFrame[m_iSelectedFrameNum].m_fTrans[1] = m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.y;
+		m_pFrame[m_iSelectedFrameNum].m_fTrans[2] = m_pFrame[m_iSelectedFrameNum].m_vAniTransStartValue.z;
+
+		m_pFrame[m_iSelectedFrameNum].m_fRotation[0] = m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.x;
+		m_pFrame[m_iSelectedFrameNum].m_fRotation[1] = m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.y;
+		m_pFrame[m_iSelectedFrameNum].m_fRotation[2] = m_pFrame[m_iSelectedFrameNum].m_vAniRotateStartValue.z;
+
 		for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 		{
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[0] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransStartValue.x;
@@ -1111,6 +1143,7 @@ VOID CMonster::AniInterpolation()
 VOID CMonster::Update()
 {
 	//CDebugConsole::GetInstance()->Messagef( L"ChangingAnimation : %d\n", m_bChangingAnimation );
+	CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck : %d\n", m_bAnimationEndCheck );
 
 	if( m_bChangingAnimation == FALSE )
 	{

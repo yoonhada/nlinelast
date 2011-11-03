@@ -779,7 +779,7 @@ VOID CCharactor::BreakQube()
 			{
 				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
 			}
-			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) )
+			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) == TRUE )
 			{
 				vecBoundBox = CTree::GetInstance()->GetAtkVector();
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
@@ -817,7 +817,21 @@ VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 	D3DXMATRIXA16 mat = Get_MatWorld();
 	D3DXVec3TransformCoord( &vDir, &vDir, &(pBB->GetAxisMat()) );
 
-	m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
+	m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, 3 );
+
+	// 이웃 노드 큐브 보이기
+	for(INT LoopFriend=0; LoopFriend<6; ++LoopFriend)
+	{
+		INT iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
+		if ( iFriendCubeVecIndex != -1 )
+		{
+			if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( m_iSelectedFrameNum ) == FALSE )
+			{
+				m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( m_iSelectedFrameNum, TRUE );
+			}
+		}
+	}
+
 #ifndef _ALPHAMON
 	if( m_bMonster )
 	{
