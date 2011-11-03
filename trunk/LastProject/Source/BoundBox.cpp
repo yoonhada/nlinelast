@@ -175,10 +175,10 @@ FLOAT CBoundBox::GetRadiusShort() const
 
 VOID CBoundBox::SetAngle(FLOAT fAngle)
 {
-	m_vAxisDir[0].x =  cosf(fAngle);
-	m_vAxisDir[0].z = -sinf(fAngle);
-	m_vAxisDir[2].x =  sinf(fAngle);
-	m_vAxisDir[2].z =  cosf(fAngle);
+	m_vAxisDir[0].x =  cosf( fAngle );
+	m_vAxisDir[0].z =  sinf( fAngle );
+	m_vAxisDir[2].x = -sinf( fAngle );
+	m_vAxisDir[2].z =  cosf( fAngle );
 }						///< yÃàÈ¸Àü
 
 D3DXMATRIXA16 CBoundBox::GetAxisMat() const

@@ -34,6 +34,12 @@ VOID CInput::Clear()
 	D3DXMatrixIdentity( &m_matMatrix );
 
 	m_bF8button = m_bF9button = FALSE;
+#ifdef _DEBUG
+	for (int i = 0; i < 10; ++i )
+	{
+		m_bNumKeybutton[i] = FALSE;
+	}
+#endif	
 }
 
 
@@ -185,7 +191,21 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			{
 				m_bF8button = FALSE;
 			}
-			
+
+#ifdef _DEBUG
+			for (int i = 0; i < 10; ++i)
+			{
+				if( GetAsyncKeyState( 0x30 + i ) )	 
+				{ 
+					m_bNumKeybutton[i] = TRUE; 
+				}  
+				else 
+				{ 
+					m_bNumKeybutton[i] = FALSE; 
+				}
+			}
+#endif
+		
 		}
 	}
 }

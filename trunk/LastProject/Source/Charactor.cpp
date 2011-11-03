@@ -476,7 +476,7 @@ BOOL CCharactor::CollisionAtk()
 		vecBoundBox = CTree::GetInstance()->GetAtkVector();
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
-  			Iter = vecBoundBox->begin();
+  			Iter = vecBoundBox->begin();			
 			if( CPhysics::GetInstance()->Collision( m_pBoundBox, ( *Iter ) ) )
 			{
 				CDebugConsole::GetInstance()->Messagef( "ATK\n" );
@@ -672,6 +672,16 @@ VOID CCharactor::Update()
 		D3DXVECTOR3 vDir = Get_CharaPos();
 		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
 		m_pWeapon->SetKeyB( vDir, m_fAngle );
+	}
+
+	for ( int i = 0; i < 10; ++i )
+	{
+		if ( CInput::GetInstance()->m_bNumKeybutton[i] )
+		{
+			D3DXVECTOR3 vDir = Get_CharaPos();
+			vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
+			m_pWeapon->SetKeyNum( i, vDir, m_fAngle );
+		}
 	}
 
 	if(m_pWeapon)	

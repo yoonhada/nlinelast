@@ -126,16 +126,21 @@ BOOL CPhysics::Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 )
 	//  | |v4---|-|v5
 	//  |/      |/
 	//  v7------v6
-
-	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(2),  _pCube2->GetPosition(1) - _pCube2->GetPosition(2), _pCube1 ) )		{ return TRUE; }
-	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(3),  _pCube2->GetPosition(0) - _pCube2->GetPosition(3), _pCube1 ) )		{ return TRUE; }
-	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(6),  _pCube2->GetPosition(5) - _pCube2->GetPosition(6), _pCube1 ) )		{ return TRUE; }
-	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(7),  _pCube2->GetPosition(4) - _pCube2->GetPosition(7), _pCube1 ) )		{ return TRUE; }
+	//CDebugConsole::GetInstance()->Messagef("Pos : %0.2f, %0.2f, %0.2f\n", _pCube2->GetPosition().x, _pCube2->GetPosition().y, _pCube2->GetPosition().z );
+	CDebugConsole::GetInstance()->Messagef("0   : %0.2f, %0.2f, %0.2f\n", _pCube2->GetPosition(0).x, _pCube2->GetPosition(0).y, _pCube2->GetPosition(0).z );
+	CDebugConsole::GetInstance()->Messagef("3   : %0.2f, %0.2f, %0.2f\n", _pCube2->GetPosition(3).x, _pCube2->GetPosition(3).y, _pCube2->GetPosition(3).z );
+	//CDebugConsole::GetInstance()->Messagef("1   : %0.2f, %0.2f, %0.2f\n", _pCube2->GetPosition(1).x, _pCube2->GetPosition(1).y, _pCube2->GetPosition(1).z );
+	//CDebugConsole::GetInstance()->Messagef("5   : %0.2f, %0.2f, %0.2f\n", _pCube2->GetPosition(5).x, _pCube2->GetPosition(5).y, _pCube2->GetPosition(5).z );
+	//CDebugConsole::GetInstance()->Messagef("4   : %0.2f, %0.2f, %0.2f\n", _pCube2->GetPosition(4).x, _pCube2->GetPosition(4).y, _pCube2->GetPosition(4).z );
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(0),  _pCube2->GetPosition(3) - _pCube2->GetPosition(0), _pCube1 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(1),  _pCube2->GetPosition(2) - _pCube2->GetPosition(1), _pCube1 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(5),  _pCube2->GetPosition(6) - _pCube2->GetPosition(5), _pCube1 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(4),  _pCube2->GetPosition(7) - _pCube2->GetPosition(4), _pCube1 ) )		{ return TRUE; }
 																							 
-	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(2),  _pCube1->GetPosition(1) - _pCube1->GetPosition(2), _pCube2 ) )		{ return TRUE; }
-	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(3),  _pCube1->GetPosition(0) - _pCube1->GetPosition(3), _pCube2 ) )		{ return TRUE; }
-	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(6),  _pCube1->GetPosition(5) - _pCube1->GetPosition(6), _pCube2 ) )		{ return TRUE; }
-	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(7),  _pCube1->GetPosition(4) - _pCube1->GetPosition(7), _pCube2 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(0),  _pCube1->GetPosition(3) - _pCube1->GetPosition(0), _pCube2 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(1),  _pCube1->GetPosition(2) - _pCube1->GetPosition(1), _pCube2 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(5),  _pCube1->GetPosition(6) - _pCube1->GetPosition(5), _pCube2 ) )		{ return TRUE; }
+	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(4),  _pCube1->GetPosition(7) - _pCube1->GetPosition(4), _pCube2 ) )		{ return TRUE; }
 	
 	return FALSE;
 }
