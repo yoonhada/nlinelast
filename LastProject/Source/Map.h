@@ -45,6 +45,7 @@ public:
 	BOOL		AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
 	BOOL		AddAnimationData2( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
 	BOOL		SetAnimation( DWORD _dID );
+	VOID		CleanupAnimationData();
 
 private:
 	typedef struct _DATA

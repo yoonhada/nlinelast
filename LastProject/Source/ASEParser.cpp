@@ -1374,4 +1374,22 @@ BOOL ASEParser::SetAnimation( DWORD _dID )
 	return TRUE;
 }
 
+VOID ASEParser::CleanupAnimationData()
+{
+	m_aniBase.iStartFrame		= 0;
+	m_aniBase.iEndFrame			= 0;
+	m_aniBase.dID				= 0;
+	m_aniBase.bLoop				= TRUE;
+
+	m_aniCurrent.iStartFrame	= 0;
+	m_aniCurrent.iEndFrame		= 0;
+	m_aniCurrent.dID			= 0;
+	m_aniCurrent.bLoop			= FALSE;
+
+	ANIMATIONMAP::iterator itE;
+	for( itE = m_mapAnimation.begin() ; itE != m_mapAnimation.end() ; itE++ )
+		delete itE->second;
+	
+	m_mapAnimation.clear();
+}
 //	End
