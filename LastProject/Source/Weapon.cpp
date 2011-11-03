@@ -43,7 +43,7 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 		m_WeaponType.nFrameBegin[5] = GetPrivateProfileInt( L"Frame", L"Begin5",	 96, WEAPONFILE );
 		m_WeaponType.nFrameBegin[6] = GetPrivateProfileInt( L"Frame", L"Begin6",	119, WEAPONFILE );
 		m_WeaponType.nFrameBegin[7] = GetPrivateProfileInt( L"Frame", L"Begin7",	141, WEAPONFILE );
-		m_WeaponType.nFrameTime[0]  = GetPrivateProfileInt( L"Frame", L"Time0",		200, WEAPONFILE );
+		m_WeaponType.nFrameTime[0]  = GetPrivateProfileInt( L"Frame", L"Time0",		  0, WEAPONFILE );
 		m_WeaponType.nFrameTime[1]  = GetPrivateProfileInt( L"Frame", L"Time1",		 24, WEAPONFILE );
 		m_WeaponType.nFrameTime[2]  = GetPrivateProfileInt( L"Frame", L"Time2",		 24, WEAPONFILE );
 		m_WeaponType.nFrameTime[3]  = GetPrivateProfileInt( L"Frame", L"Time3",		 24, WEAPONFILE );

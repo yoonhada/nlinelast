@@ -18,7 +18,21 @@ public:
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName );
 	VOID Realese();
 	VOID Load( WCHAR* a_pFileName );
+
+	// 애니메이션 변경용
 	VOID ChangeAnimation( INT a_iAniNum );
+	
+	// 보간 애니메이션 끝낫나 체크 얻어옴 ( FALSE = 끝남 TRUE = 안끝남 )
+	BOOL Get_ChangingAnimation()
+	{
+		return m_bChangingAnimation;
+	}
+
+	// 무반복 애니메이션 끝낫나 체크 얻어옴 ( FALSE = 끝남 TRUE = 안끝남 )
+	BOOL Get_AnimationEndCheck()
+	{
+		return m_bAnimationEndCheck;
+	}
 
 private:
 	VOID AniInterpolation();
@@ -178,13 +192,16 @@ private:
 
 	//CBoundBox m_pBoundBox;
 
-	INT m_iChangeAnimationEndCheck;
-	INT m_iNextFrame;
-	BOOL m_bChangingAnimation;
-	FLOAT m_fMaxInterpolationLength;
+	// 보간 애니메이션용 변수들
+	INT m_iChangeAnimationEndCheck;		  ///< 보간 애니메이션 끝낫나 체크용
+	INT m_iNextFrame;					  ///< 다음 넘어갈 프레임 번호
+	BOOL m_bChangingAnimation;			  ///< 보간 애니메이션 끝낫나 체크
+	FLOAT m_fMaxInterpolationLength;	  ///< 보간 속도 계산용 최대 거리
 
-	FLOAT m_fLengthRotate;
-	FLOAT m_fSpeedRotate;
+	FLOAT m_fLengthRotate;				  ///< 보간 회전용 임시
+	FLOAT m_fSpeedRotate;				  ///< 보간 회전용 임시
+
+	BOOL m_bAnimationEndCheck;			  ///< 애니메이션 끝낫나 체크
 
 
 };
