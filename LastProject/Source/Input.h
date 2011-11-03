@@ -74,7 +74,6 @@ public:
 		return m_bF8button;
 	}
 
-
 private:
 	LPDIRECT3DDEVICE9 m_pD3dDevice;
 	HWND			  m_hWnd;					///< 윈도우 핸들
@@ -94,6 +93,10 @@ private:
 	BOOL		m_bF8button;
 	//FLOAT		m_fXPos;						///< X축 이동
 	//FLOAT		m_fZPos;						///< Z축 이동
+#ifdef _DEBUG
+public:
+	BOOL		m_bNumKeybutton[10];
+#endif
 
 	D3DXMATRIXA16 m_matMatrix;
 	
