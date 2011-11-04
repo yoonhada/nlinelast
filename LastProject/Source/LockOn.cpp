@@ -84,12 +84,13 @@ VOID LockOn::Execute( CMonster* pMonster )
 		pMonster->Set_Angle( D3DXToRadian( 270.0f - fAngle )  );
 //		D3DXVec2Lerp(
 	}
-
+/*
 	// 공격 각도내에 들어왔으면
 	if( 1 )
 	{
 		pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
+*/
 }
 
 
