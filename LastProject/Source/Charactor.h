@@ -104,6 +104,9 @@ public:
 		return m_fAngle;
 	}
 
+	const D3DXVECTOR3& Get_CharaPos2Camera();
+	const D3DXVECTOR3& Get_PreCharaPos2Camera();
+
 	VOID UpdateMonsterPos( const D3DXVECTOR3& a_vPrePos, const D3DXVECTOR3& a_vPos, const FLOAT a_fAngle );
 	VOID UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster );
 
@@ -155,7 +158,8 @@ private:
 	VOID _CreateBase( INT a_iBoxSize, WCHAR* a_pCharaName );
 	VOID _CreateAniFrame( INT a_iFrameNum, INT a_iSrcFrameNum = 0, BOOL a_LoadMode = FALSE );
 	CCharCube* _CreateCube();
-	VOID Animate();
+	VOID AnimateMove();
+	VOID AnimateAttack();
 	
 	HRESULT InitTexture(  DWORD a_Color, DWORD a_OutLineColor  );
 
@@ -166,6 +170,8 @@ private:
 	INT m_iMaxCubeCount;
 	INT m_iBoxLimit;
 
+	D3DXVECTOR3 m_vPreControl2Camera; ///< 카메라 오른쪽 보내기용 이전 위치
+	D3DXVECTOR3 m_vControl2Camera;	  ///< 카메라 오른쪽 보내기용 위치
 	D3DXVECTOR3 m_vColissionControl; ///< 캐릭터 충돌용 위치
 	D3DXVECTOR3 m_vPreControl; ///< 캐릭터 이전 위치 저장
 	D3DXVECTOR3 m_vControl;  ///< 캐릭터 위치
@@ -207,6 +213,7 @@ private:
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;
 	FLOAT m_fAniAngleJump;
+	FLOAT m_fAniAngleAttack;
 
 private:
 	CShadowCell* m_pShadowCell;
