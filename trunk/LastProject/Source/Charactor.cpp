@@ -68,6 +68,7 @@ VOID CCharactor::Clear()
 	m_bActive = FALSE;
 
 	m_fAniAngleY = 0.0f;
+	m_fAniAngleAttack = 0.0f;
 }
 
 HRESULT CCharactor::Create()
@@ -503,6 +504,26 @@ BOOL CCharactor::CollisionAtk()
 	return FALSE;
 }
 
+const D3DXVECTOR3& CCharactor::Get_CharaPos2Camera()
+{
+	D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
+	m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
+	D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
+	m_vControl2Camera = m_vControl + (m_vSideStepVector * 5.0f);
+
+	return m_vControl2Camera;
+}
+
+const D3DXVECTOR3& CCharactor::Get_PreCharaPos2Camera()
+{
+	D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
+	m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
+	D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
+	m_vPreControl2Camera = m_vPreControl + (m_vSideStepVector * 5.0f);
+
+	return m_vPreControl2Camera;
+}
+
 VOID CCharactor::UpdateByInput(  )
 {
 	D3DXVECTOR3 a_vControl = CInput::GetInstance()->Get_Pos();
@@ -535,7 +556,7 @@ VOID CCharactor::UpdateByInput(  )
 
 	if( a_vControl.z != 0 || a_vControl.x != 0 )
 	{
-		Animate();
+		AnimateMove();
 	}
 	else
 	{
@@ -557,6 +578,8 @@ VOID CCharactor::UpdateByInput(  )
 			}
 		}
 	}
+
+	AnimateAttack();
 	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
 	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
 
@@ -570,7 +593,7 @@ VOID CCharactor::UpdateByInput(  )
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
-	Set_ControlRotate( 1, m_fAngle + m_fAniAngleY );
+	Set_ControlRotate( 1, m_fAngle + m_fAniAngleY + m_fAniAngleAttack );
 	Calcul_MatWorld();
 }
 
@@ -644,7 +667,40 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 	m_vColissionControl = m_vControl;
 }
 
-VOID CCharactor::Animate()
+VOID CCharactor::AnimateAttack()
+{
+	INT Temp = m_pWeapon->Get_nState();
+	static INT iMax = 0.0f;
+	if( m_pWeapon->Get_nState() == 0x0100 )
+	{
+		if( iMax == 0 ) iMax = m_pWeapon->Get_nFrame();
+		m_fAniAngleAttack = ( m_pWeapon->Get_nFrame() - ( iMax ) )  * 0.05f;
+		CDebugConsole::GetInstance()->Messagef( L"%f\n", m_fAniAngleAttack );
+
+		//if( m_pWeapon->Get_nFrame() != 0 )
+		//{
+		//	m_fAniAngleAttack -=  ( iMax / 5.0f ) * CFrequency::GetInstance()->getFrametime();
+		//}
+	}
+	else
+	{
+		iMax = 0;
+		if( m_fAniAngleAttack > 0.1f )
+		{
+			m_fAniAngleAttack -= 5.0f * CFrequency::GetInstance()->getFrametime();
+		}
+		else if( m_fAniAngleAttack < -0.1f )
+		{
+			m_fAniAngleAttack += 5.0f * CFrequency::GetInstance()->getFrametime();
+		}
+		else
+		{
+			m_fAniAngleAttack = 0.0f;
+		}
+	}
+}
+
+VOID CCharactor::AnimateMove()
 {
 	static BOOL bCheck = FALSE;
 
@@ -791,7 +847,7 @@ VOID CCharactor::BreakQube()
 			{
 				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
 			}
-			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) == TRUE )
+			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
 			{
 				vecBoundBox = CTree::GetInstance()->GetAtkVector();
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
@@ -831,10 +887,12 @@ VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 
 	m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, 3 );
 
+	INT iFriendCubeVecIndex = -1;
+
 	// 이웃 노드 큐브 보이기
 	for(INT LoopFriend=0; LoopFriend<6; ++LoopFriend)
 	{
-		INT iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
+		iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
 		if ( iFriendCubeVecIndex != -1 )
 		{
 			if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( m_iSelectedFrameNum ) == FALSE )

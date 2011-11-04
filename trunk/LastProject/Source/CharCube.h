@@ -108,7 +108,7 @@ private:
 		BOOL		m_bVisible;					///< 보일지 안보일지
 		DWORD		m_dwColor;					///< 색깔
 		INT			m_iType;					///< 종류
-		INT			m_iFriendCubeVecIndex[6];   ///< 이웃 박스 벡터 인덱스
+		INT			m_iFriendCubeVecIndex[6];   ///< 이웃 박스 벡터 인덱스 ( 왼쪽, 오른쪽, 위, 아래, 앞, 뒤 (0~5) 순서 )
 
 		D3DXMATRIXA16 m_matMatrix;				///< 큐브 매트릭스
 

@@ -934,16 +934,16 @@ VOID CMonster::ChangeAnimation( INT a_iAniNum )
 	D3DXVECTOR3 vTransLength(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vRotateLength(0.0f, 0.0f, 0.0f);
 
+	m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.x = m_pFrame[m_iSelectedFrameNum].m_fTrans[0];
+	m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.y = m_pFrame[m_iSelectedFrameNum].m_fTrans[1];
+	m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_fTrans[2];
+
+	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.x = m_pFrame[m_iSelectedFrameNum].m_fRotation[0];
+	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y = m_pFrame[m_iSelectedFrameNum].m_fRotation[1];
+	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_fRotation[2];
+
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
-		m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.x = m_pFrame[m_iSelectedFrameNum].m_fTrans[0];
-		m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.y = m_pFrame[m_iSelectedFrameNum].m_fTrans[1];
-		m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_fTrans[2];
-
-		m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.x = m_pFrame[m_iSelectedFrameNum].m_fRotation[0];
-		m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y = m_pFrame[m_iSelectedFrameNum].m_fRotation[1];
-		m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_fRotation[2];
-		
 		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[0];
 		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[1];
 		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[2];
@@ -1259,14 +1259,14 @@ VOID CMonster::Update()
 		AniInterpolation();
 	}
 
-#ifndef _DEBUG
-	static INT TempLoop = 0;
-	if ( CInput::GetInstance()->Get_Lbutton() )
-	{
-		m_pBox[TempLoop].TestBreakCubeAll();
-		if(TempLoop < 7) ++TempLoop;
-	}
-#endif
+//#ifndef _DEBUG
+//	static INT TempLoop = 0;
+//	if ( CInput::GetInstance()->Get_Lbutton() )
+//	{
+//		m_pBox[TempLoop].TestBreakCubeAll();
+//		if(TempLoop < 7) ++TempLoop;
+//	}
+//#endif
 
 
 	// AI

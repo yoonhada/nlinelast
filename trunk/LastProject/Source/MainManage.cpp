@@ -76,7 +76,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 #ifdef _ALPHAMON
 	m_pAlphaMon = new CCharactor;
 	m_pAlphaMon->Create( m_pD3dDevice, m_pMatrices );
-	m_pAlphaMon->Load( L"Data/CharData/15Box.txt" );
+	m_pAlphaMon->Load( L"Data/CharData/35box.csav" );
 	m_pAlphaMon->Set_Position( D3DXVECTOR3(-100.0f, 0.0f, 0.0f) );
 	CTree::GetInstance()->GetChaVector()->push_back( m_pAlphaMon->GetBoundBox() );
 #endif
@@ -251,8 +251,8 @@ VOID	CMainManage::Update()
 
 	//카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
-		m_pMyCharactor->Get_CharaPos(), 
-		m_pMyCharactor->Get_PreControl(), 
+		m_pMyCharactor->Get_CharaPos2Camera(), 
+		m_pMyCharactor->Get_CharaPos2Camera(), 
 		10.0f, 75.0f, 
 		m_pMyCharactor->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
@@ -303,7 +303,7 @@ VOID	CMainManage::Update()
 
 	if( CInput::GetInstance()->Get_Lbutton() )
 	{
-		m_pMonster->ChangeAnimation( 2 );
+		m_pMonster->ChangeAnimation( 1 );
 	}
 
 	if( CInput::GetInstance()->Get_Rbutton() )
