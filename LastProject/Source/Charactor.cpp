@@ -430,8 +430,20 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			{
 				if( CPhysics::GetInstance()->Collision( vPos, vDir, ( *Iter ) ) )
 				{
-					//CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
-					CPhysics::GetInstance()->Sliding( a_vCollisionControl );
+					if ( a_vCollisionControl.x == 0.0f && 
+						a_vCollisionControl.y == 0.0f &&
+						a_vCollisionControl.z == 0.0f )
+					{
+						CDebugConsole::GetInstance()->Messagef("È¸Àü....\n");
+						CPhysics::GetInstance()->Sliding( a_vCollisionControl );
+					}
+					else
+					{
+						//CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
+						CPhysics::GetInstance()->Sliding( a_vCollisionControl );
+						CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", a_vCollisionControl.x, a_vCollisionControl.y, a_vCollisionControl.z);
+					}
+
 					bColl = TRUE;
 				}
 				Iter++;
