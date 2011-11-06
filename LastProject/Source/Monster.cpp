@@ -451,12 +451,16 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 		Set_ControlRotate( 0, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
 		break;
 	case 1:
-		Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		Set_ControlRotate( 1, m_fAngle + m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
 		break;
 	case 2:
 		Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
 		break;
 	}
+
+	CDebugConsole::GetInstance()->Messagef( L"Total X rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[0] );
+	CDebugConsole::GetInstance()->Messagef( L"Total Y rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[1] );
+	CDebugConsole::GetInstance()->Messagef( L"Total Z rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[2] );
 
 }
 
@@ -908,7 +912,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
-	FLOAT fTemp = 11.0f;
+	static FLOAT fTemp = 11.0f;
 	CDebugInterface::GetInstance()->AddMessageFloat( "TempAngle", fTemp );
 
 	m_vPreControl = m_vControl;
@@ -916,7 +920,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	CDebugInterface::GetInstance()->AddMessageVector( "MonsterPos", m_vControl );
 
-	D3DXVECTOR3 Temp(10.0f,10.0f,10.f);
+	static D3DXVECTOR3 Temp(10.0f,10.0f,10.f);
 	CDebugInterface::GetInstance()->AddMessageVector( "TempPos", Temp );
 
 	Set_ControlTranslate( 0, m_vControl.x );
@@ -1194,6 +1198,13 @@ VOID CMonster::Update()
 				m_pFrame[m_iSelectedFrameNum].m_bRotateZReplay, 
 				CFrequency::GetInstance()->getFrametime() );
 		}
+
+		//Set_ControlTranslate( 0, m_pFrame[m_iSelectedFrameNum].m_fCharEditorTranslate.x );
+		//Set_ControlTranslate( 1, m_pFrame[m_iSelectedFrameNum].m_fCharEditorTranslate.y );
+		//Set_ControlTranslate( 2, m_pFrame[m_iSelectedFrameNum].m_fCharEditorTranslate.z );
+		//Set_ControlRotate( 0, m_pFrame[m_iSelectedFrameNum].m_fCharEditorRotate.x );
+		//Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_fCharEditorRotate.y );
+		//Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_fCharEditorRotate.z );
 
 		for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 		{
