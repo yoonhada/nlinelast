@@ -146,6 +146,9 @@ private:
 
 		BOOL		m_bAnimation;
 
+		D3DXVECTOR3 m_fCharEditorRotate;	///< 박스 회전값
+		D3DXVECTOR3 m_fCharEditorTranslate;	///< 박스 이동값
+
 		D3DXVECTOR3	m_vAniRotateStartValue;
 		D3DXVECTOR3	m_vAniRotateEndValue;
 		D3DXVECTOR3	m_vAniRotateSpeed;
@@ -175,6 +178,9 @@ private:
 		Frame() : m_pBoxData(NULL) 
 		{
 			m_bAnimation = FALSE;
+
+			m_fCharEditorRotate = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			m_fCharEditorTranslate = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 			m_vAniRotateStartValue = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			m_vAniRotateEndValue = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

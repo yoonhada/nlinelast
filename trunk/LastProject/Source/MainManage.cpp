@@ -301,14 +301,10 @@ VOID	CMainManage::Update()
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pMonster->Update();
 
-	if( CInput::GetInstance()->Get_Lbutton() )
-	{
-		m_pMonster->ChangeAnimation( 1 );
-	}
 
 	if( CInput::GetInstance()->Get_Rbutton() )
 	{
-		m_pMonster->ChangeAnimation( 0 );
+		m_pMonster->Set_iSelectedFrameNum( 1 );
 	}
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
