@@ -287,7 +287,7 @@ VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
 }
 
 
-VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, std::vector<WORD>& pList )
+VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& pList )
 {
 	CPacket pk;
 	WORD wMsgSize = 0;
@@ -295,13 +295,15 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, std::vecto
 
 	pk.Write( wMsgSize );
 	pk.Write( wMsgID );
-	pk.Write( m_wNumber );
+	//pk.Write( m_wNumber );
 	pk.Write( cDestroyPart );
 	pk.Write( cDestroyCount );
 
+	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", cDestroyCount );
 	for( WORD i=0; i<cDestroyCount; ++i )
 	{
 		pk.Write( pList[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", pList[i] );
 	}
 
 	pk.CalcSize();
@@ -314,16 +316,18 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 {
 	WORD wClientNumber;
 	CHAR cDestroyPart;
-	CHAR cDestroyCount;
-	WORD wList[100];
+	WORD cDestroyCount;
+	WORD wList[1000];
 
-	pk.Read( &wClientNumber );
+	//pk.Read( &wClientNumber );
 	pk.Read( &cDestroyPart );
 	pk.Read( &cDestroyCount );
 
+	CDebugConsole::GetInstance()->Messagef( L"cDestroyCount : %d\n", cDestroyCount );
 	for( WORD i=0; i<cDestroyCount; ++i )
 	{
 		pk.Read( &wList[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"cDestroy List : %d\n", wList[i] );
 	}
 
 	CMainManage::GetInstance()->Get_pAlphaMon()->RecvBreakList( cDestroyCount, wList );

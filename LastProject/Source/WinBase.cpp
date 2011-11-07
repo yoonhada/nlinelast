@@ -33,7 +33,8 @@ HRESULT CWinBase::Create()
 	// 네트워크
 #ifndef _NETWORK
 	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
-	m_pNetwork = new CNetwork;
+	m_pNetwork = CNetwork::GetInstance();
+	//m_pNetwork = new CNetwork;
 	m_pNetwork->CreateSocket();
 #endif
 	
