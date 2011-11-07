@@ -37,13 +37,18 @@ public:
 	}
 
 	VOID Set_Angle( FLOAT a_fAngle )				{ m_fAngle = a_fAngle; }
+	VOID Set_Pos( D3DXVECTOR3& a_vPos )				{ m_vControl = a_vPos; }
 	VOID Set_Target( INT a_iTarget )				{ m_iTarget = a_iTarget; }
+	VOID Set_TargetPos( D3DXVECTOR3 a_vPos )		{ m_vTargetPos = a_vPos; }
+	VOID Set_TargetUnitVector( D3DXVECTOR3 a_vUnit ) { m_vTargetUnitVector = a_vUnit; }
 	VOID Set_TargetDistance( FLOAT a_fDistance )	{ m_fTargetDistance = a_fDistance; }
 	VOID Set_iSelectedFrameNum( INT a_iAniNum )		{ m_iSelectedFrameNum = a_iAniNum; }
 
 	StateMachine<CMonster>* GetFSM() const	{ return m_pStateMachine; }
 	D3DXVECTOR3& Get_Pos()					{ return m_vControl; }
 	INT Get_Target()						{ return m_iTarget; }
+	D3DXVECTOR3& Get_TargetPos()			{ return m_vTargetPos; }
+	D3DXVECTOR3& Get_TargetUnitVector()		{ return m_vTargetUnitVector; }
 	INT Get_iSelectedFrameNum()				{ return m_iSelectedFrameNum; }
 	FLOAT Get_TargetDistance()				{ return m_fTargetDistance; }
 	FLOAT Get_Angle()						{ return m_fAngle; }
@@ -77,6 +82,8 @@ private:
 
 	// Å¸°Ù
 	INT m_iTarget;
+	D3DXVECTOR3 m_vTargetPos;
+	D3DXVECTOR3 m_vTargetUnitVector;
 	FLOAT m_fTargetDistance;
 
 

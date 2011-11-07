@@ -254,8 +254,6 @@ VOID CNetwork::csLOGON()
 }
 
 
-
-
 VOID CNetwork::csCHAT()
 {
 	CPacket pk;
@@ -289,6 +287,55 @@ VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
 }
 
 
+VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, WORD* pList )
+{
+	CPacket pk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_CS_UTOM_ATTACK;
+
+	pk.Write( wMsgSize );
+	pk.Write( wMsgID );
+	pk.Write( m_wNumber );
+	pk.Write( cDestroyPart );
+	pk.Write( cDestroyCount );
+
+	for( WORD i=0; i<cDestroyCount; ++i )
+	{
+		pk.Write( pList[i] );
+	}
+
+	pk.CalcSize();
+
+	SendToServer( pk );
+}
+
+
+VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
+{
+	WORD wClientNumber;
+	CHAR cDestroyPart;
+	CHAR cDestroyCount;
+	WORD wList[20];
+
+	pk.Read( &wClientNumber );
+	pk.Read( &cDestroyPart );
+	pk.Read( &cDestroyCount );
+
+	for( WORD i=0; i<cDestroyCount; ++i )
+	{
+		pk.Read( &wList[i] );
+	}
+
+	// 디버깅용 출력
+	cout << wClientNumber << " : ";
+	for( WORD i=0; i<cDestroyCount; ++i )
+	{
+		cout << wList[i];
+	}
+	cout << endl;
+}
+
+
 VOID CNetwork::ProcessPacket( CPacket& pk )
 {
 	WORD wMsgSize, wMsgType;
@@ -319,6 +366,10 @@ VOID CNetwork::ProcessPacket( CPacket& pk )
 	// 이동 처리
 	case MSG_SC_MOVE:
 		scMOVE( pk );
+		break;
+
+	case MSG_SC_UTOM_ATTACK:
+		SC_UTOM_ATTACK( pk );
 		break;
 	}
 

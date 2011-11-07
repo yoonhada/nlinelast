@@ -2,6 +2,7 @@
 
 #include "Seek.h"
 #include "Battle.h"
+#include "Chase.h"
 
 #include "Charactor.h"
 #include "Monster.h"
@@ -57,18 +58,25 @@ VOID Seek::Execute( CMonster* pMonster )
 	}
 
 	// 가장 가까이에 있는 유저가 공격 범위에 있으면 전투 상태로 전환
-	if( min < 500.0f )
+	if( min < 100.0f )
 	{
 		pMonster->Set_Target( Target );
 		pMonster->Set_TargetDistance( min );
 		pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
 	// 범위에 없으면 가장 가까운 유저 추격
+	else if( min >= 100.0f && min <= 150.0f )
+	{
+		pMonster->Set_Target( Target );
+		D3DXVECTOR3 UnitVector = CMainManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() - pMonster->Get_Pos();
+		D3DXVec3Normalize( &UnitVector, &UnitVector );
+		pMonster->Set_TargetUnitVector( UnitVector );
+		pMonster->Set_TargetPos( CMainManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() );
+		pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
+	}
 	else
 	{
-//		pMonster->Set_Target( -1 );
-//		pMonster->ChangeState( Chase::GetInstance() );
-		pMonster->ChangeAnimation( 0 );
+//		pMonster->ChangeAnimation( 0 );
 	}
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "length", min );
