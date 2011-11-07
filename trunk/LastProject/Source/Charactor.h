@@ -16,7 +16,7 @@ class CModel;
 class CWeapon;
 class CShadowCell;
 
-class OctTree;
+class COctTree2Array;
 
 //class MatrixMult
 //{
@@ -208,7 +208,7 @@ private:
 
 	CBoundBox * m_pBoundBox;
 	CWeapon * m_pWeapon;
-	OctTree * m_pOctTree;
+	COctTree2Array * m_pOctTree;
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;
