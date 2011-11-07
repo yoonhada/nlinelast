@@ -40,6 +40,7 @@ VOID Stiffen::Execute( CMonster* pMonster )
 	// 애니메이션이 끝나면 일정시간 경직상태가 된다.
 	static FLOAT fTime = 0.0f;
 */
+	BOOL bCheck = FALSE;
 	if( pMonster->Get_AnimationEndCheck() == FALSE )
 	{
 //		fTime += CFrequency::GetInstance()->getFrametime();
@@ -51,10 +52,19 @@ VOID Stiffen::Execute( CMonster* pMonster )
 			// 애니메이션 0번 복구
 			pMonster->ChangeAnimation( 0 );
 
+			bCheck = TRUE;
+
 			// 경직상태가 끝나면 다시 전투 상태로
 			pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );
+			
 //		}
 	}
+
+	//if( bCheck == TRUE && pMonster->Get_ChangingAnimation() == FALSE )
+	//{
+	//	// 경직상태가 끝나면 다시 전투 상태로
+	//	pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+	//}
 }
 
 
