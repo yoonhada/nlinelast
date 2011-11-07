@@ -54,8 +54,8 @@ VOID CCharactor::Clear()
 	m_iAliveCount = 0;
 	m_bAliveCheck = TRUE;
 
-	m_vPreControl = D3DXVECTOR3(200.0f, 0.0f, 0.0f);
-	m_vControl = D3DXVECTOR3(200.0f, 0.0f, 0.0f);
+	m_vPreControl = D3DXVECTOR3(100.0f, 0.0f, 0.0f);
+	m_vControl = D3DXVECTOR3(100.0f, 0.0f, 0.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
@@ -429,22 +429,11 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			Iter = vecBoundBox->begin();
 			while ( Iter != vecBoundBox->end() )
 			{
-				if( CPhysics::GetInstance()->Collision( vPos, vDir, ( *Iter ) ) )
+				if( CPhysics::GetInstance()->Collision( vPos + vDir, ( *Iter ) ) )
 				{
-					if ( a_vCollisionControl.x == 0.0f && 
-						a_vCollisionControl.y == 0.0f &&
-						a_vCollisionControl.z == 0.0f )
-					{
-						CDebugConsole::GetInstance()->Messagef("회전....\n");
-						CPhysics::GetInstance()->Sliding( a_vCollisionControl );
-					}
-					else
-					{
-						//CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
-						CPhysics::GetInstance()->Sliding( a_vCollisionControl );
-						CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", a_vCollisionControl.x, a_vCollisionControl.y, a_vCollisionControl.z);
-					}
-
+					//CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
+					CPhysics::GetInstance()->Sliding( a_vCollisionControl );
+					CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", a_vCollisionControl.x, a_vCollisionControl.y, a_vCollisionControl.z);
 					bColl = TRUE;
 				}
 				Iter++;
@@ -489,13 +478,23 @@ BOOL CCharactor::CollisionAtk()
 		vecBoundBox = CTree::GetInstance()->GetAtkVector();
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
-  			Iter = vecBoundBox->begin();			
-			if( CPhysics::GetInstance()->Collision( m_pBoundBox, ( *Iter ) ) )
+  			Iter = vecBoundBox->begin();
+			for (int i = 0; i < 8; ++i)
 			{
-				CDebugConsole::GetInstance()->Messagef( "ATK\n" );
-				//CTree::GetInstance()->GetAtkVector()->clear();
-				return TRUE;
+				vDir = m_pBoundBox->GetPosition(i);
+				vPos = ( *Iter )->GetPosition(i);
+				CDebugConsole::GetInstance()->Messagef( L"%0.2f, %0.2f, %0.2f\n", vPos.x, vPos.y, vPos.z );
+				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
+				{
+					return TRUE; 
+				}
 			}
+			//if( CPhysics::GetInstance()->Collision( m_pBoundBox, ( *Iter ) ) )
+			//{
+			//	CDebugConsole::GetInstance()->Messagef( "ATK\n" );
+			//	//CTree::GetInstance()->GetAtkVector()->clear();
+			//	return TRUE;
+			//}
 		}
 
 		CTree::GetInstance()->GetAtkVector()->clear();
@@ -529,18 +528,19 @@ VOID CCharactor::UpdateByInput(  )
 	D3DXVECTOR3 a_vControl = CInput::GetInstance()->Get_Pos();
 	FLOAT a_fAngle = CInput::GetInstance()->Get_MouseYRotate();
 
-	m_fAngle += a_fAngle;
+	a_fAngle += m_fAngle;
+	
 	// 360도 넘으면 라디언 360 빼기.
 	const float f360 = DEG2RAD( 360.0f );
-	m_fAngle < 0.0f ? m_fAngle += f360 : ( m_fAngle > f360 ? m_fAngle -= f360 : NULL );
+	a_fAngle < 0.0f ? a_fAngle += f360 : ( a_fAngle > f360 ? a_fAngle -= f360 : NULL );
 
-	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
+	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", a_fAngle );
 
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
 	// 전진 후진 처리
 	if( a_vControl.z != 0 )
 	{
-		D3DXMatrixRotationY( &m_matControl, m_fAngle );
+		D3DXMatrixRotationY( &m_matControl, a_fAngle );
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
 		m_vColissionControl = (m_vFowardVector * a_vControl.z);	
@@ -548,7 +548,7 @@ VOID CCharactor::UpdateByInput(  )
 	// 좌우 처리
 	if( a_vControl.x != 0)
 	{
-		D3DXMatrixRotationY( &m_matControl, m_fAngle + 1.5707963f );
+		D3DXMatrixRotationY( &m_matControl, a_fAngle + 1.5707963f );
 		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
@@ -585,11 +585,12 @@ VOID CCharactor::UpdateByInput(  )
 
 	//m_vPreControl = vControl;
 
-	m_pBoundBox->SetAngle( m_fAngle );
+	m_pBoundBox->SetAngleY( a_fAngle );
 	Collision( m_vColissionControl );
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
 
+	m_fAngle = a_fAngle;
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
@@ -610,7 +611,6 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 VOID CCharactor::UpdateOtherPlayer()
 {
-
 	m_fNetTime += CFrequency::GetInstance()->getFrametime();
 	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
 	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
@@ -670,12 +670,12 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 VOID CCharactor::AnimateAttack()
 {
 	INT Temp = m_pWeapon->Get_nState();
-	static INT iMax = 0.0f;
+	static INT iMax = 0;
 	if( m_pWeapon->Get_nState() == 0x0100 )
 	{
 		if( iMax == 0 ) iMax = m_pWeapon->Get_nFrame();
 		m_fAniAngleAttack = ( m_pWeapon->Get_nFrame() - ( iMax ) )  * 0.05f;
-		CDebugConsole::GetInstance()->Messagef( L"%f\n", m_fAniAngleAttack );
+		//CDebugConsole::GetInstance()->Messagef( L"%f\n", m_fAniAngleAttack );
 
 		//if( m_pWeapon->Get_nFrame() != 0 )
 		//{
@@ -742,6 +742,7 @@ VOID CCharactor::Update()
 		m_pWeapon->SetKeyB( vDir, m_fAngle );
 	}
 #ifdef _DEBUG
+	// 무기 애니 보기위한 키 배열
 	for ( int i = 0; i < 10; ++i )
 	{
 		if ( CInput::GetInstance()->m_bNumKeybutton[i] )

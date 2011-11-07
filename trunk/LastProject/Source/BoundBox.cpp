@@ -23,7 +23,7 @@ CBoundBox::CBoundBox(CCharactor * pObj)
 	Clear(); 
 
 	if (pObj)
-		SetAngle( pObj->Get_CharaAngle() );
+		SetAngleY( pObj->Get_CharaAngle() );
 }
 
 CBoundBox::~CBoundBox(void) 
@@ -171,7 +171,7 @@ FLOAT CBoundBox::GetRadiusShort() const
 	return fRet;
 }
 
-VOID CBoundBox::SetAngle(FLOAT fAngle)
+VOID CBoundBox::SetAngleY(FLOAT fAngle)
 {
 	// z 축 뒤집혀서 OpenGL 꺼 사용
 	m_vAxisDir[0].x =  cosf( fAngle );

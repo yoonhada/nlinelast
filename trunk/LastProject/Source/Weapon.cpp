@@ -137,26 +137,64 @@ HRESULT CWeapon::Create()
 
 VOID CWeapon::SetKeyA( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 {
-	if ( ( m_nState & 0x000F ) == 0x0000 )	//( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x000F ) == 0x0001 ) || 
+	if ( m_WeaponType.nDelay[m_nState] >= m_nFrame )
 	{
-		m_nState = ( m_nState & 0x0F0F ) + 0x0001;
-		m_nFrame = m_WeaponType.nFrameTime[m_WeaponType.nType];
-
-		m_pMap->SetAnimation( EnumCharFrame::ATTACK1 );
-		m_WeaponType.AKeyBB( vPos, fAngle );
+		if ( m_nState == 0x0000 )	//( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x000F ) == 0x0001 ) || 
+		{
+			m_nState = EnumCharFrame::ATTACK1;
+			m_nFrame = m_WeaponType.nFrameTime[1];
+			m_pMap->SetAnimation( m_nState );
+			m_WeaponType.AKeyBB( vPos, fAngle );
+		} 
+		else if ( m_nState == EnumCharFrame::ATTACK1 ) {
+			m_nState = EnumCharFrame::ATTACK2;
+			m_nFrame = m_WeaponType.nFrameTime[2];
+			m_pMap->SetAnimation( m_nState );
+			m_WeaponType.AKeyBB( vPos, fAngle );
+		}
+		else if ( m_nState == EnumCharFrame::ATTACK2 ) {
+			m_nState = EnumCharFrame::A;
+			m_nFrame = m_WeaponType.nFrameTime[3];
+			m_pMap->SetAnimation( m_nState );
+			m_WeaponType.AKeyBB( vPos, fAngle );
+		}
 	}
 }
 
 VOID CWeapon::SetKeyB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 {
-	if (  ( m_nState & 0x0F00 ) == 0x0000 ) // ( 0 < m_nFrame && m_nFrame <= m_WeaponType.nDelay && ( m_nState & 0x0F00 ) == 0x0100 ) || 
+	if ( m_WeaponType.nDelay[m_nState] >= m_nFrame )
 	{
-		m_nState = ( m_nState & 0x0F0F ) + 0x0100;
-		m_nFrame = m_WeaponType.nFrameTime[m_WeaponType.nType];
-
-		m_pMap->SetAnimation( EnumCharFrame::ATTACK2 );
-		m_WeaponType.BKeyBB( vPos, fAngle );
+		if ( m_nState == 0x0000 )
+		{
+			m_nState = EnumCharFrame::TEMP1;
+			m_nFrame = m_WeaponType.nFrameTime[4];
+			m_pMap->SetAnimation( m_nState );
+			m_WeaponType.BKeyBB( vPos, fAngle );
+		}
+		else if ( m_nState == EnumCharFrame::TEMP1 )
+		{
+			m_nState = EnumCharFrame::TEMP2;
+			m_nFrame = m_WeaponType.nFrameTime[5];
+			m_pMap->SetAnimation( m_nState );
+			m_WeaponType.BKeyBB( vPos, fAngle );
+		}
+		else if ( m_nState == EnumCharFrame::TEMP2 )
+		{
+			m_nState = EnumCharFrame::TEMP3;
+			m_nFrame = m_WeaponType.nFrameTime[6];
+			m_pMap->SetAnimation( m_nState );
+			m_WeaponType.BKeyBB( vPos, fAngle );
+		}
+		else if ( m_nState == EnumCharFrame::ATTACK2 )
+		{
+			m_nState = EnumCharFrame::TEMP4;
+			m_nFrame = m_WeaponType.nFrameTime[7];
+			m_pMap->SetAnimation( m_nState );
+			m_WeaponType.BKeyBB( vPos, fAngle );
+		}
 	}
+	CDebugConsole::GetInstance()->Messagef("%d", m_nState);
 }
 
 VOID CWeapon::SetKeyNum( INT nKey, const D3DXVECTOR3& vPos, const FLOAT fAngle )
@@ -166,7 +204,7 @@ VOID CWeapon::SetKeyNum( INT nKey, const D3DXVECTOR3& vPos, const FLOAT fAngle )
 		m_nState = ( m_nState & 0x0F0F ) + 0x0100;
 		m_nFrame = m_WeaponType.nFrameTime[m_WeaponType.nType];
 
-		m_pMap->SetAnimation( EnumCharFrame::ATTACK1 + nKey );
+		m_pMap->SetAnimation( EnumCharFrame::WALK2 + nKey );
 		m_WeaponType.BKeyBB( vPos, fAngle );
 	}
 }
@@ -231,12 +269,13 @@ VOID CWeapon::Update()
 	//m_pMap->Set_ControlRotate( 0, 0 );
 	//m_pMap->Set_ControlRotate( 1, 0 );
 	//m_pMap->Set_ControlRotate( 2, 0 );
-	//m_pMap->Set_ControlTranslate( 0, 0 );
+	m_pMap->Set_ControlTranslate( 0,-1.5 );
 	//m_pMap->Set_ControlTranslate( 1, 0 );
-	//m_pMap->Set_ControlTranslate( 2, 0 );
+	m_pMap->Set_ControlTranslate( 2,-2.5 );
 
 	m_pMap->Update();
 	m_pMap->Calcul_MatWorld();
+	CDebugConsole::GetInstance()->Messagef("%d\n", m_nFrame);
 };
 
 const D3DXMATRIXA16& CWeapon::Get_MatWorld()
