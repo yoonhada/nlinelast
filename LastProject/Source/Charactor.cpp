@@ -828,6 +828,7 @@ VOID CCharactor::BreakQube()
 	{
 		std::vector<CBoundBox*> * vecBoundBox;
 		std::vector<CBoundBox*>::iterator Iter;
+		std::vector<WORD> NetworkSendTempVector;
 
 		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
 		{
@@ -847,6 +848,9 @@ VOID CCharactor::BreakQube()
 
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
 					D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
+					
+					
+
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
 						BreakListMake( Loop, (*Iter) );
@@ -862,10 +866,13 @@ VOID CCharactor::BreakQube()
 						//	}
 						//}
 						//break;
+						NetworkSendTempVector.push_back( Loop );
 					}
 				}
 			}
 		}
+		CNetwork::GetInstance()->CS_UTOM_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector );
+		NetworkSendTempVector.clear();
 	}
 	CTree::GetInstance()->GetAtkVector()->clear();
 }
@@ -911,6 +918,39 @@ VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 #else
 	m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
 #endif 	
+}
+
+VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList )
+{
+	for( INT QLoop=0; QLoop<a_iCount; ++QLoop )
+	{
+		m_vectorCube[ a_pList[QLoop] ]->Set_Visible( m_iSelectedFrameNum, 3 );
+
+		INT iFriendCubeVecIndex = -1;
+
+		// 이웃 노드 큐브 보이기
+		for(INT LoopFriend=0; LoopFriend<6; ++LoopFriend)
+		{
+			iFriendCubeVecIndex = m_vectorCube[ a_pList[QLoop] ]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
+			if ( iFriendCubeVecIndex != -1 )
+			{
+				if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( m_iSelectedFrameNum ) == FALSE )
+				{
+					m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( m_iSelectedFrameNum, TRUE );
+				}
+			}
+		}
+
+		/*if( m_bMonster )
+		{
+			D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
+		}
+		else
+		{
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
+		}*/
+	}	
 }
 
 VOID CCharactor::TestBreakCubeAll()

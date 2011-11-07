@@ -7,9 +7,6 @@
 
 #include "stdafx.h"
 
-// 匙飘况农
-#include "Network.h"
-
 HRESULT CWinBase::Create()
 {
 	m_lpszTitle = TEXT("LastProject"); 
@@ -34,7 +31,7 @@ HRESULT CWinBase::Create()
 	CTree::GetInstance();
 
 	// 匙飘况农
-#ifndef _YOON
+#ifndef _NETWORK
 	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
 	m_pNetwork = new CNetwork;
 	m_pNetwork->CreateSocket();
@@ -58,7 +55,7 @@ HRESULT CWinBase::Create()
 
 	fclose(pFile);
 
-#ifndef _YOON
+#ifndef _NETWORK
 	m_pNetwork->ConnectToServer( szTemp, 20202 );
 	m_pNetwork->csLOGON();
 #endif
@@ -79,7 +76,7 @@ HRESULT CWinBase::Release()
 	CTree::DestoryInstance();
 	CDebugInterface::DestoryInstance();
 
-#ifndef _YOON
+#ifndef _NETWORK
 	WSACleanup();
 	delete m_pNetwork;
 #endif
@@ -238,7 +235,7 @@ VOID CWinBase::Update()
 	swprintf( buf, 256, TEXT( "%0.4f" ), CFrequency::GetInstance()->getFrequency() );
 	SetWindowText( GetInstance()->m_hWnd, buf );
 
-#ifndef _YOON
+#ifndef _NETWORK
 	GetInstance()->m_pNetwork->Update();
 #endif
 	GetInstance()->m_pManage->Update();

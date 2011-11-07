@@ -8,8 +8,6 @@
 #ifndef _WinBase_H_
 #define _WinBase_H_
 
-class CNetwork;
-
 /**
 	@class	CWinBase
 	@date	2011/09/19

@@ -61,6 +61,7 @@
 #include "TextureManage.h"
 #include "Input.h"
 #include "DebugInterface.h"
+#include "Network.h"
 
 // None Sigleton Module
 #include "Light.h"

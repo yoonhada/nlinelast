@@ -118,7 +118,7 @@ VOID CNetwork::Update()
 }
 
 
-BOOL CNetwork::SendToSever( CPacket& pk )
+BOOL CNetwork::SendToServer( CPacket& pk )
 {
 	INT r = send( m_socket, pk.GetBuff(), pk.GetLength(), 0 );
 	if( r == SOCKET_ERROR )
@@ -249,7 +249,7 @@ VOID CNetwork::csLOGON()
 	pk.WriteString( szName, strlen( szName ) );
 	pk.WriteString( szPass, strlen( szPass ) );
 
-	SendToSever( pk );
+	SendToServer( pk );
 
 }
 
@@ -266,7 +266,7 @@ VOID CNetwork::csCHAT()
 
 	pk.WriteString( szText, strlen( szText ) );
 
-	SendToSever( pk );
+	SendToServer( pk );
 }
 
 
@@ -283,11 +283,11 @@ VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
 	pk.Write( angle );
 	pk.CalcSize();
 
-	SendToSever( pk );
+	SendToServer( pk );
 }
 
 
-VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, WORD* pList )
+VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, std::vector<WORD>& pList )
 {
 	CPacket pk;
 	WORD wMsgSize = 0;
@@ -315,7 +315,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 	WORD wClientNumber;
 	CHAR cDestroyPart;
 	CHAR cDestroyCount;
-	WORD wList[20];
+	WORD wList[100];
 
 	pk.Read( &wClientNumber );
 	pk.Read( &cDestroyPart );
@@ -326,13 +326,15 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 		pk.Read( &wList[i] );
 	}
 
+	CMainManage::GetInstance()->Get_pAlphaMon()->RecvBreakList( cDestroyCount, wList );
+
 	// 디버깅용 출력
-	cout << wClientNumber << " : ";
-	for( WORD i=0; i<cDestroyCount; ++i )
-	{
-		cout << wList[i];
-	}
-	cout << endl;
+	//cout << wClientNumber << " : ";
+	//for( WORD i=0; i<cDestroyCount; ++i )
+	//{
+	//	cout << wList[i];
+	//}
+	//cout << endl;
 }
 
 
