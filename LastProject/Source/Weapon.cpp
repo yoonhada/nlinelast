@@ -80,7 +80,7 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 		m_nState = 0;
 		m_nFrame = 0;
 		m_WeaponType.vDir[0] = D3DXVECTOR3(-0.4f, -1.3f, 0.0f );
-		m_WeaponType.vDir[1] = D3DXVECTOR3( 1.2f,  0.0f, 0.0f );
+		m_WeaponType.vDir[1] = D3DXVECTOR3(-1.2f,  0.0f, 0.0f );
 
 	}
 	else
@@ -194,7 +194,6 @@ VOID CWeapon::SetKeyB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 			m_WeaponType.BKeyBB( vPos, fAngle );
 		}
 	}
-	CDebugConsole::GetInstance()->Messagef("%d", m_nState);
 }
 
 VOID CWeapon::SetKeyNum( INT nKey, const D3DXVECTOR3& vPos, const FLOAT fAngle )
@@ -275,7 +274,6 @@ VOID CWeapon::Update()
 
 	m_pMap->Update();
 	m_pMap->Calcul_MatWorld();
-	CDebugConsole::GetInstance()->Messagef("%d\n", m_nFrame);
 };
 
 const D3DXMATRIXA16& CWeapon::Get_MatWorld()
