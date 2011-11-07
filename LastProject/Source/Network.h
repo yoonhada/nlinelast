@@ -13,6 +13,8 @@ public:
 		MSG_CS_LOGON,
 		MSG_CS_CHAT,
 		MSG_CS_MOVE,
+		MSG_CS_UTOM_ATTACK,
+		MSG_CS_MTOU_ATTACK,
 		///
 		///
 		MSG_SC_LOGON = 100,
@@ -20,8 +22,21 @@ public:
 		MSG_SC_NEWUSER,
 		MSG_SC_CHAT,
 		MSG_SC_MOVE,
+		MSG_SC_UTOM_ATTACK,
+		MSG_SC_MTOU_ATTACK,
 		MSG_END,
 
+	};
+
+	enum MONSTER_PART
+	{
+		PART_HEAD = 0,
+		PART_BODY,
+		PART_TAIL,
+		PART_LEFT_ARM,
+		PART_LEFT_FOOT,
+		PART_RIGHT_ARM,
+		PART_RIGHT_FOOT,
 	};
 
 	SOCKET	m_socket;
@@ -45,14 +60,16 @@ public:
 	BOOL ConnectToServer( CHAR* szIP, WORD Port );
 
 	VOID scLOGON( CPacket& pk );
+	VOID scInitData( CPacket& pk );
 	VOID scCHAT( CPacket& pk );
 	VOID scMOVE( CPacket& pk );
 	VOID scNEWUSER( CPacket& pk );
+	VOID SC_UTOM_ATTACK( CPacket& pk );
 
 	VOID csLOGON();
-	VOID scInitData( CPacket& pk );
 	VOID csCHAT();
 	VOID csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle );
+	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, WORD* pList );
 
 	VOID Update();
 

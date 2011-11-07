@@ -2,6 +2,7 @@
 #define _CHASE_H_
 
 #include "State.h"
+#include "Monster.h"
 
 
 class Chase : public State<CMonster>
