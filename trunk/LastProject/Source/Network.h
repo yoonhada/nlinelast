@@ -71,7 +71,7 @@ public:
 	VOID csLOGON();
 	VOID csCHAT();
 	VOID csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle );
-	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, std::vector<WORD>& pList );
+	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& pList );
 
 	VOID Update();
 
