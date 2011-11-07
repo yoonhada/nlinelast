@@ -1,8 +1,7 @@
 #include "stdafx.h"
 
 #include "Stiffen.h"
-#include "Battle.h"
-#include "Seek.h"
+#include "WaitInterPolation.h"
 
 #include "Monster.h"
 #include "Frequency.h"
@@ -53,7 +52,7 @@ VOID Stiffen::Execute( CMonster* pMonster )
 			pMonster->ChangeAnimation( 0 );
 
 			// 경직상태가 끝나면 다시 전투 상태로
-			pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+			pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );
 //		}
 	}
 }

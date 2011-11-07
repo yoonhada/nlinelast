@@ -22,7 +22,7 @@ VOID Spin::Enter( CMonster* pMonster )
 
 VOID Spin::Execute( CMonster* pMonster )
 {
-	pMonster->ChangeAnimation( 1 );
+	pMonster->ChangeAnimation( 2 );
 
 	pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
 }
