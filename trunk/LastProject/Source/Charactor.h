@@ -208,7 +208,7 @@ private:
 
 	CBoundBox * m_pBoundBox;
 	CWeapon * m_pWeapon;
-	COctTree2Array * m_pOctTree;
+	//COctTree2Array * m_pOctTree;
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;
