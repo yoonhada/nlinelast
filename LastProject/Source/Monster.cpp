@@ -458,9 +458,9 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 		break;
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Total X rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[0] );
-	CDebugConsole::GetInstance()->Messagef( L"Total Y rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[1] );
-	CDebugConsole::GetInstance()->Messagef( L"Total Z rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[2] );
+	//CDebugConsole::GetInstance()->Messagef( L"Total X rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[0] );
+	//CDebugConsole::GetInstance()->Messagef( L"Total Y rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[1] );
+	//CDebugConsole::GetInstance()->Messagef( L"Total Z rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[2] );
 
 }
 
@@ -1158,7 +1158,7 @@ VOID CMonster::AniInterpolation()
 VOID CMonster::Update()
 {
 	//CDebugConsole::GetInstance()->Messagef( L"ChangingAnimation : %d\n", m_bChangingAnimation );
-	CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck : %d\n", m_bAnimationEndCheck );
+	//CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck : %d\n", m_bAnimationEndCheck );
 
 	if( m_bChangingAnimation == FALSE )
 	{

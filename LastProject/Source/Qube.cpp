@@ -39,7 +39,7 @@ VOID CQube::Update( CBoundBox * pBB )
 	m_vMomentum -= CPhysics::GetInstance()->m_vGAccel;				// 누적 중력가속도 
 
 	// 이동값 갱신
-	vDir = m_vPos + m_vAccelerate + m_vMomentum;
+	vDir = m_vPos + m_vAccelerate + m_vMomentum * CFrequency::GetInstance()->getFrametime();
 	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir );
 	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{

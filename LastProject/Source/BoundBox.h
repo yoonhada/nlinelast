@@ -48,12 +48,14 @@ public:
 	VOID SetSize(INT n, float f)		{ m_fSize[n] = f; }
 	VOID SetPosition(D3DXVECTOR3 v)		{ m_vPosition = v; }	///< 중심좌표
 	VOID SetDirection(D3DXVECTOR3 v)	{ m_vDirection = v; }	///< 동좌표
-	VOID SetAngle(FLOAT fAngle);								///< y축회전
-
+	VOID SetAngleX(FLOAT fAngle);								///< x축회전
+	VOID SetAngleY(FLOAT fAngle);								///< y축회전
+	VOID SetAngleZ(FLOAT fAngle);								///< z축회전
 private:
 	CCharactor * m_pCharactors;
 	D3DXVECTOR3 m_vPosition;		///< 중심좌표
 	D3DXVECTOR3 m_vAxisDir[3];		///< 큐브 세축의 단위벡터 ( ?? 필요한가?? )
+	D3DXMATRIXA16 m_matAxis;		///< 큐브 매트릭스
 	D3DXVECTOR3 m_vDirection;		///< 동좌표
 	FLOAT m_fSize[6];
 	//D3DXMATRIXA16 m_vMatWorld;

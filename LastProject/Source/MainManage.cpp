@@ -76,7 +76,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 #ifdef _ALPHAMON
 	m_pAlphaMon = new CCharactor;
 	m_pAlphaMon->Create( m_pD3dDevice, m_pMatrices );
-	m_pAlphaMon->Load( L"Data/CharData/35box.csav" );
+	m_pAlphaMon->Load( L"Data/CharData/MOM.csav" );
 	m_pAlphaMon->Set_Position( D3DXVECTOR3(-100.0f, 0.0f, 0.0f) );
 	CTree::GetInstance()->GetChaVector()->push_back( m_pAlphaMon->GetBoundBox() );
 #endif
