@@ -45,7 +45,7 @@ VOID CCharactor::Clear()
 	m_pObject = NULL;
 	m_pCreateCube = NULL;
 	m_pWeapon = NULL;
-	m_pOctTree = NULL;
+	//m_pOctTree = NULL;
 
 	m_iCubeVectorSize = -1;
 	m_iBoxSize = -1;
@@ -95,7 +95,7 @@ HRESULT CCharactor::Create()
 		L"Img/shadow.tga"
 		);
 
-	m_pOctTree = new COctTree2Array();
+	//m_pOctTree = new COctTree2Array();
 	//m_pOctTree->Build(1 );
 	return S_OK;
 }
@@ -150,7 +150,7 @@ HRESULT CCharactor::Release()
 	SAFE_DELETE( m_pBoundBox );
 	SAFE_DELETE( m_pWeapon );
 	SAFE_DELETE( m_pShadowCell );
-	SAFE_DELETE( m_pOctTree );
+	//SAFE_DELETE( m_pOctTree );
 
 	return S_OK;
 }
