@@ -95,9 +95,8 @@ HRESULT CCharactor::Create()
 		L"Img/shadow.tga"
 		);
 
-	D3DXVECTOR3 vArea( 7.0f, 7.0f, 7.0f );
-	m_pOctTree = new OctTree();
-	m_pOctTree->Build( 4, -vArea, vArea );
+	m_pOctTree = new COctTree2Array();
+	//m_pOctTree->Build(1 );
 	return S_OK;
 }
 
@@ -135,6 +134,7 @@ VOID CCharactor::CreateWeapon( INT nType )
 	m_pWeapon = new CWeapon( m_pD3dDevice );
 	m_pWeapon->SetType( nType );
 	m_pWeapon->Create();
+
 }
 
 
@@ -404,8 +404,6 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	//}
 
 	//MessageBox(GHWND, L"Load OK", a_pFileName, MB_OK);
-
-	
 }
 
 BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
@@ -481,20 +479,12 @@ BOOL CCharactor::CollisionAtk()
   			Iter = vecBoundBox->begin();
 			for (int i = 0; i < 8; ++i)
 			{
-				vDir = m_pBoundBox->GetPosition(i);
 				vPos = ( *Iter )->GetPosition(i);
-				CDebugConsole::GetInstance()->Messagef( L"%0.2f, %0.2f, %0.2f\n", vPos.x, vPos.y, vPos.z );
 				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
 				{
 					return TRUE; 
 				}
 			}
-			//if( CPhysics::GetInstance()->Collision( m_pBoundBox, ( *Iter ) ) )
-			//{
-			//	CDebugConsole::GetInstance()->Messagef( "ATK\n" );
-			//	//CTree::GetInstance()->GetAtkVector()->clear();
-			//	return TRUE;
-			//}
 		}
 
 		CTree::GetInstance()->GetAtkVector()->clear();
@@ -831,7 +821,7 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 
 VOID CCharactor::BreakQube()
 {
-	INT Loop, nNeighbor;
+	INT Loop;
 	D3DXVECTOR3 vPos;
 
 	if( m_bAliveCheck == TRUE )
@@ -883,8 +873,13 @@ VOID CCharactor::BreakQube()
 VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 {
 	D3DXVECTOR3 vDir = pBB->GetDirection();
+	CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", vDir.x, vDir.y, vDir.z);
+
 	D3DXMATRIXA16 mat = Get_MatWorld();
+	mat._41 = 0.0f;	mat._42 = 0.0f;	mat._43 = 0.0f;	
 	D3DXVec3TransformCoord( &vDir, &vDir, &(pBB->GetAxisMat()) );
+	CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", vDir.x, vDir.y, vDir.z);
+	CDebugConsole::GetInstance()->Messagef("\n");
 
 	m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, 3 );
 
