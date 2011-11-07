@@ -121,10 +121,6 @@ VOID CModel::CreateRandom( CCharCube* a_pCube,
 	mat._42 = 0.0f;
 	mat._43 = 0.0f;
 
-	//vMome = D3DXVECTOR3( 0.0f, 0.0f, -1.5f );
-	D3DXVec3TransformCoord( &vMome, &vMome, &mat );
-	
-
 	pQube = new CQube;
 	pQube->SetPosition( vec );
 	pQube->RandMome( vMome, fPow );
