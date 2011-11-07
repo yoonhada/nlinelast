@@ -32,6 +32,7 @@ VOID CMonster::Clear()
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
 	m_iChangeAnimationEndCheck = 0;
+	m_iChangeAnimationEndCheck2 = 0;
 	m_iNextFrame = 0;
 	m_bChangingAnimation = FALSE;
 
@@ -437,6 +438,7 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 			{
 				m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] -= a_fSpeed * a_fFrameTime;
 			}
+			//ABSDEF( m_fRotation[a_iXYZ] ) > 6.2831853f ? m_fAngle = 0.0f : NULL;
 		}
 		// 0이면 초기화
 		else
@@ -451,7 +453,8 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 		Set_ControlRotate( 0, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
 		break;
 	case 1:
-		Set_ControlRotate( 1, m_fAngle + m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		//Set_ControlRotate( 1, m_fAngle + m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		m_fAngle += m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ];
 		break;
 	case 2:
 		Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
@@ -741,7 +744,8 @@ VOID CMonster::InterpolationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEn
 		Set_ControlRotate( 0, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
 		break;
 	case 1:
-		Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		//Set_ControlRotate( 1, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
+		m_fAngle += m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ];
 		break;
 	case 2:
 		Set_ControlRotate( 2, m_pFrame[m_iSelectedFrameNum].m_fRotation[a_iXYZ] );
@@ -943,7 +947,7 @@ VOID CMonster::ChangeAnimation( INT a_iAniNum )
 	m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_fTrans[2];
 
 	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.x = m_pFrame[m_iSelectedFrameNum].m_fRotation[0];
-	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y = m_pFrame[m_iSelectedFrameNum].m_fRotation[1];
+	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y = m_fAngle;// + m_pFrame[m_iSelectedFrameNum].m_fRotation[1];
 	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_fRotation[2];
 
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
@@ -1015,44 +1019,47 @@ VOID CMonster::AniInterpolation()
 	//CDebugConsole::GetInstance()->Messagef( L"InterLength : %f \n", m_fMaxInterpolationLength );
 
 	m_iChangeAnimationEndCheck = 0;
-
+	m_iChangeAnimationEndCheck2 = 0;
 	FLOAT Speed = 3.0f;
+	if( m_pFrame[m_iSelectedFrameNum].m_bAnimation == TRUE )
+	{
 
-	InterpolationTotalTrans( 0, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.x, 
-		m_pFrame[m_iNextFrame].m_vAniTransStartValue.x, 
-		Speed, 
-		FALSE, 
-		CFrequency::GetInstance()->getFrametime() );
+		InterpolationTotalTrans( 0, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.x, 
+			m_pFrame[m_iNextFrame].m_vAniTransStartValue.x, 
+			Speed, 
+			FALSE, 
+			CFrequency::GetInstance()->getFrametime() );
 
-	InterpolationTotalTrans( 1, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.y, 
-		m_pFrame[m_iNextFrame].m_vAniTransStartValue.y, 
-		Speed, 
-		FALSE, 
-		CFrequency::GetInstance()->getFrametime() );
+		InterpolationTotalTrans( 1, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.y, 
+			m_pFrame[m_iNextFrame].m_vAniTransStartValue.y, 
+			Speed, 
+			FALSE, 
+			CFrequency::GetInstance()->getFrametime() );
 
-	InterpolationTotalTrans( 2, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.z, 
-		m_pFrame[m_iNextFrame].m_vAniTransStartValue.z, 
-		Speed, 
-		FALSE, 
-		CFrequency::GetInstance()->getFrametime() );
+		InterpolationTotalTrans( 2, m_pFrame[m_iSelectedFrameNum].m_vAniTransSave.z, 
+			m_pFrame[m_iNextFrame].m_vAniTransStartValue.z, 
+			Speed, 
+			FALSE, 
+			CFrequency::GetInstance()->getFrametime() );
 
-	InterpolationTotalRotate( 0, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.x, 
-		m_pFrame[m_iNextFrame].m_vAniRotateStartValue.x, 
-		Speed, 
-		FALSE, 
-		CFrequency::GetInstance()->getFrametime() );
+		InterpolationTotalRotate( 0, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.x, 
+			m_pFrame[m_iNextFrame].m_vAniRotateStartValue.x, 
+			Speed, 
+			FALSE, 
+			CFrequency::GetInstance()->getFrametime() );
 
-	InterpolationTotalRotate( 1, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y, 
-		m_pFrame[m_iNextFrame].m_vAniRotateStartValue.y, 
-		Speed, 
-		FALSE, 
-		CFrequency::GetInstance()->getFrametime() );
+		InterpolationTotalRotate( 1, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y, 
+			m_pFrame[m_iNextFrame].m_vAniRotateStartValue.y, 
+			Speed, 
+			FALSE, 
+			CFrequency::GetInstance()->getFrametime() );
 
-	InterpolationTotalRotate( 2, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z, 
-		m_pFrame[m_iNextFrame].m_vAniRotateStartValue.z, 
-		Speed, 
-		FALSE, 
-		CFrequency::GetInstance()->getFrametime() );
+		InterpolationTotalRotate( 2, m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z, 
+			m_pFrame[m_iNextFrame].m_vAniRotateStartValue.z, 
+			Speed, 
+			FALSE, 
+			CFrequency::GetInstance()->getFrametime() );
+	}
 
 	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[0];
 	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[1];
@@ -1061,6 +1068,14 @@ VOID CMonster::AniInterpolation()
 	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[0];
 	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[1];
 	m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[2];
+
+	m_iChangeAnimationEndCheck2 += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[0];
+	m_iChangeAnimationEndCheck2 += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[1];
+	m_iChangeAnimationEndCheck2 += m_pFrame[m_iSelectedFrameNum].m_bAniRotateEndCheck[2];
+
+	m_iChangeAnimationEndCheck2 += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[0];
+	m_iChangeAnimationEndCheck2 += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[1];
+	m_iChangeAnimationEndCheck2 += m_pFrame[m_iSelectedFrameNum].m_bAniTransEndCheck[2];
 
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
@@ -1157,8 +1172,11 @@ VOID CMonster::AniInterpolation()
 
 VOID CMonster::Update()
 {
-	//CDebugConsole::GetInstance()->Messagef( L"ChangingAnimation : %d\n", m_bChangingAnimation );
-	//CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck : %d\n", m_bAnimationEndCheck );
+	CDebugConsole::GetInstance()->Messagef( L"ChangingAnimation : %d\n", m_bChangingAnimation );
+	CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck : %d\n", m_iChangeAnimationEndCheck );
+	CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck2 : %d\n", m_iChangeAnimationEndCheck2 );
+	CDebugConsole::GetInstance()->Messagef( L"SelectedFrame : %d\n", m_iSelectedFrameNum );
+	CDebugConsole::GetInstance()->Messagef( L"bAnimationEnd : %d\n", m_bAnimationEndCheck );
 
 	if( m_bChangingAnimation == FALSE )
 	{

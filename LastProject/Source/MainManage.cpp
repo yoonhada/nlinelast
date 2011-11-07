@@ -76,7 +76,7 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 #ifdef _ALPHAMON
 	m_pAlphaMon = new CCharactor;
 	m_pAlphaMon->Create( m_pD3dDevice, m_pMatrices );
-	m_pAlphaMon->Load( L"Data/CharData/MOM.csav" );
+	m_pAlphaMon->Load( L"Data/CharData/35box.csav" );
 	m_pAlphaMon->Set_Position( D3DXVECTOR3(-100.0f, 0.0f, 0.0f) );
 	CTree::GetInstance()->GetChaVector()->push_back( m_pAlphaMon->GetBoundBox() );
 #endif
@@ -282,29 +282,32 @@ VOID	CMainManage::Update()
 	//	}
 	//}
 
-	static FLOAT TimeElapsed = 0.0f;
+	//static FLOAT TimeElapsed = 0.0f;
 	static FLOAT fMonsterRun = 0.0f;
-	TimeElapsed += CFrequency::GetInstance()->getFrametime();
-	if( TimeElapsed >= 0.1f )
-	{
-		fMonsterRun = 0.5f * CFrequency::GetInstance()->getFrametime();
-		TimeElapsed = 0.0f;
-	}
+	static FLOAT fMonsterAngle = 0.0f;
+	//TimeElapsed += CFrequency::GetInstance()->getFrametime();
+	//if( TimeElapsed >= 0.1f )
+	//{
+		fMonsterRun += 1.0f * CFrequency::GetInstance()->getFrametime();
+		fMonsterAngle += 0.3f * CFrequency::GetInstance()->getFrametime();
+		//TimeElapsed = 0.0f;
+	//}
 
 #ifdef _ALPHAMON
 	m_pAlphaMon->SetMon(TRUE);
+	m_pAlphaMon->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, fMonsterRun), fMonsterAngle );
 	m_pAlphaMon->UpdateOtherPlayer2( );
 	m_pAlphaMon->SetMon(FALSE);
 	//m_pAlphaMon->Update();
 #endif
 
-	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pMonster->Update();
+	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 
 
 	if( CInput::GetInstance()->Get_Rbutton() )
 	{
-		m_pMonster->Set_iSelectedFrameNum( 1 );
+		//m_pMonster->Set_iSelectedFrameNum( 1 );
 	}
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	

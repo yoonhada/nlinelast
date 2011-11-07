@@ -223,6 +223,7 @@ private:
 
 	// 보간 애니메이션용 변수들
 	INT m_iChangeAnimationEndCheck;		  ///< 보간 애니메이션 끝낫나 체크용
+	INT m_iChangeAnimationEndCheck2;
 	INT m_iNextFrame;					  ///< 다음 넘어갈 프레임 번호
 	BOOL m_bChangingAnimation;			  ///< 보간 애니메이션 끝낫나 체크
 	FLOAT m_fMaxInterpolationLength;	  ///< 보간 속도 계산용 최대 거리
