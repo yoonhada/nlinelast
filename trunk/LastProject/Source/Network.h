@@ -4,8 +4,9 @@
 //#include "stdafx.h"
 class CPacket;
 
-class CNetwork
+class CNetwork : public CSingleton<CNetwork>
 {
+	friend class CSingleton<CNetwork>;
 public:
 	enum MESSAGE_ID
 	{
@@ -42,6 +43,7 @@ public:
 	SOCKET	m_socket;
 	BOOL	m_bStop;
 	HANDLE	m_hRecvThread;
+	WORD	m_wNumber;
 
 	CRITICAL_SECTION m_cs;
 
@@ -69,11 +71,11 @@ public:
 	VOID csLOGON();
 	VOID csCHAT();
 	VOID csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle );
-	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, WORD* pList );
+	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, CHAR cDestroyCount, std::vector<WORD>& pList );
 
 	VOID Update();
 
-	BOOL SendToSever( CPacket& pk );
+	BOOL SendToServer( CPacket& pk );
 
 	VOID InsertPacket( CPacket& pk );
 	VOID ProcessPacket( CPacket& pk );

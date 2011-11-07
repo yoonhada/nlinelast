@@ -152,6 +152,8 @@ public:
 		return m_bMonster;
 	}
 
+	VOID RecvBreakList( INT a_iCount, WORD* a_pList );
+
 private:
 	VOID _LoadRelease();
 	VOID _SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor );

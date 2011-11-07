@@ -83,6 +83,11 @@ public:
 	{
 		return m_iClientNumber;
 	}
+
+	CCharactor* Get_pAlphaMon()
+	{
+		return m_pAlphaMon;
+	}
 };
 
 #endif
