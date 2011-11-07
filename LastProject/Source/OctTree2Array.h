@@ -1,14 +1,12 @@
 #pragma once
 
-#include <list>
-
-
 class COctTree2Array
 {
 public:
 	typedef struct _AREA
 	{
-		D3DXVECTOR3 vPos;
+		D3DXVECTOR3 vCenter;
+		INT nIndex;
 	}AREA, *LPAREA;
 
 private:
@@ -17,10 +15,10 @@ private:
 	VOID		Cleanup();
 
 	//	Build
-	VOID		BuildOctTree( INT, INT );
+	VOID		BuildOctTree( );
 
-	COctTree2Array*	AddChild( D3DXVECTOR3 _vMin, D3DXVECTOR3 _vMax );
-	BOOL		SubDivide( INT _iLevel );
+	COctTree2Array*	AddChild( INT );
+	BOOL		SubDivide( );
 
 	VOID		SetChildArea( LPAREA _pArea );
 
@@ -43,6 +41,11 @@ public:
 	VOID		Build( INT _nSize );
 	VOID		GenerateIndex( D3DXVECTOR3& _pvVertex );
 
+	// Set
+	VOID		SetChildIndex( D3DXVECTOR3& _pvVertex, INT nIndex);
+
+	// Get
+	INT			GetChildIndex( D3DXVECTOR3& _pvVertex );
 private:
 	enum { LUF = 0, LUB, LDF, LDB, RUF, RUB, RDF, RDB };
 

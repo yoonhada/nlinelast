@@ -27,76 +27,44 @@ VOID COctTree2Array::Build( INT _nSize )
 	//	CleanupÀ¸·Î ¹Ù²Ü·¡
 	Cleanup();
 
-	D3DXVECTOR3 vPos( 0.0f, 0.0f, 0.0f );
-	m_Area.vPos = vPos;
+	m_Area.vCenter = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_nSize = _nSize;
-	//BuildOctTree();
+	BuildOctTree( );
 }
 
-VOID COctTree2Array::BuildOctTree( INT _nMin, INT _nMax )
+VOID COctTree2Array::BuildOctTree( )
 {
-	//if( SubDivide( m_nMax - m_nMin ) )
+	if( SubDivide( ) )
 	{
-		////	Up
-		//m_pChild[ LUF ]->BuildOctTree( _nSize - 1 );
-		//m_pChild[ LUB ]->BuildOctTree( _nSize - 1 );
-		//m_pChild[ RUF ]->BuildOctTree( _nSize - 1 );
-		//m_pChild[ RUB ]->BuildOctTree( _nSize - 1 );
+		//	Up
+		m_pChild[ LUF ]->BuildOctTree( );
+		m_pChild[ LUB ]->BuildOctTree( );
+		m_pChild[ RUF ]->BuildOctTree( );
+		m_pChild[ RUB ]->BuildOctTree( );
 
-		////	Down
-		//m_pChild[ LDF ]->BuildOctTree( _nSize - 1 );
-		//m_pChild[ LDB ]->BuildOctTree( _nSize - 1 );
-		//m_pChild[ RDF ]->BuildOctTree( _nSize - 1 );
-		//m_pChild[ RDB ]->BuildOctTree( _nSize - 1 );
+		//	Down
+		m_pChild[ LDF ]->BuildOctTree( );
+		m_pChild[ LDB ]->BuildOctTree( );
+		m_pChild[ RDF ]->BuildOctTree( );
+		m_pChild[ RDB ]->BuildOctTree( );
 	}
 }
 
-BOOL COctTree2Array::SubDivide( INT _iLevel )
+BOOL COctTree2Array::SubDivide( )
 {
-	if( _iLevel > 1 )
+	if( m_nSize > 1 )
 	{
 		AREA	ChildArea[ 8 ];
-		SetChildArea( ChildArea );
 
-		/*//CDebugConsole::GetInstance()->Messagef( L"[ Parent ] Min x : %f y : %f z : %f\n", m_Area.vMin.x, m_Area.vMin.y, m_Area.vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ Parent ] Max x : %f y : %f z : %f\n", m_Area.vMax.x, m_Area.vMax.y, m_Area.vMax.z );*/
-		
-		//	Up
-		//m_pChild[ LUF ] = AddChild( ChildArea[ LUF ].vMin, ChildArea[ LUF ].vMax );
-		//m_pChild[ LUB ] = AddChild( ChildArea[ LUB ].vMin, ChildArea[ LUB ].vMax );
-		//m_pChild[ RUF ] = AddChild( ChildArea[ RUF ].vMin, ChildArea[ RUF ].vMax );
-		//m_pChild[ RUB ] = AddChild( ChildArea[ RUB ].vMin, ChildArea[ RUB ].vMax );
+		m_pChild[ LUF ] = AddChild( LUF );
+		m_pChild[ LUB ] = AddChild( LUB );
+		m_pChild[ RUF ] = AddChild( RUF );
+		m_pChild[ RUB ] = AddChild( RUB );
 
-		/*//CDebugConsole::GetInstance()->Messagef( L"[ LUF ] Min x : %f y : %f z : %f\n", ChildArea[ LUF ].vMin.x, ChildArea[ LUF ].vMin.y, ChildArea[ LUF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LUF ] Max x : %f y : %f z : %f\n", ChildArea[ LUF ].vMax.x, ChildArea[ LUF ].vMax.y, ChildArea[ LUF ].vMax.z );
-
-		//CDebugConsole::GetInstance()->Messagef( L"[ LUB ] Min x : %f y : %f z : %f\n", ChildArea[ LUB ].vMin.x, ChildArea[ LUB ].vMin.y, ChildArea[ LUB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LUB ] Max x : %f y : %f z : %f\n", ChildArea[ LUB ].vMax.x, ChildArea[ LUB ].vMax.y, ChildArea[ LUB ].vMax.z );
-
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUF ] Min x : %f y : %f z : %f\n", ChildArea[ RUF ].vMin.x, ChildArea[ RUF ].vMin.y, ChildArea[ RUF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUF ] Max x : %f y : %f z : %f\n", ChildArea[ RUF ].vMax.x, ChildArea[ RUF ].vMax.y, ChildArea[ RUF ].vMax.z );
-
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUB ] Min x : %f y : %f z : %f\n", ChildArea[ RUB ].vMin.x, ChildArea[ RUB ].vMin.y, ChildArea[ RUB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUB ] Max x : %f y : %f z : %f\n", ChildArea[ RUB ].vMax.x, ChildArea[ RUB ].vMax.y, ChildArea[ RUB ].vMax.z );
-		*/
-
-		//	Down
-		//m_pChild[ LDF ] = AddChild( ChildArea[ LDF ].vMin, ChildArea[ LDF ].vMax );
-		//m_pChild[ LDB ] = AddChild( ChildArea[ LDB ].vMin, ChildArea[ LDB ].vMax );
-		//m_pChild[ RDF ] = AddChild( ChildArea[ RDF ].vMin, ChildArea[ RDF ].vMax );
-		//m_pChild[ RDB ] = AddChild( ChildArea[ RDB ].vMin, ChildArea[ RDB ].vMax );
-
-		/*//CDebugConsole::GetInstance()->Messagef( L"[ LDF ] Min x : %f y : %f z : %f\n", ChildArea[ LDF ].vMin.x, ChildArea[ LDF ].vMin.y, ChildArea[ LDF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LDF ] Max x : %f y : %f z : %f\n", ChildArea[ LDF ].vMax.x, ChildArea[ LDF ].vMax.y, ChildArea[ LDF ].vMax.z );
-
-		//CDebugConsole::GetInstance()->Messagef( L"[ LDB ] Min x : %f y : %f z : %f\n", ChildArea[ LDB ].vMin.x, ChildArea[ LDB ].vMin.y, ChildArea[ LDB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LDB ] Max x : %f y : %f z : %f\n", ChildArea[ LDB ].vMax.x, ChildArea[ LDB ].vMax.y, ChildArea[ LDB ].vMax.z );
-
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDF ] Min x : %f y : %f z : %f\n", ChildArea[ RDF ].vMin.x, ChildArea[ RDF ].vMin.y, ChildArea[ RDF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDF ] Max x : %f y : %f z : %f\n", ChildArea[ RDF ].vMax.x, ChildArea[ RDF ].vMax.y, ChildArea[ RDF ].vMax.z );
-
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDB ] Min x : %f y : %f z : %f\n", ChildArea[ RDB ].vMin.x, ChildArea[ RDB ].vMin.y, ChildArea[ RDB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDB ] Max x : %f y : %f z : %f\n", ChildArea[ RDB ].vMax.x, ChildArea[ RDB ].vMax.y, ChildArea[ RDB ].vMax.z );*/
+		m_pChild[ LDF ] = AddChild( LDF );
+		m_pChild[ LDB ] = AddChild( LDB );
+		m_pChild[ RDF ] = AddChild( RDF );
+		m_pChild[ RDB ] = AddChild( RDB );
 
 		return TRUE;
 	}
@@ -104,14 +72,61 @@ BOOL COctTree2Array::SubDivide( INT _iLevel )
 	return FALSE;
 }
 
-COctTree2Array* COctTree2Array::AddChild( D3DXVECTOR3 _vMin, D3DXVECTOR3 _vMax )
+COctTree2Array* COctTree2Array::AddChild( INT nIndex )
 {
 	COctTree2Array*	pOctTree = new COctTree2Array();
-
-	//pOctTree->m_Area.vMin = _vMin;
-	//pOctTree->m_Area.vMax = _vMax;
-	
 	pOctTree->Cleanup();
+	pOctTree->m_nSize = m_nSize >> 1;
+
+	if ( ( m_nSize & 0x01 ) && ( nIndex == RUF || nIndex == RUB || nIndex == RDF || nIndex == RDB) )
+	{
+		pOctTree->m_nSize += 1;
+	}
+	
+	pOctTree->m_Area.nIndex = -1;
+	switch (nIndex)
+	{
+	case LUF:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z - pOctTree->m_nSize;
+		break;
+	case LUB:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z + pOctTree->m_nSize;
+		break;
+	case RUF:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z - pOctTree->m_nSize;
+		break;
+	case RUB:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z + pOctTree->m_nSize;
+		break;
+	case LDF:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z - pOctTree->m_nSize;
+		break;
+	case LDB:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z + pOctTree->m_nSize;
+		break;
+	case RDF:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z - pOctTree->m_nSize;
+		break;
+	case RDB:
+		pOctTree->m_Area.vCenter.x = m_Area.vCenter.x + pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.y = m_Area.vCenter.y - pOctTree->m_nSize;
+		pOctTree->m_Area.vCenter.z = m_Area.vCenter.z + pOctTree->m_nSize;
+		break;
+ 	}
 
 	return pOctTree;
 }
@@ -119,8 +134,7 @@ COctTree2Array* COctTree2Array::AddChild( D3DXVECTOR3 _vMin, D3DXVECTOR3 _vMax )
 VOID COctTree2Array::SetChildArea( LPAREA _pArea )
 {
 	//	LUB
-	//_pArea[ LUB ].nSize = 
-	//	vMin.x = m_Area.vMin.x;
+	//_pArea[ LUB ].nSize =  vMin.x = m_Area.vMin.x;
 	//_pArea[ LUB ].vMin.y = m_Area.vMin.y + ( m_Area.vMax.y - m_Area.vMin.y ) / 2.0f;
 	//_pArea[ LUB ].vMin.z = m_Area.vMin.z;
 
@@ -261,4 +275,60 @@ BOOL COctTree2Array::CmpMinMax( const D3DXVECTOR3& _vMin, const D3DXVECTOR3& _vM
 		bResult = FALSE;
 
 	return bResult;
+}
+
+VOID COctTree2Array::SetChildIndex( D3DXVECTOR3& _pvVertex, INT nIndex)
+{
+	if ( _pvVertex == m_Area.vCenter )
+	{
+		m_Area.nIndex = nIndex;
+
+		return;
+	}
+	if (m_nSize == 1)
+		return;
+
+	INT x, y, z;
+	if (_pvVertex.x >= m_Area.vCenter.x)	x = 1;
+	else									x = 0;
+	if (_pvVertex.y >= m_Area.vCenter.y)	y = 1;
+	else									y = 0;
+	if (_pvVertex.z >= m_Area.vCenter.z)	z = 1;
+	else									z = 0;
+
+	if      ( x == 0 && y == 1 && z == 0 )	m_pChild[LUF]->SetChildIndex( _pvVertex, nIndex );
+	else if ( x == 0 && y == 1 && z == 1 )	m_pChild[LUB]->SetChildIndex( _pvVertex, nIndex );
+	else if ( x == 1 && y == 1 && z == 0 )	m_pChild[RUF]->SetChildIndex( _pvVertex, nIndex );
+	else if ( x == 1 && y == 1 && z == 1 )	m_pChild[RUB]->SetChildIndex( _pvVertex, nIndex );
+	else if ( x == 0 && y == 0 && z == 0 )	m_pChild[LDF]->SetChildIndex( _pvVertex, nIndex );
+	else if ( x == 0 && y == 0 && z == 1 )	m_pChild[LDB]->SetChildIndex( _pvVertex, nIndex );
+	else if ( x == 1 && y == 0 && z == 0 )	m_pChild[RDF]->SetChildIndex( _pvVertex, nIndex );
+	else if ( x == 1 && y == 0 && z == 1 )	m_pChild[RDB]->SetChildIndex( _pvVertex, nIndex );
+}
+
+INT COctTree2Array::GetChildIndex( D3DXVECTOR3& _pvVertex )
+{
+	if ( _pvVertex == m_Area.vCenter )
+	{
+		return  m_Area.nIndex;
+	}
+
+	INT x, y, z;
+	if (_pvVertex.x >= m_Area.vCenter.x)	x = 1;
+	else									x = 0;
+	if (_pvVertex.y >= m_Area.vCenter.y)	y = 1;
+	else									y = 0;
+	if (_pvVertex.z >= m_Area.vCenter.z)	z = 1;
+	else									z = 0;
+
+	if      ( x == 0 && y == 1 && z == 0 )	m_pChild[LUF]->GetChildIndex( _pvVertex );
+	else if ( x == 0 && y == 1 && z == 1 )	m_pChild[LUB]->GetChildIndex( _pvVertex );
+	else if ( x == 1 && y == 1 && z == 0 )	m_pChild[RUF]->GetChildIndex( _pvVertex );
+	else if ( x == 1 && y == 1 && z == 1 )	m_pChild[RUB]->GetChildIndex( _pvVertex );
+	else if ( x == 0 && y == 0 && z == 0 )	m_pChild[LDF]->GetChildIndex( _pvVertex );
+	else if ( x == 0 && y == 0 && z == 1 )	m_pChild[LDB]->GetChildIndex( _pvVertex );
+	else if ( x == 1 && y == 0 && z == 0 )	m_pChild[RDF]->GetChildIndex( _pvVertex );
+	else if ( x == 1 && y == 0 && z == 1 )	m_pChild[RDB]->GetChildIndex( _pvVertex );
+
+	return -1;
 }

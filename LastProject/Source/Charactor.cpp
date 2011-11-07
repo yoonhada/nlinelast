@@ -13,7 +13,7 @@
 #include "Weapon.h"
 #include "ShadowCell.h"
 
-#include "OctTree.h"
+#include "OctTree2Array.h"
 
 CCharactor::CCharactor()
 {
@@ -45,7 +45,7 @@ VOID CCharactor::Clear()
 	m_pObject = NULL;
 	m_pCreateCube = NULL;
 	m_pWeapon = NULL;
-	//m_pOctTree = NULL;
+	m_pOctTree = NULL;
 
 	m_iCubeVectorSize = -1;
 	m_iBoxSize = -1;
@@ -95,8 +95,7 @@ HRESULT CCharactor::Create()
 		L"Img/shadow.tga"
 		);
 
-	//m_pOctTree = new COctTree2Array();
-	//m_pOctTree->Build(1 );
+	m_pOctTree = new COctTree2Array;
 	return S_OK;
 }
 
@@ -126,6 +125,7 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatric
 							0.0f, 1.0f,
 							L"Img/shadow.tga"
 						  );
+	m_pOctTree = new COctTree2Array;
 	return S_OK;
 }
 
@@ -150,7 +150,7 @@ HRESULT CCharactor::Release()
 	SAFE_DELETE( m_pBoundBox );
 	SAFE_DELETE( m_pWeapon );
 	SAFE_DELETE( m_pShadowCell );
-	//SAFE_DELETE( m_pOctTree );
+	SAFE_DELETE( m_pOctTree );
 
 	return S_OK;
 }
@@ -263,6 +263,7 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	fwscanf( pFile, L"%d", &iTemp );
 	fwscanf( pFile, L"%s", szTemp );
 	
+	m_pOctTree->Build( iTemp );
 	FLOAT fSize = 0.5f * iTemp;
 	m_pBoundBox->SetSize(0, -fSize);
 	m_pBoundBox->SetSize(1, -fSize);
@@ -335,6 +336,12 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 
 							);
 
+						//vPos.x = xLoop;
+						//vPos.y = yLoop;
+						//vPos.z = zLoop;
+
+						if( iVectorIndex != -1 )
+							m_pOctTree->SetChildIndex(vPos, iVectorIndex );
 
 						if( Loop == EnumCharFrame::BASE )
 						{
@@ -482,6 +489,7 @@ BOOL CCharactor::CollisionAtk()
 				vPos = ( *Iter )->GetPosition(i);
 				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
 				{
+					( *Iter )->SetPosVec();
 					return TRUE; 
 				}
 			}
@@ -823,54 +831,85 @@ VOID CCharactor::BreakQube()
 {
 	INT Loop;
 	D3DXVECTOR3 vPos;
+	CBoundBox BB;
 
 	if( m_bAliveCheck == TRUE )
 	{
-		std::vector<CBoundBox*> * vecBoundBox;
-		std::vector<CBoundBox*>::iterator Iter;
+		//std::vector<CBoundBox*> * vecBoundBox;
+		//std::vector<CBoundBox*>::iterator Iter;
 		std::vector<WORD> NetworkSendTempVector;
 
-		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
+		std::vector<CBoundBox> * vecBoundBox;
+		vecBoundBox = CTree::GetInstance()->GetAtkVector();
+		std::vector<D3DXVECTOR3> * vecVec = vecBoundBox->begin()->GetPosVec();
+		std::vector<D3DXVECTOR3>::iterator Iter;
+		//vecVec = m_pBoundBox->GetPosVec();
+		Iter = vecVec->begin();
+		while ( Iter != vecVec->end() )
 		{
-			if( m_vectorCube[Loop] == NULL )
-				continue;
-
-			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			vPos = ( *Iter );
+			D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
+			Loop = m_pOctTree->GetChildIndex( vPos );
+			
+			if( Loop >= 0 && m_vectorCube[Loop] != NULL )
 			{
-				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
-			}
-			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
-			{
-				vecBoundBox = CTree::GetInstance()->GetAtkVector();
-				if ( vecBoundBox != NULL && vecBoundBox->size() )
+				if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
 				{
-					Iter = vecBoundBox->begin();
-
-					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-					D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
-					
-					
-
-					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
-					{
-						BreakListMake( Loop, (*Iter) );
-
-						//for (int i = 0; i < 6; ++i )
-						//{
-						//	nNeighbor = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, i);
-
-						//	if (nNeighbor > 0 && m_vectorCube[nNeighbor]->Get_Visible( m_iSelectedFrameNum ) )
-						//	{
-						//		BreakListMake( nNeighbor, (*Iter) );
-						//		//m_BreakList.push_back(nNeighbor);
-						//	}
-						//}
-						//break;
-						NetworkSendTempVector.push_back( Loop );
-					}
+					m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+				}
+				else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
+				{
+					BreakListMake( Loop, m_pBoundBox );
+					NetworkSendTempVector.push_back( Loop );
 				}
 			}
+
+			Iter++;
 		}
+
+		//for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
+		//{
+		//	if( m_vectorCube[Loop] == NULL )
+		//		continue;
+
+		//	if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+		//	{
+		//		m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+		//	}
+		//	else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
+		//	{
+		//		vecBoundBox = CTree::GetInstance()->GetAtkVector();
+		//		if ( vecBoundBox != NULL && vecBoundBox->size() )
+		//		{
+		//			Iter = vecBoundBox->begin();
+
+		//			(*Iter)->GetPosVec();
+		//			vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
+		//			D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
+		//			
+		//			
+
+		//			if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
+		//			{
+		//				BreakListMake( Loop, (*Iter) );
+
+		//				//for (int i = 0; i < 6; ++i )
+		//				//{
+		//				//	nNeighbor = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, i);
+
+		//				//	if (nNeighbor > 0 && m_vectorCube[nNeighbor]->Get_Visible( m_iSelectedFrameNum ) )
+		//				//	{
+		//				//		BreakListMake( nNeighbor, (*Iter) );
+		//				//		//m_BreakList.push_back(nNeighbor);
+		//				//	}
+		//				//}
+		//				//break;
+		//				NetworkSendTempVector.push_back( Loop );
+		//			}
+		//		}
+		//	}
+		//}
+
 		CNetwork::GetInstance()->CS_UTOM_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector );
 		NetworkSendTempVector.clear();
 	}
