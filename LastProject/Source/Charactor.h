@@ -178,6 +178,7 @@ private:
 	D3DXVECTOR3 m_vPreControl; ///< 캐릭터 이전 위치 저장
 	D3DXVECTOR3 m_vControl;  ///< 캐릭터 위치
 	D3DXVECTOR3 m_vLerpControl; ///< 캐릭터 보간 위치
+	FLOAT		m_fPreAngle; ///< 캐릭터 이전 각도
 	FLOAT		m_fAngle;	 ///< 캐릭터 각도
 	FLOAT		m_fNetTime;  ///< 네트워크 전송 위치 보정 시간
 	D3DXVECTOR3 m_vFowardVector; ///< 캐릭터 전진 이동 벡터

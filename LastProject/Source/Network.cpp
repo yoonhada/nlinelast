@@ -182,7 +182,7 @@ VOID CNetwork::scMOVE( CPacket& pk )
 	// 捞悼 单捞磐 贸府
 }
 
-
+//眠啊 蜡历 立加矫
 VOID CNetwork::scNEWUSER( CPacket& pk )
 {
 	// 蜡历 立加 贸府
@@ -202,6 +202,7 @@ VOID CNetwork::scNEWUSER( CPacket& pk )
 	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
 }
 
+//贸澜 立加矫
 VOID CNetwork::scInitData( CPacket& pk )
 {
 	bool host;
@@ -299,12 +300,12 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vecto
 	pk.Write( cDestroyPart );
 	pk.Write( cDestroyCount );
 
-	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", cDestroyCount );
 	for( WORD i=0; i<cDestroyCount; ++i )
 	{
 		pk.Write( pList[i] );
 		//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", pList[i] );
 	}
+	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", cDestroyCount );
 
 	pk.CalcSize();
 
@@ -323,12 +324,14 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 	pk.Read( &cDestroyPart );
 	pk.Read( &cDestroyCount );
 
-	CDebugConsole::GetInstance()->Messagef( L"cDestroyCount : %d\n", cDestroyCount );
+	
 	for( WORD i=0; i<cDestroyCount; ++i )
 	{
 		pk.Read( &wList[i] );
-		//CDebugConsole::GetInstance()->Messagef( L"cDestroy List : %d\n", wList[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Rcv cDestroy List : %d\n", wList[i] );
 	}
+
+	CDebugConsole::GetInstance()->Messagef( L"Rcv cDestroyCount : %d\n", cDestroyCount );
 
 	CMainManage::GetInstance()->Get_pAlphaMon()->RecvBreakList( cDestroyCount, wList );
 
