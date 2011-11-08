@@ -856,6 +856,7 @@ VOID CCharactor::BreakQube(D3DXMATRIXA16 &mat)
 				{
 					BreakListMake( Loop, m_pBoundBox );
 					NetworkSendTempVector.push_back( Loop );
+
 				}
 			}
 
@@ -884,7 +885,11 @@ VOID CCharactor::BreakQube(D3DXMATRIXA16 &mat)
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
 					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );
 					
-					
+					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\t", vPos.x, vPos.y, vPos.z);
+					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\n", 
+						(*Iter)->GetPosition().x, 
+						(*Iter)->GetPosition().y, 
+						(*Iter)->GetPosition().z );
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{

@@ -872,12 +872,9 @@ VOID CMonster::InterpolationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, 
 
 VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 {
-
 	m_fAngle += a_fAngle;
 	// 360도 넘으면 라디언 0으로 초기화
 	ABSDEF( m_fAngle ) > 6.2831853f ? m_fAngle = 0.0f : NULL;
-
-	//////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", m_fAngle );
 
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
 	// 전진 후진 처리
@@ -913,8 +910,9 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	//	}
 	//}
 	
+	INT Loop = 4;
 	D3DXMATRIXA16 mat = Get_MatWorld();
-	for( INT Loop = 0; Loop < m_iCharEditorMax; ++Loop )
+	for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
 	{
 		if ( m_pBox[Loop].CollisionAtk() )
 		{
@@ -1308,7 +1306,7 @@ VOID CMonster::Update()
 
 
 	// AI
-	m_pStateMachine->Update();
+	//m_pStateMachine->Update();
 
 }
 
