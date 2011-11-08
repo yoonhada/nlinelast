@@ -88,7 +88,7 @@ public:
 
 	VOID World2Model(D3DXVECTOR3& _vPosition);
 	VOID BreakCube(D3DXVECTOR3& _vPosition);
-	VOID BreakQube();
+	VOID BreakQube(D3DXMATRIXA16 &mat);
 	VOID TestBreakCube();
 	VOID TestBreakCubeAll();
 	VOID BreakListMake(INT, CBoundBox *);

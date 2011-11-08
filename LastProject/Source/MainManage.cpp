@@ -8,6 +8,8 @@
 #include "Map.h"
 #include "Weapon.h"
 
+//#define _ALPHAMON
+
 CMainManage::CMainManage()
 {
 	Clear();

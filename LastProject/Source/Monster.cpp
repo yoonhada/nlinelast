@@ -912,7 +912,16 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	//		break;
 	//	}
 	//}
-	//AtkCollision();
+	
+	D3DXMATRIXA16 mat = Get_MatWorld();
+	for( INT Loop = 0; Loop < m_iCharEditorMax; ++Loop )
+	{
+		if ( m_pBox[Loop].CollisionAtk() )
+		{
+			m_pBox[Loop].BreakQube( mat );
+		}
+	}
+	CTree::GetInstance()->GetAtkVector()->clear();
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
