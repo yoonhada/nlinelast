@@ -451,7 +451,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 		}
 	}
 
-	vecBoundBox = CTree::GetInstance()->GetChaVector( );
+	/*vecBoundBox = CTree::GetInstance()->GetChaVector( );
 	if ( vecBoundBox != NULL && vecBoundBox->size() )
 	{
 		Iter = vecBoundBox->begin();
@@ -465,7 +465,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			}
 			Iter++;
 		}
-	}
+	}*/
 
 	return FALSE;
 }
@@ -599,7 +599,20 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	m_vPreControl = m_vControl;
 	m_vControl = a_vControl;
 
+	m_fPreAngle = m_fAngle;
 	m_fAngle = a_fAngle;
+
+	if( m_fPreAngle > m_fAngle )
+	{
+		m_fPreAngle -= DEG2RAD( 360.0f );
+	}
+
+	CDebugInterface::GetInstance()->AddMessageFloat( "PreAngle", m_fPreAngle  );
+	CDebugInterface::GetInstance()->AddMessageFloat( "NowAngle", m_fAngle  );
+	//CDebugConsole::GetInstance()->Messagef( L"Pre Angle : %f , Now Angle : %f \n", m_fPreAngle, m_fAngle );
+
+	m_vPreControl.y = m_fPreAngle;
+	m_vControl.y = m_fAngle;
 
 	m_fNetTime = 0.0f;
 	//CFrequency::GetInstance()->setTime( 0.0f );
@@ -608,14 +621,15 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 VOID CCharactor::UpdateOtherPlayer()
 {
 	m_fNetTime += CFrequency::GetInstance()->getFrametime();
+
 	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
 	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
 	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
 
 	Set_ControlTranslate( 0, m_vLerpControl.x );
-	Set_ControlTranslate( 1, m_vLerpControl.y );
+	//Set_ControlTranslate( 1, m_vLerpControl.y );
 	Set_ControlTranslate( 2, m_vLerpControl.z );
-	Set_ControlRotate( 1, m_fAngle );
+	Set_ControlRotate( 1, m_vLerpControl.y );
 	Calcul_MatWorld();
 }
 
@@ -952,6 +966,11 @@ VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList )
 {
 	for( INT QLoop=0; QLoop<a_iCount; ++QLoop )
 	{
+		if( m_vectorCube[ a_pList[QLoop] ] == NULL )
+		{
+			continue;
+		}
+
 		m_vectorCube[ a_pList[QLoop] ]->Set_Visible( m_iSelectedFrameNum, 3 );
 
 		INT iFriendCubeVecIndex = -1;

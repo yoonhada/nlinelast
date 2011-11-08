@@ -205,7 +205,7 @@ VOID CMainManage::CreateCharactor()
 			m_pCharactors[Loop].Load( L"Data/CharData/APPA_0.csav" );
 		}
 
-		m_pCharactors[Loop].CreateWeapon( CWeapon::SPANNER + Loop + 1 );
+		m_pCharactors[Loop].CreateWeapon( CWeapon::SPANNER /* + Loop + 1*/ );
 		m_pCharactors[Loop].Set_Position( vec[Loop] );
 		CTree::GetInstance()->GetChaVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 
@@ -298,7 +298,7 @@ VOID	CMainManage::Update()
 
 #ifdef _ALPHAMON
 	m_pAlphaMon->SetMon(TRUE);
-	m_pAlphaMon->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, fMonsterRun), fMonsterAngle );
+	m_pAlphaMon->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pAlphaMon->UpdateOtherPlayer2( );
 	m_pAlphaMon->SetMon(FALSE);
 	//m_pAlphaMon->Update();
