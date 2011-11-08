@@ -494,8 +494,6 @@ BOOL CCharactor::CollisionAtk()
 				}
 			}
 		}
-
-		CTree::GetInstance()->GetAtkVector()->clear();
 	}
 
 	return FALSE;
@@ -827,19 +825,16 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 	}
 }
 
-VOID CCharactor::BreakQube()
+VOID CCharactor::BreakQube(D3DXMATRIXA16 &mat)
 {
 	INT Loop;
 	D3DXVECTOR3 vPos;
 	CBoundBox BB;
-
 	if( m_bAliveCheck == TRUE )
 	{
-		//std::vector<CBoundBox*> * vecBoundBox;
-		//std::vector<CBoundBox*>::iterator Iter;
 		std::vector<WORD> NetworkSendTempVector;
-
-		std::vector<CBoundBox> * vecBoundBox;
+#ifdef _TEST
+		std::vector<CBoundBox *> * vecBoundBox;
 		vecBoundBox = CTree::GetInstance()->GetAtkVector();
 		std::vector<D3DXVECTOR3> * vecVec = vecBoundBox->begin()->GetPosVec();
 		std::vector<D3DXVECTOR3>::iterator Iter;
@@ -866,54 +861,43 @@ VOID CCharactor::BreakQube()
 
 			Iter++;
 		}
+#else
+		std::vector<CBoundBox*> * vecBoundBox;
+		std::vector<CBoundBox*>::iterator Iter;
+		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
+		{
+			if( m_vectorCube[Loop] == NULL )
+				continue;
 
-		//for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
-		//{
-		//	if( m_vectorCube[Loop] == NULL )
-		//		continue;
+			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			{
+				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+			}
+			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
+			{
+				vecBoundBox = CTree::GetInstance()->GetAtkVector();
+				if ( vecBoundBox != NULL && vecBoundBox->size() )
+				{
+					Iter = vecBoundBox->begin();
 
-		//	if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
-		//	{
-		//		m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
-		//	}
-		//	else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
-		//	{
-		//		vecBoundBox = CTree::GetInstance()->GetAtkVector();
-		//		if ( vecBoundBox != NULL && vecBoundBox->size() )
-		//		{
-		//			Iter = vecBoundBox->begin();
+					(*Iter)->GetPosVec();
+					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
+					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );
+					
+					
 
-		//			(*Iter)->GetPosVec();
-		//			vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-		//			D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
-		//			
-		//			
-
-		//			if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
-		//			{
-		//				BreakListMake( Loop, (*Iter) );
-
-		//				//for (int i = 0; i < 6; ++i )
-		//				//{
-		//				//	nNeighbor = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, i);
-
-		//				//	if (nNeighbor > 0 && m_vectorCube[nNeighbor]->Get_Visible( m_iSelectedFrameNum ) )
-		//				//	{
-		//				//		BreakListMake( nNeighbor, (*Iter) );
-		//				//		//m_BreakList.push_back(nNeighbor);
-		//				//	}
-		//				//}
-		//				//break;
-		//				NetworkSendTempVector.push_back( Loop );
-		//			}
-		//		}
-		//	}
-		//}
-
+					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
+					{
+						BreakListMake( Loop, (*Iter) );
+						NetworkSendTempVector.push_back( Loop );
+					}
+				}
+			}
+		}
+#endif
 		CNetwork::GetInstance()->CS_UTOM_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector );
 		NetworkSendTempVector.clear();
 	}
-	CTree::GetInstance()->GetAtkVector()->clear();
 }
 
 VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
