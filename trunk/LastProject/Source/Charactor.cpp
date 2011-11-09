@@ -15,6 +15,7 @@
 
 #include "OctTree2Array.h"
 
+
 CCharactor::CCharactor()
 {
 	Clear();
@@ -423,6 +424,34 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 	D3DXVECTOR3 vDir, vPos;
 
 	// ¸ÊÃæµ¹
+#ifdef _TEST2
+	FLOAT fRadius = m_pBoundBox->GetRadiusLong();
+	vPos = m_pBoundBox->GetPosition();
+	vDir = vPos + a_vCollisionControl;
+	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
+	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
+	{
+		Iter = vecBoundBox->begin();
+		while ( Iter != vecBoundBox->end() )
+		{
+			D3DXVECTOR3 v[8];
+			for (int i = 0; i < 8; ++i)
+			{
+				v[i] = ( *Iter )->GetPosition( i );
+			}
+
+			CDebugConsole::GetInstance()->MessageQube(v);
+			CDebugConsole::GetInstance()->Message("\n\n");
+
+			if( CPhysics::GetInstance()->Collision( vDir, fRadius, ( *Iter ) ) )
+			{
+				CPhysics::GetInstance()->Sliding( a_vCollisionControl );
+				bColl = TRUE;
+			}
+			Iter++;
+		}
+	}
+#else
 	for ( i = 0; i < 8; ++i)
 	{
 		vPos = m_pBoundBox->GetPosition(i);
@@ -438,7 +467,6 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 				{
 					//CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
 					CPhysics::GetInstance()->Sliding( a_vCollisionControl );
-					CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", a_vCollisionControl.x, a_vCollisionControl.y, a_vCollisionControl.z);
 					bColl = TRUE;
 				}
 				Iter++;
@@ -450,6 +478,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			break;
 		}
 	}
+#endif
 
 	/*vecBoundBox = CTree::GetInstance()->GetChaVector( );
 	if ( vecBoundBox != NULL && vecBoundBox->size() )
@@ -583,7 +612,7 @@ VOID CCharactor::UpdateByInput(  )
 	//m_vPreControl = vControl;
 
 	m_pBoundBox->SetAngleY( a_fAngle );
-	//Collision( m_vColissionControl );
+	Collision( m_vColissionControl );
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
 
@@ -898,13 +927,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 					//(*Iter)->GetPosVec();
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\t", vPos.x, vPos.y, vPos.z);
 					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );				
-					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\t", vPos.x, vPos.y, vPos.z);
-					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\n", 
-						(*Iter)->GetPosition().x, 
-						(*Iter)->GetPosition().y, 
-						(*Iter)->GetPosition().z );
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{

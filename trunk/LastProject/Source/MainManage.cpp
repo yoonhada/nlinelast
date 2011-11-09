@@ -249,13 +249,6 @@ VOID	CMainManage::Update()
 	CInput::GetInstance()->Update( 50.0f, 150.0f, CFrequency::GetInstance()->getFrametime() );
 
 	// 캐릭터: 인풋 값 받아오기
-	//D3DXVECTOR3 vec[8];
-	//for (int i = 0; i < 8; ++i)
-	//{
-	//	vec[i] = m_pMyCharactor->GetBoundBox()->GetPosition(i);
-	//}
-	//CDebugConsole::GetInstance()->Messagef("\n\nMyChar\n");
-	//CDebugConsole::GetInstance()->MessageQube(vec);
 	m_pMyCharactor->UpdateByInput();
 	m_pMyCharactor->Update();
 

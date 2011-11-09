@@ -918,17 +918,6 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	D3DXMatrixInverse(&matR, NULL, &mat);
 	for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
 	{
-		if ( Loop == 1 )
-		{
-			D3DXVECTOR3 vec[8];
-			for (int i = 0; i < 8; ++i)
-			{
-				vec[i] = m_pBox[Loop].GetBoundBox()->GetPosition(i);
-			}
-			CDebugConsole::GetInstance()->Messagef("\n\nHead\n");
-			CDebugConsole::GetInstance()->MessageQube(vec);
-		}
-
 		if ( m_pBox[Loop].CollisionAtk( matR ) )
 		{
 			m_pBox[Loop].BreakQube( mat );

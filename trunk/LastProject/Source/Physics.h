@@ -46,4 +46,5 @@ public:
 
 	// 111025
 	BOOL Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube );
+	BOOL Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoundBox *pBB );
 };
