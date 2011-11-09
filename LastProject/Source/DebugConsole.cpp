@@ -164,3 +164,14 @@ VOID CDebugConsole::SetPosition( DWORD _dEdge, BOOL _bTopMost )
 		SetWindowPos( m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 
 }
+
+VOID CDebugConsole::MessageQube(D3DXVECTOR3 *_vec)
+{
+	Messagef("          (%03.0f, %03.0f, %03.0f)----(%03.0f, %03.0f, %03.0f)\n", _vec[0].x, _vec[0].y, _vec[0].z, _vec[1].x, _vec[1].y, _vec[1].z);
+	Messagef("        /|                 /|\n");
+	Messagef("(%03.0f, %03.0f, %03.0f)-----(%03.0f, %03.0f, %03.0f)\n",  _vec[3].x, _vec[3].y, _vec[3].z, _vec[2].x, _vec[2].y, _vec[2].z);
+	Messagef("       | |                | |\n");
+	Messagef("       | |(%03.0f, %03.0f, %03.0f)-|-|(%03.0f, %03.0f, %03.0f)\n",  _vec[4].x, _vec[4].y, _vec[4].z, _vec[5].x, _vec[5].y, _vec[5].z);
+	Messagef("       |/                 |/\n");
+	Messagef("(%03.0f, %03.0f, %03.0f)-----(%03.0f, %03.0f, %03.0f)\n",  _vec[7].x, _vec[7].y, _vec[7].z, _vec[6].x, _vec[6].y, _vec[6].z);
+}

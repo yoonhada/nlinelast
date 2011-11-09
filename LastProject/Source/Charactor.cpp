@@ -470,7 +470,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 	return FALSE;
 }
 
-BOOL CCharactor::CollisionAtk()
+BOOL CCharactor::CollisionAtk(  D3DXMATRIXA16 &mat )
 {
 	BOOL bColl = FALSE;
 	std::vector<CBoundBox*> * vecBoundBox;
@@ -487,6 +487,7 @@ BOOL CCharactor::CollisionAtk()
 			for (int i = 0; i < 8; ++i)
 			{
 				vPos = ( *Iter )->GetPosition(i);
+				D3DXVec3TransformCoord(&vPos, &vPos, &mat);
 				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
 				{
 					( *Iter )->SetPosVec();
@@ -582,7 +583,7 @@ VOID CCharactor::UpdateByInput(  )
 	//m_vPreControl = vControl;
 
 	m_pBoundBox->SetAngleY( a_fAngle );
-	Collision( m_vColissionControl );
+	//Collision( m_vColissionControl );
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
 
@@ -839,7 +840,7 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 	}
 }
 
-VOID CCharactor::BreakQube(D3DXMATRIXA16 &mat)
+VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 {
 	INT Loop;
 	D3DXVECTOR3 vPos;
@@ -895,10 +896,10 @@ VOID CCharactor::BreakQube(D3DXMATRIXA16 &mat)
 				{
 					Iter = vecBoundBox->begin();
 
-					(*Iter)->GetPosVec();
+					//(*Iter)->GetPosVec();
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );
-					
+					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\t", vPos.x, vPos.y, vPos.z);
+					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );				
 					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\t", vPos.x, vPos.y, vPos.z);
 					CDebugConsole::GetInstance()->Messagef("%0.2f, %0.2f, %0.2f\n", 
 						(*Iter)->GetPosition().x, 
