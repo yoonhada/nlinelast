@@ -40,6 +40,7 @@ public:
 	//	모니터가 수평 배치가 아닌 수직 배치일때는 지원하지 않음
 	VOID	SetPosition( DWORD _dEdge, BOOL _bTopMost );
 
+	VOID	MessageQube(D3DXVECTOR3 *_vec);
 };
 
 #endif

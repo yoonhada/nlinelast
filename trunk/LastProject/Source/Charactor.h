@@ -112,7 +112,8 @@ public:
 
 	CBoundBox * GetBoundBox()			{ return m_pBoundBox; }
 	BOOL Collision( D3DXVECTOR3& a_vCollisionControl );
-	BOOL CollisionAtk();
+	//BOOL CollisionAtk();
+	BOOL CollisionAtk(  D3DXMATRIXA16 &mat );
 	VOID Load( WCHAR* a_pFileName );
 
 	// 

@@ -52,7 +52,7 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 		if ( m_pCharactors )		
 		{
 			vRet = m_pCharactors->Get_CharaPos(); 
-			vRet.y += ABSDEF( GetSize(CBoundBox::MINUSY) );
+			//vRet.y += ABSDEF( GetSize(CBoundBox::MINUSY) );
 		}
 		else					
 		{
@@ -97,8 +97,16 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
 			break;
 		}
-		D3DXVec3TransformCoord( &vRet, &vRet, &GetAxisMat() );
-		vRet = GetPosition() + vRet;
+		if ( m_pCharactors )		
+		{
+			vRet.y -= GetSize(CBoundBox::MINUSY);
+			D3DXVec3TransformCoord( &vRet, &vRet, &GetAxisMat() );
+		}
+		else					
+		{
+			D3DXVec3TransformCoord( &vRet, &vRet, &GetAxisMat() );
+			vRet = GetPosition() + vRet;
+		}
 	}
 
 	return vRet;
@@ -184,11 +192,18 @@ VOID CBoundBox::SetAngleY(FLOAT fAngle)
 
 D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 {
-	return D3DXMATRIXA16(
-		m_vAxisDir[0].x, m_vAxisDir[1].x, m_vAxisDir[2].x, 0, 
-		m_vAxisDir[0].y, m_vAxisDir[1].y, m_vAxisDir[2].y, 0, 
-		m_vAxisDir[0].z, m_vAxisDir[1].z, m_vAxisDir[2].z, 0, 
-		0, 0, 0, 1);
+	if ( m_pCharactors )
+	{
+		return m_pCharactors->Get_MatWorld();
+	}
+	else
+	{
+		return D3DXMATRIXA16(
+			m_vAxisDir[0].x, m_vAxisDir[1].x, m_vAxisDir[2].x, 0, 
+			m_vAxisDir[0].y, m_vAxisDir[1].y, m_vAxisDir[2].y, 0, 
+			m_vAxisDir[0].z, m_vAxisDir[1].z, m_vAxisDir[2].z, 0, 
+			0, 0, 0, 1);
+	}
 }
 
 std::vector <D3DXVECTOR3> * CBoundBox::GetPosVec()
