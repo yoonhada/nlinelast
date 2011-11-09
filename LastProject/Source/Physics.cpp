@@ -93,7 +93,7 @@ BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1,
 	return bRet;
 }
 
-BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
+BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube)
 {
 	D3DXPLANE Plane;											//    v0----- v1
 	D3DXVECTOR3 v[8];											//   /|      /|
@@ -102,17 +102,6 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube )
 		v[i] = _pCube->GetPosition( i );						//  | |v4---|-|v5
 	}															//  |/      |/
 																//  v7------v6
-	//CDebugConsole::GetInstance()->Messagef("0 : %0.2f %0.2f, %0.2f  ", v[0].x, v[0].y, v[0].z);
-	//CDebugConsole::GetInstance()->Messagef("1 : %0.2f %0.2f, %0.2f\n", v[1].x, v[1].y, v[1].z);
-	//CDebugConsole::GetInstance()->Messagef("3 : %0.2f %0.2f, %0.2f  ", v[3].x, v[3].y, v[3].z);
-	//CDebugConsole::GetInstance()->Messagef("2 : %0.2f %0.2f, %0.2f\n", v[2].x, v[2].y, v[2].z);
-	//CDebugConsole::GetInstance()->Messagef("\n");
-	//CDebugConsole::GetInstance()->Messagef("4 : %0.2f %0.2f, %0.2f  ", v[4].x, v[4].y, v[4].z);
-	//CDebugConsole::GetInstance()->Messagef("5 : %0.2f %0.2f, %0.2f\n", v[5].x, v[5].y, v[5].z);
-	//CDebugConsole::GetInstance()->Messagef("7 : %0.2f %0.2f, %0.2f  ", v[7].x, v[7].y, v[7].z);
-	//CDebugConsole::GetInstance()->Messagef("6 : %0.2f %0.2f, %0.2f\n", v[6].x, v[6].y, v[6].z);
-	//CDebugConsole::GetInstance()->Messagef("\n\n");
-	//CDebugConsole::GetInstance()->Messagef("P : %0.2f %0.2f, %0.2f\n", vPos.x, vPos.y, vPos.z);
 	for (int i = 0; i < 6; ++i)									
 	{															// Plane A+B+C+D
 		D3DXPlaneFromPoints( &Plane, 							// A = Nx		
@@ -172,6 +161,32 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDire
 		}
 
 		return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoundBox * pBB )
+{
+	FLOAT fD_s;
+	for ( i = 0; i < 8; ++i )
+	{
+		m_vBBPos[i] = pBB->GetPosition( i );
+	}
+
+	for ( i = 0; i < 4; ++i )
+	{
+		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[i][0]], &m_vBBPos[nVI[i][1]], &m_vBBPos[nVI[i][2]]);
+
+		v0 = vCenter - m_vBBPos[nVI[i][0]];
+		m_vColNormal = D3DXVECTOR3( m_plane.a, m_plane.b, m_plane.c );
+
+		fD_s = D3DXVec3Dot( &v0, &m_vColNormal );
+		
+		if ( ABSDEF( fD_s ) < fRadius )
+		{
+			return FALSE;
+		}
 	}
 
 	return TRUE;
