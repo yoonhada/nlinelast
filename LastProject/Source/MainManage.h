@@ -1,19 +1,20 @@
 #ifndef _MainManage_H_
 #define _MainManage_H_
 
+#include "Manage.h"
+
 class CMonster;
 class CBillBoard;
 class CCharactor;
 class CCamera;
 class Axis;
 class Map;
+class TileMap;
 
 class CMainManage : public CSingleton<CMainManage>
 {
 	friend class CSingleton<CMainManage>;
 public:
-	CMainManage();
-	~CMainManage();
 
 	VOID	Clear();
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
@@ -22,6 +23,10 @@ public:
 	VOID	Render();
 
 private:
+
+	CMainManage();
+	~CMainManage();
+
 	enum ClassType { NONE, CHARACTOR, MONSTER };
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
@@ -37,6 +42,7 @@ private:
 	CCharactor* m_pCharactorList[4];
 
 	Map* m_pMap;
+	TileMap* m_pTileMap;
 
 	CCharactor* m_pAlphaMon;
 

@@ -79,7 +79,7 @@ HRESULT CWinBase::Release()
 
 #ifndef _NETWORK
 	WSACleanup();
-	delete m_pNetwork;
+	CNetwork::DestoryInstance();
 #endif
 
 	return S_OK;

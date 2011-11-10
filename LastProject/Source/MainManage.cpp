@@ -7,6 +7,7 @@
 #include "Axis.h"
 #include "Map.h"
 #include "Weapon.h"
+#include "TileMap.h"
 
 //#define _ALPHAMON
 
@@ -39,6 +40,7 @@ VOID	CMainManage::Clear()
 	m_iClientNumber = 0;
 
 	m_pLogo = NULL;
+	m_pTileMap = NULL;
 }
 
 HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
@@ -91,8 +93,16 @@ HRESULT CMainManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pMap = new Map( m_pD3dDevice );
 	m_pMap->Create( L"ASE File/Stage4_Alpha.ASE", L"ASE File/Stage4_Alpha.BBX" );
 	m_pMap->AddAnimationData( 1000, 0, 0, 300, TRUE );
+
+#ifdef _DEBUG
+	//타일맵 생성
+	m_pTileMap = new TileMap( m_pD3dDevice );
+	m_pTileMap->Create( L"ASE File/Stage4_Alpha.BBX", D3DXVECTOR3(-510.0f, 0.0f, -510.0f), D3DXVECTOR3(510.0f, 0.0f, 510.0f), 10.0f );
+#endif
+
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
+
 
 	//로고
 	/*m_pLogo = new CCharactor[6];
@@ -162,6 +172,8 @@ HRESULT CMainManage::Release()
 	SAFE_DELETE( m_pAlphaMon );
 
 	SAFE_DELETE_ARRAY( m_pLogo );
+
+	SAFE_DELETE( m_pTileMap );
 
 	return S_OK;
 }
@@ -327,6 +339,10 @@ VOID	CMainManage::Render()
 
 	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pMap->Get_MatWorld() );
 	m_pMap->Render();
+
+#ifdef _DEBUG
+	m_pTileMap->Render();
+#endif
 
 	m_pMyCharactor->Render();
 

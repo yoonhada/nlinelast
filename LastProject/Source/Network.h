@@ -51,10 +51,11 @@ public:
 
 	D3DXVECTOR3 m_vMove;
 
-
-public:
+private:
 	CNetwork();
 	~CNetwork();
+
+public:
 
 	BOOL CreateSocket();
 	VOID Close();

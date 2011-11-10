@@ -8,9 +8,9 @@
 #ifndef _TextureManage_H_
 #define _TextureManage_H_
 
-#include "Manage.h"
+#include "TexManage.h"
 
-class CTextureManage : public CSingleton<CTextureManage>, public IManage<LPDIRECT3DTEXTURE9>
+class CTextureManage : public CSingleton<CTextureManage>, public ITexManage<LPDIRECT3DTEXTURE9>
 {
 	friend class CSingleton<CTextureManage>;
 public:
