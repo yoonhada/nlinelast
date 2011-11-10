@@ -21,7 +21,8 @@ HRESULT CWinBase::Create()
 	FastRand2Init();
 	
 	m_pDX9 = new CDirectX9;
-	m_pManage = CMainManage::GetInstance();
+	CSceneManage::GetInstance();
+	CObjectManage::GetInstance();
 	CDebugConsole::GetInstance();
 	CDebugConsole::GetInstance()->SetPosition( CDebugConsole::CSL_TR, TRUE );
 	CFrequency::GetInstance();
@@ -68,7 +69,8 @@ HRESULT CWinBase::Release()
 {
 	SAFE_DELETE( m_pDX9 );
 	CMatrices::DestoryInstance();
-	m_pManage->DestoryInstance();
+	CSceneManage::DestoryInstance();
+	CObjectManage::DestoryInstance();
 	CDebugConsole::DestoryInstance();
 	CFrequency::DestoryInstance();
 	//CTextureManage::DestoryInstance();
@@ -120,7 +122,7 @@ BOOL CWinBase::InitInstance(HINSTANCE hInstance, INT nCmdShow)
 	CMatrices::GetInstance()->Create( m_pDX9->GetDevice(), 
 		static_cast<FLOAT>(m_pDX9->GetD3dpp().BackBufferWidth) / static_cast<FLOAT>(m_pDX9->GetD3dpp().BackBufferHeight) );
 
-	m_pManage->Create( m_pDX9->GetDevice() );
+	CSceneManage::GetInstance()->Create( m_pDX9->GetDevice() );
 
 	CInput::GetInstance()->Create( m_pDX9->GetDevice(), m_hWnd );
 
@@ -188,11 +190,6 @@ ATOM CWinBase::MyRegisterClass(HINSTANCE hInstance)
 }
 
 
-DWORD WINAPI CWinBase::ThreadFunc(LPVOID pTemp)
-{
-	return 0;
-}
-
 LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
@@ -206,8 +203,7 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	switch (message) 
 	{
 	case WM_CREATE:
-		//GetInstance()->m_hThread = CreateThread( NULL, 0, ThreadFunc, NULL, 0, &GetInstance()->m_dwThreadID );
-		//CloseHandle(GetInstance()->m_hThread);
+		
 		return 0;
 
 	case WM_CHAR: 
@@ -239,14 +235,14 @@ VOID CWinBase::Update()
 #ifndef _NETWORK
 	GetInstance()->m_pNetwork->Update();
 #endif
-	GetInstance()->m_pManage->Update();
+	CSceneManage::GetInstance()->Update();
 }
 
 VOID CWinBase::Render()
 {
 	GetInstance()->m_pDX9->beginScene();
 
-	GetInstance()->m_pManage->Render();
+	CSceneManage::GetInstance()->Render();
 	
 	GetInstance()->m_pDX9->endScene();
 }

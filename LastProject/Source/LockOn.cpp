@@ -24,7 +24,7 @@ VOID LockOn::Enter( CMonster* pMonster )
 VOID LockOn::Execute( CMonster* pMonster )
 {
 	// 좌표 받아오기
-	D3DXVECTOR3 vPlayerPos	= CMainManage::GetInstance()->Get_CharactorList()[pMonster->Get_Target()]->Get_CharaPos();
+	D3DXVECTOR3 vPlayerPos	= CObjectManage::GetInstance()->Get_CharactorList()[pMonster->Get_Target()]->Get_CharaPos();
 	D3DXVECTOR3 vMonsterPos	= pMonster->Get_Pos();
 
 	// 이웃변

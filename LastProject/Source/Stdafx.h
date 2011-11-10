@@ -75,7 +75,8 @@
 #include "BoundBox.h"
 
 // Manage
-#include "MainManage.h"
+#include "SceneManage.h"
+#include "ObjectManage.h"
 
 // DirectX
 #include "DirectX9.h"
