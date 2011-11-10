@@ -542,6 +542,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\LobbyScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\LobbyScene.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\MainScene.cpp"
 				>
 			</File>

@@ -52,10 +52,6 @@ private:
 	BOOL m_bReSizing;	 ///< 리사이징
 	BOOL m_bFirstRun;	 ///< 처음 실행
 
-	//네트워크
-	WSADATA m_wsadata;
-	CNetwork* m_pNetwork;
-
 private:
 	static VOID Update();
 	static VOID Render();

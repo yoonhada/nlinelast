@@ -31,37 +31,6 @@ HRESULT CWinBase::Create()
 	CPhysics::GetInstance();
 	CTree::GetInstance();
 
-	// 네트워크
-#ifndef _NETWORK
-	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
-	m_pNetwork = CNetwork::GetInstance();
-	//m_pNetwork = new CNetwork;
-	m_pNetwork->CreateSocket();
-#endif
-	
-	// 파일에서 IP 받아오기
-	FILE* pFile;
-	
-	pFile = _wfopen( L"Data/IP.txt", L"r" );
-
-	if( NULL == pFile )
-	{
-		MessageBox(GHWND, L"IP File Load Error", NULL, MB_OK);
-		return E_FAIL;
-	}
-
-	fseek( pFile, 0L, SEEK_SET );
-
-	CHAR szTemp[255];
-	fscanf( pFile, "%s", szTemp );
-
-	fclose(pFile);
-
-#ifndef _NETWORK
-	m_pNetwork->ConnectToServer( szTemp, 20202 );
-	m_pNetwork->csLOGON();
-#endif
-
 	return S_OK;
 }
 
@@ -232,9 +201,6 @@ VOID CWinBase::Update()
 	swprintf( buf, 256, TEXT( "%0.4f" ), CFrequency::GetInstance()->getFrequency() );
 	SetWindowText( GetInstance()->m_hWnd, buf );
 
-#ifndef _NETWORK
-	GetInstance()->m_pNetwork->Update();
-#endif
 	CSceneManage::GetInstance()->Update();
 }
 

@@ -10,6 +10,8 @@
 #include "Weapon.h"
 #include "TileMap.h"
 
+#include "MainScene.h"
+
 CLoadScene::CLoadScene()
 {
 	Clear();
@@ -21,12 +23,17 @@ CLoadScene::~CLoadScene()
 
 VOID CLoadScene::Clear()
 {
+	m_pMatrices = NULL;
+	m_pCamera = NULL;
 	m_pD3dDevice = NULL;
 	m_pBill = NULL;
 	m_pMyCharactor = NULL;
 	m_pCharactors = NULL;
 	m_pAlphaMon = NULL;
 	m_pAxis = NULL;
+	m_pGrid = NULL;
+	m_pMonster = NULL;
+	m_pMap = NULL;
 
 	for( INT i=0; i<4; ++i )
 	{
@@ -96,7 +103,13 @@ HRESULT CLoadScene::Release()
 }
 VOID CLoadScene::Update()
 {
-	m_pMyCharactor->Update();
+	//인풋 업데이트
+	CInput::GetInstance()->Update( 50.0f, 150.0f, CFrequency::GetInstance()->getFrametime() );
+
+	// 캐릭터: 인풋 값 받아오기
+	m_pMyCharactor->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+	m_pMyCharactor->UpdateOtherPlayer();
+	//m_pMyCharactor->Update();
 
 	m_pCamera->SetView( 
 		m_pMyCharactor->Get_CharaPos2Camera(), 
@@ -104,9 +117,17 @@ VOID CLoadScene::Update()
 		10.0f, 75.0f, 
 		m_pMyCharactor->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
+
+	static BOOL bTemp = FALSE;
+	if( bTemp == FALSE )
+	{
+		CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
+		bTemp = TRUE;
+	}
 }
 
 VOID CLoadScene::Render()
 {
+	m_pLight->EnableLight();
 	m_pMyCharactor->Render();
 }

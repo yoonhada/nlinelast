@@ -33,35 +33,38 @@ HRESULT CTree::Create( FLOAT fRange, INT nDeep )
 
 VOID CTree::Release()			
 {
-	if ( m_pCurr->_children[NODE::LT] == NULL )
+	if( m_pCurr != NULL )
 	{
-		SAFE_DELETE(m_pCurr);
-	}
-	else
-	{
-		NODE * pParent = m_pCurr;
-		if ( pParent->_children[NODE::LT] != NULL )
+		if ( m_pCurr->_children[NODE::LT] == NULL )
 		{
-			m_pCurr = pParent->_children[NODE::LT];
-			Release();
+			SAFE_DELETE(m_pCurr);
 		}
-		if ( pParent->_children[NODE::RT] != NULL )
+		else
 		{
-			m_pCurr = pParent->_children[NODE::RT];
-			Release();
-		}
-		if ( pParent->_children[NODE::LB] != NULL )
-		{
-			m_pCurr = pParent->_children[NODE::LB];
-			Release();
-		}
-		if ( pParent->_children[NODE::RB] != NULL )
-		{
-			m_pCurr = pParent->_children[NODE::RB];
-			Release();
-		}
+			NODE * pParent = m_pCurr;
+			if ( pParent->_children[NODE::LT] != NULL )
+			{
+				m_pCurr = pParent->_children[NODE::LT];
+				Release();
+			}
+			if ( pParent->_children[NODE::RT] != NULL )
+			{
+				m_pCurr = pParent->_children[NODE::RT];
+				Release();
+			}
+			if ( pParent->_children[NODE::LB] != NULL )
+			{
+				m_pCurr = pParent->_children[NODE::LB];
+				Release();
+			}
+			if ( pParent->_children[NODE::RB] != NULL )
+			{
+				m_pCurr = pParent->_children[NODE::RB];
+				Release();
+			}
 
-		SAFE_DELETE(pParent);
+			SAFE_DELETE(pParent);
+		}
 	}
 }
 
