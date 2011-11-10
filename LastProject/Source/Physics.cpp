@@ -73,8 +73,15 @@ VOID CPhysics::Sliding( D3DXVECTOR3& _vOut )
 	D3DXVECTOR3 vP = _vOut;
 	D3DXVec3Normalize( &vN, &m_vColNormal );
 
-	// P - n ( n * P )
-	_vOut = vP - D3DXVec3Dot( &vP, &vN ) * vN;
+	if ( _vOut.x == 0 && _vOut.y == 0 && _vOut.z == 0 )
+	{
+		_vOut = vN * m_fD_s;
+	}
+	else
+	{
+		// P - n ( n * P )
+		_vOut = vP - D3DXVec3Dot( &vP, &vN ) * vN;
+	}
 }
 
 BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1, 
@@ -168,26 +175,32 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDire
 
 BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoundBox * pBB )
 {
-	FLOAT fD_s;
 	for ( i = 0; i < 8; ++i )
 	{
 		m_vBBPos[i] = pBB->GetPosition( i );
 	}
 
-	for ( i = 0; i < 4; ++i )
+	for ( i = 0; i < 6; ++i )
 	{
 		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[i][0]], &m_vBBPos[nVI[i][1]], &m_vBBPos[nVI[i][2]]);
-
-		v0 = vCenter - m_vBBPos[nVI[i][0]];
 		m_vColNormal = D3DXVECTOR3( m_plane.a, m_plane.b, m_plane.c );
 
-		fD_s = D3DXVec3Dot( &v0, &m_vColNormal );
+		v0 = pBB->GetPosition() - vCenter;
+		m_fD_s = D3DXVec3Dot( &v0, &m_vColNormal );
+		if ( m_fD_s > 0.0f )
+			continue;
+
+		v0 = vCenter - m_vBBPos[nVI[i][0]];
+
+		D3DXVec3Dot( &v1, &m_vColNormal );
+		m_fD_s = D3DXVec3Dot( &v0, &m_vColNormal );
 		
-		if ( ABSDEF( fD_s ) < fRadius )
+		if ( m_fD_s < 0 &&  ABSDEF(m_fD_s) < fRadius )
 		{
-			return FALSE;
+			CDebugConsole::GetInstance()->Messagef("%d : %0.2f\n", i, m_fD_s);
+			return TRUE;
 		}
 	}
 
-	return TRUE;
+	return FALSE;
 }

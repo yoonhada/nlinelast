@@ -1,4 +1,6 @@
+/*
 #include "stdafx.h"
+#include "Manage.h"
 
 CTextureManage::CTextureManage( void )
 {
@@ -17,3 +19,4 @@ BOOL CTextureManage::Create()
 VOID CTextureManage::Release()						
 {
 }
+*/

@@ -14,6 +14,7 @@ class CPhysics : public CSingleton<CPhysics>
 	// 내부 속도 증강을 위한 변수
 	INT i;
 	INT m_nCount;
+	FLOAT m_fD_s;
 	BOOL m_bRet;
 	D3DXVECTOR3 m_vBBPos[8];
 	D3DXPLANE m_plane;

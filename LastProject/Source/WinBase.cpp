@@ -25,7 +25,7 @@ HRESULT CWinBase::Create()
 	CDebugConsole::GetInstance();
 	CDebugConsole::GetInstance()->SetPosition( CDebugConsole::CSL_TR, TRUE );
 	CFrequency::GetInstance();
-	CTextureManage::GetInstance();
+	//CTextureManage::GetInstance();
 	CInput::GetInstance();
 	CPhysics::GetInstance();
 	CTree::GetInstance();
@@ -71,7 +71,7 @@ HRESULT CWinBase::Release()
 	m_pManage->DestoryInstance();
 	CDebugConsole::DestoryInstance();
 	CFrequency::DestoryInstance();
-	CTextureManage::DestoryInstance();
+	//CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
 	CPhysics::DestoryInstance();
 	CTree::DestoryInstance();

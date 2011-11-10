@@ -4,14 +4,15 @@
 @author	
 @brief	TextureManage 인터페이스
 */
-
+/*
 #ifndef _TextureManage_H_
 #define _TextureManage_H_
 
-#include "TexManage.h"
+<<<<<<< .mineclass CTextureManage : virtual public IManage, public CSingleton<CTextureManage>
+=======#include "TexManage.h"
 
 class CTextureManage : public CSingleton<CTextureManage>, public ITexManage<LPDIRECT3DTEXTURE9>
-{
+>>>>>>> .theirs{
 	friend class CSingleton<CTextureManage>;
 public:
 	CTextureManage( void );
@@ -21,4 +22,4 @@ public:
 	VOID Release();
 };
 
-#endif
+#endif*/
