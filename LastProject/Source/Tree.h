@@ -44,9 +44,6 @@ private:
 	NODE * m_pRoot;		///< 루트
 	NODE * m_pCurr;		///< 커서 
 
-	std::vector <CBoundBox*> _vecCha;
-	std::vector <CBoundBox*> _vecAtk;
-
 	VOID CreateChild( NODE *pNode, FLOAT fLeft, FLOAT fTop, FLOAT fRight, FLOAT fBottom, INT nDeep );
 	BOOL IsRect( NODE *, CBoundBox *);
 	BOOL IsRect( NODE *, D3DXVECTOR3 &);
@@ -74,6 +71,18 @@ public:
 	VOID RemoveObject( NODE *pNode, CBoundBox * pCube );
 	VOID RemoveAll( );
 	std::vector <CBoundBox*> * GetMapVector( NODE *pNode, D3DXVECTOR3 vPos );
-	std::vector <CBoundBox*> * GetChaVector()		{ return &_vecCha; }
-	std::vector <CBoundBox*> * GetAtkVector()		{ return &_vecAtk; }
+
+
+
+private:
+	std::vector <CBoundBox*> _vecChar;
+	std::vector <CBoundBox*> _vecMons;
+	std::vector <CBoundBox*> _vecCharAtk;
+	std::vector <CBoundBox*> _vecMonsAtk;
+
+public:
+	std::vector <CBoundBox*> * GetCharVector()		{ return &_vecChar; }
+	std::vector <CBoundBox*> * GetCharAtkVector()	{ return &_vecCharAtk; }
+	std::vector <CBoundBox*> * GetMonsVector()		{ return &_vecMons; }
+	std::vector <CBoundBox*> * GetMonsAtkVector()	{ return &_vecMonsAtk; }
 };

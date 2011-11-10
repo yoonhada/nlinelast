@@ -58,7 +58,7 @@ VOID CQube::Update( CBoundBox * pBB )
 		}
 	}
 
-	/*vecBoundBox = CTree::GetInstance()->GetChaVector();
+	/*vecBoundBox = CTree::GetInstance()->GetCharVector();
 	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{
 		vDir = m_vAccelerate + m_vMomentum;

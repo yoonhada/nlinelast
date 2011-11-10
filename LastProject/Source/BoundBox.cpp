@@ -35,9 +35,7 @@ VOID CBoundBox::Clear()
 {
 	m_vPosition = D3DXVECTOR3(0, 0, 0);
 	m_vDirection = D3DXVECTOR3(0, 0, 0);
-	m_vAxisDir[0] = D3DXVECTOR3(1, 0, 0);
-	m_vAxisDir[1] = D3DXVECTOR3(0, 1, 0);
-	m_vAxisDir[2] = D3DXVECTOR3(0, 0, 1);
+	D3DXMatrixIdentity( &m_matAxis );
 	m_fSize[0] = m_fSize[1] = m_fSize[2] = m_fSize[3] = m_fSize[4] = m_fSize[5] = 0;
 
 	_data.erase( _data.begin(), _data.end() );
@@ -184,11 +182,27 @@ FLOAT CBoundBox::GetRadiusShort() const
 VOID CBoundBox::SetAngleY(FLOAT fAngle)
 {
 	// z 축 뒤집혀서 OpenGL 꺼 사용
-	m_vAxisDir[0].x =  cosf( fAngle );
-	m_vAxisDir[0].z =  sinf( fAngle );
-	m_vAxisDir[2].x = -sinf( fAngle );
-	m_vAxisDir[2].z =  cosf( fAngle );
-}						///< y축회전
+	D3DXMatrixIdentity( &m_matAxis );
+	D3DXMATRIXA16 mat( 
+		cosf( fAngle ), 0, sinf( fAngle ), 0, 
+		0, 1, 0, 0, 
+		-sinf( fAngle ), 0, cosf( fAngle ), 0, 
+		0, 0, 0, 1);
+
+	m_matAxis *= mat;
+}
+
+VOID CBoundBox::SetAngleZ(FLOAT fAngle)
+{
+	// z 축 뒤집혀서 OpenGL 꺼 사용
+	D3DXMATRIXA16 mat( 
+		cosf( fAngle ), -sinf( fAngle ), 0, 0, 
+		sinf( fAngle ), cosf( fAngle ), 0, 0, 
+		0, 0, 1, 0,
+		0, 0, 0, 1);
+
+	m_matAxis *= mat;
+}
 
 D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 {
@@ -198,11 +212,7 @@ D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 	}
 	else
 	{
-		return D3DXMATRIXA16(
-			m_vAxisDir[0].x, m_vAxisDir[1].x, m_vAxisDir[2].x, 0, 
-			m_vAxisDir[0].y, m_vAxisDir[1].y, m_vAxisDir[2].y, 0, 
-			m_vAxisDir[0].z, m_vAxisDir[1].z, m_vAxisDir[2].z, 0, 
-			0, 0, 0, 1);
+		return m_matAxis;
 	}
 }
 

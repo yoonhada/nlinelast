@@ -6,8 +6,7 @@
 
 #include "Seek.h"
 
-#define _PHY_COLL_PRT
-
+#define _TEST111111
 CMonster::CMonster()
 {
 	Clear();
@@ -66,10 +65,10 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 	//WCHAR* ptr = wcstok( a_pFileName, L"." );
 	Load( a_pFileName );
 
-	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
-	{
-		CTree::GetInstance()->GetChaVector()->push_back( m_pBox[Loop].GetBoundBox() );
-	}
+	//for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	//{
+	//	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[Loop].GetBoundBox() );
+	//}
 
 	// AI
 	m_pStateMachine = new StateMachine<CMonster>( this );
@@ -277,10 +276,8 @@ VOID CMonster::Load( WCHAR* a_pFileName )
 		wsprintf(wchTemp, L"%s_%d.csav", a_pFileName, Loop);
 		m_pBox[Loop].Load( wchTemp );
 
-		CTree::GetInstance()->GetChaVector()->push_back( m_pBox[Loop].GetBoundBox() );
+		CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[Loop].GetBoundBox() );
 	}
-
-	//MessageBox( GHWND, L"Monster Load OK", NULL, MB_OK );
 }
 
 VOID CMonster::AnimationTotalTrans( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime )
@@ -923,7 +920,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 			m_pBox[Loop].BreakQube( mat );
 		}
 	}
-	CTree::GetInstance()->GetAtkVector()->clear();
+	CTree::GetInstance()->GetCharAtkVector()->clear();
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
@@ -1178,6 +1175,24 @@ VOID CMonster::AniInterpolation()
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[2] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.z;
 		}
 
+#ifdef _TEST111111
+		// 몬스터 공격 바운드 박스.
+		CBoundBox * m_pBBx = new CBoundBox;
+		m_pBBx->SetPosition( Get_Pos() );
+		m_pBBx->SetAngleY( Get_Angle() );
+
+		m_pBBx->SetSize( 0, -27.0f );
+		m_pBBx->SetSize( 1, -27.0f );
+		m_pBBx->SetSize( 2, -27.0f );
+
+		m_pBBx->SetSize( 3,  27.0f );
+		m_pBBx->SetSize( 4,  27.0f );
+		m_pBBx->SetSize( 5,  27.0f );
+
+		m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -0.3f ) );
+
+		CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+#endif
 	}	
 }
 
@@ -1310,8 +1325,7 @@ VOID CMonster::Update()
 
 
 	// AI
-	//m_pStateMachine->Update();
-
+	m_pStateMachine->Update();
 }
 
 VOID CMonster::Render()

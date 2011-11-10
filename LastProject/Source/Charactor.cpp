@@ -4,7 +4,7 @@
 	@author	백경훈
 	@brief	캐릭터 클래스
 */
-//#define _TEST111110
+#define _TEST111110
 
 
 #include "stdafx.h"
@@ -436,6 +436,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 		Iter = vecBoundBox->begin();
 		while ( Iter != vecBoundBox->end() )
 		{
+			// 케릭터보다 높은곳 제외.
 			if ( (*Iter)->GetPosition(4).y > m_pBoundBox->GetPosition(0).y)
 			{
 				Iter++;
@@ -481,8 +482,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 #endif
 
 #ifdef _TEST111110
-#else
-	vecBoundBox = CTree::GetInstance()->GetChaVector( );
+	vecBoundBox = CTree::GetInstance()->GetMonsVector( );
 	if ( vecBoundBox != NULL && vecBoundBox->size() )
 	{
 		Iter = vecBoundBox->begin();
@@ -512,7 +512,7 @@ BOOL CCharactor::CollisionAtk(  D3DXMATRIXA16 &mat )
 
 	if (m_bMonster == TRUE)
 	{
-		vecBoundBox = CTree::GetInstance()->GetAtkVector();
+		vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
   			Iter = vecBoundBox->begin();
@@ -520,6 +520,25 @@ BOOL CCharactor::CollisionAtk(  D3DXMATRIXA16 &mat )
 			{
 				vPos = ( *Iter )->GetPosition(i);
 				D3DXVec3TransformCoord(&vPos, &vPos, &mat);
+				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
+				{
+					( *Iter )->SetPosVec();
+					return TRUE; 
+				}
+			}
+		}
+	}
+	else
+	{
+		vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();
+		if ( vecBoundBox != NULL && vecBoundBox->size() )
+		{
+			Iter = vecBoundBox->begin();
+			for (int i = 0; i < 8; ++i)
+			{				
+				vPos = ( *Iter )->GetPosition(i);
+				CDebugConsole::GetInstance()->Messagef(L"%f, %f, %f\n", vPos.x, vPos.y, vPos.z);
+				//D3DXVec3TransformCoord(&vPos, &vPos, &mat);
 				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
 				{
 					( *Iter )->SetPosVec();
@@ -774,31 +793,23 @@ VOID CCharactor::Update()
 {
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
-		D3DXVECTOR3 vDir = Get_CharaPos();
-		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
-		m_pWeapon->SetKeyA( vDir, m_fAngle );
+		m_pWeapon->SetKeyA();
 	}
 	if ( CInput::GetInstance()->Get_Rbutton() )
 	{
-		D3DXVECTOR3 vDir = Get_CharaPos();
-		vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
-		m_pWeapon->SetKeyB( vDir, m_fAngle );
+		m_pWeapon->SetKeyB();
 	}
-#ifdef _DEBUG
-	// 무기 애니 보기위한 키 배열
-	for ( int i = 0; i < 10; ++i )
+
+	if(m_pWeapon)	
 	{
-		if ( CInput::GetInstance()->m_bNumKeybutton[i] )
+		m_pWeapon->Update();
+		if ( m_pWeapon->GetAtkTime() )
 		{
 			D3DXVECTOR3 vDir = Get_CharaPos();
 			vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
-			m_pWeapon->SetKeyNum( i, vDir, m_fAngle );
+			m_pWeapon->AddAtkBBx( vDir, m_fAngle );
 		}
 	}
-#endif // _DEBUG
-
-	if(m_pWeapon)	
-		m_pWeapon->Update();
 }
 
 VOID CCharactor::Render()
@@ -882,7 +893,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		std::vector<WORD> NetworkSendTempVector;
 #ifdef _TEST
 		std::vector<CBoundBox *> * vecBoundBox;
-		vecBoundBox = CTree::GetInstance()->GetAtkVector();
+		vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
 		std::vector<D3DXVECTOR3> * vecVec = vecBoundBox->begin()->GetPosVec();
 		std::vector<D3DXVECTOR3>::iterator Iter;
 		//vecVec = m_pBoundBox->GetPosVec();
@@ -923,7 +934,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
 			{
-				vecBoundBox = CTree::GetInstance()->GetAtkVector();
+				vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
 				{
 					Iter = vecBoundBox->begin();
