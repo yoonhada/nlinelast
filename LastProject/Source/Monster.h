@@ -81,10 +81,10 @@ private:
 	StateMachine<CMonster>* m_pStateMachine;
 
 	// Å¸°Ù
-	INT m_iTarget;
+	INT			m_iTarget;
 	D3DXVECTOR3 m_vTargetPos;
 	D3DXVECTOR3 m_vTargetUnitVector;
-	FLOAT m_fTargetDistance;
+	FLOAT		m_fTargetDistance;
 
 
 	struct BoxData
