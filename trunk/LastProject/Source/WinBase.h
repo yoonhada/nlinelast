@@ -44,7 +44,6 @@ public:
 
 private:
 	CDirectX9* m_pDX9;
-	CMainManage* m_pManage;
 
 private:
 	LPCTSTR m_lpszTitle; ///< 타이틀명
@@ -52,8 +51,6 @@ private:
 	RECT m_WinRect;		 ///< 윈도 크기
 	BOOL m_bReSizing;	 ///< 리사이징
 	BOOL m_bFirstRun;	 ///< 처음 실행
-	DWORD m_dwThreadID;	 ///< 쓰레드
-	HANDLE m_hThread;	 ///< 쓰레드
 
 	//네트워크
 	WSADATA m_wsadata;
@@ -63,7 +60,6 @@ private:
 	static VOID Update();
 	static VOID Render();
 
-	static DWORD WINAPI ThreadFunc(LPVOID pTemp);
 	ATOM MyRegisterClass(HINSTANCE hInstance);	///< 윈도우 클래스 등록
 	BOOL InitInstance(HINSTANCE, INT);
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

@@ -518,19 +518,47 @@
 			Name="Management"
 			>
 			<File
-				RelativePath=".\Source\MainManage.cpp"
+				RelativePath=".\Source\BaseScene.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\MainManage.h"
+				RelativePath=".\Source\BaseScene.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\Manage.cpp"
+				RelativePath=".\Source\IntroScene.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\Manage.h"
+				RelativePath=".\Source\IntroScene.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\LoadScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\LoadScene.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\MainScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\MainScene.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\ObjectManage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\ObjectManage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Scene.h"
 				>
 			</File>
 			<File

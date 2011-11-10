@@ -32,10 +32,10 @@ VOID Seek::Execute( CMonster* pMonster )
 	// 몬스터와 가장 가까이에 있는 유저를 찾는다.
 	for( INT i=0; i<4; ++i )
 	{
-		if( CMainManage::GetInstance()->Get_CharactorList()[i]->Get_Active() )
+		if( CObjectManage::GetInstance()->Get_CharactorList()[i]->Get_Active() )
 		{
 			// 유저 위치 - 보스 몬스터
-			pos = CMainManage::GetInstance()->Get_CharactorList()[i]->Get_CharaPos() - pMonster->Get_Pos();
+			pos = CObjectManage::GetInstance()->Get_CharactorList()[i]->Get_CharaPos() - pMonster->Get_Pos();
 
 			// 거리 구하기
 			length = D3DXVec3Length( &pos );
@@ -68,10 +68,10 @@ VOID Seek::Execute( CMonster* pMonster )
 	else if( min >= 100.0f && min <= 150.0f )
 	{
 		pMonster->Set_Target( Target );
-		D3DXVECTOR3 UnitVector = CMainManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() - pMonster->Get_Pos();
+		D3DXVECTOR3 UnitVector = CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() - pMonster->Get_Pos();
 		D3DXVec3Normalize( &UnitVector, &UnitVector );
 		pMonster->Set_TargetUnitVector( UnitVector );
-		pMonster->Set_TargetPos( CMainManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() );
+		pMonster->Set_TargetPos( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() );
 		pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 	}
 	else

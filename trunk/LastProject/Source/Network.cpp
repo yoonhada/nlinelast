@@ -86,9 +86,9 @@ VOID CNetwork::Update()
 	if( time > NETWORK_RECV_TIME )
 	{
 		// 이동 데이터 서버로 보내기
-		csMOVE( CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
-			CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().z,
-			CMainManage::GetInstance()->Get_MyCharactor()->Get_CharaAngle() );
+		csMOVE( CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
+			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().z,
+			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaAngle() );
 
 		time = 0.0f;
 	}
@@ -170,9 +170,9 @@ VOID CNetwork::scMOVE( CPacket& pk )
 
 	for( INT Loop=0; Loop<3; ++Loop )
 	{
-		if( CMainManage::GetInstance()->Get_Charactors()[Loop].Get_ClientNumber() == number  )
+		if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_ClientNumber() == number  )
 		{
-			CMainManage::GetInstance()->Get_Charactors()[Loop].UpdateByValue( m_vMove, angle );
+			CObjectManage::GetInstance()->Get_Charactors()[Loop].UpdateByValue( m_vMove, angle );
 			//CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
 			break;
 		}
@@ -191,10 +191,10 @@ VOID CNetwork::scNEWUSER( CPacket& pk )
 
 	for( INT Loop=0; Loop<3; ++Loop )
 	{
-		if( CMainManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
+		if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
 		{
-			CMainManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
-			CMainManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( wNumber );
+			CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
+			CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( wNumber );
 			break;
 		}
 	}
@@ -214,8 +214,8 @@ VOID CNetwork::scInitData( CPacket& pk )
 	pk.Read( &user_no );
 	pk.Read( &userCount );
 
-	CMainManage::GetInstance()->Set_Host( host );
-	CMainManage::GetInstance()->Set_ClientNumber( user_no );
+	CObjectManage::GetInstance()->Set_Host( host );
+	CObjectManage::GetInstance()->Set_ClientNumber( user_no );
 	//CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
 
 	// 유저수 만큼 루프
@@ -225,10 +225,10 @@ VOID CNetwork::scInitData( CPacket& pk )
 
 		for( INT Loop=0; Loop<3; ++Loop )
 		{
-			if( CMainManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
+			if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
 			{
-				CMainManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
-				CMainManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( user_list );
+				CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
+				CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( user_list );
 				break;
 			}
 		}
@@ -278,7 +278,7 @@ VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
 	WORD wMsgID = MSG_CS_MOVE;
 	pk.Write( wMsgSize );
 	pk.Write( wMsgID );
-	pk.Write( CMainManage::GetInstance()->Get_ClientNumber() );
+	pk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
 	pk.Write( x );
 	pk.Write( z );
 	pk.Write( angle );
@@ -333,7 +333,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 
 	CDebugConsole::GetInstance()->Messagef( L"Rcv cDestroyCount : %d\n", cDestroyCount );
 
-	CMainManage::GetInstance()->Get_pAlphaMon()->RecvBreakList( cDestroyCount, wList );
+	CObjectManage::GetInstance()->Get_AlphaMon()->RecvBreakList( cDestroyCount, wList );
 
 	// 디버깅용 출력
 	//cout << wClientNumber << " : ";
