@@ -95,14 +95,13 @@ private:
 	DWORD				m_dCurrentTime;
 	DWORD				m_dBeginTime;
 
-	INT					m_iCurrentFrame;
-
 	//	Animation Test
 	ANIMATIONDATA		m_aniBase;
 	ANIMATIONDATA		m_aniCurrent;
 	ANIMATIONMAP		m_mapAnimation;
 	//	End
 public:
+	INT					m_iCurrentFrame;
 
 };
 
