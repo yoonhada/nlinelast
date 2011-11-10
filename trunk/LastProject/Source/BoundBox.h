@@ -35,7 +35,6 @@ public:
 	FLOAT GetWidth();
 	FLOAT GetHeight();
 	D3DXVECTOR3 GetPosition(INT = -1) const;
-	D3DXVECTOR3 GetAxisDir(INT n) const 	{ return m_vAxisDir[n]; }
 	D3DXVECTOR3 GetDirection() const 		{ return m_vDirection; }
 	D3DXMATRIXA16 GetAxisMat() const;
 	std::vector <D3DXVECTOR3> * GetPosVec();
@@ -56,7 +55,6 @@ public:
 private:
 	CCharactor * m_pCharactors;
 	D3DXVECTOR3 m_vPosition;		///< 중심좌표
-	D3DXVECTOR3 m_vAxisDir[3];		///< 큐브 세축의 단위벡터 ( ?? 필요한가?? )
 	D3DXMATRIXA16 m_matAxis;		///< 큐브 매트릭스
 	D3DXVECTOR3 m_vDirection;		///< 동좌표
 	FLOAT m_fSize[6];

@@ -10,6 +10,11 @@
 class Map;
 typedef struct _WEAPONTYPE
 {
+	// <-----------Time-------------->
+	// Begin
+	// +-------------+----+----------+
+	// <-----ATK----->
+	// <------Delay------>
 	INT nType;
 	INT nFrameBegin[10];
 	INT nFrameTime[10];
@@ -18,45 +23,6 @@ typedef struct _WEAPONTYPE
 	D3DXVECTOR3 vDir[10];
 
 	CBoundBox pBBA;
-
-	VOID AKeyBB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
-	{
-		D3DXVECTOR3 vMax(-3.0f, 7.0f, -4.0f );
-		D3DXVECTOR3 vMin(-6.0f,-7.0f,-20.0f );
-		//D3DXVECTOR3 vMax(-0.5f,  9.0f, -4.0f );
-		//D3DXVECTOR3 vMin( 0.5f, -9.0f,-20.0f );
-		
-		pBBA.SetPosition( vPos );
-		pBBA.SetAngleY( fAngle );
-
-		pBBA.SetSize( 0, vMin.x );
-		pBBA.SetSize( 1, vMin.y );
-		pBBA.SetSize( 2, vMin.z );
-
-		pBBA.SetSize( 3, vMax.x );
-		pBBA.SetSize( 4, vMax.y );
-		pBBA.SetSize( 5, vMax.z );
-
-		pBBA.SetDirection( vDir[0] );
-	}
-	VOID BKeyBB( const D3DXVECTOR3& vPos, const FLOAT fAngle )
-	{
-		D3DXVECTOR3 vMax( 7.0f, 1.5f, -4.0f );
-		D3DXVECTOR3 vMin(-7.0f,-1.5f,-20.0f );
-
-		pBBA.SetPosition( vPos );
-		pBBA.SetAngleY( fAngle );
-
-		pBBA.SetSize( 0, vMin.x );
-		pBBA.SetSize( 1, vMin.y );
-		pBBA.SetSize( 2, vMin.z );
-
-		pBBA.SetSize( 3, vMax.x );
-		pBBA.SetSize( 4, vMax.y );
-		pBBA.SetSize( 5, vMax.z );
-
-		pBBA.SetDirection( vDir[1] );
-	}
 
 }WEAPONTYPE;
 
@@ -72,6 +38,8 @@ private:
 	INT m_nFrame;
 	WEAPONTYPE m_WeaponType;
 	Map * m_pMap;
+	BOOL m_bAtkTime;
+	FLOAT m_afZAng[10];
 
 public:
 	enum _WEAPON { NONE, SPANNER, FRYPEN, GUITAR, MAGICSTICK };
@@ -88,13 +56,15 @@ public:
 
 	VOID Render( D3DXMATRIX _matCharacter );
 	VOID SetType(INT nType)		{ m_WeaponType.nType = nType; }
-	VOID SetKeyA( const D3DXVECTOR3& vPos, const FLOAT fAngle );
-	VOID SetKeyB( const D3DXVECTOR3& vPos, const FLOAT fAngle );
-	VOID SetKeyNum( INT nKey, const D3DXVECTOR3& vPos, const FLOAT fAngle );
+	VOID SetKeyA();
+	VOID SetKeyB();
+	VOID SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle );
 
 	const D3DXMATRIXA16& Get_MatWorld();
-
 	CBoundBox GetBoundBox()		{ return m_WeaponType.pBBA; }
+	BOOL GetAtkTime()			{ return m_bAtkTime; }
+
+	VOID AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle );
 
 private:
 	enum { READ, WRITE };
