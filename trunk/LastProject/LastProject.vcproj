@@ -492,10 +492,6 @@
 					Name="Texture"
 					>
 					<File
-						RelativePath=".\Source\Manage.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Source\TextureManage.cpp"
 						>
 					</File>
@@ -530,11 +526,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\SceneManager.cpp"
+				RelativePath=".\Source\Manage.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Source\SceneManager.h"
+				RelativePath=".\Source\Manage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\SceneManage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\SceneManage.h"
 				>
 			</File>
 		</Filter>
@@ -673,7 +677,31 @@
 				RelativePath=".\Source\WaitInterpolation.h"
 				>
 			</File>
+			<Filter
+				Name="TileMap"
+				>
+				<File
+					RelativePath=".\Source\TileMap.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMap.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMapBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMapBase.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

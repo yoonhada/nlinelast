@@ -5,18 +5,18 @@
 @brief	Manage 인터페이스
 */
 
-#ifndef _IManage_H_
-#define _IManage_H_
+#ifndef _ITexManage_H_
+#define _ITexManage_H_
 
 #include <map>
 
 template <class T>
-class IManage
+class ITexManage
 {
 	//friend class CSingleton< IManage<T> >;
 public:
-	IManage( void ) : m_nLastID(0)	{ }
-	virtual ~IManage( void )		{ m_pItem.erase( m_pItem.begin(), m_pItem.end() ); }
+	ITexManage( void ) : m_nLastID(0)	{ }
+	virtual ~ITexManage( void )		{ m_pItem.erase( m_pItem.begin(), m_pItem.end() ); }
 
 	virtual BOOL Create() = 0;
 	virtual VOID Release() = 0;
