@@ -64,6 +64,11 @@ public:
 		return m_bF9button;
 	}
 
+	BOOL Get_F1button()
+	{
+		return m_bF1button;
+	}
+
 	VOID Set_F9button(BOOL b)
 	{
 		m_bF9button = b;
@@ -89,6 +94,7 @@ private:
 	BOOL		m_bRbutton;						///< 오른쪽 버튼
 	BOOL		m_bENdbutton;
 	BOOL		m_bHomebutton;
+	BOOL		m_bF1button;
 	BOOL		m_bF9button;
 	BOOL		m_bF8button;
 	//FLOAT		m_fXPos;						///< X축 이동

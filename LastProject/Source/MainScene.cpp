@@ -24,12 +24,17 @@ CMainScene::~CMainScene()
 
 VOID	CMainScene::Clear()
 {
+	m_pMatrices = NULL;
+	m_pCamera = NULL;
 	m_pD3dDevice = NULL;
 	m_pBill = NULL;
 	m_pMyCharactor = NULL;
 	m_pCharactors = NULL;
 	m_pAlphaMon = NULL;
 	m_pAxis = NULL;
+	m_pGrid = NULL;
+	m_pMonster = NULL;
+	m_pMap = NULL;
 
 	for( INT i=0; i<4; ++i )
 	{

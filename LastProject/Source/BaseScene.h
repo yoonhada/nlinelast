@@ -1,6 +1,8 @@
-//¾À ±âº» Æû
+////¾À ±âº» Æû
 //#ifndef _CÆûScene_H_
 //#define _CÆûScene_H_
+//
+//#include "Scene.h"
 //
 //class CÆûScene : public IScene
 //{
