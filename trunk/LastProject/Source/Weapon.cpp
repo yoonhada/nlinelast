@@ -248,14 +248,14 @@ VOID CWeapon::Update()
 	}
 #endif // _GRAP
 
-	if ( m_nFrame != 0 )
+	if ( m_nFrame > 0 )
 	{
 		if ( m_nFrame == m_WeaponType.nFrameAtk[m_WeaponType.nType] )
 		{
 			CTree::GetInstance()->GetAtkVector()->push_back(&m_WeaponType.pBBA);
 		}
-
-		m_nFrame--;
+				
+		m_nFrame = m_pMap->GetCurrentFrame();
 	}
 	else
 	{

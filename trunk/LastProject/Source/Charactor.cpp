@@ -4,6 +4,8 @@
 	@author	백경훈
 	@brief	캐릭터 클래스
 */
+//#define _TEST111110
+
 
 #include "stdafx.h"
 #include "Charactor.h"
@@ -14,7 +16,6 @@
 #include "ShadowCell.h"
 
 #include "OctTree2Array.h"
-
 
 CCharactor::CCharactor()
 {
@@ -420,38 +421,37 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 	std::vector<CBoundBox*> * vecBoundBox;
 	std::vector<CBoundBox*>::iterator Iter;
 
-	INT i;
 	D3DXVECTOR3 vDir, vPos;
 
 	// 맵충돌
-#ifdef _TEST2
+
+#ifdef _TEST111110
 	FLOAT fRadius = m_pBoundBox->GetRadiusLong();
 	vPos = m_pBoundBox->GetPosition();
 	vDir = vPos + a_vCollisionControl;
-	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
+	
+	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);	
 	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{
 		Iter = vecBoundBox->begin();
 		while ( Iter != vecBoundBox->end() )
 		{
-			D3DXVECTOR3 v[8];
-			for (int i = 0; i < 8; ++i)
+			if ( (*Iter)->GetPosition(4).y > m_pBoundBox->GetPosition(0).y)
 			{
-				v[i] = ( *Iter )->GetPosition( i );
+				Iter++;
+				continue;
 			}
-
-			CDebugConsole::GetInstance()->MessageQube(v);
-			CDebugConsole::GetInstance()->Message("\n\n");
 
 			if( CPhysics::GetInstance()->Collision( vDir, fRadius, ( *Iter ) ) )
 			{
-				CPhysics::GetInstance()->Sliding( a_vCollisionControl );
+				//CPhysics::GetInstance()->Sliding( a_vCollisionControl );
 				bColl = TRUE;
 			}
 			Iter++;
 		}
 	}
 #else
+	INT i;
 	for ( i = 0; i < 8; ++i)
 	{
 		vPos = m_pBoundBox->GetPosition(i);
@@ -480,7 +480,9 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 	}
 #endif
 
-	/*vecBoundBox = CTree::GetInstance()->GetChaVector( );
+#ifdef _TEST111110
+#else
+	vecBoundBox = CTree::GetInstance()->GetChaVector( );
 	if ( vecBoundBox != NULL && vecBoundBox->size() )
 	{
 		Iter = vecBoundBox->begin();
@@ -494,7 +496,8 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			}
 			Iter++;
 		}
-	}*/
+	}
+#endif
 
 	return FALSE;
 }
