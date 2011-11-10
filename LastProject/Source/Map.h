@@ -47,6 +47,8 @@ public:
 	BOOL		SetAnimation( DWORD _dID );
 	VOID		CleanupAnimationData();
 
+	INT			GetCurrentFrame();
+
 private:
 	typedef struct _DATA
 	{

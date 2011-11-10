@@ -352,3 +352,8 @@ HRESULT Map::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppTexture, LPCWSTR FileNa
 	return S_OK;
 
 }
+
+INT Map::GetCurrentFrame()
+{
+	return m_pASEParser->m_iCurrentFrame;
+}

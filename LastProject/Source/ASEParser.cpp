@@ -217,9 +217,10 @@ VOID ASEParser::FrameMove()
 	//	Animation Test
 	if( m_dCurrentTime > m_dBeginTime + m_pSceneData->iFrameSpeed )
 	{
-		m_iCurrentFrame++;
-
-		m_dBeginTime = m_dCurrentTime;
+		//m_iCurrentFrame++;
+		DWORD dincFrame	= ( m_dCurrentTime - m_dBeginTime ) / m_pSceneData->iFrameSpeed;
+		m_iCurrentFrame += dincFrame;
+		m_dBeginTime	= m_dCurrentTime;
 
 		if( m_iCurrentFrame > m_aniCurrent.iEndFrame )
 		{
