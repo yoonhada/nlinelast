@@ -210,7 +210,7 @@ VOID CMainScene::CreateCharactor()
 	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
 	m_pMyCharactor->CreateWeapon( CWeapon::SPANNER );
 
-	CTree::GetInstance()->GetChaVector()->push_back( m_pMyCharactor->GetBoundBox() );
+	CTree::GetInstance()->GetCharVector()->push_back( m_pMyCharactor->GetBoundBox() );
 
 	m_pCharactors = new CCharactor[m_iMaxCharaNum];
 	
@@ -232,7 +232,7 @@ VOID CMainScene::CreateCharactor()
 
 		m_pCharactors[Loop].CreateWeapon( CWeapon::SPANNER /* + Loop + 1*/ );
 		m_pCharactors[Loop].Set_Position( vec[Loop] );
-		CTree::GetInstance()->GetChaVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
+		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 
 		//D3DXVECTOR3 vec1 = m_pCharactors[Loop].GetBoundBox()->GetPosition();
 	}

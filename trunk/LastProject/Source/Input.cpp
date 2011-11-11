@@ -35,7 +35,7 @@ VOID CInput::Clear()
 
 	m_bF8button = m_bF9button = FALSE;
 
-	m_bEnable = FALSE;
+	m_bEnable = TRUE;
 }
 
 
@@ -109,7 +109,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 
 			m_vPos.x = m_vPos.y = m_vPos.z = 0.0f;
 
-			if ( m_bEnable == TRUE )
+			if ( m_bEnable )
 			{
 				if ( GetAsyncKeyState( 'A' ) )
 				{
@@ -181,31 +181,14 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 					m_bF9button = FALSE;
 				}
 
-			if( ( GetAsyncKeyState( VK_F1 ) & 0x0001 ) == TRUE )
-			{
-				m_bF1button = TRUE;
-			}
-			else
-			{
-				m_bF1button = FALSE;
-			}
-
-#ifdef _DEBUG
-			for (int i = 0; i < 10; ++i)
-			{
-				if( GetAsyncKeyState( 0x30 + i ) )	 
-				{ 
-					m_bNumKeybutton[i] = TRUE; 
-				}  
-				else 
-				{ 
-					m_bNumKeybutton[i] = FALSE; 
+				if( ( GetAsyncKeyState( VK_F1 ) & 0x0001 ) == TRUE )
+				{
+					m_bF1button = TRUE;
 				}
 				else
 				{
-					m_bF8button = FALSE;
+					m_bF1button = FALSE;
 				}
-
 			}
 		}
 	}

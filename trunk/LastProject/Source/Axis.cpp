@@ -93,10 +93,10 @@ HRESULT Axis::InitVB()
 	int i= 0;
 	while ( fX <= m_fSize )
 	{
-		pVertices[            i + 0]._pos = D3DXVECTOR3( fX, fY, m_fSize );		pVertices[            i + 0]._col = 0xFF00FF00;
+		pVertices[            i + 0]._pos = D3DXVECTOR3( fX, fY, m_fSize );			pVertices[            i + 0]._col = 0xFF00FF00;
 		pVertices[            i + 1]._pos = D3DXVECTOR3( fX, fY,-m_fSize ); 		pVertices[            i + 1]._col = 0xFF00FF00;
 		pVertices[nSize * 2 + i + 0]._pos = D3DXVECTOR3( m_fSize, fY, fZ ); 		pVertices[nSize * 2 + i + 0]._col = 0xFF00FF00;
-		pVertices[nSize * 2 + i + 1]._pos = D3DXVECTOR3(-m_fSize, fY, fZ );		pVertices[nSize * 2 + i + 1]._col = 0xFF00FF00;
+		pVertices[nSize * 2 + i + 1]._pos = D3DXVECTOR3(-m_fSize, fY, fZ );			pVertices[nSize * 2 + i + 1]._col = 0xFF00FF00;
 
 		fX += fStep;
 		fZ += fStep;

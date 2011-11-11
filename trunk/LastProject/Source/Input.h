@@ -21,8 +21,7 @@ public:
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, HWND a_hWnd );
 	HRESULT Release();
 
-	VOID Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed, 
-		FLOAT a_fFrameTime );
+	VOID Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed, FLOAT a_fFrameTime );
 
 	D3DXVECTOR3& Get_Pos()
 	{
