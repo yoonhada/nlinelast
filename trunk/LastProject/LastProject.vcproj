@@ -734,6 +734,42 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="GUI"
+			>
+			<File
+				RelativePath=".\Source\GUI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GUI.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GUIBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GUIBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GUIBtn.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GUIBtn.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GUIBtnManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GUIBtnManager.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\ClassDiagram1.cd"
 			>

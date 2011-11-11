@@ -152,12 +152,12 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 		m_pLogo[Loop].Set_Position( vec[Loop] );
 	}*/
 
-	CDebugConsole::GetInstance()->Messagef( L"**** Create End **** \n\n" );
-
 	CObjectManage::GetInstance()->Set_MyCharactor( m_pMyCharactor );
 	CObjectManage::GetInstance()->Set_Charactors( m_pCharactors );
 	CObjectManage::GetInstance()->Set_CharactorList( m_pCharactorList );
 	CObjectManage::GetInstance()->Set_pAlphaMon( m_pAlphaMon );
+
+	CDebugConsole::GetInstance()->Messagef( L"**** Create End **** \n\n" );
 
 	return S_OK;
 }
