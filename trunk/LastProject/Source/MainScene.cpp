@@ -152,12 +152,12 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 		m_pLogo[Loop].Set_Position( vec[Loop] );
 	}*/
 
+	CDebugConsole::GetInstance()->Messagef( L"**** Create End **** \n\n" );
+
 	CObjectManage::GetInstance()->Set_MyCharactor( m_pMyCharactor );
 	CObjectManage::GetInstance()->Set_Charactors( m_pCharactors );
 	CObjectManage::GetInstance()->Set_CharactorList( m_pCharactorList );
 	CObjectManage::GetInstance()->Set_pAlphaMon( m_pAlphaMon );
-
-	CDebugConsole::GetInstance()->Messagef( L"**** Create End **** \n\n" );
 
 	return S_OK;
 }
@@ -276,6 +276,12 @@ VOID	CMainScene::Update()
 	// 캐릭터: 인풋 값 받아오기
 	m_pMyCharactor->UpdateByInput();
 	m_pMyCharactor->Update();
+	D3DXMATRIXA16 mat;
+	D3DXMatrixIdentity( &mat );
+	if ( m_pMyCharactor->CollisionAtk(mat) )
+	{
+		m_pMyCharactor->BreakQube( mat );
+	}
 
 	//카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
@@ -296,9 +302,29 @@ VOID	CMainScene::Update()
 		//{
 			//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
 			m_pCharactors[Loop].UpdateOtherPlayer();
+			if ( m_pCharactors[Loop].CollisionAtk(mat) )
+			{
+				m_pCharactors[Loop].BreakQube( mat );
+			}
+
 			//m_pCharactors[Loop].Update();
 		//}
 	}
+
+	std::vector<CBoundBox*> * vecBoundBox;
+	std::vector<CBoundBox*>::iterator Iter;
+	vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();
+	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
+	{			
+		Iter = vecBoundBox->begin();
+		while ( Iter != vecBoundBox->end() )
+		{
+			delete ( *Iter );
+			Iter++;
+		}
+	}
+	
+	vecBoundBox->erase( vecBoundBox->begin(), vecBoundBox->end() );
 
 	////로고
 	//for( INT Loop=0; Loop<6; ++Loop )

@@ -43,15 +43,11 @@ VOID CCharactor::Clear()
 	m_pTotalVB = NULL;
 	m_pTotalIB = NULL;
 	m_pTexture = NULL;
-	m_pModel = NULL;
 
 	m_pObject = NULL;
 	m_pCreateCube = NULL;
 	m_pWeapon = NULL;
 	m_pOctTree = NULL;
-
-	m_pBoundBox = NULL;
-	m_pShadowCell = NULL;
 
 	m_iCubeVectorSize = -1;
 	m_iBoxSize = -1;
@@ -447,16 +443,18 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 				continue;
 			}
 
-			if( CPhysics::GetInstance()->Collision( vDir, fRadius, ( *Iter ) ) )
+			if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
 			{
+				a_vCollisionControl = D3DXVECTOR3(0, 0, 0);
+				break;
 				//CPhysics::GetInstance()->Sliding( a_vCollisionControl );
-				bColl = TRUE;
 			}
 			Iter++;
 		}
 	}
+
 #else
-	INT i;
+	/*INT i;
 	for ( i = 0; i < 8; ++i)
 	{
 		vPos = m_pBoundBox->GetPosition(i);
@@ -469,8 +467,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			while ( Iter != vecBoundBox->end() )
 			{
 				if( CPhysics::GetInstance()->Collision( vPos + vDir, ( *Iter ) ) )
-				{
-					//CDebugConsole::GetInstance()->Messagef("%f\n", CFrequency::GetInstance()->getFrametime() );
+				{					
 					CPhysics::GetInstance()->Sliding( a_vCollisionControl );
 					bColl = TRUE;
 				}
@@ -482,25 +479,25 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 		{
 			break;
 		}
-	}
+	}*/
 #endif
 
 #ifdef _TEST111110
-	vecBoundBox = CTree::GetInstance()->GetMonsVector( );
-	if ( vecBoundBox != NULL && vecBoundBox->size() )
-	{
-		Iter = vecBoundBox->begin();
-		Iter++;
-		while ( Iter != vecBoundBox->end() )
-		{
-			if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
-			{
-				a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				return TRUE;
-			}
-			Iter++;
-		}
-	}
+	//vecBoundBox = CTree::GetInstance()->GetMonsVector( );
+	//if ( vecBoundBox != NULL && vecBoundBox->size() )
+	//{
+	//	Iter = vecBoundBox->begin();
+	//	Iter++;
+	//	while ( Iter != vecBoundBox->end() )
+	//	{
+	//		if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
+	//		{
+	//			a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//			return TRUE;
+	//		}
+	//		Iter++;
+	//	}
+	//}
 #endif
 
 	return FALSE;
@@ -542,8 +539,7 @@ BOOL CCharactor::CollisionAtk(  D3DXMATRIXA16 &mat )
 			{				
 				vPos = ( *Iter )->GetPosition(i);
 				CDebugConsole::GetInstance()->Messagef(L"%f, %f, %f\n", vPos.x, vPos.y, vPos.z);
-				//D3DXVec3TransformCoord(&vPos, &vPos, &mat);
-				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
+				if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
 				{
 					( *Iter )->SetPosVec();
 					return TRUE; 
@@ -648,6 +644,10 @@ VOID CCharactor::UpdateByInput(  )
 	Set_ControlTranslate( 2, m_vControl.z );
 	Set_ControlRotate( 1, m_fAngle + m_fAniAngleY + m_fAniAngleAttack );
 	Calcul_MatWorld();
+
+	CDebugInterface::GetInstance()->AddMessageFloat( "Player_x", m_vControl.x );
+	CDebugInterface::GetInstance()->AddMessageFloat( "Player_y", m_vControl.y );
+	CDebugInterface::GetInstance()->AddMessageFloat( "Player_z", m_vControl.z );
 }
 
 VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
@@ -737,16 +737,16 @@ VOID CCharactor::AnimateAttack()
 {
 	INT Temp = m_pWeapon->Get_nState();
 	static INT iMax = 0;
-	if( m_pWeapon->Get_nState() == EnumCharFrame::ATTACK1 )
+	if( m_pWeapon->Get_nState() == 0x0100 )
 	{
 		if( iMax == 0 ) iMax = m_pWeapon->Get_nFrame();
 		m_fAniAngleAttack = ( m_pWeapon->Get_nFrame() - ( iMax ) )  * 0.05f;
 		//CDebugConsole::GetInstance()->Messagef( L"%f\n", m_fAniAngleAttack );
 
-		if( m_pWeapon->Get_nFrame() != 0 )
-		{
-			m_fAniAngleAttack -=  ( iMax / 5.0f ) * CFrequency::GetInstance()->getFrametime();
-		}
+		//if( m_pWeapon->Get_nFrame() != 0 )
+		//{
+		//	m_fAniAngleAttack -=  ( iMax / 5.0f ) * CFrequency::GetInstance()->getFrametime();
+		//}
 	}
 	else
 	{
@@ -938,7 +938,11 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
 			{
-				vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
+				if ( m_bMonster )
+					vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
+				else
+					vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();	
+
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
 				{
 					Iter = vecBoundBox->begin();

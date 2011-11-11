@@ -121,8 +121,7 @@ VOID CLoadScene::Update()
 	static BOOL bTemp = FALSE;
 	if( bTemp == FALSE )
 	{
-		CMainScene* pMain = new CMainScene;
-		CSceneManage::GetInstance()->OrderChangeScene( pMain );
+		CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 		bTemp = TRUE;
 	}
 }
