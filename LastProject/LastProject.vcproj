@@ -513,6 +513,14 @@
 				RelativePath=".\Source\Input.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Source\Mouse.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Mouse.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Management"
