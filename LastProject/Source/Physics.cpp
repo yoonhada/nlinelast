@@ -108,8 +108,7 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube)
 	{															//  | |     | |
 		v[i] = _pCube->GetPosition( i );						//  | |v4---|-|v5
 	}															//  |/      |/
-	//CDebugConsole::GetInstance()->Messagef(L"케릭?? : \nv\n\n");
-	//CDebugConsole::GetInstance()->MessageQube(v);															//  v7------v6
+																//  v7------v6
 	for (int i = 0; i < 6; ++i)									
 	{															// Plane A+B+C+D
 		D3DXPlaneFromPoints( &Plane, 							// A = Nx		
@@ -181,27 +180,24 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoun
 		m_vBBPos[i] = pBB->GetPosition( i );
 	}
 
-	for ( i = 0; i < 6; ++i )
+	for ( i = 0; i < 4; ++i )
 	{
+		// 최단거리 계산 Ds = ( Pi - Ps ) DOT N
 		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[i][0]], &m_vBBPos[nVI[i][1]], &m_vBBPos[nVI[i][2]]);
 		m_vColNormal = D3DXVECTOR3( m_plane.a, m_plane.b, m_plane.c );
 
-		v0 = pBB->GetPosition() - vCenter;
-		m_fD_s = D3DXVec3Dot( &v0, &m_vColNormal );
-		if ( m_fD_s > 0.0f )
-			continue;
-
 		v0 = vCenter - m_vBBPos[nVI[i][0]];
-
-		D3DXVec3Dot( &v1, &m_vColNormal );
 		m_fD_s = D3DXVec3Dot( &v0, &m_vColNormal );
 		
-		if ( m_fD_s < 0 &&  ABSDEF(m_fD_s) < fRadius )
+		if ( m_fD_s < fRadius )
 		{
 			CDebugConsole::GetInstance()->Messagef("%d : %0.2f\n", i, m_fD_s);
-			return TRUE;
+		}
+		else
+		{
+			return FALSE;
 		}
 	}
 
-	return FALSE;
+	return TRUE;
 }

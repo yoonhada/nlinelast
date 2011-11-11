@@ -42,6 +42,7 @@ VOID CWeapon::Clear()
 	m_afZAng[9] = DEG2RAD(0);
 
 	m_bAtkTime = FALSE;
+	m_nPF = -1;
 }
 
 HRESULT CWeapon::Release()
@@ -173,7 +174,6 @@ VOID CWeapon::SetKeyA()
 {
 	if ( m_nState == EnumCharFrame::BASE )
 	{
-		CInput::GetInstance()->EnableInput(FALSE);
 		m_nState = EnumCharFrame::ATTACK1;
 		m_pMap->SetAnimation( m_nState );
 	} 
@@ -181,7 +181,6 @@ VOID CWeapon::SetKeyA()
 			( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 			( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
-		CInput::GetInstance()->EnableInput(FALSE);
 		m_nState = EnumCharFrame::ATTACK2;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -189,7 +188,6 @@ VOID CWeapon::SetKeyA()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
-		CInput::GetInstance()->EnableInput(FALSE);
 		m_nState = EnumCharFrame::A;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -199,7 +197,6 @@ VOID CWeapon::SetKeyB()
 {
 	if ( m_nState == EnumCharFrame::BASE )
 	{
-		CInput::GetInstance()->EnableInput(FALSE);
 		m_nState = EnumCharFrame::TEMP1;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -207,7 +204,6 @@ VOID CWeapon::SetKeyB()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
-		CInput::GetInstance()->EnableInput(FALSE);
 		m_nState = EnumCharFrame::TEMP2;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -215,7 +211,6 @@ VOID CWeapon::SetKeyB()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
-		CInput::GetInstance()->EnableInput(FALSE);
 		m_nState = EnumCharFrame::TEMP3;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -223,7 +218,6 @@ VOID CWeapon::SetKeyB()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
-		CInput::GetInstance()->EnableInput(FALSE);
 		m_nState = EnumCharFrame::TEMP4;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -291,14 +285,18 @@ VOID CWeapon::Update()
 		{
 			m_bAtkTime = TRUE;
 		}
-		if ( m_pMap->GetCurrentFrame() >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] )
-		{
-			CInput::GetInstance()->EnableInput(TRUE);
-		}
+		//if ( m_pMap->GetCurrentFrame() >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] )
+		//{
+		//}
 		if ( m_pMap->GetCurrentFrame() >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] )
 		{
 			m_nState = EnumCharFrame::BASE;
 		}
+		
+		if ( m_pMap->GetCurrentFrame() == 0 && m_nPF == 0 )
+			m_nState = EnumCharFrame::BASE;
+
+		m_nPF = m_pMap->GetCurrentFrame();
 	}
 	//CDebugConsole::GetInstance()->Messagef(L"%d - %d\n", m_nState, m_pMap->GetCurrentFrame() );
 
@@ -324,4 +322,14 @@ const D3DXMATRIXA16& CWeapon::Get_MatWorld()
 VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 {
 	m_pMap->Render( _matCharacter );	
+}
+
+INT CWeapon::Get_nFrame()
+{
+	return m_pMap->GetCurrentFrame(); 
+}
+
+INT CWeapon::Get_nState() 
+{
+	return m_nState; 
 }

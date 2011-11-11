@@ -136,7 +136,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 					PostMessage( m_hWnd, WM_DESTROY, NULL, NULL );
 				}
 
-				if ( GetAsyncKeyState( VK_LBUTTON ) /*& 0x0001 )*/ )
+				if ( GetAsyncKeyState( VK_LBUTTON ) /*& 0x0001*/ )
 				{
 					m_bLbutton = TRUE;
 				}
@@ -145,7 +145,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 					m_bLbutton = FALSE;
 				}
 
-				if ( GetAsyncKeyState( VK_RBUTTON ) /*& 0x0001 )*/)
+				if ( GetAsyncKeyState( VK_RBUTTON ) /*& 0x0001*/ )
 				{
 					m_bRbutton = TRUE;
 				}

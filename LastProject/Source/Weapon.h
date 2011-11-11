@@ -29,13 +29,13 @@ typedef struct _WEAPONTYPE
 class CWeapon : public IObject
 {
 public:
-	INT Get_nFrame() { return m_nFrame; };
-	INT Get_nState() { return m_nState; };
+	INT Get_nFrame();
+	INT Get_nState();
 
 private:
 	LPDIRECT3DDEVICE9 m_pd3dDevice;
+	INT m_nPF ;
 	INT m_nState;
-	INT m_nFrame;
 	WEAPONTYPE m_WeaponType;
 	Map * m_pMap;
 	BOOL m_bAtkTime;
