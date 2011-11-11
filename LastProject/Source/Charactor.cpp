@@ -43,11 +43,15 @@ VOID CCharactor::Clear()
 	m_pTotalVB = NULL;
 	m_pTotalIB = NULL;
 	m_pTexture = NULL;
+	m_pModel = NULL;
 
 	m_pObject = NULL;
 	m_pCreateCube = NULL;
 	m_pWeapon = NULL;
 	m_pOctTree = NULL;
+
+	m_pBoundBox = NULL;
+	m_pShadowCell = NULL;
 
 	m_iCubeVectorSize = -1;
 	m_iBoxSize = -1;
@@ -733,16 +737,16 @@ VOID CCharactor::AnimateAttack()
 {
 	INT Temp = m_pWeapon->Get_nState();
 	static INT iMax = 0;
-	if( m_pWeapon->Get_nState() == 0x0100 )
+	if( m_pWeapon->Get_nState() == EnumCharFrame::ATTACK1 )
 	{
 		if( iMax == 0 ) iMax = m_pWeapon->Get_nFrame();
 		m_fAniAngleAttack = ( m_pWeapon->Get_nFrame() - ( iMax ) )  * 0.05f;
 		//CDebugConsole::GetInstance()->Messagef( L"%f\n", m_fAniAngleAttack );
 
-		//if( m_pWeapon->Get_nFrame() != 0 )
-		//{
-		//	m_fAniAngleAttack -=  ( iMax / 5.0f ) * CFrequency::GetInstance()->getFrametime();
-		//}
+		if( m_pWeapon->Get_nFrame() != 0 )
+		{
+			m_fAniAngleAttack -=  ( iMax / 5.0f ) * CFrequency::GetInstance()->getFrametime();
+		}
 	}
 	else
 	{

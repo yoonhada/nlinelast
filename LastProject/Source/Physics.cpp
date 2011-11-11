@@ -108,8 +108,8 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube)
 	{															//  | |     | |
 		v[i] = _pCube->GetPosition( i );						//  | |v4---|-|v5
 	}															//  |/      |/
-	CDebugConsole::GetInstance()->Messagef(L"케릭?? : \nv\n\n");
-	CDebugConsole::GetInstance()->MessageQube(v);															//  v7------v6
+	//CDebugConsole::GetInstance()->Messagef(L"케릭?? : \nv\n\n");
+	//CDebugConsole::GetInstance()->MessageQube(v);															//  v7------v6
 	for (int i = 0; i < 6; ++i)									
 	{															// Plane A+B+C+D
 		D3DXPlaneFromPoints( &Plane, 							// A = Nx		
