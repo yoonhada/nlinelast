@@ -396,7 +396,7 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	//for( INT Loop=0; Loop<m_iCubeVectorSize; ++Loop )
 	//{
 	//	// 인터페이스에서 컬링이 온이라면
-	//	if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) == TRUE )
+	//	if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) == TRUE )
 	//	{
 	//		for(INT LoopCell=0; LoopCell<6; ++LoopCell)
 	//		{
@@ -830,7 +830,7 @@ VOID CCharactor::Render()
 
 	for( INT Loop=0; Loop<m_iCubeVectorSize; ++Loop )
 	{
-		if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) == TRUE )
+		if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) == TRUE )
 		{
 			D3DXMatrixMultiply( &m_matMultWorld, &m_vectorCube[Loop]->Get_Matrix( m_iSelectedFrameNum ), &Get_MatWorld() );
 			//m_matMultWorld = m_vectorCube[Loop]->Get_Matrix( m_iSelectedFrameNum ) * Get_MatWorld();
@@ -879,9 +879,9 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 		if( m_vectorCube[Loop] == NULL ) 
 			continue; 
 		D3DXVECTOR3 v = m_vectorCube[Loop]->Get_Pos(m_iSelectedFrameNum);
-		if( v == _vPosition && m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) )
+		if( v == _vPosition && m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) )
 		{
-			m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
+			m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
 			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 		}
 	}
@@ -912,9 +912,9 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			{
 				if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
 				{
-					m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+					m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 				}
-				else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
+				else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != 3 )
 				{
 					BreakListMake( Loop, m_pBoundBox );
 					NetworkSendTempVector.push_back( Loop );
@@ -934,9 +934,9 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
 			{
-				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 			}
-			else if( m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) != 3 )
+			else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != 3 )
 			{
 				if ( m_bMonster )
 					vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
@@ -976,7 +976,7 @@ VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 	CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", vDir.x, vDir.y, vDir.z);
 	CDebugConsole::GetInstance()->Messagef("\n");
 
-	m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, 3 );
+	m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, 3 );
 
 	INT iFriendCubeVecIndex = -1;
 
@@ -986,9 +986,9 @@ VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 		iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
 		if ( iFriendCubeVecIndex != -1 )
 		{
-			if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( m_iSelectedFrameNum ) == FALSE )
+			if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( EnumCharFrame::BASE ) == FALSE )
 			{
-				m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( m_iSelectedFrameNum, TRUE );
+				m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( EnumCharFrame::BASE, TRUE );
 			}
 		}
 	}
@@ -1017,7 +1017,7 @@ VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList )
 			continue;
 		}
 
-		m_vectorCube[ a_pList[QLoop] ]->Set_Visible( m_iSelectedFrameNum, 3 );
+		m_vectorCube[ a_pList[QLoop] ]->Set_Visible( EnumCharFrame::BASE, 3 );
 
 		INT iFriendCubeVecIndex = -1;
 
@@ -1027,9 +1027,9 @@ VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList )
 			iFriendCubeVecIndex = m_vectorCube[ a_pList[QLoop] ]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
 			if ( iFriendCubeVecIndex != -1 )
 			{
-				if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( m_iSelectedFrameNum ) == FALSE )
+				if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( EnumCharFrame::BASE ) == FALSE )
 				{
-					m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( m_iSelectedFrameNum, TRUE );
+					m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( EnumCharFrame::BASE, TRUE );
 				}
 			}
 		}
@@ -1054,12 +1054,12 @@ VOID CCharactor::TestBreakCubeAll()
 		{
 			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
 			{
-				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 			}
 
 			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
 			{
-				m_vectorCube[Loop]->Set_Visible( m_iSelectedFrameNum, FALSE );
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
 
 				if( m_bMonster )
 				{
@@ -1082,10 +1082,10 @@ VOID CCharactor::TestBreakCube()
 	if( m_bAliveCheck == TRUE )
 	{
 		if( m_vectorCube[m_iLoop] != NULL &&  
-			m_vectorCube[m_iLoop]->Get_Visible( m_iSelectedFrameNum ) == TRUE &&  
+			m_vectorCube[m_iLoop]->Get_Visible( EnumCharFrame::BASE ) == TRUE &&  
 			m_vectorCube[m_iLoop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
 		{
-			m_vectorCube[m_iLoop]->Set_Visible( m_iSelectedFrameNum, 2 );
+			m_vectorCube[m_iLoop]->Set_Visible( EnumCharFrame::BASE, 2 );
 			if( m_bMonster )
 			{
 				D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
@@ -1101,9 +1101,9 @@ VOID CCharactor::TestBreakCube()
 				INT iFriendCubeVecIndex = m_vectorCube[m_iLoop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, Loop);
 				if ( iFriendCubeVecIndex != -1 )
 				{
-					if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( m_iSelectedFrameNum ) == FALSE )
+					if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( EnumCharFrame::BASE ) == FALSE )
 					{
-						m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( m_iSelectedFrameNum, TRUE );
+						m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( EnumCharFrame::BASE, TRUE );
 					}
 				}
 			}
@@ -1131,7 +1131,7 @@ VOID CCharactor::TestBreakCube()
 	{
 		if( m_vectorCube[m_iLoop] != NULL )
 		{
-			m_vectorCube[m_iLoop]->Set_Visible( m_iSelectedFrameNum, TRUE );
+			m_vectorCube[m_iLoop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 		}
 
 		if( m_iLoop < m_iCubeVectorSize-1 )
