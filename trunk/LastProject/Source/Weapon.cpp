@@ -303,6 +303,8 @@ VOID CWeapon::Update()
 		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 
 		INT nCurrFrame = m_pMap->GetCurrentFrame();
+
+		CDebugConsole::GetInstance()->Messagef(L"B : %d - %d - %d\n", m_nState, nCurrFrame, m_bAtkTime);
 		//타격설정
 		if ( m_bAtkTime == TRUE)
 		{
@@ -318,7 +320,6 @@ VOID CWeapon::Update()
 			m_nState = EnumCharFrame::BASE;
 			m_bAtkTime = FALSE;
 		}
-		CDebugConsole::GetInstance()->Messagef(L"%d - %d\n", m_nState, nCurrFrame );
 	}
 
 	UpdateSRT();
