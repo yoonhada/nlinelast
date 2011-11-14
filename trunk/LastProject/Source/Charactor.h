@@ -91,7 +91,7 @@ public:
 	VOID BreakQube(D3DXMATRIXA16 &mat);
 	VOID TestBreakCube();
 	VOID TestBreakCubeAll();
-	VOID BreakListMake(INT, D3DXVECTOR3& vDir);
+	VOID BreakListMake(INT, D3DXVECTOR3&);
 	std::list<INT> m_BreakList;
 
 	const D3DXVECTOR3& Get_CharaPos()
