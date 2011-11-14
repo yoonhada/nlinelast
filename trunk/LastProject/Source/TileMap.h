@@ -40,7 +40,6 @@ public:
 	BOOL		SetInfo( INT _iX, INT _iY, DWORD _dType );
 	BOOL		SetInfo( FLOAT _fX, FLOAT _fY, DWORD _dType );
 
-	VOID		GetNavGraphNode( INT* _pOut );
 
 private:
 	typedef struct _TILEDATA
@@ -119,8 +118,9 @@ private:
 
 	INT					m_iNumBBXImage;
 	
-public:
 
+public:
+	INFO*	GetMapInfo()	{ return &m_Info; }
 };
 
 #endif

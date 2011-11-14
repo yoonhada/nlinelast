@@ -13,6 +13,11 @@ private:
 	Chase( const Chase& rhs );
 	Chase& operator=( const Chase& rhs );
 
+	PathNode*	m_pCurrentPath;
+	D3DXVECTOR3 m_vPos;
+	INT			m_iCurrentX;
+	INT			m_iCurrentZ;
+
 
 public:
 	virtual ~Chase(){}
@@ -22,6 +27,9 @@ public:
 	virtual VOID Enter( CMonster* pMonster );
 	virtual VOID Execute( CMonster* pMonster );
 	virtual VOID Exit( CMonster* pMonster );
+
+	FLOAT GetDegree();
+	BOOL isArrive( CMonster* pMonster );
 };
 
 

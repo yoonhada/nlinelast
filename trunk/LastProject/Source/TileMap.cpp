@@ -212,6 +212,7 @@ VOID TileMap::Create( LPWSTR _BBXFileName, D3DXVECTOR3 _vecStart, D3DXVECTOR3 _v
 }
 VOID TileMap::Update()
 {
+
 }
 
 VOID TileMap::Render()
@@ -271,9 +272,4 @@ BOOL TileMap::SetInfo( FLOAT _fX, FLOAT _fY, DWORD _dType )
 	}
 
 	return TRUE;
-}
-
-VOID TileMap::GetNavGraphNode( INT* _pOut )
-{
-	_pOut = m_Info.pNavGraphNode;
 }

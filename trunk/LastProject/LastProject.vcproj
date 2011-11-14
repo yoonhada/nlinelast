@@ -741,6 +741,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="PathFinder"
+				>
+				<File
+					RelativePath=".\Source\Astar.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Astar.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="GUI"

@@ -10,6 +10,11 @@
 #include "Weapon.h"
 #include "TileMap.h"
 
+// AI 테스트용
+#ifdef _DEBUG
+#include "Seek.h"
+#endif
+
 //#define _ALPHAMON
 
 CMainScene::CMainScene()
@@ -106,6 +111,12 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pTileMap = new TileMap( m_pD3dDevice );
 	m_pTileMap->Create( L"ASE File/Stage4_Alpha.BBX", D3DXVECTOR3(-510.0f, 0.0f, -510.0f), D3DXVECTOR3(510.0f, 0.0f, 510.0f), 10.0f );
 #endif
+
+	Seek::GetInstance()->Initialize( m_pTileMap );
+
+	Astar::GetInstance()->Initialize( m_pTileMap->GetMapInfo()->iMaxWidth,
+									  m_pTileMap->GetMapInfo()->iMaxHeight,
+									  m_pTileMap->GetMapInfo()->pNavGraphNode );
 
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
@@ -366,6 +377,14 @@ VOID	CMainScene::Update()
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 
 	m_pMap->Update();
+/*
+	m_pTileMap->SetInfo( 0, 0, TileMap::TLM_COURSE );
+	m_pTileMap->SetInfo( 1, 0, TileMap::TLM_COURSE );
+	m_pTileMap->SetInfo( 2, 0, TileMap::TLM_COURSE );
+	m_pTileMap->SetInfo( 3, 0, TileMap::TLM_COURSE );
+	m_pTileMap->SetInfo( 4, 0, TileMap::TLM_COURSE );
+	m_pTileMap->SetInfo( 5, 0, TileMap::TLM_COURSE );
+*/
 }
 
 VOID	CMainScene::Render()
