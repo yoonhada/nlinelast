@@ -57,6 +57,7 @@ VOID Seek::Execute( CMonster* pMonster )
 		}
 	}
 
+
 	// 가장 가까이에 있는 유저가 공격 범위에 있으면 전투 상태로 전환
 	if( min < 100.0f )
 	{
