@@ -48,7 +48,6 @@ public:
 	SOCKET	m_socket;
 	BOOL	m_bStop;
 	HANDLE	m_hRecvThread;
-	WORD	m_wNumber;
 
 	CRITICAL_SECTION m_cs;
 
@@ -75,10 +74,15 @@ public:
 	VOID SC_UTOM_ATTACK( CPacket& pk );
 	VOID SC_DISCONNECT( CPacket& pk );
 
+	VOID SC_UTOM_Attack_Animation( CPacket& a_pk );
+
 	VOID csLOGON();
 	VOID csCHAT();
 	VOID csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle );
-	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& pList );
+	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& pList, D3DXVECTOR3 vDirection );
+
+	VOID CS_UTOM_Attack_Animation( WORD a_wAnimationNumber );
+	
 
 	VOID Update();
 

@@ -52,47 +52,47 @@ private:
 
 	VOID CreateCharactor();
 
-	BOOL m_bHost;
-	WORD m_iClientNumber;
+	//BOOL m_bHost;
+	//WORD m_iClientNumber;
 
 	//·Î°í
 	CCharactor* m_pLogo;
 
-public:
-	CCharactor* Get_Charactors()
-	{
-		return m_pCharactors;
-	}
-
-	CCharactor* Get_MyCharactor()
-	{
-		return m_pMyCharactor;
-	}
-
-	CCharactor** Get_CharactorList()
-	{
-		return m_pCharactorList;
-	}
-
-	VOID Set_Host( BOOL a_bHost )
-	{
-		m_bHost = a_bHost;
-	}
-
-	VOID Set_ClientNumber( WORD a_iClientNumber )
-	{
-		m_iClientNumber = a_iClientNumber;
-	}
-
-	WORD Get_ClientNumber()
-	{
-		return m_iClientNumber;
-	}
-
-	CCharactor* Get_pAlphaMon()
-	{
-		return m_pAlphaMon;
-	}
+//public:
+//	CCharactor* Get_Charactors()
+//	{
+//		return m_pCharactors;
+//	}
+//
+//	CCharactor* Get_MyCharactor()
+//	{
+//		return m_pMyCharactor;
+//	}
+//
+//	CCharactor** Get_CharactorList()
+//	{
+//		return m_pCharactorList;
+//	}
+//
+//	VOID Set_Host( BOOL a_bHost )
+//	{
+//		m_bHost = a_bHost;
+//	}
+//
+//	VOID Set_ClientNumber( WORD a_iClientNumber )
+//	{
+//		m_iClientNumber = a_iClientNumber;
+//	}
+//
+//	WORD Get_ClientNumber()
+//	{
+//		return m_iClientNumber;
+//	}
+//
+//	CCharactor* Get_pAlphaMon()
+//	{
+//		return m_pAlphaMon;
+//	}
 };
 
 #endif

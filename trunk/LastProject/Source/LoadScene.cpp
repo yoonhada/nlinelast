@@ -23,7 +23,6 @@ CLoadScene::~CLoadScene()
 
 VOID CLoadScene::Clear()
 {
-	m_pMatrices = NULL;
 	m_pCamera = NULL;
 	m_pD3dDevice = NULL;
 	m_pBill = NULL;
@@ -51,15 +50,13 @@ HRESULT CLoadScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 {
 	m_pD3dDevice = a_pD3dDevice;
 
-	m_pMatrices = CMatrices::GetInstance();
-
 	//카메라 생성
 	m_pCamera = new CCamera;
 	m_pCamera->Create( m_pD3dDevice );
 
 	//캐릭터 생성
 	m_pMyCharactor = new CCharactor;
-	m_pMyCharactor->Create( m_pD3dDevice, m_pMatrices );
+	m_pMyCharactor->Create( m_pD3dDevice );
 	m_pMyCharactor->Set_Active( TRUE );
 	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
 	m_pMyCharactor->CreateWeapon( CWeapon::SPANNER );
@@ -68,7 +65,7 @@ HRESULT CLoadScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pLight = new CLight;
 	m_pLight->Create( m_pD3dDevice );
 
-	m_pMatrices->SetupProjection();
+	CMatrices::GetInstance()->SetupProjection();
 
 
 	return S_OK;

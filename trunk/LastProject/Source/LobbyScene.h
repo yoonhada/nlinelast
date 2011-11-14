@@ -21,7 +21,6 @@ private:
 
 	//네트워크
 	WSADATA m_wsadata;
-	CNetwork* m_pNetwork;
 
 };
 

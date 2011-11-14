@@ -1,3 +1,10 @@
+/**
+@file	ObjectManage.h
+@date	2011/11/11
+@author	백경훈
+@brief	오브젝트 관리 ( 네트워크와 클래스간 사용 )
+*/
+
 #ifndef _MainManage_H_
 #define _MainManage_H_
 
@@ -11,7 +18,7 @@ class CObjectManage : public CSingleton<CObjectManage>
 public:
 
 	VOID	Clear();
-	HRESULT Create();
+	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 	HRESULT Release();
 	//VOID	Update();
 	//VOID	Render();
@@ -45,6 +52,11 @@ public:
 	CMonster* Get_Monster()
 	{
 		return m_pMonster;
+	}
+
+	INT Get_MaxCharaNum()
+	{
+		return m_iMaxCharaNum;
 	}
 
 public:
@@ -86,6 +98,10 @@ public:
 private:
 	CObjectManage();
 	~CObjectManage();
+
+	LPDIRECT3DDEVICE9 m_pD3dDevice;
+
+	INT m_iMaxCharaNum;
 
 	CCharactor* m_pMyCharactor;
 	CCharactor* m_pCharactors;

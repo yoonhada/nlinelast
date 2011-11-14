@@ -288,6 +288,9 @@ VOID CWeapon::Update()
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{
+		//네트워크로 현재 애니메이션 상태 보내기
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
+
 		INT nCurrFrame = m_pMap->GetCurrentFrame();
 		//타격설정
 		if ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameAtk[m_nState] &&
@@ -341,4 +344,9 @@ INT CWeapon::GetDirection()
 {
 	FLOAT fRet = m_WeaponType.pBBA.GetDirection().x;
 	return ( fRet < 0.0f ? -1 : ( fRet > 0.0f ? 1 : 0 ) );
+}
+
+VOID CWeapon::Set_nState( INT _nState ) 
+{ 
+	m_pMap->SetAnimation( _nState ); 
 }

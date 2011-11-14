@@ -287,7 +287,7 @@ VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
 }
 
 
-VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD wDestroyCount, std::vector<WORD>& pList )
+VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD wDestroyCount, std::vector<WORD>& pList, D3DXVECTOR3 vDirection )
 {
 	CPacket pk;
 	WORD wMsgSize = 0;
@@ -295,7 +295,10 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD wDestroyCount, std::vecto
 
 	pk.Write( wMsgSize );
 	pk.Write( wMsgID );
-	//pk.Write( m_wNumber );
+	pk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	pk.Write( vDirection.x );
+	pk.Write( vDirection.y );
+	pk.Write( vDirection.z );
 	pk.Write( cDestroyPart );
 	pk.Write( wDestroyCount );
 
@@ -314,12 +317,16 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD wDestroyCount, std::vecto
 
 VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 {
+	FLOAT fDirX, fDirY, fDirZ;
 	WORD wClientNumber;
 	CHAR cDestroyPart;
 	WORD wDestroyCount;
 	WORD wList[1000];
 
-	//pk.Read( &wClientNumber );
+	pk.Read( &fDirX);
+	pk.Read( &fDirY);
+	pk.Read( &fDirZ);
+	pk.Read( &wClientNumber );
 	pk.Read( &cDestroyPart );
 	pk.Read( &wDestroyCount );
 
@@ -332,7 +339,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 
 	CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount : %d\n", wDestroyCount );
 
-	CObjectManage::GetInstance()->Get_AlphaMon()->RecvBreakList( wDestroyCount, wList );
+	CObjectManage::GetInstance()->Get_AlphaMon()->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 
 	// 디버깅용 출력
 	//cout << wClientNumber << " : ";
@@ -343,10 +350,42 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 	//cout << endl;
 }
 
+VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
+{
+	CPacket pk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_CS_UTOM_ATTACK;
+
+	pk.Write( wMsgSize );
+	pk.Write( wMsgID );
+	pk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	pk.Write( a_wAnimationNumber );
+
+	pk.CalcSize();
+
+	SendToServer( pk );
+}
+
+
+VOID CNetwork::SC_UTOM_Attack_Animation( CPacket& a_pk )
+{
+	WORD wClientNumber;
+	WORD wAnimationNumber;
+
+	a_pk.Read( &wClientNumber );
+	a_pk.Read( &wAnimationNumber );
+
+	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber].Set_WeaponAnimationState( wAnimationNumber );
+}
+
 
 VOID CNetwork::SC_DISCONNECT( CPacket& pk )
 {
+	WORD wClientNumber;
+	pk.Read( &wClientNumber );
 	// 접속 유저 비활성화
+
+	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber].Set_Active( FALSE );
 }
 
 

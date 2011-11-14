@@ -31,6 +31,7 @@ class CWeapon : public IObject
 public:
 	INT Get_nFrame();
 	INT Get_nState();
+	VOID Set_nState( INT _nState );
 
 private:
 	LPDIRECT3DDEVICE9 m_pd3dDevice;

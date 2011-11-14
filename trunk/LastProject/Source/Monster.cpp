@@ -51,13 +51,12 @@ VOID CMonster::Clear()
 HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 {
 	m_pD3dDevice = a_pD3dDevice;
-	m_pMatrices = CMatrices::GetInstance();
 
 	m_pFrame = new Frame[m_iFrameMax];
 	m_pBox = new CCharactor[m_iCharEditorMax];
 	for( INT LoopBox=0; LoopBox<m_iCharEditorMax; ++LoopBox )
 	{
-		m_pBox[LoopBox].Create( m_pD3dDevice, m_pMatrices );
+		m_pBox[LoopBox].Create( m_pD3dDevice );
 		m_pBox[LoopBox].CreateWeapon( CWeapon::NONE );
 	}
 

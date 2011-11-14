@@ -17,17 +17,25 @@
 
 #include "OctTree2Array.h"
 
+VOID CCharactor::Set_WeaponAnimationState( const WORD a_iNumber )
+{
+	m_pWeapon->Set_nState( static_cast<INT>(a_iNumber) );
+}
+
+const INT CCharactor::Get_WeaponAnimationState()
+{
+	return m_pWeapon->Get_nState();
+}
+
 CCharactor::CCharactor()
 {
 	Clear();
 }
 
-CCharactor::CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
-: m_pD3dDevice(a_pD3dDevice)
-, m_pMatrices(a_pMatrices)
-{
-	Clear();
-}
+//CCharactor::CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice ) : m_pD3dDevice(a_pD3dDevice)
+//{
+//	Clear();
+//}
 
 CCharactor::~CCharactor()
 {
@@ -48,6 +56,8 @@ VOID CCharactor::Clear()
 	m_pCreateCube = NULL;
 	m_pWeapon = NULL;
 	m_pOctTree = NULL;
+	m_pModel = NULL;
+	m_pBoundBox = NULL;
 
 	m_iCubeVectorSize = -1;
 	m_iBoxSize = -1;
@@ -73,38 +83,37 @@ VOID CCharactor::Clear()
 	m_fAniAngleAttack = 0.0f;
 }
 
-HRESULT CCharactor::Create()
-{
-	InitTexture( 0xFFFFFFFF, 0xFF000000 );
+//HRESULT CCharactor::Create()
+//{
+//	InitTexture( 0xFFFFFFFF, 0xFF000000 );
+//
+//	//Load( a_pzFileName );
+//
+//	//m_pGrid = new CGrid;
+//	//m_pGrid->Create( m_pD3dDevice );
+//
+//	m_pModel = new CModel( m_pD3dDevice );
+//
+//	m_pShadowCell = new CShadowCell;
+//	m_pShadowCell->Create( m_pD3dDevice, 
+//		-1.0f, -1.0f, -1.0f,
+//		1.0f, -1.0f, -1.0f,
+//		1.0f, -1.0f,  1.0f,
+//		-1.0f, -1.0f,  1.0f,
+//		0.0f, 0.0f,
+//		1.0f, 0.0f,
+//		1.0f, 1.0f,
+//		0.0f, 1.0f,
+//		L"Img/shadow.tga"
+//		);
+//
+//	m_pOctTree = new COctTree2Array;
+//	return S_OK;
+//}
 
-	//Load( a_pzFileName );
-
-	//m_pGrid = new CGrid;
-	//m_pGrid->Create( m_pD3dDevice );
-
-	m_pModel = new CModel( m_pD3dDevice );
-
-	m_pShadowCell = new CShadowCell;
-	m_pShadowCell->Create( m_pD3dDevice, 
-		-1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f,
-		0.0f, 1.0f,
-		L"Img/shadow.tga"
-		);
-
-	m_pOctTree = new COctTree2Array;
-	return S_OK;
-}
-
-HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices )
+HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 {
 	m_pD3dDevice = a_pD3dDevice;
-	m_pMatrices = a_pMatrices;
 
 	InitTexture( 0xFFFFFFFF, 0xFF000000 );
 
@@ -798,6 +807,7 @@ VOID CCharactor::Update()
 	if ( CInput::GetInstance()->Get_Lbutton() )
 	{
 		m_pWeapon->SetKeyA();
+		m_iSelectedFrameNum = 1;
 	}
 	if ( CInput::GetInstance()->Get_Rbutton() )
 	{
@@ -830,7 +840,7 @@ VOID CCharactor::Render()
 
 	for( INT Loop=0; Loop<m_iCubeVectorSize; ++Loop )
 	{
-		if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) == TRUE )
+		if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Visible( m_iSelectedFrameNum ) == TRUE )
 		{
 			D3DXMatrixMultiply( &m_matMultWorld, &m_vectorCube[Loop]->Get_Matrix( m_iSelectedFrameNum ), &Get_MatWorld() );
 			//m_matMultWorld = m_vectorCube[Loop]->Get_Matrix( m_iSelectedFrameNum ) * Get_MatWorld();
@@ -839,7 +849,6 @@ VOID CCharactor::Render()
 				D3DXMatrixMultiply( &m_matMultWorld, &m_matMultWorld, &m_matMonster);
 			}
 			m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_matMultWorld );
-			//m_pMatrices->SetupModeltoWorld( m_vectorCube[Loop]->Get_MatWorld() );
 			m_vectorCube[Loop]->Render();
 		}
 		
@@ -927,6 +936,18 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 #else
 		std::vector<CBoundBox*> * vecBoundBox;
 		std::vector<CBoundBox*>::iterator Iter;
+
+		if ( m_bMonster )
+			vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
+		else
+			vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();	
+
+		Iter = vecBoundBox->begin();
+		D3DXVECTOR3 vDir = (*Iter)->GetDirection();
+		D3DXMATRIXA16 mat = Get_MatWorld();
+		mat._41 = 0.0f;	mat._42 = 0.0f;	mat._43 = 0.0f;	
+		D3DXVec3TransformCoord( &vDir, &vDir, &((*Iter)->GetAxisMat()) );
+
 		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
 		{
 			if( m_vectorCube[Loop] == NULL )
@@ -938,57 +959,47 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 			else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != 3 )
 			{
-				if ( m_bMonster )
-					vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
-				else
-					vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();	
-
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
 				{
-					Iter = vecBoundBox->begin();
-
 					//(*Iter)->GetPosVec();
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
 					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );				
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
-						BreakListMake( Loop, (*Iter) );
+						BreakListMake( Loop, vDir );
 						NetworkSendTempVector.push_back( Loop );
 					}
 				}
 			}
 		}
 #endif
-		CNetwork::GetInstance()->CS_UTOM_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector );
+		CNetwork::GetInstance()->CS_UTOM_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		NetworkSendTempVector.clear();
 	}
 }
 
-VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
+VOID CCharactor::BreakListMake( INT Loop, D3DXVECTOR3& vDir )
 {
-	D3DXVECTOR3 vDir = pBB->GetDirection();
-	CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", vDir.x, vDir.y, vDir.z);
-
-	D3DXMATRIXA16 mat = Get_MatWorld();
-	mat._41 = 0.0f;	mat._42 = 0.0f;	mat._43 = 0.0f;	
-	D3DXVec3TransformCoord( &vDir, &vDir, &(pBB->GetAxisMat()) );
-	CDebugConsole::GetInstance()->Messagef("%0.2f %0.2f, %0.2f\n", vDir.x, vDir.y, vDir.z);
-	CDebugConsole::GetInstance()->Messagef("\n");
-
-	m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, 3 );
-
 	INT iFriendCubeVecIndex = -1;
 
-	// 이웃 노드 큐브 보이기
-	for(INT LoopFriend=0; LoopFriend<6; ++LoopFriend)
+	//전 프레임을 돌면서 체크
+	for( INT LoopFrame = 0; LoopFrame<EnumCharFrame::MAXFRAME; ++LoopFrame )
 	{
-		iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
-		if ( iFriendCubeVecIndex != -1 )
+		m_vectorCube[Loop]->Set_Visible( LoopFrame, 3 );
+
+		iFriendCubeVecIndex = -1;
+
+		// 이웃 노드 큐브 보이기
+		for(INT LoopFriend=0; LoopFriend<6; ++LoopFriend)
 		{
-			if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( EnumCharFrame::BASE ) == FALSE )
+			iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( LoopFrame, LoopFriend );
+			if ( iFriendCubeVecIndex != -1 )
 			{
-				m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( EnumCharFrame::BASE, TRUE );
+				if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( LoopFrame ) == FALSE )
+				{
+					m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( LoopFrame, TRUE );
+				}
 			}
 		}
 	}
@@ -1008,7 +1019,7 @@ VOID CCharactor::BreakListMake(INT Loop, CBoundBox* pBB)
 #endif 	
 }
 
-VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList )
+VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir )
 {
 	for( INT QLoop=0; QLoop<a_iCount; ++QLoop )
 	{
@@ -1034,15 +1045,15 @@ VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList )
 			}
 		}
 
-		/*if( m_bMonster )
+		if( m_bMonster )
 		{
 			D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
+			m_pModel->CreateRandom( m_vectorCube[QLoop], m_iSelectedFrameNum, m_matMultWorld, a_vDir );
 		}
 		else
 		{
-			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
-		}*/
+			m_pModel->CreateRandom( m_vectorCube[QLoop], m_iSelectedFrameNum, Get_MatWorld(), a_vDir );
+		}
 	}	
 }
 
