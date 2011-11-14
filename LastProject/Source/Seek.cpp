@@ -58,14 +58,14 @@ VOID Seek::Execute( CMonster* pMonster )
 	}
 
 	// 가장 가까이에 있는 유저가 공격 범위에 있으면 전투 상태로 전환
-	if( min < 100.0f )
+	if( min < 50.0f )
 	{
 		pMonster->Set_Target( Target );
 		pMonster->Set_TargetDistance( min );
 		pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
 	// 범위에 없으면 가장 가까운 유저 추격
-	else if( min >= 100.0f && min <= 500.0f )
+	else if( min >= 50.0f && min <= 500.0f )
 	{	
 	/*
 			pMonster->Set_Target( Target );

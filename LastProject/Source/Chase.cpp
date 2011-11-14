@@ -101,9 +101,9 @@ VOID Chase::Exit( CMonster* pMonster )
 FLOAT Chase::GetDegree()
 {
 	static FLOAT fDegree[3][3] = {
-		{ 225.0f, 270.0f, 315.0f },
+		{ 135.0f, 90.0f,  45.0f },
 		{ 180.0f, 0.0f,   0.0f },
-		{ 135.0f, 90.0f,  45.0f }
+		{ 225.0f, 270.0f, 315.0f }
 	};
 
 	INT iDirX = m_pCurrentPath->x - m_iCurrentX + 1;
