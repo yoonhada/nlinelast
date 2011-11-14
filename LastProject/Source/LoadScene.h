@@ -27,7 +27,6 @@ public:
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 
-	CMatrices* m_pMatrices;
 	CCamera* m_pCamera;
 	CGrid* m_pGrid;
 	CCharactor* m_pCharactors;

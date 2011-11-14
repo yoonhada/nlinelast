@@ -1,6 +1,8 @@
 #include "Stdafx.h"
 #include "LobbyScene.h"
 
+#include "MainScene.h"
+
 CLobbyScene::CLobbyScene()
 {
 	Clear();
@@ -19,11 +21,11 @@ HRESULT CLobbyScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pD3dDevice = a_pD3dDevice;
 
 	// 네트워크
-#ifndef _NETWORK
+
 	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
-	m_pNetwork = CNetwork::GetInstance();
-	m_pNetwork->CreateSocket();
-#endif
+	CNetwork::GetInstance();
+	CNetwork::GetInstance()->CreateSocket();
+
 
 	// 파일에서 IP 받아오기
 	FILE* pFile;
@@ -43,10 +45,20 @@ HRESULT CLobbyScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	fclose(pFile);
 
-#ifndef _NETWORK
-	m_pNetwork->ConnectToServer( szTemp, 20202 );
-	m_pNetwork->csLOGON();
-#endif
+	CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 );
+	CNetwork::GetInstance()->csLOGON();
+	CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
+
+	// 접속이 되었다면 로그인 하고 메인 씬으로 변경
+	/*if( CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 ) )
+	{
+		CNetwork::GetInstance()->csLOGON();
+		CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
+	}
+	else
+	{
+		MessageBox( NULL, L"Connect Failed", NULL, MB_OK );
+	}*/
 	
 	return S_OK;
 }
@@ -56,9 +68,7 @@ HRESULT CLobbyScene::Release()
 }
 VOID CLobbyScene::Update()
 {
-#ifndef _NETWORK
-	m_pNetwork->Update();
-#endif
+	CNetwork::GetInstance()->Update();
 }
 
 VOID CLobbyScene::Render()

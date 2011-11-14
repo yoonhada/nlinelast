@@ -20,10 +20,10 @@ public:
 
 private:
 
-	static DWORD WINAPI ThreadFunc(LPVOID pTemp);
+	static UINT WINAPI ThreadFunc(LPVOID lParam);
 	VOID ChangeScene();
 
-	DWORD m_dwThreadID;	 ///< 쓰레드
+	UINT m_uiThreadID;	 ///< 쓰레드
 	HANDLE m_hThread;	 ///< 쓰레드
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스

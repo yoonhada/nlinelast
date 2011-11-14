@@ -36,6 +36,9 @@ VOID CInput::Clear()
 	m_bF8button = m_bF9button = FALSE;
 
 	m_bEnable = TRUE;
+
+	ZeroMemory( &m_MousePosOld, sizeof(m_MousePosOld) );
+	ZeroMemory( &m_MousePos, sizeof(m_MousePos) );
 }
 
 

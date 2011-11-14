@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Weapon.h"
 #include "TileMap.h"
+#include "Seek.h"
 
 // AI 테스트용
 #ifdef _DEBUG
@@ -46,9 +47,9 @@ VOID	CMainScene::Clear()
 		m_pCharactorList[i] = NULL;
 	}
 
-	m_iMaxCharaNum = 3;
-	m_bHost = FALSE;
-	m_iClientNumber = 0;
+	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
+	//m_bHost = FALSE;
+	//m_iClientNumber = 0;
 
 	m_pLogo = NULL;
 	m_pTileMap = NULL;
@@ -106,11 +107,9 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pMap->Create( L"ASE File/Stage4_Alpha.ASE", L"ASE File/Stage4_Alpha.BBX" );
 	m_pMap->AddAnimationData( 1000, 0, 0, 300, TRUE );
 
-#ifdef _DEBUG
 	//타일맵 생성
 	m_pTileMap = new TileMap( m_pD3dDevice );
 	m_pTileMap->Create( L"ASE File/Stage4_Alpha.BBX", D3DXVECTOR3(-510.0f, 0.0f, -510.0f), D3DXVECTOR3(510.0f, 0.0f, 510.0f), 10.0f );
-#endif
 
 	Seek::GetInstance()->Initialize( m_pTileMap );
 
@@ -179,9 +178,9 @@ HRESULT CMainScene::Release()
 
 	SAFE_DELETE ( m_pGrid );
 
-	SAFE_DELETE( m_pMyCharactor );
+	//SAFE_DELETE( m_pMyCharactor );
 
-	SAFE_DELETE_ARRAY( m_pCharactors );
+	//SAFE_DELETE_ARRAY( m_pCharactors );
 
 	SAFE_DELETE( m_pMonster );
 
@@ -215,22 +214,22 @@ VOID CMainScene::CreateCharactor()
 
 	//캐릭터 생성
 	FLOAT fYawZero = 1.0f;
-	m_pMyCharactor = new CCharactor( m_pD3dDevice, m_pMatrices );
-	m_pMyCharactor->Create();
+	m_pMyCharactor = CObjectManage::GetInstance()->Get_MyCharactor();
+	m_pMyCharactor->Create( m_pD3dDevice );
 	m_pMyCharactor->Set_Active( TRUE );
 	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
 	m_pMyCharactor->CreateWeapon( CWeapon::SPANNER );
 
 	CTree::GetInstance()->GetCharVector()->push_back( m_pMyCharactor->GetBoundBox() );
 
-	m_pCharactors = new CCharactor[m_iMaxCharaNum];
+	m_pCharactors = CObjectManage::GetInstance()->Get_Charactors();
 	
 	for(INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 	{
-		m_pCharactors[Loop].Create( m_pD3dDevice, m_pMatrices );
+		m_pCharactors[Loop].Create( m_pD3dDevice );
 		if(Loop == 0)
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/MOM.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
 		}
 		else if(Loop == 1)
 		{
@@ -318,7 +317,7 @@ VOID	CMainScene::Update()
 				m_pCharactors[Loop].BreakQube( mat );
 			}
 
-			//m_pCharactors[Loop].Update();
+			m_pCharactors[Loop].Update();
 		//}
 	}
 
@@ -385,6 +384,8 @@ VOID	CMainScene::Update()
 	m_pTileMap->SetInfo( 4, 0, TileMap::TLM_COURSE );
 	m_pTileMap->SetInfo( 5, 0, TileMap::TLM_COURSE );
 */
+
+	CNetwork::GetInstance()->Update();
 }
 
 VOID	CMainScene::Render()
@@ -406,12 +407,10 @@ VOID	CMainScene::Render()
 
 	for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 	{
-		
-		//if( m_pCharactors[Loop].Get_Active() )
-		//{
+		if( m_pCharactors[Loop].Get_Active() )
+		{
 			m_pCharactors[Loop].Render();
-		//}
-		
+		}
 	}
 
 	//로고

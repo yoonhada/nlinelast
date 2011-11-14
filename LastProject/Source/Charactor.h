@@ -70,12 +70,12 @@ public:
 	};
 
 	CCharactor();
-	CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices );
+	//CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice );
 	~CCharactor();
 
 	VOID Clear();
-	HRESULT Create();
-	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, CMatrices* a_pMatrices );
+	HRESULT Create() { return S_OK; }
+	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 	VOID CreateWeapon( INT nType );
 
 	HRESULT Release();
@@ -91,7 +91,7 @@ public:
 	VOID BreakQube(D3DXMATRIXA16 &mat);
 	VOID TestBreakCube();
 	VOID TestBreakCubeAll();
-	VOID BreakListMake(INT, CBoundBox *);
+	VOID BreakListMake(INT, D3DXVECTOR3& vDir);
 	std::list<INT> m_BreakList;
 
 	const D3DXVECTOR3& Get_CharaPos()
@@ -152,7 +152,11 @@ public:
 		return m_bMonster;
 	}
 
-	VOID RecvBreakList( INT a_iCount, WORD* a_pList );
+	VOID Set_WeaponAnimationState( const WORD a_iNumber );
+
+	const INT Get_WeaponAnimationState();
+
+	VOID RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir );
 
 private:
 	VOID _LoadRelease();
@@ -165,7 +169,7 @@ private:
 	
 	HRESULT InitTexture(  DWORD a_Color, DWORD a_OutLineColor  );
 
-	WORD	m_iClientNumber;
+	WORD m_iClientNumber;
 	BOOL m_bActive;
 
 	INT m_iSelectedFrameNum;
@@ -199,7 +203,6 @@ private:
 	std::vector< CCharCube* > m_vectorCube;
 	//std::vector <CCharCube*>::iterator m_iterCube;
 
-	CMatrices*    m_pMatrices;			///< 행렬 클래스 포인터
 	D3DXMATRIXA16 m_matMultWorld;		///< 적용할 최종 행렬
 	D3DXMATRIXA16 m_matMonster;			///< 몬스터용 행렬
 	BOOL		  m_bMonster;			///< 몬스터인지 아닌지 체크

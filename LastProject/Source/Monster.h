@@ -223,7 +223,6 @@ private:
 	Frame* m_pFrame;
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
-	CMatrices*				m_pMatrices;
 
 	D3DXVECTOR3 m_vPreControl;			  ///< 몬스터 이전 위치
 	D3DXVECTOR3 m_vControl;				  ///< 몬스터 위치

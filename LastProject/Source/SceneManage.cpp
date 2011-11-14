@@ -3,7 +3,8 @@
 
 #include "Scene.h"
 #include "MainScene.h"
-#include "Loadscene.h"
+#include "LoadScene.h"
+#include "LobbyScene.h"
 
 CSceneManage::CSceneManage()
 {
@@ -28,8 +29,10 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 {
 	m_pD3dDevice = a_pD3dDevice;
 
-	m_pScene = new CMainScene;
-	//m_pLoadScene = new CLoadScene;
+	CObjectManage::GetInstance()->Create( m_pD3dDevice );
+
+	m_pScene = new CLobbyScene;
+	m_pLoadScene = m_pScene;
 	m_pScene->Create( m_pD3dDevice );
 
 	return S_OK;
@@ -47,16 +50,18 @@ HRESULT CSceneManage::Release()
 		SAFE_DELETE(m_pLoadScene);
 	}
 	SAFE_DELETE(m_pPrevScene);
-	SAFE_DELETE(m_pNextScene);
+	//SAFE_DELETE(m_pNextScene);
+
+	CObjectManage::DestoryInstance();
 
 	return S_OK;
 }
 
-DWORD WINAPI CSceneManage::ThreadFunc(LPVOID pTemp)
+UINT WINAPI CSceneManage::ThreadFunc(LPVOID lParam)
 {
+	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading Start**" );
 	GetInstance()->m_pNextScene->Create( GetInstance()->m_pD3dDevice );
-
-	GetInstance()->ChangeScene();
+	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading End**" );
 
 	return 0;
 }
@@ -70,8 +75,13 @@ BOOL CSceneManage::OrderChangeScene( IScene* a_pScene )
 	//ÇöÀç ¾À ·Îµù¾ÀÀ¸·Î º¯°æ
 	m_pScene = m_pLoadScene;
 
-	m_hThread = CreateThread( NULL, 0, ThreadFunc, NULL, 0, &m_dwThreadID );
-	CloseHandle(m_hThread);
+	//m_bThreadOn = TRUE;
+	m_hThread = (HANDLE)_beginthreadex(NULL, 0, ThreadFunc, NULL, 0, &m_uiThreadID);
+	if(m_hThread == 0)
+	{
+		MessageBox(NULL, L"Create Thread Error",NULL, MB_OK);
+	}
+	//CloseHandle(m_hThread);
 
 	return TRUE;
 }
@@ -83,10 +93,10 @@ VOID CSceneManage::ChangeScene()
 
 VOID CSceneManage::Update()
 {
-	/*if( WAIT_OBJECT_0 == WaitForSingleObject( m_hThread, 1 ) )
+	if( WAIT_OBJECT_0 == WaitForSingleObject( m_hThread, 1 ) )
 	{
 		ChangeScene();
-	}*/
+	}
 
 	m_pScene->Update();
 }

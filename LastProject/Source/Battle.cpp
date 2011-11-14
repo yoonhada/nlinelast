@@ -43,15 +43,15 @@ VOID Battle::Execute( CMonster* pMonster )
 	if( fDistance <= 50.0f )
 	{
 		// 근접 공격
-		if( FastRand2() < 0.5f )
-		{
+		//if( FastRand2() < 0.5f )
+		//{
 			pMonster->GetFSM()->ChangeState( LockOn::GetInstance() );
-		}
+		//}
 		// 회전 공격
-		else
+		/*else
 		{
 			pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
-		}	
+		}	*/
 	}
 /*
 	// 대시 공격 범위면
