@@ -29,6 +29,7 @@ public:
 		MSG_SC_MTOU_ATTACK,
 		MSG_SC_UTOM_ATTACK_ANIMATION,
 		MSG_SC_MTOU_ATTACK_ANIMATION,
+		MSG_SC_DISCONNECT,
 		MSG_END,
 
 	};
@@ -72,6 +73,7 @@ public:
 	VOID scMOVE( CPacket& pk );
 	VOID scNEWUSER( CPacket& pk );
 	VOID SC_UTOM_ATTACK( CPacket& pk );
+	VOID SC_DISCONNECT( CPacket& pk );
 
 	VOID csLOGON();
 	VOID csCHAT();

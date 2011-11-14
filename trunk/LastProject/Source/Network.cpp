@@ -344,6 +344,12 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 }
 
 
+VOID CNetwork::SC_DISCONNECT( CPacket& pk )
+{
+	// 접속 유저 비활성화
+}
+
+
 VOID CNetwork::ProcessPacket( CPacket& pk )
 {
 	WORD wMsgSize, wMsgType;
@@ -357,6 +363,7 @@ VOID CNetwork::ProcessPacket( CPacket& pk )
 		scLOGON( pk );
 		break;
 
+	// 초기 정보
 	case MSG_SC_INITDATA:
 		scInitData( pk );
 		break;
@@ -376,11 +383,16 @@ VOID CNetwork::ProcessPacket( CPacket& pk )
 		scMOVE( pk );
 		break;
 
+	// 공격 ( 유저 -> 몬스터 )
 	case MSG_SC_UTOM_ATTACK:
 		SC_UTOM_ATTACK( pk );
 		break;
-	}
 
+	// 유저 접속 종료
+	case MSG_SC_DISCONNECT:
+		SC_DISCONNECT( pk );
+		break;
+	}
 }
 
 
