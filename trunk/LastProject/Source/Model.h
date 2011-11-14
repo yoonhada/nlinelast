@@ -22,6 +22,8 @@ private:
 	std::vector<CQube*>::iterator m_iterQube;
 
 	VOID CreateQube();
+	VOID Move();
+	VOID Delete();
 
 	INT m_iVectorNum;
 	D3DXMATRIXA16 m_matMultMatrix;
@@ -37,10 +39,14 @@ public:
 	virtual VOID Render();
 	virtual VOID Update();
 
+	VOID Render(INT n);
 	VOID CreateRandom( CCharCube* a_pCube, INT a_iFrameNum, const D3DXMATRIXA16& a_matChara, const D3DXVECTOR3& a_vMome, const FLOAT fPow = 1.0f );
 
-	VOID SetCharType( CBoundBox * pBB )		
-	{
-		m_pParentBB = pBB; 
-	}
+	VOID SetCharType( CBoundBox * pBB )			{ m_pParentBB = pBB; }
+
+	HANDLE m_hEvent[4];
+	static UINT WINAPI UpdateThread0(LPVOID lp);
+	static UINT WINAPI UpdateThread1(LPVOID lp);
+	static UINT WINAPI UpdateThread2(LPVOID lp);
+	static UINT WINAPI UpdateThread3(LPVOID lp);
 };

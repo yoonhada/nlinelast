@@ -917,11 +917,9 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	
 	INT Loop;
 	D3DXMATRIXA16 mat = Get_MatWorld();
-	D3DXMATRIXA16 matR;
-	D3DXMatrixInverse(&matR, NULL, &mat);
 	for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
 	{
-		if ( m_pBox[Loop].CollisionAtk( matR ) )
+		if ( m_pBox[Loop].CollisionAtk( ) )
 		{
 			m_pBox[Loop].BreakQube( mat );
 		}
@@ -1331,7 +1329,7 @@ VOID CMonster::Update()
 
 
 	// AI
-	m_pStateMachine->Update();
+	// m_pStateMachine->Update();
 }
 
 VOID CMonster::Render()
@@ -1341,3 +1339,4 @@ VOID CMonster::Render()
 		m_pBox[Loop].Render();
 	}
 }
+

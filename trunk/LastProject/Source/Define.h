@@ -37,8 +37,4 @@ extern FLOAT FastRand2();
 // File
 #define WEAPONFILE L".\\WeaponFile.ini"
 
-// Debug
-#define _YOON
-#define _GRAP
-
 #endif

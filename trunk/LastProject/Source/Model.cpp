@@ -68,6 +68,128 @@ HRESULT CModel::Create()
 
 VOID CModel::Update()
 {
+	Delete();
+	Move();
+}
+
+VOID CModel::Move()
+{
+	m_hEvent[0] = ::CreateEvent(NULL, TRUE, FALSE, L"UpdateThread0"); 
+	m_hEvent[1] = ::CreateEvent(NULL, TRUE, FALSE, L"UpdateThread1"); 
+	m_hEvent[2] = ::CreateEvent(NULL, TRUE, FALSE, L"UpdateThread2"); 
+	m_hEvent[3] = ::CreateEvent(NULL, TRUE, FALSE, L"UpdateThread3"); 
+	
+	_beginthreadex(NULL, 0, UpdateThread0, (LPVOID)this, 0, NULL);
+	_beginthreadex(NULL, 0, UpdateThread1, (LPVOID)this, 0, NULL);
+	_beginthreadex(NULL, 0, UpdateThread2, (LPVOID)this, 0, NULL);
+	_beginthreadex(NULL, 0, UpdateThread3, (LPVOID)this, 0, NULL);
+
+	SetEvent(m_hEvent[0]);
+	SetEvent(m_hEvent[1]);
+	SetEvent(m_hEvent[2]);
+	SetEvent(m_hEvent[3]);
+	
+	WaitForSingleObject( m_hEvent[0], INFINITE );
+	WaitForSingleObject( m_hEvent[1], INFINITE );
+	WaitForSingleObject( m_hEvent[2], INFINITE );
+	WaitForSingleObject( m_hEvent[3], INFINITE );
+}
+
+UINT CModel::UpdateThread0(LPVOID lp)
+{
+	CModel *pThis = static_cast<CModel *>(lp);
+
+	INT nIndexBegin = 0;
+	INT nIndexEnd   = pThis->m_vectorQube.size() / 4;
+
+	CQube * pQube;
+	for (int i = nIndexBegin; i < nIndexEnd; ++i)
+	{
+		pQube = pThis->m_vectorQube[i];
+		if ( pQube != NULL && pQube->GetVisiable() )
+		{
+			pQube->Update( pThis->m_pParentBB );
+		}
+	}
+
+	return 0;
+}
+
+UINT CModel::UpdateThread1(LPVOID lp)
+{
+	CModel *pThis = static_cast<CModel *>(lp);
+
+	INT nIndexBegin = pThis->m_vectorQube.size() / 4;
+	INT nIndexEnd   = pThis->m_vectorQube.size() / 2;
+
+	CQube * pQube;
+	for (int i = nIndexBegin; i < nIndexEnd; ++i)
+	{
+		pQube = pThis->m_vectorQube[i];
+		if ( pQube != NULL && pQube->GetVisiable() )
+		{
+			pQube->Update( pThis->m_pParentBB );
+		}
+	}
+
+	return 0;
+}
+
+UINT CModel::UpdateThread2(LPVOID lp)
+{
+	CModel *pThis = static_cast<CModel *>(lp);
+
+	INT nIndexBegin = pThis->m_vectorQube.size() / 2;
+	INT nIndexEnd   = pThis->m_vectorQube.size() / 4 * 3;
+
+	CQube * pQube;
+	for (int i = nIndexBegin; i < nIndexEnd; ++i)
+	{
+		pQube = pThis->m_vectorQube[i];
+		if ( pQube != NULL && pQube->GetVisiable() )
+		{
+			pQube->Update( pThis->m_pParentBB );
+		}
+	}
+
+	return 0;
+}
+
+UINT CModel::UpdateThread3(LPVOID lp)
+{
+	CModel *pThis = static_cast<CModel *>(lp);
+
+	INT nIndexBegin = pThis->m_vectorQube.size() / 4 * 3;
+	INT nIndexEnd   = pThis->m_vectorQube.size();
+
+	CQube * pQube;
+	for (int i = nIndexBegin; i < nIndexEnd; ++i)
+	{
+		pQube = pThis->m_vectorQube[i];
+		if ( pQube != NULL && pQube->GetVisiable() )
+		{
+			pQube->Update( pThis->m_pParentBB );
+		}
+	}
+
+	return 0;
+}
+
+VOID CModel::Delete()
+{
+	std::vector<CQube*>::iterator Iter;
+	Iter = m_vectorQube.begin();
+	while( Iter != m_vectorQube.end() )
+	{
+		if ( ( *Iter ) != NULL && !( *Iter )->GetVisiable() )
+		{
+			delete ( *Iter );
+			Iter = m_vectorQube.erase( Iter );
+			continue;
+		}
+
+		Iter++;
+	}
 }
 
 VOID CModel::Render()
@@ -91,6 +213,26 @@ VOID CModel::Render()
 			delete ( *m_iterQube );
 			m_iterQube = m_vectorQube.erase( m_iterQube );
 			continue;
+		}
+
+		m_iterQube++;
+	}
+}
+
+VOID CModel::Render(INT n)
+{
+	m_pd3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
+	m_pd3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
+	m_pd3dDevice->SetIndices( m_pTotalIB );
+
+	// Qube o??
+	m_iterQube = m_vectorQube.begin();
+	while( m_iterQube != m_vectorQube.end() )
+	{
+		if ( ( *m_iterQube ) != NULL && ( *m_iterQube )->GetVisiable() )
+		{
+			m_pd3dDevice->SetTransform( D3DTS_WORLD, &( *m_iterQube )->Get_MatWorld() );
+			( *m_iterQube )->Render();
 		}
 
 		m_iterQube++;

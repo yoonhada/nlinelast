@@ -19,7 +19,7 @@ namespace EnumCharFrame
 
 namespace EnumCubeType
 {
-	enum CubeType { NONE = -1, BONE, MEAT, CORE };
+	enum CubeType { NONE = -1, BONE, MEAT, CORE, HIDEMEAT };
 };
 
 namespace ConstCubeColor
