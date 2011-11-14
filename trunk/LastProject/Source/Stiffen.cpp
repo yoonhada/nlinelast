@@ -54,7 +54,7 @@ VOID Stiffen::Execute( CMonster* pMonster )
 
 			bCheck = TRUE;
 
-			// 경직상태가 끝나면 다시 전투 상태로
+			// 경직상태가 끝나면 애니메이션 보간을 위해 보간 대기 상태로
 			pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );
 			
 //		}
