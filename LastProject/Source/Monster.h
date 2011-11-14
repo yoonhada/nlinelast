@@ -39,19 +39,23 @@ public:
 	VOID Set_Angle( FLOAT a_fAngle )				{ m_fAngle = a_fAngle; }
 	VOID Set_Pos( D3DXVECTOR3& a_vPos )				{ m_vControl = a_vPos; }
 	VOID Set_Target( INT a_iTarget )				{ m_iTarget = a_iTarget; }
+	VOID Set_TargetPos( INT a_iX, INT a_iZ )		{ m_iTargetPos[0] = a_iX; m_iTargetPos[1] = a_iZ; }
 	VOID Set_TargetPos( D3DXVECTOR3 a_vPos )		{ m_vTargetPos = a_vPos; }
 	VOID Set_TargetUnitVector( D3DXVECTOR3 a_vUnit ) { m_vTargetUnitVector = a_vUnit; }
 	VOID Set_TargetDistance( FLOAT a_fDistance )	{ m_fTargetDistance = a_fDistance; }
 	VOID Set_iSelectedFrameNum( INT a_iAniNum )		{ m_iSelectedFrameNum = a_iAniNum; }
+	VOID Set_Path( PathNode* a_pPath )				{ m_pPath = a_pPath; }
 
 	StateMachine<CMonster>* GetFSM() const	{ return m_pStateMachine; }
 	D3DXVECTOR3& Get_Pos()					{ return m_vControl; }
 	INT Get_Target()						{ return m_iTarget; }
-	D3DXVECTOR3& Get_TargetPos()			{ return m_vTargetPos; }
+	INT* Get_TargetPos()					{ return m_iTargetPos; }
+//	D3DXVECTOR3& Get_TargetPos()			{ return m_vTargetPos; }
 	D3DXVECTOR3& Get_TargetUnitVector()		{ return m_vTargetUnitVector; }
 	INT Get_iSelectedFrameNum()				{ return m_iSelectedFrameNum; }
 	FLOAT Get_TargetDistance()				{ return m_fTargetDistance; }
 	FLOAT Get_Angle()						{ return m_fAngle; }
+	PathNode* Get_Path()					{ return m_pPath; }
 
 
 private:
@@ -82,9 +86,13 @@ private:
 
 	// Å¸°Ù
 	INT			m_iTarget;
+	INT			m_iTargetPos[2];
 	D3DXVECTOR3 m_vTargetPos;
 	D3DXVECTOR3 m_vTargetUnitVector;
 	FLOAT		m_fTargetDistance;
+
+	// Path
+	PathNode*	m_pPath;
 
 
 	struct BoxData

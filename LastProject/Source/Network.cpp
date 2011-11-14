@@ -232,7 +232,6 @@ VOID CNetwork::scInitData( CPacket& pk )
 				break;
 			}
 		}
-
 	}
 }
 
@@ -288,7 +287,7 @@ VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
 }
 
 
-VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& pList )
+VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD wDestroyCount, std::vector<WORD>& pList )
 {
 	CPacket pk;
 	WORD wMsgSize = 0;
@@ -298,14 +297,14 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vecto
 	pk.Write( wMsgID );
 	//pk.Write( m_wNumber );
 	pk.Write( cDestroyPart );
-	pk.Write( cDestroyCount );
+	pk.Write( wDestroyCount );
 
-	for( WORD i=0; i<cDestroyCount; ++i )
+	for( WORD i=0; i<wDestroyCount; ++i )
 	{
 		pk.Write( pList[i] );
 		//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", pList[i] );
 	}
-	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", cDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", wDestroyCount );
 
 	pk.CalcSize();
 
@@ -317,23 +316,23 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 {
 	WORD wClientNumber;
 	CHAR cDestroyPart;
-	WORD cDestroyCount;
+	WORD wDestroyCount;
 	WORD wList[1000];
 
 	//pk.Read( &wClientNumber );
 	pk.Read( &cDestroyPart );
-	pk.Read( &cDestroyCount );
+	pk.Read( &wDestroyCount );
 
 	
-	for( WORD i=0; i<cDestroyCount; ++i )
+	for( WORD i=0; i<wDestroyCount; ++i )
 	{
 		pk.Read( &wList[i] );
-		CDebugConsole::GetInstance()->Messagef( L"Rcv cDestroy List : %d\n", wList[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Rcv cDestroyCount : %d\n", cDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount : %d\n", wDestroyCount );
 
-	CObjectManage::GetInstance()->Get_AlphaMon()->RecvBreakList( cDestroyCount, wList );
+	CObjectManage::GetInstance()->Get_AlphaMon()->RecvBreakList( wDestroyCount, wList );
 
 	// 디버깅용 출력
 	//cout << wClientNumber << " : ";

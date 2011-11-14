@@ -15,6 +15,9 @@ CMonster::CMonster()
 CMonster::~CMonster()
 {
 	Realese();
+
+	// AI : 남아있는 Path를 제거한다.
+	Astar::GetInstance()->removePath( m_pPath );
 }
 
 VOID CMonster::Clear()
@@ -38,7 +41,11 @@ VOID CMonster::Clear()
 	m_bChangingAnimation = FALSE;
 
 	m_iTarget = -1;
+	m_iTargetPos[0] = 0;
+	m_iTargetPos[1] = 0;
 	m_fTargetDistance = 0.0f;
+
+	m_pPath = NULL;
 }
 
 HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )

@@ -31,6 +31,8 @@ HRESULT CWinBase::Create()
 	CPhysics::GetInstance();
 	CTree::GetInstance();
 
+	Astar::GetInstance();
+
 	return S_OK;
 }
 
@@ -52,6 +54,8 @@ HRESULT CWinBase::Release()
 	WSACleanup();
 	CNetwork::DestoryInstance();
 #endif
+
+	Astar::DestoryInstance();
 
 	return S_OK;
 }
