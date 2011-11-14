@@ -115,10 +115,8 @@ FLOAT Chase::GetDegree()
 
 BOOL Chase::isArrive( CMonster* pMonster )
 {
-	INT iX = pMonster->Get_Pos().x;
-	INT iZ = pMonster->Get_Pos().z;
-
-	
+	INT iX = static_cast<INT>( pMonster->Get_Pos().x );
+	INT iZ = static_cast<INT>( pMonster->Get_Pos().z );
 
 	return TRUE;
 }

@@ -36,7 +36,7 @@ VOID Battle::Execute( CMonster* pMonster )
 
 	// 타겟 번호
 	static FLOAT target;
-	target = pMonster->Get_Target();
+	target = static_cast<FLOAT>( pMonster->Get_Target() );
 	CDebugInterface::GetInstance()->AddMessageFloat( "target", target );
 
 	// 근접 공격범위 안에 들어왔으면 밀리나 회전 공격중 랜덤 선택
