@@ -34,8 +34,8 @@ public:
 
 private:
 	LPDIRECT3DDEVICE9 m_pd3dDevice;
-	INT m_nPF ;
 	INT m_nState;
+	INT m_nReversing;
 	WEAPONTYPE m_WeaponType;
 	Map * m_pMap;
 	BOOL m_bAtkTime;
@@ -65,7 +65,8 @@ public:
 	BOOL GetAtkTime()			{ return m_bAtkTime; }
 
 	VOID AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle );
-
+	
+	INT GetDirection();
 private:
 	enum { READ, WRITE };
 
