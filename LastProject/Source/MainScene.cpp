@@ -11,6 +11,7 @@
 #include "TileMap.h"
 #include "Seek.h"
 
+#define _ALPHAMON
 // AI 테스트용
 #ifdef _DEBUG
 #include "Seek.h"
