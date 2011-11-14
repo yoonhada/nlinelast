@@ -95,7 +95,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pAlphaMon->Create( m_pD3dDevice, m_pMatrices );
 	m_pAlphaMon->Load( L"Data/CharData/35box.csav" );
 	m_pAlphaMon->Set_Position( D3DXVECTOR3(-100.0f, 0.0f, 0.0f) );
-	CTree::GetInstance()->GetChaVector()->push_back( m_pAlphaMon->GetBoundBox() );
+	CTree::GetInstance()->GetCharVector()->push_back( m_pAlphaMon->GetBoundBox() );
 #endif
 
 	//조명 생성
@@ -288,7 +288,7 @@ VOID	CMainScene::Update()
 	m_pMyCharactor->Update();
 	D3DXMATRIXA16 mat;
 	D3DXMatrixIdentity( &mat );
-	if ( m_pMyCharactor->CollisionAtk(mat) )
+	if ( m_pMyCharactor->CollisionAtk( ) )
 	{
 		m_pMyCharactor->BreakQube( mat );
 	}
@@ -312,7 +312,7 @@ VOID	CMainScene::Update()
 		//{
 			//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
 			m_pCharactors[Loop].UpdateOtherPlayer();
-			if ( m_pCharactors[Loop].CollisionAtk(mat) )
+			if ( m_pCharactors[Loop].CollisionAtk( ) )
 			{
 				m_pCharactors[Loop].BreakQube( mat );
 			}
@@ -419,7 +419,7 @@ VOID	CMainScene::Render()
 		m_pLogo[Loop].Render();
 	}*/
 #ifdef _ALPHAMON
-	m_pAlphaMon->Render();
+	//m_pAlphaMon->Render();
 #endif
 
 	m_pMonster->Render();

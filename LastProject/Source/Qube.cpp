@@ -90,6 +90,7 @@ VOID CQube::Update( CBoundBox * pBB )
 		vDir.y = 2.0f * m_fSize - vDir.y ;
 		m_vMomentum.y *= -1.0f;
 		m_vAccelerate.y *= -1.0f;
+		m_vAccelerate = D3DXVECTOR3(0, 0, 0);
 
 		//회전량의 방향성 추가		
 		//m_vRotateTemp.x = -m_vAccelerate.z * CPhysics::GetInstance()->m_fElastic;

@@ -4,8 +4,8 @@
 	@author	백경훈
 	@brief	캐릭터 클래스
 */
-#define _TEST111110
-
+#define _TEST
+#define _ALPHAMON
 
 #include "stdafx.h"
 #include "Charactor.h"
@@ -145,7 +145,6 @@ VOID CCharactor::CreateWeapon( INT nType )
 	m_pWeapon = new CWeapon( m_pD3dDevice );
 	m_pWeapon->SetType( nType );
 	m_pWeapon->Create();
-
 }
 
 
@@ -434,7 +433,6 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 
 	// 맵충돌
 
-#ifdef _TEST111110
 	FLOAT fRadius = m_pBoundBox->GetRadiusLong();
 	vPos = m_pBoundBox->GetPosition();
 	vDir = vPos + a_vCollisionControl;
@@ -462,62 +460,32 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 		}
 	}
 
-#else
-	/*INT i;
-	for ( i = 0; i < 8; ++i)
+	vecBoundBox = CTree::GetInstance()->GetMonsVector( );
+	if ( vecBoundBox != NULL && vecBoundBox->size() )
 	{
-		vPos = m_pBoundBox->GetPosition(i);
-		vDir = vPos + a_vCollisionControl;
-		vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir);
-		if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
-		{			
-			vDir = a_vCollisionControl;
-			Iter = vecBoundBox->begin();
-			while ( Iter != vecBoundBox->end() )
-			{
-				if( CPhysics::GetInstance()->Collision( vPos + vDir, ( *Iter ) ) )
-				{					
-					CPhysics::GetInstance()->Sliding( a_vCollisionControl );
-					bColl = TRUE;
-				}
-				Iter++;
-			}
-		}
-
-		if (bColl)
+		Iter = vecBoundBox->begin();
+		Iter++;
+		while ( Iter != vecBoundBox->end() )
 		{
-			break;
+			if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
+			{
+				a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				return TRUE;
+			}
+			Iter++;
 		}
-	}*/
-#endif
-
-#ifdef _TEST111110
-	//vecBoundBox = CTree::GetInstance()->GetMonsVector( );
-	//if ( vecBoundBox != NULL && vecBoundBox->size() )
-	//{
-	//	Iter = vecBoundBox->begin();
-	//	Iter++;
-	//	while ( Iter != vecBoundBox->end() )
-	//	{
-	//		if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
-	//		{
-	//			a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	//			return TRUE;
-	//		}
-	//		Iter++;
-	//	}
-	//}
-#endif
+	}
 
 	return FALSE;
 }
 
-BOOL CCharactor::CollisionAtk(  D3DXMATRIXA16 &mat )
+BOOL CCharactor::CollisionAtk( )
 {
 	BOOL bColl = FALSE;
 	std::vector<CBoundBox*> * vecBoundBox;
 	std::vector<CBoundBox*>::iterator Iter;
 
+	FLOAT fRadius = m_pBoundBox->GetSize( CBoundBox::PLUSX ) * 1.732f; // a * sqrt(3)
 	D3DXVECTOR3 vDir, vPos;
 
 	if (m_bMonster == TRUE)
@@ -526,11 +494,11 @@ BOOL CCharactor::CollisionAtk(  D3DXMATRIXA16 &mat )
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
   			Iter = vecBoundBox->begin();
+
 			for (int i = 0; i < 8; ++i)
-			{
+			{				
 				vPos = ( *Iter )->GetPosition(i);
-				D3DXVec3TransformCoord(&vPos, &vPos, &mat);
-				if( CPhysics::GetInstance()->Collision( vPos,  m_pBoundBox ) )
+				if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, 0.0f ) )
 				{
 					( *Iter )->SetPosVec();
 					return TRUE; 
@@ -547,7 +515,6 @@ BOOL CCharactor::CollisionAtk(  D3DXMATRIXA16 &mat )
 			for (int i = 0; i < 8; ++i)
 			{				
 				vPos = ( *Iter )->GetPosition(i);
-				CDebugConsole::GetInstance()->Messagef(L"%f, %f, %f\n", vPos.x, vPos.y, vPos.z);
 				if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
 				{
 					( *Iter )->SetPosVec();
@@ -582,8 +549,14 @@ const D3DXVECTOR3& CCharactor::Get_PreCharaPos2Camera()
 
 VOID CCharactor::UpdateByInput(  )
 {
-	D3DXVECTOR3 a_vControl = CInput::GetInstance()->Get_Pos();
-	FLOAT a_fAngle = CInput::GetInstance()->Get_MouseYRotate();
+	D3DXVECTOR3 a_vControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	FLOAT a_fAngle = 0.0f;
+
+	if ( m_pWeapon->Get_nFrame() == 0 )
+	{
+		a_vControl = CInput::GetInstance()->Get_Pos();
+		a_fAngle = CInput::GetInstance()->Get_MouseYRotate();
+	}
 
 	a_fAngle += m_fAngle;
 	
@@ -690,6 +663,7 @@ VOID CCharactor::UpdateOtherPlayer()
 	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
 	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
 	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
+	m_pWeapon->UpdateSRT();
 
 	Set_ControlTranslate( 0, m_vLerpControl.x );
 	//Set_ControlTranslate( 1, m_vLerpControl.y );
@@ -712,9 +686,11 @@ VOID CCharactor::UpdateOtherPlayer2()
 	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
 
+	D3DXMATRIXA16 mat;
+	D3DXMatrixIdentity( &mat );
 	if ( CollisionAtk() )
 	{
-		BreakQube();
+		BreakQube(mat);
 	}
 }
 #endif // _ALPHAMON
@@ -804,20 +780,19 @@ VOID CCharactor::AnimateMove()
 
 VOID CCharactor::Update()
 {
-	if ( CInput::GetInstance()->Get_Lbutton() )
-	{
-		m_pWeapon->SetKeyA();
-		m_iSelectedFrameNum = 1;
-	}
-	if ( CInput::GetInstance()->Get_Rbutton() )
-	{
-		m_pWeapon->SetKeyB();
-	}
-
 	if(m_pWeapon)	
 	{
+		if ( CInput::GetInstance()->Get_Lbutton() )
+		{
+			m_pWeapon->SetKeyA();
+		}
+		if ( CInput::GetInstance()->Get_Rbutton() )
+		{
+			m_pWeapon->SetKeyB();
+		}
+
 		m_pWeapon->Update();
-		if ( m_pWeapon->GetAtkTime() )
+		if ( m_pWeapon->GetAtkTime() == TRUE )
 		{
 			D3DXVECTOR3 vDir = Get_CharaPos();
 			vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
@@ -901,12 +876,15 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 	INT Loop;
 	D3DXVECTOR3 vPos;
 	CBoundBox BB;
+	D3DXMATRIXA16 matTemp;
+	D3DXMatrixIdentity(&matTemp);
 	if( m_bAliveCheck == TRUE )
 	{
 		std::vector<WORD> NetworkSendTempVector;
-#ifdef _TEST
+#ifndef _TEST
 		std::vector<CBoundBox *> * vecBoundBox;
 		vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
+
 		std::vector<D3DXVECTOR3> * vecVec = vecBoundBox->begin()->GetPosVec();
 		std::vector<D3DXVECTOR3>::iterator Iter;
 		//vecVec = m_pBoundBox->GetPosVec();
@@ -916,7 +894,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			vPos = ( *Iter );
 			D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
 			Loop = m_pOctTree->GetChildIndex( vPos );
-			
+
 			if( Loop >= 0 && m_vectorCube[Loop] != NULL )
 			{
 				if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
@@ -925,7 +903,9 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 				}
 				else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != 3 )
 				{
-					BreakListMake( Loop, m_pBoundBox );
+					vPos = (*Iter)->GetDirection();
+					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );
+					BreakListMake( Loop, vPos );
 					NetworkSendTempVector.push_back( Loop );
 
 				}
@@ -934,19 +914,14 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			Iter++;
 		}
 #else
+		D3DXVECTOR3 vDir;
 		std::vector<CBoundBox*> * vecBoundBox;
 		std::vector<CBoundBox*>::iterator Iter;
-
 		if ( m_bMonster )
 			vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
 		else
 			vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();	
 
-		Iter = vecBoundBox->begin();
-		D3DXVECTOR3 vDir = (*Iter)->GetDirection();
-		D3DXMATRIXA16 mat = Get_MatWorld();
-		mat._41 = 0.0f;	mat._42 = 0.0f;	mat._43 = 0.0f;	
-		D3DXVec3TransformCoord( &vDir, &vDir, &((*Iter)->GetAxisMat()) );
 
 		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
 		{
@@ -957,18 +932,25 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			{
 				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 			}
-			else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != 3 )
+			else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != EnumCubeType::HIDEMEAT )
 			{
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
 				{
+					Iter = vecBoundBox->begin();
+
 					//(*Iter)->GetPosVec();
+					matTemp = Get_MatWorld() * mat;
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );				
+					D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );				
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
-						BreakListMake( Loop, vDir );
+						vPos = (*Iter)->GetDirection();
+						matTemp._41 = matTemp._42 = matTemp._43 = 0.0f;
+						D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
+						BreakListMake( Loop, vPos );
 						NetworkSendTempVector.push_back( Loop );
+						vDir = vPos;
 					}
 				}
 			}
@@ -988,40 +970,38 @@ VOID CCharactor::BreakListMake( INT Loop, D3DXVECTOR3& vDir )
 	{
 		m_vectorCube[Loop]->Set_Visible( LoopFrame, 3 );
 
-		iFriendCubeVecIndex = -1;
-
 		// 이웃 노드 큐브 보이기
 		for(INT LoopFriend=0; LoopFriend<6; ++LoopFriend)
 		{
-			iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( LoopFrame, LoopFriend );
+			iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
 			if ( iFriendCubeVecIndex != -1 )
 			{
-				if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( LoopFrame ) == FALSE )
+				iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( LoopFrame, LoopFriend );
+				if ( iFriendCubeVecIndex != -1 )
 				{
-					m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( LoopFrame, TRUE );
+					if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( LoopFrame ) == FALSE )
+					{
+						m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( LoopFrame, TRUE );
+					}
 				}
 			}
 		}
-	}
 
-#ifndef _ALPHAMON
-	if( m_bMonster )
-	{
-		D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
+		if( m_bMonster )
+		{
+			D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
+		}
+		else
+		{
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
+		}
 	}
-	else
-	{
-		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
-	}
-#else
-	m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
-#endif 	
 }
 
 VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir )
 {
-	for( INT QLoop=0; QLoop<a_iCount; ++QLoop )
+	for( INT QLoop = 0; QLoop < a_iCount; ++QLoop )
 	{
 		if( m_vectorCube[ a_pList[QLoop] ] == NULL )
 		{

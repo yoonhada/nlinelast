@@ -11,6 +11,8 @@ CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
 : m_pd3dDevice(_pd3dDevice)
 {
 	m_pMap = new Map( _pd3dDevice );
+	m_pGL = new CGuideLine( _pd3dDevice );
+	m_pGL->SetpBBSize( m_fBBSize );
 	Clear();
 }
 
@@ -33,16 +35,23 @@ VOID CWeapon::Clear()
 		m_WeaponType.vDir[i].x = m_WeaponType.vDir[i].y = m_WeaponType.vDir[i].z = 0.0f;
 	}
 
-	m_afZAng[0] = DEG2RAD(0);
-	m_afZAng[1] = DEG2RAD(0);
-	m_afZAng[2] = DEG2RAD(0);
-	m_afZAng[3] = DEG2RAD(90);
-	m_afZAng[4] = DEG2RAD(-15);
-	m_afZAng[5] = DEG2RAD(0);
-	m_afZAng[6] = DEG2RAD(15);
-	m_afZAng[7] = DEG2RAD(90);
-	m_afZAng[8] = DEG2RAD(75);
-	m_afZAng[9] = DEG2RAD(0);
+	m_fZAng[0] = DEG2RAD(0);
+	m_fZAng[1] = DEG2RAD(0);
+	m_fZAng[2] = DEG2RAD(0);
+	m_fZAng[3] = DEG2RAD(90);
+	m_fZAng[4] = DEG2RAD(-15);
+	m_fZAng[5] = DEG2RAD(0);
+	m_fZAng[6] = DEG2RAD(15);
+	m_fZAng[7] = DEG2RAD(90);
+	m_fZAng[8] = DEG2RAD(75);
+	m_fZAng[9] = DEG2RAD(0);
+
+	m_fBBSize[0] = -4.5f;
+	m_fBBSize[1] = -1.5f;
+	m_fBBSize[2] =-10.5f;
+	m_fBBSize[3] = 10.5f;
+	m_fBBSize[4] =  1.5f;
+	m_fBBSize[5] = -5.5f;
 
 	m_bAtkTime = FALSE;
 }
@@ -51,6 +60,8 @@ HRESULT CWeapon::Release()
 {
 	Clear();
 	SAFE_DELETE( m_pMap );
+
+	SAFE_DELETE( m_pGL );
 	return S_OK;
 }
 
@@ -236,22 +247,22 @@ VOID CWeapon::AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle )
 	SetBBx( vPos, fAngle );
 	CTree::GetInstance()->GetCharAtkVector()->push_back( &m_WeaponType.pBBA );
 
-	m_bAtkTime = FALSE;
+	//m_bAtkTime = FALSE;
 }
 
 VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 {
 	m_WeaponType.pBBA.SetPosition( vPos );
 	m_WeaponType.pBBA.SetAngleY( fAngle );
-	m_WeaponType.pBBA.SetAngleZ( m_afZAng[m_nState] );
+	m_WeaponType.pBBA.SetAngleZ( m_fZAng[m_nState] );
 
-	m_WeaponType.pBBA.SetSize( 0, - 4.5f );
-	m_WeaponType.pBBA.SetSize( 1, - 1.5f );
-	m_WeaponType.pBBA.SetSize( 2, -10.5f );
+	m_WeaponType.pBBA.SetSize( 0, m_fBBSize[0] );
+	m_WeaponType.pBBA.SetSize( 1, m_fBBSize[1] );
+	m_WeaponType.pBBA.SetSize( 2, m_fBBSize[2] );
 
-	m_WeaponType.pBBA.SetSize( 3,  10.5f );
-	m_WeaponType.pBBA.SetSize( 4,   1.5f );
-	m_WeaponType.pBBA.SetSize( 5, - 5.5f );
+	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[3] );
+	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[4] );
+	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[5] );
 
 	m_WeaponType.pBBA.SetDirection( m_WeaponType.vDir[m_nState] );
 }
@@ -293,19 +304,28 @@ VOID CWeapon::Update()
 
 		INT nCurrFrame = m_pMap->GetCurrentFrame();
 		//타격설정
-		if ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameAtk[m_nState] &&
-			 m_bAtkTime == FALSE )
+		if ( m_bAtkTime == TRUE)
+		{
+			m_bAtkTime = 2;
+		}
+		else if ( ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameAtk[m_nState] ) && m_bAtkTime == FALSE )
 		{
 			m_bAtkTime = TRUE;
 		}
-		if ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] || 
-			 nCurrFrame == 0 )
+
+		if ( nCurrFrame == 0 )			/*nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] || */
 		{
 			m_nState = EnumCharFrame::BASE;
+			m_bAtkTime = FALSE;
 		}
 		CDebugConsole::GetInstance()->Messagef(L"%d - %d\n", m_nState, nCurrFrame );
 	}
-	
+
+	UpdateSRT();
+}
+
+VOID CWeapon::UpdateSRT()
+{
 	m_pMap->Set_ControlScale( 0, 0.75f );
 	m_pMap->Set_ControlScale( 1, 0.75f );
 	m_pMap->Set_ControlScale( 2, 0.75f );
@@ -318,6 +338,8 @@ VOID CWeapon::Update()
 
 	m_pMap->Update();
 	m_pMap->Calcul_MatWorld();
+
+	m_pGL->Update();
 };
 
 const D3DXMATRIXA16& CWeapon::Get_MatWorld()
@@ -328,6 +350,7 @@ const D3DXMATRIXA16& CWeapon::Get_MatWorld()
 VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 {
 	m_pMap->Render( _matCharacter );	
+	m_pGL->Render( _matCharacter );
 }
 
 INT CWeapon::Get_nFrame()
@@ -340,10 +363,15 @@ INT CWeapon::Get_nState()
 	return m_nState; 
 }
 
-INT CWeapon::GetDirection()
+INT CWeapon::Get_Direction()
 {
 	FLOAT fRet = m_WeaponType.pBBA.GetDirection().x;
 	return ( fRet < 0.0f ? -1 : ( fRet > 0.0f ? 1 : 0 ) );
+}
+
+VOID CWeapon::Set_Animation( INT _nState )	
+{
+	m_pMap->SetAnimation( _nState ); 
 }
 
 VOID CWeapon::Set_nState( INT _nState ) 

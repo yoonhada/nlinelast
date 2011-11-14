@@ -112,7 +112,7 @@ public:
 
 	CBoundBox * GetBoundBox()			{ return m_pBoundBox; }
 	BOOL Collision( D3DXVECTOR3& a_vCollisionControl );
-	BOOL CollisionAtk(  D3DXMATRIXA16 &mat );
+	BOOL CollisionAtk( );
 	VOID Load( WCHAR* a_pFileName );
 
 	// 
@@ -224,13 +224,9 @@ private:
 private:
 	CShadowCell* m_pShadowCell;
 
-#ifdef _ALPHAMON
 public:
 	VOID SetMon(BOOL b)		{ m_bMonster = b; }
 	VOID UpdateOtherPlayer2();
-
-#endif
-
 };
 
 #endif

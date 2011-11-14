@@ -182,13 +182,11 @@ VOID CBoundBox::SetAngleY(FLOAT fAngle)
 {
 	// z 축 뒤집혀서 OpenGL 꺼 사용
 	D3DXMatrixIdentity( &m_matAxis );
-	D3DXMATRIXA16 mat( 
+	m_matAxis = D3DXMATRIXA16( 
 		cosf( fAngle ), 0, sinf( fAngle ), 0, 
 		0, 1, 0, 0, 
 		-sinf( fAngle ), 0, cosf( fAngle ), 0, 
 		0, 0, 0, 1);
-
-	m_matAxis *= mat;
 }
 
 VOID CBoundBox::SetAngleZ(FLOAT fAngle)
