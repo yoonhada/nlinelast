@@ -1,3 +1,5 @@
+#define _GRAP
+
 #include "stdafx.h"
 #include "Map.h"
 #include "ASEParser.h"
@@ -16,6 +18,7 @@ CWeapon::~CWeapon()
 {
 	if ( m_WeaponType.nType > NONE )
 		PrivateProfile( WRITE );
+
 	Release();
 }
 
@@ -42,7 +45,6 @@ VOID CWeapon::Clear()
 	m_afZAng[9] = DEG2RAD(0);
 
 	m_bAtkTime = FALSE;
-	m_nPF = -1;
 }
 
 HRESULT CWeapon::Release()
@@ -59,7 +61,7 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 		WCHAR lpKeyName[256];
 		m_pMap->CleanupAnimationData();
 		wsprintf( lpKeyName, L"Begin%d", EnumCharFrame::BASE	);	m_WeaponType.nFrameBegin[EnumCharFrame::BASE	] = GetPrivateProfileInt( L"Frame", lpKeyName,  0, WEAPONFILE );
-		wsprintf( lpKeyName, L"Begin%d", EnumCharFrame::ATTACK1 );	m_WeaponType.nFrameBegin[EnumCharFrame::ATTACK1 ] = GetPrivateProfileInt( L"Frame", lpKeyName,  0, WEAPONFILE );
+		wsprintf( lpKeyName, L"Begin%d", EnumCharFrame::ATTACK1 );	m_WeaponType.nFrameBegin[EnumCharFrame::ATTACK1 ] = GetPrivateProfileInt( L"Frame", lpKeyName,  1, WEAPONFILE );
 		wsprintf( lpKeyName, L"Begin%d", EnumCharFrame::ATTACK2 );	m_WeaponType.nFrameBegin[EnumCharFrame::ATTACK2 ] = GetPrivateProfileInt( L"Frame", lpKeyName, 25, WEAPONFILE );
 		wsprintf( lpKeyName, L"Begin%d", EnumCharFrame::A		);	m_WeaponType.nFrameBegin[EnumCharFrame::A		] = GetPrivateProfileInt( L"Frame", lpKeyName, 49, WEAPONFILE );
 		wsprintf( lpKeyName, L"Begin%d", EnumCharFrame::TEMP1	);	m_WeaponType.nFrameBegin[EnumCharFrame::TEMP1	] = GetPrivateProfileInt( L"Frame", lpKeyName, 73, WEAPONFILE );
@@ -99,6 +101,7 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 		m_WeaponType.vDir[EnumCharFrame::TEMP3  ] = D3DXVECTOR3(-0.3f, -1.0f, -0.3f );
 		m_WeaponType.vDir[EnumCharFrame::TEMP4  ] = D3DXVECTOR3(-1.3f,  0.0f, -0.3f );
 
+
 		m_pMap->AddAnimationData ( IDLE		,  EnumCharFrame::BASE  , m_WeaponType.nFrameBegin[EnumCharFrame::BASE	 ], m_WeaponType.nFrameTime[EnumCharFrame::BASE	  ], TRUE );
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, m_WeaponType.nFrameBegin[EnumCharFrame::ATTACK1], m_WeaponType.nFrameTime[EnumCharFrame::ATTACK1], FALSE);
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, m_WeaponType.nFrameBegin[EnumCharFrame::ATTACK2], m_WeaponType.nFrameTime[EnumCharFrame::ATTACK2], FALSE);
@@ -109,6 +112,7 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::TEMP4  , m_WeaponType.nFrameBegin[EnumCharFrame::TEMP4  ], m_WeaponType.nFrameTime[EnumCharFrame::TEMP4  ], FALSE);
 
 		m_nState = EnumCharFrame::BASE;
+
 	}
 	else
 	{
@@ -172,39 +176,38 @@ HRESULT CWeapon::Create()
 
 VOID CWeapon::SetKeyA()
 {
-	if ( m_nState == EnumCharFrame::BASE )
-	{
-		m_nState = EnumCharFrame::ATTACK1;
-		m_pMap->SetAnimation( m_nState );
-	} 
-	else if ( m_nState == EnumCharFrame::ATTACK1 && 
-			( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
-			( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
-	{
-		m_nState = EnumCharFrame::ATTACK2;
-		m_pMap->SetAnimation( m_nState );
-	}
-	else if ( m_nState == EnumCharFrame::ATTACK2 &&
-		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
-		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
+	INT nCurrFrame = m_pMap->GetCurrentFrame();
+
+	if ( m_nState == EnumCharFrame::ATTACK2 &&
+		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
+		( nCurrFrame < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
 		m_nState = EnumCharFrame::A;
 		m_pMap->SetAnimation( m_nState );
 	}
+	else if ( m_nState == EnumCharFrame::ATTACK1 && 
+		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
+		( nCurrFrame < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
+	{
+		m_nState = EnumCharFrame::ATTACK2;
+		m_pMap->SetAnimation( m_nState );
+	}
+	else if ( m_nState == EnumCharFrame::BASE )
+	{
+		m_nState = EnumCharFrame::ATTACK1;
+		m_pMap->SetAnimation( m_nState );
+	} 
 }
 
 VOID CWeapon::SetKeyB()
 {
-	if ( m_nState == EnumCharFrame::BASE )
-	{
-		m_nState = EnumCharFrame::TEMP1;
-		m_pMap->SetAnimation( m_nState );
-	}
-	else if ( m_nState == EnumCharFrame::TEMP1 &&
+	INT nCurrFrame = m_pMap->GetCurrentFrame();
+
+	if ( m_nState == EnumCharFrame::ATTACK2 &&
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
-		m_nState = EnumCharFrame::TEMP2;
+		m_nState = EnumCharFrame::TEMP4;
 		m_pMap->SetAnimation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::TEMP2 &&
@@ -214,13 +217,26 @@ VOID CWeapon::SetKeyB()
 		m_nState = EnumCharFrame::TEMP3;
 		m_pMap->SetAnimation( m_nState );
 	}
-	else if ( m_nState == EnumCharFrame::ATTACK2 &&
+	else if ( m_nState == EnumCharFrame::TEMP1 &&
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
-		m_nState = EnumCharFrame::TEMP4;
+		m_nState = EnumCharFrame::TEMP2;
 		m_pMap->SetAnimation( m_nState );
 	}
+	else if ( m_nState == EnumCharFrame::BASE )
+	{
+		m_nState = EnumCharFrame::TEMP1;
+		m_pMap->SetAnimation( m_nState );
+	}
+}
+
+VOID CWeapon::AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle )
+{
+	SetBBx( vPos, fAngle );
+	CTree::GetInstance()->GetCharAtkVector()->push_back( &m_WeaponType.pBBA );
+
+	m_bAtkTime = FALSE;
 }
 
 VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
@@ -229,23 +245,15 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	m_WeaponType.pBBA.SetAngleY( fAngle );
 	m_WeaponType.pBBA.SetAngleZ( m_afZAng[m_nState] );
 
-	m_WeaponType.pBBA.SetSize( 0, - 7.0f );
+	m_WeaponType.pBBA.SetSize( 0, - 4.5f );
 	m_WeaponType.pBBA.SetSize( 1, - 1.5f );
-	m_WeaponType.pBBA.SetSize( 2, -10.0f );
+	m_WeaponType.pBBA.SetSize( 2, -10.5f );
 
-	m_WeaponType.pBBA.SetSize( 3,   7.0f );
+	m_WeaponType.pBBA.SetSize( 3,  10.5f );
 	m_WeaponType.pBBA.SetSize( 4,   1.5f );
-	m_WeaponType.pBBA.SetSize( 5, - 5.0f );
+	m_WeaponType.pBBA.SetSize( 5, - 5.5f );
 
 	m_WeaponType.pBBA.SetDirection( m_WeaponType.vDir[m_nState] );
-}
-
-VOID CWeapon::AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle )
-{
-	SetBBx( vPos, fAngle );
-	CTree::GetInstance()->GetCharAtkVector()->push_back( &m_WeaponType.pBBA );
-	
-	m_bAtkTime = FALSE;
 }
 
 VOID CWeapon::Update()
@@ -280,26 +288,21 @@ VOID CWeapon::Update()
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{
+		INT nCurrFrame = m_pMap->GetCurrentFrame();
 		//타격설정
-		if ( m_bAtkTime == FALSE && m_pMap->GetCurrentFrame() >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameAtk[m_nState] )
+		if ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameAtk[m_nState] &&
+			 m_bAtkTime == FALSE )
 		{
 			m_bAtkTime = TRUE;
 		}
-		//if ( m_pMap->GetCurrentFrame() >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] )
-		//{
-		//}
-		if ( m_pMap->GetCurrentFrame() >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] )
+		if ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] || 
+			 nCurrFrame == 0 )
 		{
 			m_nState = EnumCharFrame::BASE;
 		}
-		
-		if ( m_pMap->GetCurrentFrame() == 0 && m_nPF == 0 )
-			m_nState = EnumCharFrame::BASE;
-
-		m_nPF = m_pMap->GetCurrentFrame();
+		CDebugConsole::GetInstance()->Messagef(L"%d - %d\n", m_nState, nCurrFrame );
 	}
-	//CDebugConsole::GetInstance()->Messagef(L"%d - %d\n", m_nState, m_pMap->GetCurrentFrame() );
-
+	
 	m_pMap->Set_ControlScale( 0, 0.75f );
 	m_pMap->Set_ControlScale( 1, 0.75f );
 	m_pMap->Set_ControlScale( 2, 0.75f );
@@ -332,4 +335,10 @@ INT CWeapon::Get_nFrame()
 INT CWeapon::Get_nState() 
 {
 	return m_nState; 
+}
+
+INT CWeapon::GetDirection()
+{
+	FLOAT fRet = m_WeaponType.pBBA.GetDirection().x;
+	return ( fRet < 0.0f ? -1 : ( fRet > 0.0f ? 1 : 0 ) );
 }
