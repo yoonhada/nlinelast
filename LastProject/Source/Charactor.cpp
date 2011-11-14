@@ -32,11 +32,6 @@ CCharactor::CCharactor()
 	Clear();
 }
 
-//CCharactor::CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice ) : m_pD3dDevice(a_pD3dDevice)
-//{
-//	Clear();
-//}
-
 CCharactor::~CCharactor()
 {
 	Release();
@@ -66,8 +61,8 @@ VOID CCharactor::Clear()
 	m_iAliveCount = 0;
 	m_bAliveCheck = TRUE;
 
-	m_vPreControl = D3DXVECTOR3(100.0f, 0.0f, 0.0f);
 	m_vControl = D3DXVECTOR3(100.0f, 0.0f, 0.0f);
+	m_vPreControl = D3DXVECTOR3(100.0f, 0.0f, 0.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
@@ -501,6 +496,7 @@ BOOL CCharactor::CollisionAtk( )
 				if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, 0.0f ) )
 				{
 					( *Iter )->SetPosVec();
+					( *Iter )->SetPosMap();
 					return TRUE; 
 				}
 			}
@@ -512,12 +508,14 @@ BOOL CCharactor::CollisionAtk( )
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
 			Iter = vecBoundBox->begin();
+
 			for (int i = 0; i < 8; ++i)
 			{				
 				vPos = ( *Iter )->GetPosition(i);
 				if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
 				{
 					( *Iter )->SetPosVec();
+					( *Iter )->SetPosMap();
 					return TRUE; 
 				}
 			}

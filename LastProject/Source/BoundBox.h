@@ -13,6 +13,8 @@
 @author	yoonhada@gmail.com	
 @brief	충돌 클래스
 */
+#include <map>
+
 class CCharactor;
 
 class CBoundBox : public IObject
@@ -38,6 +40,7 @@ public:
 	D3DXVECTOR3 GetDirection() const 		{ return m_vDirection; }
 	D3DXMATRIXA16 GetAxisMat() const;
 	std::vector <D3DXVECTOR3> * GetPosVec();
+	std::map <INT, D3DXVECTOR3> * GetPosMap();
 
 	FLOAT GetSize(INT n) const;
 	FLOAT GetRadius() const;
@@ -52,6 +55,8 @@ public:
 	VOID SetAngleY(FLOAT fAngle);								///< y축회전
 	VOID SetAngleZ(FLOAT fAngle);								///< z축회전
 	VOID SetPosVec();
+	VOID SetPosMap();
+
 private:
 	CCharactor * m_pCharactors;
 	D3DXVECTOR3 m_vPosition;		///< 중심좌표
@@ -59,5 +64,6 @@ private:
 	D3DXVECTOR3 m_vDirection;		///< 동좌표
 	FLOAT m_fSize[6];
 	std::vector <D3DXVECTOR3> _data;
+	std::map <INT, D3DXVECTOR3> _map;
 	//D3DXMATRIXA16 m_vMatWorld;
 };
