@@ -964,11 +964,9 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 	}
 }
 
-VOID CCharactor::BreakListMake(INT Loop, D3DXVECTOR3& rBB)
+VOID CCharactor::BreakListMake( INT Loop, D3DXVECTOR3& vDir )
 {
 	INT iFriendCubeVecIndex = -1;
-
-	m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, EnumCubeType::HIDEMEAT );
 
 	//전 프레임을 돌면서 체크
 	for( INT LoopFrame = 0; LoopFrame<EnumCharFrame::MAXFRAME; ++LoopFrame )
@@ -978,20 +976,29 @@ VOID CCharactor::BreakListMake(INT Loop, D3DXVECTOR3& rBB)
 		// 이웃 노드 큐브 보이기
 		for(INT LoopFriend=0; LoopFriend<6; ++LoopFriend)
 		{
-			if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( EnumCharFrame::BASE ) == FALSE )
+			iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( m_iSelectedFrameNum, LoopFriend );
+			if ( iFriendCubeVecIndex != -1 )
 			{
-				m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( EnumCharFrame::BASE, TRUE );
+				iFriendCubeVecIndex = m_vectorCube[Loop]->Get_FriendCubeVecIndex( LoopFrame, LoopFriend );
+				if ( iFriendCubeVecIndex != -1 )
+				{
+					if( m_vectorCube[ iFriendCubeVecIndex ] != NULL && m_vectorCube[ iFriendCubeVecIndex ]->Get_Visible( LoopFrame ) == FALSE )
+					{
+						m_vectorCube[ iFriendCubeVecIndex ]->Set_Visible( LoopFrame, TRUE );
+					}
+				}
 			}
 		}
 
-	if( m_bMonster )
-	{
-		D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, rBB );
-	}
-	else
-	{
-		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), rBB );
+		if( m_bMonster )
+		{
+			D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
+		}
+		else
+		{
+			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
+		}
 	}
 }
 
