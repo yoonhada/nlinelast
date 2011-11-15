@@ -57,14 +57,14 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		}
 	}
 
-	// 가장 가까이에 있는 유저가 공격 범위에 있으면 전투 상태로 전환
+	// 가장 가까이에 있는 목표가 공격 범위에 있으면 전투 상태로 전환
 	if( min < 50.0f )
 	{
 		a_pMonster->Set_Target( Target );
 		a_pMonster->Set_TargetDistance( min );
 		a_pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
-	// 범위에 없으면 가장 가까운 유저 추격
+	// 범위에 없으면 가장 가까운 목표 추격
 	else if( min >= 50.0f && min <= 500.0f )
 	{	
 	/*
@@ -107,7 +107,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 	else
 	{
-//		pMonster->ChangeAnimation( 0 );
+//		a_pMonster->ChangeAnimation( 0 );
 	}
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "length", min );
