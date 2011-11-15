@@ -924,6 +924,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 			m_pBox[Loop].BreakQube( mat );
 		}
 	}
+
 	CTree::GetInstance()->GetCharAtkVector()->clear();
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
@@ -1329,7 +1330,7 @@ VOID CMonster::Update()
 
 
 	// AI
-	// m_pStateMachine->Update();
+	m_pStateMachine->Update();
 }
 
 VOID CMonster::Render()

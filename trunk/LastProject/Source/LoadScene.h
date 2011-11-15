@@ -39,7 +39,6 @@ private:
 	Map* m_pMap;
 	TileMap* m_pTileMap;
 
-	CCharactor* m_pAlphaMon;
 
 	INT m_iMaxCharaNum;
 

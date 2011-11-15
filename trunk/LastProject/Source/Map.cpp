@@ -193,6 +193,7 @@ VOID Map::RenderASEData( INT _Index, D3DXMATRIX _matCharacter )
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity( &matIdentity );
 	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
+	m_pd3dDevice->SetTexture( 0, NULL );
 }
 
 VOID Map::RenderBBXData( INT _Index )

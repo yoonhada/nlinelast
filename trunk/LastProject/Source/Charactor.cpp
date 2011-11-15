@@ -5,7 +5,6 @@
 	@brief	캐릭터 클래스
 */
 #define _TEST
-#define _ALPHAMON
 
 #include "stdafx.h"
 #include "Charactor.h"
@@ -162,7 +161,6 @@ HRESULT CCharactor::Release()
 
 VOID CCharactor::_LoadRelease()
 {
-
 	//벡터 큐브 동적 할당 해제
 	for( INT Loop=0; Loop<static_cast<INT>( m_vectorCube.size() ); ++Loop )
 	{
@@ -495,8 +493,8 @@ BOOL CCharactor::CollisionAtk( )
 				vPos = ( *Iter )->GetPosition(i);
 				if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, 0.0f ) )
 				{
-					( *Iter )->SetPosVec();
-					( *Iter )->SetPosMap();
+					//( *Iter )->SetPosVec();
+					//( *Iter )->SetPosMap();
 					return TRUE; 
 				}
 			}
@@ -514,8 +512,8 @@ BOOL CCharactor::CollisionAtk( )
 				vPos = ( *Iter )->GetPosition(i);
 				if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
 				{
-					( *Iter )->SetPosVec();
-					( *Iter )->SetPosMap();
+					//( *Iter )->SetPosVec();
+					//( *Iter )->SetPosMap();
 					return TRUE; 
 				}
 			}
@@ -670,29 +668,6 @@ VOID CCharactor::UpdateOtherPlayer()
 	Calcul_MatWorld();
 }
 
-#ifdef _ALPHAMON
-VOID CCharactor::UpdateOtherPlayer2()
-{
-	m_fNetTime += CFrequency::GetInstance()->getFrametime();
-	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
-	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
-	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
-
-	Set_ControlTranslate( 0, m_vLerpControl.x );
-	Set_ControlTranslate( 1, m_vLerpControl.y );
-	Set_ControlTranslate( 2, m_vLerpControl.z );
-	Set_ControlRotate( 1, m_fAngle );
-	Calcul_MatWorld();
-
-	D3DXMATRIXA16 mat;
-	D3DXMatrixIdentity( &mat );
-	if ( CollisionAtk() )
-	{
-		BreakQube(mat);
-	}
-}
-#endif // _ALPHAMON
-
 VOID CCharactor::UpdateMonsterPos( const D3DXVECTOR3& a_vPrePos, const D3DXVECTOR3& a_vPos, const FLOAT a_fAngle )
 {
 	//m_vPreControl = a_vPrePos;
@@ -827,10 +802,11 @@ VOID CCharactor::Render()
 		
 	}
 
+	//m_pModel->Update();
 	m_pModel->Render();
 	
 	if(m_pWeapon)	
-		m_pWeapon->Render( m_pWeapon->Get_MatWorld() * this->Get_MatWorld() );
+		m_pWeapon->Render( /*m_pWeapon->Get_MatWorld() * */this->Get_MatWorld() );
 
 	m_pShadowCell->Set_ControlScale( 0, 10.0f );
 	m_pShadowCell->Set_ControlScale( 2, 10.0f );
@@ -912,6 +888,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			Iter++;
 		}
 #else
+		INT nCount = 0;
 		D3DXVECTOR3 vDir;
 		std::vector<CBoundBox*> * vecBoundBox;
 		std::vector<CBoundBox*>::iterator Iter;
@@ -932,11 +909,6 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 			else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != EnumCubeType::HIDEMEAT )
 			{
-				if ( m_bMonster )
-					vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
-				else
-					vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();	
-
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
 				{
 					Iter = vecBoundBox->begin();
@@ -948,6 +920,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
+						nCount++;
 						vPos = (*Iter)->GetDirection();
 						matTemp._41 = matTemp._42 = matTemp._43 = 0.0f;
 						D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
@@ -956,6 +929,11 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 						vDir = vPos;
 					}
 				}
+			}
+
+			if (nCount > 20)
+			{
+				break;
 			}
 		}
 #endif

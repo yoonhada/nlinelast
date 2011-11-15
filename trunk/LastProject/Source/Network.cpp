@@ -339,8 +339,6 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 
 	CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount : %d\n", wDestroyCount );
 
-	CObjectManage::GetInstance()->Get_AlphaMon()->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
-
 	// 디버깅용 출력
 	//cout << wClientNumber << " : ";
 	//for( WORD i=0; i<cDestroyCount; ++i )

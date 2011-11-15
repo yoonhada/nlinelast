@@ -28,7 +28,6 @@ VOID CLoadScene::Clear()
 	m_pBill = NULL;
 	m_pMyCharactor = NULL;
 	m_pCharactors = NULL;
-	m_pAlphaMon = NULL;
 	m_pAxis = NULL;
 	m_pGrid = NULL;
 	m_pMonster = NULL;
@@ -90,7 +89,6 @@ HRESULT CLoadScene::Release()
 
 	SAFE_DELETE( m_pAxis );
 
-	SAFE_DELETE( m_pAlphaMon );
 
 	SAFE_DELETE_ARRAY( m_pLogo );
 

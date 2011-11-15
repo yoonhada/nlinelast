@@ -95,6 +95,21 @@ VOID CModel::Move()
 	WaitForSingleObject( m_hEvent[3], INFINITE );
 }
 
+UINT CModel::UpdateThread( INT nBegin, INT nEnd )
+{
+	CQube * pQube;
+	for (int i = nBegin; i < nEnd; ++i)
+	{
+		pQube = m_vectorQube[i];
+		if ( pQube != NULL && pQube->GetVisiable() )
+		{
+			pQube->Update( m_pParentBB );
+		}
+	}
+
+	return 0;
+}
+
 UINT CModel::UpdateThread0(LPVOID lp)
 {
 	CModel *pThis = static_cast<CModel *>(lp);
@@ -102,15 +117,7 @@ UINT CModel::UpdateThread0(LPVOID lp)
 	INT nIndexBegin = 0;
 	INT nIndexEnd   = pThis->m_vectorQube.size() / 4;
 
-	CQube * pQube;
-	for (int i = nIndexBegin; i < nIndexEnd; ++i)
-	{
-		pQube = pThis->m_vectorQube[i];
-		if ( pQube != NULL && pQube->GetVisiable() )
-		{
-			pQube->Update( pThis->m_pParentBB );
-		}
-	}
+	pThis->UpdateThread( nIndexBegin, nIndexEnd );
 
 	return 0;
 }
@@ -122,15 +129,7 @@ UINT CModel::UpdateThread1(LPVOID lp)
 	INT nIndexBegin = pThis->m_vectorQube.size() / 4;
 	INT nIndexEnd   = pThis->m_vectorQube.size() / 2;
 
-	CQube * pQube;
-	for (int i = nIndexBegin; i < nIndexEnd; ++i)
-	{
-		pQube = pThis->m_vectorQube[i];
-		if ( pQube != NULL && pQube->GetVisiable() )
-		{
-			pQube->Update( pThis->m_pParentBB );
-		}
-	}
+	pThis->UpdateThread( nIndexBegin, nIndexEnd );
 
 	return 0;
 }
@@ -142,15 +141,7 @@ UINT CModel::UpdateThread2(LPVOID lp)
 	INT nIndexBegin = pThis->m_vectorQube.size() / 2;
 	INT nIndexEnd   = pThis->m_vectorQube.size() / 4 * 3;
 
-	CQube * pQube;
-	for (int i = nIndexBegin; i < nIndexEnd; ++i)
-	{
-		pQube = pThis->m_vectorQube[i];
-		if ( pQube != NULL && pQube->GetVisiable() )
-		{
-			pQube->Update( pThis->m_pParentBB );
-		}
-	}
+	pThis->UpdateThread( nIndexBegin, nIndexEnd );
 
 	return 0;
 }
@@ -162,15 +153,7 @@ UINT CModel::UpdateThread3(LPVOID lp)
 	INT nIndexBegin = pThis->m_vectorQube.size() / 4 * 3;
 	INT nIndexEnd   = pThis->m_vectorQube.size();
 
-	CQube * pQube;
-	for (int i = nIndexBegin; i < nIndexEnd; ++i)
-	{
-		pQube = pThis->m_vectorQube[i];
-		if ( pQube != NULL && pQube->GetVisiable() )
-		{
-			pQube->Update( pThis->m_pParentBB );
-		}
-	}
+	pThis->UpdateThread( nIndexBegin, nIndexEnd );
 
 	return 0;
 }

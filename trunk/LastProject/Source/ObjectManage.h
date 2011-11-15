@@ -44,11 +44,6 @@ public:
 		return m_iClientNumber;
 	}
 
-	CCharactor* Get_AlphaMon()
-	{
-		return m_pAlphaMon;
-	}
-
 	CMonster* Get_Monster()
 	{
 		return m_pMonster;
@@ -85,11 +80,6 @@ public:
 		m_ppCharactorList = a_ppCharactorList;
 	}
 
-	VOID Set_pAlphaMon( CCharactor* a_pAlphaMon )
-	{
-		m_pAlphaMon = a_pAlphaMon;
-	}
-
 	VOID Set_Monster( CMonster* a_pMonster )
 	{
 		m_pMonster = a_pMonster;
@@ -106,7 +96,6 @@ private:
 	CCharactor* m_pMyCharactor;
 	CCharactor* m_pCharactors;
 	CMonster* m_pMonster;
-	CCharactor* m_pAlphaMon;
 
 	CCharactor** m_ppCharactorList;
 
