@@ -58,6 +58,7 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 	{
 		m_pBox[LoopBox].Create( m_pD3dDevice );
 		m_pBox[LoopBox].CreateWeapon( CWeapon::NONE );
+		m_pBox[LoopBox].Set_MonsterPart( LoopBox );
 	}
 
 	//m_pBoundBox = new CBoundBox(&m_pBox[2]);

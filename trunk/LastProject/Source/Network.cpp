@@ -3,6 +3,7 @@
 #include "Network.h"
 #include "Packet.h"
 #include "Charactor.h"
+#include "Monster.h"
 //#include "Frequency.h"
 
 
@@ -189,14 +190,10 @@ VOID CNetwork::scNEWUSER( CPacket& a_pk )
 	WORD wNumber;
 	a_pk.Read( &wNumber );
 
-	for( INT Loop=0; Loop<3; ++Loop )
+	if( CObjectManage::GetInstance()->Get_Charactors()[wNumber].Get_Active() == FALSE )
 	{
-		if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
-		{
-			CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
-			CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( wNumber );
-			break;
-		}
+		CObjectManage::GetInstance()->Get_Charactors()[wNumber].Set_Active( TRUE );
+		CObjectManage::GetInstance()->Get_Charactors()[wNumber].Set_ClientNumber( wNumber );
 	}
 
 	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
@@ -223,14 +220,10 @@ VOID CNetwork::scInitData( CPacket& a_pk )
 	{
 		a_pk.Read( &user_list );
 
-		for( INT Loop=0; Loop<3; ++Loop )
+		if( CObjectManage::GetInstance()->Get_Charactors()[user_list].Get_Active() == FALSE )
 		{
-			if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_Active() == FALSE )
-			{
-				CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_Active( TRUE );
-				CObjectManage::GetInstance()->Get_Charactors()[Loop].Set_ClientNumber( user_list );
-				break;
-			}
+			CObjectManage::GetInstance()->Get_Charactors()[user_list].Set_Active( TRUE );
+			CObjectManage::GetInstance()->Get_Charactors()[user_list].Set_ClientNumber( user_list );
 		}
 	}
 }
@@ -307,7 +300,7 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 		sendPk.Write( a_pList[i] );
 		//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", pList[i] );
 	}
-	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", a_wDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"Send Part:cDestroyCount : %d : %d\n", a_cDestroyPart, a_wDestroyCount );
 
 	sendPk.CalcSize();
 
@@ -334,10 +327,12 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	for( WORD i=0; i<wDestroyCount; ++i )
 	{
 		a_pk.Read( &wList[i] );
-		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount : %d\n", wDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
+
+	CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[cDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 
 	// 디버깅용 출력
 	//cout << wClientNumber << " : ";
@@ -352,7 +347,7 @@ VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_CS_UTOM_ATTACK;
+	WORD wMsgID = MSG_CS_UTOM_ATTACK_ANIMATION;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -428,6 +423,10 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	// 유저 접속 종료
 	case MSG_SC_DISCONNECT:
 		SC_DISCONNECT( a_pk );
+		break;
+
+	case MSG_SC_UTOM_ATTACK_ANIMATION:
+		SC_UTOM_Attack_Animation( a_pk );
 		break;
 	}
 }

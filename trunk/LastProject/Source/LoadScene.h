@@ -26,32 +26,6 @@ public:
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
-
-	CCamera* m_pCamera;
-	CGrid* m_pGrid;
-	CCharactor* m_pCharactors;
-	CCharactor* m_pMyCharactor;
-	CMonster* m_pMonster;
-	CLight* m_pLight;
-
-	CCharactor* m_pCharactorList[4];
-
-	Map* m_pMap;
-	TileMap* m_pTileMap;
-
-
-	INT m_iMaxCharaNum;
-
-	CBillBoard* m_pBill;
-	Axis* m_pAxis;
-
-	VOID CreateCharactor();
-
-	BOOL m_bHost;
-	WORD m_iClientNumber;
-
-	//로고
-	CCharactor* m_pLogo;
 };
 
 #endif

@@ -18,33 +18,6 @@ class CShadowCell;
 
 class COctTree2Array;
 
-//class MatrixMult
-//{
-//public:
-//	MatrixMult( std::vector< CCharCube* > a_pVectorCube, 
-//				const D3DXMATRIXA16& a_matChara, 
-//				const INT a_iSelectedFrame ) : m_pVectorCube(a_pVectorCube)
-//				,m_matChara(a_matChara)
-//				,m_iSelectedFrame(a_iSelectedFrame) {}
-//
-//public:
-//	void operator()( const blocked_range<size_t>& r ) const
-//	{
-//		for( size_t i=r.begin(); i!=r.end(); ++i )
-//		{
-//			if( m_pVectorCube[i] != NULL )
-//			{
-//				m_pVectorCube[i]->Set_Matrix( m_iSelectedFrame, m_pVectorCube[i]->Get_Matrix( m_iSelectedFrame ) * m_matChara ) ;
-//			}
-//		}
-//	}
-//
-//private:
-//	D3DXMATRIXA16 m_matChara;
-//	std::vector< CCharCube* > m_pVectorCube;
-//	INT m_iSelectedFrame;
-//};
-
 /**
 	@class	CCharactor
 	@date	2011/09/20
@@ -158,6 +131,11 @@ public:
 
 	VOID RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir );
 
+	VOID Set_MonsterPart( CHAR a_chMonsterPart )
+	{
+		m_chMonsterPart = a_chMonsterPart;
+	}
+
 private:
 	VOID _LoadRelease();
 	VOID _SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor );
@@ -171,6 +149,7 @@ private:
 
 	WORD m_iClientNumber;
 	BOOL m_bActive;
+	CHAR m_chMonsterPart; ///< 몬스터 어느 부위인지
 
 	INT m_iSelectedFrameNum;
 	INT m_iMaxCubeCount;

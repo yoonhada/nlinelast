@@ -59,9 +59,9 @@ HRESULT CSceneManage::Release()
 
 UINT WINAPI CSceneManage::ThreadFunc(LPVOID lParam)
 {
-	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading Start**" );
+	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading Start**\n" );
 	GetInstance()->m_pNextScene->Create( GetInstance()->m_pD3dDevice );
-	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading End**" );
+	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading End**\n" );
 
 	return 0;
 }
@@ -79,7 +79,7 @@ BOOL CSceneManage::OrderChangeScene( IScene* a_pScene )
 	m_hThread = (HANDLE)_beginthreadex(NULL, 0, ThreadFunc, NULL, 0, &m_uiThreadID);
 	if(m_hThread == 0)
 	{
-		MessageBox(NULL, L"Create Thread Error",NULL, MB_OK);
+		MessageBox(NULL, L"Create SceneManage Thread Error",NULL, MB_OK);
 	}
 	//CloseHandle(m_hThread);
 

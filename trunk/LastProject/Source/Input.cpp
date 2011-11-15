@@ -23,7 +23,6 @@ CInput::~CInput()
 
 VOID CInput::Clear()
 {
-	m_pD3dDevice		= NULL;
 	m_hWnd				= NULL;
 	m_vRotate = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vPos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
@@ -42,9 +41,8 @@ VOID CInput::Clear()
 }
 
 
-HRESULT CInput::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, HWND a_hWnd )
+HRESULT CInput::Create( HWND a_hWnd )
 {
-	m_pD3dDevice= a_pD3dDevice;
 
 	m_hWnd		= a_hWnd;
 
@@ -139,7 +137,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 					PostMessage( m_hWnd, WM_DESTROY, NULL, NULL );
 				}
 
-				if ( GetAsyncKeyState( VK_LBUTTON ) /*& 0x0001*/ )
+				if ( GetAsyncKeyState( VK_LBUTTON ) & 0x0001 )
 				{
 					m_bLbutton = TRUE;
 				}
@@ -148,7 +146,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 					m_bLbutton = FALSE;
 				}
 
-				if ( GetAsyncKeyState( VK_RBUTTON ) /*& 0x0001*/ )
+				if ( GetAsyncKeyState( VK_RBUTTON ) & 0x0001 )
 				{
 					m_bRbutton = TRUE;
 				}

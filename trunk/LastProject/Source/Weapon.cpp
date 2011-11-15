@@ -323,9 +323,6 @@ VOID CWeapon::Update()
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{
-		//네트워크로 현재 애니메이션 상태 보내기
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
-
 		
 
 		//타격설정
@@ -350,7 +347,7 @@ VOID CWeapon::Update()
 
 	UpdateSRT();
 
-	CDebugConsole::GetInstance()->Messagef(L"%d-%d\n", m_nState, nCurrFrame);
+	//CDebugConsole::GetInstance()->Messagef(L"%d-%d\n", m_nState, nCurrFrame);
 }
 
 VOID CWeapon::UpdateSRT()
