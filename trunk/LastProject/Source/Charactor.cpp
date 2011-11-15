@@ -1185,4 +1185,5 @@ HRESULT CCharactor::InitTexture( DWORD a_Color, DWORD a_OutLineColor )
 	}
 
 	return S_OK;
+	//
 }
