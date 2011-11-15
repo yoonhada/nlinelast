@@ -1,6 +1,8 @@
 #ifndef _MainScene_H_
 #define _MainScene_H_
 
+#define _ALPHAMON
+
 #include "Scene.h"
 
 class CMonster;
@@ -42,8 +44,6 @@ private:
 
 	Map* m_pMap;
 	TileMap* m_pTileMap;
-
-	CCharactor* m_pAlphaMon;
 
 	INT m_iMaxCharaNum;
 

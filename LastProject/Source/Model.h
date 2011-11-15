@@ -49,4 +49,6 @@ public:
 	static UINT WINAPI UpdateThread1(LPVOID lp);
 	static UINT WINAPI UpdateThread2(LPVOID lp);
 	static UINT WINAPI UpdateThread3(LPVOID lp);
+	
+	UINT UpdateThread( INT nBegin, INT nEnd );
 };

@@ -11,13 +11,11 @@
 #include "TileMap.h"
 #include "Seek.h"
 
-#define _ALPHAMON
 // AI 테스트용
 #ifdef _DEBUG
 #include "Seek.h"
 #endif
 
-//#define _ALPHAMON
 
 CMainScene::CMainScene()
 {
@@ -37,7 +35,6 @@ VOID	CMainScene::Clear()
 	m_pBill = NULL;
 	m_pMyCharactor = NULL;
 	m_pCharactors = NULL;
-	m_pAlphaMon = NULL;
 	m_pAxis = NULL;
 	m_pGrid = NULL;
 	m_pMonster = NULL;
@@ -90,14 +87,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	//몬스터 생성
 	m_pMonster = new CMonster;
 	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
-
-#ifdef _ALPHAMON
-	m_pAlphaMon = new CCharactor;
-	m_pAlphaMon->Create( m_pD3dDevice );
-	m_pAlphaMon->Load( L"Data/CharData/35box.csav" );
-	m_pAlphaMon->Set_Position( D3DXVECTOR3(-100.0f, 0.0f, 0.0f) );
-	CTree::GetInstance()->GetCharVector()->push_back( m_pAlphaMon->GetBoundBox() );
-#endif
 
 	//조명 생성
 	m_pLight = new CLight;
@@ -168,7 +157,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	CObjectManage::GetInstance()->Set_MyCharactor( m_pMyCharactor );
 	CObjectManage::GetInstance()->Set_Charactors( m_pCharactors );
 	CObjectManage::GetInstance()->Set_CharactorList( m_pCharactorList );
-	CObjectManage::GetInstance()->Set_pAlphaMon( m_pAlphaMon );
 
 	return S_OK;
 }
@@ -193,7 +181,6 @@ HRESULT CMainScene::Release()
 
 	SAFE_DELETE( m_pAxis );
 
-	SAFE_DELETE( m_pAlphaMon );
 
 	SAFE_DELETE_ARRAY( m_pLogo );
 
@@ -311,14 +298,9 @@ VOID	CMainScene::Update()
 		//다른 플레이어는 값으로 이동
 		//if( m_pCharactors[Loop].Get_Active() )
 		//{
-			//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
-			m_pCharactors[Loop].UpdateOtherPlayer();
-			if ( m_pCharactors[Loop].CollisionAtk( ) )
-			{
-				m_pCharactors[Loop].BreakQube( mat );
-			}
-
-			m_pCharactors[Loop].Update();
+		//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
+		m_pCharactors[Loop].UpdateOtherPlayer();
+		m_pCharactors[Loop].Update();
 		//}
 	}
 
@@ -358,21 +340,13 @@ VOID	CMainScene::Update()
 		//TimeElapsed = 0.0f;
 	//}
 
-#ifdef _ALPHAMON
-	m_pAlphaMon->SetMon(TRUE);
-	m_pAlphaMon->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
-	m_pAlphaMon->UpdateOtherPlayer2( );
-	m_pAlphaMon->SetMon(FALSE);
-	//m_pAlphaMon->Update();
-#endif
-
 	m_pMonster->Update();
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 
-	if( CInput::GetInstance()->Get_Rbutton() )
-	{
-		//m_pMonster->Set_iSelectedFrameNum( 1 );
-	}
+	//if( CInput::GetInstance()->Get_Rbutton() )
+	//{
+	//	//m_pMonster->Set_iSelectedFrameNum( 1 );
+	//}
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 
@@ -419,9 +393,6 @@ VOID	CMainScene::Render()
 	{
 		m_pLogo[Loop].Render();
 	}*/
-#ifdef _ALPHAMON
-	//m_pAlphaMon->Render();
-#endif
 
 	m_pMonster->Render();
 
