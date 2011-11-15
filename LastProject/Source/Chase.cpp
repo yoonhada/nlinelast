@@ -16,16 +16,16 @@ Chase* Chase::GetInstance()
 }
 
 
-VOID Chase::Enter( CMonster* pMonster )
+VOID Chase::Enter( CMonster* a_pMonster )
 {
-	m_pCurrentPath = pMonster->Get_Path();
-	m_vPos = pMonster->Get_Pos();
+	m_pCurrentPath = a_pMonster->Get_Path();
+	m_vPos = a_pMonster->Get_Pos();
 	m_iCurrentX = INT( m_vPos.x + 510.0f ) / 10;
 	m_iCurrentZ = INT( m_vPos.z + 510.0f ) / 10;
 }
 
 
-VOID Chase::Execute( CMonster* pMonster )
+VOID Chase::Execute( CMonster* a_pMonster )
 {
 /*
 	if( (INT)pMonster->Get_Pos().x != (INT)pMonster->Get_TargetPos().x && 
@@ -67,16 +67,16 @@ VOID Chase::Execute( CMonster* pMonster )
 		m_pCurrentPath = m_pCurrentPath->next;
 		if( m_pCurrentPath->next == NULL )
 		{
-			pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+			a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
 		}
 		else
 		{
 			// 다음 위치로 몬스터 각을 맞춘다.
 			FLOAT fDegree = GetDegree();
-			pMonster->Set_Angle( D3DXToRadian( fDegree - 90.0f ) );
+			a_pMonster->Set_Angle( D3DXToRadian( fDegree - 90.0f ) );
 
 			// 다음 Path 설정
-			m_vPos = pMonster->Get_Pos();
+			m_vPos = a_pMonster->Get_Pos();
 		}
 	}
 	else
@@ -87,12 +87,12 @@ VOID Chase::Execute( CMonster* pMonster )
 										   -510.0f + 10.0f * m_pCurrentPath->y + 5.0f );
 
 		D3DXVec3Lerp( &Pos, &m_vPos, &NextPos, t / 0.25f );
-		pMonster->Set_Pos( Pos );
+		a_pMonster->Set_Pos( Pos );
 	}
 }
 
 
-VOID Chase::Exit( CMonster* pMonster )
+VOID Chase::Exit( CMonster* a_pMonster )
 {
 
 }
@@ -113,10 +113,10 @@ FLOAT Chase::GetDegree()
 }
 
 
-BOOL Chase::isArrive( CMonster* pMonster )
+BOOL Chase::isArrive( CMonster* a_pMonster )
 {
-	INT iX = static_cast<INT>( pMonster->Get_Pos().x );
-	INT iZ = static_cast<INT>( pMonster->Get_Pos().z );
+	INT iX = static_cast<INT>( a_pMonster->Get_Pos().x );
+	INT iZ = static_cast<INT>( a_pMonster->Get_Pos().z );
 
 	return TRUE;
 }

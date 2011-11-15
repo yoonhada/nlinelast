@@ -15,17 +15,17 @@ LockOn* LockOn::GetInstance()
 }
 
 
-VOID LockOn::Enter( CMonster* pMonster )
+VOID LockOn::Enter( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID LockOn::Execute( CMonster* pMonster )
+VOID LockOn::Execute( CMonster* a_pMonster )
 {
 	// 좌표 받아오기
-	D3DXVECTOR3 vPlayerPos	= CObjectManage::GetInstance()->Get_CharactorList()[pMonster->Get_Target()]->Get_CharaPos();
-	D3DXVECTOR3 vMonsterPos	= pMonster->Get_Pos();
+	D3DXVECTOR3 vPlayerPos	= CObjectManage::GetInstance()->Get_CharactorList()[a_pMonster->Get_Target()]->Get_CharaPos();
+	D3DXVECTOR3 vMonsterPos	= a_pMonster->Get_Pos();
 
 	// 이웃변
 	FLOAT x = vPlayerPos.x - vMonsterPos.x;
@@ -74,27 +74,27 @@ VOID LockOn::Execute( CMonster* pMonster )
 
 	// 몬스터 각 ( +x축이 0도, CW가 +각도 )
 	static FLOAT fMonsterAngle = 0.0f;
-	fMonsterAngle = pMonster->Get_Angle() * 180.0f / D3DX_PI;
+	fMonsterAngle = a_pMonster->Get_Angle() * 180.0f / D3DX_PI;
 	CDebugInterface::GetInstance()->AddMessageFloat( "Monster_Angle", fMonsterAngle );
 
 	static D3DXVECTOR3 vRot = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	//vRot.y
 	if( fMonsterAngle != fAngle )
 	{
-		pMonster->Set_Angle( D3DXToRadian( 270.0f - fAngle )  );
+		a_pMonster->Set_Angle( D3DXToRadian( 270.0f - fAngle )  );
 //		D3DXVec2Lerp(
 	}
 	
 	// 공격 각도내에 들어왔으면
 	if( 1 )
 	{
-		pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
 
 }
 
 
-VOID LockOn::Exit( CMonster* pMonster )
+VOID LockOn::Exit( CMonster* a_pMonster )
 {
 
 }

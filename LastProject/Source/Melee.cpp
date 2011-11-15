@@ -14,21 +14,21 @@ Melee* Melee::GetInstance()
 }
 
 
-VOID Melee::Enter( CMonster* pMonster )
+VOID Melee::Enter( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID Melee::Execute( CMonster* pMonster )
+VOID Melee::Execute( CMonster* a_pMonster )
 {
-	pMonster->ChangeAnimation( 2 );
+	a_pMonster->ChangeAnimation( 2 );
 
-	pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
+	a_pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
 }
 
 
-VOID Melee::Exit( CMonster* pMonster )
+VOID Melee::Exit( CMonster* a_pMonster )
 {
 
 }

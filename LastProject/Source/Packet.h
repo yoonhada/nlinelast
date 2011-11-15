@@ -14,19 +14,19 @@ public:
 	CPacket();
 	~CPacket();
 
-	VOID	Copy( CHAR* pData, INT nSize );
+	VOID	Copy( CHAR* a_pData, INT a_nSize );
 
 	VOID	Rewind()	{ m_BuffPoint = 0; }
 	CHAR*	GetBuff()	{ return m_Buff; }
 	INT		GetLength()	{ return m_DataSize; }
 
-	BOOL	ReadString( CHAR* pOut, WORD wMaxSize );	// wMaxSize : pOut의 최대크기
-	BOOL	WriteString( CHAR* pData, WORD wSize );
+	BOOL	ReadString( CHAR* a_pOut, WORD a_wMaxSize );	// wMaxSize : pOut의 최대크기
+	BOOL	WriteString( CHAR* a_pData, WORD a_wSize );
 	VOID	CalcSize();
 
 
 	template<typename T>
-	BOOL Read( T* a )
+	BOOL Read( T* a_pDest )
 	{
 		INT nSize = sizeof( T );
 		INT remainedData = m_DataSize - m_BuffPoint;
@@ -35,7 +35,7 @@ public:
 			return FALSE;
 		}
 
-		memcpy( a, m_Buff + m_BuffPoint, sizeof( T ) );
+		memcpy( a_pDest, m_Buff + m_BuffPoint, sizeof( T ) );
 		m_BuffPoint += sizeof( T );
 
 		return TRUE;
@@ -43,7 +43,7 @@ public:
 
 
 	template<typename T>
-	BOOL Write( T a )
+	BOOL Write( T a_Src )
 	{
 		INT remained = PACKET_SIZE - m_BuffPoint;
 		INT nSize = sizeof( T );
@@ -52,7 +52,7 @@ public:
 			return FALSE;
 		}
 
-		memcpy( m_Buff + m_BuffPoint, &a, nSize );
+		memcpy( m_Buff + m_BuffPoint, &a_Src, nSize );
 		m_BuffPoint += nSize;
 		m_DataSize += nSize;
 

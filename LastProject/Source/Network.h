@@ -64,34 +64,34 @@ public:
 	BOOL CreateSocket();
 	VOID Close();
 
-	BOOL ConnectToServer( CHAR* szIP, WORD Port );
+	BOOL ConnectToServer( CHAR* a_szIP, WORD a_wPort );
 
-	VOID scLOGON( CPacket& pk );
-	VOID scInitData( CPacket& pk );
-	VOID scCHAT( CPacket& pk );
-	VOID scMOVE( CPacket& pk );
-	VOID scNEWUSER( CPacket& pk );
-	VOID SC_UTOM_ATTACK( CPacket& pk );
-	VOID SC_DISCONNECT( CPacket& pk );
+	VOID scLOGON( CPacket& a_pk );
+	VOID scInitData( CPacket& a_pk );
+	VOID scCHAT( CPacket& a_pk );
+	VOID scMOVE( CPacket& a_pk );
+	VOID scNEWUSER( CPacket& a_pk );
+	VOID SC_UTOM_ATTACK( CPacket& a_pk );
+	VOID SC_DISCONNECT( CPacket& a_pk );
 
 	VOID SC_UTOM_Attack_Animation( CPacket& a_pk );
 
 	VOID csLOGON();
 	VOID csCHAT();
-	VOID csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle );
-	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& pList, D3DXVECTOR3 vDirection );
+	VOID csMOVE( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
+	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection );
 
 	VOID CS_UTOM_Attack_Animation( WORD a_wAnimationNumber );
 	
 
 	VOID Update();
 
-	BOOL SendToServer( CPacket& pk );
+	BOOL SendToServer( CPacket& a_pk );
 
-	VOID InsertPacket( CPacket& pk );
-	VOID ProcessPacket( CPacket& pk );
+	VOID InsertPacket( CPacket& a_pk );
+	VOID ProcessPacket( CPacket& a_pk );
 
-	friend static UINT WINAPI RecvThread( LPVOID p );
+	friend static UINT WINAPI RecvThread( LPVOID a_p );
 };
 
 

@@ -14,21 +14,21 @@ Spin* Spin::GetInstance()
 }
 
 
-VOID Spin::Enter( CMonster* pMonster )
+VOID Spin::Enter( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID Spin::Execute( CMonster* pMonster )
+VOID Spin::Execute( CMonster* a_pMonster )
 {
-	pMonster->ChangeAnimation( 1 );
+	a_pMonster->ChangeAnimation( 1 );
 
-	pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
+	a_pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
 }
 
 
-VOID Spin::Exit( CMonster* pMonster )
+VOID Spin::Exit( CMonster* a_pMonster )
 {
 
 }

@@ -10,8 +10,8 @@ class LockOn : public State<CMonster>
 private:
 	LockOn(){}
 
-	LockOn( const LockOn& rhs );
-	LockOn& operator=( const LockOn& rhs );
+	LockOn( const LockOn& a_rhs );
+	LockOn& operator=( const LockOn& a_rhs );
 
 
 public:
@@ -19,9 +19,9 @@ public:
 
 	static LockOn* GetInstance();
 
-	virtual VOID Enter( CMonster* pMonster );
-	virtual VOID Execute( CMonster* pMonster );
-	virtual VOID Exit( CMonster* pMonster );
+	virtual VOID Enter( CMonster* a_pMonster );
+	virtual VOID Execute( CMonster* a_pMonster );
+	virtual VOID Exit( CMonster* a_pMonster );
 };
 
 

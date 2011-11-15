@@ -10,8 +10,8 @@ class Spin : public State<CMonster>
 private:
 	Spin(){}
 
-	Spin( const Spin& rhs );
-	Spin& operator=( const Spin& rhs );
+	Spin( const Spin& a_rhs );
+	Spin& operator=( const Spin& a_rhs );
 
 
 public:
@@ -19,9 +19,9 @@ public:
 
 	static Spin* GetInstance();
 
-	virtual VOID Enter( CMonster* pMonster );
-	virtual VOID Execute( CMonster* pMonster );
-	virtual VOID Exit( CMonster* pMonster );
+	virtual VOID Enter( CMonster* a_pMonster );
+	virtual VOID Execute( CMonster* a_pMonster );
+	virtual VOID Exit( CMonster* a_pMonster );
 };
 
 
