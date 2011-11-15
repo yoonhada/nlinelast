@@ -57,6 +57,11 @@ public:
 	FLOAT Get_Angle()						{ return m_fAngle; }
 	PathNode* Get_Path()					{ return m_pPath; }
 
+	CCharactor* Get_MonsterPart()
+	{
+		return m_pBox;
+	}
+
 
 private:
 	VOID AniInterpolation();

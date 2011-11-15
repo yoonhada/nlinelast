@@ -95,6 +95,7 @@ private:
 
 	CCharactor* m_pMyCharactor;
 	CCharactor* m_pCharactors;
+	CCharactor* m_pCharactorList[4];
 	CMonster* m_pMonster;
 
 	CCharactor** m_ppCharactorList;

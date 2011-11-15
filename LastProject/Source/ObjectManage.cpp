@@ -9,6 +9,7 @@
 #include "ObjectManage.h"
 
 #include "Charactor.h"
+#include "Monster.h"
 
 CObjectManage::CObjectManage()
 {
@@ -37,6 +38,15 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pMyCharactor = new CCharactor;
 
 	m_pCharactors = new CCharactor[m_iMaxCharaNum];
+
+	m_pCharactorList[0] = m_pMyCharactor;
+	m_pCharactorList[1] = &m_pCharactors[0];
+	m_pCharactorList[2] = &m_pCharactors[1];
+	m_pCharactorList[3] = &m_pCharactors[2];
+
+	Set_CharactorList( m_pCharactorList );
+
+	m_pMonster = new CMonster;
 	
 	return S_OK;
 }
@@ -46,6 +56,7 @@ HRESULT CObjectManage::Release()
 
 	SAFE_DELETE(m_pMyCharactor);
 	SAFE_DELETE_ARRAY(m_pCharactors);
+	SAFE_DELETE(m_pMonster);
 
 	return S_OK;
 }

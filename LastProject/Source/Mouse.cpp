@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "Mouse.h"
 
-void Mouse::Initialize()
+void Mouse::Initialize( HWND a_hWnd )
 {
+	m_hWnd = a_hWnd;
 	GetClientRect(m_hWnd,&m_rt);
 }
 void Mouse::Update()

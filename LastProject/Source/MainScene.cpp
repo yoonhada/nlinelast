@@ -78,14 +78,9 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//캐릭터 생성
 	CreateCharactor();
-	m_pCharactorList[0] = m_pMyCharactor;
-	m_pCharactorList[1] = &m_pCharactors[0];
-	m_pCharactorList[2] = &m_pCharactors[1];
-	m_pCharactorList[3] = &m_pCharactors[2];
-
 
 	//몬스터 생성
-	m_pMonster = new CMonster;
+	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
 
 	//조명 생성
@@ -154,9 +149,10 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	CDebugConsole::GetInstance()->Messagef( L"**** Create End **** \n\n" );
 
-	CObjectManage::GetInstance()->Set_MyCharactor( m_pMyCharactor );
-	CObjectManage::GetInstance()->Set_Charactors( m_pCharactors );
-	CObjectManage::GetInstance()->Set_CharactorList( m_pCharactorList );
+	//CObjectManage::GetInstance()->Set_MyCharactor( m_pMyCharactor );
+	//CObjectManage::GetInstance()->Set_Charactors( m_pCharactors );
+	//CObjectManage::GetInstance()->Set_CharactorList( m_pCharactorList );
+	//CObjectManage::GetInstance()->Set_pAlphaMon( m_pAlphaMon );
 
 	return S_OK;
 }
@@ -171,7 +167,7 @@ HRESULT CMainScene::Release()
 
 	//SAFE_DELETE_ARRAY( m_pCharactors );
 
-	SAFE_DELETE( m_pMonster );
+	//SAFE_DELETE( m_pMonster );
 
 	SAFE_DELETE ( m_pMap );
 
@@ -236,9 +232,9 @@ VOID CMainScene::CreateCharactor()
 	}
 
 	// 인풋 업데이트
-	FLOAT fMoveSpeed = 50.0f;
-	FLOAT fRotateSpeed = 150.0f; 
-	CInput::GetInstance()->Update( fMoveSpeed, fRotateSpeed, CFrequency::GetInstance()->getFrametime() );
+	//FLOAT fMoveSpeed = 50.0f;
+	//FLOAT fRotateSpeed = 150.0f; 
+	//CInput::GetInstance()->Update( fMoveSpeed, fRotateSpeed, CFrequency::GetInstance()->getFrametime() );
 }
 
 VOID	CMainScene::Update()
@@ -267,9 +263,6 @@ VOID	CMainScene::Update()
 	//		//m_CharEdit.Load( OFN.lpstrFile );
 	//	}
 	//}
-
-	//인풋 업데이트
-	CInput::GetInstance()->Update( 50.0f, 150.0f, CFrequency::GetInstance()->getFrametime() );
 
 	// 캐릭터: 인풋 값 받아오기
 	m_pMyCharactor->UpdateByInput();
@@ -300,7 +293,7 @@ VOID	CMainScene::Update()
 		//{
 		//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
 		m_pCharactors[Loop].UpdateOtherPlayer();
-		m_pCharactors[Loop].Update();
+		//m_pCharactors[Loop].Update();
 		//}
 	}
 

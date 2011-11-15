@@ -60,6 +60,7 @@
 #include "Physics.h"
 #include "TextureManage.h"
 #include "Input.h"
+#include "Mouse.h"
 #include "DebugInterface.h"
 #include "Network.h"
 #include "Astar.h"

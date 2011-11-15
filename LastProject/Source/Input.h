@@ -18,7 +18,7 @@ public:
 	virtual ~CInput();
 
 	VOID Clear();
-	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, HWND a_hWnd );
+	HRESULT Create( HWND a_hWnd );
 	HRESULT Release();
 
 	VOID Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed, FLOAT a_fFrameTime );
@@ -87,7 +87,6 @@ public:
 	}
 
 private:
-	LPDIRECT3DDEVICE9 m_pD3dDevice;
 	HWND			  m_hWnd;					///< 윈도우 핸들
 
 	POINT		m_MousePos;						///< 현재 마우스 위치
@@ -98,6 +97,7 @@ private:
 	FLOAT		m_fYRotate;
 	FLOAT		m_fXRotate;
 	BOOL		m_bLbutton;						///< 왼쪽 버튼
+	BOOL		m_bLbuttonCheck;
 	BOOL		m_bRbutton;						///< 오른쪽 버튼
 	BOOL		m_bENdbutton;
 	BOOL		m_bHomebutton;

@@ -5,7 +5,8 @@
 
 VOID GUI::Initialize()
 {
-	m_pMouse			= new Mouse( m_hWnd );
+	m_pMouse			= new Mouse;
+	m_pMouse->Initialize( m_hWnd );
 	m_pGUIBtnManager	= new GUIBtnManager( m_pd3dDevice );
 }
 

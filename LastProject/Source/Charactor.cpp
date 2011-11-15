@@ -75,6 +75,8 @@ VOID CCharactor::Clear()
 
 	m_fAniAngleY = 0.0f;
 	m_fAniAngleAttack = 0.0f;
+
+	m_chMonsterPart = 0;
 }
 
 //HRESULT CCharactor::Create()
@@ -641,8 +643,8 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		m_fPreAngle -= DEG2RAD( 360.0f );
 	}
 
-	CDebugInterface::GetInstance()->AddMessageFloat( "PreAngle", m_fPreAngle  );
-	CDebugInterface::GetInstance()->AddMessageFloat( "NowAngle", m_fAngle  );
+	//CDebugInterface::GetInstance()->AddMessageFloat( "PreAngle", m_fPreAngle  );
+	//CDebugInterface::GetInstance()->AddMessageFloat( "NowAngle", m_fAngle  );
 	//CDebugConsole::GetInstance()->Messagef( L"Pre Angle : %f , Now Angle : %f \n", m_fPreAngle, m_fAngle );
 
 	m_vPreControl.y = m_fPreAngle;
@@ -664,7 +666,8 @@ VOID CCharactor::UpdateOtherPlayer()
 	Set_ControlTranslate( 0, m_vLerpControl.x );
 	//Set_ControlTranslate( 1, m_vLerpControl.y );
 	Set_ControlTranslate( 2, m_vLerpControl.z );
-	Set_ControlRotate( 1, m_vLerpControl.y );
+	//Set_ControlRotate( 1, m_vLerpControl.y );
+	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
 }
 
@@ -758,10 +761,14 @@ VOID CCharactor::Update()
 		if ( CInput::GetInstance()->Get_Lbutton() )
 		{
 			m_pWeapon->SetKeyA();
+			//네트워크로 현재 애니메이션 상태 보내기
+			CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_pWeapon->Get_nState() );
 		}
 		if ( CInput::GetInstance()->Get_Rbutton() )
 		{
 			m_pWeapon->SetKeyB();
+			//네트워크로 현재 애니메이션 상태 보내기
+			CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_pWeapon->Get_nState() );
 		}
 
 		m_pWeapon->Update();
@@ -937,7 +944,10 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 		}
 #endif
-		CNetwork::GetInstance()->CS_UTOM_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
+		if( m_bMonster && NetworkSendTempVector.size() != 0 )
+		{
+			CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
+		}
 		NetworkSendTempVector.clear();
 	}
 }

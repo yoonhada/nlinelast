@@ -52,9 +52,15 @@ private:
 	BOOL m_bReSizing;	 ///< 리사이징
 	BOOL m_bFirstRun;	 ///< 처음 실행
 
+	UINT m_uiThreadID;	 ///< 쓰레드
+	HANDLE m_hThread;	 ///< 쓰레드
+	BOOL m_bThreadEndCheck; ///< 쓰레드 종료 체크
+
 private:
 	static VOID Update();
 	static VOID Render();
+
+	static UINT WINAPI InputThread(LPVOID lParam);
 
 	ATOM MyRegisterClass(HINSTANCE hInstance);	///< 윈도우 클래스 등록
 	BOOL InitInstance(HINSTANCE, INT);

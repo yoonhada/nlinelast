@@ -3,8 +3,9 @@
 #ifndef _MOUSE_H_
 #define _MOUSE_H_
 
-class Mouse	//한번만 누르는건 구현이 되지 않았음 & 0x8001 을 쓰면 되겟는데 함수 이름은 뭘로? LButton One Click? 이상해...
+class Mouse	: public CSingleton<Mouse> //한번만 누르는건 구현이 되지 않았음 & 0x8001 을 쓰면 되겟는데 함수 이름은 뭘로? LButton One Click? 이상해...
 {
+	friend class CSingleton<Mouse>;
 private:
 	HWND		m_hWnd;
 
@@ -16,16 +17,15 @@ private:
 	POINT		m_pt;
 	
 public:
-	Mouse(HWND a_hWnd) : m_hWnd(a_hWnd)
+	Mouse()
 	{
 		m_bLKeyUp			= true;
 		m_bLKeyDown			= false;
 		m_bLDrag			= false;
-		this->Initialize();	
 	}
 	~Mouse(){}
 
-	void Initialize();
+	void Initialize( HWND a_hWnd );
 	void Update();
 
 	bool LButton_Up();
