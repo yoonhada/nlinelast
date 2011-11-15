@@ -77,9 +77,9 @@ VOID Astar::clearMap()
 }
 
 
-VOID Astar::setPath( INT sx, INT sy, INT ex, INT ey, PathNode* path )
+VOID Astar::setPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy, PathNode* a_pPath )
 {
-	PathNode* temp = path;
+	PathNode* temp = a_pPath;
 
 	while( temp != NULL )
 	{
@@ -87,19 +87,19 @@ VOID Astar::setPath( INT sx, INT sy, INT ex, INT ey, PathNode* path )
 		temp = temp->next;
 	}
 
-	m_Map[sx][sy].map = 10;
-	m_Map[ex][ey].map = 20;
+	m_Map[a_iSx][a_iSy].map = 10;
+	m_Map[a_iEx][a_iEy].map = 20;
 }
 
 
-BOOL Astar::isLoad( INT x, INT y )
+BOOL Astar::isLoad( INT a_iX, INT a_iY )
 {
-	if( x < 0 || x >= m_iWidth || y < 0 || y >= m_iHeight )
+	if( a_iX < 0 || a_iX >= m_iWidth || a_iY < 0 || a_iY >= m_iHeight )
 	{
 		return FALSE;
 	}
 
-	if( m_Map[x][y].map != 0 )
+	if( m_Map[a_iX[a_iY].map != 0 )
 	{
 		return FALSE;
 	}
@@ -109,11 +109,11 @@ BOOL Astar::isLoad( INT x, INT y )
 
 
 /*TREE*/
-TreeNode* Astar::createNode( INT x, INT y )
+TreeNode* Astar::createNode( INT a_iX, INT a_iY )
 {
 	TreeNode* node = new TreeNode;
-	node->x = x;
-	node->y = y;
+	node->x = a_iX;
+	node->y = a_iY;
 	node->left = NULL;
 	node->right = NULL;
 
@@ -121,73 +121,73 @@ TreeNode* Astar::createNode( INT x, INT y )
 }
 
 
-VOID Astar::removeTree( TreeRoot* root )
+VOID Astar::removeTree( TreeRoot* a_pRoot )
 {
-	deleteNode( root->root );
+	deleteNode( a_pRoot->root );
 }
 
 
-VOID Astar::deleteNode( TreeNode *node )
+VOID Astar::deleteNode( TreeNode* a_pNode )
 {
-	if( node == NULL )
+	if( a_pNode == NULL )
 	{
 		return;
 	}
 	else
 	{
-		deleteNode( node->left );
-		deleteNode( node->right );
+		deleteNode( a_pNode->left );
+		deleteNode( a_pNode->right );
 
-		SAFE_DELETE( node );
+		SAFE_DELETE( a_pNode );
 	}
 }
 
 
-VOID Astar::insert( TreeRoot* root, TreeNode* node )
+VOID Astar::insert( TreeRoot* a_pRoot, TreeNode* a_pNode )
 {
-	root->root = insertNode( root->root, node );
+	a_pRoot->root = insertNode( a_pRoot->root, a_pNode );
 }
 
 
-TreeNode* Astar::insertNode( TreeNode *p, TreeNode *node )
+TreeNode* Astar::insertNode( TreeNode* a_p, TreeNode* a_pNode )
 {
-	if( p == NULL )
+	if( a_p == NULL )
 	{
-		return node;
+		return a_pNode;
 	}
-	else if( m_Map[p->x][p->y].f > m_Map[node->x][node->y].f )
+	else if( m_Map[a_p->x][a_p->y].f > m_Map[a_pNode->x][a_pNode->y].f )
 	{
-		p->left = insertNode( p->left, node );
-		return p;
+		a_p->left = insertNode( a_p->left, a_pNode );
+		return a_p;
 	}
 	else
 	{
-		p->right = insertNode( p->right, node );
-		return p;
+		a_p->right = insertNode( a_p->right, a_pNode );
+		return a_p;
 	}
 }
 
 
 /*PATH*/
-PathNode* Astar::createPath( INT x, INT y )
+PathNode* Astar::createPath( INT a_iX, INT a_iY )
 {
 	PathNode *path = new PathNode;
-	path->x = x;
-	path->y = y;
+	path->x = a_iX;
+	path->y = a_iY;
 	path->next = NULL;
 
 	return path;
 }
 
 
-PathNode* Astar::getPath( INT sx, INT sy, INT ex, INT ey )
+PathNode* Astar::getPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy )
 {
 	PathNode* path = NULL;
 	PathNode* temp = NULL;
-	INT x = ex;
-	INT y = ey;
-	INT tx = x;
-	INT ty = y;
+	INT x = a_iEx;
+	INT y = a_iEy;
+	INT tx = a_iX;
+	INT ty = a_iY;
 
 	if( m_Map[x][y].cameX < 0 || m_Map[x][y].cameY < 0 )
 	{
@@ -213,16 +213,16 @@ PathNode* Astar::getPath( INT sx, INT sy, INT ex, INT ey )
 }
 
 
-VOID Astar::removePath( PathNode *path )
+VOID Astar::removePath( PathNode* a_pPath )
 {
-	if( path == NULL )
+	if( a_pPath == NULL )
 	{
 		return;
 	}
 
-	removePath( path->next );
+	removePath( a_pPath->next );
 
-	SAFE_DELETE( path );
+	SAFE_DELETE( a_pPath );
 }
 
 
@@ -297,23 +297,23 @@ VOID Astar::openMap( INT bx, INT by, INT vx, INT vy )
 }
 
 
-PathNode* Astar::findPath( INT sx, INT sy, INT ex, INT ey )
+PathNode* Astar::findPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy )
 {
 	PathNode* path = NULL;
 
-	if( sx == ex && sy == ey )
+	if( a_iSx == a_iEx && a_iSy == a_iEy )
 	{
 		return path;
 	}
 
-	m_Start[0] = sx;
-	m_Start[1] = sy;
+	m_Start[0] = a_iSx;
+	m_Start[1] = a_iSy;
 
-	m_End[0] = ex;
-	m_End[1] = ey;
+	m_End[0] = a_iEx;
+	m_End[1] = a_iEy;
 
-	INT x = sx;
-	INT y = sy;
+	INT x = a_iSx;
+	INT y = a_iSy;
 
 	m_Map[x][y].visit = TRUE;
 
@@ -341,8 +341,8 @@ PathNode* Astar::findPath( INT sx, INT sy, INT ex, INT ey )
 		}
 	}
 
-	m_Map[sx][sy].map = 10;
-	m_Map[ex][ey].map = 20;
+	m_Map[a_iSx][a_iSy].map = 10;
+	m_Map[a_iEx][a_iEy].map = 20;
 
 	removeTree( m_pOpen );
 	m_pOpen->root = NULL;
