@@ -9,9 +9,9 @@ public:
 	State(){}
 	virtual ~State(){}
 
-	virtual VOID Enter( entity_type* pEntity )=0;
-	virtual VOID Execute( entity_type* pEntity )=0;
-	virtual VOID Exit( entity_type* pEntity )=0;
+	virtual VOID Enter( entity_type* a_pEntity )=0;
+	virtual VOID Execute( entity_type* a_pEntity )=0;
+	virtual VOID Exit( entity_type* a_pEntity )=0;
 };
 
 

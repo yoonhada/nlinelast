@@ -10,8 +10,8 @@ class WaitInterPolation : public State<CMonster>
 private:
 	WaitInterPolation(){}
 
-	WaitInterPolation( const WaitInterPolation& rhs );
-	WaitInterPolation& operator=( const WaitInterPolation& rhs );
+	WaitInterPolation( const WaitInterPolation& a_rhs );
+	WaitInterPolation& operator=( const WaitInterPolation& a_rhs );
 
 
 public:
@@ -19,9 +19,9 @@ public:
 
 	static WaitInterPolation* GetInstance();
 
-	virtual VOID Enter( CMonster* pMonster );
-	virtual VOID Execute( CMonster* pMonster );
-	virtual VOID Exit( CMonster* pMonster );
+	virtual VOID Enter( CMonster* a_pMonster );
+	virtual VOID Execute( CMonster* a_pMonster );
+	virtual VOID Exit( CMonster* a_pMonster );
 };
 
 

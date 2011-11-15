@@ -16,29 +16,29 @@ CPacket::~CPacket()
 }
 
 
-VOID CPacket::Copy( CHAR* pData, INT nSize )
+VOID CPacket::Copy( CHAR* a_pData, INT a_nSize )
 {
-	memcpy( m_Buff, pData, nSize );
+	memcpy( m_Buff, a_pData, a_nSize );
 //	m_BuffPoint += nSize;
 //	m_DataSize += nSize;
-	m_DataSize = nSize;
+	m_DataSize = a_nSize;
 	m_BuffPoint = 0;
 }
 
 
-BOOL CPacket::WriteString( CHAR* pData, WORD wSize )
+BOOL CPacket::WriteString( CHAR* a_pData, WORD a_wSize )
 {
 	INT remained = PACKET_SIZE - m_BuffPoint;
-	if( wSize > remained )
+	if( a_wSize > remained )
 	{
 		return FALSE;
 	}
 
-	Write( wSize );
-	memcpy( m_Buff + m_BuffPoint, pData, wSize );
+	Write( a_wSize );
+	memcpy( m_Buff + m_BuffPoint, a_pData, a_wSize );
 
-	m_BuffPoint += wSize;
-	m_DataSize += wSize;
+	m_BuffPoint += a_wSize;
+	m_DataSize += a_wSize;
 
 	if( m_BuffPoint > 2 )
 	{
@@ -49,7 +49,7 @@ BOOL CPacket::WriteString( CHAR* pData, WORD wSize )
 }
 
 
-BOOL CPacket::ReadString( CHAR* pOut, WORD wMaxSize )
+BOOL CPacket::ReadString( CHAR* a_pOut, WORD a_wMaxSize )
 {
 	WORD wSize;
 	if( Read( &wSize ) != TRUE )
@@ -63,7 +63,7 @@ BOOL CPacket::ReadString( CHAR* pOut, WORD wMaxSize )
 		return FALSE;
 	}
 
-	memcpy( pOut, m_Buff + m_BuffPoint, wSize );
+	memcpy( a_pOut, m_Buff + m_BuffPoint, wSize );
 
 	return TRUE;
 }

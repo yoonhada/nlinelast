@@ -9,8 +9,8 @@ class Dash : public State<CMonster>
 private:
 	Dash(){}
 
-	Dash( const Dash& rhs );
-	Dash& operator=( const Dash& rhs );
+	Dash( const Dash& a_rhs );
+	Dash& operator=( const Dash& a_rhs );
 
 
 public:
@@ -18,9 +18,9 @@ public:
 
 	static Dash* GetInstance();
 
-	virtual VOID Enter( CMonster* pMonster );
-	virtual VOID Execute( CMonster* pMonster );
-	virtual VOID Exit( CMonster* pMonster );
+	virtual VOID Enter( CMonster* a_pMonster );
+	virtual VOID Execute( CMonster* a_pMonster );
+	virtual VOID Exit( CMonster* a_pMonster );
 };
 
 

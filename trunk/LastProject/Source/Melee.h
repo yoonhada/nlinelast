@@ -10,8 +10,8 @@ class Melee : public State<CMonster>
 private:
 	Melee(){}
 
-	Melee( const Melee& rhs );
-	Melee& operator=( const Melee& rhs );
+	Melee( const Melee& a_rhs );
+	Melee& operator=( const Melee& a_rhs );
 
 
 public:
@@ -19,9 +19,9 @@ public:
 
 	static Melee* GetInstance();
 
-	virtual VOID Enter( CMonster* pMonster );
-	virtual VOID Execute( CMonster* pMonster );
-	virtual VOID Exit( CMonster* pMonster );
+	virtual VOID Enter( CMonster* a_pMonster );
+	virtual VOID Execute( CMonster* a_pMonster );
+	virtual VOID Exit( CMonster* a_pMonster );
 };
 
 

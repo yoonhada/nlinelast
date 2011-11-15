@@ -16,13 +16,13 @@ Seek* Seek::GetInstance()
 }
 
 
-VOID Seek::Enter( CMonster* pMonster )
+VOID Seek::Enter( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID Seek::Execute( CMonster* pMonster )
+VOID Seek::Execute( CMonster* a_pMonster )
 {
 	INT Target = -1;
 	D3DXVECTOR3 pos;
@@ -35,7 +35,7 @@ VOID Seek::Execute( CMonster* pMonster )
 		if( CObjectManage::GetInstance()->Get_CharactorList()[i]->Get_Active() )
 		{
 			// 유저 위치 - 보스 몬스터
-			pos = CObjectManage::GetInstance()->Get_CharactorList()[i]->Get_CharaPos() - pMonster->Get_Pos();
+			pos = CObjectManage::GetInstance()->Get_CharactorList()[i]->Get_CharaPos() - a_pMonster->Get_Pos();
 
 			// 거리 구하기
 			length = D3DXVec3Length( &pos );
@@ -60,9 +60,9 @@ VOID Seek::Execute( CMonster* pMonster )
 	// 가장 가까이에 있는 유저가 공격 범위에 있으면 전투 상태로 전환
 	if( min < 50.0f )
 	{
-		pMonster->Set_Target( Target );
-		pMonster->Set_TargetDistance( min );
-		pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
+		a_pMonster->Set_Target( Target );
+		a_pMonster->Set_TargetDistance( min );
+		a_pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
 	// 범위에 없으면 가장 가까운 유저 추격
 	else if( min >= 50.0f && min <= 500.0f )
@@ -76,12 +76,12 @@ VOID Seek::Execute( CMonster* pMonster )
 			pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 	*/
 			// 위치를 0, 0 기준으로 맞춘 후 계산한다.
-			INT StartX = INT( pMonster->Get_Pos().x + 510.0f ) / 10;
-			INT StartZ = INT( pMonster->Get_Pos().z + 510.0f ) / 10;
+			INT StartX = INT( a_pMonster->Get_Pos().x + 510.0f ) / 10;
+			INT StartZ = INT( a_pMonster->Get_Pos().z + 510.0f ) / 10;
 			INT EndX = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().x + 510.0f ) / 10;
 			INT EndZ = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().z + 510.0f ) / 10;
 
-			pMonster->Set_TargetPos( EndX, EndZ );
+			a_pMonster->Set_TargetPos( EndX, EndZ );
 	
 			DWORD oldTime = timeGetTime();
 			PathNode* path = Astar::GetInstance()->findPath( StartX, StartZ, EndX, EndZ );
@@ -89,20 +89,20 @@ VOID Seek::Execute( CMonster* pMonster )
 			CDebugConsole::GetInstance()->Messagef( "Search Time : %f \n", time );
 
 			// 이전 Path 표시를 없앤다.
-			ClearPath( pMonster->Get_Path() );
-			Astar::GetInstance()->removePath( pMonster->Get_Path() );
+			ClearPath( a_pMonster->Get_Path() );
+			Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
 			Astar::GetInstance()->clearMap();
 
 			// 새 Path를 표시한다.
 			SetPath( path );
 
-			pMonster->Set_Path( path );
+			a_pMonster->Set_Path( path );
 
 			// Path가 있으면 Chase 상태로
 			if( path )
 			{
-				pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
-				Chase::GetInstance()->Enter( pMonster );
+				a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
+				Chase::GetInstance()->Enter( a_pMonster );
 			}
 	}
 	else
@@ -114,21 +114,21 @@ VOID Seek::Execute( CMonster* pMonster )
 }
 
 
-VOID Seek::Exit( CMonster* pMonster )
+VOID Seek::Exit( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID Seek::Initialize( TileMap* pTileMap )
+VOID Seek::Initialize( TileMap* a_pTileMap )
 {
-	m_pTileMap = pTileMap;
+	m_pTileMap = a_pTileMap;
 }
 
 
-VOID Seek::ClearPath( PathNode* pPath )
+VOID Seek::ClearPath( PathNode* a_pPath )
 {
-	PathNode* temp = pPath;
+	PathNode* temp = a_pPath;
 	if( temp )
 	{
 		while( temp->next != NULL )
@@ -143,9 +143,9 @@ VOID Seek::ClearPath( PathNode* pPath )
 }
 
 
-VOID Seek::SetPath( PathNode* pPath )
+VOID Seek::SetPath( PathNode* a_pPath )
 {
-	PathNode* temp = pPath;
+	PathNode* temp = a_pPath;
 	if( temp )
 	{
 		while( temp->next != NULL )

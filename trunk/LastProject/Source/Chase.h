@@ -10,8 +10,8 @@ class Chase : public State<CMonster>
 private:
 	Chase(){}
 
-	Chase( const Chase& rhs );
-	Chase& operator=( const Chase& rhs );
+	Chase( const Chase& a_rhs );
+	Chase& operator=( const Chase& a_rhs );
 
 	PathNode*	m_pCurrentPath;
 	D3DXVECTOR3 m_vPos;
@@ -24,12 +24,12 @@ public:
 
 	static Chase* GetInstance();
 
-	virtual VOID Enter( CMonster* pMonster );
-	virtual VOID Execute( CMonster* pMonster );
-	virtual VOID Exit( CMonster* pMonster );
+	virtual VOID Enter( CMonster* a_pMonster );
+	virtual VOID Execute( CMonster* a_pMonster );
+	virtual VOID Exit( CMonster* a_pMonster );
 
 	FLOAT GetDegree();
-	BOOL isArrive( CMonster* pMonster );
+	BOOL isArrive( CMonster* a_pMonster );
 };
 
 

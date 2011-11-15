@@ -14,23 +14,23 @@ WaitInterPolation* WaitInterPolation::GetInstance()
 }
 
 
-VOID WaitInterPolation::Enter( CMonster* pMonster )
+VOID WaitInterPolation::Enter( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID WaitInterPolation::Execute( CMonster* pMonster )
+VOID WaitInterPolation::Execute( CMonster* a_pMonster )
 {
 	// 애니메이션 보간이 끝나면 다시 탐색 상태로
-	if( pMonster->Get_ChangingAnimation() == FALSE )
+	if( a_pMonster->Get_ChangingAnimation() == FALSE )
 	{
-		pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+		a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
 	}
 }
 
 
-VOID WaitInterPolation::Exit( CMonster* pMonster )
+VOID WaitInterPolation::Exit( CMonster* a_pMonster )
 {
 
 }

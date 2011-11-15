@@ -15,13 +15,13 @@ Stiffen* Stiffen::GetInstance()
 }
 
 
-VOID Stiffen::Enter( CMonster* pMonster )
+VOID Stiffen::Enter( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID Stiffen::Execute( CMonster* pMonster )
+VOID Stiffen::Execute( CMonster* a_pMonster )
 {
 /*
 	static BOOL bEndAni = FALSE;
@@ -41,7 +41,7 @@ VOID Stiffen::Execute( CMonster* pMonster )
 	static FLOAT fTime = 0.0f;
 */
 	BOOL bCheck = FALSE;
-	if( pMonster->Get_AnimationEndCheck() == FALSE )
+	if( a_pMonster->Get_AnimationEndCheck() == FALSE )
 	{
 //		fTime += CFrequency::GetInstance()->getFrametime();
 //		if( fTime >= 1.0f )
@@ -50,12 +50,12 @@ VOID Stiffen::Execute( CMonster* pMonster )
 //			bEndAni = FALSE;
 
 			// 애니메이션 0번 복구
-			pMonster->ChangeAnimation( 0 );
+			a_pMonster->ChangeAnimation( 0 );
 
 			bCheck = TRUE;
 
 			// 경직상태가 끝나면 애니메이션 보간을 위해 보간 대기 상태로
-			pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );
+			a_pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );
 			
 //		}
 	}
@@ -68,7 +68,7 @@ VOID Stiffen::Execute( CMonster* pMonster )
 }
 
 
-VOID Stiffen::Exit( CMonster* pMonster )
+VOID Stiffen::Exit( CMonster* a_pMonster )
 {
 
 }

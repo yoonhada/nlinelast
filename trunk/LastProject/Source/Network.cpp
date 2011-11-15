@@ -51,12 +51,12 @@ VOID CNetwork::Close()
 }
 	
 
-BOOL CNetwork::ConnectToServer( CHAR* szIP, WORD Port )
+BOOL CNetwork::ConnectToServer( CHAR* a_szIP, WORD a_wPort )
 {
 	SOCKADDR_IN addr;
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr( szIP );
-	addr.sin_port = htons( Port );
+	addr.sin_addr.s_addr = inet_addr( a_szIP );
+	addr.sin_port = htons( a_wPort );
 
 	INT r = connect( m_socket, (SOCKADDR*)&addr, sizeof( SOCKADDR_IN ) );
 	if( r != 0 )
@@ -118,9 +118,9 @@ VOID CNetwork::Update()
 }
 
 
-BOOL CNetwork::SendToServer( CPacket& pk )
+BOOL CNetwork::SendToServer( CPacket& a_pk )
 {
-	INT r = send( m_socket, pk.GetBuff(), pk.GetLength(), 0 );
+	INT r = send( m_socket, a_pk.GetBuff(), a_pk.GetLength(), 0 );
 	if( r == SOCKET_ERROR )
 	{
 		//cout << "send error : " << WSAGetLastError() << endl;
@@ -131,40 +131,40 @@ BOOL CNetwork::SendToServer( CPacket& pk )
 }
 
 
-VOID CNetwork::InsertPacket( CPacket& pk )
+VOID CNetwork::InsertPacket( CPacket& a_pk )
 {
 	EnterCriticalSection( &m_cs );
 
-	m_VectorPackets.push_back( pk );
+	m_VectorPackets.push_back( a_pk );
 
 	LeaveCriticalSection( &m_cs );
 }
 
 
-VOID CNetwork::scLOGON( CPacket& pk )
+VOID CNetwork::scLOGON( CPacket& a_pk )
 {
 
 }
 
 
-VOID CNetwork::scCHAT( CPacket& pk )
+VOID CNetwork::scCHAT( CPacket& a_pk )
 {
 	CHAR szText[128] = { 0, };
-	pk.ReadString( szText, 128 );
+	a_pk.ReadString( szText, 128 );
 
 	//cout << szText << endl;
 }
 
 
-VOID CNetwork::scMOVE( CPacket& pk )
+VOID CNetwork::scMOVE( CPacket& a_pk )
 {
 	FLOAT x, z, angle;
 	WORD number;
 
-	pk.Read( &number );
-	pk.Read( &x );
-	pk.Read( &z );
-	pk.Read( &angle );
+	a_pk.Read( &number );
+	a_pk.Read( &x );
+	a_pk.Read( &z );
+	a_pk.Read( &angle );
 
 	m_vMove = D3DXVECTOR3( x, 0.0f, z );
 
@@ -183,11 +183,11 @@ VOID CNetwork::scMOVE( CPacket& pk )
 }
 
 //추가 유저 접속시
-VOID CNetwork::scNEWUSER( CPacket& pk )
+VOID CNetwork::scNEWUSER( CPacket& a_pk )
 {
 	// 유저 접속 처리
 	WORD wNumber;
-	pk.Read( &wNumber );
+	a_pk.Read( &wNumber );
 
 	for( INT Loop=0; Loop<3; ++Loop )
 	{
@@ -203,16 +203,16 @@ VOID CNetwork::scNEWUSER( CPacket& pk )
 }
 
 //처음 접속시
-VOID CNetwork::scInitData( CPacket& pk )
+VOID CNetwork::scInitData( CPacket& a_pk )
 {
-	bool host;
+	bool host;	// 1바이트 bool 사용
 	WORD user_no;
 	WORD userCount;
 	WORD user_list;
 
-	pk.Read( &host );
-	pk.Read( &user_no );
-	pk.Read( &userCount );
+	a_pk.Read( &host );
+	a_pk.Read( &user_no );
+	a_pk.Read( &userCount );
 
 	CObjectManage::GetInstance()->Set_Host( host );
 	CObjectManage::GetInstance()->Set_ClientNumber( user_no );
@@ -221,7 +221,7 @@ VOID CNetwork::scInitData( CPacket& pk )
 	// 유저수 만큼 루프
 	for( WORD i=0; i<userCount; ++i )
 	{
-		pk.Read( &user_list );
+		a_pk.Read( &user_list );
 
 		for( INT Loop=0; Loop<3; ++Loop )
 		{
@@ -237,85 +237,85 @@ VOID CNetwork::scInitData( CPacket& pk )
 
 VOID CNetwork::csLOGON()
 {
-	CPacket pk;
+	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_CS_LOGON;
-	pk.Write( wMsgSize );
-	pk.Write( wMsgID );
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
 
 	CHAR* szName = "HelloWorld";
 	CHAR* szPass = "Beautiful";
 
-	pk.WriteString( szName, strlen( szName ) );
-	pk.WriteString( szPass, strlen( szPass ) );
+	sendPk.WriteString( szName, strlen( szName ) );
+	sendPk.WriteString( szPass, strlen( szPass ) );
 
-	SendToServer( pk );
+	SendToServer( sendPk );
 
 }
 
 
 VOID CNetwork::csCHAT()
 {
-	CPacket pk;
+	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_CS_CHAT;
-	pk.Write( wMsgSize );
-	pk.Write( wMsgID );
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
 
 	CHAR* szText = "Who Are You?";
 
-	pk.WriteString( szText, strlen( szText ) );
+	sendPk.WriteString( szText, strlen( szText ) );
 
-	SendToServer( pk );
+	SendToServer( sendPk );
 }
 
 
-VOID CNetwork::csMOVE( const FLOAT& x, const FLOAT& z, const FLOAT& angle )
+VOID CNetwork::csMOVE( const FLOAT& a_fX, const FLOAT& a_fZ, const FLOAT& a_fAngle )
 {
-	CPacket pk;
+	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_CS_MOVE;
-	pk.Write( wMsgSize );
-	pk.Write( wMsgID );
-	pk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
-	pk.Write( x );
-	pk.Write( z );
-	pk.Write( angle );
-	pk.CalcSize();
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	sendPk.Write( a_fX );
+	sendPk.Write( a_fZ );
+	sendPk.Write( a_fAngle );
+	sendPk.CalcSize();
 
-	SendToServer( pk );
+	SendToServer( sendPk );
 }
 
 
-VOID CNetwork::CS_UTOM_ATTACK( CHAR cDestroyPart, WORD wDestroyCount, std::vector<WORD>& pList, D3DXVECTOR3 vDirection )
+VOID CNetwork::CS_UTOM_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection )
 {
-	CPacket pk;
+	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_CS_UTOM_ATTACK;
 
-	pk.Write( wMsgSize );
-	pk.Write( wMsgID );
-	pk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
-	pk.Write( vDirection.x );
-	pk.Write( vDirection.y );
-	pk.Write( vDirection.z );
-	pk.Write( cDestroyPart );
-	pk.Write( wDestroyCount );
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	sendPk.Write( a_vDirection.x );
+	sendPk.Write( a_vDirection.y );
+	sendPk.Write( a_vDirection.z );
+	sendPk.Write( a_cDestroyPart );
+	sendPk.Write( a_wDestroyCount );
 
-	for( WORD i=0; i<wDestroyCount; ++i )
+	for( WORD i=0; i<a_wDestroyCount; ++i )
 	{
-		pk.Write( pList[i] );
+		sendPk.Write( a_pList[i] );
 		//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", pList[i] );
 	}
-	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", wDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"Send cDestroyCount : %d\n", a_wDestroyCount );
 
-	pk.CalcSize();
+	sendPk.CalcSize();
 
-	SendToServer( pk );
+	SendToServer( sendPk );
 }
 
 
-VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
+VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 {
 	FLOAT fDirX, fDirY, fDirZ;
 	WORD wClientNumber;
@@ -323,17 +323,17 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 	WORD wDestroyCount;
 	WORD wList[1000];
 
-	pk.Read( &fDirX);
-	pk.Read( &fDirY);
-	pk.Read( &fDirZ);
-	pk.Read( &wClientNumber );
-	pk.Read( &cDestroyPart );
-	pk.Read( &wDestroyCount );
+	a_pk.Read( &fDirX);
+	a_pk.Read( &fDirY);
+	a_pk.Read( &fDirZ);
+	a_pk.Read( &wClientNumber );
+	a_pk.Read( &cDestroyPart );
+	a_pk.Read( &wDestroyCount );
 
 	
 	for( WORD i=0; i<wDestroyCount; ++i )
 	{
-		pk.Read( &wList[i] );
+		a_pk.Read( &wList[i] );
 		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
@@ -352,18 +352,18 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& pk )
 
 VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
 {
-	CPacket pk;
+	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_CS_UTOM_ATTACK;
 
-	pk.Write( wMsgSize );
-	pk.Write( wMsgID );
-	pk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
-	pk.Write( a_wAnimationNumber );
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	sendPk.Write( a_wAnimationNumber );
 
-	pk.CalcSize();
+	sendPk.CalcSize();
 
-	SendToServer( pk );
+	SendToServer( sendPk );
 }
 
 
@@ -379,65 +379,65 @@ VOID CNetwork::SC_UTOM_Attack_Animation( CPacket& a_pk )
 }
 
 
-VOID CNetwork::SC_DISCONNECT( CPacket& pk )
+VOID CNetwork::SC_DISCONNECT( CPacket& a_pk )
 {
 	WORD wClientNumber;
-	pk.Read( &wClientNumber );
-	// 접속 유저 비활성화
+	a_pk.Read( &wClientNumber );
 
+	// 접속 유저 비활성화
 	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber].Set_Active( FALSE );
 }
 
 
-VOID CNetwork::ProcessPacket( CPacket& pk )
+VOID CNetwork::ProcessPacket( CPacket& a_pk )
 {
 	WORD wMsgSize, wMsgType;
-	pk.Read( &wMsgSize );
-	pk.Read( &wMsgType );
+	a_pk.Read( &wMsgSize );
+	a_pk.Read( &wMsgType );
 
 	switch( wMsgType )
 	{
 	// 로그온 처리
 	case MSG_CS_LOGON:
-		scLOGON( pk );
+		scLOGON( a_pk );
 		break;
 
 	// 초기 정보
 	case MSG_SC_INITDATA:
-		scInitData( pk );
+		scInitData( a_pk );
 		break;
 
 	// 새로운 유저 추가 처리
 	case MSG_SC_NEWUSER:
-		scNEWUSER( pk );
+		scNEWUSER( a_pk );
 		break;
 
 	// 채팅 처리
 	case MSG_SC_CHAT:
-		scCHAT( pk );
+		scCHAT( a_pk );
 		break;
 
 	// 이동 처리
 	case MSG_SC_MOVE:
-		scMOVE( pk );
+		scMOVE( a_pk );
 		break;
 
 	// 공격 ( 유저 -> 몬스터 )
 	case MSG_SC_UTOM_ATTACK:
-		SC_UTOM_ATTACK( pk );
+		SC_UTOM_ATTACK( a_pk );
 		break;
 
 	// 유저 접속 종료
 	case MSG_SC_DISCONNECT:
-		SC_DISCONNECT( pk );
+		SC_DISCONNECT( a_pk );
 		break;
 	}
 }
 
 
-UINT WINAPI RecvThread( LPVOID p )
+UINT WINAPI RecvThread( LPVOID a_p )
 {
-	CNetwork* pNetwork = (CNetwork*)p;
+	CNetwork* pNetwork = (CNetwork*)a_p;
 
 	CHAR buff[BUF_SIZE];
 //	INT remainedBufferSize = BUF_SIZE;
