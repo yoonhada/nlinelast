@@ -40,11 +40,29 @@ public:
 
 	BOOL Get_Lbutton()
 	{
+		if( m_iLbuttonCheck == 0 )
+		{
+			m_bLbutton = TRUE;
+		}
+		else
+		{
+			m_bLbutton = FALSE;
+		}
+
 		return m_bLbutton;
 	}
 	
 	BOOL Get_Rbutton()
 	{
+		if( m_iRbuttonCheck == 0 )
+		{
+			m_bRbutton = TRUE;
+		}
+		else
+		{
+			m_bRbutton = FALSE;
+		}
+
 		return m_bRbutton;
 	}
 
@@ -97,8 +115,9 @@ private:
 	FLOAT		m_fYRotate;
 	FLOAT		m_fXRotate;
 	BOOL		m_bLbutton;						///< 왼쪽 버튼
-	BOOL		m_bLbuttonCheck;
+	BOOL		m_iLbuttonCheck;
 	BOOL		m_bRbutton;						///< 오른쪽 버튼
+	INT			m_iRbuttonCheck;
 	BOOL		m_bENdbutton;
 	BOOL		m_bHomebutton;
 	BOOL		m_bF1button;

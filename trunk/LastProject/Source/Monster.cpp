@@ -1180,26 +1180,39 @@ VOID CMonster::AniInterpolation()
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[1] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.y;
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[2] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.z;
 		}
-
-#ifdef _TEST111111
-		// 몬스터 공격 바운드 박스.
-		CBoundBox * m_pBBx = new CBoundBox;
-		m_pBBx->SetPosition( Get_Pos() );
-		m_pBBx->SetAngleY( Get_Angle() );
-
-		m_pBBx->SetSize( 0, -27.0f );
-		m_pBBx->SetSize( 1, -27.0f );
-		m_pBBx->SetSize( 2, -27.0f );
-
-		m_pBBx->SetSize( 3,  27.0f );
-		m_pBBx->SetSize( 4,  27.0f );
-		m_pBBx->SetSize( 5,  27.0f );
-
-		m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -0.3f ) );
-
-		CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
-#endif
 	}	
+}
+
+VOID CMonster::CreateAttackBoundBox()
+{
+	// 애니메이션이 끝낫다면
+	if( m_bAnimationEndCheck == FALSE )
+	{
+		//프레임에 해당 하는 바운드 박스 생성
+		switch( m_iSelectedFrameNum )
+		{
+		case 2:
+
+			// 몬스터 공격 바운드 박스.
+			CBoundBox * m_pBBx = new CBoundBox;
+			m_pBBx->SetPosition( Get_Pos() );
+			m_pBBx->SetAngleY( Get_Angle() );
+
+			m_pBBx->SetSize( 0, -27.0f );
+			m_pBBx->SetSize( 1, -27.0f );
+			m_pBBx->SetSize( 2, -27.0f );
+
+			m_pBBx->SetSize( 3,  27.0f );
+			m_pBBx->SetSize( 4,  27.0f );
+			m_pBBx->SetSize( 5,  27.0f );
+
+			m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -0.3f ) );
+
+			CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+
+			break;
+		}
+	}
 }
 
 VOID CMonster::Update()
@@ -1332,6 +1345,7 @@ VOID CMonster::Update()
 
 	// AI
 	m_pStateMachine->Update();
+	CreateAttackBoundBox();
 }
 
 VOID CMonster::Render()
