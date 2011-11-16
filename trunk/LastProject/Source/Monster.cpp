@@ -39,6 +39,7 @@ VOID CMonster::Clear()
 	m_iChangeAnimationEndCheck2 = 0;
 	m_iNextFrame = 0;
 	m_bChangingAnimation = FALSE;
+	m_bAnimationEndCheck = FALSE;
 
 	m_iTarget = -1;
 	m_iTargetPos[0] = 0;
@@ -58,7 +59,7 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 	{
 		m_pBox[LoopBox].Create( m_pD3dDevice );
 		m_pBox[LoopBox].CreateWeapon( CWeapon::NONE );
-		m_pBox[LoopBox].Set_MonsterPart( LoopBox );
+		m_pBox[LoopBox].Set_MonsterPart( static_cast<CHAR>(LoopBox) );
 	}
 
 	//m_pBoundBox = new CBoundBox(&m_pBox[2]);
@@ -1185,14 +1186,13 @@ VOID CMonster::AniInterpolation()
 
 VOID CMonster::CreateAttackBoundBox()
 {
-	// 애니메이션이 끝낫다면
-	if( m_bAnimationEndCheck == FALSE )
+	// 애니메이션이 끝났고 보간 애니메이션중이 아니라면
+	if( m_bAnimationEndCheck == FALSE && m_iChangeAnimationEndCheck == FALSE )
 	{
 		//프레임에 해당 하는 바운드 박스 생성
 		switch( m_iSelectedFrameNum )
 		{
 		case 2:
-
 			// 몬스터 공격 바운드 박스.
 			CBoundBox * m_pBBx = new CBoundBox;
 			m_pBBx->SetPosition( Get_Pos() );
@@ -1332,16 +1332,6 @@ VOID CMonster::Update()
 	{
 		AniInterpolation();
 	}
-
-//#ifndef _DEBUG
-//	static INT TempLoop = 0;
-//	if ( CInput::GetInstance()->Get_Lbutton() )
-//	{
-//		m_pBox[TempLoop].TestBreakCubeAll();
-//		if(TempLoop < 7) ++TempLoop;
-//	}
-//#endif
-
 
 	// AI
 	m_pStateMachine->Update();

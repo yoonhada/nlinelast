@@ -949,7 +949,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 			else
 			{
-				if (nCount > 1)
+				if (nCount > 50)
 				{
 					break;
 				}
@@ -994,16 +994,16 @@ VOID CCharactor::BreakListMake( INT Loop, D3DXVECTOR3& vDir )
 				}
 			}
 		}
+	}
 
-		if( m_bMonster )
-		{
-			D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
-		}
-		else
-		{
-			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
-		}
+	if( m_bMonster )
+	{
+		D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
+	}
+	else
+	{
+		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), vDir );
 	}
 }
 
