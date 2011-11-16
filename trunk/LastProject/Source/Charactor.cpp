@@ -1021,11 +1021,11 @@ VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir
 		if( m_bMonster )
 		{
 			D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-			m_pModel->CreateRandom( m_vectorCube[QLoop], m_iSelectedFrameNum, m_matMultWorld, a_vDir );
+			m_pModel->CreateRandom( m_vectorCube[ a_pList[QLoop] ], m_iSelectedFrameNum, m_matMultWorld, a_vDir );
 		}
 		else
 		{
-			m_pModel->CreateRandom( m_vectorCube[QLoop], m_iSelectedFrameNum, Get_MatWorld(), a_vDir );
+			m_pModel->CreateRandom( m_vectorCube[ a_pList[QLoop] ], m_iSelectedFrameNum, Get_MatWorld(), a_vDir );
 		}
 	}	
 }
