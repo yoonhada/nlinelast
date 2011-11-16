@@ -4,7 +4,7 @@
 #include "Charactor.h"
 
 CQube::CQube()
-: m_fItemLift( 0.005f )
+: m_fItemLift( 0.05f )
 , m_vMomentum( 0.0f, 0.0f, 0.0f )
 , m_vAccelerate( 0.0f, 0.0f, 0.0f )
 , m_bVisiable( TRUE )
@@ -36,10 +36,12 @@ VOID CQube::Update( CBoundBox * pBB )
 	}
 
 	m_vAccelerate *= CPhysics::GetInstance()->m_fAirRegistance;		// 가속도 공기저항 감속
-	m_vMomentum -= CPhysics::GetInstance()->m_vGAccel;				// 누적 중력가속도 
+	m_vMomentum = m_vMomentum - (CPhysics::GetInstance()->m_vGAccel 
+					* CFrequency::GetInstance()->getFrametime() 
+					* CFrequency::GetInstance()->getFrametime() );
 
 	// 이동값 갱신
-	vDir = m_vPos + m_vAccelerate + m_vMomentum * CFrequency::GetInstance()->getFrametime();
+	vDir = m_vPos + m_vAccelerate + m_vMomentum;// * CFrequency::GetInstance()->getFrametime();
 	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir );
 	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{
@@ -90,7 +92,6 @@ VOID CQube::Update( CBoundBox * pBB )
 		vDir.y = 2.0f * m_fSize - vDir.y ;
 		m_vMomentum.y *= -1.0f;
 		m_vAccelerate.y *= -1.0f;
-		m_vAccelerate = D3DXVECTOR3(0, 0, 0);
 
 		//회전량의 방향성 추가		
 		//m_vRotateTemp.x = -m_vAccelerate.z * CPhysics::GetInstance()->m_fElastic;
