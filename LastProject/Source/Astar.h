@@ -64,11 +64,11 @@ private:
 	BOOL		isLoad( INT a_iX, INT a_iY );
 
 	/*Tree*/
-	TreeNode*	createNode( INT x, INT y );
-	VOID		insert( TreeRoot* root, TreeNode* node );
-	TreeNode*	insertNode( TreeNode* p, TreeNode* node );
-	VOID		removeTree( TreeRoot* root );
-	VOID		deleteNode( TreeNode* node );
+	TreeNode*	createNode( INT a_iX, INT a_iY );
+	VOID		insert( TreeRoot* a_pRoot, TreeNode* a_pNode );
+	TreeNode*	insertNode( TreeNode* a_p, TreeNode* a_node );
+	VOID		removeTree( TreeRoot* a_pRoot );
+	VOID		deleteNode( TreeNode* a_pNode );
 
 	/*Path*/
 	PathNode*	createPath( INT a_iX, INT a_iY );	
