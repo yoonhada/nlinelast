@@ -316,13 +316,17 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	WORD wDestroyCount;
 	WORD wList[1000];
 
+	a_pk.Read( &wClientNumber );
 	a_pk.Read( &fDirX);
 	a_pk.Read( &fDirY);
 	a_pk.Read( &fDirZ);
-	a_pk.Read( &wClientNumber );
 	a_pk.Read( &cDestroyPart );
 	a_pk.Read( &wDestroyCount );
 
+	if( wDestroyCount >= 1000-1 )
+	{
+		MessageBox( NULL, L"Network.cpp Line 328 배열 초과", NULL, MB_OK );
+	}
 	
 	for( WORD i=0; i<wDestroyCount; ++i )
 	{
@@ -330,9 +334,9 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", static_cast<INT>(cDestroyPart), wDestroyCount );
 
-	CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[cDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[static_cast<INT>(cDestroyPart)].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 
 	// 디버깅용 출력
 	//cout << wClientNumber << " : ";
@@ -395,7 +399,13 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 
 	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
-	CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	for( INT Loop = 0; Loop < 3; ++Loop )
+	{
+		if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_ClientNumber() == wClientNumber )
+		{
+			CObjectManage::GetInstance()->Get_Charactors()[Loop].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+		}
+	}
 }
 
 VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
@@ -476,7 +486,7 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		break;
 
 	// 공격 : 몬스터 -> 유저
-	case MSG_CS_MTOU_ATTACK:
+	case MSG_SC_MTOU_ATTACK:
 		SC_MTOU_ATTACK( a_pk );
 		break;
 

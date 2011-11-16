@@ -85,6 +85,8 @@ public:
 		m_pMonster = a_pMonster;
 	}
 
+	VOID RefreshCharList();
+
 private:
 	CObjectManage();
 	~CObjectManage();

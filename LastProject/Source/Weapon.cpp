@@ -44,12 +44,14 @@ VOID CWeapon::Clear()
 	m_fZAng[8] = DEG2RAD(135);
 	m_fZAng[9] = DEG2RAD(0);
 
+	// XYZ Min
 	m_fBBSize[0] =-12.5f;
 	m_fBBSize[1] =- 1.5f;
 	m_fBBSize[2] =-16.5f;
+	// XYZ Max
 	m_fBBSize[3] =  2.5f;
 	m_fBBSize[4] =  1.5f;
-	m_fBBSize[5] =-10.5f;
+	m_fBBSize[5] =  0.5f;
 
 	m_bAtkTime = FALSE;
 	m_pCube = 0;
