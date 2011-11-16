@@ -764,6 +764,7 @@ VOID CCharactor::Update()
 			m_pWeapon->SetKeyA();
 			//네트워크로 현재 애니메이션 상태 보내기
 			CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_pWeapon->Get_nState() );
+			CDebugConsole::GetInstance()->Messagef( L"Lbutton Action\n" );
 		}
 		if ( CInput::GetInstance()->Get_Rbutton() )
 		{

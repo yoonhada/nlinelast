@@ -38,6 +38,9 @@ VOID CInput::Clear()
 
 	ZeroMemory( &m_MousePosOld, sizeof(m_MousePosOld) );
 	ZeroMemory( &m_MousePos, sizeof(m_MousePos) );
+
+	m_iLbuttonCheck = -1;
+	m_iRbuttonCheck = -1;
 }
 
 
@@ -137,22 +140,24 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 					PostMessage( m_hWnd, WM_DESTROY, NULL, NULL );
 				}
 
-				if ( GetAsyncKeyState( VK_LBUTTON ) & 0x0001 )
+				if ( GetAsyncKeyState( VK_LBUTTON ) )
 				{
-					m_bLbutton = TRUE;
+					++m_iLbuttonCheck;
 				}
 				else
 				{
 					m_bLbutton = FALSE;
+					m_iLbuttonCheck = -1;
 				}
 
-				if ( GetAsyncKeyState( VK_RBUTTON ) & 0x0001 )
+				if ( GetAsyncKeyState( VK_RBUTTON ) )
 				{
-					m_bRbutton = TRUE;
+					++m_iRbuttonCheck;
 				}
 				else
 				{
 					m_bRbutton = FALSE;
+					m_iRbuttonCheck = -1;
 				}
 
 				if( GetAsyncKeyState( VK_END ) )
