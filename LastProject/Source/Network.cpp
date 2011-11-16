@@ -298,7 +298,7 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 	for( WORD i=0; i<a_wDestroyCount; ++i )
 	{
 		sendPk.Write( a_pList[i] );
-		//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", pList[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
 	}
 	CDebugConsole::GetInstance()->Messagef( L"Send Part:cDestroyCount : %d : %d\n", a_cDestroyPart, a_wDestroyCount );
 
@@ -327,7 +327,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	for( WORD i=0; i<wDestroyCount; ++i )
 	{
 		a_pk.Read( &wList[i] );
-		//CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
 	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
@@ -341,6 +341,61 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	//	cout << wList[i];
 	//}
 	//cout << endl;
+}
+
+VOID CNetwork::CS_MTOU_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_CS_MTOU_ATTACK;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	sendPk.Write( a_vDirection.x );
+	sendPk.Write( a_vDirection.y );
+	sendPk.Write( a_vDirection.z );
+	sendPk.Write( a_cDestroyPart );
+	sendPk.Write( a_wDestroyCount );
+
+	for( WORD i=0; i<a_wDestroyCount; ++i )
+	{
+		sendPk.Write( a_pList[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
+	}
+	CDebugConsole::GetInstance()->Messagef( L"Send Part:cDestroyCount : %d : %d\n", a_cDestroyPart, a_wDestroyCount );
+
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
+}
+
+
+VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
+{
+	FLOAT fDirX, fDirY, fDirZ;
+	WORD wClientNumber;
+	CHAR cDestroyPart;
+	WORD wDestroyCount;
+	WORD wList[1000];
+
+	a_pk.Read( &fDirX);
+	a_pk.Read( &fDirY);
+	a_pk.Read( &fDirZ);
+	a_pk.Read( &wClientNumber );
+	a_pk.Read( &cDestroyPart );
+	a_pk.Read( &wDestroyCount );
+
+
+	for( WORD i=0; i<wDestroyCount; ++i )
+	{
+		a_pk.Read( &wList[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
+	}
+
+	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
+
+	CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 }
 
 VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
@@ -418,6 +473,11 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	// 공격 ( 유저 -> 몬스터 )
 	case MSG_SC_UTOM_ATTACK:
 		SC_UTOM_ATTACK( a_pk );
+		break;
+
+	// 공격 : 몬스터 -> 유저
+	case MSG_CS_MTOU_ATTACK:
+		SC_MTOU_ATTACK( a_pk );
 		break;
 
 	// 유저 접속 종료

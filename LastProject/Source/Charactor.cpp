@@ -929,7 +929,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
-						nCount++;
+						++nCount;
 						vPos = (*Iter)->GetDirection();
 						matTemp._41 = matTemp._42 = matTemp._43 = 0.0f;
 						D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
@@ -940,9 +940,19 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 				}
 			}
 
-			if (nCount > 20)
+			if( m_bMonster )
 			{
-				break;
+				if (nCount > 20)
+				{
+					break;
+				}
+			}
+			else
+			{
+				if (nCount > 1)
+				{
+					break;
+				}
 			}
 		}
 #endif
@@ -950,6 +960,11 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		{
 			CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
+		else
+		{
+			CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
+		}
+
 		NetworkSendTempVector.clear();
 	}
 }
