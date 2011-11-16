@@ -490,16 +490,12 @@ BOOL CCharactor::CollisionAtk( )
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
   			Iter = vecBoundBox->begin();
-
-			for (int i = 0; i < 8; ++i)
-			{				
-				vPos = ( *Iter )->GetPosition(i);
-				if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, 0.0f ) )
-				{
-					//( *Iter )->SetPosVec();
-					//( *Iter )->SetPosMap();
-					return TRUE; 
-				}
+			vPos = ( *Iter )->GetPosition();
+			if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
+			{
+				//( *Iter )->SetPosVec();
+				//( *Iter )->SetPosMap();
+				return TRUE; 
 			}
 		}
 	}
@@ -614,6 +610,7 @@ VOID CCharactor::UpdateByInput(  )
 
 	//m_vPreControl = vControl;
 
+	m_pBoundBox->MatrixIdentity();
 	m_pBoundBox->SetAngleY( a_fAngle );
 	Collision( m_vColissionControl );
 	m_vPreControl = m_vControl;
@@ -776,6 +773,7 @@ VOID CCharactor::Update()
 		m_pWeapon->Update();
 		if ( m_pWeapon->GetAtkTime() == TRUE )
 		{
+			//CDebugConsole::GetInstance()->Messagef("%f : ", CFrequency::GetInstance()->getFrametime());
 			D3DXVECTOR3 vDir = Get_CharaPos();
 			vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
 			m_pWeapon->AddAtkBBx( vDir, m_fAngle );
@@ -859,8 +857,10 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 	INT Loop;
 	D3DXVECTOR3 vPos;
 	CBoundBox BB;
-	D3DXMATRIXA16 matTemp;
-	D3DXMatrixIdentity(&matTemp);
+	D3DXMATRIXA16 matTemp = Get_MatWorld() * mat;
+	D3DXMATRIXA16 matDir  = matTemp;
+	matDir._41 = matDir._42 = matDir._43 = 0.0f;
+	
 	if( m_bAliveCheck == TRUE )
 	{
 		std::vector<WORD> NetworkSendTempVector;
@@ -923,16 +923,15 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					Iter = vecBoundBox->begin();
 
 					//(*Iter)->GetPosVec();
-					matTemp = Get_MatWorld() * mat;
+					// 케릭터 매트릭스 					
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
 					D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );				
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
-						++nCount;
-						vPos = (*Iter)->GetDirection();
-						matTemp._41 = matTemp._42 = matTemp._43 = 0.0f;
-						D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
+						// 날아가는 방향 계산.
+						vPos = (*Iter)->GetDirection();						
+						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
 						BreakListMake( Loop, vPos );
 						NetworkSendTempVector.push_back( Loop );
 						vDir = vPos;

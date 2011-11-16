@@ -267,10 +267,10 @@ VOID	CMainScene::Update()
 	// 캐릭터: 인풋 값 받아오기
 	m_pMyCharactor->UpdateByInput();
 	m_pMyCharactor->Update();
-	D3DXMATRIXA16 mat;
-	D3DXMatrixIdentity( &mat );
 	if ( m_pMyCharactor->CollisionAtk( ) )
 	{
+		D3DXMATRIXA16 mat;
+		D3DXMatrixIdentity( &mat );
 		m_pMyCharactor->BreakQube( mat );
 	}
 
