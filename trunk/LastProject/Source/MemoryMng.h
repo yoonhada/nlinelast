@@ -12,7 +12,7 @@ public:
     MemoryMng() 
     { 
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-        //_CrtSetBreakAlloc(236257);
+        //_CrtSetBreakAlloc(1215896);
     }
     ~MemoryMng()
     { 

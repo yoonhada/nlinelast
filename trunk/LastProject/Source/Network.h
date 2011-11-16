@@ -72,6 +72,7 @@ public:
 	VOID scMOVE( CPacket& a_pk );
 	VOID scNEWUSER( CPacket& a_pk );
 	VOID SC_UTOM_ATTACK( CPacket& a_pk );
+	VOID SC_MTOU_ATTACK( CPacket& a_pk );
 	VOID SC_DISCONNECT( CPacket& a_pk );
 
 	VOID SC_UTOM_Attack_Animation( CPacket& a_pk );
@@ -80,6 +81,7 @@ public:
 	VOID csCHAT();
 	VOID csMOVE( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
 	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection );
+	VOID CS_MTOU_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection );
 
 	VOID CS_UTOM_Attack_Animation( WORD a_wAnimationNumber );
 	
