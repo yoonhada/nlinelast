@@ -52,7 +52,6 @@ VOID CWeapon::Clear()
 	m_fBBSize[5] =-10.5f;
 
 	m_bAtkTime = FALSE;
-	m_pCube = NULL;
 }
 
 HRESULT CWeapon::Release()
@@ -124,9 +123,9 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 		m_nState = EnumCharFrame::BASE;
 
 	}
+#ifdef _GRAP
 	else
 	{
-#ifdef _GRAP
 		WCHAR buf[256];
 		WCHAR lpKeyName[256];
 		for (int i = 0; i < 10; ++i)
@@ -153,8 +152,8 @@ VOID CWeapon::PrivateProfile(BOOL bRW)
 			wsprintf( lpKeyName, L"Delay%d", i );
 			WritePrivateProfileString( L"Frame", lpKeyName,	buf, WEAPONFILE );
 		}
-#endif
 	}
+#endif
 }
 
 HRESULT CWeapon::Create()
@@ -323,7 +322,8 @@ VOID CWeapon::Update()
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{
-		
+		//네트워크로 현재 애니메이션 상태 보내기
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 
 		//타격설정
 		if ( m_bAtkTime == TRUE)
@@ -347,7 +347,7 @@ VOID CWeapon::Update()
 
 	UpdateSRT();
 
-	//CDebugConsole::GetInstance()->Messagef(L"%d-%d\n", m_nState, nCurrFrame);
+	CDebugConsole::GetInstance()->Messagef(L"%d-%d\n", m_nState, nCurrFrame);
 }
 
 VOID CWeapon::UpdateSRT()
