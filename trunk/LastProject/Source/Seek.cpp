@@ -64,17 +64,18 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		a_pMonster->Set_TargetDistance( min );
 		a_pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
+
 	// 범위에 없으면 가장 가까운 목표 추격
 	else if( min >= 50.0f && min <= 500.0f )
 	{	
-	/*
-			pMonster->Set_Target( Target );
-			D3DXVECTOR3 UnitVector = CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() - pMonster->Get_Pos();
-			D3DXVec3Normalize( &UnitVector, &UnitVector );
-			pMonster->Set_TargetUnitVector( UnitVector );
-			pMonster->Set_TargetPos( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() );
-			pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
-	*/
+	
+//			pMonster->Set_Target( Target );
+//			D3DXVECTOR3 UnitVector = CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() - pMonster->Get_Pos();
+//			D3DXVec3Normalize( &UnitVector, &UnitVector );
+//			pMonster->Set_TargetUnitVector( UnitVector );
+//			pMonster->Set_TargetPos( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() );
+//			pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
+	
 			// 위치를 0, 0 기준으로 맞춘 후 계산한다.
 			INT StartX = INT( a_pMonster->Get_Pos().x + 510.0f ) / 10;
 			INT StartZ = INT( a_pMonster->Get_Pos().z + 510.0f ) / 10;
