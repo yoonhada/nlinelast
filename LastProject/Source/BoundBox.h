@@ -57,6 +57,8 @@ public:
 	VOID SetPosVec();
 	VOID SetPosMap();
 
+	VOID MatrixIdentity();
+
 private:
 	CCharactor * m_pCharactors;
 	D3DXVECTOR3 m_vPosition;		///< Áß½ÉÁÂÇ¥

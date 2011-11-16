@@ -97,7 +97,7 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 		if ( m_pCharactors )		
 		{
 			vRet.y -= GetSize(CBoundBox::MINUSY);
-			D3DXVec3TransformCoord( &vRet, &vRet, &GetAxisMat() );
+			D3DXVec3TransformCoord( &vRet, &vRet, &m_pCharactors->Get_MatWorld() );		//GetAxisMat() );
 		}
 		else					
 		{
@@ -178,10 +178,14 @@ FLOAT CBoundBox::GetRadiusShort() const
 	return fRet;
 }
 
+VOID CBoundBox::MatrixIdentity()
+{
+	D3DXMatrixIdentity( &m_matAxis );
+}
+
 VOID CBoundBox::SetAngleY(FLOAT fAngle)
 {
-	// z 축 뒤집혀서 OpenGL 꺼 사용
-	D3DXMatrixIdentity( &m_matAxis );
+	// z 축 뒤집혀서 OpenGL 꺼 사용	
 	m_matAxis = D3DXMATRIXA16( 
 		cosf( fAngle ), 0, sinf( fAngle ), 0, 
 		0, 1, 0, 0, 

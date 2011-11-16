@@ -300,7 +300,9 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 		sendPk.Write( a_pList[i] );
 		CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
 	}
-	CDebugConsole::GetInstance()->Messagef( L"Send Part:cDestroyCount : %d : %d\n", a_cDestroyPart, a_wDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"%f : Send Part:cDestroyCount : %d : %d\n", 
+		CFrequency::GetInstance()->getFrametime(), 
+		a_cDestroyPart, a_wDestroyCount );
 
 	sendPk.CalcSize();
 

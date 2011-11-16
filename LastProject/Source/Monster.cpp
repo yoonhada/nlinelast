@@ -917,17 +917,19 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	//	}
 	//}
 	
-	INT Loop;
+	INT Loop = 4;
 	D3DXMATRIXA16 mat = Get_MatWorld();
-	for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
-	{
+	//for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
+	//{
 		if ( m_pBox[Loop].CollisionAtk( ) )
 		{
 			m_pBox[Loop].BreakQube( mat );
 		}
-	}
+	//}/
 
-	CTree::GetInstance()->GetCharAtkVector()->clear();
+	CTree::GetInstance()->GetCharAtkVector()->erase(
+		CTree::GetInstance()->GetCharAtkVector()->begin(), 
+		CTree::GetInstance()->GetCharAtkVector()->end() );
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
@@ -1206,7 +1208,7 @@ VOID CMonster::CreateAttackBoundBox()
 			m_pBBx->SetSize( 4,  27.0f );
 			m_pBBx->SetSize( 5,  27.0f );
 
-			m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -0.3f ) );
+			m_pBBx->SetDirection( D3DXVECTOR3( 2.0f, -1.3f, -0.3f ) );
 
 			CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
 
@@ -1334,7 +1336,7 @@ VOID CMonster::Update()
 	}
 
 	// AI
-	m_pStateMachine->Update();
+	//m_pStateMachine->Update();
 	CreateAttackBoundBox();
 }
 
