@@ -52,11 +52,11 @@ VOID CWeapon::Clear()
 	m_fBBSize[5] =-10.5f;
 
 	m_bAtkTime = FALSE;
+	m_pCube = 0;
 }
 
 HRESULT CWeapon::Release()
 {
-	Clear();
 	SAFE_DELETE( m_pMap );
 	SAFE_DELETE( m_pCube );
 	SAFE_RELEASE( m_pTotalIB );
@@ -259,8 +259,6 @@ VOID CWeapon::AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle )
 {
 	SetBBx( vPos, fAngle );
 	CTree::GetInstance()->GetCharAtkVector()->push_back( &m_WeaponType.pBBA );
-
-	//m_bAtkTime = FALSE;
 }
 
 VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
@@ -322,21 +320,14 @@ VOID CWeapon::Update()
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{
-		//네트워크로 현재 애니메이션 상태 보내기
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
-
 		//타격설정
 		if ( m_bAtkTime == TRUE)
 		{
 			m_bAtkTime = 2;
 		}
-		else if ( ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameAtk[m_nState] ) )
+		else if ( m_bAtkTime != 2 && ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameAtk[m_nState] ) )
 		{
-			m_bAtkTime = TRUE;
-		}
-		else if ( nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] )
-		{
-			m_bAtkTime = FALSE;
+			m_bAtkTime = TRUE;			
 		}
 		else if ( nCurrFrame == 0 )			/*nCurrFrame >= m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] || */
 		{
@@ -347,7 +338,7 @@ VOID CWeapon::Update()
 
 	UpdateSRT();
 
-	CDebugConsole::GetInstance()->Messagef(L"%d-%d\n", m_nState, nCurrFrame);
+	//CDebugConsole::GetInstance()->Messagef(L"%d-%d\n", m_nState, nCurrFrame);
 }
 
 VOID CWeapon::UpdateSRT()
