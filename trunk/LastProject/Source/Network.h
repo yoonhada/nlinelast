@@ -66,20 +66,20 @@ public:
 
 	BOOL ConnectToServer( CHAR* a_szIP, WORD a_wPort );
 
-	VOID scLOGON( CPacket& a_pk );
-	VOID scInitData( CPacket& a_pk );
-	VOID scCHAT( CPacket& a_pk );
-	VOID scMOVE( CPacket& a_pk );
-	VOID scNEWUSER( CPacket& a_pk );
+	VOID SC_LOGON( CPacket& a_pk );
+	VOID SC_InitData( CPacket& a_pk );
+	VOID SC_CHAT( CPacket& a_pk );
+	VOID SC_MOVEMENT( CPacket& a_pk );
+	VOID SC_NEWUSER( CPacket& a_pk );
 	VOID SC_UTOM_ATTACK( CPacket& a_pk );
 	VOID SC_MTOU_ATTACK( CPacket& a_pk );
 	VOID SC_DISCONNECT( CPacket& a_pk );
 
 	VOID SC_UTOM_Attack_Animation( CPacket& a_pk );
 
-	VOID csLOGON();
-	VOID csCHAT();
-	VOID csMOVE( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
+	VOID CS_LOGON();
+	VOID CS_CHAT();
+	VOID CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
 	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, CHAR a_cTotalParts, CHAR a_cDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
 	VOID CS_MTOU_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection );
 

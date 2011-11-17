@@ -46,7 +46,7 @@ HRESULT CLobbyScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	fclose(pFile);
 
 	CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 );
-	CNetwork::GetInstance()->csLOGON();
+	CNetwork::GetInstance()->CS_LOGON();
 	CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 
 	// 접속이 되었다면 로그인 하고 메인 씬으로 변경

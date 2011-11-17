@@ -28,33 +28,6 @@ VOID Chase::Enter( CMonster* a_pMonster )
 
 VOID Chase::Execute( CMonster* a_pMonster )
 {
-/*
-	if( (INT)pMonster->Get_Pos().x != (INT)pMonster->Get_TargetPos().x && 
-		(INT)pMonster->Get_Pos().z != (INT)pMonster->Get_TargetPos().z )
-	{
-		D3DXVECTOR3 pos( 0.0f, 0.0f, 0.0f );
-		pos.x = pMonster->Get_Pos().x + pMonster->Get_TargetUnitVector().x * 20.0f * CFrequency::GetInstance()->getFrametime();
-		pos.z = pMonster->Get_Pos().z + pMonster->Get_TargetUnitVector().z * 20.0f * CFrequency::GetInstance()->getFrametime();
-
-		pMonster->Set_Pos( pos );
-	}
-	else
-	{
-		pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
-	}
-*/
-/*
-	// 최종 위치에 도착했으면 탐색 상태로
-	if( isArrive( pMonster ) )
-	{
-		pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
-	}
-	else
-	{
-		
-	}
-*/
-
 	static FLOAT t = 0.0f;
 	t += CFrequency::GetInstance()->getFrametime();
 

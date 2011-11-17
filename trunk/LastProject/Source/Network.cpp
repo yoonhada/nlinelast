@@ -87,7 +87,7 @@ VOID CNetwork::Update()
 	if( time > NETWORK_RECV_TIME )
 	{
 		// 이동 데이터 서버로 보내기
-		csMOVE( CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
+		CS_MOVEMENT( CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
 			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().z,
 			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaAngle() );
 
@@ -142,13 +142,13 @@ VOID CNetwork::InsertPacket( CPacket& a_pk )
 }
 
 
-VOID CNetwork::scLOGON( CPacket& a_pk )
+VOID CNetwork::SC_LOGON( CPacket& a_pk )
 {
 
 }
 
 
-VOID CNetwork::scCHAT( CPacket& a_pk )
+VOID CNetwork::SC_CHAT( CPacket& a_pk )
 {
 	CHAR szText[128] = { 0, };
 	a_pk.ReadString( szText, 128 );
@@ -157,7 +157,7 @@ VOID CNetwork::scCHAT( CPacket& a_pk )
 }
 
 
-VOID CNetwork::scMOVE( CPacket& a_pk )
+VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
 {
 	FLOAT x, z, angle;
 	WORD number;
@@ -184,7 +184,7 @@ VOID CNetwork::scMOVE( CPacket& a_pk )
 }
 
 //추가 유저 접속시
-VOID CNetwork::scNEWUSER( CPacket& a_pk )
+VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
 {
 	// 유저 접속 처리
 	WORD wNumber;
@@ -200,7 +200,7 @@ VOID CNetwork::scNEWUSER( CPacket& a_pk )
 }
 
 //처음 접속시
-VOID CNetwork::scInitData( CPacket& a_pk )
+VOID CNetwork::SC_InitData( CPacket& a_pk )
 {
 	bool host;	// 1바이트 bool 사용
 	WORD user_no;
@@ -230,7 +230,7 @@ VOID CNetwork::scInitData( CPacket& a_pk )
 	CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 }
 
-VOID CNetwork::csLOGON()
+VOID CNetwork::CS_LOGON()
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -249,7 +249,7 @@ VOID CNetwork::csLOGON()
 }
 
 
-VOID CNetwork::csCHAT()
+VOID CNetwork::CS_CHAT()
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -265,7 +265,7 @@ VOID CNetwork::csCHAT()
 }
 
 
-VOID CNetwork::csMOVE( const FLOAT& a_fX, const FLOAT& a_fZ, const FLOAT& a_fAngle )
+VOID CNetwork::CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -457,27 +457,27 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	{
 	// 로그온 처리
 	case MSG_CS_LOGON:
-		scLOGON( a_pk );
+		SC_LOGON( a_pk );
 		break;
 
 	// 초기 정보
 	case MSG_SC_INITDATA:
-		scInitData( a_pk );
+		SC_InitData( a_pk );
 		break;
 
 	// 새로운 유저 추가 처리
 	case MSG_SC_NEWUSER:
-		scNEWUSER( a_pk );
+		SC_NEWUSER( a_pk );
 		break;
 
 	// 채팅 처리
 	case MSG_SC_CHAT:
-		scCHAT( a_pk );
+		SC_CHAT( a_pk );
 		break;
 
 	// 이동 처리
 	case MSG_SC_MOVE:
-		scMOVE( a_pk );
+		SC_MOVEMENT( a_pk );
 		break;
 
 	// 공격 ( 유저 -> 몬스터 )
