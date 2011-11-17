@@ -22,6 +22,7 @@ VOID Chase::Enter( CMonster* a_pMonster )
 	m_vPos = a_pMonster->Get_Pos();
 	m_iCurrentX = INT( m_vPos.x + 510.0f ) / 10;
 	m_iCurrentZ = INT( m_vPos.z + 510.0f ) / 10;
+//	a_pMonster->Set_Angle( D3DXToRadian( GetDegree() ) );
 }
 
 

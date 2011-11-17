@@ -80,7 +80,7 @@ public:
 	VOID csLOGON();
 	VOID csCHAT();
 	VOID csMOVE( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
-	VOID CS_UTOM_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection );
+	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, CHAR a_cTotalParts, CHAR a_cDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
 	VOID CS_MTOU_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection );
 
 	VOID CS_UTOM_Attack_Animation( WORD a_wAnimationNumber );

@@ -280,7 +280,7 @@ VOID CNetwork::csMOVE( const FLOAT& a_fX, const FLOAT& a_fZ, const FLOAT& a_fAng
 }
 
 
-VOID CNetwork::CS_UTOM_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection )
+VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, CHAR a_cTotalParts, CHAR a_cDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -292,18 +292,26 @@ VOID CNetwork::CS_UTOM_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 	sendPk.Write( a_vDirection.x );
 	sendPk.Write( a_vDirection.y );
 	sendPk.Write( a_vDirection.z );
-	sendPk.Write( a_cDestroyPart );
-	sendPk.Write( a_wDestroyCount );
+	sendPk.Write( a_cTotalParts );
 
-	for( WORD i=0; i<a_wDestroyCount; ++i )
+	CDebugConsole::GetInstance()->Messagef( L"Send TotalParts : %d \n", a_cTotalParts );
+
+	INT k = 0;
+	for( INT i=0; i<a_cTotalParts; ++i )
 	{
-		sendPk.Write( a_pList[i] );
-		CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
-	}
-	CDebugConsole::GetInstance()->Messagef( L"%f : Send Part:cDestroyCount : %d : %d\n", 
-		CFrequency::GetInstance()->getFrametime(), 
-		a_cDestroyPart, a_wDestroyCount );
+		sendPk.Write( a_cDestroyPart[i] );
+		sendPk.Write( a_wDestroyCount[i] );
 
+		CDebugConsole::GetInstance()->Messagef( L"Send DestroyPart : %d \n", a_cDestroyPart[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Send DestroyCount : %d \n", a_wDestroyCount[i] );
+
+		for( INT j=0; j<a_wDestroyCount[i]; ++j )
+		{
+			sendPk.Write( a_pList[k] );
+			CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[k] );
+			++k;
+		}
+	}
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );
@@ -314,31 +322,33 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 {
 	FLOAT fDirX, fDirY, fDirZ;
 	WORD wClientNumber;
-	CHAR cDestroyPart;
-	WORD wDestroyCount;
+	CHAR cTotalPart;
+	CHAR cDestroyPart[7];
+	WORD wDestroyCount[7];
 	WORD wList[1000];
 
-	a_pk.Read( &wClientNumber );
 	a_pk.Read( &fDirX);
 	a_pk.Read( &fDirY);
 	a_pk.Read( &fDirZ);
-	a_pk.Read( &cDestroyPart );
-	a_pk.Read( &wDestroyCount );
+	a_pk.Read( &wClientNumber );
+	a_pk.Read( &cTotalPart );
 
-	if( wDestroyCount >= 1000-1 )
+	INT k = 0;
+	for( INT i=0; i<cTotalPart; ++i )
 	{
-		MessageBox( NULL, L"Network.cpp Line 328 배열 초과", NULL, MB_OK );
-	}
-	
-	for( WORD i=0; i<wDestroyCount; ++i )
-	{
-		a_pk.Read( &wList[i] );
-		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
+		a_pk.Read( &cDestroyPart[i] );
+		a_pk.Read( &wDestroyCount[i] );
+
+		for( WORD j=0; j<wDestroyCount[i]; ++j )
+		{
+			a_pk.Read( &wList[k] );
+			CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[k] );
+		}
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", static_cast<INT>(cDestroyPart), wDestroyCount );
+	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
-	CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[static_cast<INT>(cDestroyPart)].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[cDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 
 	// 디버깅용 출력
 	//cout << wClientNumber << " : ";
@@ -401,13 +411,7 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 
 	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
-	for( INT Loop = 0; Loop < 3; ++Loop )
-	{
-		if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_ClientNumber() == wClientNumber )
-		{
-			CObjectManage::GetInstance()->Get_Charactors()[Loop].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
-		}
-	}
+	CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 }
 
 VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
@@ -488,7 +492,7 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		break;
 
 	// 공격 : 몬스터 -> 유저
-	case MSG_SC_MTOU_ATTACK:
+	case MSG_CS_MTOU_ATTACK:
 		SC_MTOU_ATTACK( a_pk );
 		break;
 
