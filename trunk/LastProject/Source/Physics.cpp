@@ -158,6 +158,7 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDire
 		m_vBBPos[i] = pBB->GetPosition( i );
 	}
 
+	//CDebugConsole::GetInstance()->MessageQube(m_vBBPos);
 	for ( i = 0; i < 6; ++i )
 	{
 		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[i][0]], &m_vBBPos[nVI[i][1]], &m_vBBPos[nVI[i][2]] );	

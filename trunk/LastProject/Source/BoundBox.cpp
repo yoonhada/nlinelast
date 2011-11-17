@@ -67,34 +67,33 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 		//  |/      |/
 		//  v7------v6
 
-		vRet = m_vVector[nPoint];
-		//switch (nPoint)
-		//{
-		//case 0:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
-		//	break;
-		//case 1:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
-		//	break;
-		//case 2:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
-		//	break;
-		//case 3:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
-		//	break;
-		//case 4:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
-		//	break;
-		//case 5:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
-		//	break;
-		//case 6:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
-		//	break;
-		//case 7:
-		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
-		//	break;
-		//}
+		switch (nPoint)
+		{
+		case 0:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
+			break;
+		case 1:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
+			break;
+		case 2:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
+			break;
+		case 3:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
+			break;
+		case 4:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
+			break;
+		case 5:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
+			break;
+		case 6:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
+			break;
+		case 7:
+			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
+			break;
+		}
 		if ( m_pCharactors )		
 		{
 			vRet.y -= GetSize(CBoundBox::MINUSY);
@@ -186,14 +185,12 @@ VOID CBoundBox::MatrixIdentity()
 
 VOID CBoundBox::SetAngleY(FLOAT fAngle)
 {
-	D3DXMATRIXA16 mat;
-	D3DXMatrixRotationY( &mat, fAngle );
-	m_matAxis *= mat;
-	//m_matAxis = D3DXMATRIXA16( 
-	//	cosf( fAngle ), 0, sinf( fAngle ), 0, 
-	//	0, 1, 0, 0, 
-	//	-sinf( fAngle ), 0, cosf( fAngle ), 0, 
-	//	0, 0, 0, 1);
+	// z 축 뒤집혀서 OpenGL 꺼 사용	
+	m_matAxis = D3DXMATRIXA16( 
+		cosf( fAngle ), 0, sinf( fAngle ), 0, 
+		0, 1, 0, 0, 
+		-sinf( fAngle ), 0, cosf( fAngle ), 0, 
+		0, 0, 0, 1);
 }
 
 VOID CBoundBox::SetAngleZ(FLOAT fAngle)
@@ -219,35 +216,54 @@ D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 	}
 }
 
-
-VOID CBoundBox::SetSize(INT n, float f)		
+std::vector <D3DXVECTOR3> * CBoundBox::GetPosVec()
 {
-		//    v0----- v1
-		//   /|      /|
-		//  v3------v2|
-		//  | |     | |
-		//  | |v4---|-|v5
-		//  |/      |/
-		//  v7------v6
-	switch ( n )
+	return &_data;
+}
+
+std::map <INT, D3DXVECTOR3> * CBoundBox::GetPosMap()
+{
+	return &_map;
+}
+
+VOID CBoundBox::SetPosVec()
+{
+	INT nNear = 0;
+	D3DXVECTOR3 vPos, vOri = GetPosition();
+	for (FLOAT i = GetSize(0); i < GetSize(3); ++i)
 	{
-	case 0:
-		m_vVector[0].x = m_vVector[3].x = m_vVector[4].x = m_vVector[7].x = f;
-		break;
-	case 1:
-		m_vVector[4].y = m_vVector[5].y = m_vVector[6].y = m_vVector[7].y = f;
-		break;
-	case 2:
-		m_vVector[2].z = m_vVector[3].z = m_vVector[6].z = m_vVector[7].z = f;
-		break;
-	case 3:
-		m_vVector[1].x = m_vVector[2].x = m_vVector[5].x = m_vVector[6].x = f;
-		break;
-	case 4:
-		m_vVector[0].y = m_vVector[1].y = m_vVector[2].y = m_vVector[3].y = f;
-		break;
-	case 5:
-		m_vVector[0].z = m_vVector[1].z = m_vVector[4].z = m_vVector[5].z = f;
-		break;
+		for (FLOAT j = GetSize(1); j < GetSize(4); ++j)
+		{
+			for (FLOAT k = GetSize(2); k < GetSize(5); ++k)
+			{
+				vPos.x = static_cast<FLOAT>( static_cast<INT>( vOri.x + i ) );
+				vPos.y = static_cast<FLOAT>( static_cast<INT>( vOri.y + j ) );
+				vPos.z = static_cast<FLOAT>( static_cast<INT>( vOri.z + k ) );
+
+				_data.push_back( vPos );
+			}
+		}
+	}
+}
+
+VOID CBoundBox::SetPosMap()
+{
+	INT nNear = 0;
+	D3DXVECTOR3 vPos, vOri = GetPosition();
+	for (FLOAT i = GetSize(0); i < GetSize(3); ++i)
+	{
+		for (FLOAT j = GetSize(1); j < GetSize(4); ++j)
+		{
+			for (FLOAT k = GetSize(2); k < GetSize(5); ++k)
+			{
+				vPos.x = static_cast<FLOAT>( static_cast<INT>( vOri.x + i ) );
+				vPos.y = static_cast<FLOAT>( static_cast<INT>( vOri.y + j ) );
+				vPos.z = static_cast<FLOAT>( static_cast<INT>( vOri.z + k ) );
+
+				_map[nNear] = vPos;
+				//_data.push_back( vPos );
+				nNear++;
+			}
+		}
 	}
 }

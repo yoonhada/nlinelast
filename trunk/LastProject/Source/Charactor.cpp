@@ -450,8 +450,6 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			{
 				a_vCollisionControl = D3DXVECTOR3(0, 0, 0);
 				break;
-				//CPhysics::GetInstance()->Sliding( a_vCollisionControl );
-				CDebugConsole::GetInstance()->Messagef(L"%f, %f, %f\n", a_vCollisionControl.x, a_vCollisionControl.y, a_vCollisionControl.z);
 			}
 			Iter++;
 		}

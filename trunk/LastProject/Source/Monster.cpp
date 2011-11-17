@@ -1210,7 +1210,7 @@ VOID CMonster::CreateAttackBoundBox()
 			m_pBBx->SetSize( 4,  27.0f );
 			m_pBBx->SetSize( 5,  27.0f );
 
-			m_pBBx->SetDirection( D3DXVECTOR3( 2.0f, -1.3f, -0.3f ) );
+			m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
 
 			CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
 
@@ -1338,7 +1338,7 @@ VOID CMonster::Update()
 	}
 
 	// AI
-	//m_pStateMachine->Update();
+	m_pStateMachine->Update();
 	CreateAttackBoundBox();
 }
 
