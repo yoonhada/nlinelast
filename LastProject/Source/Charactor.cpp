@@ -64,6 +64,7 @@ VOID CCharactor::Clear()
 	m_vPreControl = D3DXVECTOR3(100.0f, 0.0f, 0.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vKnockBack = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
 
 	D3DXMatrixIdentity( &m_matMultWorld );
@@ -553,6 +554,8 @@ VOID CCharactor::UpdateByInput(  )
 		a_fAngle = CInput::GetInstance()->Get_MouseYRotate();
 	}
 
+	a_vControl += (m_vKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
+	m_vKnockBack = m_vKnockBack * 0.9f;
 	a_fAngle += m_fAngle;
 	
 	// 360도 넘으면 라디언 360 빼기.
@@ -925,12 +928,16 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					//(*Iter)->GetPosVec();
 					// 케릭터 매트릭스 					
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-					D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );				
+					D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
+					(*Iter)->GetPosition();
+
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
+						nCount++;
 						// 날아가는 방향 계산.
-						vPos = (*Iter)->GetDirection();						
+						vPos = (*Iter)->GetDirection();	
+						m_vKnockBack = vPos;
 						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
 						BreakListMake( Loop, vPos );
 						NetworkSendTempVector.push_back( Loop );
@@ -963,7 +970,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		{
 			CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
-
+		m_vKnockBack = m_vKnockBack * NetworkSendTempVector.size();
 		NetworkSendTempVector.clear();
 	}
 }

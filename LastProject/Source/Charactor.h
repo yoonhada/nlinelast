@@ -166,6 +166,7 @@ private:
 	FLOAT		m_fNetTime;  ///< 네트워크 전송 위치 보정 시간
 	D3DXVECTOR3 m_vFowardVector; ///< 캐릭터 전진 이동 벡터
 	D3DXVECTOR3 m_vSideStepVector; ///< 캐릭터 좌우 이동 벡터
+	D3DXVECTOR3 m_vKnockBack;
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 	LPDIRECT3DVERTEXBUFFER9 m_pTotalVB;   ///< 큐브 통합 버텍스
