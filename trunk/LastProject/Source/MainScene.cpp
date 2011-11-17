@@ -81,7 +81,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
-	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
+	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 
 	//조명 생성
 	m_pLight = new CLight;
