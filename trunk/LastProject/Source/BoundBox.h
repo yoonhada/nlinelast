@@ -46,7 +46,8 @@ public:
 	FLOAT GetRadiusShort() const;
 
 	// Set
-	VOID SetSize(INT n, float f)		{ m_fSize[n] = f; }
+	//VOID SetSize(INT n, float f)		{ m_fSize[n] = f; }
+	VOID SetSize(INT n, float f);
 	VOID SetPosition(D3DXVECTOR3 v)		{ m_vPosition = v; }	///< 중심좌표
 	VOID SetDirection(D3DXVECTOR3 v)	{ m_vDirection = v; }	///< 동좌표
 	VOID SetAngleX(FLOAT fAngle);								///< x축회전
@@ -60,6 +61,7 @@ public:
 private:
 	CCharactor * m_pCharactors;
 	D3DXVECTOR3 m_vPosition;		///< 중심좌표
+	D3DXVECTOR3 m_vVector[8];
 	D3DXMATRIXA16 m_matAxis;		///< 큐브 매트릭스
 	D3DXVECTOR3 m_vDirection;		///< 동좌표
 	FLOAT m_fSize[6];

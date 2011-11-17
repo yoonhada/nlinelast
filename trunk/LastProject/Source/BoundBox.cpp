@@ -67,33 +67,34 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 		//  |/      |/
 		//  v7------v6
 
-		switch (nPoint)
-		{
-		case 0:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 1:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 2:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		case 3:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		case 4:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 5:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 6:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		case 7:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		}
+		vRet = m_vVector[nPoint];
+		//switch (nPoint)
+		//{
+		//case 0:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
+		//	break;
+		//case 1:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
+		//	break;
+		//case 2:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
+		//	break;
+		//case 3:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
+		//	break;
+		//case 4:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
+		//	break;
+		//case 5:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
+		//	break;
+		//case 6:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
+		//	break;
+		//case 7:
+		//	vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
+		//	break;
+		//}
 		if ( m_pCharactors )		
 		{
 			vRet.y -= GetSize(CBoundBox::MINUSY);
@@ -215,5 +216,38 @@ D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 	else
 	{
 		return m_matAxis;
+	}
+}
+
+
+VOID CBoundBox::SetSize(INT n, float f)		
+{
+		//    v0----- v1
+		//   /|      /|
+		//  v3------v2|
+		//  | |     | |
+		//  | |v4---|-|v5
+		//  |/      |/
+		//  v7------v6
+	switch ( n )
+	{
+	case 0:
+		m_vVector[0].x = m_vVector[3].x = m_vVector[4].x = m_vVector[7].x = f;
+		break;
+	case 1:
+		m_vVector[4].y = m_vVector[5].y = m_vVector[6].y = m_vVector[7].y = f;
+		break;
+	case 2:
+		m_vVector[2].z = m_vVector[3].z = m_vVector[6].z = m_vVector[7].z = f;
+		break;
+	case 3:
+		m_vVector[1].x = m_vVector[2].x = m_vVector[5].x = m_vVector[6].x = f;
+		break;
+	case 4:
+		m_vVector[0].y = m_vVector[1].y = m_vVector[2].y = m_vVector[3].y = f;
+		break;
+	case 5:
+		m_vVector[0].z = m_vVector[1].z = m_vVector[4].z = m_vVector[5].z = f;
+		break;
 	}
 }
