@@ -1338,7 +1338,7 @@ VOID CMonster::Update()
 	}
 
 	// AI
-	m_pStateMachine->Update();
+	//m_pStateMachine->Update();
 	CreateAttackBoundBox();
 }
 
