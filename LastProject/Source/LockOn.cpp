@@ -78,11 +78,10 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	CDebugInterface::GetInstance()->AddMessageFloat( "Monster_Angle", fMonsterAngle );
 
 	static D3DXVECTOR3 vRot = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-	//vRot.y
+
 	if( fMonsterAngle != fAngle )
 	{
 		a_pMonster->Set_Angle( D3DXToRadian( 270.0f - fAngle )  );
-//		D3DXVec2Lerp(
 	}
 	
 	// 공격 각도내에 들어왔으면

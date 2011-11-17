@@ -68,43 +68,35 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	// 범위에 없으면 가장 가까운 목표 추격
 	else if( min >= 50.0f && min <= 500.0f )
 	{	
-	
-//			pMonster->Set_Target( Target );
-//			D3DXVECTOR3 UnitVector = CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() - pMonster->Get_Pos();
-//			D3DXVec3Normalize( &UnitVector, &UnitVector );
-//			pMonster->Set_TargetUnitVector( UnitVector );
-//			pMonster->Set_TargetPos( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos() );
-//			pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
-	
-			// 위치를 0, 0 기준으로 맞춘 후 계산한다.
-			INT StartX = INT( a_pMonster->Get_Pos().x + 510.0f ) / 10;
-			INT StartZ = INT( a_pMonster->Get_Pos().z + 510.0f ) / 10;
-			INT EndX = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().x + 510.0f ) / 10;
-			INT EndZ = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().z + 510.0f ) / 10;
+		// 위치를 0, 0 기준으로 맞춘 후 계산한다.
+		INT StartX = INT( a_pMonster->Get_Pos().x + 510.0f ) / 10;
+		INT StartZ = INT( a_pMonster->Get_Pos().z + 510.0f ) / 10;
+		INT EndX = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().x + 510.0f ) / 10;
+		INT EndZ = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().z + 510.0f ) / 10;
 
-			a_pMonster->Set_TargetPos( EndX, EndZ );
-	
-			DWORD oldTime = timeGetTime();
-			PathNode* path = Astar::GetInstance()->findPath( StartX, StartZ, EndX, EndZ );
-			FLOAT time = ( timeGetTime() - oldTime ) * 0.001f;
-			CDebugConsole::GetInstance()->Messagef( "Search Time : %f \n", time );
+		a_pMonster->Set_TargetPos( EndX, EndZ );
 
-			// 이전 Path 표시를 없앤다.
-			ClearPath( a_pMonster->Get_Path() );
-			Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
-			Astar::GetInstance()->clearMap();
+		DWORD oldTime = timeGetTime();
+		PathNode* path = Astar::GetInstance()->findPath( StartX, StartZ, EndX, EndZ );
+		FLOAT time = ( timeGetTime() - oldTime ) * 0.001f;
+		CDebugConsole::GetInstance()->Messagef( "Search Time : %f \n", time );
 
-			// 새 Path를 표시한다.
-			SetPath( path );
+		// 이전 Path 표시를 없앤다.
+		ClearPath( a_pMonster->Get_Path() );
+		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
+		Astar::GetInstance()->clearMap();
 
-			a_pMonster->Set_Path( path );
+		// 새 Path를 표시한다.
+		SetPath( path );
 
-			// Path가 있으면 Chase 상태로
-			if( path )
-			{
-				a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
-				Chase::GetInstance()->Enter( a_pMonster );
-			}
+		a_pMonster->Set_Path( path );
+
+		// Path가 있으면 Chase 상태로
+		if( path )
+		{
+			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
+			Chase::GetInstance()->Enter( a_pMonster );
+		}
 	}
 	else
 	{
