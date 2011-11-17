@@ -39,8 +39,6 @@ public:
 	D3DXVECTOR3 GetPosition(INT = -1) const;
 	D3DXVECTOR3 GetDirection() const 		{ return m_vDirection; }
 	D3DXMATRIXA16 GetAxisMat() const;
-	std::vector <D3DXVECTOR3> * GetPosVec();
-	std::map <INT, D3DXVECTOR3> * GetPosMap();
 
 	FLOAT GetSize(INT n) const;
 	FLOAT GetRadius() const;
