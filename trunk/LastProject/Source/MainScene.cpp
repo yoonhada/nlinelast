@@ -201,7 +201,7 @@ VOID CMainScene::CreateCharactor()
 	m_pMyCharactor = CObjectManage::GetInstance()->Get_MyCharactor();
 	m_pMyCharactor->Create( m_pD3dDevice );
 	m_pMyCharactor->Set_Active( TRUE );
-	m_pMyCharactor->Load( L"Data/CharData/DDAL_0.csav" );
+	m_pMyCharactor->Load( L"Data/CharData/APPA_0.csav" );
 	m_pMyCharactor->CreateWeapon( CWeapon::SPANNER );
 
 	CTree::GetInstance()->GetCharVector()->push_back( m_pMyCharactor->GetBoundBox() );
@@ -213,7 +213,7 @@ VOID CMainScene::CreateCharactor()
 		m_pCharactors[Loop].Create( m_pD3dDevice );
 		if(Loop == 0)
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/MOM.csav" );
 		}
 		else if(Loop == 1)
 		{
@@ -221,7 +221,7 @@ VOID CMainScene::CreateCharactor()
 		}
 		else
 		{
-			m_pCharactors[Loop].Load( L"Data/CharData/APPA_0.csav" );
+			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
 		}
 
 		m_pCharactors[Loop].CreateWeapon( CWeapon::SPANNER /* + Loop + 1*/ );
@@ -277,7 +277,7 @@ VOID	CMainScene::Update()
 	//카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
 		m_pMyCharactor->Get_CharaPos2Camera(), 
-		m_pMyCharactor->Get_CharaPos2Camera(), 
+		m_pMyCharactor->Get_PreCharaPos2Camera(), 
 		10.0f, 75.0f, 
 		m_pMyCharactor->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );

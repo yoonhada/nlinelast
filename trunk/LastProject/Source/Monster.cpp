@@ -917,15 +917,17 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	//	}
 	//}
 	
-	INT Loop = 4;
+	INT Loop = 0;
 	D3DXMATRIXA16 mat = Get_MatWorld();
-	//for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
-	//{
+	for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
+	{
 		if ( m_pBox[Loop].CollisionAtk( ) )
 		{
 			m_pBox[Loop].BreakQube( mat );
 		}
-	//}/
+	}
+
+	CObjectManage::GetInstance()->Send_NetworkSendDestroyData();
 
 	CTree::GetInstance()->GetCharAtkVector()->erase(
 		CTree::GetInstance()->GetCharAtkVector()->begin(), 
