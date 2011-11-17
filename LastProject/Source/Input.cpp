@@ -41,6 +41,9 @@ VOID CInput::Clear()
 
 	m_iLbuttonCheck = -1;
 	m_iRbuttonCheck = -1;
+
+	// 마우스 커서를 숨긴다.
+	ShowCursor( FALSE );
 }
 
 
@@ -97,8 +100,6 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			////CDebugConsole::GetInstance()->Messagef( "Input : %f\n", m_fYRotate );
 
 			// 마우스를 윈도우의 중앙으로 초기화
-			// 마우스를 나타나지 않게 않다.
-			SetCursor( NULL );
 			RECT	rc;
 			GetClientRect( m_hWnd, &rc );
 			m_MousePosOld.x = (rc.right - rc.left) / 2;

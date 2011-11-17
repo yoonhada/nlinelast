@@ -4,7 +4,7 @@
 #include "Packet.h"
 #include "Charactor.h"
 #include "Monster.h"
-//#include "Frequency.h"
+#include "MainScene.h"
 
 
 CNetwork::CNetwork()
@@ -226,6 +226,8 @@ VOID CNetwork::scInitData( CPacket& a_pk )
 			CObjectManage::GetInstance()->Get_Charactors()[user_list].Set_ClientNumber( user_list );
 		}
 	}
+
+	CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 }
 
 VOID CNetwork::csLOGON()
@@ -343,20 +345,12 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 		{
 			a_pk.Read( &wList[k] );
 			CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[k] );
+			++k;
 		}
-	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
-
-	CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[cDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
-
-	// 디버깅용 출력
-	//cout << wClientNumber << " : ";
-	//for( WORD i=0; i<cDestroyCount; ++i )
-	//{
-	//	cout << wList[i];
-	//}
-	//cout << endl;
+		CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", static_cast<INT>(cDestroyPart[i]), wDestroyCount[i] );
+		CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[static_cast<INT>(cDestroyPart[i])].RecvBreakList( wDestroyCount[i], wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	}	
 }
 
 VOID CNetwork::CS_MTOU_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection )
@@ -377,9 +371,9 @@ VOID CNetwork::CS_MTOU_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 	for( WORD i=0; i<a_wDestroyCount; ++i )
 	{
 		sendPk.Write( a_pList[i] );
-		CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
 	}
-	CDebugConsole::GetInstance()->Messagef( L"Send Part:cDestroyCount : %d : %d\n", a_cDestroyPart, a_wDestroyCount );
+	//CDebugConsole::GetInstance()->Messagef( L"Send Part:cDestroyCount : %d : %d\n", a_cDestroyPart, a_wDestroyCount );
 
 	sendPk.CalcSize();
 
@@ -409,9 +403,9 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
+	//CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
-	CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 }
 
 VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )

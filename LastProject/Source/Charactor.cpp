@@ -77,7 +77,7 @@ VOID CCharactor::Clear()
 	m_fAniAngleY = 0.0f;
 	m_fAniAngleAttack = 0.0f;
 
-	m_chMonsterPart = 0;
+	m_chMonsterPart = -1;
 }
 
 //HRESULT CCharactor::Create()
@@ -934,13 +934,17 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
-						nCount++;
+						++nCount;
 						// 날아가는 방향 계산.
 						vPos = (*Iter)->GetDirection();	
 						m_vKnockBack = vPos;
 						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
 						BreakListMake( Loop, vPos );
 						NetworkSendTempVector.push_back( Loop );
+						if( m_bMonster )
+						{
+							CObjectManage::GetInstance()->Set_PushBackNetworkSendTempVector( static_cast<WORD>(Loop) );
+						}
 						vDir = vPos;
 					}
 				}
@@ -964,11 +968,12 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 #endif
 		if( m_bMonster && NetworkSendTempVector.size() != 0 )
 		{
-			CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
+			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, NetworkSendTempVector.size(), vDir );
+			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
 		else
 		{
-			CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
+			//CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
 		m_vKnockBack = m_vKnockBack * NetworkSendTempVector.size();
 		NetworkSendTempVector.clear();
