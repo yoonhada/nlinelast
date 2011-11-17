@@ -185,12 +185,14 @@ VOID CBoundBox::MatrixIdentity()
 
 VOID CBoundBox::SetAngleY(FLOAT fAngle)
 {
-	// z 축 뒤집혀서 OpenGL 꺼 사용	
-	m_matAxis = D3DXMATRIXA16( 
-		cosf( fAngle ), 0, sinf( fAngle ), 0, 
-		0, 1, 0, 0, 
-		-sinf( fAngle ), 0, cosf( fAngle ), 0, 
-		0, 0, 0, 1);
+	D3DXMATRIXA16 mat;
+	D3DXMatrixRotationY( &mat, fAngle );
+	m_matAxis *= mat;
+	//m_matAxis = D3DXMATRIXA16( 
+	//	cosf( fAngle ), 0, sinf( fAngle ), 0, 
+	//	0, 1, 0, 0, 
+	//	-sinf( fAngle ), 0, cosf( fAngle ), 0, 
+	//	0, 0, 0, 1);
 }
 
 VOID CBoundBox::SetAngleZ(FLOAT fAngle)
@@ -213,57 +215,5 @@ D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 	else
 	{
 		return m_matAxis;
-	}
-}
-
-std::vector <D3DXVECTOR3> * CBoundBox::GetPosVec()
-{
-	return &_data;
-}
-
-std::map <INT, D3DXVECTOR3> * CBoundBox::GetPosMap()
-{
-	return &_map;
-}
-
-VOID CBoundBox::SetPosVec()
-{
-	INT nNear = 0;
-	D3DXVECTOR3 vPos, vOri = GetPosition();
-	for (FLOAT i = GetSize(0); i < GetSize(3); ++i)
-	{
-		for (FLOAT j = GetSize(1); j < GetSize(4); ++j)
-		{
-			for (FLOAT k = GetSize(2); k < GetSize(5); ++k)
-			{
-				vPos.x = static_cast<FLOAT>( static_cast<INT>( vOri.x + i ) );
-				vPos.y = static_cast<FLOAT>( static_cast<INT>( vOri.y + j ) );
-				vPos.z = static_cast<FLOAT>( static_cast<INT>( vOri.z + k ) );
-
-				_data.push_back( vPos );
-			}
-		}
-	}
-}
-
-VOID CBoundBox::SetPosMap()
-{
-	INT nNear = 0;
-	D3DXVECTOR3 vPos, vOri = GetPosition();
-	for (FLOAT i = GetSize(0); i < GetSize(3); ++i)
-	{
-		for (FLOAT j = GetSize(1); j < GetSize(4); ++j)
-		{
-			for (FLOAT k = GetSize(2); k < GetSize(5); ++k)
-			{
-				vPos.x = static_cast<FLOAT>( static_cast<INT>( vOri.x + i ) );
-				vPos.y = static_cast<FLOAT>( static_cast<INT>( vOri.y + j ) );
-				vPos.z = static_cast<FLOAT>( static_cast<INT>( vOri.z + k ) );
-
-				_map[nNear] = vPos;
-				//_data.push_back( vPos );
-				nNear++;
-			}
-		}
 	}
 }
