@@ -774,7 +774,6 @@ VOID CCharactor::Update()
 		m_pWeapon->Update();
 		if ( m_pWeapon->GetAtkTime() == TRUE )
 		{
-			//CDebugConsole::GetInstance()->Messagef("%f : ", CFrequency::GetInstance()->getFrametime());
 			D3DXVECTOR3 vDir = Get_CharaPos();
 			vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
 			m_pWeapon->AddAtkBBx( vDir, m_fAngle );
