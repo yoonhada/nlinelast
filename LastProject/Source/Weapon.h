@@ -39,6 +39,7 @@ private:
 	WEAPONTYPE m_WeaponType;
 	Map * m_pMap;
 	BOOL m_bAtkTime, m_bAtkTimeReset;
+	FLOAT m_fScale;
 	FLOAT m_fZAng[10];
 	FLOAT m_fBBSize[6];
 

@@ -36,7 +36,7 @@ VOID CWeapon::Clear()
 	m_fZAng[0] = DEG2RAD(0);
 	m_fZAng[1] = DEG2RAD(0);
 	m_fZAng[2] = DEG2RAD(0);
-	m_fZAng[3] = DEG2RAD(90);
+	m_fZAng[3] = DEG2RAD(0);
 	m_fZAng[4] = DEG2RAD(-15);
 	m_fZAng[5] = DEG2RAD(0);
 	m_fZAng[6] = DEG2RAD(45);
@@ -45,14 +45,15 @@ VOID CWeapon::Clear()
 	m_fZAng[9] = DEG2RAD(0);
 
 	// XYZ Min
-	m_fBBSize[0] =-10.5f;
-	m_fBBSize[1] =- 1.5f;
-	m_fBBSize[2] =-16.5f;
+	m_fBBSize[0] = -7.5f;
+	m_fBBSize[1] = -1.5f;
+	m_fBBSize[2] = -7.5f;
 	// XYZ Max
-	m_fBBSize[3] =  4.5f;
+	m_fBBSize[3] =  7.5f;
 	m_fBBSize[4] =  1.5f;
-	m_fBBSize[5] =  0.5f;
+	m_fBBSize[5] =  7.5f;
 
+	m_fScale = 0;
 	m_bAtkTime = FALSE;
 	m_pCube = 0;
 }
@@ -211,6 +212,7 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::A;
 		m_pMap->SetAnimation( m_nState );
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::ATTACK1 && 
 		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -219,12 +221,15 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK2;
 		m_pMap->SetAnimation( m_nState );
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::BASE && nCurrFrame == 0 )
 	{
+		m_fScale = 1.0f;
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK1;
 		m_pMap->SetAnimation( m_nState );
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 	} 
 }
 
@@ -236,9 +241,11 @@ VOID CWeapon::SetKeyB()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
+		m_fScale = 2.0f;
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP4;
 		m_pMap->SetAnimation( m_nState );
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::TEMP2 &&
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -247,6 +254,7 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP3;
 		m_pMap->SetAnimation( m_nState );
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::TEMP1 &&
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -255,12 +263,15 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP2;
 		m_pMap->SetAnimation( m_nState );
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::BASE  && nCurrFrame == 0 )
 	{
+		m_fScale = 1.0f;
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP1;
 		m_pMap->SetAnimation( m_nState );
+		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
 	}
 }
 
@@ -273,6 +284,7 @@ VOID CWeapon::AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle )
 VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 {
 	m_WeaponType.pBBA.SetPosition( vPos );
+	m_WeaponType.pBBA.SetScale( m_fScale );
 	m_WeaponType.pBBA.SetAngleY( fAngle );
 	m_WeaponType.pBBA.SetAngleZ( m_fZAng[m_nState] );
 
@@ -284,13 +296,13 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[4] );
 	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[5] );
 
-	m_pCube->Set_ControlScale( 0, m_fBBSize[3] - m_fBBSize[0] );
-	m_pCube->Set_ControlScale( 1, m_fBBSize[4] - m_fBBSize[1] );
-	m_pCube->Set_ControlScale( 2, m_fBBSize[5] - m_fBBSize[2] );
+	m_pCube->Set_ControlScale( 0, ( m_fBBSize[3] - m_fBBSize[0] ) * m_fScale );
+	m_pCube->Set_ControlScale( 1, ( m_fBBSize[4] - m_fBBSize[1] ) );
+	m_pCube->Set_ControlScale( 2, ( m_fBBSize[5] - m_fBBSize[2] ) * m_fScale );
 	m_pCube->Set_ControlRotate( 2, m_fZAng[m_nState] );
 	m_pCube->Set_ControlTranslate( 0, ( m_fBBSize[0] + m_fBBSize[3] ) * 0.5f );
 	m_pCube->Set_ControlTranslate( 1, ( m_fBBSize[1] + m_fBBSize[4] ) * 0.5f + 7.5f );
-	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[2] + m_fBBSize[5] ) * 0.5f );
+	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[2] + m_fBBSize[5] ) * 0.5f - ( m_nState == EnumCharFrame::TEMP4 ? 0.0f : 7.5f ) );
 	
 	m_WeaponType.pBBA.SetDirection( m_WeaponType.vDir[m_nState] );
 }

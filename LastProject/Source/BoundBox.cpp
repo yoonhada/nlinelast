@@ -181,6 +181,12 @@ VOID CBoundBox::MatrixIdentity()
 	D3DXMatrixIdentity( &m_matAxis );
 }
 
+VOID CBoundBox::SetScale(FLOAT fScale)
+{
+	m_matAxis._11 = fScale;
+	m_matAxis._33 = fScale;
+}
+
 VOID CBoundBox::SetAngleY(FLOAT fAngle)
 {
 	// z 축 뒤집혀서 OpenGL 꺼 사용	
