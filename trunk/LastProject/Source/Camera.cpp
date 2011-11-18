@@ -51,6 +51,22 @@ void CCamera::SetCamera()
 }
 
 
+VOID CCamera::SetEffect(INT nType)
+{
+	m_nEffect = nType;
+}
+
+VOID CCamera::Effect()
+{
+	switch ( m_nEffect )
+	{
+	case 1:
+		m_vLook.x = m_vLook.x + sin(m_fEffectValue) * 10.0f;
+		m_fEffectValue += 0.01f;
+		break;
+	}	
+}
+
 VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
 {
 	static FLOAT fZoom = m_fMaxZoom;
@@ -69,8 +85,8 @@ VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook
 	m_fZoom  = fZoom;
 	m_fYaw   = a_fYaw;
 	m_fPitch += a_fPitch;
-	
     SetCamera();
+	Effect();
 }
 
 

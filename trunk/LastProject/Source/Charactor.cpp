@@ -934,8 +934,8 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 						++nCount;
 						// 날아가는 방향 계산.
 						vPos = (*Iter)->GetDirection();	
-						m_vKnockBack = vPos;
 						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
+						m_vKnockBack = vPos;
 						BreakListMake( Loop, vPos );
 						NetworkSendTempVector.push_back( Loop );
 						if( m_bMonster )
@@ -958,6 +958,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			{
 				if (nCount > 50)
 				{
+					m_fEffect = 1.0f;
 					break;
 				}
 			}
@@ -972,7 +973,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		{
 			//CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
-		m_vKnockBack = m_vKnockBack * NetworkSendTempVector.size();
+		m_vKnockBack = m_vKnockBack * (FLOAT)NetworkSendTempVector.size();
 		NetworkSendTempVector.clear();
 	}
 }
