@@ -34,7 +34,7 @@ private:
 	D3DXVECTOR3 m_vRotate;			///< 현재 회전량
 	BOOL m_bVisiable;				///< 
 	FLOAT m_fSize;					///< 큐브 반지름
-	D3DXMATRIXA16 m_matChara;		///< 생성 당시 캐릭터 월드 매트릭스 행렬 저장
+	//D3DXMATRIXA16 m_matChara;		///< 생성 당시 캐릭터 월드 매트릭스 행렬 저장
 	FLOAT m_fHeight;					///< 바닥으로 부터의 높이 보정값
 
 
@@ -52,18 +52,18 @@ public:
 	BOOL GetVisiable()				{ return m_bVisiable; }
 	D3DXVECTOR3 GetPosition()		{ return m_vPos; }
 	D3DXVECTOR3 GetAxisDir(INT n)	{ return m_vAxisDir[n]; }
-	D3DXMATRIXA16 GetCharMatrix()
-	{ 
-		return m_matChara; 
-	}
+	//D3DXMATRIXA16 GetCharMatrix()
+	//{ 
+	//	return m_matChara; 
+	//}
 
 	// Set
 	VOID SetVisiable( BOOL bVisi)			{ m_bVisiable = bVisi; }
 	VOID SetPosition( D3DXVECTOR3 vec )		{ m_vPos = vec; }
-	VOID SetCharMatrix( const D3DXMATRIXA16& a_matChara )
-	{
-		m_matChara = a_matChara;
-	}
+	//VOID SetCharMatrix( const D3DXMATRIXA16& a_matChara )
+	//{
+	//	m_matChara = a_matChara;
+	//}
 	VOID SetHeight( FLOAT a_fHeight )
 	{
 		m_fHeight = a_fHeight;

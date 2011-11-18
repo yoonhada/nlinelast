@@ -13,10 +13,10 @@ CQube::CQube()
 {
 	//Create( _pd3dDevice, a_pVB, a_pIB, a_iStartVB, a_iStartIB, a_fCubeSize );
 	m_vPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	ZeroMemory( &m_vAxisDir, sizeof(m_vAxisDir) );
+	ZeroMemory( m_vAxisDir, sizeof(m_vAxisDir) );
 	m_vRotateTemp = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vRotate = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXMatrixIdentity( &m_matChara );
+	//D3DXMatrixIdentity( &m_matChara );
 }
 
 CQube::~CQube()

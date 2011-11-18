@@ -202,14 +202,12 @@ private:
 	FLOAT m_fAniAngleAttack;
 
 	// 카메라 이펙트 변수
-	FLOAT m_fEffect;
 private:
 	CShadowCell* m_pShadowCell;
 
 public:
 	VOID SetMon(BOOL b)		{ m_bMonster = b; }
 	VOID UpdateOtherPlayer2();
-	FLOAT GetEffect()		{ return (m_fEffect*=-1.0f);}// *= -0.75f; }
 };
 
 #endif

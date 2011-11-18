@@ -246,12 +246,26 @@ VOID CModel::CreateRandom( CCharCube* a_pCube,
 	mat._42 = 0.0f;
 	mat._43 = 0.0f;
 
-	pQube = new CQube;
-	pQube->SetPosition( vec );
-	pQube->RandMome( vMome, fPow );
-	pQube->RanderRotate();
-	pQube->Create( m_pd3dDevice, m_pTotalVB, m_pTotalIB, 0, 0, 0.5f );
-	pQube->InitTexture( dwColor, dwOutLine1 );
+	try
+	{
+		if(!(pQube = new CQube))
+			throw 0;
+	}
+	catch (...)
+	{		
+		return;
+	}
+	
+	if (pQube != NULL)
+	{
+		CDebugConsole::GetInstance()->Messagef("%d - %f, %f, %f\n", pQube, vec.x, vec.y, vec.z);
+		pQube->SetPosition( vec );
+		pQube->RandMome( vMome, fPow );
+		pQube->RanderRotate();
+		pQube->Create( m_pd3dDevice, m_pTotalVB, m_pTotalIB, 0, 0, 0.5f );
+		pQube->InitTexture( dwColor, dwOutLine1 );
 
-	m_vectorQube.push_back( pQube );
+		m_vectorQube.push_back( pQube );
+	}
+
 }
