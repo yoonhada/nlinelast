@@ -493,8 +493,6 @@ BOOL CCharactor::CollisionAtk( )
 			vPos = ( *Iter )->GetPosition();
 			if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
 			{
-				//( *Iter )->SetPosVec();
-				//( *Iter )->SetPosMap();
 				return TRUE; 
 			}
 		}
@@ -511,8 +509,6 @@ BOOL CCharactor::CollisionAtk( )
 				vPos = ( *Iter )->GetPosition(i);
 				if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
 				{
-					//( *Iter )->SetPosVec();
-					//( *Iter )->SetPosMap();
 					return TRUE; 
 				}
 			}
@@ -762,14 +758,13 @@ VOID CCharactor::Update()
 		{
 			m_pWeapon->SetKeyA();
 			//네트워크로 현재 애니메이션 상태 보내기
-			CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_pWeapon->Get_nState() );
+			//CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_pWeapon->Get_nState() );
 			CDebugConsole::GetInstance()->Messagef( L"Lbutton Action\n" );
 		}
 		if ( CInput::GetInstance()->Get_Rbutton() )
 		{
 			m_pWeapon->SetKeyB();
-			//네트워크로 현재 애니메이션 상태 보내기
-			CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_pWeapon->Get_nState() );
+			//네트워크로 현재 애니메이션 상태 보내기			
 		}
 
 		m_pWeapon->Update();
@@ -908,6 +903,11 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();	
 
 
+		if ( !(vecBoundBox != NULL && vecBoundBox->size()) )
+		{
+			return;
+		}
+		
 		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
 		{
 			if( m_vectorCube[Loop] == NULL )
@@ -973,7 +973,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		{
 			//CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
-		m_vKnockBack = m_vKnockBack * nCount;
+		m_vKnockBack = m_vKnockBack * (FLOAT)nCount;
 		//NetworkSendTempVector.clear();
 	}
 }

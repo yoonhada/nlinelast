@@ -90,7 +90,6 @@ VOID CNetwork::Update()
 		CS_MOVEMENT( CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
 			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().z,
 			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaAngle() );
-
 		time = 0.0f;
 	}
 
@@ -241,6 +240,7 @@ VOID CNetwork::CS_LOGON()
 	CHAR* szName = "HelloWorld";
 	CHAR* szPass = "Beautiful";
 
+
 	sendPk.WriteString( szName, strlen( szName ) );
 	sendPk.WriteString( szPass, strlen( szPass ) );
 
@@ -279,6 +279,7 @@ VOID CNetwork::CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );
+	//CDebugConsole::GetInstance()->Messagef( L"****MOV\n" );
 }
 
 
@@ -315,8 +316,10 @@ VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WOR
 		}
 	}
 	sendPk.CalcSize();
+	CDebugConsole::GetInstance()->Messagef( L"Packet Length : %d\n", sendPk.GetLength() );
 
 	SendToServer( sendPk );
+	CDebugConsole::GetInstance()->Messagef( L"****C-ATK\n" );
 }
 
 
@@ -379,6 +382,7 @@ VOID CNetwork::CS_MTOU_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );
+	CDebugConsole::GetInstance()->Messagef( L"****M-ATK\n" );
 }
 
 
@@ -422,7 +426,10 @@ VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
 
 	sendPk.CalcSize();
 
+	CDebugConsole::GetInstance()->Messagef("MSG_CS_UTOM_ATTACK_ANIMATION : %d - %d\n", CObjectManage::GetInstance()->Get_ClientNumber(), a_wAnimationNumber);
+
 	SendToServer( sendPk );
+	CDebugConsole::GetInstance()->Messagef( L"****ATK ANI\n" );
 }
 
 

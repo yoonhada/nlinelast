@@ -47,8 +47,9 @@ public:
 
 	// Set
 	VOID SetSize(INT n, float f)		{ m_fSize[n] = f; }
-	VOID SetPosition(D3DXVECTOR3 v)		{ m_vPosition = v; }	///< 중심좌표
+	VOID SetPosition(D3DXVECTOR3 v)		{ m_vPosition = v; m_matAxis._43 = -7.5f;}	///< 중심좌표
 	VOID SetDirection(D3DXVECTOR3 v)	{ m_vDirection = v; }	///< 동좌표
+	VOID SetScale(FLOAT fScale);
 	VOID SetAngleX(FLOAT fAngle);								///< x축회전
 	VOID SetAngleY(FLOAT fAngle);								///< y축회전
 	VOID SetAngleZ(FLOAT fAngle);								///< z축회전
