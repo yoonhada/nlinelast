@@ -29,7 +29,7 @@ VOID CObjectManage::Clear()
 	m_pCharactors = NULL;
 	m_iMaxCharaNum = 3;
 
-	m_cTotalDestroyPart = 0;
+	m_wTotalDestroyPart = 0;
 }
 
 HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )

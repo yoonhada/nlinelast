@@ -106,8 +106,8 @@ private:
 	WORD m_iClientNumber;
 
 private:
-	CHAR m_cTotalDestroyPart;
-	CHAR m_cDestroyPart[7];
+	WORD m_wTotalDestroyPart;
+	WORD m_wDestroyPart[7];
 	WORD m_wDestroyCount[7];
 	std::vector<WORD> m_NetworkSendTempVector;
 	D3DXVECTOR3 m_vDestroyDir;
@@ -121,22 +121,22 @@ public:
 
 	VOID Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir )
 	{
-		m_cDestroyPart[m_cTotalDestroyPart] = a_cDestroyPart;
-		m_wDestroyCount[m_cTotalDestroyPart] = a_wDestroyCount;
+		m_wDestroyPart[m_wTotalDestroyPart] = a_cDestroyPart;
+		m_wDestroyCount[m_wTotalDestroyPart] = a_wDestroyCount;
 		m_vDestroyDir = a_vDestroyDir;
 		
-		++m_cTotalDestroyPart;
+		++m_wTotalDestroyPart;
 	}
 
 	VOID Send_NetworkSendDestroyData()
 	{
-		if( m_cTotalDestroyPart > 0)
+		if( m_wTotalDestroyPart > 0)
 		{
-			CNetwork::GetInstance()->CS_UTOM_ATTACK( m_vDestroyDir, m_cTotalDestroyPart, m_cDestroyPart, m_wDestroyCount, m_NetworkSendTempVector );
+			CNetwork::GetInstance()->CS_UTOM_ATTACK( m_vDestroyDir, m_wTotalDestroyPart, m_wDestroyPart, m_wDestroyCount, m_NetworkSendTempVector );
 			m_NetworkSendTempVector.clear();
 			CDebugConsole::GetInstance()->Messagef( L"m_NetworkSendTempVector Size : %d\n", m_NetworkSendTempVector.size() );
-			m_cTotalDestroyPart = 0;
-			ZeroMemory( &m_cDestroyPart, sizeof(m_cDestroyPart) );
+			m_wTotalDestroyPart = 0;
+			ZeroMemory( &m_wDestroyPart, sizeof(m_wDestroyPart) );
 			ZeroMemory( &m_wDestroyCount, sizeof(m_wDestroyCount) );
 			ZeroMemory( m_vDestroyDir, sizeof(m_vDestroyDir) );
 		}

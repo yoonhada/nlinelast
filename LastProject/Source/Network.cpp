@@ -282,7 +282,7 @@ VOID CNetwork::CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a
 }
 
 
-VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, CHAR a_cTotalParts, CHAR a_cDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList )
+VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -294,20 +294,20 @@ VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, CHAR a_cTotalParts, CHA
 	sendPk.Write( a_vDirection.x );
 	sendPk.Write( a_vDirection.y );
 	sendPk.Write( a_vDirection.z );
-	sendPk.Write( a_cTotalParts );
+	sendPk.Write( a_wTotalParts );
 
-	CDebugConsole::GetInstance()->Messagef( L"Send TotalParts : %d \n", a_cTotalParts );
+	CDebugConsole::GetInstance()->Messagef( L"Send TotalParts : %d \n", a_wTotalParts );
 
 	INT k = 0;
-	for( INT i=0; i<a_cTotalParts; ++i )
+	for( WORD i=0; i<a_wTotalParts; ++i )
 	{
-		sendPk.Write( a_cDestroyPart[i] );
+		sendPk.Write( a_wDestroyPart[i] );
 		sendPk.Write( a_wDestroyCount[i] );
 
-		CDebugConsole::GetInstance()->Messagef( L"Send DestroyPart : %d \n", a_cDestroyPart[i] );
+		CDebugConsole::GetInstance()->Messagef( L"Send DestroyPart : %d \n", a_wDestroyPart[i] );
 		CDebugConsole::GetInstance()->Messagef( L"Send DestroyCount : %d \n", a_wDestroyCount[i] );
 
-		for( INT j=0; j<a_wDestroyCount[i]; ++j )
+		for( WORD j=0; j<a_wDestroyCount[i]; ++j )
 		{
 			sendPk.Write( a_pList[k] );
 			CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[k] );
