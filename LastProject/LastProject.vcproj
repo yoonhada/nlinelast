@@ -794,6 +794,10 @@
 			RelativePath=".\ClassDiagram11.cd"
 			>
 		</File>
+		<File
+			RelativePath=".\Data\IP.txt"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

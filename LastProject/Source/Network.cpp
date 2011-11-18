@@ -318,6 +318,7 @@ VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WOR
 	sendPk.CalcSize();
 	CDebugConsole::GetInstance()->Messagef( L"Packet Length : %d\n", sendPk.GetLength() );
 
+	CDebugConsole::GetInstance()->Messagef("Send Size : %d\n", sendPk.GetLength() );
 	SendToServer( sendPk );
 	CDebugConsole::GetInstance()->Messagef( L"****C-ATK\n" );
 }
