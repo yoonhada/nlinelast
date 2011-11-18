@@ -37,8 +37,6 @@ VOID CBoundBox::Clear()
 	m_vDirection = D3DXVECTOR3(0, 0, 0);
 	D3DXMatrixIdentity( &m_matAxis );
 	m_fSize[0] = m_fSize[1] = m_fSize[2] = m_fSize[3] = m_fSize[4] = m_fSize[5] = 0;
-
-	_data.erase( _data.begin(), _data.end() );
 }
 
 D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
@@ -213,57 +211,5 @@ D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 	else
 	{
 		return m_matAxis;
-	}
-}
-
-std::vector <D3DXVECTOR3> * CBoundBox::GetPosVec()
-{
-	return &_data;
-}
-
-std::map <INT, D3DXVECTOR3> * CBoundBox::GetPosMap()
-{
-	return &_map;
-}
-
-VOID CBoundBox::SetPosVec()
-{
-	INT nNear = 0;
-	D3DXVECTOR3 vPos, vOri = GetPosition();
-	for (FLOAT i = GetSize(0); i < GetSize(3); ++i)
-	{
-		for (FLOAT j = GetSize(1); j < GetSize(4); ++j)
-		{
-			for (FLOAT k = GetSize(2); k < GetSize(5); ++k)
-			{
-				vPos.x = static_cast<FLOAT>( static_cast<INT>( vOri.x + i ) );
-				vPos.y = static_cast<FLOAT>( static_cast<INT>( vOri.y + j ) );
-				vPos.z = static_cast<FLOAT>( static_cast<INT>( vOri.z + k ) );
-
-				_data.push_back( vPos );
-			}
-		}
-	}
-}
-
-VOID CBoundBox::SetPosMap()
-{
-	INT nNear = 0;
-	D3DXVECTOR3 vPos, vOri = GetPosition();
-	for (FLOAT i = GetSize(0); i < GetSize(3); ++i)
-	{
-		for (FLOAT j = GetSize(1); j < GetSize(4); ++j)
-		{
-			for (FLOAT k = GetSize(2); k < GetSize(5); ++k)
-			{
-				vPos.x = static_cast<FLOAT>( static_cast<INT>( vOri.x + i ) );
-				vPos.y = static_cast<FLOAT>( static_cast<INT>( vOri.y + j ) );
-				vPos.z = static_cast<FLOAT>( static_cast<INT>( vOri.z + k ) );
-
-				_map[nNear] = vPos;
-				//_data.push_back( vPos );
-				nNear++;
-			}
-		}
 	}
 }

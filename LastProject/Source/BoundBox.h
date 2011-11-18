@@ -39,8 +39,6 @@ public:
 	D3DXVECTOR3 GetPosition(INT = -1) const;
 	D3DXVECTOR3 GetDirection() const 		{ return m_vDirection; }
 	D3DXMATRIXA16 GetAxisMat() const;
-	std::vector <D3DXVECTOR3> * GetPosVec();
-	std::map <INT, D3DXVECTOR3> * GetPosMap();
 
 	FLOAT GetSize(INT n) const;
 	FLOAT GetRadius() const;
@@ -54,8 +52,6 @@ public:
 	VOID SetAngleX(FLOAT fAngle);								///< x축회전
 	VOID SetAngleY(FLOAT fAngle);								///< y축회전
 	VOID SetAngleZ(FLOAT fAngle);								///< z축회전
-	VOID SetPosVec();
-	VOID SetPosMap();
 
 	VOID MatrixIdentity();
 
@@ -65,7 +61,5 @@ private:
 	D3DXMATRIXA16 m_matAxis;		///< 큐브 매트릭스
 	D3DXVECTOR3 m_vDirection;		///< 동좌표
 	FLOAT m_fSize[6];
-	std::vector <D3DXVECTOR3> _data;
-	std::map <INT, D3DXVECTOR3> _map;
 	//D3DXMATRIXA16 m_vMatWorld;
 };
