@@ -36,7 +36,7 @@ VOID CWeapon::Clear()
 	m_fZAng[0] = DEG2RAD(0);
 	m_fZAng[1] = DEG2RAD(0);
 	m_fZAng[2] = DEG2RAD(0);
-	m_fZAng[3] = DEG2RAD(0);
+	m_fZAng[3] = DEG2RAD(-90);
 	m_fZAng[4] = DEG2RAD(-15);
 	m_fZAng[5] = DEG2RAD(0);
 	m_fZAng[6] = DEG2RAD(45);
@@ -45,9 +45,9 @@ VOID CWeapon::Clear()
 	m_fZAng[9] = DEG2RAD(0);
 
 	// XYZ Min
-	m_fBBSize[0] = -7.5f;
-	m_fBBSize[1] = -1.5f;
-	m_fBBSize[2] = -7.5f;
+	m_fBBSize[0] =- 7.5f;
+	m_fBBSize[1] =- 1.5f;
+	m_fBBSize[2] =-16.5f;
 	// XYZ Max
 	m_fBBSize[3] =  7.5f;
 	m_fBBSize[4] =  1.5f;
