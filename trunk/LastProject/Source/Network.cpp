@@ -324,22 +324,22 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 {
 	WORD wClientNumber = 0;
 	FLOAT fDirX, fDirY, fDirZ;
-	CHAR cTotalParts = 0;
-	CHAR cDestroyPart = 0;
+	WORD wTotalParts = 0;
+	WORD wDestroyPart = 0;
 	WORD wDestroyCount = 0;
 
 	a_pk.Read( &wClientNumber );
 	a_pk.Read( &fDirX);
 	a_pk.Read( &fDirY);
 	a_pk.Read( &fDirZ);
-	a_pk.Read( &cTotalParts );
+	a_pk.Read( &wTotalParts );
 
-	for( INT i=0; i<static_cast<INT>(cTotalParts); ++i )
+	for( WORD i=0; i<wTotalParts; ++i )
 	{
 		INT k = 0;
 		WORD wList[100];
 
-		a_pk.Read( &cDestroyPart );
+		a_pk.Read( &wDestroyPart );
 		a_pk.Read( &wDestroyCount );
 
 		for( WORD j=0; j<wDestroyCount; ++j )
@@ -349,8 +349,8 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 			++k;
 		}
 
-		CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", static_cast<INT>(cDestroyPart), wDestroyCount );
-		CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[static_cast<INT>(cDestroyPart)].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+		CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", wDestroyPart, wDestroyCount );
+		CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[wDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 	}	
 }
 
