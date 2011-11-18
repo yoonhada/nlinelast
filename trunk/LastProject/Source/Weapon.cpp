@@ -208,6 +208,7 @@ VOID CWeapon::SetKeyA()
 		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( nCurrFrame < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
+		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::A;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -215,11 +216,13 @@ VOID CWeapon::SetKeyA()
 		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( nCurrFrame < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
+		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK2;
 		m_pMap->SetAnimation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::BASE && nCurrFrame == 0 )
 	{
+		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK1;
 		m_pMap->SetAnimation( m_nState );
 	} 
@@ -233,6 +236,7 @@ VOID CWeapon::SetKeyB()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
+		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP4;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -240,6 +244,7 @@ VOID CWeapon::SetKeyB()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
+		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP3;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -247,11 +252,13 @@ VOID CWeapon::SetKeyB()
 		( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
 		( m_pMap->GetCurrentFrame() < ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nFrameTime[m_nState] ) ) )
 	{
+		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP2;
 		m_pMap->SetAnimation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::BASE  && nCurrFrame == 0 )
 	{
+		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP1;
 		m_pMap->SetAnimation( m_nState );
 	}
@@ -322,6 +329,7 @@ VOID CWeapon::Update()
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{
+		CDebugConsole::GetInstance()->Messagef("%d : %d\n", m_nState, m_bAtkTime);
 		//타격설정
 		if ( m_bAtkTime == TRUE)
 		{
