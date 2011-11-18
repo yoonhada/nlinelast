@@ -73,6 +73,7 @@ VOID CCharactor::Clear()
 	m_bMonster = FALSE;
 	m_iClientNumber = 0;
 	m_bActive = FALSE;
+	m_pShadowCell = NULL;
 
 	m_fAniAngleY = 0.0f;
 	m_fAniAngleAttack = 0.0f;
@@ -855,6 +856,7 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 {
 	INT Loop;
+	INT nCount = 0;
 	D3DXVECTOR3 vPos;
 	CBoundBox BB;
 	D3DXMATRIXA16 matTemp = Get_MatWorld() * mat;
@@ -863,7 +865,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 	
 	if( m_bAliveCheck == TRUE )
 	{
-		std::vector<WORD> NetworkSendTempVector;
+		//std::vector<WORD> NetworkSendTempVector;
 #ifndef _TEST
 		std::vector<CBoundBox *> * vecBoundBox;
 		vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
@@ -897,7 +899,6 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			Iter++;
 		}
 #else
-		INT nCount = 0;
 		D3DXVECTOR3 vDir;
 		std::vector<CBoundBox*> * vecBoundBox;
 		std::vector<CBoundBox*>::iterator Iter;
@@ -937,7 +938,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
 						m_vKnockBack = vPos;
 						BreakListMake( Loop, vPos );
-						NetworkSendTempVector.push_back( Loop );
+						//NetworkSendTempVector.push_back( Loop );
 						if( m_bMonster )
 						{
 							CObjectManage::GetInstance()->Set_PushBackNetworkSendTempVector( static_cast<WORD>(Loop) );
@@ -958,23 +959,22 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			{
 				if (nCount > 50)
 				{
-					m_fEffect = 1.0f;
 					break;
 				}
 			}
 		}
 #endif
-		if( m_bMonster && NetworkSendTempVector.size() != 0 )
+		if( m_bMonster && nCount != 0 )
 		{
-			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, NetworkSendTempVector.size(), vDir );
+			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
 			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
 		else
 		{
 			//CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
-		m_vKnockBack = m_vKnockBack * (FLOAT)NetworkSendTempVector.size();
-		NetworkSendTempVector.clear();
+		m_vKnockBack = m_vKnockBack * nCount;
+		//NetworkSendTempVector.clear();
 	}
 }
 

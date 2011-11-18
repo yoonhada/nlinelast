@@ -272,7 +272,7 @@ VOID	CMainScene::Update()
 		D3DXMATRIXA16 mat;
 		D3DXMatrixIdentity( &mat );
 		m_pMyCharactor->BreakQube( mat );
-		m_pCamera->SetEffect(1);
+		//m_pCamera->SetEffect(1);
 	}
 
 	//카메라: 캐릭터 위치,각도 받아오기
