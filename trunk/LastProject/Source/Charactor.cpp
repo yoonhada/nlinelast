@@ -861,39 +861,6 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 	if( m_bAliveCheck == TRUE )
 	{
 		//std::vector<WORD> NetworkSendTempVector;
-#ifndef _TEST
-		std::vector<CBoundBox *> * vecBoundBox;
-		vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
-
-		std::vector<D3DXVECTOR3> * vecVec = vecBoundBox->begin()->GetPosVec();
-		std::vector<D3DXVECTOR3>::iterator Iter;
-		//vecVec = m_pBoundBox->GetPosVec();
-		Iter = vecVec->begin();
-		while ( Iter != vecVec->end() )
-		{
-			vPos = ( *Iter );
-			D3DXVec3TransformCoord( &vPos, &vPos, &Get_MatWorld() );
-			Loop = m_pOctTree->GetChildIndex( vPos );
-
-			if( Loop >= 0 && m_vectorCube[Loop] != NULL )
-			{
-				if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
-				{
-					m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
-				}
-				else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != 3 )
-				{
-					vPos = (*Iter)->GetDirection();
-					D3DXVec3TransformCoord( &vPos, &vPos, &(Get_MatWorld() * mat) );
-					BreakListMake( Loop, vPos );
-					NetworkSendTempVector.push_back( Loop );
-
-				}
-			}
-
-			Iter++;
-		}
-#else
 		D3DXVECTOR3 vDir;
 		std::vector<CBoundBox*> * vecBoundBox;
 		std::vector<CBoundBox*>::iterator Iter;
@@ -948,14 +915,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 				}
 			}
 
-			if( m_bMonster )
-			{
-				if (nCount > 20)
-				{
-					break;
-				}
-			}
-			else
+			if( !m_bMonster )
 			{
 				if (nCount > 50)
 				{
@@ -963,7 +923,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 				}
 			}
 		}
-#endif
+
 		if( m_bMonster && nCount != 0 )
 		{
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );

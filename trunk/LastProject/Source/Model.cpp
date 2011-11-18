@@ -248,17 +248,8 @@ VOID CModel::CreateRandom( CCharCube* a_pCube,
 
 	try
 	{
-		if(!(pQube = new CQube))
-			throw 0;
-	}
-	catch (...)
-	{		
-		return;
-	}
-	
-	if (pQube != NULL)
-	{
-		CDebugConsole::GetInstance()->Messagef("%d - %f, %f, %f\n", pQube, vec.x, vec.y, vec.z);
+		pQube = new CQube;
+
 		pQube->SetPosition( vec );
 		pQube->RandMome( vMome, fPow );
 		pQube->RanderRotate();
@@ -266,6 +257,10 @@ VOID CModel::CreateRandom( CCharCube* a_pCube,
 		pQube->InitTexture( dwColor, dwOutLine1 );
 
 		m_vectorQube.push_back( pQube );
+	}
+	catch( std::bad_alloc& ex)
+	{
+		CDebugConsole::GetInstance()->Messagef( L"%s", ex.what() );
 	}
 
 }

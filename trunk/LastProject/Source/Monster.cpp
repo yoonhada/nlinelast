@@ -1200,7 +1200,7 @@ VOID CMonster::CreateAttackBoundBox()
 			// 몬스터 공격 바운드 박스.
 			CBoundBox * m_pBBx = new CBoundBox;
 			m_pBBx->SetPosition( Get_Pos() );
-			m_pBBx->SetAngleY( Get_Angle() );
+			//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
 
 			m_pBBx->SetSize( 0, -27.0f );
 			m_pBBx->SetSize( 1, -27.0f );
