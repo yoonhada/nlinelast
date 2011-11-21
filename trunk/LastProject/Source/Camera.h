@@ -71,7 +71,7 @@ public:
 
 
 	VOID SetEffect(INT nType);
-	VOID Effect();
+	VOID Effect( D3DXVECTOR3 & a_vLook );
 };
 
 #endif 

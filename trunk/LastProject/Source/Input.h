@@ -104,6 +104,14 @@ public:
 		return m_bEnable; 
 	}
 
+	BOOL Get_NumKey(INT nInput)
+	{
+		if (nInput >= 10 || nInput < 0)
+			return FALSE;
+
+		return m_bNumKey[nInput];
+	}
+
 private:
 	HWND			  m_hWnd;					///< 윈도우 핸들
 
@@ -123,6 +131,7 @@ private:
 	BOOL		m_bF1button;
 	BOOL		m_bF9button;
 	BOOL		m_bF8button;
+	BOOL		m_bNumKey[10];
 	//FLOAT		m_fXPos;						///< X축 이동
 	//FLOAT		m_fZPos;						///< Z축 이동
 	D3DXMATRIXA16 m_matMatrix;
