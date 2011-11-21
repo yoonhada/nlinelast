@@ -196,6 +196,18 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 				{
 					m_bF1button = FALSE;
 				}
+
+				for (int i = 0; i < 10; ++i)
+				{
+					if( ( GetAsyncKeyState( '0' + i ) ) )
+					{
+						m_bNumKey[i] = TRUE;
+					}
+					else
+					{
+						m_bNumKey[i] = FALSE;
+					}
+				}
 			}
 		}
 	}

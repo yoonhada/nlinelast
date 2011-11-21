@@ -27,6 +27,8 @@ VOID CCamera::Clear()
 	m_fYaw		= 0.0f;
 	m_fPitch	= 0.0f;
 	m_fLock		= (D3DX_PI/2) - 0.05f;
+
+	m_fEffectValue = 0.0f;
 }
 
 void CCamera::SetCamera()
@@ -56,19 +58,39 @@ VOID CCamera::SetEffect(INT nType)
 	m_nEffect = nType;
 }
 
-VOID CCamera::Effect()
+VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 {
 	switch ( m_nEffect )
 	{
+	case 0:
+		m_nEffect = 0;
+		m_fEffectValue = 0;
+		break;
 	case 1:
-		m_vLook.x = m_vLook.x + sin(m_fEffectValue) * 10.0f;
-		m_fEffectValue += 0.01f;
+		a_vLook += D3DXVECTOR3(1, 0, 1) * sin(m_fEffectValue) * 10.0f;
+		m_fEffectValue += (D3DX_PI * 0.5f );
+		if (m_fEffectValue > 100.0f)
+		{
+			m_nEffect = 0;
+			m_fEffectValue = 0;
+		}
+		break;
+	case 2:
+		if (a_vLook == D3DXVECTOR3(300, 0, 0))
+		{
+			a_vLook = D3DXVECTOR3(300, 0, 300);
+		}
+		else 
+		{
+			a_vLook = D3DXVECTOR3(300, 0, 0);
+		}
 		break;
 	}	
 }
 
 VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
 {
+	D3DXVECTOR3 vLook;
 	static FLOAT fZoom = m_fMaxZoom;
 	if( CInput::GetInstance()->Get_Homebutton() == TRUE )
 	{
@@ -79,14 +101,22 @@ VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook
 		fZoom -= 1.0f;
 	}
 
-	m_vLook = SpringDamp( m_vLook, a_vLook, a_vPreLook, 10.0f, 1.0f, 1.0f );
+	for (int i = 0; i < 10; ++i)
+	{
+		if( CInput::GetInstance()->Get_NumKey(i) )
+			SetEffect(i);
+	}
+
+	vLook = a_vLook;
+	Effect( vLook );
+
+	m_vLook = SpringDamp( m_vLook, vLook, a_vPreLook, 10.0f, 1.0f, 1.0f );
 	//m_vLook  = a_vLook;
 	m_vLook.y = a_fY;
 	m_fZoom  = fZoom;
 	m_fYaw   = a_fYaw;
 	m_fPitch += a_fPitch;
     SetCamera();
-	Effect();
 }
 
 
