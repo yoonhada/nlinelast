@@ -671,7 +671,7 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 
 			// 수신데이터가 매세지로 완성되었는지 확인하고 처리
 			UINT DataSize = pClient->m_RecvBuffer.GetStoredSize();
-			while( DataSize >= HEADER_SIZE )
+			while( DataSize >= 2/*HEADER_SIZE*/ )
 			{
 				// 헤더에서 크기정보를 얻어온다.
 				WORD wMsgSize;
@@ -679,7 +679,8 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 
 				if( wMsgSize <= DataSize )
 				{
-					cout << "wMsgSize : " << wMsgSize << endl;
+					if( wMsgSize > 18 )
+						cout << "wMsgSize : " << wMsgSize << endl;
 
 					// 패킷수신완료, 패킷을 구성해서 처리함수로 넘긴다.
 					CPacket pk;
@@ -687,6 +688,7 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 					pClient->m_RecvBuffer.ReadCommit( wMsgSize );
 
 					// 완성된 패킷을 처리한다.
+					Sleep(1);
 					pServer->ProcessPacket( pClient, pk );
 				}
 

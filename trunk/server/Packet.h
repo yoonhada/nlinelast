@@ -6,19 +6,19 @@ class CPacket
 {
 public:
 	CHAR	m_Buff[PACKET_SIZE];
-	WORD	m_BuffPoint;
-	WORD	m_DataSize;
+	UINT	m_BuffPoint;
+	UINT	m_DataSize;
 
 
 public:
 	CPacket();
 	virtual ~CPacket();
 
-	VOID	Copy( CHAR* pData, WORD nSize );
+	VOID	Copy( CHAR* pData, UINT nSize );
 
 	VOID	Rewind()		{ m_BuffPoint = 0; }
 	CHAR*	GetBuff()		{ return m_Buff; }
-	WORD	GetLength()		{ return m_DataSize; }
+	UINT	GetLength()		{ return m_DataSize; }
 
 	BOOL	ReadString( CHAR* pOut, WORD wMaxSize );
 	BOOL	WriteString( CHAR* pData, WORD wSize );
@@ -28,8 +28,8 @@ public:
 	template<typename T>
 	BOOL Write( T a )
 	{
-		WORD remained = PACKET_SIZE - m_BuffPoint;
-		WORD nSize = sizeof( T );
+		UINT remained = PACKET_SIZE - m_BuffPoint;
+		UINT nSize = sizeof( T );
 		if( remained < nSize )
 		{
 			return FALSE;
@@ -45,8 +45,8 @@ public:
 	template<typename T>
 	BOOL Read( T* a )
 	{
-		WORD nSize = sizeof( T );
-		WORD remainedData = m_DataSize - m_BuffPoint;
+		UINT nSize = sizeof( T );
+		UINT remainedData = m_DataSize - m_BuffPoint;
 		if( nSize > remainedData )
 		{
 			return FALSE;

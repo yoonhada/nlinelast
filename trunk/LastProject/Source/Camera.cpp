@@ -77,14 +77,7 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 		}
 		break;
 	case 2:
-		if (a_vLook == D3DXVECTOR3(300, 0, 0))
-		{
-			a_vLook = D3DXVECTOR3(300, 0, 300);
-		}
-		else 
-		{
-			a_vLook = D3DXVECTOR3(300, 0, 0);
-		}
+		a_vLook = D3DXVECTOR3(300, 0, 0);
 		break;
 	}	
 }
