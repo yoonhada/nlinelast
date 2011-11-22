@@ -70,6 +70,7 @@ public:
 	VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
 
 
+	BOOL m_bEvent;
 	VOID SetEffect(INT nType);
 	VOID Effect( D3DXVECTOR3 & a_vLook );
 };

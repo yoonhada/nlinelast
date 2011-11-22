@@ -158,7 +158,7 @@ ATOM CWinBase::MyRegisterClass(HINSTANCE hInstance)
 
 	wcex.cbSize = sizeof(WNDCLASSEX); 
 
-	wcex.style			= CS_CLASSDC|CS_DBLCLKS;
+	wcex.style			= CS_HREDRAW | CS_VREDRAW | CS_CLASSDC | CS_DBLCLKS;
 	wcex.lpfnWndProc	= (WNDPROC)GetInstance()->WndProc;
 	wcex.cbClsExtra		= 0;
 	wcex.cbWndExtra		= 0;
