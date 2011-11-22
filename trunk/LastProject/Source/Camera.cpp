@@ -28,6 +28,7 @@ VOID CCamera::Clear()
 	m_fPitch	= 0.0f;
 	m_fLock		= (D3DX_PI/2) - 0.05f;
 
+	m_bEvent = FALSE;
 	m_fEffectValue = 0.0f;
 }
 
