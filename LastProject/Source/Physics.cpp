@@ -14,7 +14,7 @@ CPhysics::CPhysics( void )
 //: m_vGAccel( 0.0f, 0.0108962777f, 0.0f )		///< 9.80665 * ( 1/30( f/s ) )^2
 : m_vGAccel( 0.0f, 9.80665f, 0.0f )		
 , m_fElastic( 0.667f )							///< 탄성도
-, m_fAirRegistance( 0.98f )						///< 공기저항
+, m_fAirRegistance( 0.99f )						///< 공기저항
 , m_vColNormal(0.0f, 0.0f, 0.0f)				///< 충돌공간의 노멀
 {
 }

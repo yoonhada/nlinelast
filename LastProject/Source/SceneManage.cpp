@@ -31,6 +31,7 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	CObjectManage::GetInstance()->Create( m_pD3dDevice );
 
+
 	m_pScene = new CLobbyScene;
 	m_pLoadScene = m_pScene;
 	m_pScene->Create( m_pD3dDevice );

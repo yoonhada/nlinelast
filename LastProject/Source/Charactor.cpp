@@ -81,34 +81,6 @@ VOID CCharactor::Clear()
 	m_chMonsterPart = -1;
 }
 
-//HRESULT CCharactor::Create()
-//{
-//	InitTexture( 0xFFFFFFFF, 0xFF000000 );
-//
-//	//Load( a_pzFileName );
-//
-//	//m_pGrid = new CGrid;
-//	//m_pGrid->Create( m_pD3dDevice );
-//
-//	m_pModel = new CModel( m_pD3dDevice );
-//
-//	m_pShadowCell = new CShadowCell;
-//	m_pShadowCell->Create( m_pD3dDevice, 
-//		-1.0f, -1.0f, -1.0f,
-//		1.0f, -1.0f, -1.0f,
-//		1.0f, -1.0f,  1.0f,
-//		-1.0f, -1.0f,  1.0f,
-//		0.0f, 0.0f,
-//		1.0f, 0.0f,
-//		1.0f, 1.0f,
-//		0.0f, 1.0f,
-//		L"Img/shadow.tga"
-//		);
-//
-//	m_pOctTree = new COctTree2Array;
-//	return S_OK;
-//}
-
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 {
 	m_pD3dDevice = a_pD3dDevice;
@@ -134,7 +106,7 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 							0.0f, 1.0f,
 							L"Img/shadow.tga"
 						  );
-	m_pOctTree = new COctTree2Array;
+	//m_pOctTree = new COctTree2Array;
 	return S_OK;
 }
 
@@ -270,7 +242,7 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	fwscanf( pFile, L"%d", &iTemp );
 	fwscanf( pFile, L"%s", szTemp );
 	
-	m_pOctTree->Build( iTemp );
+	//m_pOctTree->Build( iTemp );
 	FLOAT fSize = 0.5f * iTemp;
 	m_pBoundBox->SetSize(0, -fSize);
 	m_pBoundBox->SetSize(1, -fSize);
@@ -347,8 +319,8 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 						//vPos.y = yLoop;
 						//vPos.z = zLoop;
 
-						if( iVectorIndex != -1 )
-							m_pOctTree->SetChildIndex(vPos, iVectorIndex );
+						//if( iVectorIndex != -1 )
+							//m_pOctTree->SetChildIndex(vPos, iVectorIndex );
 
 						if( Loop == EnumCharFrame::BASE )
 						{
@@ -904,6 +876,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 						vPos = (*Iter)->GetDirection();	
 						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
 						m_vKnockBack = vPos;
+						vPos = D3DXVECTOR3(0, 0, 0);
 						BreakListMake( Loop, vPos );
 						//NetworkSendTempVector.push_back( Loop );
 						if( m_bMonster )
@@ -918,6 +891,13 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			if( !m_bMonster )
 			{
 				if (nCount > 50)
+				{
+					break;
+				}
+			}
+			else
+			{
+				if (nCount > 20)
 				{
 					break;
 				}

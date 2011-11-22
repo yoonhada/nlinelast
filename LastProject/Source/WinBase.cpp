@@ -109,7 +109,7 @@ BOOL CWinBase::InitInstance(HINSTANCE hInstance, INT nCmdShow)
 	CSceneManage::GetInstance()->Create( m_pDX9->GetDevice() );
 
 	CInput::GetInstance()->Create( m_hWnd );
-
+	CInput::GetInstance()->EnableInput(TRUE);
 	CDebugInterface::GetInstance()->Create( m_pDX9->GetDevice() );
 
 	return TRUE;

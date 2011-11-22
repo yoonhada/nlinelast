@@ -15,7 +15,7 @@ CPacket::~CPacket()
 }
 
 
-VOID CPacket::Copy( CHAR* pData, WORD nSize )
+VOID CPacket::Copy( CHAR* pData, UINT nSize )
 {
 	memcpy( m_Buff, pData, nSize );
 	m_DataSize = nSize;
@@ -31,7 +31,7 @@ BOOL CPacket::ReadString( CHAR* pOut, WORD wMaxSize )	// wMaxSize : pOutÀÇ ÃÖ´ëÅ
 		return FALSE;
 	}
 
-	INT remainedData = m_DataSize - m_BuffPoint;
+	UINT remainedData = m_DataSize - m_BuffPoint;
 	if( wSize > remainedData )
 	{
 		return FALSE;
@@ -47,7 +47,7 @@ BOOL CPacket::ReadString( CHAR* pOut, WORD wMaxSize )	// wMaxSize : pOutÀÇ ÃÖ´ëÅ
 
 BOOL CPacket::WriteString( CHAR* pData, WORD wSize )
 {
-	INT remained = PACKET_SIZE - m_BuffPoint;
+	UINT remained = PACKET_SIZE - m_BuffPoint;
 	if( wSize > remained )
 	{
 		return FALSE;

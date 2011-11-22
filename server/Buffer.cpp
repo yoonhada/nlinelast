@@ -15,7 +15,7 @@ CBuffer::~CBuffer()
 }
 
 
-BOOL CBuffer::Write( CHAR* pData, WORD nSize )
+BOOL CBuffer::Write( CHAR* pData, UINT nSize )
 {
 	UINT remained = GetEmptySize();
 	if( remained < nSize )
@@ -32,13 +32,13 @@ BOOL CBuffer::Write( CHAR* pData, WORD nSize )
 }
 
 
-VOID CBuffer::WriteCommit( WORD nSize )
+VOID CBuffer::WriteCommit( UINT nSize )
 {
 	m_End += nSize;
 }
 
 
-BOOL CBuffer::ReadCommit( WORD nSize )
+BOOL CBuffer::ReadCommit( UINT nSize )
 {
 	if( m_End < nSize )
 	{
