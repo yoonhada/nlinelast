@@ -98,8 +98,10 @@ public:
 
 	BOOL EnableInput(BOOL b = -1)		
 	{
-		if (b != -1) 
+		if (b != -1) {
 			m_bEnable = b;
+			ShowCursor( !b );
+		}
 
 		return m_bEnable; 
 	}
