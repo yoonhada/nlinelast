@@ -24,7 +24,6 @@
 #define RAD2DEG( x )				( x * ( 180.0f / D3DX_PI ) )			 // Converts radians to degrees
 #define ABSDEF( a )					( ( ( a ) > 0 ) ? ( a ) : - ( a ) )	
 
-//#define FULLSCREEN TRUE
 #define FULLSCREEN FALSE
 
 extern VOID FastRand2Init();

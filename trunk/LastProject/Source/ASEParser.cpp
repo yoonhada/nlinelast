@@ -702,7 +702,6 @@ BOOL ASEParser::BeginNodeTM( FILE* _fp, LPWSTR _sLine )
 			if( '}' == _sLine[ 0 ] )
 				break;
 
-			ZeroMemory( _sLine, 512 );
 			GetRow0( _sLine );
 			GetRow1( _sLine );
 			GetRow2( _sLine );
