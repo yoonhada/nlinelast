@@ -200,6 +200,14 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		CWinBase::DestoryInstance();
 		return 0;
 
+	case WM_SYSCOMMAND:
+		switch( wParam & 0xFFF0)
+		{
+		case SC_KEYMENU:
+			return 0;
+		}
+		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
