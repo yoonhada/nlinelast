@@ -551,8 +551,8 @@ UINT WINAPI RecvThread( LPVOID a_p )
 				pk.Copy( buff, wMsgSize );
 				pNetwork->InsertPacket( pk );
 				
-				memmove( buff, buff + wMsgSize, wMsgSize );
 				buffSize -= wMsgSize;
+				memmove( buff, buff + wMsgSize, buffSize );
 			}
 		}
 	}

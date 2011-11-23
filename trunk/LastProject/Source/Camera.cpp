@@ -1,7 +1,11 @@
 #include "Stdafx.h"
 #include "Camera.h"
 
-CCamera::CCamera() : m_fMinZoom(15.0f), m_fMaxZoom(50.0f)
+CCamera::CCamera() 
+: m_fMinZoom( 15.0f )
+, m_fMaxZoom( 50.0f )
+, m_fLowAngle( DEG2RAD( -15 ) )
+, m_fHighAngle( 0.1f )
 {
 	Clear();
 }
@@ -21,22 +25,29 @@ VOID CCamera::Clear()
 	m_vLook		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vPreLook  = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vEye		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	m_vPreEye	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vDir		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	m_vPreDir	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_fZoom		= 50.0f;
 	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
 	m_fPitch	= 0.0f;
 	m_fLock		= (D3DX_PI/2) - 0.05f;
 
-	m_bEvent = FALSE;
 	m_fEffectValue = 0.0f;
 }
 
 void CCamera::SetCamera()
 {
 	//상하 각도 고정
-	if ( m_fPitch > (m_fLock * 0.1f) ) m_fPitch = m_fLock * 0.1f;
-	if ( m_fPitch < (m_fLock * -1.0f) ) m_fPitch = m_fLock * -1.0f;
+	if ( m_fPitch > (m_fLock * m_fHighAngle) ) 
+	{
+		m_fPitch = m_fLock * m_fHighAngle;
+	}
+	if ( m_fPitch < (m_fLock * m_fLowAngle) ) 
+	{
+		m_fPitch = m_fLock * m_fLowAngle;
+	}
 
 	D3DXMATRIXA16   m;
     m_vDir  = D3DXVECTOR3( 0.0f, 0.0f, -1.0f );
@@ -44,13 +55,20 @@ void CCamera::SetCamera()
     D3DXVec3TransformCoord( &m_vDir, &m_vDir, D3DXMatrixRotationY( &m, m_fYaw ) );
 
     m_vEye    = m_vLook;
-    m_vDir   *= m_fZoom;
+	if ( m_nEffect == 2 )	m_vDir = ( m_vDir + ( m_vLook - m_vPreLook ) / 2 ) * m_fZoom;
+	else					m_vDir *= m_fZoom;
     m_vEye   -= m_vDir;
+	if ( m_vEye.y < 0.0f )
+		m_vEye.y = 0.0f;
 
     D3DXMatrixLookAtLH( &m_matView, &m_vEye, &m_vLook, &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ) );
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &m_matView );
 	D3DXMatrixInverse( &m_matInvView, NULL, &m_matView );
 	D3DXVec3Normalize( &m_vDir, &(m_vEye - m_vLook ) );
+
+	m_vPreLook = m_vLook;	
+	m_vPreDir = m_vDir;	
+	m_vPreEye = m_vEye;
 }
 
 

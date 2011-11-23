@@ -10,6 +10,7 @@
 
 class CMonster;
 class CCharactor;
+class CTimeLifeItem;
 
 class CObjectManage : public CSingleton<CObjectManage>
 {
@@ -47,6 +48,11 @@ public:
 	CMonster* Get_Monster()
 	{
 		return m_pMonster;
+	}
+
+	CTimeLifeItem * Get_FirstAidKit()
+	{
+		return m_pFirstAidKit;
 	}
 
 	INT Get_MaxCharaNum()
@@ -99,6 +105,8 @@ private:
 	CCharactor* m_pCharactors;
 	CCharactor* m_pCharactorList[4];
 	CMonster* m_pMonster;
+
+	CTimeLifeItem* m_pFirstAidKit;
 
 	CCharactor** m_ppCharactorList;
 

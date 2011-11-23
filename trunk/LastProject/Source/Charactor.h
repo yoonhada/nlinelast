@@ -57,13 +57,14 @@ public:
 	//VOID UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID UpdateOtherPlayer();
+	VOID UpdateOtherPlayer(BOOL);
 	VOID Render();
 
 	VOID World2Model(D3DXVECTOR3& _vPosition);
 	VOID BreakCube(D3DXVECTOR3& _vPosition);
 	VOID BreakQube(D3DXMATRIXA16 &mat);
 	VOID TestBreakCube();
-	VOID TestBreakCubeAll();
+	VOID BreakCubeAll(BOOL = FALSE);
 	VOID BreakListMake(INT, D3DXVECTOR3&);
 	std::list<INT> m_BreakList;
 
@@ -206,8 +207,8 @@ private:
 	CShadowCell* m_pShadowCell;
 
 public:
-	VOID SetMon(BOOL b)		{ m_bMonster = b; }
-	VOID UpdateOtherPlayer2();
+	BOOL AliveCheck(BOOL bState = -1);
+
 };
 
 #endif

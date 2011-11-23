@@ -8,6 +8,7 @@
 class CMonster;
 class CBillBoard;
 class CCharactor;
+class CTimeLifeItem;
 class CCamera;
 class Axis;
 class Map;
@@ -39,6 +40,7 @@ private:
 	CCharactor* m_pMyCharactor;
 	CMonster* m_pMonster;
 	CLight* m_pLight;
+	CTimeLifeItem * m_pFirstAidKit;
 
 	CCharactor* m_pCharactorList[4];
 
