@@ -639,6 +639,16 @@ VOID CCharactor::UpdateOtherPlayer()
 	Calcul_MatWorld();
 }
 
+VOID CCharactor::UpdateOtherPlayer(BOOL bKind)
+{
+	Set_ControlTranslate( 0, m_vControl.x );
+	//Set_ControlTranslate( 1, m_vControl.y );
+	Set_ControlTranslate( 2, m_vControl.z );
+	//Set_ControlRotate( 1, m_vControl.y );
+	Set_ControlRotate( 1, m_fAngle );
+	Calcul_MatWorld();
+}
+
 VOID CCharactor::UpdateMonsterPos( const D3DXVECTOR3& a_vPrePos, const D3DXVECTOR3& a_vPos, const FLOAT a_fAngle )
 {
 	//m_vPreControl = a_vPrePos;
@@ -724,7 +734,7 @@ VOID CCharactor::AnimateMove()
 
 VOID CCharactor::Update()
 {
-	if(m_pWeapon)	
+	if( m_pWeapon )	
 	{
 		if ( CInput::GetInstance()->Get_Lbutton() )
 		{
@@ -780,7 +790,7 @@ VOID CCharactor::Render()
 	//m_pModel->Update();
 	m_pModel->Render();
 	
-	if(m_pWeapon)	
+	if( m_pWeapon )	
 		m_pWeapon->Render( /*m_pWeapon->Get_MatWorld() * */this->Get_MatWorld() );
 
 	m_pShadowCell->Set_ControlScale( 0, 10.0f );
@@ -994,9 +1004,9 @@ VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir
 	}	
 }
 
-VOID CCharactor::TestBreakCubeAll()
+VOID CCharactor::BreakCubeAll(BOOL bBreak)
 {
-	if( m_bAliveCheck == TRUE )
+	if( bBreak != m_bAliveCheck)
 	{
 		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
 		{
@@ -1007,22 +1017,25 @@ VOID CCharactor::TestBreakCubeAll()
 
 			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
 			{
-				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, bBreak );
 
-				if( m_bMonster )
+				if ( bBreak )
 				{
-					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
-				}
-				else
-				{
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					if( m_bMonster )
+					{
+						D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					}
+					else
+					{
+						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					}
 				}
 			}
 		}
-	}
 
-	m_bAliveCheck=FALSE;
+		m_bAliveCheck = bBreak;
+	}
 }
 
 VOID CCharactor::TestBreakCube()
@@ -1147,4 +1160,14 @@ HRESULT CCharactor::InitTexture( DWORD a_Color, DWORD a_OutLineColor )
 
 	return S_OK;
 	//
+}
+
+BOOL CCharactor::AliveCheck(BOOL bState )
+{ 
+	if (bState != -1)		
+	{
+		m_bAliveCheck = bState;
+	}
+
+	return m_bAliveCheck;
 }

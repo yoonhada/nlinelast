@@ -327,6 +327,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\TimeLifeItem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TimeLifeItem.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Weapon.cpp"
 					>
 				</File>

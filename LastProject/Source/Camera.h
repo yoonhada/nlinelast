@@ -15,11 +15,15 @@ private:
 	D3DXMATRIXA16	m_matInvView; 
 
 	FLOAT			m_fLock;            ///< 상하 각도 제한용 변수
+	const FLOAT		m_fLowAngle;		///< 카메라 하각 제한 상수
+	const FLOAT		m_fHighAngle;		///< 카메라 상각 제한 상수
 
 	D3DXVECTOR3		m_vLook;
 	D3DXVECTOR3		m_vPreLook;
 	D3DXVECTOR3		m_vDir;
+	D3DXVECTOR3		m_vPreDir;
 	D3DXVECTOR3		m_vEye;
+	D3DXVECTOR3		m_vPreEye;
 	FLOAT			m_fZoom;            ///< 캐릭터와 카메라의 거리
 	FLOAT			m_fZoomReduce;		///< 카메라와 오브젝트 충돌시 거리 감소치
 	const FLOAT		m_fMinZoom;			///< 줌 최소치
@@ -69,8 +73,6 @@ public:
 	
 	VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
 
-
-	BOOL m_bEvent;
 	VOID SetEffect(INT nType);
 	VOID Effect( D3DXVECTOR3 & a_vLook );
 };

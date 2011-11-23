@@ -6,7 +6,8 @@
 
 #include "Seek.h"
 
-#define _TEST111111
+//#define _AI
+
 CMonster::CMonster()
 {
 	Clear();
@@ -58,7 +59,7 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 	for( INT LoopBox=0; LoopBox<m_iCharEditorMax; ++LoopBox )
 	{
 		m_pBox[LoopBox].Create( m_pD3dDevice );
-		m_pBox[LoopBox].CreateWeapon( CWeapon::NONE );
+		//m_pBox[LoopBox].CreateWeapon( CWeapon::NONE );
 		m_pBox[LoopBox].Set_MonsterPart( static_cast<CHAR>(LoopBox) );
 	}
 
@@ -1191,8 +1192,8 @@ VOID CMonster::AniInterpolation()
 VOID CMonster::CreateAttackBoundBox()
 {
 	// 애니메이션이 끝났고 보간 애니메이션중이 아니라면
-	if( m_bAnimationEndCheck == FALSE && m_iChangeAnimationEndCheck == FALSE )
-	{
+	//if( m_bAnimationEndCheck == FALSE && m_iChangeAnimationEndCheck == FALSE )
+	//{
 		//프레임에 해당 하는 바운드 박스 생성
 		switch( m_iSelectedFrameNum )
 		{
@@ -1216,7 +1217,7 @@ VOID CMonster::CreateAttackBoundBox()
 
 			break;
 		}
-	}
+//	}
 }
 
 VOID CMonster::Update()
@@ -1338,7 +1339,9 @@ VOID CMonster::Update()
 	}
 
 	// AI
-	// m_pStateMachine->Update();
+#ifndef _AI
+	m_pStateMachine->Update();
+#endif // _DEBUG
 	CreateAttackBoundBox();
 }
 

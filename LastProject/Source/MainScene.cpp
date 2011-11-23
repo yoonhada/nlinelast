@@ -10,6 +10,7 @@
 #include "Weapon.h"
 #include "TileMap.h"
 #include "Seek.h"
+#include "TimeLifeItem.h"
 
 // AI 테스트용
 #ifdef _DEBUG
@@ -82,6 +83,11 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
+
+	// 아이템 생성
+	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
+	m_pFirstAidKit->Create( m_pD3dDevice );
+	m_pFirstAidKit->Load( L"Data/CharData/FirstAidKit_1.csav" );
 
 	//조명 생성
 	m_pLight = new CLight;
@@ -318,7 +324,7 @@ VOID	CMainScene::Update()
 	//	m_pLogo[Loop].UpdateOtherPlayer();
 	//	if( CInput::GetInstance()->Get_Lbutton() )
 	//	{
-	//		//m_pLogo[Loop].TestBreakCubeAll();
+	//		//m_pLogo[Loop].BreakCubeAll();
 	//	}
 	//}
 
@@ -335,6 +341,18 @@ VOID	CMainScene::Update()
 
 	m_pMonster->Update();
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+
+	// 아이템 생성
+	if (CInput::GetInstance()->Get_NumKey(3))
+	{
+		m_pFirstAidKit->SetActive(TRUE);
+	}
+	if (CInput::GetInstance()->Get_NumKey(4))
+	{
+		m_pFirstAidKit->SetActive(FALSE);
+	}
+
+	m_pFirstAidKit->Update();
 
 	//if( CInput::GetInstance()->Get_Rbutton() )
 	//{
@@ -388,6 +406,8 @@ VOID	CMainScene::Render()
 	}*/
 
 	m_pMonster->Render();
+
+	m_pFirstAidKit->Render();
 
 #ifdef _DEBUG
 	TwDraw();

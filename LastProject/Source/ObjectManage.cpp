@@ -10,6 +10,7 @@
 
 #include "Charactor.h"
 #include "Monster.h"
+#include "TimeLifeItem.h"
 
 CObjectManage::CObjectManage()
 {
@@ -49,6 +50,8 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	Set_CharactorList( m_pCharactorList );
 
 	m_pMonster = new CMonster;
+
+	m_pFirstAidKit = new CTimeLifeItem;
 	
 	return S_OK;
 }
@@ -65,10 +68,10 @@ VOID CObjectManage::RefreshCharList()
 
 HRESULT CObjectManage::Release()
 {
-
-	SAFE_DELETE(m_pMyCharactor);
-	SAFE_DELETE_ARRAY(m_pCharactors);
-	SAFE_DELETE(m_pMonster);
+	SAFE_DELETE( m_pMyCharactor );
+	SAFE_DELETE_ARRAY( m_pCharactors );
+	SAFE_DELETE( m_pMonster );
+	SAFE_DELETE( m_pFirstAidKit );
 
 	return S_OK;
 }
