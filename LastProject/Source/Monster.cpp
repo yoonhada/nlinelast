@@ -6,8 +6,6 @@
 
 #include "Seek.h"
 
-//#define _AI
-
 CMonster::CMonster()
 {
 	Clear();
@@ -1339,9 +1337,7 @@ VOID CMonster::Update()
 	}
 
 	// AI
-#ifdef _AI
 	m_pStateMachine->Update();
-#endif // _DEBUG
 }
 
 VOID CMonster::Render()
