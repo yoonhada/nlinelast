@@ -199,8 +199,8 @@ private:
 
 	//애니메이션 변수
 	FLOAT m_fAniAngleY;
-	FLOAT m_fAniAngleJump;
 	FLOAT m_fAniAngleAttack;
+	FLOAT m_fAniAngle;
 
 	// 카메라 이펙트 변수
 private:

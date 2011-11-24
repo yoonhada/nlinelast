@@ -430,10 +430,9 @@ INT CWeapon::Get_nState()
 	return m_nState; 
 }
 
-INT CWeapon::Get_Direction()
+D3DXVECTOR3 CWeapon::Get_Direction()
 {
-	FLOAT fRet = m_WeaponType.pBBA.GetDirection().x;
-	return ( fRet < 0.0f ? -1 : ( fRet > 0.0f ? 1 : 0 ) );
+	return m_WeaponType.pBBA.GetDirection();
 }
 
 VOID CWeapon::Set_Animation( INT _nState )	
