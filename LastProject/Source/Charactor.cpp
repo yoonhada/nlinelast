@@ -658,7 +658,7 @@ FLOAT CCharactor::AnimateAttack()
 		if ( m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEBEGIN ) + m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK ) > m_pWeapon->Get_nFrame( WEAPONTYPE::CURRENTFRAME ) &&
 			 m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEBEGIN ) < m_pWeapon->Get_nFrame( WEAPONTYPE::CURRENTFRAME ) )
 		{
-			fRet = 10.0f / m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK );
+			fRet = 5.0f / m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK );
 		}
 		//if ( m_nAniAttackFrame == 0.0f )
 		//	m_nAniAttackFrame = m_pWeapon->Get_nFrame();
