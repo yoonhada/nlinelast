@@ -32,7 +32,6 @@ VOID CQube::Update( CBoundBox * pBB )
 	if ( m_fItemLift > fLen )
 	{
 		m_bVisiable = FALSE;
-		return;
 	}
 
 	fLen = CFrequency::GetInstance()->getFrametime();
@@ -108,8 +107,11 @@ VOID CQube::Update( CBoundBox * pBB )
 		m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
 		//m_vRotateTemp = CPhysics::GetInstance()->m_fElastic;
 		//vDir = m_vPos + m_vMomentum;
+		if( !m_bVisiable )
+			return;
 	}
 
+	m_bVisiable = TRUE;
 	m_vPos = vDir;
 
 	//m_vRotate += m_vRotateTemp;

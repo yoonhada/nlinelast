@@ -143,8 +143,8 @@ private:
 	VOID _CreateBase( INT a_iBoxSize, WCHAR* a_pCharaName );
 	VOID _CreateAniFrame( INT a_iFrameNum, INT a_iSrcFrameNum = 0, BOOL a_LoadMode = FALSE );
 	CCharCube* _CreateCube();
-	VOID AnimateMove();
-	VOID AnimateAttack();
+	VOID AnimateMove(BOOL);
+	FLOAT AnimateAttack();
 	
 	HRESULT InitTexture(  DWORD a_Color, DWORD a_OutLineColor  );
 
@@ -167,7 +167,7 @@ private:
 	FLOAT		m_fNetTime;  ///< 네트워크 전송 위치 보정 시간
 	D3DXVECTOR3 m_vFowardVector; ///< 캐릭터 전진 이동 벡터
 	D3DXVECTOR3 m_vSideStepVector; ///< 캐릭터 좌우 이동 벡터
-	D3DXVECTOR3 m_vKnockBack;
+	//D3DXVECTOR3 m_vKnockBack;
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 	LPDIRECT3DVERTEXBUFFER9 m_pTotalVB;   ///< 큐브 통합 버텍스
@@ -198,11 +198,16 @@ private:
 	COctTree2Array * m_pOctTree;
 
 	//애니메이션 변수
-	FLOAT m_fAniAngleY;
+	INT m_nAniAttackFrame;
+	FLOAT m_fKnockBack;
+	FLOAT m_fTransition;
 	FLOAT m_fAniAngleAttack;
 	FLOAT m_fAniAngle;
+	D3DXVECTOR3 m_vAniVector;
+	const FLOAT fAniAngleTurn;
+	const FLOAT fAniAngleLimit;
+	const FLOAT fAniMagicNum;
 
-	// 카메라 이펙트 변수
 private:
 	CShadowCell* m_pShadowCell;
 

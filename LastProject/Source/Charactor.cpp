@@ -16,17 +16,10 @@
 
 #include "OctTree2Array.h"
 
-VOID CCharactor::Set_WeaponAnimationState( const WORD a_iNumber )
-{
-	m_pWeapon->Set_nState( static_cast<INT>(a_iNumber) );
-}
-
-const INT CCharactor::Get_WeaponAnimationState()
-{
-	return m_pWeapon->Get_nState();
-}
-
 CCharactor::CCharactor()
+: fAniAngleTurn(0.1f)
+, fAniAngleLimit(0.4f)
+, fAniMagicNum(3.0f)
 {
 	Clear();
 }
@@ -64,7 +57,7 @@ VOID CCharactor::Clear()
 	m_vPreControl = D3DXVECTOR3(100.0f, 0.0f, 0.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_vKnockBack = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//m_fKnockBack = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fAngle = 0.0f;
 
 	D3DXMatrixIdentity( &m_matMultWorld );
@@ -75,8 +68,12 @@ VOID CCharactor::Clear()
 	m_bActive = FALSE;
 	m_pShadowCell = NULL;
 
-	m_fAniAngleY = 0.0f;
+	m_fKnockBack = 0.0f;
+	m_fTransition = 0.0f;
+	m_nAniAttackFrame = 0;
 	m_fAniAngleAttack = 0.0f;
+	m_fAniAngle = 0.0f;
+	m_vAniVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	m_chMonsterPart = -1;
 }
@@ -522,13 +519,8 @@ VOID CCharactor::UpdateByInput(  )
 		a_fAngle = CInput::GetInstance()->Get_MouseYRotate();
 	}
 
-	if( a_vControl.z != 0 || a_vControl.x != 0 )
-	{
-		bSetAni = TRUE;
-	}
-
-	a_vControl += (m_vKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
-	m_vKnockBack = m_vKnockBack * 0.9f;
+	a_vControl.z -= ( m_fKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
+	m_fKnockBack *= 0.9f;
 	a_fAngle += m_fAngle;
 	
 	// 360도 넘으면 라디언 360 빼기.
@@ -536,9 +528,13 @@ VOID CCharactor::UpdateByInput(  )
 	a_fAngle < 0.0f ? a_fAngle += f360 : ( a_fAngle > f360 ? a_fAngle -= f360 : NULL );
 
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
+
+	a_vControl.z += AnimateAttack();
+
 	// 전진 후진 처리
 	if( a_vControl.z != 0 )
 	{
+		bSetAni = TRUE;
 		D3DXMatrixRotationY( &m_matControl, a_fAngle );
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
@@ -547,42 +543,14 @@ VOID CCharactor::UpdateByInput(  )
 	// 좌우 처리
 	if( a_vControl.x != 0)
 	{
+		bSetAni = TRUE;
 		D3DXMatrixRotationY( &m_matControl, a_fAngle + 1.5707963f );
 		m_vSideStepVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
 	}
 
-	if( bSetAni )
-	{
-		AnimateMove();
-	}
-	else
-	{
-		if( m_fAniAngleY < 0.1f && m_fAniAngleY > -0.1f )
-		{
-			m_fAniAngleY = 0.0f;
-		}
-		else
-		{
-			if( m_fAniAngleY < 0.1f)
-			{
-				m_fAniAngleY += 3.0f * CFrequency::GetInstance()->getFrametime();
-				m_iSelectedFrameNum = 3;
-			}
-			else if (m_fAniAngleY > -0.1f )
-			{
-				m_fAniAngleY -= 3.0f * CFrequency::GetInstance()->getFrametime();
-				m_iSelectedFrameNum = 1;
-			}
-		}
-	}
-
-	AnimateAttack();
-	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlX : %f\n", m_vControl.x );
-	// //CDebugConsole::GetInstance()->Messagef( L"Chara ControlZ : %f\n", m_vControl.z );
-
-	//m_vPreControl = vControl;
+	AnimateMove( bSetAni );
 
 	m_pBoundBox->MatrixIdentity();
 	m_pBoundBox->SetAngleY( a_fAngle );
@@ -594,12 +562,8 @@ VOID CCharactor::UpdateByInput(  )
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
-	Set_ControlRotate( 1, m_fAngle + m_fAniAngleY + m_fAniAngleAttack );
+	Set_ControlRotate( 1, m_fAngle + m_fAniAngle + m_fAniAngleAttack );
 	Calcul_MatWorld();
-
-	CDebugInterface::GetInstance()->AddMessageFloat( "Player_x", m_vControl.x );
-	CDebugInterface::GetInstance()->AddMessageFloat( "Player_y", m_vControl.y );
-	CDebugInterface::GetInstance()->AddMessageFloat( "Player_z", m_vControl.z );
 }
 
 VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
@@ -676,65 +640,84 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 	m_vColissionControl = m_vControl;
 }
 
-VOID CCharactor::AnimateAttack()
+FLOAT CCharactor::AnimateAttack()
 {
-	INT Temp = m_pWeapon->Get_nState();
-	static INT iMax = 0;
+	FLOAT fRet = 0.0f;
+	FLOAT fFrameTime = CFrequency::GetInstance()->getFrametime();
 	
 	if( m_pWeapon->Get_nState() != EnumCharFrame::BASE )
 	{
-		if( iMax == 0 ) iMax = m_pWeapon->Get_nFrame();
-		m_fAniAngleAttack = ( m_pWeapon->Get_nFrame() - ( iMax ) )  * 0.05f;
-		//CDebugConsole::GetInstance()->Messagef( L"%f\n", m_fAniAngleAttack );
+		if ( m_pWeapon->GetBoundBox().GetDirection().x < -0.1f )
+			m_iSelectedFrameNum = 3;
+		else if ( m_pWeapon->GetBoundBox().GetDirection().x > 0.1f )
+			m_iSelectedFrameNum = 1;
+		else
+			m_iSelectedFrameNum = 0;
 
-		//if( m_pWeapon->Get_nFrame() != 0 )
-		//{
-		//	m_fAniAngleAttack -=  ( iMax / 5.0f ) * CFrequency::GetInstance()->getFrametime();
-		//}
+		// CURRENTFRAME, FRAMEBEGIN, FRAMETIME, FRAMEATK, DELAY
+		if ( m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEBEGIN ) + m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK ) > m_pWeapon->Get_nFrame( WEAPONTYPE::CURRENTFRAME ) &&
+			 m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEBEGIN ) < m_pWeapon->Get_nFrame( WEAPONTYPE::CURRENTFRAME ) )
+		{
+			fRet = 10.0f / m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK );
+		}
+		//if ( m_nAniAttackFrame == 0.0f )
+		//	m_nAniAttackFrame = m_pWeapon->Get_nFrame();
+
+		//if ( m_nAniAttackFrame + 1.0f < m_pWeapon->Get_nFrame() && 
+		//	m_nAniAttackFrame + 8.0f > m_pWeapon->Get_nFrame() )
+		//	fRet = 1.0f;
+		//else  if ( m_nAniAttackFrame + 16.0f < m_pWeapon->Get_nFrame() )
+		//	m_nAniAttackFrame = 0;
 	}
 	else
 	{
-		iMax = 0;
-		if( m_fAniAngleAttack > 0.1f )
-		{
-			m_fAniAngleAttack -= 5.0f * CFrequency::GetInstance()->getFrametime();
-		}
-		else if( m_fAniAngleAttack < -0.1f )
-		{
-			m_fAniAngleAttack += 5.0f * CFrequency::GetInstance()->getFrametime();
-		}
-		else
-		{
-			m_fAniAngleAttack = 0.0f;
-		}
+		m_nAniAttackFrame = 0;
 	}
+
+	return fRet;
 }
 
-VOID CCharactor::AnimateMove()
+VOID CCharactor::AnimateMove( BOOL bSetAni )
 {
-	static BOOL bCheck = FALSE;
+	FLOAT fFrameTime = CFrequency::GetInstance()->getFrametime();
 
-	if( m_fAniAngleY < 0.4f && bCheck == FALSE )
+	if ( m_fAniAngle > fAniAngleLimit )
 	{
-		m_fAniAngleY += 3.0f * CFrequency::GetInstance()->getFrametime();
-		m_iSelectedFrameNum = 3;
+		m_fTransition = -1;
+	}
+	else if( m_fAniAngle < -fAniAngleLimit )
+	{
+		m_fTransition = 1;
+	}
+
+	m_fAniAngle += fAniMagicNum * fFrameTime * m_fTransition;
+
+	if ( bSetAni )
+	{
+		if ( m_fTransition == 0 )
+		{
+			m_fTransition = 1;
+		}
 	}
 	else
 	{
-		bCheck = TRUE;
-
-		if( m_fAniAngleY > -0.4f )
-		{
-			m_fAniAngleY -= 3.0f * CFrequency::GetInstance()->getFrametime();
-			m_iSelectedFrameNum = 1;
-		}
-		else
-		{
-			bCheck = FALSE;
-		}
+		if ( -fAniAngleTurn < m_fAniAngle && m_fAniAngle < fAniAngleTurn )
+			m_fTransition = 0;
 	}
 
-	//CDebugConsole::GetInstance()->Messagef( L"%f \n", m_fAniAngle );
+
+	if ( m_fAniAngle > fAniAngleTurn )
+	{
+		m_iSelectedFrameNum = 3;
+	}
+	else if ( m_fAniAngle < -fAniAngleTurn )
+	{
+		m_iSelectedFrameNum = 1;
+	}
+	else
+	{
+		m_iSelectedFrameNum = 0;
+	}
 }
 
 VOID CCharactor::Update()
@@ -890,7 +873,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 						// 날아가는 방향 계산.
 						vPos = (*Iter)->GetDirection();	
 						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
-						m_vKnockBack = vPos;
+						//m_vKnockBack = vPos;
 						vPos = D3DXVECTOR3(0, 0, 0);
 						BreakListMake( Loop, vPos );
 						//NetworkSendTempVector.push_back( Loop );
@@ -928,7 +911,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		{
 			//CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
-		m_vKnockBack = m_vKnockBack * (FLOAT)nCount;
+		m_fKnockBack = (FLOAT)nCount;
 		//NetworkSendTempVector.clear();
 	}
 }
@@ -1176,3 +1159,14 @@ BOOL CCharactor::AliveCheck(BOOL bState )
 
 	return m_bAliveCheck;
 }
+
+VOID CCharactor::Set_WeaponAnimationState( const WORD a_iNumber )
+{
+	m_pWeapon->Set_nState( static_cast<INT>(a_iNumber) );
+}
+
+const INT CCharactor::Get_WeaponAnimationState()
+{
+	return m_pWeapon->Get_nState();
+}
+

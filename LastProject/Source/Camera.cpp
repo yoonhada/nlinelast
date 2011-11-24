@@ -3,7 +3,7 @@
 
 CCamera::CCamera() 
 : m_fMinZoom( 15.0f )
-, m_fMaxZoom( 50.0f )
+, m_fMaxZoom( 80.0f )
 , m_fLowAngle( DEG2RAD( -15 ) )
 , m_fHighAngle( 0.1f )
 {
@@ -28,7 +28,7 @@ VOID CCamera::Clear()
 	m_vPreEye	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vDir		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vPreDir	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-	m_fZoom		= 50.0f;
+	m_fZoom		= 80.0f;
 	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
 	m_fPitch	= 0.0f;
