@@ -73,7 +73,7 @@ public:
 	
 	INT Get_nFrame();
 	INT Get_nState();
-	INT Get_Direction();
+	D3DXVECTOR3 Get_Direction();
 	VOID Set_Animation( INT _nState );
 	VOID Set_nState( INT _nState );
 
