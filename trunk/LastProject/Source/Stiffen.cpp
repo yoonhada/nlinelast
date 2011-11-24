@@ -23,14 +23,15 @@ VOID Stiffen::Enter( CMonster* a_pMonster )
 
 VOID Stiffen::Execute( CMonster* a_pMonster )
 {
-	BOOL bCheck = FALSE;
+	static FLOAT t = 0.0f;
+	t += CFrequency::GetInstance()->getFrametime();
 
-	if( a_pMonster->Get_AnimationEndCheck() == FALSE )
+	if( t >= 1.5f )
 	{
+		t = 0.0f;
+
 		// 애니메이션 0번 복구
 		a_pMonster->ChangeAnimation( 0 );
-
-		bCheck = TRUE;
 
 		// 경직상태가 끝나면 애니메이션 보간을 위해 보간 대기 상태로
 		a_pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );

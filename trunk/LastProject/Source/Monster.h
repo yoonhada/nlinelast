@@ -62,10 +62,10 @@ public:
 		return m_pBox;
 	}
 
-
-private:
 	VOID CreateAttackBoundBox();
 
+
+private:
 	VOID AniInterpolation();
 
 	VOID AnimationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );

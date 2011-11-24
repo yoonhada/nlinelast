@@ -41,24 +41,32 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	static FLOAT fAngle = 0.0f;
 	fAngle = (FLOAT)atan( z / x ) * 180.0f / D3DX_PI;
 
-	// 1사분면에 있는 각일 때
+	//          |
+	// 3사분면  |  4사분면
+	//          |
+	// |||||||||||||||||||
+	//	        |
+	// 2사분면  |  1사분면
+	//          |
+
+	// 4사분면에 있는 각일 때
 	if( vPlayerPos.z > vMonsterPos.z && vPlayerPos.x > vMonsterPos.x )
 	{
 		fAngle = fAngle;
-		w = 1;
+		w = 4;
 	}
 	// 2, 3사분면에 있는 각일 때
 	else if( ( vPlayerPos.z > vMonsterPos.z && vPlayerPos.x < vMonsterPos.x ) ||
-			 ( vPlayerPos.z < vMonsterPos.z && vPlayerPos.x < vMonsterPos.x ) )
+		( vPlayerPos.z < vMonsterPos.z && vPlayerPos.x < vMonsterPos.x ) )
 	{
 		fAngle += 180.0f;
 		w = 23;
 	}
-	// 4사분면
+	// 1사분면
 	else
 	{
 		fAngle = 360.0f + fAngle;
-		w = 4;
+		w = 1;
 	}
 
 	// 몬스터 기준 플레이어 각 ( +x축이 0도, CCW가 +각도)
@@ -85,9 +93,10 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	}
 	
 	// 공격 각도내에 들어왔으면
-	if( 1 )
+	if( isInSight() )
 	{
 		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+		a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
 	}
 
 }
@@ -96,4 +105,10 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 VOID LockOn::Exit( CMonster* a_pMonster )
 {
 
+}
+
+
+BOOL LockOn::isInSight()
+{
+	return TRUE;
 }

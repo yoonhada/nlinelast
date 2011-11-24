@@ -95,7 +95,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		if( path )
 		{
 			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
-			Chase::GetInstance()->Enter( a_pMonster );
+			a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
 		}
 	}
 	else

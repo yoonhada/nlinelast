@@ -16,15 +16,20 @@ Melee* Melee::GetInstance()
 
 VOID Melee::Enter( CMonster* a_pMonster )
 {
-
+	a_pMonster->ChangeAnimation( 2 );
 }
 
 
 VOID Melee::Execute( CMonster* a_pMonster )
 {
-	a_pMonster->ChangeAnimation( 2 );
+	if( a_pMonster->Get_AnimationEndCheck() == FALSE )
+	{
+		// 공격 충돌 박스 생성
+		a_pMonster->CreateAttackBoundBox();
 
-	a_pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
+		// 경직 상태로
+		a_pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
+	}
 }
 
 
