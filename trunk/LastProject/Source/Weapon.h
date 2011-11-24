@@ -12,6 +12,7 @@ class CCube;
 
 typedef struct _WEAPONTYPE
 {
+	enum { CURRENTFRAME, FRAMEBEGIN, FRAMETIME, FRAMEATK, DELAY };
 	// <-----------Time-------------->
 	// Begin
 	// +-------------+----+----------+
@@ -46,6 +47,7 @@ private:
 	VOID PrivateProfile(BOOL = READ);
 
 public:
+	
 	enum _WEAPON { NONE, SPANNER, FRYPEN, GUITAR, MAGICSTICK };
 	enum _ASEANI { IDLE = 1000, POST_IDLE };
 	CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice );
@@ -71,7 +73,7 @@ public:
 
 	VOID AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle );
 	
-	INT Get_nFrame();
+	INT Get_nFrame(INT = 0);
 	INT Get_nState();
 	D3DXVECTOR3 Get_Direction();
 	VOID Set_Animation( INT _nState );

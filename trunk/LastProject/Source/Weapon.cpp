@@ -420,9 +420,30 @@ VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 #endif // _DEBUG
 }
 
-INT CWeapon::Get_nFrame()
+INT CWeapon::Get_nFrame(INT nType)
 {
-	return m_pMap->GetCurrentFrame(); 
+	INT nRet = 0;
+	
+	switch (nType)
+	{
+	case WEAPONTYPE::CURRENTFRAME:
+		nRet = m_pMap->GetCurrentFrame(); 
+		break;
+	case WEAPONTYPE::FRAMEBEGIN:
+		nRet = m_WeaponType.nFrameBegin[m_nState];
+		break;
+	case WEAPONTYPE::FRAMETIME:
+		nRet = m_WeaponType.nFrameTime[m_nState];
+		break;
+	case WEAPONTYPE::FRAMEATK:
+		nRet = m_WeaponType.nFrameAtk[m_nState];
+		break;
+	case WEAPONTYPE::DELAY:
+		nRet = m_WeaponType.nDelay[m_nState];
+		break;
+	}
+	
+	return nRet;
 }
 
 INT CWeapon::Get_nState() 
