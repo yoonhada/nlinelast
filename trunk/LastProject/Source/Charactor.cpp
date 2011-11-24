@@ -512,6 +512,7 @@ const D3DXVECTOR3& CCharactor::Get_PreCharaPos2Camera()
 
 VOID CCharactor::UpdateByInput(  )
 {
+	BOOL bSetAni = FALSE;
 	D3DXVECTOR3 a_vControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	FLOAT a_fAngle = 0.0f;
 
@@ -521,6 +522,11 @@ VOID CCharactor::UpdateByInput(  )
 		a_fAngle = CInput::GetInstance()->Get_MouseYRotate();
 	}
 
+	if( a_vControl.z != 0 || a_vControl.x != 0 )
+	{
+		bSetAni = TRUE;
+	}
+
 	a_vControl += (m_vKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
 	m_vKnockBack = m_vKnockBack * 0.9f;
 	a_fAngle += m_fAngle;
@@ -528,8 +534,6 @@ VOID CCharactor::UpdateByInput(  )
 	// 360도 넘으면 라디언 360 빼기.
 	const float f360 = DEG2RAD( 360.0f );
 	a_fAngle < 0.0f ? a_fAngle += f360 : ( a_fAngle > f360 ? a_fAngle -= f360 : NULL );
-
-	////CDebugConsole::GetInstance()->Messagef( L"Chara Angle : %f\n", a_fAngle );
 
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
 	// 전진 후진 처리
@@ -549,7 +553,7 @@ VOID CCharactor::UpdateByInput(  )
 		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
 	}
 
-	if( a_vControl.z != 0 || a_vControl.x != 0 )
+	if( bSetAni )
 	{
 		AnimateMove();
 	}
@@ -676,7 +680,8 @@ VOID CCharactor::AnimateAttack()
 {
 	INT Temp = m_pWeapon->Get_nState();
 	static INT iMax = 0;
-	if( m_pWeapon->Get_nState() == 0x0100 )
+	
+	if( m_pWeapon->Get_nState() != EnumCharFrame::BASE )
 	{
 		if( iMax == 0 ) iMax = m_pWeapon->Get_nFrame();
 		m_fAniAngleAttack = ( m_pWeapon->Get_nFrame() - ( iMax ) )  * 0.05f;

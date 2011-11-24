@@ -212,7 +212,7 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
-	//return 0;
+	return 0;
 }
 
 UINT WINAPI CWinBase::InputThread(LPVOID lParam)

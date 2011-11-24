@@ -1339,7 +1339,7 @@ VOID CMonster::Update()
 	}
 
 	// AI
-#ifndef _AI
+#ifdef _AI
 	m_pStateMachine->Update();
 #endif // _DEBUG
 	CreateAttackBoundBox();
