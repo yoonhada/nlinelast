@@ -1342,7 +1342,6 @@ VOID CMonster::Update()
 #ifdef _AI
 	m_pStateMachine->Update();
 #endif // _DEBUG
-	CreateAttackBoundBox();
 }
 
 VOID CMonster::Render()
