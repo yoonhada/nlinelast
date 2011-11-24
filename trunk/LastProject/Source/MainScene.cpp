@@ -208,7 +208,7 @@ VOID CMainScene::CreateCharactor()
 	m_pMyCharactor->Create( m_pD3dDevice );
 	m_pMyCharactor->Set_Active( TRUE );
 	m_pMyCharactor->Load( L"Data/CharData/APPA_0.csav" );
-	m_pMyCharactor->CreateWeapon( CWeapon::SPANNER );
+	m_pMyCharactor->CreateWeapon( CWeapon::MAGICSTICK );
 
 	CTree::GetInstance()->GetCharVector()->push_back( m_pMyCharactor->GetBoundBox() );
 
