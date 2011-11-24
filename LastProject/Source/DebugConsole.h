@@ -29,11 +29,11 @@ private:
 	VOID		GetEdgePosition( DWORD _Edge );
 
 public:
-	//	Console::m_Console().Message( " " );
+	//	CDebugConsole::m_Console().Message( " " );
 	VOID	Message( LPWSTR str );
 	VOID	Message( LPSTR str );
 
-	//	Console::m_Console().Messagef( "%s %d %f", char, int, float );
+	//	CDebugConsole::m_Console().Messagef( "%s %d %f", char, int, float );
 	VOID	Messagef( LPWSTR str, ... );
 	VOID	Messagef( LPSTR str, ... );
 

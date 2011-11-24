@@ -11,21 +11,23 @@ class CCharactor;
 class CTimeLifeItem;
 class CCamera;
 class Axis;
-class Map;
-class TileMap;
+class ASEViewer;
 
 class CMainScene : public IScene
 {
 	//friend class CSingleton<CMainManage>;
 public:
 	CMainScene();
-	~CMainScene();
+	virtual ~CMainScene();
 
-	VOID	Clear();
-	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
-	HRESULT Release();
-	VOID	Update();
-	VOID	Render();
+	VOID			Clear();
+	virtual HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprite, HWND a_hWnd );
+	HRESULT			Release();
+	virtual VOID	Update();
+	virtual VOID	Render();
+
+	virtual INT		GetSceneNext();
+	virtual INT		GetSceneState();
 
 private:
 
@@ -33,32 +35,34 @@ private:
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 
-	CMatrices* m_pMatrices;
-	CCamera* m_pCamera;
-	CGrid* m_pGrid;
-	CCharactor* m_pCharactors;
-	CCharactor* m_pMyCharactor;
-	CMonster* m_pMonster;
-	CLight* m_pLight;
+	CMatrices*				m_pMatrices;
+	CCamera*				m_pCamera;
+	CGrid*					m_pGrid;
+	CCharactor*				m_pCharactors;
+	CCharactor*				m_pMyCharactor;
+	CMonster*				m_pMonster;
+	CLight*					m_pLight;
 	CTimeLifeItem * m_pFirstAidKit;
 
-	CCharactor* m_pCharactorList[4];
+	CCharactor*				m_pCharactorList[4];
 
-	Map* m_pMap;
-	TileMap* m_pTileMap;
+	ASEViewer*				m_pASEViewer;
+	
+	INT						m_iMaxCharaNum;
 
-	INT m_iMaxCharaNum;
+	CBillBoard*				m_pBill;
+	Axis*					m_pAxis;
 
-	CBillBoard* m_pBill;
-	Axis* m_pAxis;
-
-	VOID CreateCharactor();
+	VOID					CreateCharactor();
 
 	//BOOL m_bHost;
 	//WORD m_iClientNumber;
 
 	//로고
 	CCharactor* m_pLogo;
+
+	INT						m_scnNext;
+	INT						m_scnState;
 
 //public:
 //	CCharactor* Get_Charactors()

@@ -4,14 +4,10 @@
 
 VOID TileMap::Initialize()
 {
-	m_iNumBBXImage	= 0;
-
-	m_pBBXParser = new BBXParser();
 }
 
 VOID TileMap::Release()
 {
-	delete m_pBBXParser;
 }
 
 VOID TileMap::InitInfo( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize )
@@ -29,14 +25,14 @@ VOID TileMap::InitInfo( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTi
 	m_Info.fTileSize	= _fTileSize;
 
 	m_Info.vecStart		= _vecStart;
-	m_Info.vecEnd.x		= _vecStart.x + fNumWidth * _fTileSize;
-	m_Info.vecEnd.y		= _vecStart.y;
-	m_Info.vecEnd.z		= _vecStart.z + fNumHeight * _fTileSize;
+	m_Info.vecEnd		= _vecEnd;
+	//m_Info.vecEnd.x		= _vecStart.x + fNumWidth * _fTileSize;
+	//m_Info.vecEnd.y		= _vecStart.y;
+	//m_Info.vecEnd.z		= _vecStart.z + fNumHeight * _fTileSize;
 
 	m_Info.pNavGraphNode = new INT[ m_Info.iMaxWidth * m_Info.iMaxHeight ];
 	memset( m_Info.pNavGraphNode, 0, sizeof( INT ) *  m_Info.iMaxWidth * m_Info.iMaxHeight );
 }
-
 VOID TileMap::InitTileData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize )
 {
 	INT		iNumWidth	= static_cast<INT>( ( _vecEnd.x - _vecStart.x ) / _fTileSize + 1.0f );
@@ -90,7 +86,7 @@ VOID TileMap::InitTileData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT 
 						 
 			m_TileData.pIndex[ l + 1	]._0	=	i			* ( iNumWidth  ) + ( j + 1 );
 			m_TileData.pIndex[ l + 1	]._1	=	i			* ( iNumWidth  ) + j;
-			m_TileData.pIndex[ l + 1	]._2	=	( i + 1)	* ( iNumWidth  ) + ( j + 1 );
+			m_TileData.pIndex[ l + 1	]._2	=	( i + 1 )	* ( iNumWidth  ) + ( j + 1 );
 
 			l+=2;
 		}
@@ -117,7 +113,7 @@ VOID TileMap::InitLineData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT 
 
 	INT l=0;
 	//	Set Width
-	for( INT i=0 ; i<iNumWidth ; i++ )
+	for( INT i=0 ; i<iNumHeight ; i++ )
 	{
 		m_LineData.pVertex[ l     ].vecPosition.x = _vecStart.x;
 		m_LineData.pVertex[ l     ].vecPosition.y = 0.5f;
@@ -155,64 +151,16 @@ VOID TileMap::InitLineData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT 
 	CreateLineImage( m_LineData.Image, m_LineData.iNumVertex, m_LineData.pVertex );
 }
 
-VOID TileMap::InitBBX( LPWSTR _BBXFileName )
-{
-	if( FALSE == m_pBBXParser->LoadFile( _BBXFileName ) )
-	{
-		MessageBox( NULL, L"LoadBBXFile failed...", NULL, MB_OK );
-		return;
-	}
 
-	m_iNumBBXImage	= m_pBBXParser->GetNumBoundBox();
-
-	for( INT i=0 ; i<m_iNumBBXImage ; i++ )
-		CreateDataFromBBX( i );
-}
-
-VOID TileMap::CreateDataFromBBX( const INT _Index )
-{
-	BBXParser::DATA BBXData;
-
-	m_pBBXParser->GetData( _Index, BBXData );
-
-	CreateWallFromBBX( BBXData.Info.vPivot, BBXData.Info.fMinusSize, BBXData.Info.fPlusSize );
-}
-
-VOID TileMap::CreateWallFromBBX( D3DXVECTOR3& _vecPivot, FLOAT* _pfMinus, FLOAT* _pfPlus )
-{
-	FLOAT	fStartX = _vecPivot.x + _pfMinus[ 0 ];
-	FLOAT	fStartZ = _vecPivot.z + _pfMinus[ 2 ];
-
-	INT iNumWidth	= static_cast<INT>( ( _pfPlus[ 0 ] - _pfMinus[ 0 ] ) / m_Info.fTileSize );
-	INT iNumHeight	= static_cast<INT>( ( _pfPlus[ 2 ] - _pfMinus[ 2 ] ) / m_Info.fTileSize );
-
-	FLOAT fX = 0.0f;
-	FLOAT fZ = 0.0f;
-	for( INT j=0 ; j<=iNumHeight ; j++ )
-	{
-		for( INT i=0 ; i<=iNumWidth ; i++ )
-		{
-			SetInfo( fStartX + m_Info.fTileSize * fX, fStartZ + m_Info.fTileSize * fZ, TLM_WALL );
-
-			fX += 1.0f;
-		}
-		fZ += 1.0f;
-		fX = 0.0f;
-	}
-
-}
-
-VOID TileMap::Create( LPWSTR _BBXFileName, D3DXVECTOR3 _vecStart, D3DXVECTOR3 _vecEnd, FLOAT _fTileSize )
+VOID TileMap::Create( D3DXVECTOR3 _vecStart, D3DXVECTOR3 _vecEnd, FLOAT _fTileSize )
 {
 	InitInfo( _vecStart, _vecEnd, _fTileSize );
 	InitTileData( _vecStart, _vecEnd, _fTileSize );
 	InitLineData( _vecStart, _vecEnd, _fTileSize );
 
-	InitBBX( _BBXFileName );
 }
 VOID TileMap::Update()
 {
-
 }
 
 VOID TileMap::Render()
@@ -243,18 +191,31 @@ BOOL TileMap::SetInfo( INT _iX, INT _iY, DWORD _dType )
 		break;
 	}
 
+	for( INT y=0 ; y<m_Info.iMaxHeight ; y++ )
+	{
+		for( INT x=0 ; x<m_Info.iMaxWidth ; x++ )
+		{
+			CDebugConsole::GetInstance()->Messagef( L"%d ", m_Info.pNavGraphNode[ x + y * m_Info.iMaxHeight ] );
+		}
+		CDebugConsole::GetInstance()->Messagef( L"\n" );
+	}
+	CDebugConsole::GetInstance()->Messagef( L"\n\n" );
+
 	return TRUE;
 }
 
-BOOL TileMap::SetInfo( FLOAT _fX, FLOAT _fY, DWORD _dType )
+BOOL TileMap::SetInfo( FLOAT _fX, FLOAT _fZ, DWORD _dType )
 {
 	if( m_Info.vecStart.x > _fX && _fX > m_Info.vecEnd.x )
 		return FALSE;
-	if( m_Info.vecStart.z > _fY && _fY > m_Info.vecEnd.z )
+	if( m_Info.vecStart.z > _fZ && _fZ > m_Info.vecEnd.z )
 		return FALSE;
 
 	INT iX = static_cast<INT>( ( _fX - m_Info.vecStart.x ) / m_Info.fTileSize );
-	INT iY = static_cast<INT>( ( _fY - m_Info.vecStart.z ) / m_Info.fTileSize );
+	INT iY = static_cast<INT>( ( _fZ - m_Info.vecStart.z ) / m_Info.fTileSize );
+
+	if( iX < 0 )iX *= -1;
+	if( iY < 0 )iY *= -1;
 
 	switch( _dType )
 	{
@@ -272,4 +233,27 @@ BOOL TileMap::SetInfo( FLOAT _fX, FLOAT _fY, DWORD _dType )
 	}
 
 	return TRUE;
+}
+
+VOID TileMap::SetBBXData( LPD3DXVECTOR3 _pvecPivot, FLOAT* _pfMinus, FLOAT* _pfPlus )
+{
+	FLOAT	fStartX = _pvecPivot->x + _pfMinus[ 0 ];
+	FLOAT	fStartZ = _pvecPivot->z + _pfMinus[ 2 ];
+
+	INT iNumWidth	= static_cast<INT>( ( _pfPlus[ 0 ] - _pfMinus[ 0 ] ) / m_Info.fTileSize );
+	INT iNumHeight	= static_cast<INT>( ( _pfPlus[ 2 ] - _pfMinus[ 2 ] ) / m_Info.fTileSize );
+
+	FLOAT fX = 0.0f;
+	FLOAT fZ = 0.0f;
+	for( INT j=0 ; j<=iNumHeight ; j++ )
+	{
+		for( INT i=0 ; i<=iNumWidth ; i++ )
+		{
+			SetInfo( fStartX + m_Info.fTileSize * fX, fStartZ + m_Info.fTileSize * fZ, TLM_WALL );
+
+			fX += 1.0f;
+		}
+		fZ += 1.0f;
+		fX = 0.0f;
+	}
 }

@@ -10,11 +10,14 @@ public:
 	~CLobbyScene();
 
 public:
-	VOID Clear();
-	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
-	HRESULT Release();
-	VOID Update();
-	VOID Render();
+	VOID			Clear();
+	virtual HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
+	HRESULT			Release();
+	virtual VOID	Update();
+	virtual VOID	Render();
+
+	virtual INT		GetSceneNext();
+	virtual INT		GetSceneState();
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
@@ -22,6 +25,8 @@ private:
 	//네트워크
 	WSADATA m_wsadata;
 
+	INT						m_scnNext;
+	INT						m_scnState;
 };
 
 #endif

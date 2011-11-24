@@ -19,44 +19,75 @@ VOID GUIBtn::Release()
 {
 }
 
-VOID GUIBtn::Create( DWORD _ID, DWORD _Style, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, 
-					LPCWSTR _Normal, LPCWSTR _Hot, LPCWSTR _Down, LPCWSTR _Disable )
+//VOID GUIBtn::Create( DWORD _ID, DWORD _Style, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, 
+//					LPCWSTR _Normal, LPCWSTR _Hot, LPCWSTR _Down, LPCWSTR _Disable )
+//{
+//	//	Init ID
+//	m_ID	=	_ID;
+//
+//	//	Init Style
+//	m_Style		=	_Style;
+//
+//	//	Init Position
+//	m_Data.vecPosition.x = _fX;	
+//	m_Data.vecPosition.y = _fY;
+//
+//	//	Init Source
+//	m_Data.fWidth	= _fWidth;
+//	m_Data.fHeight	= _fHeight;
+//	
+//	//	Init Image
+//	CreateImage(	m_Data.Image[ GB_NORMAL ],
+//					GUIBase::GBS_TOPLEFT,
+//					_fX, _fY,
+//					_fWidth, _fHeight,
+//					_Normal );
+//
+//	CreateImage(	m_Data.Image[ GB_HOT ],
+//					GUIBase::GBS_TOPLEFT,
+//					_fX, _fY,
+//					_fWidth, _fHeight,
+//					_Hot );
+//
+//	CreateImage(	m_Data.Image[ GB_DOWN ],
+//					GUIBase::GBS_TOPLEFT,
+//					_fX, _fY,
+//					_fWidth, _fHeight,
+//					_Down );
+//
+//	CreateImage(	m_Data.Image[ GB_DISABLE ],
+//					GUIBase::GBS_TOPLEFT,
+//					_fX, _fY,
+//					_fWidth, _fHeight,
+//					_Disable );
+//}
+
+VOID GUIBtn::Create( DWORD _dID, DWORD _dStyle, IMAGEPARAM& _imgNormal, IMAGEPARAM& _imgHot, IMAGEPARAM& _imgDown, IMAGEPARAM& _imgDisable )
 {
 	//	Init ID
-	m_ID	=	_ID;
+	m_ID		=	_dID;
 
 	//	Init Style
-	m_Style		=	_Style;
+	m_Style		=	_dStyle;
 
 	//	Init Position
-	m_Data.vecPosition.x = _fX;	
-	m_Data.vecPosition.y = _fY;
+	m_Data.vecPosition.x	= _imgNormal.fX;	
+	m_Data.vecPosition.y	= _imgNormal.fY;
 
 	//	Init Source
-	m_Data.fWidth	= _fWidth;
-	m_Data.fHeight	= _fHeight;
+	m_Data.fWidth	= _imgNormal.fWidth;
+	m_Data.fHeight	= _imgNormal.fHeight;
 	
 	//	Init Image
-	CreateImage(	m_Data.Image[ GB_NORMAL ],
-					_fX, _fY,
-					_fWidth, _fHeight,
-					_Normal );
+	CreateImage(	m_Data.Image[ GB_NORMAL ], _imgNormal );
+					
+	CreateImage(	m_Data.Image[ GB_HOT ], _imgHot );
 
-	CreateImage(	m_Data.Image[ GB_HOT ],
-					_fX, _fY,
-					_fWidth, _fHeight,
-					_Hot );
+	CreateImage(	m_Data.Image[ GB_DOWN ], _imgDown );
 
-	CreateImage(	m_Data.Image[ GB_DOWN ],
-					_fX, _fY,
-					_fWidth, _fHeight,
-					_Down );
-
-	CreateImage(	m_Data.Image[ GB_DISABLE ],
-					_fX, _fY,
-					_fWidth, _fHeight,
-					_Disable );
+	CreateImage(	m_Data.Image[ GB_DISABLE ], _imgDisable );
 }
+
 
 VOID GUIBtn::Render()
 {

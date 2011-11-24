@@ -54,15 +54,15 @@ VOID TileMapBase::RenderTileImage( IMAGE& _TileImage )
 	m_pd3dDevice->SetFVF( TILEVERTEX::FVF );
 	m_pd3dDevice->SetIndices( _TileImage.pIB );
 	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, _TileImage.iNumVertex, 0, _TileImage.iNumIndex );
+
+	m_pd3dDevice->SetTexture( 0, NULL );
 }
 
 VOID TileMapBase::RenderLineImage( IMAGE& _LineImage )
 {
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pd3dDevice->SetStreamSource( 0, _LineImage.pVB, 0, sizeof( LINEVERTEX ) );
 	m_pd3dDevice->SetFVF( LINEVERTEX::FVF );
 	m_pd3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, _LineImage.iNumVertex );
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 
 VOID TileMapBase::ChangePixel( IMAGE& _TileImage, INT _iX, INT _iY, DWORD _dColor )
@@ -72,13 +72,16 @@ VOID TileMapBase::ChangePixel( IMAGE& _TileImage, INT _iX, INT _iY, DWORD _dColo
 
 	D3DSURFACE_DESC ddsd;
 	_TileImage.pTexture->GetLevelDesc( 0, &ddsd );
-	if( static_cast<INT>( ddsd.Width ) < _iX || static_cast<INT>( ddsd.Height ) < _iY )
+	INT itexWidth	= ddsd.Width;
+	INT itexHeight	= ddsd.Height;
+
+	if( itexWidth < _iX || itexHeight < _iY )
 		return;
 
 	D3DLOCKED_RECT d3drc;
 	_TileImage.pTexture->LockRect( 0, &d3drc, NULL, 0 );
 	UINT* pByte = static_cast<UINT*>( d3drc.pBits );
-	pByte += _iX + ( /*ddsd.Height - 1 - */_iY ) * ddsd.Height;
+	pByte += _iX + ( /*ddsd.Height - 1 -*/ _iY ) * ddsd.Width;
 	(*pByte) = _dColor;
 	_TileImage.pTexture->UnlockRect( 0 );
 }

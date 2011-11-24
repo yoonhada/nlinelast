@@ -4,8 +4,6 @@
 
 #include "TileMapBase.h"
 
-class BBXParser;
-
 class TileMap : public TileMapBase
 {
 private:
@@ -15,11 +13,6 @@ private:
 	VOID		InitInfo( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize );
 	VOID		InitTileData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize );
 	VOID		InitLineData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize );
-
-	//	Β₯Αυ³ͺ...
-	VOID		InitBBX( LPWSTR _BBXFileName );
-	VOID		CreateDataFromBBX( INT _Index );
-	VOID		CreateWallFromBBX( D3DXVECTOR3& _vecPivot, FLOAT* _pfMinus, FLOAT* _pfPlus );
 
 public:
 	enum { TLM_WAY = 0, TLM_WALL, TLM_COURSE };
@@ -33,13 +26,13 @@ public:
 		this->Release();
 	}
 
-	VOID		Create( LPWSTR _BBXFileName, D3DXVECTOR3 _vecStart, D3DXVECTOR3 _vecEnd, FLOAT _fTileSize );
+	VOID		Create( D3DXVECTOR3 _vecStart, D3DXVECTOR3 _vecEnd, FLOAT _fTileSize );
 	VOID		Update();
 	VOID		Render();
 
+	VOID		SetBBXData( LPD3DXVECTOR3 _pvecPivot, FLOAT* _pfMinus, FLOAT* _pfPlus );
 	BOOL		SetInfo( INT _iX, INT _iY, DWORD _dType );
-	BOOL		SetInfo( FLOAT _fX, FLOAT _fY, DWORD _dType );
-
+	BOOL		SetInfo( FLOAT _fX, FLOAT _fZ, DWORD _dType );
 
 private:
 	typedef struct _TILEDATA
@@ -107,20 +100,18 @@ private:
 		{
 			if( pNavGraphNode != NULL )
 				delete[] pNavGraphNode;
+
+			pNavGraphNode = NULL;
 		}
 	}INFO, *LPINFO;
 		
-	BBXParser*			m_pBBXParser;
-
 	TILEDATA			m_TileData;
 	LINEDATA			m_LineData;
 	INFO				m_Info;
-
-	INT					m_iNumBBXImage;
 	
-
 public:
 	INFO*	GetMapInfo()	{ return &m_Info; }
+
 };
 
 #endif

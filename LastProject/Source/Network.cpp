@@ -226,7 +226,7 @@ VOID CNetwork::SC_InitData( CPacket& a_pk )
 		}
 	}
 
-	CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
+	//CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 }
 
 VOID CNetwork::CS_LOGON()

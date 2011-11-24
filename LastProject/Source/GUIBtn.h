@@ -23,7 +23,7 @@ private:
 	BOOL		IsPtOnMe( INT x, INT y );
 
 public:
-	GUIBtn( LPDIRECT3DDEVICE9 _pd3dDevice ) : GUIBase( _pd3dDevice )
+	GUIBtn( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite ) : GUIBase( _pd3dDevice, _pSprite )
 	{
 		this->Initialize();
 	}
@@ -40,15 +40,22 @@ public:
 		FLOAT				fHeight;
 	}DATA, *LPDATA;
 
-	VOID		Create(		DWORD _ID,						//	ID Resource
-							DWORD _Style,					//	Style GBS_PUSH || GBS_CHECK
-							FLOAT _fX, FLOAT _fY,			//	Button Position
-							FLOAT _fWidth, FLOAT _fHeight,	//	Button Width, Height
-							LPCWSTR _Normal,				//	Normal TextureFileName
-							LPCWSTR _Hot,					//	Hot TextureFileName
-							LPCWSTR _Down,					//	Down TextureFileName
-							LPCWSTR _Disable				//	Disable TextureFileName
-							);
+	//VOID		Create(		DWORD _ID,						//	ID Resource
+	//						DWORD _Style,					//	Style GBS_PUSH || GBS_CHECK
+	//						FLOAT _fX, FLOAT _fY,			//	Button Position
+	//						FLOAT _fWidth, FLOAT _fHeight,	//	Button Width, Height
+	//						LPCWSTR _Normal,				//	Normal TextureFileName
+	//						LPCWSTR _Hot,					//	Hot TextureFileName
+	//						LPCWSTR _Down,					//	Down TextureFileName
+	//						LPCWSTR _Disable				//	Disable TextureFileName
+	//						);
+
+	VOID		Create(		DWORD _dID, 
+							DWORD _dStyle, 
+							IMAGEPARAM& _imgNormal, 
+							IMAGEPARAM& _imgHot, 
+							IMAGEPARAM& _imgDown, 
+							IMAGEPARAM& _imgDisable );
 
 	eState		GetState() { return m_State; }
 	VOID		SetState( eState _State );
