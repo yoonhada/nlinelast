@@ -47,7 +47,10 @@ HRESULT CLobbyScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 );
 	CNetwork::GetInstance()->CS_LOGON();
-//	CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
+
+	m_scnState	= IScene::SCENE_END;
+	m_scnNext	= IScene::SCENE_MAIN;
+	//CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 
 	// 접속이 되었다면 로그인 하고 메인 씬으로 변경
 	//if( CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 ) )
@@ -74,4 +77,14 @@ VOID CLobbyScene::Update()
 VOID CLobbyScene::Render()
 {
 
+}
+
+INT CLobbyScene::GetSceneNext()
+{
+	return m_scnNext;
+}
+
+INT CLobbyScene::GetSceneState()
+{
+	return m_scnState;
 }
