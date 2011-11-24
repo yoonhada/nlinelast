@@ -391,6 +391,42 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="ASEViewer"
+				>
+				<File
+					RelativePath=".\Source\ASEViewer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\ASEViewer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\ASEViewerBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\ASEViewerBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMap.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMap.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMapBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMapBase.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="리소스 파일"
@@ -582,10 +618,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\Scene.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Source\SceneManage.cpp"
 				>
 			</File>
@@ -593,6 +625,158 @@
 				RelativePath=".\Source\SceneManage.h"
 				>
 			</File>
+			<Filter
+				Name="Scene"
+				>
+				<File
+					RelativePath=".\Source\Scene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Scene.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="StoryScene"
+				>
+				<File
+					RelativePath=".\Source\StoryGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\StoryGUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\StoryScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\StoryScene.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="LoadingScene"
+				>
+				<File
+					RelativePath=".\Source\LoadingGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LoadingGUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LoadingScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LoadingScene.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="MenuScene"
+				>
+				<File
+					RelativePath=".\Source\MenuGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MenuGUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\MenuScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MenuScene.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="OptionScene"
+				>
+				<File
+					RelativePath=".\Source\OptionGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\OptionGUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\OptionScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\OptionScene.h"
+					>
+				</File>
+				<Filter
+					Name="SetupScene"
+					>
+					<File
+						RelativePath=".\Source\SetupGUI.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\SetupGUI.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\SetupScene.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\SetupScene.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="HelpScene"
+					>
+					<File
+						RelativePath=".\Source\HelpGUI.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\HelpGUI.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\HelpScene.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\HelpScene.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="LoginScene"
+				>
+				<File
+					RelativePath=".\Source\LoginGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LoginGUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LoginScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LoginScene.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Network"
@@ -730,26 +914,6 @@
 				>
 			</File>
 			<Filter
-				Name="TileMap"
-				>
-				<File
-					RelativePath=".\Source\TileMap.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\TileMap.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\TileMapBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\TileMapBase.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="PathFinder"
 				>
 				<File
@@ -765,38 +929,110 @@
 		<Filter
 			Name="GUI"
 			>
-			<File
-				RelativePath=".\Source\GUI.cpp"
+			<Filter
+				Name="GUIButton"
 				>
-			</File>
-			<File
-				RelativePath=".\Source\GUI.h"
+				<File
+					RelativePath=".\Source\GUIBtn.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIBtn.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIBtnManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIBtnManager.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUIBackground"
 				>
-			</File>
-			<File
-				RelativePath=".\Source\GUIBase.cpp"
+				<File
+					RelativePath=".\Source\GUIBackground.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIBackground.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUIBase"
 				>
-			</File>
-			<File
-				RelativePath=".\Source\GUIBase.h"
+				<File
+					RelativePath=".\Source\GUIBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIBase.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUICursor"
 				>
-			</File>
-			<File
-				RelativePath=".\Source\GUIBtn.cpp"
+				<File
+					RelativePath=".\Source\GUICursor.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUICursor.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUIEdit"
 				>
-			</File>
-			<File
-				RelativePath=".\Source\GUIBtn.h"
+				<File
+					RelativePath=".\Source\GUIEdit.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIEdit.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUIListbox"
 				>
-			</File>
-			<File
-				RelativePath=".\Source\GUIBtnManager.cpp"
+				<File
+					RelativePath=".\Source\GUIListbox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIListbox.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUIScrollbar"
 				>
-			</File>
-			<File
-				RelativePath=".\Source\GUIBtnManager.h"
+				<File
+					RelativePath=".\Source\GUIScrollbar.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIScrollbar.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUIWriting"
 				>
-			</File>
+				<File
+					RelativePath=".\Source\GUIWriting.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIWriting.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\ClassDiagram11.cd"

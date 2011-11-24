@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "Stdafx.h"
 #include "GUIBase.h"
 
 VOID GUIBase::Initialize()
@@ -6,13 +6,17 @@ VOID GUIBase::Initialize()
 	//	DrawFontOnTexture
 	m_hFont = NULL;
 	//	End
+
+	//	Test
+	m_iFrameSpeed = 50;
+	//	End
 }
 
 VOID GUIBase::Release()
 {
 }
 
-VOID GUIBase::CreateImage( IMAGE& _Image, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, LPCWSTR _pFileName )
+VOID GUIBase::CreateImage( IMAGE& _Image, DWORD _dPivotType, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, LPCWSTR _pFileName )
 {
 	//	Init VertexBuffer, IndexBuffer
 	VERTEX	Vertex[ 4 ];
@@ -49,22 +53,66 @@ VOID GUIBase::CreateImage( IMAGE& _Image, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, F
 	_Image.vecScale.x	= _fWidth;
 	_Image.vecScale.y	= _fHeight;
 
-	//	Rotate는 일단 빼자
-	_Image.vecTrans.x	= _fX + _fWidth * 0.5f + 0.5f;	//	중점을 옮기는 것
-	_Image.vecTrans.y	= _fY + _fHeight * 0.5f + 0.5f;
+	switch( _dPivotType )
+	{
+	case GBS_TOPLEFT:
+		_Image.vecTrans.x	= _fX + _fWidth * 0.5f + 0.5f;	//	중점을 옮기는 것
+		_Image.vecTrans.y	= _fY + _fHeight * 0.5f + 0.5f;	//	fX, fY가 사각형의 좌상단을 가리킨다
+		break;
+	case GBS_CENTER:
+		_Image.vecTrans.x	= _fX;
+		_Image.vecTrans.y	= _fY;
+		break;
+	default:
+		MessageBox( NULL, L"CreateImage( ..., _dPivotType, ... ) error", NULL, MB_OK );
+		break;
+	}
 
 	//	Init Texture
-	if( _Image.pTex != NULL )
-		_Image.pTex->Release();
+	LPTEXTURE pTexture = new TEXTURE;
+	pTexture->iFrameSpeed = m_iFrameSpeed;
 
-	LoadTextureFromFile(	&_Image.pTex,
-							_pFileName,
-							static_cast< INT >( _fWidth ),
-							static_cast< INT >( _fHeight ),
-							D3DCOLOR_XRGB( 255, 0, 255 ) );
+	if( _pFileName != NULL )
+	{	//	_pFileName != NULL LoadTexture
+		LoadTextureFromFile(	&pTexture->pTex,
+								_pFileName,
+								static_cast<INT>( _fWidth ),
+								static_cast<INT>( _fHeight ),
+								D3DCOLOR_XRGB( 255, 0, 255 ) );
+
+	}
+	else
+	{	//	_pFileName == NULL CreateTexture
+		if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _fWidth ),
+													static_cast<INT>( _fHeight ),
+													0,
+													0,
+													D3DFMT_X8R8G8B8,
+													D3DPOOL_MANAGED,
+													&pTexture->pTex,
+													NULL ) ) )
+		{
+			MessageBox( NULL, L"CreateImage()::CreateTexture failed...", NULL, MB_OK );
+			return;
+		}
+		//	흰색으로 초기화
+		D3DLOCKED_RECT	d3drt;
+		pTexture->pTex->LockRect( 0, &d3drt, NULL, 0 );
+	
+		UINT* pBits = static_cast<UINT*>( d3drt.pBits );
+		
+		INT iWidth	= static_cast<INT>( _fWidth );
+		INT iHeight	= static_cast<INT>( _fHeight );
+		memset( pBits, 0xffff00ff, sizeof( UINT ) * iWidth * iHeight );
+		
+		pTexture->pTex->UnlockRect( 0 );
+	}
+	
+	_Image.vec2Tex.resize( 1 );
+	_Image.vec2Tex[ 0 ].push_back( pTexture );
 }
 
-VOID GUIBase::CreateImage(	IMAGE& _Image, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight )
+VOID GUIBase::CreateImage( IMAGE& _Image, IMAGEPARAM& _imgParam )
 {
 	//	Init VertexBuffer, IndexBuffer
 	VERTEX	Vertex[ 4 ];
@@ -98,57 +146,194 @@ VOID GUIBase::CreateImage(	IMAGE& _Image, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, F
 	SetIB( _Image.pIB, Index, _Image.iNumIndices, sizeof( INDEX ) );
 
 	//	Init Matrix
-	_Image.vecScale.x	= _fWidth;
-	_Image.vecScale.y	= _fHeight;
+	_Image.vecScale.x	= _imgParam.fWidth;//_fWidth;
+	_Image.vecScale.y	= _imgParam.fHeight;//_fHeight;
 
-	//	Rotate는 일단 빼자
-	_Image.vecTrans.x	= _fX + _fWidth * 0.5f + 0.5f;	//	중점을 옮기는 것
-	_Image.vecTrans.y	= _fY + _fHeight * 0.5f + 0.5f;
-
-	//	Init Texture
-	if( _Image.pTex != NULL )
-		_Image.pTex->Release();
-
-	if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _fWidth ),
-												static_cast<INT>( _fHeight ),
-												0,
-												0,
-												D3DFMT_X8R8G8B8,
-												D3DPOOL_MANAGED,
-												&_Image.pTex,
-												NULL ) ) )
+	switch( _imgParam.dPivotType )
 	{
-		MessageBox( NULL, L"CreateTexture failed...", NULL, MB_OK );
+	case GBS_TOPLEFT:
+		_Image.vecTrans.x	= _imgParam.fX + _imgParam.fWidth * 0.5f + 0.5f;	//	중점을 옮기는 것
+		_Image.vecTrans.y	= _imgParam.fY + _imgParam.fHeight * 0.5f + 0.5f;	//	fX, fY가 사각형의 좌상단을 가리킨다
+		break;
+	case GBS_CENTER:
+		_Image.vecTrans.x	= _imgParam.fX;
+		_Image.vecTrans.y	= _imgParam.fY;
+		break;
+	default:
+		MessageBox( NULL, L"CreateImage( ..., dPivotType, ... ) error", NULL, MB_OK );
+		break;
+	}
+
+	////	Init Texture
+	//LPTEXTURE pTexture = new TEXTURE;
+	//pTexture->iFrameSpeed = m_iFrameSpeed;
+
+	//	vec2FileName Error Check
+	INT iNumAnimation	= _imgParam.vec2FileName.size();
+	INT	iNumFrame		= 0;
+	if( iNumAnimation != 0 )
+		iNumFrame = _imgParam.vec2FileName[ 0 ].size();
+
+	//	Not FileName
+	if( iNumAnimation == 0 || iNumFrame == 0 )
+	{
+		//	Init Texture
+		LPTEXTURE pTexture = new TEXTURE;
+		pTexture->iFrameSpeed = m_iFrameSpeed;
+
+		//	_pFileName == NULL CreateTexture
+		if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _imgParam.fWidth ),
+													static_cast<INT>( _imgParam.fHeight ),
+													0,
+													0,
+													D3DFMT_X8R8G8B8,
+													D3DPOOL_MANAGED,
+													&pTexture->pTex,
+													NULL ) ) )
+		{
+			MessageBox( NULL, L"CreateImage()::CreateTexture failed...", NULL, MB_OK );
+			return;
+		}
+		//	흰색으로 초기화
+		D3DLOCKED_RECT	d3drt;
+		pTexture->pTex->LockRect( 0, &d3drt, NULL, 0 );
+	
+		UINT* pBits = static_cast<UINT*>( d3drt.pBits );
+		
+		INT iWidth	= static_cast<INT>( _imgParam.fWidth );
+		INT iHeight	= static_cast<INT>( _imgParam.fHeight );
+		memset( pBits, 0xffff00ff, sizeof( UINT ) * iWidth * iHeight );
+		
+		pTexture->pTex->UnlockRect( 0 );
+
+		_Image.vec2Tex.resize( 1 );
+		_Image.vec2Tex[ 0 ].push_back( pTexture );
+
 		return;
 	}
-	//	흰색으로 초기화
-	D3DLOCKED_RECT	d3drt;
-	_Image.pTex->LockRect( 0, &d3drt, NULL, 0 );
-
-	UINT* pBits = static_cast< UINT* >( d3drt.pBits );
 	
-	memset( pBits, 0xffff00ff, sizeof( UINT ) * _fWidth * _fHeight );
-	
-	_Image.pTex->UnlockRect( 0 );
+	//	Load Texture
+	_Image.vec2Tex.resize( iNumAnimation );
+	for( INT j=0 ; j<iNumAnimation ; j++ )
+	{
+		for( INT i=0 ; i<iNumFrame ; i++ )
+			AddTexture( j, _Image, _imgParam.vec2FileName[ j ][ i ] );
+	}
 }
+
+VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, IMAGEPARAM& _imgParam )
+{
+	_Image2D.vecPosition.x = _imgParam.fX;
+	_Image2D.vecPosition.y = _imgParam.fY;
+	_Image2D.vecPosition.z = 0.0f;
+
+	SetRect( &_Image2D.rtSource,	0, 0,
+									static_cast<INT>( _imgParam.fWidth ),
+									static_cast<INT>( _imgParam.fHeight ) );
+								
+
+	switch( _imgParam.dPivotType )
+	{
+	case GBS_TOPLEFT:
+		_Image2D.vecCenter.x	= 0.0f;
+		_Image2D.vecCenter.y	= 0.0f;
+		_Image2D.vecCenter.z	= 0.0f;
+		break;
+	case GBS_CENTER:
+		_Image2D.vecCenter.x	= _imgParam.fWidth * 0.5f;	//	중점을 옮기는 것
+		_Image2D.vecCenter.y	= _imgParam.fHeight * 0.5f;	//	fX, fY가 사각형의 좌상단을 가리킨다
+		_Image2D.vecCenter.z	= 0.0f;
+		break;
+	default:
+		MessageBox( NULL, L"CreateImage( ..., dPivotType, ... ) error", NULL, MB_OK );
+		break;
+	}
+
+	//	Init Texture
+	//LPTEXTURE pTexture = new TEXTURE;
+	//pTexture->iFrameSpeed = m_iFrameSpeed;
+
+	//	vec2FileName Error Check
+	INT iNumAnimation	= _imgParam.vec2FileName.size();
+	INT	iNumFrame		= 0;
+	if( iNumAnimation != 0 )
+		iNumFrame = _imgParam.vec2FileName[ 0 ].size();
+
+	//	Not FileName
+	if( iNumAnimation == 0 || iNumFrame == 0 )
+	{
+		LPTEXTURE pTexture = new TEXTURE;
+		pTexture->iFrameSpeed = m_iFrameSpeed;
+		//	_pFileName == NULL CreateTexture
+		if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _imgParam.fWidth ),
+													static_cast<INT>( _imgParam.fHeight ),
+													0,
+													0,
+													D3DFMT_X8R8G8B8,
+													D3DPOOL_MANAGED,
+													&pTexture->pTex,
+													NULL ) ) )
+		{
+			MessageBox( NULL, L"CreateImage()::CreateTexture failed...", NULL, MB_OK );
+			return;
+		}
+		//	흰색으로 초기화
+		D3DLOCKED_RECT	d3drt;
+		pTexture->pTex->LockRect( 0, &d3drt, NULL, 0 );
+	
+		UINT* pBits = static_cast<UINT*>( d3drt.pBits );
+		
+		INT iWidth	= static_cast<INT>( _imgParam.fWidth );
+		INT iHeight	= static_cast<INT>( _imgParam.fHeight );
+		memset( pBits, 0xffff00ff, sizeof( UINT ) * iWidth * iHeight );
+		
+		pTexture->pTex->UnlockRect( 0 );
+
+		_Image2D.vec2Tex.resize( 1 );
+		_Image2D.vec2Tex[ 0 ].push_back( pTexture );
+
+		return;
+	}
+	
+	//	Load Texture
+	_Image2D.vec2Tex.resize( iNumAnimation );
+	for( INT j=0 ; j<iNumAnimation ; j++ )
+	{
+		for( INT i=0 ; i<iNumFrame ; i++ )
+			AddTexture( j, _Image2D, _imgParam.vec2FileName[ j ][ i ] );
+	}
+
+}
+
 
 VOID GUIBase::RenderImage( IMAGE& _Image )
 {
-	//	SetWorldMatrix
+	//	Set World, Projection Matrix
 	SetMatrix( _Image.vecScale, _Image.vecRotate, _Image.vecTrans );
 
-	//	SetProjectionMatrix
-	D3DVIEWPORT9 vp;
-	GUIBase::m_pd3dDevice->GetViewport( &vp );
-	D3DXMATRIX matOrtho;
-	D3DXMatrixIdentity( &matOrtho );
-	//D3DXMatrixOrthoLH( &matOrtho, vp.Width, vp.Height, 0, 1 );	//	다른 이유가 뭘까?? 모르겟네;;
-	D3DXMatrixOrthoOffCenterLH( &matOrtho, 0.0f, static_cast< FLOAT>( vp.Width ), static_cast< FLOAT >( vp.Height ), 0.0f, 0, 1 );
-	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matOrtho );
-
 	//	SetTexture
-	if( _Image.pTex != NULL )
-		m_pd3dDevice->SetTexture( 0, _Image.pTex );
+	LPTEXTURE pTexture = _Image.vec2Tex[ _Image.iCurrentAnimation ][ 0 ];
+	
+	if( _Image.bAniPlay )
+	{
+		pTexture = _Image.vec2Tex[ _Image.iCurrentAnimation ][ _Image.iCurrentFrame ];
+
+		_Image.dCurrentTime = timeGetTime();
+
+		if( _Image.dCurrentTime > _Image.dBeginTime + pTexture->iFrameSpeed )
+		{
+			_Image.iCurrentFrame++;
+	
+			_Image.dBeginTime = _Image.dCurrentTime;
+	
+			if( _Image.iCurrentFrame >= _Image.vec2Tex[ _Image.iCurrentAnimation ].size() )
+				_Image.iCurrentFrame = 0;
+		}
+	}
+
+	if( pTexture->pTex != NULL )
+		m_pd3dDevice->SetTexture( 0, pTexture->pTex );
+	
 
 	//	Draw
 	m_pd3dDevice->SetStreamSource( 0, _Image.pVB, 0, sizeof( VERTEX ) );
@@ -156,17 +341,47 @@ VOID GUIBase::RenderImage( IMAGE& _Image )
 	m_pd3dDevice->SetIndices( _Image.pIB );
 	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, _Image.iNumVertices, 0, _Image.iNumIndices );
 
-	//	Init WorldMatrix
+	//	Identity WorldMatrix
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity( &matIdentity );
 	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
 
-	//	Init ProjectionMatrix
+	//	Identity ProjectionMatrix
 	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matIdentity );
+}
+
+VOID GUIBase::RenderImage2D( IMAGE2D& _Image2D )
+{
+	//	SetTexture
+	LPTEXTURE pTexture = _Image2D.vec2Tex[ _Image2D.iCurrentAnimation ][ 0 ];
+	
+	if( _Image2D.bAniPlay )
+	{
+		pTexture = _Image2D.vec2Tex[ _Image2D.iCurrentAnimation ][ _Image2D.iCurrentFrame ];
+
+		_Image2D.dCurrentTime = timeGetTime();
+
+		if( _Image2D.dCurrentTime > _Image2D.dBeginTime + pTexture->iFrameSpeed )
+		{
+			_Image2D.iCurrentFrame++;
+	
+			_Image2D.dBeginTime = _Image2D.dCurrentTime;
+	
+			if( _Image2D.iCurrentFrame >= _Image2D.vec2Tex[ _Image2D.iCurrentAnimation ].size() )
+				_Image2D.iCurrentFrame = 0;
+		}
+	}
+
+	//	Draw
+	//	Begin, End를 다른 곳으로 옮기자
+	m_pSprite->Begin( D3DXSPRITE_ALPHABLEND );
+	m_pSprite->Draw( pTexture->pTex, &_Image2D.rtSource, &_Image2D.vecCenter, &_Image2D.vecPosition, 0xffff00ff );
+	m_pSprite->End();
 }
 
 VOID GUIBase::SetMatrix( D3DXVECTOR3& _vecScale, D3DXVECTOR3& _vecRotate, D3DXVECTOR3& _vecTranslate )
 {
+	//	Set World Matrix
 	D3DXMATRIX matScale;
 	D3DXMatrixIdentity( &matScale );
 	D3DXMatrixScaling( &matScale, _vecScale.x, _vecScale.y, _vecScale.z );
@@ -192,6 +407,15 @@ VOID GUIBase::SetMatrix( D3DXVECTOR3& _vecScale, D3DXVECTOR3& _vecRotate, D3DXVE
 	matWorld = matScale * matRotateX * matRotateY * matRotateZ * matTranslate;
 	
 	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+
+	//	Set Projection Matrix
+	D3DVIEWPORT9 vp;
+	GUIBase::m_pd3dDevice->GetViewport( &vp );
+	D3DXMATRIX matOrtho;
+	D3DXMatrixIdentity( &matOrtho );
+	//D3DXMatrixOrthoLH( &matOrtho, vp.Width, vp.Height, 0, 1 );	//	다른 이유가 뭘까?? 모르겟네;;
+	D3DXMatrixOrthoOffCenterLH( &matOrtho, 0.0f, static_cast< FLOAT>( vp.Width ), static_cast< FLOAT >( vp.Height ), 0.0f, 0, 1 );
+	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matOrtho );
 }
 
 HRESULT	GUIBase::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
@@ -257,32 +481,6 @@ HRESULT	GUIBase::SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT _nInde
 	return S_OK;
 }
 
-HRESULT GUIBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppTexture, LPCWSTR FileName, D3DCOLOR colClear )
-{
-	if( FAILED( D3DXCreateTextureFromFileEx(	
-					m_pd3dDevice,
-					FileName,				//	컴파일러 설정이 Unicode를 요구하고 있는 경우 데이터 타입 LPCSTR은 LPCWSTR이 된다
-					D3DX_DEFAULT_NONPOW2,	//	원본 크기를 받아온다 2의 승수로도 받아올수 있다
-					D3DX_DEFAULT_NONPOW2,	//	원본 크기를 받아온다
-					D3DX_DEFAULT,			//	요구되는 밉레벨의 수, 이 값이 0또는 D3DX_DEFAULT의 경우 완전한 밉맵 체인 생성
-					NULL,					//	동적 텍스쳐
-					D3DFMT_X8R8G8B8,		//	텍스처 포멧 D3DFMT_UNKKNOWN의 경우 포멧은 파일로부터 취득
-					D3DPOOL_MANAGED,		//	텍스처의 배치처가 되는 메모리 클래스를 기술한다
-					D3DX_DEFAULT,			//	필터링 방법, D3DX_DEFAULT는 D3DX_FILTER_TRIANGLE | D3DX_FILTER_DITHER 와 같다
-					D3DX_DEFAULT,			//	필터링 방법, D3DX_DEFAULT는 D3DX_FILTER_BOX 와 같다
-					colClear,				//	투명이 되는 D3DCOLOR값, 컬러키를 무효로 하는 경우는 0을 지정
-					NULL,					//	소스 이미지 파일내의 데이터의 기술을 저장하는 D3DXIMAGE INFO 구조체의 포인터
-					NULL,					//	저장하는 256 색 팔레트를 나타내는 PALETTEENTRY 구조체의 포인터
-					&(*_ppTexture) ) ) )		//	생성된 큐브 텍스처 개체를 나타내는 IDirect3DTexture9 인터페이스의 포인터 주소
-	{
-		MessageBox( NULL, L"LoadTextureFromFile() Failed.", NULL, MB_OK );
-		return E_FAIL;
-	}
-
-	return S_OK;
-
-}
-
 HRESULT GUIBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppOutTexture, LPCWSTR FileName, UINT iWidth, UINT iHeight, D3DCOLOR colClear )
 {
 	if( FAILED( D3DXCreateTextureFromFileEx(	
@@ -301,6 +499,7 @@ HRESULT GUIBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppOutTexture, LPCWSTR
 					NULL,					//	저장하는 256 색 팔레트를 나타내는 PALETTEENTRY 구조체의 포인터
 					&(*_ppOutTexture) ) ) )	//	생성된 큐브 텍스처 개체를 나타내는 IDirect3DTexture9 인터페이스의 포인터 주소
 	{
+		CDebugConsole::GetInstance()->Messagef( L"%s\n", FileName );
 		MessageBox( NULL, L"LoadTextureFromFile() Failed.", NULL, MB_OK );
 		return E_FAIL;
 	}
@@ -370,7 +569,7 @@ VOID GUIBase::DrawFontOnTexture( LPWSTR _Str, COLORREF _Color, LPDIRECT3DTEXTURE
 	SetTextColor( hDC, _Color );
 	
 	//	2,2 대신 좌상단, 중단, 좌하단 3가지로 나누어 할 수 있게 하면 좋을 듯
-	TextOut( hDC, 2, 2, _Str, lstrlen( _Str ) );
+	TextOut( hDC, 10, 10, _Str, lstrlen( _Str ) );
 	
 	D3DLOCKED_RECT	d3drt;
 	_pTexture->LockRect( 0, &d3drt, NULL, 0 );
@@ -414,4 +613,57 @@ VOID GUIBase::ImageTranslate( IMAGE& _Image, FLOAT _fX, FLOAT _fY, FLOAT _fZ )
 	_Image.vecTrans.x = _fX;
 	_Image.vecTrans.y = _fY;
 	_Image.vecTrans.z = _fZ;
+}
+
+VOID GUIBase::AddTexture( INT _iNumAni, IMAGE& _Image, LPWSTR _pFileName )
+{
+	_Image.bAniPlay = TRUE;
+
+	//	Init Texture
+	LPTEXTURE pTexture		= new TEXTURE;
+	pTexture->iFrameSpeed	= m_iFrameSpeed;
+
+	LoadTextureFromFile(	&pTexture->pTex,
+							_pFileName,
+							static_cast<UINT>( _Image.vecScale.x ),
+							static_cast<UINT>( _Image.vecScale.y ),
+							D3DCOLOR_XRGB( 255, 0, 255 ) );
+
+	_Image.vec2Tex[ _iNumAni ].push_back( pTexture );
+}
+
+VOID GUIBase::AddTexture( INT _iNumAni, IMAGE2D& _Image2D, LPWSTR _pFileName )
+{
+	_Image2D.bAniPlay = TRUE;
+
+	//	Init Texture
+	LPTEXTURE pTexture		= new TEXTURE;
+	pTexture->iFrameSpeed	= m_iFrameSpeed;
+
+	LoadTextureFromFile(	&pTexture->pTex,
+							_pFileName,
+							_Image2D.rtSource.right,
+							_Image2D.rtSource.bottom,
+							D3DCOLOR_XRGB( 255, 0, 255 ) );
+
+	_Image2D.vec2Tex[ _iNumAni ].push_back( pTexture );
+}
+
+VOID GUIBase::AddFileName( INT _iNumAni, IMAGEPARAM& _imgParam, LPWSTR _pFileName )
+{
+	INT iNumAnimation = _imgParam.vec2FileName.size();
+
+	//	순서대로 넣는 것이 아니면 중간에 빼먹고 하는 경우가 있으므로 ERROR 처리
+	if( _iNumAni > iNumAnimation )
+		MessageBox( NULL, L"AddFileName(){ ... resize() failed ... }", NULL, MB_OK );
+
+	//	같으면 크기를 늘린다
+	if( _iNumAni == iNumAnimation )
+		_imgParam.vec2FileName.resize( _iNumAni + 1 );
+
+	LPWSTR pFileName = new TCHAR[ 1024 ];
+	
+	lstrcpy( pFileName, _pFileName );
+
+	_imgParam.vec2FileName[ _iNumAni ].push_back( pFileName );
 }

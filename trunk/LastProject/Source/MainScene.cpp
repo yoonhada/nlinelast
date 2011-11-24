@@ -6,9 +6,8 @@
 #include "Charactor.h"
 #include "Camera.h"
 #include "Axis.h"
-#include "Map.h"
+#include "ASEViewer.h"
 #include "Weapon.h"
-#include "TileMap.h"
 #include "Seek.h"
 #include "TimeLifeItem.h"
 
@@ -21,6 +20,9 @@
 CMainScene::CMainScene()
 {
 	Clear();
+
+	m_scnNext	= IScene::SCENE_MENU;
+	m_scnState	= IScene::SCENE_RUNNING;
 }
 
 CMainScene::~CMainScene()
@@ -30,16 +32,16 @@ CMainScene::~CMainScene()
 
 VOID	CMainScene::Clear()
 {
-	m_pMatrices = NULL;
-	m_pCamera = NULL;
-	m_pD3dDevice = NULL;
-	m_pBill = NULL;
-	m_pMyCharactor = NULL;
-	m_pCharactors = NULL;
-	m_pAxis = NULL;
-	m_pGrid = NULL;
-	m_pMonster = NULL;
-	m_pMap = NULL;
+	m_pMatrices		= NULL;
+	m_pCamera		= NULL;
+	m_pD3dDevice	= NULL;
+	m_pBill			= NULL;
+	m_pMyCharactor	= NULL;
+	m_pCharactors	= NULL;
+	m_pAxis			= NULL;
+	m_pGrid			= NULL;
+	m_pMonster		= NULL;
+	m_pASEViewer	= NULL;
 
 	for( INT i=0; i<4; ++i )
 	{
@@ -50,11 +52,10 @@ VOID	CMainScene::Clear()
 	//m_bHost = FALSE;
 	//m_iClientNumber = 0;
 
-	m_pLogo = NULL;
-	m_pTileMap = NULL;
+	m_pLogo		= NULL;
 }
 
-HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
+HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprite, HWND a_hWnd )
 {
 	m_pD3dDevice = a_pD3dDevice;
 
@@ -94,19 +95,14 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pLight->Create( m_pD3dDevice );
 
 	//맵 생성
-	m_pMap = new Map( m_pD3dDevice );
-	m_pMap->Create( L"ASE File/Stage4_Alpha.ASE", L"ASE File/Stage4_Alpha.BBX" );
-	m_pMap->AddAnimationData( 1000, 0, 0, 300, TRUE );
+	m_pASEViewer = new ASEViewer( m_pD3dDevice );
+	m_pASEViewer->Create(  L"ASE File/Map/Stage_Beta.ASE", L"ASE File/Map/Stage_Beta_Box.BBX" );
 
-	//타일맵 생성
-	m_pTileMap = new TileMap( m_pD3dDevice );
-	m_pTileMap->Create( L"ASE File/Stage4_Alpha.BBX", D3DXVECTOR3(-510.0f, 0.0f, -510.0f), D3DXVECTOR3(510.0f, 0.0f, 510.0f), 10.0f );
+	//Seek::GetInstance()->Initialize( m_pTileMap );
 
-	Seek::GetInstance()->Initialize( m_pTileMap );
-
-	Astar::GetInstance()->Initialize( m_pTileMap->GetMapInfo()->iMaxWidth,
-									  m_pTileMap->GetMapInfo()->iMaxHeight,
-									  m_pTileMap->GetMapInfo()->pNavGraphNode );
+	//Astar::GetInstance()->Initialize( m_pTileMap->GetMapInfo()->iMaxWidth,
+									  //m_pTileMap->GetMapInfo()->iMaxHeight,
+									  //m_pTileMap->GetMapInfo()->pNavGraphNode );
 
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
@@ -175,7 +171,7 @@ HRESULT CMainScene::Release()
 
 	//SAFE_DELETE( m_pMonster );
 
-	SAFE_DELETE ( m_pMap );
+	SAFE_DELETE ( m_pASEViewer );
 
 	SAFE_DELETE ( m_pLight );
 
@@ -183,10 +179,8 @@ HRESULT CMainScene::Release()
 
 	SAFE_DELETE( m_pAxis );
 
-
 	SAFE_DELETE_ARRAY( m_pLogo );
 
-	SAFE_DELETE( m_pTileMap );
 
 	return S_OK;
 }
@@ -361,15 +355,8 @@ VOID	CMainScene::Update()
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 
-	m_pMap->Update();
-/*
-	m_pTileMap->SetInfo( 0, 0, TileMap::TLM_COURSE );
-	m_pTileMap->SetInfo( 1, 0, TileMap::TLM_COURSE );
-	m_pTileMap->SetInfo( 2, 0, TileMap::TLM_COURSE );
-	m_pTileMap->SetInfo( 3, 0, TileMap::TLM_COURSE );
-	m_pTileMap->SetInfo( 4, 0, TileMap::TLM_COURSE );
-	m_pTileMap->SetInfo( 5, 0, TileMap::TLM_COURSE );
-*/
+	m_pASEViewer->Update();
+
 
 	CNetwork::GetInstance()->Update();
 }
@@ -382,12 +369,8 @@ VOID	CMainScene::Render()
 	m_pAxis->Render();
 #endif
 
-	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pMap->Get_MatWorld() );
-	m_pMap->Render();
-
-#ifdef _DEBUG
-	m_pTileMap->Render();
-#endif
+	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pASEViewe->Get_MatWorld() );
+	m_pASEViewer->Render();
 
 	m_pMyCharactor->Render();
 
@@ -413,4 +396,14 @@ VOID	CMainScene::Render()
 	TwDraw();
 #endif
 
+}
+
+INT CMainScene::GetSceneNext()
+{
+	return m_scnNext;
+}
+
+INT CMainScene::GetSceneState()
+{
+	return m_scnState;
 }

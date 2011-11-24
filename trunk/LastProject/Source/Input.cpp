@@ -5,7 +5,6 @@
 	@brief	키보드, 마우스 처리 클래스
 */
 
-
 #include "stdafx.h"
 #include "Input.h"
 
@@ -23,9 +22,9 @@ CInput::~CInput()
 
 VOID CInput::Clear()
 {
-	m_hWnd				= NULL;
-	m_vRotate = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-	m_vPos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	m_hWnd			= NULL;
+	m_vRotate		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	m_vPos			= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	//m_fXPos = 0.0f;
 	m_fYRotate = 0.0f;
 	m_fXRotate = 0.0f;
