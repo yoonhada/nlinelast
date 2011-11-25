@@ -127,13 +127,16 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 	switch( _scnNext )
 	{
 	case IScene::SCENE_LOGO:
+		//m_pNextScene = new CLogoScene;
 		break;
 	case IScene::SCENE_STORY:
+		//m_pNextScene = new StoryScene;
 		break;
 	case IScene::SCENE_MENU:
 		m_pNextScene = new MenuScene;
 		break;
 	case IScene::SCENE_LOBBY:
+		//m_pNextScene = new StoryScene;
 		break;
 	case IScene::SCENE_MAIN:
 		m_pNextScene = new CMainScene;
@@ -158,6 +161,7 @@ VOID CSceneManage::Update()
 		//ChangeScene();
 		m_pScene = m_pNextScene;
 	}
+
 	if( m_pScene->GetSceneState() == IScene::SCENE_END )
 	{
 		ChangeScene( m_pScene->GetSceneNext() );

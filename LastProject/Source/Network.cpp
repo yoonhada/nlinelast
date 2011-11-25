@@ -86,10 +86,9 @@ VOID CNetwork::Update()
 
 	if( time > NETWORK_RECV_TIME )
 	{
+		CCharactor &rCharactors = CObjectManage::GetInstance()->Get_Charactors()[0];	
 		// 이동 데이터 서버로 보내기
-		CS_MOVEMENT( CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().x,
-			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaPos().z,
-			CObjectManage::GetInstance()->Get_MyCharactor()->Get_CharaAngle() );
+		CS_MOVEMENT( rCharactors.Get_CharaPos().x, rCharactors.Get_CharaPos().z, rCharactors.Get_CharaAngle() );
 		time = 0.0f;
 	}
 

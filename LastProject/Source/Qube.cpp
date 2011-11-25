@@ -46,7 +46,6 @@ VOID CQube::Update( CBoundBox * pBB )
 		vDir = CPhysics::GetInstance()->m_vGAccel * fLen * fLen ;
 	}
 
-	CDebugConsole::GetInstance()->Messagef( "%f-------------\n", vDir.y );
 	m_vMomentum = m_vMomentum - vDir;
 
 	// 이동값 갱신
