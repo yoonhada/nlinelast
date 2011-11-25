@@ -23,20 +23,20 @@ public:
 	{
 		this->Release();
 	}
-	
+
 	typedef struct _TILEVERTEX
 	{
 		enum { FVF = D3DFVF_XYZ | D3DFVF_TEX1 };
 
-		D3DXVECTOR3	vecPosition;
-		D3DXVECTOR2	vecTexcoord;
+		D3DXVECTOR3 vecPosition;
+		D3DXVECTOR3 vecTexcoord;
 	}TILEVERTEX, *LPTILEVERTEX;
 
 	typedef struct _LINEVERTEX
 	{
 		enum { FVF = D3DFVF_XYZ | D3DFVF_DIFFUSE };
 
-		D3DXVECTOR3	vecPosition;
+		D3DXVECTOR3 vecPosition;
 		DWORD		dColor;
 	}LINEVERTEX, *LPLINEVERTEX;
 
@@ -48,11 +48,13 @@ public:
 	typedef struct _IMAGE
 	{
 		LPDIRECT3DVERTEXBUFFER9	pVB;
-		INT						iNumVertex;
+		INT						iVertices;
 		LPDIRECT3DINDEXBUFFER9	pIB;
-		INT						iNumIndex;
+		INT						iIndices;
 
 		LPDIRECT3DTEXTURE9		pTexture;
+
+		DWORD					FVF;
 
 		_IMAGE()
 		{
@@ -67,14 +69,15 @@ public:
 			SAFE_RELEASE( pTexture );
 		}
 	}IMAGE, *LPIMAGE;
-	
-	VOID		CreateTileImage( IMAGE& _TileImage, INT _iNumVertex, LPTILEVERTEX _pVertex, INT _iNumIndex, LPINDEX _pIndex, INT _iWidth, INT _iHeight );
-	VOID		CreateLineImage( IMAGE& _LineImage, INT _iNumVertex, LPLINEVERTEX _pVertex );
-	VOID		RenderTileImage( IMAGE& _TileImage );
-	VOID		RenderLineImage( IMAGE& _LineImage );
 
-	VOID		ChangePixel( IMAGE& _TileImage, INT _iX, INT _iY, DWORD _dColor );
-	
+	VOID		CreateTileImage( IMAGE& _TileImage, INT _iVertices, LPTILEVERTEX _pVertex, INT _iIndices, LPINDEX _pIndex, INT _itexWidth, INT _itexHeight );
+	VOID		CreateLineImage( IMAGE& _LineImage, INT _iVertices, LPLINEVERTEX _pVertex );
+
+	VOID		RenderTileImage( LPIMAGE _pTileImage );
+	VOID		RenderLineImage( LPIMAGE _pLineImage );
+
+	VOID		ChangePixel( LPDIRECT3DTEXTURE9 _pTexture, INT _iX, INT _iY, DWORD _dColor );
+
 private:
 	LPDIRECT3DDEVICE9		m_pd3dDevice;
 

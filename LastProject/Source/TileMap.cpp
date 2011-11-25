@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "TileMap.h"
-#include "BBXParser.h"
 
 VOID TileMap::Initialize()
 {
@@ -10,248 +9,221 @@ VOID TileMap::Release()
 {
 }
 
-VOID TileMap::InitInfo( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize )
+VOID TileMap::InitInfo( LPD3DXVECTOR3 _pvecStart, LPD3DXVECTOR3 _pvecEnd, FLOAT _fTileSize )
 {
-	INT		iNumWidth	= static_cast<INT>( ( _vecEnd.x - _vecStart.x ) / _fTileSize + 1.0f );
-	INT		iNumHeight	= static_cast<INT>( ( _vecEnd.z - _vecStart.z ) / _fTileSize + 1.0f );
-	
-	FLOAT	fNumWidth	= static_cast<FLOAT>( iNumWidth );
-	FLOAT	fNumHeight	= static_cast<FLOAT>( iNumHeight );
+	//	Init Info
+	m_Data.Info.iTileWidth		= static_cast<INT>( ( _pvecEnd->x - _pvecStart->x ) / _fTileSize + 1.0f );
+	m_Data.Info.iTileHeight		= static_cast<INT>( ( _pvecEnd->z - _pvecStart->z ) / _fTileSize + 1.0f );
+	//	타일이랑 그래프 넓이 높이를 햇갈리지 말자
+	m_Data.Info.iGraphWidth		= m_Data.Info.iTileWidth - 1;
+	m_Data.Info.iGraphHeight	= m_Data.Info.iTileHeight - 1;
 
-	//	Set Info
-	m_Info.iMaxWidth	= iNumWidth - 1;
-	m_Info.iMaxHeight	= iNumHeight - 1;
+	m_Data.Info.fTileSize		= _fTileSize;
 
-	m_Info.fTileSize	= _fTileSize;
+	m_Data.Info.vecStart		= (*_pvecStart);
+	m_Data.Info.vecEnd			= (*_pvecEnd);
 
-	m_Info.vecStart		= _vecStart;
-	m_Info.vecEnd		= _vecEnd;
-	//m_Info.vecEnd.x		= _vecStart.x + fNumWidth * _fTileSize;
-	//m_Info.vecEnd.y		= _vecStart.y;
-	//m_Info.vecEnd.z		= _vecStart.z + fNumHeight * _fTileSize;
-
-	m_Info.pNavGraphNode = new INT[ m_Info.iMaxWidth * m_Info.iMaxHeight ];
-	memset( m_Info.pNavGraphNode, 0, sizeof( INT ) *  m_Info.iMaxWidth * m_Info.iMaxHeight );
+	m_Data.Info.pNavGraphNode = new INT[ m_Data.Info.iGraphWidth * m_Data.Info.iGraphHeight ];
+	ZeroMemory( m_Data.Info.pNavGraphNode, sizeof( INT ) * m_Data.Info.iGraphWidth * m_Data.Info.iGraphHeight );
 }
-VOID TileMap::InitTileData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize )
+VOID TileMap::InitTileImage()
 {
-	INT		iNumWidth	= static_cast<INT>( ( _vecEnd.x - _vecStart.x ) / _fTileSize + 1.0f );
-	INT		iNumHeight	= static_cast<INT>( ( _vecEnd.z - _vecStart.z ) / _fTileSize + 1.0f );
-	
-	FLOAT	fNumWidth	= static_cast<FLOAT>( iNumWidth );
-	FLOAT	fNumHeight	= static_cast<FLOAT>( iNumHeight );
-
-	//	Set TileData
+	//	Init TileImage
 	//	Set Vertex
-	m_TileData.iNumVertex	= iNumWidth * iNumHeight;
+	m_Data.imgTile.iVertices = m_Data.Info.iTileWidth * m_Data.Info.iTileHeight;
 
-	SAFE_DELETE_ARRAY( m_TileData.pVertex );
-	m_TileData.pVertex		= new TILEVERTEX[ m_TileData.iNumVertex ];
+	LPTILEVERTEX pTileVertex = new TILEVERTEX[ m_Data.imgTile.iVertices ];
 
-	FLOAT incU = 1.0f / ( fNumWidth - 1.0f );
-	FLOAT incV = 1.0f / ( fNumHeight - 1.0f );
+	FLOAT incU = static_cast<FLOAT>( 1.0f / m_Data.Info.iTileWidth );
+	FLOAT incV = static_cast<FLOAT>( 1.0f / m_Data.Info.iTileHeight );
 
 	INT l = 0;
-	for( INT z=0 ; z<iNumHeight ; z++ )
+	for( INT z=0 ; z<m_Data.Info.iTileHeight ; z++ )
 	{
-		for( INT x=0 ; x<iNumWidth ; x++ )
+		for( INT x=0 ; x<m_Data.Info.iTileWidth ; x++ )
 		{
-			m_TileData.pVertex[ l ].vecPosition.x = _vecStart.x + _fTileSize * static_cast<FLOAT>( x );
-			m_TileData.pVertex[ l ].vecPosition.y = 0.0f;
-			m_TileData.pVertex[ l ].vecPosition.z = _vecStart.z + _fTileSize * static_cast<FLOAT>( z );
+			pTileVertex[ l ].vecPosition.x = m_Data.Info.vecStart.x + m_Data.Info.fTileSize * static_cast<FLOAT>( x );
+			pTileVertex[ l ].vecPosition.y = 0.0f;
+			pTileVertex[ l ].vecPosition.z = m_Data.Info.vecStart.z + m_Data.Info.fTileSize * static_cast<FLOAT>( z );
 
-			m_TileData.pVertex[ l ].vecTexcoord.x = incU * static_cast<FLOAT>( x );
-			m_TileData.pVertex[ l ].vecTexcoord.y = incV * static_cast<FLOAT>( z );
+			pTileVertex[ l ].vecTexcoord.x = incU * static_cast<FLOAT>( x );
+			pTileVertex[ l ].vecTexcoord.y = incV * static_cast<FLOAT>( z );
 
 			l++;
 		}
 	}
-
 	//	Set Index
-	m_TileData.iNumIndex	= ( iNumWidth - 1 ) * ( iNumHeight - 1 ) * 2;
+	m_Data.imgTile.iIndices = ( m_Data.Info.iTileWidth - 1 ) * ( m_Data.Info.iTileHeight - 1 ) * 2;
 
-	SAFE_DELETE_ARRAY( m_TileData.pIndex );
-	m_TileData.pIndex = new INDEX[ m_TileData.iNumIndex ];
+	LPINDEX pTileIndex = new INDEX[ m_Data.imgTile.iIndices ];
 
 	l = 0;
-	for( INT i=0 ; i<iNumHeight-1 ; i++ )
+	for( INT z=0 ; z<m_Data.Info.iTileHeight-1 ; z++ )
 	{
-		for( INT j=0 ; j<iNumWidth-1 ; j++ )
+		for( INT x=0 ; x<m_Data.Info.iTileWidth-1 ; x++ )
 		{
-			m_TileData.pIndex[ l		]._0	=	i			* ( iNumWidth  ) + j;
-			m_TileData.pIndex[ l		]._1	=	( i + 1 )	* ( iNumWidth  ) + j;
-			m_TileData.pIndex[ l		]._2	=	( i + 1 )	* ( iNumWidth  ) + ( j + 1 );
-						 
-			m_TileData.pIndex[ l + 1	]._0	=	i			* ( iNumWidth  ) + ( j + 1 );
-			m_TileData.pIndex[ l + 1	]._1	=	i			* ( iNumWidth  ) + j;
-			m_TileData.pIndex[ l + 1	]._2	=	( i + 1 )	* ( iNumWidth  ) + ( j + 1 );
+			pTileIndex[ l     ]._0 =	x         + z         * m_Data.Info.iTileWidth;
+			pTileIndex[ l     ]._1 =	x         + ( z + 1 ) * m_Data.Info.iTileWidth;
+			pTileIndex[ l     ]._2 =	( x + 1 ) + ( z + 1 ) * m_Data.Info.iTileWidth;
+
+			pTileIndex[ l + 1 ]._0 =	( x + 1 ) + z         * m_Data.Info.iTileWidth;
+			pTileIndex[ l + 1 ]._1 =	x         + z         * m_Data.Info.iTileWidth;
+			pTileIndex[ l + 1 ]._2 =	( x + 1 ) + ( z + 1 ) * m_Data.Info.iTileWidth;
 
 			l+=2;
 		}
 	}
 
-	//	Set VertexBuffer, IndexBuffer, Texture
-	CreateTileImage( m_TileData.Image, m_TileData.iNumVertex, m_TileData.pVertex, m_TileData.iNumIndex, m_TileData.pIndex, iNumWidth, iNumHeight );
+	CreateTileImage( m_Data.imgTile,	m_Data.imgTile.iVertices,
+		pTileVertex,
+		m_Data.imgTile.iIndices,
+		pTileIndex,
+		m_Data.Info.iTileWidth,
+		m_Data.Info.iTileHeight );
 
+	SAFE_DELETE_ARRAY( pTileVertex );
+	SAFE_DELETE_ARRAY( pTileIndex );
 
 }
-VOID TileMap::InitLineData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT _fTileSize )
+VOID TileMap::InitLineImage()
 {
-	INT		iNumWidth	= static_cast<INT>( ( _vecEnd.x - _vecStart.x ) / _fTileSize + 1.0f );
-	INT		iNumHeight	= static_cast<INT>( ( _vecEnd.z - _vecStart.z ) / _fTileSize + 1.0f );
-	
-	FLOAT	fNumWidth	= static_cast<FLOAT>( iNumWidth );
-	FLOAT	fNumHeight	= static_cast<FLOAT>( iNumHeight );
+	//	Init LineImage
+	m_Data.imgLine.iVertices = ( m_Data.Info.iTileWidth + m_Data.Info.iTileHeight ) * 2;
 
-	//	Set LineData
-	//	Set Vertex
-	m_LineData.iNumVertex = ( iNumWidth + iNumHeight ) * 2;
-	
-	m_LineData.pVertex = new LINEVERTEX[ m_LineData.iNumVertex ];
+	LPLINEVERTEX pLineVertex = new LINEVERTEX[ m_Data.imgLine.iVertices ];
 
-	INT l=0;
+	INT l = 0;
 	//	Set Width
-	for( INT i=0 ; i<iNumHeight ; i++ )
+	for( INT i=0 ; i<m_Data.Info.iTileHeight ; i++ )
 	{
-		m_LineData.pVertex[ l     ].vecPosition.x = _vecStart.x;
-		m_LineData.pVertex[ l     ].vecPosition.y = 0.5f;
-		m_LineData.pVertex[ l     ].vecPosition.z = _vecStart.z + ( i * _fTileSize );
+		pLineVertex[ l     ].vecPosition.x	= m_Data.Info.vecStart.x;
+		pLineVertex[ l     ].vecPosition.y	= 0.5f;
+		pLineVertex[ l     ].vecPosition.z	= m_Data.Info.vecStart.z + ( i * m_Data.Info.fTileSize );
 
-		m_LineData.pVertex[ l     ].dColor = 0xff0000ff;
+		pLineVertex[ l     ].dColor			= 0xff0000ff;
 
-		m_LineData.pVertex[ l + 1 ].vecPosition.x = _vecStart.x + ( ( iNumWidth - 1 ) * _fTileSize );
-		m_LineData.pVertex[ l + 1 ].vecPosition.y = 0.5f;
-		m_LineData.pVertex[ l + 1 ].vecPosition.z = _vecStart.z + ( i * _fTileSize );
+		pLineVertex[ l + 1 ].vecPosition.x	= m_Data.Info.vecStart.x + static_cast<FLOAT>( m_Data.Info.iTileWidth - 1 ) * m_Data.Info.fTileSize;
+		pLineVertex[ l + 1 ].vecPosition.y	= 0.5f;
+		pLineVertex[ l + 1 ].vecPosition.z	= m_Data.Info.vecStart.z + static_cast<FLOAT>( i ) * m_Data.Info.fTileSize;
 
-		m_LineData.pVertex[ l + 1 ].dColor = 0xff0000ff;
+		pLineVertex[ l + 1 ].dColor			= 0xff0000ff;
 
 		l+=2;
 	}
 
 	//	Set Height
-	for( INT i=0 ; i<iNumHeight ; i++ )
+	for( INT i=0 ; i<m_Data.Info.iTileWidth ; i++ )
 	{
-		m_LineData.pVertex[ l     ].vecPosition.x = _vecStart.x + ( i * _fTileSize );
-		m_LineData.pVertex[ l     ].vecPosition.y = 0.5f;
-		m_LineData.pVertex[ l     ].vecPosition.z = _vecStart.z;
+		pLineVertex[ l     ].vecPosition.x	= m_Data.Info.vecStart.x + static_cast<FLOAT>( i ) * m_Data.Info.fTileSize;
+		pLineVertex[ l     ].vecPosition.y	= 0.5f;
+		pLineVertex[ l     ].vecPosition.z	= m_Data.Info.vecStart.z;
 
-		m_LineData.pVertex[ l     ].dColor = 0xff0000ff;
+		pLineVertex[ l     ].dColor			= 0xff0000ff;
 
-		m_LineData.pVertex[ l + 1 ].vecPosition.x = _vecStart.x + ( i * _fTileSize );
-		m_LineData.pVertex[ l + 1 ].vecPosition.y = 0.5f;
-		m_LineData.pVertex[ l + 1 ].vecPosition.z = _vecStart.z + ( ( iNumHeight - 1 ) * _fTileSize );
+		pLineVertex[ l + 1 ].vecPosition.x	= m_Data.Info.vecStart.x + static_cast<FLOAT>( i ) * m_Data.Info.fTileSize;
+		pLineVertex[ l + 1 ].vecPosition.y	= 0.5f;
+		pLineVertex[ l + 1 ].vecPosition.z	= m_Data.Info.vecStart.z + static_cast<FLOAT>( m_Data.Info.iTileHeight - 1 ) * m_Data.Info.fTileSize;
 
-		m_LineData.pVertex[ l + 1 ].dColor = 0xff0000ff;
+		pLineVertex[ l + 1 ].dColor			= 0xff0000ff;
 
 		l+=2;
 	}
 
-	CreateLineImage( m_LineData.Image, m_LineData.iNumVertex, m_LineData.pVertex );
-}
+	CreateLineImage( m_Data.imgLine, m_Data.imgLine.iVertices, pLineVertex );
 
+	SAFE_DELETE_ARRAY( pLineVertex );
+}
 
 VOID TileMap::Create( D3DXVECTOR3 _vecStart, D3DXVECTOR3 _vecEnd, FLOAT _fTileSize )
 {
-	InitInfo( _vecStart, _vecEnd, _fTileSize );
-	InitTileData( _vecStart, _vecEnd, _fTileSize );
-	InitLineData( _vecStart, _vecEnd, _fTileSize );
-
+	InitInfo( &_vecStart, &_vecEnd, _fTileSize );
+	InitTileImage();
+	InitLineImage();
 }
+
 VOID TileMap::Update()
 {
 }
 
 VOID TileMap::Render()
 {
-	RenderTileImage( m_TileData.Image );
-	RenderLineImage( m_LineData.Image );
+	RenderTileImage( &m_Data.imgTile );
+	RenderLineImage( &m_Data.imgLine );
 }
 
-BOOL TileMap::SetInfo( INT _iX, INT _iY, DWORD _dType )
+BOOL TileMap::SetInfo( DWORD _dType, INT _iX, INT _iY )
 {
-	if( 0 > _iX && _iX > m_Info.iMaxWidth )
-		return FALSE;
-	if( 0 > _iY && _iY > m_Info.iMaxHeight )
-		return FALSE;
+	if( 0 > _iX || _iX >= m_Data.Info.iGraphWidth )return FALSE;
+	if( 0 > _iY || _iY >= m_Data.Info.iGraphHeight )return FALSE;
 
 	switch( _dType )
 	{
 	case TLM_WAY:
-		ChangePixel( m_TileData.Image, _iX, _iY, 0xffffffff );
-		m_Info.pNavGraphNode[ _iX + _iY * m_Info.iMaxWidth ] = 0;
+		ChangePixel( m_Data.imgTile.pTexture, _iX, _iY, 0xffffffff );
+		m_Data.Info.pNavGraphNode[ _iX + _iY * m_Data.Info.iGraphWidth ] = 0;
 		break;
 	case TLM_WALL:
-		ChangePixel( m_TileData.Image, _iX, _iY, 0xff000000 );
-		m_Info.pNavGraphNode[ _iX + _iY * m_Info.iMaxWidth ] = 1;
+		ChangePixel( m_Data.imgTile.pTexture, _iX, _iY, 0xff000000 );
+		m_Data.Info.pNavGraphNode[ _iX + _iY * m_Data.Info.iGraphWidth ] = 1;
 		break;
 	case TLM_COURSE:
-		ChangePixel( m_TileData.Image, _iX, _iY, 0xff00ff00 );
+		ChangePixel( m_Data.imgTile.pTexture, _iX, _iY, 0xff00ff00 );
 		break;
 	}
-
-	for( INT y=0 ; y<m_Info.iMaxHeight ; y++ )
-	{
-		for( INT x=0 ; x<m_Info.iMaxWidth ; x++ )
-		{
-			CDebugConsole::GetInstance()->Messagef( L"%d ", m_Info.pNavGraphNode[ x + y * m_Info.iMaxHeight ] );
-		}
-		CDebugConsole::GetInstance()->Messagef( L"\n" );
-	}
-	CDebugConsole::GetInstance()->Messagef( L"\n\n" );
 
 	return TRUE;
+
 }
 
-BOOL TileMap::SetInfo( FLOAT _fX, FLOAT _fZ, DWORD _dType )
+BOOL TileMap::SetInfo( DWORD _dType, FLOAT _fX, FLOAT _fZ )
 {
-	if( m_Info.vecStart.x > _fX && _fX > m_Info.vecEnd.x )
-		return FALSE;
-	if( m_Info.vecStart.z > _fZ && _fZ > m_Info.vecEnd.z )
-		return FALSE;
+	INT iX = static_cast<INT>( ( _fX - m_Data.Info.vecStart.x ) / m_Data.Info.fTileSize );
+	INT iY = static_cast<INT>( ( _fZ - m_Data.Info.vecStart.z ) / m_Data.Info.fTileSize );
 
-	INT iX = static_cast<INT>( ( _fX - m_Info.vecStart.x ) / m_Info.fTileSize );
-	INT iY = static_cast<INT>( ( _fZ - m_Info.vecStart.z ) / m_Info.fTileSize );
-
-	if( iX < 0 )iX *= -1;
-	if( iY < 0 )iY *= -1;
+	if( 0 > iX || iX >= m_Data.Info.iGraphWidth )return FALSE;
+	if( 0 > iY || iY >= m_Data.Info.iGraphHeight )return FALSE;
 
 	switch( _dType )
 	{
 	case TLM_WAY:
-		ChangePixel( m_TileData.Image, iX, iY, 0xffffffff );
-		m_Info.pNavGraphNode[ iX + iY * m_Info.iMaxWidth ] = 0;
+		ChangePixel( m_Data.imgTile.pTexture, iX, iY, 0xffffffff );
+		m_Data.Info.pNavGraphNode[ iX + iY * m_Data.Info.iGraphWidth ] = 0;
 		break;
 	case TLM_WALL:
-		ChangePixel( m_TileData.Image, iX, iY, 0xff000000 );
-		m_Info.pNavGraphNode[ iX + iY * m_Info.iMaxWidth ] = 1;
+		ChangePixel( m_Data.imgTile.pTexture, iX, iY, 0xff000000 );
+		m_Data.Info.pNavGraphNode[ iX + iY * m_Data.Info.iGraphWidth ] = 1;
 		break;
 	case TLM_COURSE:
-		ChangePixel( m_TileData.Image, iX, iY, 0xff00ff00 );
+		ChangePixel( m_Data.imgTile.pTexture, iX, iY, 0xff00ff00 );
 		break;
 	}
 
 	return TRUE;
 }
 
-VOID TileMap::SetBBXData( LPD3DXVECTOR3 _pvecPivot, FLOAT* _pfMinus, FLOAT* _pfPlus )
+BOOL TileMap::SetBBXData( LPD3DXVECTOR3 _pvecPivot, FLOAT* _pfMinus, FLOAT* _pfPlus )
 {
-	FLOAT	fStartX = _pvecPivot->x + _pfMinus[ 0 ];
-	FLOAT	fStartZ = _pvecPivot->z + _pfMinus[ 2 ];
+	FLOAT fStartX = _pvecPivot->x + _pfMinus[ 0 ];
+	FLOAT fStartZ = _pvecPivot->z + _pfMinus[ 2 ];
 
-	INT iNumWidth	= static_cast<INT>( ( _pfPlus[ 0 ] - _pfMinus[ 0 ] ) / m_Info.fTileSize );
-	INT iNumHeight	= static_cast<INT>( ( _pfPlus[ 2 ] - _pfMinus[ 2 ] ) / m_Info.fTileSize );
+	INT iBBXWidth	= static_cast<INT>( ( _pfPlus[ 0 ] - _pfMinus[ 0 ] ) / m_Data.Info.fTileSize );
+	INT iBBXHeight	= static_cast<INT>( ( _pfPlus[ 2 ] - _pfMinus[ 2 ] ) / m_Data.Info.fTileSize );
 
 	FLOAT fX = 0.0f;
 	FLOAT fZ = 0.0f;
-	for( INT j=0 ; j<=iNumHeight ; j++ )
+
+	for( INT y=0 ; y<=iBBXHeight ; y++ )
 	{
-		for( INT i=0 ; i<=iNumWidth ; i++ )
+		for( INT x=0 ; x<=iBBXWidth ; x++ )
 		{
-			SetInfo( fStartX + m_Info.fTileSize * fX, fStartZ + m_Info.fTileSize * fZ, TLM_WALL );
+			SetInfo( TLM_WALL,	fStartX + fX * m_Data.Info.fTileSize,
+				fStartZ + fZ * m_Data.Info.fTileSize );
 
 			fX += 1.0f;
 		}
 		fZ += 1.0f;
 		fX = 0.0f;
 	}
+
+	return TRUE;
 }
