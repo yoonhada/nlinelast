@@ -6,6 +6,7 @@
 #include "Charactor.h"
 #include "Camera.h"
 #include "Axis.h"
+#include "TileMap.h"
 #include "ASEViewer.h"
 #include "Weapon.h"
 #include "TimeLifeItem.h"
@@ -42,6 +43,7 @@ VOID	CMainScene::Clear()
 	m_pAxis			= NULL;
 	m_pGrid			= NULL;
 	m_pMonster		= NULL;
+	m_pTileMap		= NULL;
 	m_pASEViewer	= NULL;
 	m_pGameEvent	= NULL;
 
@@ -100,6 +102,10 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//甘 积己
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
 	m_pASEViewer->Create(  L"ASE File/Map/Stage_Beta.ASE", L"ASE File/Map/Stage_Beta_Box.BBX" );
+
+	//鸥老甘 积己
+	m_pTileMap = new TileMap( m_pD3dDevice );
+	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -910.0f ), D3DXVECTOR3( 510.0f, 0.0f, 910.0f ), 10.0f );
 	
 	Seek::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo(), m_pASEViewer->GetTileMapInfo() );
 	Chase::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo() );

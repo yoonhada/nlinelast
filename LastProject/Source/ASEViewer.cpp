@@ -2,7 +2,6 @@
 #include "ASEViewer.h"
 #include "ASEParser.h"
 #include "BBXParser.h"
-#include "TileMap.h"
 
 #define ANI_1 0
 #define ANI_2 1
@@ -22,7 +21,6 @@ VOID ASEViewer::Initialize()
 
 	m_pASEParser	= new ASEParser();
 	m_pBBXParser	= new BBXParser();
-	m_pTileMap		= new TileMap( m_pd3dDevice );
 }
 
 
@@ -33,7 +31,6 @@ VOID ASEViewer::Release()
 
 	SAFE_DELETE( m_pASEParser );
 	SAFE_DELETE( m_pBBXParser );
-	SAFE_DELETE( m_pTileMap );
 }
 
 VOID ASEViewer::InitASE( LPWSTR _ASEFileName )
@@ -132,49 +129,25 @@ VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 	InitASE( _ASEFileName );
 
 	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_1, 0, 10, FALSE );
-	m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 100, TRUE );
-	m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
-	m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
+	//m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 100, TRUE );
+	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
+	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
 
 	if( _BBXFileName != NULL )
 		InitBBX( _BBXFileName );
 
-	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -910.0f ), D3DXVECTOR3( 510.0f, 0.0f, 910.0f ), 10.0f );
-
-	for( INT i=0 ; i<m_pBBXParser->GetNumBoundBox() ; i++ )
-	{
-		BBXParser::DATA BBXData;
-		m_pBBXParser->GetData( i, BBXData );
-
-		m_pTileMap->SetBBXData( &BBXData.Info.vPivot, BBXData.Info.fMinusSize, BBXData.Info.fPlusSize );
-	}
-
-	//	Set TileMapInfo
-	INT iGraphWidth		= m_pTileMap->GetInfo()->iGraphWidth;
-	INT iGraphHeight	= m_pTileMap->GetInfo()->iGraphHeight;
-
-	m_GraphInfo.pNavGraphNode = new INT[ iGraphWidth * iGraphHeight ];
-	memcpy( m_GraphInfo.pNavGraphNode, m_pTileMap->GetInfo()->pNavGraphNode, sizeof( INT ) * iGraphWidth * iGraphHeight );
-
-	m_GraphInfo.iWidth		= iGraphWidth;
-	m_GraphInfo.iHeight		= iGraphHeight;
-
-	m_GraphInfo.fTileSize	= m_pTileMap->GetInfo()->fTileSize;
-
-	m_GraphInfo.vecStart	= m_pTileMap->GetInfo()->vecStart;
-	m_GraphInfo.vecEnd		= m_pTileMap->GetInfo()->vecEnd;
 }
 
 VOID ASEViewer::Update()
 {
 	m_pASEParser->FrameMove();
 
-	if( GetKeyState( '1' ) & 0x8000 )
+	/*if( GetKeyState( '1' ) & 0x8000 )
 		m_pASEParser->SetAnimation( ANI_1 );
 	if( GetKeyState( '2' ) & 0x8000 )
 		m_pASEParser->SetAnimation( ANI_2 );
 	if( GetKeyState( '3' ) & 0x8000 )
-		m_pASEParser->SetAnimation( ANI_3 );
+		m_pASEParser->SetAnimation( ANI_3 );*/
 }
 
 
@@ -217,10 +190,6 @@ VOID ASEViewer::Render()
 		RenderASEData( i );
 	for( INT i=0 ; i<m_iNumBBXData ; i++ )
 		RenderBBXData( i );
-
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
-	m_pTileMap->Render();
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 
 INT ASEViewer::GetCurrentFrame()

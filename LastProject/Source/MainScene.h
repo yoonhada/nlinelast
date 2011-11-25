@@ -13,6 +13,7 @@ class CCamera;
 class Axis;
 class ASEViewer;
 class CGameEvent;
+class TileMap;
 
 class CMainScene : public IScene
 {
@@ -47,6 +48,7 @@ private:
 
 	CCharactor*				m_pCharactorList[4];
 
+	TileMap*				m_pTileMap;
 	ASEViewer*				m_pASEViewer;
 	
 	INT						m_iMaxCharaNum;
