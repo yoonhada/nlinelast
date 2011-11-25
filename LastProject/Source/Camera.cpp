@@ -4,8 +4,8 @@
 CCamera::CCamera() 
 : m_fMinZoom( 15.0f )
 , m_fMaxZoom( 80.0f )
-, m_fLowAngle( DEG2RAD( -15.0f ) )
-, m_fHighAngle( D3DXToRadian( 60.0f ) )
+, m_fLowAngle( D3DXToRadian( 15.0f ) )
+, m_fHighAngle( D3DXToRadian( -60.0f ) )
 {
 	Clear();
 }
@@ -32,7 +32,7 @@ VOID CCamera::Clear()
 	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
 	m_fPitch	= 0.0f;
-	m_fLock		= D3DXToRadian( 80.0f );
+	//m_fLock		= (D3DX_PI/2) - 0.05f;
 
 	m_fEffectValue = 0.0f;
 }
@@ -40,11 +40,11 @@ VOID CCamera::Clear()
 void CCamera::SetCamera()
 {
 	//상하 각도 고정
-	if ( m_fPitch > ( m_fHighAngle) ) 
+	if ( m_fPitch < ( m_fHighAngle ) ) 
 	{
 		m_fPitch = m_fHighAngle;
 	}
-	if ( m_fPitch < ( m_fLowAngle) ) 
+	if ( m_fPitch > ( m_fLowAngle ) ) 
 	{
 		m_fPitch = m_fLowAngle;
 	}
@@ -127,7 +127,8 @@ VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook
 	m_vLook.y = a_fY;
 	m_fZoom  = fZoom;
 	m_fYaw   = a_fYaw;
-	m_fPitch += a_fPitch;
+	m_fPitch -= a_fPitch;
+
     SetCamera();
 }
 

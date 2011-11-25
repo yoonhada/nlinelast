@@ -28,8 +28,8 @@ VOID CMonster::Clear()
 	m_iFrameMax = 10;
 	m_iSelectedFrameNum = 0;
 	D3DXMatrixIdentity( &m_matControl );
-	m_vPreControl = D3DXVECTOR3(300.0f, 0.0f, 100.0f);
-	m_vControl = D3DXVECTOR3(300.0f, 0.0f, 100.0f);
+	m_vPreControl = D3DXVECTOR3(-250.0f, 0.0f, 650.0f);
+	m_vControl = D3DXVECTOR3(-250.0f, 0.0f, 650.0f);
 	m_vFowardVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

@@ -60,8 +60,6 @@ private:
 	static VOID Update();
 	static VOID Render();
 
-	static UINT WINAPI InputThread(LPVOID lParam);
-
 	ATOM MyRegisterClass(HINSTANCE hInstance);	///< 윈도우 클래스 등록
 	BOOL InitInstance(HINSTANCE, INT);
 	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

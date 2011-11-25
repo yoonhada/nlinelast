@@ -137,6 +137,8 @@ public:
 		m_chMonsterPart = a_chMonsterPart;
 	}
 
+	VOID LoadKindChar( INT nKind );
+
 private:
 	VOID _LoadRelease();
 	VOID _SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor );

@@ -578,6 +578,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\GameEvent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\GameEvent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\IntroScene.cpp"
 				>
 			</File>

@@ -9,6 +9,9 @@ private:
 	VOID		Release();
 	
 public:
+	ASEViewerBase( )
+	{
+	}
 	ASEViewerBase( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pd3dDevice( _pd3dDevice )
 	{
 		this->Initialize();
@@ -72,7 +75,6 @@ private:
 
 public:
 	LPDIRECT3DDEVICE9		m_pd3dDevice;
-
 };
 
 #endif

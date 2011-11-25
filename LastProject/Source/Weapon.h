@@ -44,7 +44,10 @@ private:
 	FLOAT m_fZAng[10];
 	FLOAT m_fBBSize[6];
 
-	VOID PrivateProfile(BOOL = READ);
+	VOID _GetProfileInt( INT *nOut, LPWSTR lpAppName, LPWSTR lpszBuf, INT nIndex, INT nDefault );
+	VOID _GetProfileVector( D3DXVECTOR3 *vVec, LPWSTR lpAppName, LPWSTR lpszBuf, INT, INT, INT, INT, FLOAT );
+	VOID PrivateProfile( LPWSTR lpwStr, BOOL = READ);
+	//VOID LoadAniFrame( LPWSTR lpwStr );
 
 public:
 	

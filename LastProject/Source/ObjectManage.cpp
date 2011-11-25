@@ -11,6 +11,7 @@
 #include "Charactor.h"
 #include "Monster.h"
 #include "TimeLifeItem.h"
+#include "ASEViewer.h"
 
 CObjectManage::CObjectManage()
 {
@@ -25,9 +26,10 @@ CObjectManage::~CObjectManage()
 VOID CObjectManage::Clear()
 {
 	m_bHost = FALSE;
-	m_iClientNumber = 0;
 	m_pMyCharactor = NULL;
 	m_pCharactors = NULL;
+	m_pASEViewer = NULL;
+	m_iClientNumber = 0;
 	m_iMaxCharaNum = 3;
 
 	m_wTotalDestroyPart = 0;
@@ -52,6 +54,8 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pMonster = new CMonster;
 
 	m_pFirstAidKit = new CTimeLifeItem;
+
+	m_pASEViewer = new ASEViewer;
 	
 	return S_OK;
 }
@@ -72,6 +76,7 @@ HRESULT CObjectManage::Release()
 	SAFE_DELETE_ARRAY( m_pCharactors );
 	SAFE_DELETE( m_pMonster );
 	SAFE_DELETE( m_pFirstAidKit );
+	SAFE_DELETE( m_pASEViewer );
 
 	return S_OK;
 }

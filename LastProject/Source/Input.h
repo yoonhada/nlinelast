@@ -100,7 +100,13 @@ public:
 	{
 		if (b != -1) {
 			m_bEnable = b;
-			ShowCursor( !b );
+
+			INT nCount;
+			do 
+			{
+				nCount = ShowCursor(b);
+
+			} while ( b == FALSE && nCount >= 0 );
 		}
 
 		return m_bEnable; 
