@@ -79,7 +79,7 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 
 	// AI
 	m_pStateMachine = new StateMachine<CMonster>( this );
-	m_pStateMachine->SetCurrentState( Seek::GetInstance() );
+//	m_pStateMachine->SetCurrentState( Seek::GetInstance() );
 
 	return S_OK;
 }
@@ -1337,7 +1337,7 @@ VOID CMonster::Update()
 	}
 
 	// AI
-	m_pStateMachine->Update();
+//	m_pStateMachine->Update();
 }
 
 VOID CMonster::Render()

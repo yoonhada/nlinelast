@@ -8,7 +8,6 @@
 #include "Axis.h"
 #include "ASEViewer.h"
 #include "Weapon.h"
-#include "Seek.h"
 #include "TimeLifeItem.h"
 
 // AI 테스트용
