@@ -72,8 +72,7 @@ VOID ASEParser::InitKeyword()
 }
 VOID ASEParser::Release()
 {
-	if( m_pKeyword != NULL )
-		delete[] m_pKeyword;
+	SAFE_DELETE_ARRAY( m_pKeyword );
 	Cleanup();
 }
 
@@ -82,16 +81,9 @@ VOID ASEParser::Cleanup()
 	m_iCurrentGeomObjectIndex	=	0;
 	m_iCurrentMaterialIndex		=	0;
 
-	if( m_pSceneData != NULL )
-		delete m_pSceneData;
-	if( m_pMaterialData != NULL )
-		delete[] m_pMaterialData;
-	if( m_pGeomObjectData != NULL )
-		delete[] m_pGeomObjectData;
-
-	m_pSceneData		=	NULL;
-	m_pMaterialData		=	NULL;
-	m_pGeomObjectData	=	NULL;
+	SAFE_DELETE( m_pSceneData );
+	SAFE_DELETE_ARRAY( m_pMaterialData );
+	SAFE_DELETE_ARRAY( m_pGeomObjectData );
 
 	//	Animation Test
 	m_aniBase.iStartFrame		= 0;
@@ -173,8 +165,7 @@ BOOL ASEParser::GetObjectData( const INT _Index, MATERIALDATA& _OutMaterialData,
 		lstrcpy( _OutGeomObjectData.pNodeName, m_pGeomObjectData[ _Index ].pNodeName );
 	}
 	
-	if( _OutGeomObjectData.pVertex != NULL )
-		delete[] _OutGeomObjectData.pVertex;
+	SAFE_DELETE_ARRAY( _OutGeomObjectData.pVertex );
 	_OutGeomObjectData.pVertex	=	new VERTEX[ m_pGeomObjectData[ _Index ].iNumVertex ];
 	for( INT i=0 ; i<m_pGeomObjectData[ _Index ].iNumVertex ; i++ )
 	{
@@ -183,8 +174,7 @@ BOOL ASEParser::GetObjectData( const INT _Index, MATERIALDATA& _OutMaterialData,
 		_OutGeomObjectData.pVertex[ i ].texcoord	= m_pGeomObjectData[ _Index ].pVertex[ i ].texcoord;
 	}
 	
-	if( _OutGeomObjectData.pIndex != NULL )
-		delete[] _OutGeomObjectData.pIndex;
+	SAFE_DELETE_ARRAY( _OutGeomObjectData.pIndex );
 	_OutGeomObjectData.pIndex	=	new INDEX[ m_pGeomObjectData[ _Index ].iNumIndex ];
 	for( INT i=0 ; i<m_pGeomObjectData[ _Index ].iNumIndex ; i++ )
 	{

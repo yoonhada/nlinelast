@@ -10,7 +10,7 @@ VOID NormalLine::Release()
 {
 	LPDATALIST::iterator itE;
 	for( itE = m_pDataList.begin() ; itE != m_pDataList.end() ; itE++ )
-		delete (*itE);
+		SAFE_DELETE( (*itE) );
 	m_pDataList.clear();
 }
 
@@ -40,7 +40,7 @@ VOID NormalLine::Create( D3DCOLOR _Color, INT _iNumVertex, LPD3DXVECTOR3 _pPosit
 
 	m_pDataList.push_back( pData );
 
-	delete[] pVertex;
+	SAFE_DELETE_ARRAY( pVertex );
 }
 
 VOID NormalLine::Render()

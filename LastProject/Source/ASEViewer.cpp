@@ -22,23 +22,18 @@ VOID ASEViewer::Initialize()
 
 	m_pASEParser	= new ASEParser();
 	m_pBBXParser	= new BBXParser();
-	m_pTileMap		= new TileMap( m_pd3dDevice );
+//	m_pTileMap		= new TileMap( m_pd3dDevice );
 }
 
 
 VOID ASEViewer::Release()
 {
-	if( m_pASEData != NULL )
-		delete[] m_pASEData;
-	if( m_pBBXData != NULL )
-		delete[] m_pBBXData;
+	SAFE_DELETE_ARRAY( m_pASEData );
+	SAFE_DELETE_ARRAY( m_pBBXData );
 
-	if( m_pASEParser != NULL )
-		delete m_pASEParser;
-	if( m_pBBXParser != NULL )
-		delete m_pBBXParser;
-	if( m_pTileMap != NULL )
-		delete m_pTileMap;
+	SAFE_DELETE( m_pASEParser );
+	SAFE_DELETE( m_pBBXParser );
+	SAFE_DELETE( m_pTileMap );
 }
 
 VOID ASEViewer::InitASE( LPWSTR _ASEFileName )
@@ -51,8 +46,7 @@ VOID ASEViewer::InitASE( LPWSTR _ASEFileName )
 	
 	m_iNumASEData = m_pASEParser->GetNumObject();
 	
-	if( m_pASEData != NULL )
-		delete[] m_pASEData;
+	SAFE_DELETE_ARRAY( m_pASEData );
 	m_pASEData = new DATA[ m_iNumASEData ];
 
 	for( INT i=0 ; i<m_iNumASEData ; i++ )
@@ -72,8 +66,7 @@ VOID ASEViewer::InitBBX( LPWSTR _BBXFileName )
 
 	m_iNumBBXData	= m_pBBXParser->GetNumBoundBox();
 
-	if( m_pBBXData != NULL )
-		delete[] m_pBBXData;
+	SAFE_DELETE_ARRAY( m_pBBXData );
 	m_pBBXData = new DATA[ m_iNumBBXData ];
 
 	for( INT i=0 ; i<m_iNumBBXData ; i++ )
@@ -145,7 +138,7 @@ VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 
 	if( _BBXFileName != NULL )
 		InitBBX( _BBXFileName );
-
+/*
 	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -510.0f ), D3DXVECTOR3( 510.0f, 0.0f, 510.0f ), 10.0f );
 
 	for( INT i=0 ; i<m_pBBXParser->GetNumBoundBox() ; i++ )
@@ -168,7 +161,7 @@ VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 
 	m_TileMapInfo.vecStart	= m_pTileMap->GetMapInfo()->vecStart;
 	m_TileMapInfo.vecEnd	= m_pTileMap->GetMapInfo()->vecEnd;
-
+*/
 }
 
 VOID ASEViewer::Update()
@@ -225,7 +218,7 @@ VOID ASEViewer::Render()
 		RenderBBXData( i );
 
 	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
-	m_pTileMap->Render();
+//	m_pTileMap->Render();
 	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 

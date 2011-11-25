@@ -48,7 +48,7 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//m_pScene = new CLobbyScene;
 	//m_pLoadScene = m_pScene;
-	m_pScene			= new StoryScene;
+	m_pScene			= new CMainScene;
 	m_pLoadingScene		= new LoadingScene;
 
 	m_pScene->Create( m_pD3dDevice, m_pSprite, m_hWnd );

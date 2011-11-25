@@ -62,16 +62,9 @@ public:
 		}
 		~_IMAGE()
 		{
-			if( pVB != NULL )
-				pVB->Release();
-			if( pIB != NULL )
-				pIB->Release();
-			if( pTexture != NULL )
-				pTexture->Release();
-
-			pVB			= NULL;
-			pIB			= NULL;
-			pTexture	= NULL;
+			SAFE_RELEASE( pVB );
+			SAFE_RELEASE( pIB );
+			SAFE_RELEASE( pTexture );
 		}
 	}IMAGE, *LPIMAGE;
 	

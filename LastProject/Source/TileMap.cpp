@@ -45,8 +45,7 @@ VOID TileMap::InitTileData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT 
 	//	Set Vertex
 	m_TileData.iNumVertex	= iNumWidth * iNumHeight;
 
-	if( m_TileData.pVertex != NULL )
-		delete[] m_TileData.pVertex;
+	SAFE_DELETE_ARRAY( m_TileData.pVertex );
 	m_TileData.pVertex		= new TILEVERTEX[ m_TileData.iNumVertex ];
 
 	FLOAT incU = 1.0f / ( fNumWidth - 1.0f );
@@ -71,8 +70,7 @@ VOID TileMap::InitTileData( D3DXVECTOR3& _vecStart, D3DXVECTOR3& _vecEnd, FLOAT 
 	//	Set Index
 	m_TileData.iNumIndex	= ( iNumWidth - 1 ) * ( iNumHeight - 1 ) * 2;
 
-	if( m_TileData.pIndex != NULL )
-		delete[] m_TileData.pIndex;
+	SAFE_DELETE_ARRAY( m_TileData.pIndex );
 	m_TileData.pIndex = new INDEX[ m_TileData.iNumIndex ];
 
 	l = 0;

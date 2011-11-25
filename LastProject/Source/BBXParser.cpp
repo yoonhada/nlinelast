@@ -28,8 +28,7 @@ VOID BBXParser::InitKeyword()
 
 VOID BBXParser::Release()
 {
-	if( m_pKeyword != NULL )
-		delete[] m_pKeyword;
+	SAFE_DELETE_ARRAY( m_pKeyword );
 
 	Cleanup();
 }
@@ -39,8 +38,7 @@ VOID BBXParser::Cleanup()
 	m_iNumBoundBox	= 0;
 	m_iCurrentIndex	= 0;
 
-	if( m_pData != NULL )
-		delete[] m_pData;
+	SAFE_DELETE_ARRAY( m_pData );
 }
 
 BOOL BBXParser::LoadFile( LPWSTR _FileName )
