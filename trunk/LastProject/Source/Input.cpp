@@ -1,8 +1,8 @@
 /**
-@file	Input.cpp
-@date	2011/09/27
-@author	백경훈
-@brief	키보드, 마우스 처리 클래스
+	@file	Input.cpp
+	@date	2011/09/27
+	@author	백경훈
+	@brief	키보드, 마우스 처리 클래스
 */
 
 #include "stdafx.h"
