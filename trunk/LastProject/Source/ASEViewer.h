@@ -6,7 +6,6 @@
 
 class ASEParser;
 class BBXParser;
-class TileMap;
 
 class ASEViewer : public ASEViewerBase
 {
@@ -33,19 +32,16 @@ public:
 		this->Release();
 	}
 
-	VOID		Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName );
-	VOID		Update();
-	VOID		Render();
-	VOID		Render( D3DXMATRIX& _matCharacter );
-	VOID		Release();
+	VOID			Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName );
+	VOID			Update();
+	VOID			Render();
+	VOID			Render( D3DXMATRIX& _matCharacter );
+	VOID			Release();
 
-	INT			GetCurrentFrame();
-	BOOL		AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
-	BOOL		SetAnimation( DWORD _dID );
-	VOID		CleanupAnimationData();
-
-	LPGRAPHINFO		GetGraphInfo() { return &m_GraphInfo; }
-	TileMap*		GetTileMapInfo() { return m_pTileMap; }
+	INT				GetCurrentFrame();
+	BOOL			AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
+	BOOL			SetAnimation( DWORD _dID );
+	VOID			CleanupAnimationData();
 
 private:
 	LPDATA					m_pASEData;
@@ -53,11 +49,8 @@ private:
 	INT						m_iNumASEData;
 	INT						m_iNumBBXData;
 
-	GRAPHINFO				m_GraphInfo;
-
 	ASEParser*				m_pASEParser;
 	BBXParser*				m_pBBXParser;
-	TileMap*				m_pTileMap;
 
 	//std::vector<CBoundBox*> m_pBoundBoxVector;
 	//

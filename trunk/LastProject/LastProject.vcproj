@@ -410,22 +410,6 @@
 					RelativePath=".\Source\ASEViewerBase.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Source\TileMap.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\TileMap.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\TileMapBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\TileMapBase.h"
-					>
-				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -930,6 +914,26 @@
 				</File>
 				<File
 					RelativePath=".\Source\Astar.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="TileMap"
+				>
+				<File
+					RelativePath=".\Source\TileMap.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMap.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMapBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TileMapBase.h"
 					>
 				</File>
 			</Filter>
