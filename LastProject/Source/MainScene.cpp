@@ -14,6 +14,7 @@
 // AI 테스트용
 #ifdef _DEBUG
 #include "Seek.h"
+#include "Chase.h"
 #endif
 
 
@@ -100,12 +101,11 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
 	m_pASEViewer->Set_D3DDevice( m_pD3dDevice );
 	m_pASEViewer->Create(  L"ASE File/Map/Stage_Beta.ASE", L"ASE File/Map/Stage_Beta_Box.BBX" );
+	
+	Seek::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo(), m_pASEViewer->GetTileMapInfo() );
+	Chase::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo() );
 
-	//Seek::GetInstance()->Initialize( m_pTileMap );
-
-	//Astar::GetInstance()->Initialize( m_pTileMap->GetMapInfo()->iMaxWidth,
-									  //m_pTileMap->GetMapInfo()->iMaxHeight,
-									  //m_pTileMap->GetMapInfo()->pNavGraphNode );
+	Astar::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo() );
 
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();

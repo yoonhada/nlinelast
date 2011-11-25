@@ -21,16 +21,16 @@ Astar::~Astar()
 }
 
 
-VOID Astar::Initialize( INT a_iWidth, INT a_iHeight, INT* a_Map )
+VOID Astar::Initialize( ASEViewer::LPGRAPHINFO a_MapInfo )
 {
-	m_iWidth = a_iWidth;
-	m_iHeight = a_iHeight;
+	m_iWidth = a_MapInfo->iWidth;
+	m_iHeight = a_MapInfo->iHeight;
 
-	m_Map = new PathMap*[a_iWidth];
+	m_Map = new PathMap*[m_iWidth];
 
-	for( INT i=0; i<a_iWidth; i++ )
+	for( INT i=0; i<m_iWidth; i++ )
 	{
-		m_Map[i] = new PathMap[a_iHeight];
+		m_Map[i] = new PathMap[m_iHeight];
 	}
 
 	m_pOpen = new TreeRoot;
@@ -46,7 +46,7 @@ VOID Astar::Initialize( INT a_iWidth, INT a_iHeight, INT* a_Map )
 	m_Dir[6][0] = -1;	m_Dir[6][1] = 0;
 	m_Dir[7][0] = -1;	m_Dir[7][1] = 1;
 
-	createMap( a_Map );
+	createMap( a_MapInfo->pNavGraphNode );
 	clearMap();
 }
 
