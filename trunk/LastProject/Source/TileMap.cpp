@@ -1,12 +1,16 @@
 #include "stdafx.h"
 #include "TileMap.h"
+#include "BBXParser.h"
 
 VOID TileMap::Initialize()
 {
+	m_pBBXParser = NULL;
+	m_pBBXParser = new BBXParser;
 }
 
 VOID TileMap::Release()
 {
+	SAFE_DELETE( m_pBBXParser );
 }
 
 VOID TileMap::InitInfo( LPD3DXVECTOR3 _pvecStart, LPD3DXVECTOR3 _pvecEnd, FLOAT _fTileSize )
@@ -17,7 +21,7 @@ VOID TileMap::InitInfo( LPD3DXVECTOR3 _pvecStart, LPD3DXVECTOR3 _pvecEnd, FLOAT 
 	//	타일이랑 그래프 넓이 높이를 햇갈리지 말자
 	m_Data.Info.iGraphWidth		= m_Data.Info.iTileWidth - 1;
 	m_Data.Info.iGraphHeight	= m_Data.Info.iTileHeight - 1;
-
+	
 	m_Data.Info.fTileSize		= _fTileSize;
 
 	m_Data.Info.vecStart		= (*_pvecStart);
@@ -75,11 +79,11 @@ VOID TileMap::InitTileImage()
 	}
 
 	CreateTileImage( m_Data.imgTile,	m_Data.imgTile.iVertices,
-		pTileVertex,
-		m_Data.imgTile.iIndices,
-		pTileIndex,
-		m_Data.Info.iTileWidth,
-		m_Data.Info.iTileHeight );
+										pTileVertex,
+										m_Data.imgTile.iIndices,
+										pTileIndex,
+										m_Data.Info.iTileWidth,
+										m_Data.Info.iTileHeight );
 
 	SAFE_DELETE_ARRAY( pTileVertex );
 	SAFE_DELETE_ARRAY( pTileIndex );
@@ -139,6 +143,22 @@ VOID TileMap::Create( D3DXVECTOR3 _vecStart, D3DXVECTOR3 _vecEnd, FLOAT _fTileSi
 	InitInfo( &_vecStart, &_vecEnd, _fTileSize );
 	InitTileImage();
 	InitLineImage();
+}
+
+VOID TileMap::LoadBBXFile( LPWSTR _pFileName )
+{
+	m_pBBXParser->LoadFile( _pFileName );
+
+	INT iNumBBXData = m_pBBXParser->GetNumBoundBox();
+
+	for( INT i=0 ; i<iNumBBXData ; i++ )
+	{ 
+		BBXParser::DATA BBXData;
+		m_pBBXParser->GetData( i, BBXData );
+		
+		SetBBXData( &BBXData.Info.vPivot, BBXData.Info.fMinusSize, BBXData.Info.fPlusSize );
+	}
+
 }
 
 VOID TileMap::Update()
@@ -217,7 +237,7 @@ BOOL TileMap::SetBBXData( LPD3DXVECTOR3 _pvecPivot, FLOAT* _pfMinus, FLOAT* _pfP
 		for( INT x=0 ; x<=iBBXWidth ; x++ )
 		{
 			SetInfo( TLM_WALL,	fStartX + fX * m_Data.Info.fTileSize,
-				fStartZ + fZ * m_Data.Info.fTileSize );
+								fStartZ + fZ * m_Data.Info.fTileSize );
 
 			fX += 1.0f;
 		}
