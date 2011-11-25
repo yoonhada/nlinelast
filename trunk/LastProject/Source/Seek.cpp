@@ -30,12 +30,13 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	static FLOAT min = 0.0f;
 
 	// 몬스터와 가장 가까이에 있는 유저를 찾는다.
+	CCharactor *pCharactors = CObjectManage::GetInstance()->Get_Charactors();	
 	for( INT i=0; i<4; ++i )
 	{
-		if( CObjectManage::GetInstance()->Get_CharactorList()[i]->Get_Active() )
+		if( pCharactors[i].Get_Active() )
 		{
 			// 유저 위치 - 보스 몬스터
-			pos = CObjectManage::GetInstance()->Get_CharactorList()[i]->Get_CharaPos() - a_pMonster->Get_Pos();
+			pos = pCharactors[i].Get_CharaPos() - a_pMonster->Get_Pos();
 
 			// 거리 구하기
 			length = D3DXVec3Length( &pos );
@@ -69,10 +70,10 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	else if( min >= 20.0f && min <= 500.0f )
 	{
 		// 위치를 0, 0 기준으로 맞춘 후 계산한다.
-		INT StartX = INT( a_pMonster->Get_Pos().x + m_pMapInfo->vecEnd.x ) / m_pMapInfo->fTileSize;
-		INT StartZ = INT( a_pMonster->Get_Pos().z + m_pMapInfo->vecEnd.z ) / m_pMapInfo->fTileSize;
-		INT EndX = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().x + m_pMapInfo->vecEnd.x ) / m_pMapInfo->fTileSize;
-		INT EndZ = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().z + m_pMapInfo->vecEnd.z ) / m_pMapInfo->fTileSize;
+		INT StartX = INT( a_pMonster->Get_Pos().x + 510.0f ) / 10;
+		INT StartZ = INT( a_pMonster->Get_Pos().z + 510.0f ) / 10;
+		INT EndX = INT( pCharactors[Target].Get_CharaPos().x + 510.0f ) / 10;
+		INT EndZ = INT( pCharactors[Target].Get_CharaPos().z + 510.0f ) / 10;
 
 		a_pMonster->Set_TargetPos( EndX, EndZ );
 

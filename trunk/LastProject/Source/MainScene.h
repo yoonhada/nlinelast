@@ -40,7 +40,7 @@ private:
 	CCamera*				m_pCamera;
 	CGrid*					m_pGrid;
 	CCharactor*				m_pCharactors;
-	CCharactor*				m_pMyCharactor;
+	//CCharactor*				m_pMyCharactor;
 	CMonster*				m_pMonster;
 	CLight*					m_pLight;
 	CTimeLifeItem * m_pFirstAidKit;

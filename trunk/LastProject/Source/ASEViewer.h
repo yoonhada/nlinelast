@@ -21,6 +21,9 @@ private:
 	VOID		RenderBBXData( INT _Index );
 
 public:
+	ASEViewer( )
+	{
+	}
 	ASEViewer( LPDIRECT3DDEVICE9 _pd3dDevice ) : ASEViewerBase( _pd3dDevice )
 	{
 		this->Initialize();
@@ -57,6 +60,15 @@ private:
 	TileMap*				m_pTileMap;
 
 	//std::vector<CBoundBox*> m_pBoundBoxVector;
+	//
+
+public:
+	VOID Set_D3DDevice( LPDIRECT3DDEVICE9 a_pd3dDevice )
+	{
+		m_pd3dDevice = a_pd3dDevice;
+		this->Initialize();
+	}
+
 };
 
 #endif

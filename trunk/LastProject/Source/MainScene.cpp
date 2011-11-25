@@ -37,7 +37,7 @@ VOID	CMainScene::Clear()
 	m_pCamera		= NULL;
 	m_pD3dDevice	= NULL;
 	m_pBill			= NULL;
-	m_pMyCharactor	= NULL;
+	//m_pMyCharactor	= NULL;
 	m_pCharactors	= NULL;
 	m_pAxis			= NULL;
 	m_pGrid			= NULL;
@@ -86,7 +86,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
-	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
+	m_pMonster[0].Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
 
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
@@ -99,7 +99,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//맵 생성
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
-	m_pASEViewer->Set_D3DDevice( m_pD3dDevice );
 	m_pASEViewer->Create(  L"ASE File/Map/Stage_Beta.ASE", L"ASE File/Map/Stage_Beta_Box.BBX" );
 	
 	Seek::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo(), m_pASEViewer->GetTileMapInfo() );
@@ -192,30 +191,22 @@ HRESULT CMainScene::Release()
 
 VOID CMainScene::CreateCharactor()
 {
-	const INT nChar = 5;
-	D3DXVECTOR3 vec[nChar] = { 
-		D3DXVECTOR3( -130.0f, 0.0f, 100.0f ), 
-		D3DXVECTOR3( -160.0f, 0.0f, 100.0f ), 
-		D3DXVECTOR3( -190.0f, 0.0f, 100.0f ), 
-		D3DXVECTOR3( -210.0f, 0.0f, 100.0f ), 
-		D3DXVECTOR3( -250.0f, 0.0f, 600.0f ) 
-	};
-
 	//캐릭터 생성
 	FLOAT fYawZero = 1.0f;
-	m_pMyCharactor = CObjectManage::GetInstance()->Get_MyCharactor();
-	m_pMyCharactor->Create( m_pD3dDevice );
-	m_pMyCharactor->LoadKindChar( 3 );
-	m_pMyCharactor->Set_Active( TRUE );
-	CTree::GetInstance()->GetCharVector()->push_back( m_pMyCharactor->GetBoundBox() );
-
 	m_pCharactors = CObjectManage::GetInstance()->Get_Charactors();
-	
-	for(INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
+	//m_pMyCharactor = CObjectManage::GetInstance()->Get_Charactors();
+	//m_pCharactors[0].LoadKindChar( 0 );
+	m_pCharactors[0].Set_Active( TRUE );
+	//m_pMyCharactor->Create( m_pD3dDevice );
+	//m_pMyCharactor->LoadKindChar( 3 );
+	//m_pMyCharactor->Set_Active( TRUE );
+	CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[0].GetBoundBox() );
+
+	for(INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		m_pCharactors[Loop].Create( m_pD3dDevice );
-		m_pCharactors[Loop].LoadKindChar( Loop + 1 );
-		m_pCharactors[Loop].Set_Position( vec[Loop] );
+		//m_pCharactors[Loop].Create( m_pD3dDevice );
+		m_pCharactors[Loop].LoadKindChar( Loop );
+		m_pCharactors[Loop].Set_Position( D3DXVECTOR3(0, 0, 0) );
 		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 
 		//D3DXVECTOR3 vec1 = m_pCharactors[Loop].GetBoundBox()->GetPosition();
@@ -255,28 +246,28 @@ VOID	CMainScene::Update()
 	//}
 
 	// 캐릭터: 인풋 값 받아오기
-	m_pMyCharactor->UpdateByInput();
-	m_pMyCharactor->Update();
-	if ( m_pMyCharactor->CollisionAtk( ) )
+	m_pCharactors[0].UpdateByInput();
+	m_pCharactors[0].Update();
+	if ( m_pCharactors[0].CollisionAtk( ) )
 	{
 		D3DXMATRIXA16 mat;
 		D3DXMatrixIdentity( &mat );
-		m_pMyCharactor->BreakQube( mat );
+		m_pCharactors[0].BreakQube( mat );
 	}
 
 	//카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
-		m_pMyCharactor->Get_CharaPos2Camera(), 
-		m_pMyCharactor->Get_PreCharaPos2Camera(), 
+		m_pCharactors[0].Get_CharaPos2Camera(), 
+		m_pCharactors[0].Get_PreCharaPos2Camera(), 
 		10.0f, 75.0f, 
-		m_pMyCharactor->Get_CharaAngle(),
+		m_pCharactors[0].Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
-	m_pCamera->CheckObjectCollision( m_pCamera->GetEye(), m_pMyCharactor->Get_CharaPos(), m_pMyCharactor->Get_CharaAngle() );
+	m_pCamera->CheckObjectCollision( m_pCamera->GetEye(), m_pCharactors[0].Get_CharaPos(), m_pCharactors[0].Get_CharaAngle() );
 
 	FLOAT fYawZero = 1.0f;
 
-	for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
+	for( INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
 	{	
 		//다른 플레이어는 값으로 이동
 		//if( m_pCharactors[Loop].Get_Active() )
@@ -362,9 +353,9 @@ VOID	CMainScene::Render()
 	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pASEViewe->Get_MatWorld() );
 	m_pASEViewer->Render();
 
-	m_pMyCharactor->Render();
+	m_pCharactors[0].Render();
 
-	for( INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
+	for( INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
 	{
 		if( m_pCharactors[Loop].Get_Active() )
 		{
