@@ -5,6 +5,8 @@
 
 Astar::Astar()
 {
+	m_Map	= NULL;
+	m_pOpen = NULL;
 }
 
 Astar::~Astar()
