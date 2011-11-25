@@ -45,9 +45,9 @@ BOOL BBXParser::LoadFile( LPWSTR _FileName )
 {
 	Cleanup();
 
-	CDebugConsole::GetInstance()->Messagef( L"BBXParser\n" );
-	CDebugConsole::GetInstance()->Message( _FileName );
-	CDebugConsole::GetInstance()->Messagef( L"\n" );
+//	CDebugConsole::GetInstance()->Messagef( L"BBXParser\n" );
+//	CDebugConsole::GetInstance()->Message( _FileName );
+//	CDebugConsole::GetInstance()->Messagef( L"\n" );
 
 	FILE*	fp;
 	fp = _wfopen( _FileName, L"rt" );
@@ -92,11 +92,11 @@ BOOL BBXParser::CheckFile( FILE *_fp, LPWSTR _sLine )
 {
 	if( 0 == wcsnicmp( _sLine, m_pKeyword[ BBXKEY::BBXEXPORT ].sKey, m_pKeyword[ BBXKEY::BBXEXPORT ].iKey ) )
 	{
-		CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : SUCCESS\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : SUCCESS\n" );
 		return TRUE;
 	}
 
-	CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : FAIL\n" );
+	//CDebugConsole::GetInstance()->Messagef( L"CHECK FILE : FAIL\n" );
 
 	MessageBox( NULL, L"BBX FILEÀÌ ¾Æ´Õ´Ï´Ù", NULL, MB_OK );
 
@@ -111,7 +111,7 @@ BOOL BBXParser::GetNumBoundBox( LPWSTR _sLine )
 		swscanf( _sLine, L"%*s %d", &iCount );
 
 		m_iNumBoundBox = iCount;
-		CDebugConsole::GetInstance()->Messagef( L"*BOUNDBOX_COUNT %d\n", m_iNumBoundBox );
+		//CDebugConsole::GetInstance()->Messagef( L"*BOUNDBOX_COUNT %d\n", m_iNumBoundBox );
 
 		m_pData = new DATA[ m_iNumBoundBox ];
 
@@ -157,7 +157,7 @@ BOOL BBXParser::GetBoundBoxName( LPWSTR _sLine )
 
 		TCHAR str[ 1024 ];
 		wsprintf( str, L"*NAME : %s\n", Name );
-		CDebugConsole::GetInstance()->Message( str );
+		//CDebugConsole::GetInstance()->Message( str );
 
 		return TRUE;
 	}
@@ -176,7 +176,7 @@ BOOL BBXParser::GetBoundBoxPivot( LPWSTR _sLine )
 		m_pData[ m_iCurrentIndex ].Info.vPivot.y = y;
 		m_pData[ m_iCurrentIndex ].Info.vPivot.z = z;
 
-		CDebugConsole::GetInstance()->Messagef( L"*PIVOT %f %f %f\n", x, y, z );
+		//CDebugConsole::GetInstance()->Messagef( L"*PIVOT %f %f %f\n", x, y, z );
 
 		return TRUE;
 	}
@@ -195,7 +195,7 @@ BOOL BBXParser::GetBoundBoxPlusSize( LPWSTR _sLine )
 		m_pData[ m_iCurrentIndex ].Info.fPlusSize[ 1 ] = y;
 		m_pData[ m_iCurrentIndex ].Info.fPlusSize[ 2 ] = z;
 
-		CDebugConsole::GetInstance()->Messagef( L"*PLUS_SIZE %f %f %f\n", x, y, z );
+		//CDebugConsole::GetInstance()->Messagef( L"*PLUS_SIZE %f %f %f\n", x, y, z );
 
 		return TRUE;
 	}
@@ -214,7 +214,7 @@ BOOL BBXParser::GetBoundBoxMinusSize( LPWSTR _sLine )
 		m_pData[ m_iCurrentIndex ].Info.fMinusSize[ 1 ] = y;
 		m_pData[ m_iCurrentIndex ].Info.fMinusSize[ 2 ] = z;
 
-		CDebugConsole::GetInstance()->Messagef( L"*MINUS_SIZE %f %f %f\n", x, y, z );
+		//CDebugConsole::GetInstance()->Messagef( L"*MINUS_SIZE %f %f %f\n", x, y, z );
 
 		return TRUE;
 	}
@@ -231,7 +231,7 @@ BOOL BBXParser::GetBoundBoxColor( LPWSTR _sLine )
 
 		m_pData[ m_iCurrentIndex ].Info.Color = Color;
 		
-		CDebugConsole::GetInstance()->Messagef( L"*COLOR %X\n", Color );
+		//CDebugConsole::GetInstance()->Messagef( L"*COLOR %X\n", Color );
 
 		return TRUE;
 	}

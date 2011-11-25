@@ -4,8 +4,8 @@
 CCamera::CCamera() 
 : m_fMinZoom( 15.0f )
 , m_fMaxZoom( 80.0f )
-, m_fLowAngle( DEG2RAD( -15 ) )
-, m_fHighAngle( D3DXToRadian( 80.0f ) )
+, m_fLowAngle( DEG2RAD( -15.0f ) )
+, m_fHighAngle( D3DXToRadian( 60.0f ) )
 {
 	Clear();
 }

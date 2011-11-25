@@ -42,7 +42,7 @@ public:
 		}
 	}DATA, *LPDATA;
 
-	typedef struct _TILEINFO
+	typedef struct _GRAPHINFO
 	{
 		INT*		pNavGraphNode;
 
@@ -51,15 +51,15 @@ public:
 		D3DXVECTOR3 vecStart;
 		D3DXVECTOR3 vecEnd;
 
-		_TILEINFO()
+		_GRAPHINFO()
 		{
 			pNavGraphNode = NULL;
 		}
-		~_TILEINFO()
+		~_GRAPHINFO()
 		{
 			SAFE_DELETE_ARRAY( pNavGraphNode );
 		}
-	}TILEINFO, *LPTILEINFO;
+	}GRAPHINFO, *LPGRAPHINFO;
 
 
 	HRESULT		CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF );

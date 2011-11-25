@@ -22,7 +22,7 @@ VOID ASEViewer::Initialize()
 
 	m_pASEParser	= new ASEParser();
 	m_pBBXParser	= new BBXParser();
-//	m_pTileMap		= new TileMap( m_pd3dDevice );
+	m_pTileMap		= new TileMap( m_pd3dDevice );
 }
 
 
@@ -51,7 +51,7 @@ VOID ASEViewer::InitASE( LPWSTR _ASEFileName )
 
 	for( INT i=0 ; i<m_iNumASEData ; i++ )
 	{
-		CDebugConsole::GetInstance()->Messagef( L"%d\n", i );
+		//CDebugConsole::GetInstance()->Messagef( L"%d\n", i );
 		CreateDataFromASE( i );
 	}
 }
@@ -138,8 +138,8 @@ VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 
 	if( _BBXFileName != NULL )
 		InitBBX( _BBXFileName );
-/*
-	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -510.0f ), D3DXVECTOR3( 510.0f, 0.0f, 510.0f ), 10.0f );
+
+	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -910.0f ), D3DXVECTOR3( 510.0f, 0.0f, 910.0f ), 10.0f );
 
 	for( INT i=0 ; i<m_pBBXParser->GetNumBoundBox() ; i++ )
 	{
@@ -150,18 +150,16 @@ VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 	}
 
 	//	Set TileMapInfo
-	INT iTileWidth	= m_pTileMap->GetMapInfo()->iMaxWidth;
-	INT iTileHeight	= m_pTileMap->GetMapInfo()->iMaxHeight;
+	INT iGraphWidth		= m_pTileMap->GetInfo()->iGraphWidth;
+	INT iGraphHeight	= m_pTileMap->GetInfo()->iGraphHeight;
 
-	m_TileMapInfo.pNavGraphNode = new INT[ iTileWidth * iTileHeight ];
-	memcpy( m_TileMapInfo.pNavGraphNode, m_pTileMap->GetMapInfo()->pNavGraphNode, sizeof( INT ) * iTileWidth * iTileHeight );
-	//m_TileMapInfo.pNavGraphNode = m_pTileMap->GetMapInfo()->pNavGraphNode;
+	m_GraphInfo.pNavGraphNode = new INT[ iGraphWidth * iGraphHeight ];
+	memcpy( m_GraphInfo.pNavGraphNode, m_pTileMap->GetInfo()->pNavGraphNode, sizeof( INT ) * iGraphWidth * iGraphHeight );
 
-	m_TileMapInfo.fTileSize	= m_pTileMap->GetMapInfo()->fTileSize;
+	m_GraphInfo.fTileSize	= m_pTileMap->GetInfo()->fTileSize;
 
-	m_TileMapInfo.vecStart	= m_pTileMap->GetMapInfo()->vecStart;
-	m_TileMapInfo.vecEnd	= m_pTileMap->GetMapInfo()->vecEnd;
-*/
+	m_GraphInfo.vecStart	= m_pTileMap->GetInfo()->vecStart;
+	m_GraphInfo.vecEnd		= m_pTileMap->GetInfo()->vecEnd;
 }
 
 VOID ASEViewer::Update()
@@ -218,7 +216,7 @@ VOID ASEViewer::Render()
 		RenderBBXData( i );
 
 	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
-//	m_pTileMap->Render();
+	m_pTileMap->Render();
 	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 

@@ -41,7 +41,7 @@ public:
 	BOOL		SetAnimation( DWORD _dID );
 	VOID		CleanupAnimationData();
 
-	LPTILEINFO	GetTileMapInfo() { return &m_TileMapInfo; }
+	LPGRAPHINFO		GetGraphInfo() { return &m_GraphInfo; }
 
 private:
 	LPDATA					m_pASEData;
@@ -49,7 +49,7 @@ private:
 	INT						m_iNumASEData;
 	INT						m_iNumBBXData;
 
-	TILEINFO				m_TileMapInfo;
+	GRAPHINFO				m_GraphInfo;
 
 	ASEParser*				m_pASEParser;
 	BBXParser*				m_pBBXParser;
