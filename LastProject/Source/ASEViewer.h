@@ -23,7 +23,6 @@ private:
 public:
 	ASEViewer( )
 	{
-		this->Initialize();
 	}
 	ASEViewer( LPDIRECT3DDEVICE9 _pd3dDevice ) : ASEViewerBase( _pd3dDevice )
 	{
@@ -65,6 +64,7 @@ public:
 	VOID Set_D3DDevice( LPDIRECT3DDEVICE9 a_pd3dDevice )
 	{
 		m_pd3dDevice = a_pd3dDevice;
+		this->Initialize();
 	}
 
 };
