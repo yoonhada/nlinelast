@@ -141,23 +141,15 @@ public:
 		}
 		~_GEOMOBJECTDATA()
 		{
-			if( pMeshVertex != NULL )
-				delete[] pMeshVertex;
-			if( pMeshFace != NULL )
-				delete[] pMeshFace;
-			if( pMeshTVertex != NULL )
-				delete[] pMeshTVertex;
-			if( pMeshTFace != NULL )
-				delete[] pMeshTFace;
-			if( pVertex != NULL )
-				delete[] pVertex;
-			if( pIndex != NULL )
-				delete[] pIndex;
+			SAFE_DELETE_ARRAY( pMeshVertex );
+			SAFE_DELETE_ARRAY( pMeshFace );
+			SAFE_DELETE_ARRAY( pMeshTVertex );
+			SAFE_DELETE_ARRAY( pMeshTFace );
+			SAFE_DELETE_ARRAY( pVertex );
+			SAFE_DELETE_ARRAY( pIndex );
 
-			if( pNodeName != NULL )
-				delete[] pNodeName;
-			if( pNodeParentName != NULL )
-				delete[] pNodeParentName;
+			SAFE_DELETE_ARRAY( pNodeName );
+			SAFE_DELETE_ARRAY( pNodeParentName );
 
 			TRACKLIST::iterator itE;
 			for( itE = TrackPos.begin() ; itE != TrackPos.end() ; itE++ )
@@ -171,16 +163,6 @@ public:
 			for( itE = TrackRot.begin() ; itE != TrackRot.end() ; itE++ )
 				delete (*itE);
 			TrackRot.clear();
-
-			pMeshVertex		=	NULL;
-			pMeshFace		=	NULL;
-			pMeshTVertex	=	NULL;
-			pMeshTFace		=	NULL;
-			pVertex			=	NULL;
-			pIndex			=	NULL;
-
-			pNodeName		=	NULL;
-			pNodeParentName	=	NULL;
 
 			MaterialREF		=	0;
 		}
@@ -196,10 +178,7 @@ public:
 		}
 		~_MATERIALDATA()
 		{
-			if( pTextureFileName != NULL )
-				delete[] pTextureFileName;
-
-			pTextureFileName = NULL;
+			SAFE_DELETE_ARRAY( pTextureFileName );
 		}
 	}MATERIALDATA, *LPMATERIALDATA;
 

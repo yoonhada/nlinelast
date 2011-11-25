@@ -13,7 +13,7 @@ private:
 
 	HRESULT		CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF );
 	HRESULT		SetVB( LPDIRECT3DVERTEXBUFFER9 _pVB, LPVOID _pvertices, INT _nVertex, INT _Size );
-	
+
 public:
 	NormalLine( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pd3dDevice( _pd3dDevice )
 	{
@@ -47,8 +47,7 @@ private:
 		}
 		~_DATA()
 		{
-			if( pVB != NULL )
-				pVB->Release();
+			SAFE_RELEASE( pVB );
 		}
 	}DATA, *LPDATA;
 

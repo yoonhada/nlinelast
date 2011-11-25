@@ -36,12 +36,9 @@ public:
 		}
 		~_DATA()
 		{
-			if( pVB != NULL )
-				pVB->Release();
-			if( pIB != NULL )
-				pIB->Release();
-			if( pTex != NULL )
-				pTex->Release();
+			SAFE_RELEASE( pVB );
+			SAFE_RELEASE( pIB );
+			SAFE_RELEASE( pTex );
 		}
 	}DATA, *LPDATA;
 
@@ -60,8 +57,7 @@ public:
 		}
 		~_TILEINFO()
 		{
-			if( pNavGraphNode != NULL )
-				delete[] pNavGraphNode;
+			SAFE_DELETE_ARRAY( pNavGraphNode );
 		}
 	}TILEINFO, *LPTILEINFO;
 

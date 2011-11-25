@@ -39,8 +39,9 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 
 	// 각을 구한다.
 	static FLOAT fAngle = 0.0f;
-	fAngle = (FLOAT)atan( z / x ) * 180.0f / D3DX_PI;
+	fAngle = D3DXToDegree( (FLOAT)atan( z / x ) );
 
+	// DX 방식으로 계산하기 위해 변환한다. 3시부터 시계방향
 	//          |
 	// 3사분면  |  4사분면
 	//          |
@@ -49,27 +50,32 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	// 2사분면  |  1사분면
 	//          |
 
-	// 4사분면에 있는 각일 때
-	if( vPlayerPos.z > vMonsterPos.z && vPlayerPos.x > vMonsterPos.x )
+	// 1사분면 ( 0˚<= Angle < 90˚)
+	if( vPlayerPos.x > vMonsterPos.x && vPlayerPos.z <= vMonsterPos.z )
 	{
-		fAngle = fAngle;
-		w = 4;
-	}
-	// 2, 3사분면에 있는 각일 때
-	else if( ( vPlayerPos.z > vMonsterPos.z && vPlayerPos.x < vMonsterPos.x ) ||
-		( vPlayerPos.z < vMonsterPos.z && vPlayerPos.x < vMonsterPos.x ) )
-	{
-		fAngle += 180.0f;
-		w = 23;
-	}
-	// 1사분면
-	else
-	{
-		fAngle = 360.0f + fAngle;
+		fAngle = abs( fAngle );
 		w = 1;
 	}
+	// 2사분면 ( 90˚<= Angle < 180˚)
+	else if( vPlayerPos.x <= vMonsterPos.x && vPlayerPos.z < vMonsterPos.z )
+	{
+		fAngle = 180.0f - fAngle;
+		w = 2;
+	}
+	// 3사분면 ( 180˚<= Angle < 270˚)
+	else if( vPlayerPos.x < vMonsterPos.x && vPlayerPos.z >= vMonsterPos.z )
+	{
+		fAngle = abs( fAngle ) + 180.0f;
+		w = 3;
+	}
+	// 4사분면 ( 270˚<= Angle < 360˚)
+	else if( vPlayerPos.x >= vMonsterPos.x && vPlayerPos.z > vMonsterPos.z )
+	{
+		fAngle = 360.0f - fAngle;
+		w = 4;
+	}
 
-	// 몬스터 기준 플레이어 각 ( +x축이 0도, CCW가 +각도)
+	// 몬스터 기준 플레이어 각 ( +x축이 0도, CW가 +각도)
 	CDebugInterface::GetInstance()->AddMessageFloat( "Player_Angle", fAngle );
 
 	static FLOAT Posx = 0.0f;
@@ -82,23 +88,32 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 
 	// 몬스터 각 ( +x축이 0도, CW가 +각도 )
 	static FLOAT fMonsterAngle = 0.0f;
-	fMonsterAngle = a_pMonster->Get_Angle() * 180.0f / D3DX_PI;
+	fMonsterAngle = D3DXToDegree( a_pMonster->Get_Angle() );
 	CDebugInterface::GetInstance()->AddMessageFloat( "Monster_Angle", fMonsterAngle );
 
-	static D3DXVECTOR3 vRot = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	// 0˚가 90˚방향으로 보고 있으므로 -90˚해서 방향을 맞춘다.
+	// 0˚~ 360˚사이의 값이 되도록 변환한다.
+	FLOAT f = fAngle;
+	if( f < 90.0f )
+	{
+		f = 270.0f + f;
+	}
+	else
+	{
+		f = f - 90.0f;
+	}
 
 	if( fMonsterAngle != fAngle )
-	{
-		a_pMonster->Set_Angle( D3DXToRadian( 270.0f - fAngle )  );
+	{	
+		a_pMonster->Set_Angle( D3DXToRadian( f )  );
 	}
-	
+
 	// 공격 각도내에 들어왔으면
 	if( isInSight() )
 	{
-		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
-		a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
+//		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+//		a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
 	}
-
 }
 
 
@@ -110,5 +125,6 @@ VOID LockOn::Exit( CMonster* a_pMonster )
 
 BOOL LockOn::isInSight()
 {
+	
 	return TRUE;
 }

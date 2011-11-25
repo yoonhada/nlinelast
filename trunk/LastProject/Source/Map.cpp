@@ -24,19 +24,15 @@ VOID Map::Initialize()
 
 VOID Map::Release()
 {
-	if( m_pASEData != NULL )
-		delete[] m_pASEData;
-	if( m_pBBXData != NULL )
-		delete[] m_pBBXData;
+	SAFE_DELETE_ARRAY( m_pASEData );
+	SAFE_DELETE_ARRAY( m_pBBXData );
 
-	if( m_pASEParser != NULL )
-		delete m_pASEParser;
-	if( m_pBBXParser != NULL )
-		delete m_pBBXParser;
+	SAFE_DELETE( m_pASEParser );
+	SAFE_DELETE( m_pBBXParser );
 
 	for( std::vector<CBoundBox*>::iterator iter=m_pBoundBoxVector.begin(); iter!=m_pBoundBoxVector.end(); ++iter)
 	{
-		delete *iter;
+		SAFE_DELETE( *iter );
 	}
 
 	if ( m_pBoundBoxVector.empty() == FALSE )
@@ -56,8 +52,7 @@ VOID Map::InitASE( LPWSTR _ASEFileName )
 	
 	m_iNumASEData = m_pASEParser->GetNumObject();
 	
-	if( m_pASEData != NULL )
-		delete[] m_pASEData;
+	SAFE_DELETE_ARRAY( m_pASEData );
 	m_pASEData = new DATA[ m_iNumASEData ];
 
 	for( INT i=0 ; i<m_iNumASEData ; i++ )
@@ -74,8 +69,7 @@ VOID Map::InitBBX( LPWSTR _BBXFileName )
 
 	m_iNumBBXData	= m_pBBXParser->GetNumBoundBox();
 
-	if( m_pBBXData != NULL )
-		delete[] m_pBBXData;
+	SAFE_DELETE_ARRAY( m_pBBXData );
 	m_pBBXData = new DATA[ m_iNumBBXData ];
 
 	for( INT i=0 ; i<m_iNumBBXData ; i++ )

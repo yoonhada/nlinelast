@@ -52,13 +52,8 @@ private:
 		}
 		~_TILEDATA()
 		{
-			if( pVertex != NULL )
-				delete[] pVertex;
-			if( pIndex != NULL )
-				delete[] pIndex;
-
-			pVertex = NULL;
-			pIndex	= NULL;
+			SAFE_DELETE_ARRAY( pVertex );
+			SAFE_DELETE_ARRAY( pIndex );
 		}
 	}TILEDATA, *LPTILEDATA;
 
@@ -75,10 +70,7 @@ private:
 		}
 		~_LINEDATA()
 		{
-			if( pVertex != NULL )
-				delete[] pVertex;
-			
-			pVertex = NULL;
+			SAFE_DELETE_ARRAY( pVertex );
 		}
 	}LINEDATA, *LPLINEDATA;
 
@@ -98,10 +90,7 @@ private:
 		}
 		~_INFO()
 		{
-			if( pNavGraphNode != NULL )
-				delete[] pNavGraphNode;
-
-			pNavGraphNode = NULL;
+			SAFE_DELETE_ARRAY( pNavGraphNode );
 		}
 	}INFO, *LPINFO;
 		
