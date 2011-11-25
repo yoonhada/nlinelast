@@ -2,7 +2,7 @@
 #define _ASTAR_H_
 
 #include "stdafx.h"
-#include "ASEViewer.h"
+#include "TileMap.h"
 
 
 typedef struct TreeNode
@@ -86,7 +86,7 @@ public:
 	Astar();
 	~Astar();
 
-	VOID		Initialize( ASEViewer::LPGRAPHINFO a_MapInfo );
+	VOID		Initialize( TileMap::LPINFO a_MapInfo );
 	VOID		clearMap();
 
 	PathNode*	findPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy );

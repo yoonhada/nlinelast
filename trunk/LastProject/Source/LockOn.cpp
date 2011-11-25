@@ -16,7 +16,51 @@ LockOn* LockOn::GetInstance()
 
 VOID LockOn::Enter( CMonster* a_pMonster )
 {
+	// 임시
+/*
+	// 함수 부분
+	FLOAT f = D3DXToDegree( acosf( D3DXVec2Dot( &vMonster, &vPlayer ) / ( D3DXVec2Length( &vMonster ) * D3DXVec2Length( &vPlayer ) ) ) );
 
+	cout << "각도 차 : " << f << endl;
+
+	if( f >= 0.0f && f <= 30.0f )
+	{
+	return TRUE;
+	}
+
+	return FALSE;
+*/
+
+/*
+	D3DXVECTOR2 MonsterPos( 0.0f, 0.0f );
+	D3DXVECTOR2 PlayerPos( 10.0f, -10.0f );
+
+	// 각도를 벡터로 변환한다.
+	FLOAT MonsterAngle = 0.0f;
+	FLOAT a = cos( D3DXToRadian( MonsterAngle ) );
+	FLOAT b = sin( D3DXToRadian( MonsterAngle ) );
+
+	D3DXVECTOR2 vMonster( a, b );
+	D3DXVECTOR2 vPlayer( PlayerPos.x - MonsterPos.x, PlayerPos.y - MonsterPos.y );
+
+	D3DXVec2Normalize( &vMonster, &vMonster );
+	D3DXVec2Normalize( &vPlayer, &vPlayer );
+
+	cout << "Monster Vector : " << vMonster.x << ", " << vMonster.y << endl;
+	cout << "Player  Vector : " << vPlayer.x << ", " << vPlayer.y << endl;
+
+	cout << D3DXToDegree( acosf( D3DXVec2Dot( &vMonster, &vPlayer ) ) ) << endl;
+
+	// 내적을 구해 공격시야에 들어온지 체크한다.
+	if( isInSight( vMonster, vPlayer ) )
+	{
+		cout << "In" << endl;
+	}
+	else
+	{
+		cout << "Out" << endl;
+	}
+*/
 }
 
 VOID LockOn::Execute( CMonster* a_pMonster )

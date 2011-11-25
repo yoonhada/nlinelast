@@ -21,10 +21,10 @@ Astar::~Astar()
 }
 
 
-VOID Astar::Initialize( ASEViewer::LPGRAPHINFO a_MapInfo )
+VOID Astar::Initialize( TileMap::LPINFO a_MapInfo )
 {
-	m_iWidth = a_MapInfo->iWidth;
-	m_iHeight = a_MapInfo->iHeight;
+	m_iWidth = a_MapInfo->iGraphWidth;
+	m_iHeight = a_MapInfo->iGraphHeight;
 
 	m_Map = new PathMap*[m_iWidth];
 

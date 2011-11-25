@@ -21,7 +21,7 @@ VOID TileMap::InitInfo( LPD3DXVECTOR3 _pvecStart, LPD3DXVECTOR3 _pvecEnd, FLOAT 
 	//	타일이랑 그래프 넓이 높이를 햇갈리지 말자
 	m_Data.Info.iGraphWidth		= m_Data.Info.iTileWidth - 1;
 	m_Data.Info.iGraphHeight	= m_Data.Info.iTileHeight - 1;
-	
+
 	m_Data.Info.fTileSize		= _fTileSize;
 
 	m_Data.Info.vecStart		= (*_pvecStart);

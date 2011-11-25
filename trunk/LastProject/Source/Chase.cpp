@@ -72,7 +72,7 @@ VOID Chase::Exit( CMonster* a_pMonster )
 }
 
 
-VOID Chase::Initialize( ASEViewerBase::LPGRAPHINFO a_pMapInfo )
+VOID Chase::Initialize( TileMap::INFO* a_pMapInfo )
 {
 	m_pMapInfo = a_pMapInfo;
 }
