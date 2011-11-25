@@ -35,13 +35,6 @@ HRESULT CWinBase::Create()
 
 	m_bThreadEndCheck = TRUE;
 
-	//인풋 쓰레드
-	/*m_hThread = (HANDLE)_beginthreadex(NULL, 0, InputThread, NULL, 0, &m_uiThreadID);
-	if(m_hThread == 0)
-	{
-		MessageBox(NULL, L"Create Input Thread Error",NULL, MB_OK);
-	}*/
-
 	return S_OK;
 }
 
@@ -109,7 +102,6 @@ BOOL CWinBase::InitInstance(HINSTANCE hInstance, INT nCmdShow)
 	CSceneManage::GetInstance()->Create( m_pDX9->GetDevice() );
 
 	CInput::GetInstance()->Create( m_hWnd );
-	CInput::GetInstance()->EnableInput(TRUE);
 	CDebugInterface::GetInstance()->Create( m_pDX9->GetDevice() );
 
 	return TRUE;
@@ -215,29 +207,16 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	return 0;
 }
 
-UINT WINAPI CWinBase::InputThread(LPVOID lParam)
-{
-	CDebugConsole::GetInstance()->Messagef( L"** Input Thread Start **\n" );
-	//인풋 업데이트
-	while (GetInstance()->m_bThreadEndCheck)
-	{
-		CInput::GetInstance()->Update( 50.0f, 150.0f, CFrequency::GetInstance()->getFrametime() );
-		Sleep(1);
-	}
-
-	MessageBox( NULL, L"End", NULL, MB_OK );
-	return 0;
-}
-
 VOID CWinBase::Update()
 {
+	CFrequency &rFre = *CFrequency::GetInstance();
 	
-	CFrequency::GetInstance()->Update();
-	TCHAR buf[256];
-	swprintf( buf, 256, TEXT( "%0.4f" ), CFrequency::GetInstance()->getFrequency() );
-	SetWindowText( GetInstance()->m_hWnd, buf );
+	rFre.Update();
+	WCHAR buf[256];
+	swprintf( buf, 256, L"%0.4f", rFre.getFrequency() );
+	SetWindowText( GHWND, buf );
 
-	CInput::GetInstance()->Update( 50.0f, 150.0f, CFrequency::GetInstance()->getFrametime() );
+	CInput::GetInstance()->Update( 50.0f, 150.0f, rFre.getFrametime() );
 	CSceneManage::GetInstance()->Update();
 }
 

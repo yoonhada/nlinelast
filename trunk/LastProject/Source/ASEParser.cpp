@@ -114,7 +114,10 @@ BOOL ASEParser::LoadFile( LPWSTR _FileName )
 	//CDebugConsole::GetInstance()->Messagef( L"\n" );
 
 	FILE*	fp;
-	fp = _wfopen( _FileName, L"rt" );
+	//fp = _wfopen( _FileName, L"rt" );
+	errno_t err;
+	err = _wfopen_s( &fp, _FileName, L"rt" );
+
 	TCHAR	sLine[ 516 ];
 
 	ReadLineFromFile( fp, sLine );

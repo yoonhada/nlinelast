@@ -9,6 +9,7 @@
 #include "ASEViewer.h"
 #include "Weapon.h"
 #include "TimeLifeItem.h"
+#include "GameEvent.h"
 
 // AI 테스트용
 #ifdef _DEBUG
@@ -41,6 +42,7 @@ VOID	CMainScene::Clear()
 	m_pGrid			= NULL;
 	m_pMonster		= NULL;
 	m_pASEViewer	= NULL;
+	m_pGameEvent	= NULL;
 
 	for( INT i=0; i<4; ++i )
 	{
@@ -48,6 +50,7 @@ VOID	CMainScene::Clear()
 	}
 
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
+
 	//m_bHost = FALSE;
 	//m_iClientNumber = 0;
 
@@ -94,7 +97,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pLight->Create( m_pD3dDevice );
 
 	//맵 생성
-	m_pASEViewer = new ASEViewer( m_pD3dDevice );
+	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
+	m_pASEViewer->Set_D3DDevice( m_pD3dDevice );
 	m_pASEViewer->Create(  L"ASE File/Map/Stage_Beta.ASE", L"ASE File/Map/Stage_Beta_Box.BBX" );
 
 	//Seek::GetInstance()->Initialize( m_pTileMap );
@@ -155,6 +159,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//CObjectManage::GetInstance()->Set_CharactorList( m_pCharactorList );
 	//CObjectManage::GetInstance()->Set_pAlphaMon( m_pAlphaMon );
 
+	CInput::GetInstance()->EnableInput(FALSE);
+
 	return S_OK;
 }
 
@@ -170,7 +176,7 @@ HRESULT CMainScene::Release()
 
 	//SAFE_DELETE( m_pMonster );
 
-	SAFE_DELETE ( m_pASEViewer );
+	//SAFE_DELETE ( m_pASEViewer );
 
 	SAFE_DELETE ( m_pLight );
 
@@ -188,21 +194,19 @@ VOID CMainScene::CreateCharactor()
 {
 	const INT nChar = 5;
 	D3DXVECTOR3 vec[nChar] = { 
-		D3DXVECTOR3( -130.0f, 0.0f,100.0f ), 
-		D3DXVECTOR3( -160.0f, 0.0f,100.0f ), 
-		D3DXVECTOR3( -190.0f, 0.0f,100.0f ), 
-		D3DXVECTOR3( -210.0f, 0.0f,100.0f ), 
-		D3DXVECTOR3(  0.0f, 0.0f, 100.0f ) 
+		D3DXVECTOR3( -130.0f, 0.0f, 100.0f ), 
+		D3DXVECTOR3( -160.0f, 0.0f, 100.0f ), 
+		D3DXVECTOR3( -190.0f, 0.0f, 100.0f ), 
+		D3DXVECTOR3( -210.0f, 0.0f, 100.0f ), 
+		D3DXVECTOR3( -250.0f, 0.0f, 600.0f ) 
 	};
 
 	//캐릭터 생성
 	FLOAT fYawZero = 1.0f;
 	m_pMyCharactor = CObjectManage::GetInstance()->Get_MyCharactor();
 	m_pMyCharactor->Create( m_pD3dDevice );
+	m_pMyCharactor->LoadKindChar( 3 );
 	m_pMyCharactor->Set_Active( TRUE );
-	m_pMyCharactor->Load( L"Data/CharData/APPA_0.csav" );
-	m_pMyCharactor->CreateWeapon( CWeapon::MAGICSTICK );
-
 	CTree::GetInstance()->GetCharVector()->push_back( m_pMyCharactor->GetBoundBox() );
 
 	m_pCharactors = CObjectManage::GetInstance()->Get_Charactors();
@@ -210,20 +214,7 @@ VOID CMainScene::CreateCharactor()
 	for(INT Loop=0; Loop<m_iMaxCharaNum; ++Loop )
 	{
 		m_pCharactors[Loop].Create( m_pD3dDevice );
-		if(Loop == 0)
-		{
-			m_pCharactors[Loop].Load( L"Data/CharData/MOM.csav" );
-		}
-		else if(Loop == 1)
-		{
-			m_pCharactors[Loop].Load( L"Data/CharData/ADDLE_0.csav" );
-		}
-		else
-		{
-			m_pCharactors[Loop].Load( L"Data/CharData/DDAL_0.csav" );
-		}
-
-		m_pCharactors[Loop].CreateWeapon( CWeapon::SPANNER /* + Loop + 1*/ );
+		m_pCharactors[Loop].LoadKindChar( Loop + 1 );
 		m_pCharactors[Loop].Set_Position( vec[Loop] );
 		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 

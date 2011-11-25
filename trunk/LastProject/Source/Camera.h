@@ -14,7 +14,7 @@ private:
 	D3DXMATRIXA16	m_matView;
 	D3DXMATRIXA16	m_matInvView; 
 
-	FLOAT			m_fLock;            ///< 상하 각도 제한용 변수
+	//FLOAT			m_fLock;            ///< 상하 각도 제한용 변수
 	const FLOAT		m_fLowAngle;		///< 카메라 하각 제한 상수
 	const FLOAT		m_fHighAngle;		///< 카메라 상각 제한 상수
 

@@ -12,6 +12,7 @@ class CTimeLifeItem;
 class CCamera;
 class Axis;
 class ASEViewer;
+class CGameEvent;
 
 class CMainScene : public IScene
 {
@@ -52,6 +53,8 @@ private:
 
 	CBillBoard*				m_pBill;
 	Axis*					m_pAxis;
+
+	CGameEvent*				m_pGameEvent;
 
 	VOID					CreateCharactor();
 

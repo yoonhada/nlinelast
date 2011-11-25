@@ -21,6 +21,7 @@ public:
 	virtual ~IScene() {}
 
 	//virtual VOID	Clear() = 0;
+	//virtual HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice ) = 0;
 	virtual HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_pSprite, HWND a_hWnd ) = 0;
 	//virtual HRESULT Release() = 0;
 	virtual VOID	Update() = 0;
@@ -31,7 +32,6 @@ public:
 	virtual INT		GetSceneState() = 0;
 
 	static INT		g_iNumStage;
-
 };
 
 #endif

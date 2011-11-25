@@ -11,6 +11,7 @@
 class CMonster;
 class CCharactor;
 class CTimeLifeItem;
+class ASEViewer;
 
 class CObjectManage : public CSingleton<CObjectManage>
 {
@@ -60,6 +61,12 @@ public:
 		return m_iMaxCharaNum;
 	}
 
+	ASEViewer* Get_ASEViewer()
+	{
+		return 	m_pASEViewer;
+	}
+
+
 public:
 	VOID Set_Host( BOOL a_bHost )
 	{
@@ -104,11 +111,13 @@ private:
 	CCharactor* m_pMyCharactor;
 	CCharactor* m_pCharactors;
 	CCharactor* m_pCharactorList[4];
+	CCharactor** m_ppCharactorList;
+
 	CMonster* m_pMonster;
 
 	CTimeLifeItem* m_pFirstAidKit;
 
-	CCharactor** m_ppCharactorList;
+	ASEViewer* m_pASEViewer;
 
 	BOOL m_bHost;
 	WORD m_iClientNumber;

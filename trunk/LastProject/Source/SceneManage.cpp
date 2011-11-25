@@ -8,6 +8,8 @@
 //#include "LoadScene.h"
 #include "LobbyScene.h"
 
+#define _TEST
+
 CSceneManage::CSceneManage()
 {
 	Clear();
@@ -48,7 +50,11 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//m_pScene = new CLobbyScene;
 	//m_pLoadScene = m_pScene;
+#ifdef _TEST
 	m_pScene			= new CMainScene;
+#else
+	m_pScene			= new StoryScene;
+#endif // _DEBUG	
 	m_pLoadingScene		= new LoadingScene;
 
 	m_pScene->Create( m_pD3dDevice, m_pSprite, m_hWnd );
