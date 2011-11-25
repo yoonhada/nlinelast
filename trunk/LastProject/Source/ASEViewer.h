@@ -45,6 +45,7 @@ public:
 	VOID		CleanupAnimationData();
 
 	LPGRAPHINFO		GetGraphInfo() { return &m_GraphInfo; }
+	TileMap*		GetTileMapInfo() { return m_pTileMap; }
 
 private:
 	LPDATA					m_pASEData;

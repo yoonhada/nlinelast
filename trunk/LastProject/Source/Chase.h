@@ -18,6 +18,8 @@ private:
 	INT			m_iCurrentX;
 	INT			m_iCurrentZ;
 
+	ASEViewerBase::LPGRAPHINFO m_pMapInfo;
+
 
 public:
 	virtual ~Chase(){}
@@ -28,6 +30,7 @@ public:
 	virtual VOID Execute( CMonster* a_pMonster );
 	virtual VOID Exit( CMonster* a_pMonster );
 
+	VOID Initialize( ASEViewerBase::LPGRAPHINFO a_pMapInfo );
 	FLOAT GetDegree();
 	BOOL isArrive( CMonster* a_pMonster );
 };

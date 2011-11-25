@@ -156,6 +156,9 @@ VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 	m_GraphInfo.pNavGraphNode = new INT[ iGraphWidth * iGraphHeight ];
 	memcpy( m_GraphInfo.pNavGraphNode, m_pTileMap->GetInfo()->pNavGraphNode, sizeof( INT ) * iGraphWidth * iGraphHeight );
 
+	m_GraphInfo.iWidth		= iGraphWidth;
+	m_GraphInfo.iHeight		= iGraphHeight;
+
 	m_GraphInfo.fTileSize	= m_pTileMap->GetInfo()->fTileSize;
 
 	m_GraphInfo.vecStart	= m_pTileMap->GetInfo()->vecStart;

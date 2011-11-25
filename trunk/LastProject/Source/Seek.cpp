@@ -58,7 +58,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 가장 가까이에 있는 목표가 공격 범위에 있으면 전투 상태로 전환
-	if( min < 50.0f )
+	if( min < 20.0f )
 	{
 		a_pMonster->Set_Target( Target );
 		a_pMonster->Set_TargetDistance( min );
@@ -66,13 +66,13 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 범위에 없으면 가장 가까운 목표 추격
-	else if( min >= 50.0f && min <= 500.0f )
-	{	
+	else if( min >= 20.0f && min <= 500.0f )
+	{
 		// 위치를 0, 0 기준으로 맞춘 후 계산한다.
-		INT StartX = INT( a_pMonster->Get_Pos().x + 510.0f ) / 10;
-		INT StartZ = INT( a_pMonster->Get_Pos().z + 510.0f ) / 10;
-		INT EndX = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().x + 510.0f ) / 10;
-		INT EndZ = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().z + 510.0f ) / 10;
+		INT StartX = INT( a_pMonster->Get_Pos().x + m_pMapInfo->vecEnd.x ) / m_pMapInfo->fTileSize;
+		INT StartZ = INT( a_pMonster->Get_Pos().z + m_pMapInfo->vecEnd.z ) / m_pMapInfo->fTileSize;
+		INT EndX = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().x + m_pMapInfo->vecEnd.x ) / m_pMapInfo->fTileSize;
+		INT EndZ = INT( CObjectManage::GetInstance()->Get_CharactorList()[Target]->Get_CharaPos().z + m_pMapInfo->vecEnd.z ) / m_pMapInfo->fTileSize;
 
 		a_pMonster->Set_TargetPos( EndX, EndZ );
 
@@ -109,12 +109,13 @@ VOID Seek::Execute( CMonster* a_pMonster )
 
 VOID Seek::Exit( CMonster* a_pMonster )
 {
-
+	
 }
 
 
-VOID Seek::Initialize( TileMap* a_pTileMap )
+VOID Seek::Initialize( ASEViewerBase::LPGRAPHINFO a_pMapInfo, TileMap* a_pTileMap )
 {
+	m_pMapInfo = a_pMapInfo;
 	m_pTileMap = a_pTileMap;
 }
 

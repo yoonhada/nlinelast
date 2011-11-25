@@ -7,7 +7,7 @@ class ASEViewerBase
 private:
 	VOID		Initialize();
 	VOID		Release();
-	
+
 public:
 	ASEViewerBase( )
 	{
@@ -48,6 +48,9 @@ public:
 	typedef struct _GRAPHINFO
 	{
 		INT*		pNavGraphNode;
+
+		INT			iWidth;
+		INT			iHeight;
 
 		FLOAT		fTileSize;
 
