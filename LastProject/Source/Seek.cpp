@@ -67,13 +67,28 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 범위에 없으면 가장 가까운 목표 추격
-	else if( min >= 20.0f && min <= 500.0f )
+	else if( min >= 20.0f && min <= 2500.0f )
 	{
 		// 위치를 0, 0 기준으로 맞춘 후 계산한다.
-		INT StartX = INT( a_pMonster->Get_Pos().x + 510.0f ) / 10;
-		INT StartZ = INT( a_pMonster->Get_Pos().z + 510.0f ) / 10;
-		INT EndX = INT( pCharactors[Target].Get_CharaPos().x + 510.0f ) / 10;
-		INT EndZ = INT( pCharactors[Target].Get_CharaPos().z + 510.0f ) / 10;
+		INT StartX = INT( a_pMonster->Get_Pos().x + m_pTileMap->GetInfo()->vecEnd.x ) / m_pTileMap->GetInfo()->fTileSize;
+		INT StartZ = INT( a_pMonster->Get_Pos().z + m_pTileMap->GetInfo()->vecEnd.z ) / m_pTileMap->GetInfo()->fTileSize;
+		INT EndX = INT( pCharactors[Target].Get_CharaPos().x + m_pTileMap->GetInfo()->vecEnd.x ) / m_pTileMap->GetInfo()->fTileSize;
+		INT EndZ = INT( pCharactors[Target].Get_CharaPos().z + m_pTileMap->GetInfo()->vecEnd.z ) / m_pTileMap->GetInfo()->fTileSize;
+
+		static FLOAT sx = 0;
+		static FLOAT sz = 0;
+		static FLOAT ex = 0;
+		static FLOAT ez = 0;
+		
+		sx = StartX;
+		sz = StartZ;
+		ex = EndX;
+		ez = EndZ;
+
+		CDebugInterface::GetInstance()->AddMessageFloat( "sx", sx );
+		CDebugInterface::GetInstance()->AddMessageFloat( "sz", sz );
+		CDebugInterface::GetInstance()->AddMessageFloat( "ex", ex );
+		CDebugInterface::GetInstance()->AddMessageFloat( "ez", ez );
 
 		a_pMonster->Set_TargetPos( EndX, EndZ );
 
@@ -87,16 +102,19 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
 		Astar::GetInstance()->clearMap();
 
+		m_pTileMap->SetInfo( TileMap::TLM_COURSE, (INT)ex, (INT)ez );
+		m_pTileMap->SetInfo( TileMap::TLM_COURSE, (INT)sx, (INT)sz );
+
 		// 새 Path를 표시한다.
 		SetPath( path );
 
-		a_pMonster->Set_Path( path );
+//		a_pMonster->Set_Path( path );
 
 		// Path가 있으면 Chase 상태로
 		if( path )
 		{
-			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
-			a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
+//			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
+//			a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
 		}
 	}
 	else
@@ -114,9 +132,8 @@ VOID Seek::Exit( CMonster* a_pMonster )
 }
 
 
-VOID Seek::Initialize( ASEViewerBase::LPGRAPHINFO a_pMapInfo, TileMap* a_pTileMap )
+VOID Seek::Initialize( TileMap* a_pTileMap )
 {
-	m_pMapInfo = a_pMapInfo;
 	m_pTileMap = a_pTileMap;
 }
 
@@ -128,7 +145,7 @@ VOID Seek::ClearPath( PathNode* a_pPath )
 	{
 		while( temp->next != NULL )
 		{
-			m_pTileMap->SetInfo( temp->x, temp->y, TileMap::TLM_WAY );
+			m_pTileMap->SetInfo( TileMap::TLM_WAY, temp->x, temp->y );
 
 			temp = temp->next;
 			if( temp == NULL )
@@ -145,7 +162,7 @@ VOID Seek::SetPath( PathNode* a_pPath )
 	{
 		while( temp->next != NULL )
 		{
-			m_pTileMap->SetInfo( temp->x, temp->y, TileMap::TLM_COURSE );
+			m_pTileMap->SetInfo( TileMap::TLM_WAY, temp->x, temp->y );
 
 			temp = temp->next;
 			if( temp == NULL )

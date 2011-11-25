@@ -14,7 +14,6 @@ VOID ASEViewer::Initialize()
 
 	m_pASEParser	= NULL;
 	m_pBBXParser	= NULL;
-	m_pTileMap		= NULL;
 
 	m_iNumASEData	= 0;
 	m_iNumBBXData	= 0;
@@ -129,7 +128,7 @@ VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
 	InitASE( _ASEFileName );
 
 	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_1, 0, 10, FALSE );
-	//m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 100, TRUE );
+	m_pASEParser->AddAnimationData( ASEANI_IDLE, ANI_1, 0, 300, TRUE );
 	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_2, 10, 20, FALSE );
 	//m_pASEParser->AddAnimationData( ASEANI_POST_IDLE, ANI_3, 20, 30, FALSE );
 

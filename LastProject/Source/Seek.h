@@ -16,8 +16,8 @@ private:
 	Seek( const Seek& a_rhs );
 	Seek& operator=( const Seek& a_rhs );
 
-	ASEViewerBase::LPGRAPHINFO m_pMapInfo;
-	TileMap*	m_pTileMap;
+
+	TileMap*		m_pTileMap;
 
 
 public:
@@ -30,7 +30,7 @@ public:
 	virtual VOID Exit( CMonster* a_pMonster );
 
 	// AI 테스트용
-	VOID Initialize( ASEViewerBase::LPGRAPHINFO a_pMapInfo, TileMap* a_pTileMap );
+	VOID Initialize( TileMap* a_pTileMap );
 	VOID ClearPath( PathNode* a_pPath );
 	VOID SetPath( PathNode* a_pPath );
 };

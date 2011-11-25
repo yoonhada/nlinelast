@@ -105,12 +105,13 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//타일맵 생성
 	m_pTileMap = new TileMap( m_pD3dDevice );
-	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -910.0f ), D3DXVECTOR3( 510.0f, 0.0f, 910.0f ), 10.0f );
-	
-	Seek::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo(), m_pASEViewer->GetTileMapInfo() );
-	Chase::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo() );
+	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -950.0f ), D3DXVECTOR3( 510.0f, 0.0f, 950.0f ), 10.0f );
+	m_pTileMap->LoadBBXFile( L"ASE File/Map/Stage_Beta_Box.BBX" );
 
-	Astar::GetInstance()->Initialize( m_pASEViewer->GetGraphInfo() );
+	Seek::GetInstance()->Initialize( m_pTileMap );
+	Chase::GetInstance()->Initialize( m_pTileMap->GetInfo() );
+
+	Astar::GetInstance()->Initialize( m_pTileMap->GetInfo() );
 
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
@@ -378,6 +379,17 @@ VOID	CMainScene::Render()
 	m_pMonster->Render();
 
 	m_pFirstAidKit->Render();
+
+#ifdef _DEBUG
+	D3DXMATRIXA16 matWorld;
+	D3DXMatrixIdentity( &matWorld );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+	m_pTileMap->Render();
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+#endif
+
 
 #ifdef _DEBUG
 	TwDraw();

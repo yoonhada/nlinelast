@@ -3,6 +3,7 @@
 
 #include "State.h"
 #include "Monster.h"
+#include "TileMap.h"
 
 
 class Chase : public State<CMonster>
@@ -18,7 +19,7 @@ private:
 	INT			m_iCurrentX;
 	INT			m_iCurrentZ;
 
-	ASEViewerBase::LPGRAPHINFO m_pMapInfo;
+	TileMap::INFO*	m_pMapInfo;
 
 
 public:
@@ -30,7 +31,7 @@ public:
 	virtual VOID Execute( CMonster* a_pMonster );
 	virtual VOID Exit( CMonster* a_pMonster );
 
-	VOID Initialize( ASEViewerBase::LPGRAPHINFO a_pMapInfo );
+	VOID Initialize( TileMap::INFO* a_pMapInfo );
 	FLOAT GetDegree();
 	BOOL isArrive( CMonster* a_pMonster );
 };
