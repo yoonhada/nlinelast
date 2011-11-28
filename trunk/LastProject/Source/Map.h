@@ -26,7 +26,7 @@ private:
 	HRESULT		LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppTexture, LPCWSTR FileName );
 
 public:
-	Map( LPDIRECT3DDEVICE9	_pd3dDevice ) : m_pd3dDevice( _pd3dDevice )
+	Map( LPDIRECT3DDEVICE9	_pd3dDevice ) : m_pD3dDevice( _pd3dDevice )
 	{
 		this->Initialize();
 	}
@@ -74,7 +74,7 @@ private:
 		}
 	}DATA, *LPDATA;
 
-	LPDIRECT3DDEVICE9		m_pd3dDevice;
+	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPDATA					m_pASEData;
 	LPDATA					m_pBBXData;
 	INT						m_iNumASEData;

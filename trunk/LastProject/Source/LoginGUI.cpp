@@ -8,10 +8,10 @@
 VOID LoginGUI::Initialize()
 {
 	m_pMouse			= new Mouse;
-	m_pGUIBase			= new GUIBase( m_pd3dDevice, m_pSprite );
-	m_pGUIBackground	= new GUIBackground( m_pd3dDevice, m_pSprite );
-	m_pGUIBtnManager	= new GUIBtnManager( m_pd3dDevice, m_pSprite );
-	m_pGUIEdit			= new GUIEdit( m_pd3dDevice, m_pSprite );
+	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
+	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIBtnManager	= new GUIBtnManager( m_pD3dDevice, m_pSprite );
+	m_pGUIEdit			= new GUIEdit( m_pD3dDevice, m_pSprite );
 }
 
 VOID LoginGUI::Release()
@@ -44,7 +44,7 @@ VOID LoginGUI::CreateButton()
 
 	//	Create Background
 	D3DVIEWPORT9 Vp;
-	m_pd3dDevice->GetViewport( &Vp );
+	m_pD3dDevice->GetViewport( &Vp );
 
 	FLOAT fX		= m_fX + 250.0f;
 	FLOAT fY		= m_fY + 350.0f;
@@ -77,7 +77,7 @@ VOID LoginGUI::CreateEdit()
 VOID LoginGUI::Create()
 {
 	D3DVIEWPORT9 Vp;
-	m_pd3dDevice->GetViewport( &Vp );
+	m_pD3dDevice->GetViewport( &Vp );
 
 	m_fWidth	= 512.0f;
 	m_fHeight	= 512.0f;

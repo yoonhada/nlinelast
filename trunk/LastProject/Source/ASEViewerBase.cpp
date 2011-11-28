@@ -11,7 +11,7 @@ VOID ASEViewerBase::Release()
 
 HRESULT	ASEViewerBase::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
 {
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer(	_nVertex * _Size,
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer(	_nVertex * _Size,
 													0,
 													_FVF,
 													D3DPOOL_DEFAULT,
@@ -41,7 +41,7 @@ HRESULT	ASEViewerBase::SetVB( LPDIRECT3DVERTEXBUFFER9 _pVB, LPVOID _pvertices, I
 }
 HRESULT	ASEViewerBase::CreateIB( LPDIRECT3DINDEXBUFFER9* _ppIB, INT _nIndex, INT _Size )
 {
-	if( FAILED( m_pd3dDevice->CreateIndexBuffer(	_nIndex * _Size,
+	if( FAILED( m_pD3dDevice->CreateIndexBuffer(	_nIndex * _Size,
 													0,
 													D3DFMT_INDEX32,
 													D3DPOOL_DEFAULT,
@@ -73,7 +73,7 @@ HRESULT	ASEViewerBase::SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT 
 HRESULT ASEViewerBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppTexture, LPCWSTR FileName )
 {
 	if( FAILED( D3DXCreateTextureFromFileEx(	
-					m_pd3dDevice,
+					m_pD3dDevice,
 					FileName,				//	컴파일러 설정이 Unicode를 요구하고 있는 경우 데이터 타입 LPCSTR은 LPCWSTR이 된다
 					D3DX_DEFAULT_NONPOW2,	//	원본 크기를 받아온다 2의 승수로도 받아올수 있다
 					D3DX_DEFAULT_NONPOW2,	//	원본 크기를 받아온다

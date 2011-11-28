@@ -52,13 +52,13 @@ private:
 	ASEParser*				m_pASEParser;
 	BBXParser*				m_pBBXParser;
 
-	//std::vector<CBoundBox*> m_pBoundBoxVector;
+	std::vector<CBoundBox*> m_pBoundBoxVector;
 	//
 
 public:
 	VOID Set_D3DDevice( LPDIRECT3DDEVICE9 a_pd3dDevice )
 	{
-		m_pd3dDevice = a_pd3dDevice;
+		m_pD3dDevice = a_pd3dDevice;
 		this->Initialize();
 	}
 

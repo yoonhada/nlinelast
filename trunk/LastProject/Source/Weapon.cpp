@@ -8,7 +8,7 @@
 #include "CharCube.h"
 
 CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
-: m_pd3dDevice(_pd3dDevice)
+: m_pD3dDevice(_pd3dDevice)
 , m_pMap(NULL)
 {
 	m_pMap = new Map( _pd3dDevice );
@@ -38,16 +38,16 @@ VOID CWeapon::Clear()
 		m_WeaponType.vDir[i].x = m_WeaponType.vDir[i].y = m_WeaponType.vDir[i].z = 0.0f;
 	}
 
-	m_fZAng[0] = DEG2RAD(0);
-	m_fZAng[1] = DEG2RAD(0);
-	m_fZAng[2] = DEG2RAD(0);
-	m_fZAng[3] = DEG2RAD(-90);
-	m_fZAng[4] = DEG2RAD(-15);
-	m_fZAng[5] = DEG2RAD(0);
-	m_fZAng[6] = DEG2RAD(45);
-	m_fZAng[7] = DEG2RAD(90);
-	m_fZAng[8] = DEG2RAD(135);
-	m_fZAng[9] = DEG2RAD(0);
+	m_fZAng[0] = D3DXToRadian( 0.0f);
+	m_fZAng[1] = D3DXToRadian( 0.0f);
+	m_fZAng[2] = D3DXToRadian( 0.0f);
+	m_fZAng[3] = D3DXToRadian( -90.0f);
+	m_fZAng[4] = D3DXToRadian( -15.0f);
+	m_fZAng[5] = D3DXToRadian( 0.0f);
+	m_fZAng[6] = D3DXToRadian( 45.0f);
+	m_fZAng[7] = D3DXToRadian( 90.0f);
+	m_fZAng[8] = D3DXToRadian( 135.0f);
+	m_fZAng[9] = D3DXToRadian( 0.0f);
 
 	// XYZ Min
 	m_fBBSize[0] =-10.5f;
@@ -278,19 +278,19 @@ HRESULT CWeapon::Create()
 
 #ifdef _DEBUG
 	m_pCube = new CCube();
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
 		0, CCube::CUBEVERTEX::FVF, D3DPOOL_MANAGED, &m_pTotalVB, NULL ) ) )
 	{
 		MessageBox(GHWND, L"Vertex Buffer Failed", NULL, MB_OK);
 	}
 
-	if( FAILED( m_pd3dDevice->CreateIndexBuffer( CCube::CUBEINDEX::IndexNum * sizeof( CCube::CUBEINDEX ), 
+	if( FAILED( m_pD3dDevice->CreateIndexBuffer( CCube::CUBEINDEX::IndexNum * sizeof( CCube::CUBEINDEX ), 
 		0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pTotalIB, NULL ) ) )
 	{
 		MessageBox(GHWND, L"Index Buffer Failed", NULL, MB_OK);
 	}
 
-	m_pCube->Create( m_pd3dDevice, m_pTotalVB, m_pTotalIB, 0, 0 );
+	m_pCube->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, 0, 0 );
 	m_pCube->InitTexture( 0xFFFF0000 );
 #endif // _DEBUG
 	return S_OK;
@@ -494,18 +494,18 @@ VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 	mtrl.Emissive = D3DXCOLOR( 0.0f, 0.0f, 0.0f, 0.0f );
 	mtrl.Specular = D3DXCOLOR( 0xFFFFFFFF );
 
-	m_pd3dDevice->SetMaterial( &mtrl );
+	m_pD3dDevice->SetMaterial( &mtrl );
 
 	m_pMap->Render( Get_MatWorld() * _matCharacter );	
 
 #ifdef _DEBUG
-	m_pd3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
-	m_pd3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pTotalIB );
+	m_pD3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
+	m_pD3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pTotalIB );
 
 	m_pCube->Update();
 	m_pCube->Calcul_MatWorld();
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &( m_pCube->Get_MatWorld() * _matCharacter ) );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pCube->Get_MatWorld() * _matCharacter ) );
 	m_pCube->Render();
 #endif // _DEBUG
 }

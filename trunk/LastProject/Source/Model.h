@@ -14,7 +14,7 @@ class CModel : public virtual IObject
 {
 private:
 	CBoundBox * m_pParentBB;
-	LPDIRECT3DDEVICE9 m_pd3dDevice;
+	LPDIRECT3DDEVICE9 m_pD3dDevice;
 	LPDIRECT3DVERTEXBUFFER9 m_pTotalVB;   ///< 큐브 통합 버텍스
 	LPDIRECT3DINDEXBUFFER9  m_pTotalIB;   ///< 큐브 인덱스
 

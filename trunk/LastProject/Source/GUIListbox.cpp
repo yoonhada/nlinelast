@@ -16,7 +16,7 @@ VOID GUIListbox::Initialize()
 	m_fX		= 0.0f;	m_fY		= 0.0f;
 	m_fWidth	= 0.0f; m_fHeight	= 0.0f;
 
-	m_pGUIScrollbar		= new GUIScrollbar( GUIBase::m_pd3dDevice, GUIBase::m_pSprite );
+	m_pGUIScrollbar		= new GUIScrollbar( GUIBase::m_pD3dDevice, GUIBase::m_pSprite );
 }
 
 VOID GUIListbox::Release()
@@ -268,7 +268,7 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 	AddFileName( 0, imgParamText, L"Img\\Listbox_Item_Normal.png" );
 	CreateImage2D( *pimg2DText, fTextX, fTextY, fTextWidth, fTextHeight, imgParamText ); 
 	
-	GUIFont::GetInstance().Create( L"±Ã¼­", 10, 10, m_pd3dDevice );
+	GUIFont::GetInstance().Create( L"±Ã¼­", 10, 10, m_pD3dDevice );
 	GUIFont::GetInstance().DrawOnTexture(	_Text, 0x00000000, pimg2DText->vec2Tex[ 0 ][ 0 ]->pTex, 
 											static_cast<INT>( fTextWidth ), 
 											static_cast<INT>( fTextHeight ) );

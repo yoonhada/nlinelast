@@ -76,7 +76,7 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, IMAGEPARAM& _imgParam )
 		pGUITexture->iFrameSpeed		= 1000;
 
 		//	_pFileName == NULL CreateTexture
-		if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _imgParam.fWidth ),
+		if( FAILED( m_pD3dDevice->CreateTexture(	static_cast<INT>( _imgParam.fWidth ),
 													static_cast<INT>( _imgParam.fHeight ),
 													0,
 													0,
@@ -156,7 +156,7 @@ VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, IMAGEPARAM& _imgParam )
 		LPGUITEXTURE pGUITexture	= new GUITEXTURE;
 		pGUITexture->iFrameSpeed	= 1000;
 		//	_pFileName == NULL CreateTexture
-		if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _imgParam.fWidth ),
+		if( FAILED( m_pD3dDevice->CreateTexture(	static_cast<INT>( _imgParam.fWidth ),
 													static_cast<INT>( _imgParam.fHeight ),
 													0,
 													0,
@@ -224,25 +224,25 @@ VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 	}
 
 	if( pGUITexture->pTex != NULL )
-		m_pd3dDevice->SetTexture( 0, pGUITexture->pTex );
+		m_pD3dDevice->SetTexture( 0, pGUITexture->pTex );
 	
 
 	//	Draw
 	INT iNumVertices	= 4;
 	INT iNumIndices		= 2;
 
-	m_pd3dDevice->SetStreamSource( 0, _pImage3D->pVB, 0, sizeof( GUIVERTEX ) );
-	m_pd3dDevice->SetFVF( GUIVERTEX::FVF );
-	m_pd3dDevice->SetIndices( _pImage3D->pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, iNumVertices, 0, iNumIndices );
+	m_pD3dDevice->SetStreamSource( 0, _pImage3D->pVB, 0, sizeof( GUIVERTEX ) );
+	m_pD3dDevice->SetFVF( GUIVERTEX::FVF );
+	m_pD3dDevice->SetIndices( _pImage3D->pIB );
+	m_pD3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, iNumVertices, 0, iNumIndices );
 
 	//	Identity WorldMatrix
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity( &matIdentity );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
 
 	//	Identity ProjectionMatrix
-	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matIdentity );
+	m_pD3dDevice->SetTransform( D3DTS_PROJECTION, &matIdentity );
 }
 
 VOID GUIBase::RenderImage2D( LPIMAGE2D _pImage2D )
@@ -302,21 +302,21 @@ VOID GUIBase::SetMatrix( D3DXVECTOR3& _vecScale, D3DXVECTOR3& _vecRotate, D3DXVE
 	D3DXMatrixIdentity( &matWorld );
 	matWorld = matScale * matRotateX * matRotateY * matRotateZ * matTranslate;
 	
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
 	//	Set Projection Matrix
 	D3DVIEWPORT9 vp;
-	GUIBase::m_pd3dDevice->GetViewport( &vp );
+	GUIBase::m_pD3dDevice->GetViewport( &vp );
 	D3DXMATRIX matOrtho;
 	D3DXMatrixIdentity( &matOrtho );
 	//D3DXMatrixOrthoLH( &matOrtho, vp.Width, vp.Height, 0, 1 );	//	다른 이유가 뭘까?? 모르겟네;;
 	D3DXMatrixOrthoOffCenterLH( &matOrtho, 0.0f, static_cast< FLOAT>( vp.Width ), static_cast< FLOAT >( vp.Height ), 0.0f, 1, 2 );
-	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matOrtho );
+	m_pD3dDevice->SetTransform( D3DTS_PROJECTION, &matOrtho );
 }
 
 HRESULT	GUIBase::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
 {
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer(	_nVertex * _Size,
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer(	_nVertex * _Size,
 													0,
 													_FVF,
 													D3DPOOL_DEFAULT,
@@ -347,7 +347,7 @@ HRESULT	GUIBase::SetVB( LPDIRECT3DVERTEXBUFFER9 _pVB, LPVOID _pvertices, INT _nV
 
 HRESULT	GUIBase::CreateIB( LPDIRECT3DINDEXBUFFER9* _ppIB, INT _nIndex, INT _Size )
 {
-	if( FAILED( m_pd3dDevice->CreateIndexBuffer(	_nIndex * _Size,
+	if( FAILED( m_pD3dDevice->CreateIndexBuffer(	_nIndex * _Size,
 													0,
 													D3DFMT_INDEX32,
 													D3DPOOL_DEFAULT,
@@ -380,7 +380,7 @@ HRESULT	GUIBase::SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT _nInde
 HRESULT GUIBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppOutTexture, LPCWSTR _FileName, UINT _iWidth, UINT _iHeight, D3DCOLOR _colClear )
 {
 	if( FAILED( D3DXCreateTextureFromFileEx(	
-					m_pd3dDevice,
+					m_pD3dDevice,
 					_FileName,				//	컴파일러 설정이 Unicode를 요구하고 있는 경우 데이터 타입 LPCSTR은 LPCWSTR이 된다
 					_iWidth,				//	원본 크기를 받아온다 2의 승수로도 받아올수 있다	D3DX_DEFAULT_NONPOW2
 					_iHeight,				//	원본 크기를 받아온다							D3DX_DEFAULT_NONPOW2
@@ -538,7 +538,7 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, FLOAT _fX, FLOAT _fY, FLOAT _fWi
 		pGUITexture->iFrameSpeed	= 1000;
 
 		//	_pFileName == NULL CreateTexture
-		if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _fWidth ),
+		if( FAILED( m_pD3dDevice->CreateTexture(	static_cast<INT>( _fWidth ),
 													static_cast<INT>( _fHeight ),
 													0,
 													0,
@@ -617,7 +617,7 @@ VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, FLOAT _fX, FLOAT _fY, FLOAT _fWi
 		LPGUITEXTURE pGUITexture	= new GUITEXTURE;
 		pGUITexture->iFrameSpeed	= 1000;
 		//	_pFileName == NULL CreateTexture
-		if( FAILED( m_pd3dDevice->CreateTexture(	static_cast<INT>( _fWidth ),
+		if( FAILED( m_pD3dDevice->CreateTexture(	static_cast<INT>( _fWidth ),
 													static_cast<INT>( _fHeight ),
 													0,
 													0,

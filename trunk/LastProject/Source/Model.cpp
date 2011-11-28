@@ -5,7 +5,7 @@
 #include "Qube.h"
 
 CModel::CModel( LPDIRECT3DDEVICE9 _pd3dDevice )
-: m_pd3dDevice( _pd3dDevice )
+: m_pD3dDevice( _pd3dDevice )
 , m_pParentBB( NULL )
 {
 	Create();
@@ -18,7 +18,7 @@ CModel::~CModel()
 
 VOID CModel::Clear()
 {
-	m_pd3dDevice = NULL;
+	m_pD3dDevice = NULL;
 	m_pTotalVB = NULL;
 	m_pTotalIB = NULL;
 	m_pParentBB = NULL;
@@ -49,13 +49,13 @@ HRESULT CModel::Release()
 
 HRESULT CModel::Create()
 {
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
 		0, CCube::CUBEVERTEX::FVF, D3DPOOL_MANAGED, &m_pTotalVB, NULL ) ) )
 	{
 		MessageBox(GHWND, L"Vertex Buffer Failed", NULL, MB_OK);
 	}
 
-	if( FAILED( m_pd3dDevice->CreateIndexBuffer( CCube::CUBEINDEX::IndexNum * sizeof( CCube::CUBEINDEX ), 
+	if( FAILED( m_pD3dDevice->CreateIndexBuffer( CCube::CUBEINDEX::IndexNum * sizeof( CCube::CUBEINDEX ), 
 		0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pTotalIB, NULL ) ) )
 	{
 		MessageBox(GHWND, L"Index Buffer Failed", NULL, MB_OK);
@@ -177,9 +177,9 @@ VOID CModel::Delete()
 
 VOID CModel::Render()
 {
-	m_pd3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
-	m_pd3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pTotalIB );
+	m_pD3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
+	m_pD3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pTotalIB );
 
 	// Qube o??
 	m_iterQube = m_vectorQube.begin();
@@ -188,7 +188,7 @@ VOID CModel::Render()
 		if ( ( *m_iterQube ) != NULL && ( *m_iterQube )->GetVisiable() )
 		{
 			( *m_iterQube )->Update( m_pParentBB );
-			m_pd3dDevice->SetTransform( D3DTS_WORLD, &( *m_iterQube )->Get_MatWorld() );
+			m_pD3dDevice->SetTransform( D3DTS_WORLD, &( *m_iterQube )->Get_MatWorld() );
 			( *m_iterQube )->Render();
 		}
 		else 
@@ -204,9 +204,9 @@ VOID CModel::Render()
 
 VOID CModel::Render(INT n)
 {
-	m_pd3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
-	m_pd3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pTotalIB );
+	m_pD3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
+	m_pD3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pTotalIB );
 
 	// Qube o??
 	m_iterQube = m_vectorQube.begin();
@@ -214,7 +214,7 @@ VOID CModel::Render(INT n)
 	{
 		if ( ( *m_iterQube ) != NULL && ( *m_iterQube )->GetVisiable() )
 		{
-			m_pd3dDevice->SetTransform( D3DTS_WORLD, &( *m_iterQube )->Get_MatWorld() );
+			m_pD3dDevice->SetTransform( D3DTS_WORLD, &( *m_iterQube )->Get_MatWorld() );
 			( *m_iterQube )->Render();
 		}
 
@@ -253,7 +253,7 @@ VOID CModel::CreateRandom( CCharCube* a_pCube,
 		pQube->SetPosition( vec );
 		pQube->RandMome( vMome, fPow );
 		pQube->RanderRotate();
-		pQube->Create( m_pd3dDevice, m_pTotalVB, m_pTotalIB, 0, 0, 0.5f );
+		pQube->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, 0, 0, 0.5f );
 		pQube->InitTexture( dwColor, dwOutLine1 );
 
 		m_vectorQube.push_back( pQube );

@@ -8,11 +8,11 @@
 VOID MainGUI::Initialize()
 {
 	m_pMouse				= new Mouse;
-	m_pGUIBase				= new GUIBase( m_pd3dDevice, m_pSprite );
-	m_pGUICharacterState	= new GUIBackground( m_pd3dDevice, m_pSprite );
-	m_pGUIMiniMap			= new GUIBackground( m_pd3dDevice, m_pSprite );
-	m_pChatWindow			= new GUIListbox( m_pd3dDevice, m_pSprite );
-	m_pChatEdit				= new GUIEdit( m_pd3dDevice, m_pSprite );
+	m_pGUIBase				= new GUIBase( m_pD3dDevice, m_pSprite );
+	m_pGUICharacterState	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIMiniMap			= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pChatWindow			= new GUIListbox( m_pD3dDevice, m_pSprite );
+	m_pChatEdit				= new GUIEdit( m_pD3dDevice, m_pSprite );
 }
 
 VOID MainGUI::Release()

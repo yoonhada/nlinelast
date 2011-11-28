@@ -18,7 +18,7 @@ private:
 	};
 
 protected:
-	LPDIRECT3DDEVICE9		m_pd3dDevice;	///< D3D 디바이스
+	LPDIRECT3DDEVICE9		m_pD3dDevice;	///< D3D 디바이스
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;			///< 정점 버퍼
 
 	HRESULT	InitVB();	///< 정점 버퍼 생성

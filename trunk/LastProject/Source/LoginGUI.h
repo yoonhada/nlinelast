@@ -24,7 +24,7 @@ private:
 
 public:
 	LoginGUI( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd ) 
-		: m_pd3dDevice( _pd3dDevice ), m_pSprite( _pSprite ), m_hWnd( _hWnd )
+		: m_pD3dDevice( _pd3dDevice ), m_pSprite( _pSprite ), m_hWnd( _hWnd )
 	{
 		this->Initialize();
 	}
@@ -42,7 +42,7 @@ public:
 	BOOL		NextBackgroundImage();
 
 private:
-	LPDIRECT3DDEVICE9		m_pd3dDevice;
+	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
 	HWND					m_hWnd;
 

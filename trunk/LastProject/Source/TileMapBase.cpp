@@ -24,7 +24,7 @@ VOID TileMapBase::CreateTileImage( IMAGE& _TileImage, INT _iVertices, LPTILEVERT
 	SetIB( _TileImage.pIB, _pIndex, _iIndices, sizeof( INDEX ) );
 
 	//	Set Texture
-	m_pd3dDevice->CreateTexture( _itexWidth, _itexHeight, 0, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &_TileImage.pTexture, NULL );
+	m_pD3dDevice->CreateTexture( _itexWidth, _itexHeight, 0, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &_TileImage.pTexture, NULL );
 
 	D3DLOCKED_RECT d3drc;
 	_TileImage.pTexture->LockRect( 0, &d3drc, NULL, 0 );
@@ -48,21 +48,21 @@ VOID TileMapBase::CreateLineImage( IMAGE& _LineImage, INT _iVertices, LPLINEVERT
 VOID TileMapBase::RenderTileImage( LPIMAGE _pTileImage )
 {
 	if( _pTileImage->pTexture != NULL )
-		m_pd3dDevice->SetTexture( 0, _pTileImage->pTexture );
+		m_pD3dDevice->SetTexture( 0, _pTileImage->pTexture );
 	//	Draw
-	m_pd3dDevice->SetStreamSource( 0, _pTileImage->pVB, 0, sizeof( TILEVERTEX ) );
-	m_pd3dDevice->SetFVF( TILEVERTEX::FVF );
-	m_pd3dDevice->SetIndices( _pTileImage->pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, _pTileImage->iVertices, 0, _pTileImage->iIndices );
+	m_pD3dDevice->SetStreamSource( 0, _pTileImage->pVB, 0, sizeof( TILEVERTEX ) );
+	m_pD3dDevice->SetFVF( TILEVERTEX::FVF );
+	m_pD3dDevice->SetIndices( _pTileImage->pIB );
+	m_pD3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, _pTileImage->iVertices, 0, _pTileImage->iIndices );
 
-	m_pd3dDevice->SetTexture( 0, NULL );
+	m_pD3dDevice->SetTexture( 0, NULL );
 }
 
 VOID TileMapBase::RenderLineImage( LPIMAGE _pLineImage )
 {
-	m_pd3dDevice->SetStreamSource( 0, _pLineImage->pVB, 0, sizeof( LINEVERTEX ) );
-	m_pd3dDevice->SetFVF( LINEVERTEX::FVF );
-	m_pd3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, _pLineImage->iVertices );
+	m_pD3dDevice->SetStreamSource( 0, _pLineImage->pVB, 0, sizeof( LINEVERTEX ) );
+	m_pD3dDevice->SetFVF( LINEVERTEX::FVF );
+	m_pD3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, _pLineImage->iVertices );
 }
 
 VOID TileMapBase::ChangePixel( LPDIRECT3DTEXTURE9 _pTexture, INT _iX, INT _iY, DWORD _dColor )
@@ -91,7 +91,7 @@ VOID TileMapBase::ChangePixel( LPDIRECT3DTEXTURE9 _pTexture, INT _iX, INT _iY, D
 
 HRESULT	TileMapBase::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
 {
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer(	_nVertex * _Size,
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer(	_nVertex * _Size,
 		0,
 		_FVF,
 		D3DPOOL_DEFAULT,
@@ -122,7 +122,7 @@ HRESULT	TileMapBase::SetVB( LPDIRECT3DVERTEXBUFFER9 _pVB, LPVOID _pvertices, INT
 
 HRESULT	TileMapBase::CreateIB( LPDIRECT3DINDEXBUFFER9* _ppIB, INT _nIndex, INT _Size )
 {
-	if( FAILED( m_pd3dDevice->CreateIndexBuffer(	_nIndex * _Size,
+	if( FAILED( m_pD3dDevice->CreateIndexBuffer(	_nIndex * _Size,
 		0,
 		D3DFMT_INDEX32,
 		D3DPOOL_DEFAULT,

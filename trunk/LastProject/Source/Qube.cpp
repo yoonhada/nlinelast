@@ -124,7 +124,7 @@ VOID CQube::Update( CBoundBox * pBB )
 	Set_ControlTranslate( 2, m_vPos.z );
 
 	Calcul_MatWorld();
-	//m_pd3dDevice->SetTransform( D3DTS_WORLD, &m_matWorld );
+	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_matWorld );
 }
 
 //VOID CQube::Translate()

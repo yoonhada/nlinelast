@@ -96,7 +96,7 @@ VOID GUIEdit::Update()
 		m_bMessage = TRUE;
 	}
 
-	GUIFont::GetInstance().Create( L"휴먼매직체", 20, 20, m_pd3dDevice );
+	GUIFont::GetInstance().Create( L"휴먼매직체", 20, 20, m_pD3dDevice );
 	SIZE Size;
 	GUIFont::GetInstance().GetTextSize( m_Data.Str, Size );
 	m_Data.img2DCaret.vecPosition.x = static_cast<FLOAT>( m_Data.iX + Size.cx );

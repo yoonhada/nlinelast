@@ -30,7 +30,7 @@ public:
 	virtual INT		GetSceneState();
 
 private:
-	LPDIRECT3DDEVICE9		m_pd3dDevice;
+	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
 	HWND					m_hWnd;
 	

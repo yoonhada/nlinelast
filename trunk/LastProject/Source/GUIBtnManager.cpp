@@ -27,7 +27,7 @@ VOID GUIBtnManager::Create( DWORD _dID, DWORD _dStyle,
 	pData->ID	=	_dID;
 
 	//	Init Btn
-	pData->pGUIBtn = new GUIBtn( m_pd3dDevice, m_pSprite );
+	pData->pGUIBtn = new GUIBtn( m_pD3dDevice, m_pSprite );
 
 	pData->pGUIBtn->Create( _dID,
 							_dStyle,
@@ -50,7 +50,7 @@ VOID GUIBtnManager::Create( DWORD _dID, DWORD _dStyle, FLOAT _fX, FLOAT _fY, FLO
 	pData->ID	=	_dID;
 
 	//	Init Btn
-	pData->pGUIBtn = new GUIBtn( m_pd3dDevice, m_pSprite );
+	pData->pGUIBtn = new GUIBtn( m_pD3dDevice, m_pSprite );
 
 	pData->pGUIBtn->Create( _dID,
 							_dStyle,

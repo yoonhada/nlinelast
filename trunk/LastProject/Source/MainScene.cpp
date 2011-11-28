@@ -43,11 +43,8 @@ VOID	CMainScene::Clear()
 	m_pMatrices		= NULL;
 	m_pCamera		= NULL;
 	m_pD3dDevice	= NULL;
-	m_pBill			= NULL;
-	//m_pMyCharactor	= NULL;
 	m_pCharactors	= NULL;
 	m_pAxis			= NULL;
-	m_pGrid			= NULL;
 	m_pMonster		= NULL;
 	m_pTileMap		= NULL;
 	m_pASEViewer	= NULL;
@@ -57,10 +54,6 @@ VOID	CMainScene::Clear()
 	m_pOptionScene	= NULL;
 
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
-
-	//m_bHost = FALSE;
-	//m_iClientNumber = 0;
-	m_pLogo		= NULL;
 }
 
 HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprite, HWND a_hWnd )
@@ -82,10 +75,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pCamera = new CCamera;
 	m_pCamera->Create( m_pD3dDevice );
 
-	//그리드 생성
-	m_pGrid = new CGrid;
-	m_pGrid->Create( m_pD3dDevice );
-
 	//캐릭터 생성
 	CreateCharactor();
 
@@ -103,6 +92,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pLight->Create( m_pD3dDevice );
 
 	//맵 생성
+	// Error 예외생성 
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
 	m_pASEViewer->Create(  L"ASE File/Map/Stage_Beta.ASE", L"ASE File/Map/Stage_Beta_Box.BBX" );
 
@@ -136,29 +126,17 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 HRESULT CMainScene::Release()
 {
+	SAFE_DELETE ( m_pLight );
+	SAFE_DELETE( m_pAxis );
+	SAFE_DELETE( m_pOptionScene );
+	SAFE_DELETE( m_pMainGUI );
+	SAFE_DELETE( m_pGameEvent );
+	SAFE_DELETE( m_pTileMap );
 	SAFE_DELETE ( m_pCamera );
 
-	SAFE_DELETE ( m_pGrid );
-
-	//SAFE_DELETE( m_pMyCharactor );
-
-	//SAFE_DELETE_ARRAY( m_pCharactors );
-
-	//SAFE_DELETE( m_pMonster );
-
-	//SAFE_DELETE ( m_pASEViewer );
-
-	SAFE_DELETE ( m_pLight );
-
-	SAFE_DELETE( m_pBill );
-
+#ifdef _DEBUG
 	SAFE_DELETE( m_pAxis );
-
-	SAFE_DELETE_ARRAY( m_pLogo );
-
-	SAFE_DELETE( m_pMainGUI );
-	SAFE_DELETE( m_pOptionScene );
-
+#endif // _DEBUG
 
 	return S_OK;
 }
@@ -166,44 +144,29 @@ HRESULT CMainScene::Release()
 VOID CMainScene::CreateCharactor()
 {
 	//캐릭터 생성
-	FLOAT fYawZero = 1.0f;
 	m_pCharactors = CObjectManage::GetInstance()->Get_Charactors();
 
-	for ( int i = 0; i < m_iMaxCharaNum; ++i )
+	for(INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		m_pCharactors[i].Create(m_pD3dDevice);
-		m_pCharactors[i].LoadKindChar( i );
-	}
-
-	//m_pMyCharactor = CObjectManage::GetInstance()->Get_Charactors();
-	//m_pCharactors[0].LoadKindChar( 0 );
-	m_pCharactors[0].Set_Active( TRUE );
-	//m_pMyCharactor->Create( m_pD3dDevice );
-	//m_pMyCharactor->LoadKindChar( 3 );
-	//m_pMyCharactor->Set_Active( TRUE );
-	CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[0].GetBoundBox() );
-
-	for(INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
-	{
-		//m_pCharactors[Loop].Create( m_pD3dDevice );
+		m_pCharactors[Loop].Create(m_pD3dDevice);
 		m_pCharactors[Loop].LoadKindChar( Loop );
-		m_pCharactors[Loop].Set_Position( D3DXVECTOR3(0, 0, 0) );
+
+		if (Loop == 0)
+		{
+			m_pCharactors[0].Set_Active( TRUE );
+		}
+		else
+		{
+			m_pCharactors[Loop].Set_Position( D3DXVECTOR3(0, 0, 0) );
+		}
 		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
-
-		//D3DXVECTOR3 vec1 = m_pCharactors[Loop].GetBoundBox()->GetPosition();
 	}
-
-	// 인풋 업데이트
-	//FLOAT fMoveSpeed = 50.0f;
-	//FLOAT fRotateSpeed = 150.0f; 
-	//CInput::GetInstance()->Update( fMoveSpeed, fRotateSpeed, CFrequency::GetInstance()->getFrametime() );
 }
 
 VOID	CMainScene::Update()
 {
 	// 캐릭터: 인풋 값 받아오기
 	m_pCharactors[0].UpdateByInput();
-	m_pCharactors[0].Update();
 	if ( m_pCharactors[0].CollisionAtk( ) )
 	{
 		D3DXMATRIXA16 mat;
@@ -211,7 +174,7 @@ VOID	CMainScene::Update()
 		m_pCharactors[0].BreakQube( mat );
 	}
 
-	//카메라: 캐릭터 위치,각도 받아오기
+	// 카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
 		m_pCharactors[0].Get_CharaPos2Camera(), 
 		m_pCharactors[0].Get_PreCharaPos2Camera(), 
@@ -219,54 +182,24 @@ VOID	CMainScene::Update()
 		m_pCharactors[0].Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
-	m_pCamera->CheckObjectCollision( m_pCamera->GetEye(), m_pCharactors[0].Get_CharaPos(), m_pCharactors[0].Get_CharaAngle() );
+	m_pCamera->CheckObjectCollision( 
+		m_pCamera->GetEye(), 
+		m_pCharactors[0].Get_CharaPos(), 
+		m_pCharactors[0].Get_CharaAngle() );
 
-	FLOAT fYawZero = 1.0f;
-
+	// 다른 플레이어는 값으로 이동
 	for( INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
-	{	
-		//다른 플레이어는 값으로 이동
-		//if( m_pCharactors[Loop].Get_Active() )
-		//{
-		//CDebugConsole::GetInstance()->Messagef( L"CHECK\n" );
+	{			
 		m_pCharactors[Loop].UpdateOtherPlayer();
-		//m_pCharactors[Loop].Update();
-		//}
 	}
-
-	////static FLOAT TimeElapsed = 0.0f;
-	//static FLOAT fMonsterRun = 0.0f;
-	//static FLOAT fMonsterAngle = 0.0f;
-	////TimeElapsed += CFrequency::GetInstance()->getFrametime();
-	////if( TimeElapsed >= 0.1f )
-	////{
-	//	fMonsterRun += 1.0f * CFrequency::GetInstance()->getFrametime();
-	//	fMonsterAngle += 0.3f * CFrequency::GetInstance()->getFrametime();
-	//	//TimeElapsed = 0.0f;
-	//}
 
 	m_pMonster->Update();
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 
-	// 아이템 생성
-	if (CInput::GetInstance()->Get_NumKey(3))
-	{
-		m_pFirstAidKit->SetActive(TRUE);
-	}
-	if (CInput::GetInstance()->Get_NumKey(4))
-	{
-		m_pFirstAidKit->SetActive(FALSE);
-	}
-
+	// 아이템 쓸까나??
 	m_pFirstAidKit->Update();
 
-	//if( CInput::GetInstance()->Get_Rbutton() )
-	//{
-	//	//m_pMonster->Set_iSelectedFrameNum( 1 );
-	//}
-
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
-
 	m_pASEViewer->Update();
 
 	m_pMainGUI->Update();
@@ -289,21 +222,13 @@ VOID	CMainScene::Render()
 	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pASEViewe->Get_MatWorld() );
 	m_pASEViewer->Render();
 
-	m_pCharactors[0].Render();
-
-	for( INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
+	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
 		if( m_pCharactors[Loop].Get_Active() )
 		{
 			m_pCharactors[Loop].Render();
 		}
 	}
-
-	//로고
-	//for( INT Loop=0; Loop<6; ++Loop )
-	//{
-	//	m_pLogo[Loop].Render();
-	//}
 
 	m_pMonster->Render();
 
@@ -317,10 +242,7 @@ VOID	CMainScene::Render()
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pTileMap->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
-#endif
 
-
-#ifdef _DEBUG
 	TwDraw();
 #endif
 
@@ -331,7 +253,6 @@ VOID	CMainScene::Render()
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
-
 }
 
 INT CMainScene::GetSceneNext()

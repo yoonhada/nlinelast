@@ -527,7 +527,7 @@ VOID CCharactor::UpdateByInput(  )
 	a_fAngle += m_fAngle;
 	
 	// 360도 넘으면 라디언 360 빼기.
-	const float f360 = DEG2RAD( 360.0f );
+	const float f360 = D3DXToRadian( 360.0f );
 	a_fAngle < 0.0f ? a_fAngle += f360 : ( a_fAngle > f360 ? a_fAngle -= f360 : NULL );
 
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
@@ -567,6 +567,8 @@ VOID CCharactor::UpdateByInput(  )
 	Set_ControlTranslate( 2, m_vControl.z );
 	Set_ControlRotate( 1, m_fAngle + m_fAniAngle + m_fAniAngleAttack );
 	Calcul_MatWorld();
+
+	Update();
 }
 
 VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
@@ -579,7 +581,7 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	if( m_fPreAngle > m_fAngle )
 	{
-		m_fPreAngle -= DEG2RAD( 360.0f );
+		m_fPreAngle -= D3DXToRadian( 360.0f );
 	}
 
 	//CDebugInterface::GetInstance()->AddMessageFloat( "PreAngle", m_fPreAngle  );
@@ -725,14 +727,10 @@ VOID CCharactor::Update()
 		if ( CInput::GetInstance()->Get_Lbutton() )
 		{
 			m_pWeapon->SetKeyA();
-			//네트워크로 현재 애니메이션 상태 보내기
-			//CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_pWeapon->Get_nState() );
-			CDebugConsole::GetInstance()->Messagef( L"Lbutton Action\n" );
 		}
 		if ( CInput::GetInstance()->Get_Rbutton() )
 		{
 			m_pWeapon->SetKeyB();
-			//네트워크로 현재 애니메이션 상태 보내기			
 		}
 
 		m_pWeapon->Update();

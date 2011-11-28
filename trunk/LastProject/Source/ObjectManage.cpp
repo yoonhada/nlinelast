@@ -26,8 +26,7 @@ CObjectManage::~CObjectManage()
 VOID CObjectManage::Clear()
 {
 	m_bHost = FALSE;
-	//m_pMyCharactor = NULL;
-	//m_pCharactors = NULL;
+	m_pCharactors = NULL;
 	m_pASEViewer = NULL;
 	m_iClientNumber = 0;
 	m_iMaxCharaNum = 4;
@@ -40,11 +39,7 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pD3dDevice = a_pD3dDevice;
 	
 	//캐릭터 생성
-	// m_pMyCharactor = new CCharactor;
-
 	m_pCharactors = new CCharactor[ m_iMaxCharaNum ];
-
-	//Set_CharactorList( m_pCharactorList );
 
 	m_pMonster = new CMonster;
 
@@ -55,19 +50,8 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	return S_OK;
 }
 
-//VOID CObjectManage::RefreshCharList()
-//{
-//	m_pCharactorList[0] = m_pMyCharactor;
-//	m_pCharactorList[1] = &m_pCharactors[0];
-//	m_pCharactorList[2] = &m_pCharactors[1];
-//	m_pCharactorList[3] = &m_pCharactors[2];
-//
-//	Set_CharactorList( m_pCharactorList );
-//}
-
 HRESULT CObjectManage::Release()
 {
-	//SAFE_DELETE( m_pMyCharactor );
 	SAFE_DELETE_ARRAY( m_pCharactors );
 	SAFE_DELETE( m_pMonster );
 	SAFE_DELETE( m_pFirstAidKit );

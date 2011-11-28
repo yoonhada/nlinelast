@@ -5,22 +5,20 @@
 
 #include "Scene.h"
 
-class CMonster;
-class CBillBoard;
-class CCharactor;
-class CTimeLifeItem;
 class CCamera;
-class Axis;
+class CCharactor;
+class CMonster;
+class CTimeLifeItem;
 class ASEViewer;
-class CGameEvent;
 class TileMap;
+class Axis;
+class CGameEvent;
 
 class MainGUI;
 class OptionScene;
 
 class CMainScene : public IScene
 {
-	//friend class CSingleton<CMainManage>;
 public:
 	CMainScene();
 	virtual ~CMainScene();
@@ -42,35 +40,25 @@ private:
 
 	CMatrices*				m_pMatrices;
 	CCamera*				m_pCamera;
-	CGrid*					m_pGrid;
 	CCharactor*				m_pCharactors;
 	CMonster*				m_pMonster;
-	CLight*					m_pLight;
-	CTimeLifeItem * m_pFirstAidKit;
+	CTimeLifeItem *			m_pFirstAidKit;
 
 	TileMap*				m_pTileMap;
 	ASEViewer*				m_pASEViewer;
 	
 	INT						m_iMaxCharaNum;
 
-	CBillBoard*				m_pBill;
 	Axis*					m_pAxis;
-
+	CLight*					m_pLight;
 	CGameEvent*				m_pGameEvent;
-
 	MainGUI*				m_pMainGUI;
 	OptionScene*			m_pOptionScene;
 
-	VOID					CreateCharactor();
-
-	//BOOL m_bHost;
-	//WORD m_iClientNumber;
-
-	//·Î°í
-	CCharactor* m_pLogo;
-
 	INT						m_scnNext;
 	INT						m_scnState;
+
+	VOID					CreateCharactor();
 };
 
 #endif

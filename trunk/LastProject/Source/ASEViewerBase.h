@@ -12,7 +12,7 @@ public:
 	ASEViewerBase( )
 	{
 	}
-	ASEViewerBase( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pd3dDevice( _pd3dDevice )
+	ASEViewerBase( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pD3dDevice( _pd3dDevice )
 	{
 		this->Initialize();
 	}
@@ -77,7 +77,7 @@ public:
 private:
 
 public:
-	LPDIRECT3DDEVICE9		m_pd3dDevice;
+	LPDIRECT3DDEVICE9		m_pD3dDevice;
 };
 
 #endif

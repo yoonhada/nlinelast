@@ -15,7 +15,7 @@ private:
 	HRESULT		SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT _nIndex, INT _Size );
 
 public:
-	TileMapBase( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pd3dDevice( _pd3dDevice )
+	TileMapBase( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pD3dDevice( _pd3dDevice )
 	{
 		this->Initialize();
 	}
@@ -79,7 +79,7 @@ public:
 	VOID		ChangePixel( LPDIRECT3DTEXTURE9 _pTexture, INT _iX, INT _iY, DWORD _dColor );
 
 private:
-	LPDIRECT3DDEVICE9		m_pd3dDevice;
+	LPDIRECT3DDEVICE9		m_pD3dDevice;
 
 public:
 

@@ -41,7 +41,7 @@ D3DXVECTOR2 CBillBoard::m_pTexUV[16][4] =
 
 
 CBillBoard::CBillBoard( LPDIRECT3DDEVICE9 _pd3dDevice )
-: m_pd3dDevice( _pd3dDevice )
+: m_pD3dDevice( _pd3dDevice )
 , m_nType( 0 )
 , m_nStep( 0 )
 , m_dwTick( 0 )
@@ -67,10 +67,10 @@ HRESULT CBillBoard::Create()
 {
 	Release();
 	Clear();
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill1.jpg", &m_pTexBillboard[0] );		// Äô
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill2.jpg", &m_pTexBillboard[1] );		// ±â´ö
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill3.jpg", &m_pTexBillboard[2] );		// ´ö
-	D3DXCreateTextureFromFile( m_pd3dDevice, L"img/Bill4.jpg", &m_pTexBillboard[3] );		// ´õ·¯
+	D3DXCreateTextureFromFile( m_pD3dDevice, L"img/Bill1.jpg", &m_pTexBillboard[0] );		// Äô
+	D3DXCreateTextureFromFile( m_pD3dDevice, L"img/Bill2.jpg", &m_pTexBillboard[1] );		// ±â´ö
+	D3DXCreateTextureFromFile( m_pD3dDevice, L"img/Bill3.jpg", &m_pTexBillboard[2] );		// ´ö
+	D3DXCreateTextureFromFile( m_pD3dDevice, L"img/Bill4.jpg", &m_pTexBillboard[3] );		// ´õ·¯
 	return S_OK;
 }
 
@@ -99,26 +99,26 @@ VOID CBillBoard::Update()
 
 VOID CBillBoard::Render()
 {
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
-	//m_pd3dDevice->SetRenderState( D3DRS_ALPHAREF, (DWORD)0x0000009 );
-	//m_pd3dDevice->SetRenderState( D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
+	m_pD3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
+	//m_pD3dDevice->SetRenderState( D3DRS_ALPHAREF, (DWORD)0x0000009 );
+	//m_pD3dDevice->SetRenderState( D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
 
-	//m_pd3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, TRUE );
-	m_pd3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCCOLOR );
-	m_pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ONE );
-	m_pd3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );
+	//m_pD3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, TRUE );
+	m_pD3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCCOLOR );
+	m_pD3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ONE );
+	m_pD3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );
 
-	m_pd3dDevice->SetFVF( _EFFECT::FVF );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &m_matInver );
+	m_pD3dDevice->SetFVF( _EFFECT::FVF );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_matInver );
 
-	m_pd3dDevice->SetTexture( 0, m_pTexBillboard[m_nType] );
-	m_pd3dDevice->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, m_pVtx, sizeof( _EFFECT ) );
+	m_pD3dDevice->SetTexture( 0, m_pTexBillboard[m_nType] );
+	m_pD3dDevice->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, m_pVtx, sizeof( _EFFECT ) );
 
-	m_pd3dDevice->SetTexture( 0, NULL );
-	m_pd3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
-	//m_pd3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, FALSE );
+	m_pD3dDevice->SetTexture( 0, NULL );
+	m_pD3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
+	//m_pD3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, FALSE );
 
-	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &m_matWorld ); 
+	m_pD3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_matWorld ); 
 }
 
