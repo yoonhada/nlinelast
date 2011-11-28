@@ -42,6 +42,8 @@ VOID TileMap::InitTileImage()
 	FLOAT incV = static_cast<FLOAT>( 1.0f / m_Data.Info.iTileHeight );
 
 	INT l = 0;
+	// test
+	FLOAT fInverseZ = static_cast<FLOAT>( m_Data.Info.iTileHeight-1 );
 	for( INT z=0 ; z<m_Data.Info.iTileHeight ; z++ )
 	{
 		for( INT x=0 ; x<m_Data.Info.iTileWidth ; x++ )
@@ -51,10 +53,14 @@ VOID TileMap::InitTileImage()
 			pTileVertex[ l ].vecPosition.z = m_Data.Info.vecStart.z + m_Data.Info.fTileSize * static_cast<FLOAT>( z );
 
 			pTileVertex[ l ].vecTexcoord.x = incU * static_cast<FLOAT>( x );
-			pTileVertex[ l ].vecTexcoord.y = incV * static_cast<FLOAT>( z );
+			//pTileVertex[ l ].vecTexcoord.y = incV * static_cast<FLOAT>( z );
+			// test
+			pTileVertex[ l ].vecTexcoord.y = incV * fInverseZ;
 
 			l++;
 		}
+		// test
+		fInverseZ--;
 	}
 	//	Set Index
 	m_Data.imgTile.iIndices = ( m_Data.Info.iTileWidth - 1 ) * ( m_Data.Info.iTileHeight - 1 ) * 2;
@@ -197,8 +203,12 @@ BOOL TileMap::SetInfo( DWORD _dType, INT _iX, INT _iY )
 
 BOOL TileMap::SetInfo( DWORD _dType, FLOAT _fX, FLOAT _fZ )
 {
+	//INT iX = static_cast<INT>( ( _fX - m_Data.Info.vecStart.x ) / m_Data.Info.fTileSize );
+	//INT iY = static_cast<INT>( ( _fZ - m_Data.Info.vecStart.z ) / m_Data.Info.fTileSize );
+
+	// test
 	INT iX = static_cast<INT>( ( _fX - m_Data.Info.vecStart.x ) / m_Data.Info.fTileSize );
-	INT iY = static_cast<INT>( ( _fZ - m_Data.Info.vecStart.z ) / m_Data.Info.fTileSize );
+	INT iY = static_cast<INT>( ( m_Data.Info.vecEnd.z - _fZ ) / m_Data.Info.fTileSize );
 
 	if( 0 > iX || iX >= m_Data.Info.iGraphWidth )return FALSE;
 	if( 0 > iY || iY >= m_Data.Info.iGraphHeight )return FALSE;
