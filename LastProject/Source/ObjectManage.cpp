@@ -52,7 +52,7 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	//Set_CharactorList( m_pCharactorList );
 
-	m_pMonster = new CMonster[ m_iMaxCharaNum ];
+	m_pMonster = new CMonster;
 
 	m_pFirstAidKit = new CTimeLifeItem;
 
@@ -75,7 +75,7 @@ HRESULT CObjectManage::Release()
 {
 	//SAFE_DELETE( m_pMyCharactor );
 	SAFE_DELETE_ARRAY( m_pCharactors );
-	SAFE_DELETE_ARRAY( m_pMonster );
+	SAFE_DELETE( m_pMonster );
 	SAFE_DELETE( m_pFirstAidKit );
 	SAFE_DELETE( m_pASEViewer );
 

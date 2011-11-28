@@ -72,6 +72,7 @@ public:
 	VOID RemoveAll( );
 	std::vector <CBoundBox*> * GetMapVector( NODE *pNode, D3DXVECTOR3 vPos );
 
+	VOID SetMonsAtkClear();
 
 
 private:

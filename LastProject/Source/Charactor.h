@@ -44,7 +44,7 @@ public:
 
 	CCharactor();
 	//CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice );
-	~CCharactor();
+	virtual ~CCharactor();
 
 	VOID Clear();
 	HRESULT Create() { return S_OK; }

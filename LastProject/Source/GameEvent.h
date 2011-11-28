@@ -9,13 +9,27 @@
 
 class CGameEvent : public IObject
 {
-private:
+public:
+	// Host
+	BOOL m_bHost;
+
+	// Char
+	INT m_iMaxCharaNum;
+	INT * m_pAttackPoint;
+	INT * m_pShotedPoint;
+
+	// Monster
+	INT m_nHPMonstor;
+	
+	// Event
+	INT m_nGameEvent;
 
 public:
 	CGameEvent();
+	CGameEvent( INT );
 	virtual ~CGameEvent();
 
-	VOID Clear()		{}
+	VOID Clear();
 	HRESULT Create();	///< 초기화
 	HRESULT Release();	///< 오브젝트들 제거
 	VOID Update();		///< Update

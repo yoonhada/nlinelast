@@ -485,7 +485,7 @@ const D3DXMATRIXA16& CWeapon::Get_MatWorld()
 
 VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 {
-	CDebugConsole::GetInstance()->Messagef("Weapon Current Frame %d \n", m_pMap->GetCurrentFrame() );
+	//CDebugConsole::GetInstance()->Messagef("Weapon Current Frame %d \n", m_pMap->GetCurrentFrame() );
 	D3DMATERIAL9 mtrl;
 
 	mtrl.Diffuse = D3DXCOLOR( 0xFFFFFFFF );
