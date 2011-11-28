@@ -43,21 +43,16 @@ VOID HelpGUI::CreateBackground()
 
 VOID HelpGUI::CreateListbox()
 {
-	GUIBase::IMAGEPARAM imgFrontParam, imgBackParam;
+	FLOAT fX		= m_fX + 100.0f;
+	FLOAT fY		= m_fY + 100.0f;
+	FLOAT fWidth	= 200.0f;
+	FLOAT fHeight	= 400.0f;
 
-	imgFrontParam.fX		= m_fX + 100.0f;
-	imgFrontParam.fY		= m_fY + 100.0f;
-	imgFrontParam.fWidth	= 200.0f;
-	imgFrontParam.fHeight	= 400.0f;
+	GUIBase::IMAGEPARAM imgBackground;
 
-	imgBackParam.fX			= m_fX + 100.0f;
-	imgBackParam.fY			= m_fY + 100.0f;
-	imgBackParam.fWidth		= 200.0f;
-	imgBackParam.fHeight	= 1200.0f;
+	m_pGUIBase->AddFileName( 0, imgBackground, L"Img\\HelpScene\\Help_Listbox.png" );
 
-	m_pGUIBase->AddFileName( 0, imgBackParam, L"Img\\HelpScene\\Help_Listbox.png" );
-
-	m_pGUIListbox->Create( imgFrontParam, imgBackParam );
+	m_pGUIListbox->Create( fX, fY, fWidth, fHeight, imgBackground );
 
 	m_pGUIListbox->AddItem( L"NULL값은 들어 갔나요?" );
 	m_pGUIListbox->AddItem( L"NULL값은 들어 갔나요?" );

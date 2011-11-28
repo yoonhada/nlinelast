@@ -15,6 +15,9 @@ class ASEViewer;
 class CGameEvent;
 class TileMap;
 
+class MainGUI;
+class OptionScene;
+
 class CMainScene : public IScene
 {
 	//friend class CSingleton<CMainManage>;
@@ -57,6 +60,9 @@ private:
 	Axis*					m_pAxis;
 
 	CGameEvent*				m_pGameEvent;
+
+	MainGUI*				m_pMainGUI;
+	OptionScene*			m_pOptionScene;
 
 	VOID					CreateCharactor();
 

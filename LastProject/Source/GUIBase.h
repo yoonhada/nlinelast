@@ -21,60 +21,59 @@ private:
 	HRESULT		SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT _nIndex, INT _Size );
 
 	HRESULT		LoadTextureFromFile(	LPDIRECT3DTEXTURE9* _ppOutTexture, 
-										LPCWSTR FileName, 
-										UINT iWidth	 = D3DX_DEFAULT_NONPOW2, 
-										UINT iHeight = D3DX_DEFAULT_NONPOW2, 
-										D3DCOLOR colClear = NULL );
+										LPCWSTR				_FileName, 
+										UINT				_iWidth		= D3DX_DEFAULT_NONPOW2, 
+										UINT				_iHeight	= D3DX_DEFAULT_NONPOW2, 
+										D3DCOLOR			_colClear	= NULL );
 
 public:
 	enum { GBS_TOPLEFT = 0, GBS_CENTER };
 
 	//	struct Vertex
-	typedef struct _VERTEX
+	typedef struct _GUIVERTEX
 	{
 		enum { FVF = D3DFVF_XYZ | D3DFVF_TEX1 };
 
 		D3DXVECTOR3	vecPosition;
 		D3DXVECTOR2	vecTexcoord;
-	}VERTEX, *LPVERTEX;
+	}GUIVERTEX, *LPGUIVERTEX;
 
 	//	struct Index
-	typedef struct _INDEX
+	typedef struct _GUIINDEX
 	{
 		DWORD _0, _1, _2;
-	}INDEX, *LPINDEX;
+	}GUIINDEX, *LPGUIINDEX;
 
 	//	struct Texture
-	typedef struct _TEXTURE
+	typedef struct _GUITEXTURE
 	{
 		LPDIRECT3DTEXTURE9	pTex;
 		INT					iFrameSpeed;
 		
-		_TEXTURE()
-		{	//	iFrameSpeed = 1000;
+		_GUITEXTURE()
+		{	
+			iFrameSpeed = 1000;
 			pTex = NULL;
 		}
-		~_TEXTURE()
+		~_GUITEXTURE()
 		{
 			if( pTex != NULL )
 				pTex->Release();
 			pTex = NULL;
 		}
-	}TEXTURE, *LPTEXTURE;
+	}GUITEXTURE, *LPGUITEXTURE;
+
+	typedef std::vector< LPGUITEXTURE >	 GUITEXTUREVECTOR;
+	typedef std::vector< GUITEXTUREVECTOR > GUITEXTUREVECTOR2;
 
 	//	struct Image 
 	//	IMAGE -> IMAGE3D로 수정
-	typedef std::vector< LPTEXTURE >	 TEXTUREVECTOR;
-	typedef std::vector< TEXTUREVECTOR > TEXTUREVECTOR2;
-
-	typedef struct _IMAGE
+	typedef struct _IMAGE3D
 	{
 		LPDIRECT3DVERTEXBUFFER9	pVB;
-		INT						iNumVertices;	//	4로 고정인데 있을 필요가 있나?
 		LPDIRECT3DINDEXBUFFER9	pIB;
-		INT						iNumIndices;	//	2로 고정인데 있을 필요가 있나?
 		
-		TEXTUREVECTOR2			vec2Tex;	
+		GUITEXTUREVECTOR2		vec2Tex;	
 		BOOL					bAniPlay;
 		DWORD					dCurrentTime;
 		DWORD					dBeginTime;
@@ -85,7 +84,7 @@ public:
 		D3DXVECTOR3				vecRotate;
 		D3DXVECTOR3				vecTrans;
 		
-		_IMAGE()
+		_IMAGE3D()
 		{
 			pVB		= NULL;
 			pIB		= NULL;
@@ -100,17 +99,17 @@ public:
 			vecRotate	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 			vecTrans	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 		}
-		~_IMAGE()
+		~_IMAGE3D()
 		{
 			if( pVB != NULL )
 				pVB->Release();
 			if( pIB != NULL )
 				pIB->Release();
 			
-			TEXTUREVECTOR2::iterator itE2;
+			GUITEXTUREVECTOR2::iterator itE2;
 			for( itE2=vec2Tex.begin() ; itE2!=vec2Tex.end() ; itE2++ )
 			{
-				TEXTUREVECTOR::iterator itE;
+				GUITEXTUREVECTOR::iterator itE;
 				for( itE=itE2->begin() ; itE!=itE2->end() ; itE++ )
 					delete (*itE);
 			}
@@ -118,7 +117,7 @@ public:
 			pVB		= NULL;
 			pIB		= NULL;
 		}
-	}IMAGE, *LPIMAGE;
+	}IMAGE3D, *LPIMAGE3D;
 
 	//	struct Image2D
 	typedef struct _IMAGE2D
@@ -127,7 +126,7 @@ public:
 		D3DXVECTOR3			vecCenter;
 		D3DXVECTOR3			vecPosition;
 
-		TEXTUREVECTOR2		vec2Tex;	
+		GUITEXTUREVECTOR2	vec2Tex;	
 		BOOL				bAniPlay;
 		DWORD				dCurrentTime;
 		DWORD				dBeginTime;
@@ -144,39 +143,53 @@ public:
 		}
 		~_IMAGE2D()
 		{
-			TEXTUREVECTOR2::iterator itE2;
+			GUITEXTUREVECTOR2::iterator itE2;
 			for( itE2=vec2Tex.begin() ; itE2!=vec2Tex.end() ; itE2++ )
 			{
-				TEXTUREVECTOR::iterator itE;
+				GUITEXTUREVECTOR::iterator itE;
 				for( itE=itE2->begin() ; itE!=itE2->end() ; itE++ )
 					delete (*itE);
 			}
 		}
 	}IMAGE2D, *LPIMAGE2D;
 
-	
+	//	iFrameSpeed를 추가 해야 된다
 	//	struct Param
-	typedef std::vector< LPWSTR >		TCHARVECTOR;
-	typedef std::vector< TCHARVECTOR >	TCHARVECTOR2;
+	typedef struct _GUITEXTUREINFO
+	{
+		TCHAR	FileName[ 1024 ];
+		INT		iFrameSpeed;
+	}GUITEXTUREINFO, *LPGUITEXTUREINFO;
+
+	typedef std::vector< LPGUITEXTUREINFO >		GUITEXTUREINFOVECTOR;
+	typedef std::vector< GUITEXTUREINFOVECTOR >	GUITEXTUREINFOVECTOR2;
 
 	typedef struct _IMAGEPARAM
-	{
-		DWORD			dPivotType;
-		FLOAT			fX, fY;
-		FLOAT			fWidth, fHeight;
+	{	//	fX, fY, fWidth, fHeight를 따로 나누는것은 고려해봐야 될 문제...
+		//	텍스쳐를 생성할때 써야되니깐...
+		//	분리 하고 싶은데 뭔가가 조금 찝찝해...
+		//	외부에서 편집할 수 있게 할때 필요함!
+		//	코드로 입력 받는것은 불편하니깐 일단 Create에서 imgParam의 fx, fy, fwidth, fheight를 입력받자
+		DWORD					dPivotType;
+		FLOAT					fX, fY;
+		FLOAT					fWidth, fHeight;
 
-		TCHARVECTOR2	vec2FileName;
+		GUITEXTUREINFOVECTOR2	vec2FileName;
 
 		_IMAGEPARAM()
 		{
-			dPivotType = GBS_TOPLEFT;
+			dPivotType	= GBS_TOPLEFT;
+			fX			= 0.0f;
+			fY			= 0.0f;
+			fWidth		= 10.0f;
+			fHeight		= 10.0f;
 		}
 		~_IMAGEPARAM()
 		{
-			TCHARVECTOR2::iterator itE2;
+			GUITEXTUREINFOVECTOR2::iterator itE2;
 			for( itE2=vec2FileName.begin() ; itE2!=vec2FileName.end() ; itE2++ )
 			{
-				TCHARVECTOR::iterator itE;
+				GUITEXTUREINFOVECTOR::iterator itE;
 				for( itE=itE2->begin() ; itE!=itE2->end() ; itE++ )
 					delete (*itE);
 			}
@@ -192,44 +205,26 @@ public:
 		this->Release();
 	}
 
-	//	CreateImage -> CreateImage3D
-	VOID		CreateImage(	IMAGE& _Image,					//	Load Texture
-								DWORD _dPivotType,
-								FLOAT _fX, FLOAT _fY, 
-								FLOAT _fWidth, FLOAT _fHeight,	//	_pFileName == NULL -> CreateTexture
-								LPCWSTR _pFileName = NULL );
-
 	//	참조형 말고 포인트형으로 받자 
 	//	통일통일~ 우리의 소원은 통일~
-	VOID		CreateImage( IMAGE& _Image, IMAGEPARAM& _imgParam );	//	Load Texture
+	//	외부 변형 툴 만들었을때 쓸꺼
+	VOID		CreateImage3D( IMAGE3D& _Image3D, IMAGEPARAM& _imgParam );
 	VOID		CreateImage2D( IMAGE2D& _Image2D, IMAGEPARAM& _imgParam );
+	//	코드로 직접 입력할때 쓸꺼
+	VOID		CreateImage3D( IMAGE3D& _Image3D, FLOAT _fX, FLOAT _fY, FLOAT _fWidht, FLOAT _fHeight, IMAGEPARAM& _imgParam );
+	VOID		CreateImage2D( IMAGE2D& _Image2D, FLOAT _fX, FLOAT _fY, FLOAT _fWidht, FLOAT _fHeight, IMAGEPARAM& _imgParam );
 
-	VOID		RenderImage( IMAGE& _Image );
-	VOID		RenderImage2D( IMAGE2D& _Image2D );
+	VOID		RenderImage3D( LPIMAGE3D _pImage3D );
+	VOID		RenderImage2D( LPIMAGE2D _pImage2D );
 
-	VOID		ImageScale( IMAGE& _Image, FLOAT _fX, FLOAT _fY, FLOAT _fZ );
-	VOID		ImageTranslate( IMAGE& _Image, FLOAT _fX, FLOAT _fY, FLOAT _fZ );
+	VOID		Image3DScale( LPIMAGE3D _pImage3D, FLOAT _fX, FLOAT _fY, FLOAT _fZ );
+	VOID		Image3DTranslate( LPIMAGE3D _pImage3D, FLOAT _fX, FLOAT _fY, FLOAT _fZ );
 
-	VOID		AddFileName( INT _iNumAni, IMAGEPARAM& _imgParam, LPWSTR _pFileName );
-	VOID		AddTexture( INT _iNumAni, IMAGE& _Image, LPWSTR _pFileName );
-	VOID		AddTexture( INT _iNumAni, IMAGE2D& _Image2D, LPWSTR _pFileName );
-
-	//	DrawFontOnTexture
-	VOID		SetFont( LPWSTR _FontType, INT _iSize, INT _iWeight );
-	VOID		DrawFontOnTexture( LPWSTR _Str, COLORREF _Color, LPDIRECT3DTEXTURE9 _pTexture, INT _iWidth, INT _iHeight );
-	//	End
+	VOID		AddFileName( INT _iNumAni, IMAGEPARAM& _imgParam, LPWSTR _pFileName, INT _iFrameSpeed  = 1000 );
+	VOID		AddTexture( INT _iNumAni, IMAGE3D& _Image3D, LPGUITEXTUREINFO _pGUITextureInfo );
+	VOID		AddTexture( INT _iNumAni, IMAGE2D& _Image2D, LPGUITEXTUREINFO _pGUITextureInfo );
+	
 private:
-	//	DrawFontOnTexture
-	HFONT				m_hFont;
-	COLORREF			m_colFont;
-	//	End
-
-	//	Animation Test
-	DWORD				m_dBeginTime;
-	DWORD				m_dCurrentTime;
-
-	//	End
-	INT					m_iFrameSpeed;
 
 public:
 	LPDIRECT3DDEVICE9	m_pd3dDevice;

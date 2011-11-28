@@ -23,7 +23,7 @@ VOID GUIScrollbar::Release()
 {
 }
 
-VOID GUIScrollbar::Create( GUIBase::IMAGEPARAM& _imgThumb, GUIBase::IMAGEPARAM& _imgBack )
+VOID GUIScrollbar::Create( IMAGEPARAM& _imgThumb, IMAGEPARAM& _imgBack )
 {
 	//	Set Rect
 	SetRect( &m_Data.rtThumb, 0, 0, static_cast< INT >( _imgThumb.fWidth ), static_cast< INT >( _imgThumb.fHeight ) );
@@ -37,8 +37,8 @@ VOID GUIScrollbar::Create( GUIBase::IMAGEPARAM& _imgThumb, GUIBase::IMAGEPARAM& 
 	SetStyle( m_dStyle );
 
 	//	Create Image
-	CreateImage( m_Data.imgThumb, _imgThumb );
-	CreateImage( m_Data.imgBack, _imgBack );
+	CreateImage3D( m_Data.img3DThumb, _imgThumb );
+	CreateImage3D( m_Data.img3DBack, _imgBack );
 }
 
 VOID GUIScrollbar::SetStyle( DWORD _dStyle )
@@ -116,18 +116,18 @@ VOID GUIScrollbar::SetRange( INT _iMin, INT _iMax )
 
 VOID GUIScrollbar::Render()
 {
-	RenderImage( m_Data.imgBack );
-	RenderImage( m_Data.imgThumb );
+	RenderImage3D( &m_Data.img3DBack );
+	RenderImage3D( &m_Data.img3DThumb );
 }
 
 VOID GUIScrollbar::Update()
 {
 	RECT trt;
 	GetThumbRect( &trt );
-	ImageTranslate(	m_Data.imgThumb, 
-					static_cast< FLOAT >( m_Data.ptBackPosition.x + trt.left + m_Data.imgThumb.vecScale.x * 0.5f ),
-					static_cast< FLOAT >( m_Data.ptBackPosition.y + trt.top + m_Data.imgThumb.vecScale.y * 0.5f ),
-					0.0f );
+	Image3DTranslate(	&m_Data.img3DThumb, 
+						static_cast< FLOAT >( m_Data.ptBackPosition.x + trt.left + m_Data.img3DThumb.vecScale.x * 0.5f ),
+						static_cast< FLOAT >( m_Data.ptBackPosition.y + trt.top + m_Data.img3DThumb.vecScale.y * 0.5f ),
+						0.0f );
 	
 	m_bLKeyUp = TRUE;
 }

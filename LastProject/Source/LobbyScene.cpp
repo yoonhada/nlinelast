@@ -1,90 +1,63 @@
-#include "Stdafx.h"
+#include "stdafx.h"
 #include "LobbyScene.h"
+#include "LobbyGUI.h"
+#include "OptionScene.h"
 
-#include "MainScene.h"
-
-CLobbyScene::CLobbyScene()
+VOID LobbyScene::Initialize()
 {
-	Clear();
+	m_scnNext		= SCENE_MAIN;
+	m_scnState		= SCENE_RUNNING;
+
+	m_pLobbyGUI		= NULL;
+	m_pOptionScene	= NULL;
 }
-CLobbyScene::~CLobbyScene()
+
+VOID LobbyScene::Release()
 {
-	Release();
+	SAFE_DELETE( m_pLobbyGUI );
+	SAFE_DELETE( m_pOptionScene );
 }
 
-VOID CLobbyScene::Clear()
+HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
 {
-
-}
-HRESULT CLobbyScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
-{
-	m_pD3dDevice = a_pD3dDevice;
-
-	// 네트워크
-
-	WSAStartup( MAKEWORD( 2, 2), &m_wsadata );
-	CNetwork::GetInstance();
-	CNetwork::GetInstance()->CreateSocket();
-
-
-	// 파일에서 IP 받아오기
-	FILE* pFile;
-
-	pFile = _wfopen( L"Data/IP.txt", L"r" );
-
-	if( NULL == pFile )
-	{
-		MessageBox(GHWND, L"IP File Load Error", NULL, MB_OK);
-		return E_FAIL;
-	}
-
-	fseek( pFile, 0L, SEEK_SET );
-
-	CHAR szTemp[255];
-	fscanf( pFile, "%s", szTemp );
-
-	fclose(pFile);
-
-	CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 );
-	CNetwork::GetInstance()->CS_LOGON();
-
-	m_scnState	= IScene::SCENE_END;
-	m_scnNext	= IScene::SCENE_MAIN;
-	//CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
-
-	// 접속이 되었다면 로그인 하고 메인 씬으로 변경
-	//if( CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 ) )
-	//{
-	//	CNetwork::GetInstance()->CS_LOGON();
-	//	CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
-	//}
-	//else
-	//{
-	//	MessageBox( NULL, L"Connect Failed", NULL, MB_OK );
-	//}
+	m_pLobbyGUI		= new LobbyGUI( _pd3dDevice, _pSprite, _hWnd );
+	m_pOptionScene	= new OptionScene;
 	
+	m_pLobbyGUI->Create();
+	m_pOptionScene->Create( _pd3dDevice, _pSprite, _hWnd );
+
 	return S_OK;
 }
-HRESULT CLobbyScene::Release()
+
+VOID LobbyScene::Update()
 {
-	return S_OK;
-}
-VOID CLobbyScene::Update()
-{
-	CNetwork::GetInstance()->Update();
+	m_pLobbyGUI->Update();
+	m_pOptionScene->Update();
+
+
+	DWORD dID;
+	m_pLobbyGUI->Command( dID );
+	switch( dID )
+	{
+	case GUIBTN_LOBBY_START:
+		m_scnState = IScene::SCENE_END;
+		break;
+	}
+	
 }
 
-VOID CLobbyScene::Render()
+VOID LobbyScene::Render()
 {
-
+	m_pLobbyGUI->Render();
+	m_pOptionScene->Render();
 }
 
-INT CLobbyScene::GetSceneNext()
+INT LobbyScene::GetSceneNext()
 {
 	return m_scnNext;
 }
 
-INT CLobbyScene::GetSceneState()
+INT LobbyScene::GetSceneState()
 {
 	return m_scnState;
 }

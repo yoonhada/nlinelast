@@ -6,6 +6,8 @@
 */
 
 #include "stdafx.h"
+#include "GUIFont.h"
+#include "GUIWriting.h"
 
 HRESULT CWinBase::Create()
 {
@@ -179,9 +181,14 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	switch (message) 
 	{
 	case WM_CREATE:
+		GUIFont::GetInstance().SetHWND( hWnd );
 		return 0;
 
+	case WM_IME_COMPOSITION:
+		GUIWriting::GetInstance().IMEUpdate( wParam, lParam );
+		break;
 	case WM_CHAR: 
+		GUIWriting::GetInstance().CHARUpdate( wParam, lParam );
 		return 0;
 
 	case WM_SIZE:

@@ -51,7 +51,7 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	//m_pScene = new CLobbyScene;
 	//m_pLoadScene = m_pScene;
 #ifdef _TEST
-	m_pScene			= new CMainScene;
+	m_pScene			= new StoryScene;
 #else
 	m_pScene			= new StoryScene;
 #endif // _DEBUG	
@@ -127,18 +127,23 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 	switch( _scnNext )
 	{
 	case IScene::SCENE_LOGO:
+		CDebugConsole::GetInstance()->Messagef( L"SCENE_LOGO\n" );
 		//m_pNextScene = new CLogoScene;
 		break;
 	case IScene::SCENE_STORY:
-		//m_pNextScene = new StoryScene;
+		CDebugConsole::GetInstance()->Messagef( L"SCENE_STORY\n" );
+		m_pNextScene = new StoryScene;
 		break;
 	case IScene::SCENE_MENU:
+		CDebugConsole::GetInstance()->Messagef( L"SCENE_MENU\n" );
 		m_pNextScene = new MenuScene;
 		break;
 	case IScene::SCENE_LOBBY:
-		//m_pNextScene = new StoryScene;
+		CDebugConsole::GetInstance()->Messagef( L"SCENE_LOBBY\n" );
+		m_pNextScene = new LobbyScene;
 		break;
 	case IScene::SCENE_MAIN:
+		CDebugConsole::GetInstance()->Messagef( L"SCENE_MAIN\n" );
 		m_pNextScene = new CMainScene;
 		break;
 	}

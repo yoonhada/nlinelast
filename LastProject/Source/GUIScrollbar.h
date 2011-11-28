@@ -28,8 +28,8 @@ public:
 
 	typedef struct _DATA
 	{
-		IMAGE	imgBack;
-		IMAGE	imgThumb;
+		IMAGE3D	img3DBack;
+		IMAGE3D	img3DThumb;
 		
 		RECT	rtBack;
 		RECT	rtThumb;
@@ -44,7 +44,7 @@ public:
 		INT		iValue;
 	}DATA, *LPDATA;
 
-	VOID		Create( GUIBase::IMAGEPARAM& _imgThumb, GUIBase::IMAGEPARAM& _imgBack );
+	VOID		Create( IMAGEPARAM& _imgThumb, IMAGEPARAM& _imgBack );
 	VOID		SetStyle( DWORD _dStyle );
 	VOID		SetRange( INT _iMin, INT _iMax );
 
@@ -56,6 +56,7 @@ public:
 	VOID		OnDown( INT x, INT y );
 
 	INT			GetValue(){ return m_Data.iValue; };
+	VOID		SetValue( INT _iValue ){ m_Data.iValue = _iValue; };
 
 private:
 	DATA				m_Data;

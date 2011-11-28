@@ -11,7 +11,12 @@ VOID GUIBackground::Release()
 
 VOID GUIBackground::Create( IMAGEPARAM& _imgParam )
 {
-	CreateImage( m_Data.Image, _imgParam );
+	CreateImage3D( m_Data.Image3D, _imgParam );
+}
+
+VOID GUIBackground::Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidht, FLOAT _fHeight, IMAGEPARAM& _imgParam )
+{
+	CreateImage3D( m_Data.Image3D, _fX, _fY, _fWidht, _fHeight, _imgParam );
 }
 
 VOID GUIBackground::Update()
@@ -20,18 +25,19 @@ VOID GUIBackground::Update()
 
 VOID GUIBackground::Render()
 {
-	RenderImage( m_Data.Image );
+	RenderImage3D( &m_Data.Image3D );
 }
 
 BOOL GUIBackground::NextAnimation()
 {
-	if( m_Data.Image.iCurrentAnimation + 1 >= m_Data.Image.vec2Tex.size() )
+	INT iAnimationSize = m_Data.Image3D.vec2Tex.size();
+	if( m_Data.Image3D.iCurrentAnimation + 1 >= iAnimationSize )
 	{
-		m_Data.Image.iCurrentAnimation = 0;
+		m_Data.Image3D.iCurrentAnimation = 0;
 		return FALSE;
 	}
 
-	m_Data.Image.iCurrentAnimation++;
+	m_Data.Image3D.iCurrentAnimation++;
 
 	return TRUE;
 }

@@ -22,10 +22,11 @@ public:
 
 	typedef struct _DATA
 	{
-		IMAGE		Image;
+		IMAGE3D		Image3D;
 	}DATA, *LPDATA;
 
 	VOID		Create( IMAGEPARAM& _imgParam );
+	VOID		Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidht, FLOAT _fHeight, IMAGEPARAM& _imgParam );
 	VOID		Update();
 	VOID		Render();
 

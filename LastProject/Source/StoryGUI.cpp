@@ -37,21 +37,21 @@ VOID StoryGUI::CreateBackground()
 	imgParam.fWidth		= fWidth;
 	imgParam.fHeight	= fHeight;
 
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_1.jpg" );
-	m_pGUIBase->AddFileName( 1, imgParam, L"Img\\StoryScene\\Story_2.jpg" );
-	m_pGUIBase->AddFileName( 2, imgParam, L"Img\\StoryScene\\Story_3.jpg" );
-	m_pGUIBase->AddFileName( 3, imgParam, L"Img\\StoryScene\\Story_4.jpg" );
-	m_pGUIBase->AddFileName( 4, imgParam, L"Img\\StoryScene\\Story_5.jpg" );
-	m_pGUIBase->AddFileName( 5, imgParam, L"Img\\StoryScene\\Story_6.jpg" );
-	m_pGUIBase->AddFileName( 6, imgParam, L"Img\\StoryScene\\Story_7.jpg" );
-	m_pGUIBase->AddFileName( 7, imgParam, L"Img\\StoryScene\\Story_8.jpg" );
-	m_pGUIBase->AddFileName( 8, imgParam, L"Img\\StoryScene\\Story_9.jpg" );
-	m_pGUIBase->AddFileName( 9, imgParam, L"Img\\StoryScene\\Story_10.jpg" );
-	m_pGUIBase->AddFileName( 10, imgParam, L"Img\\StoryScene\\Story_11.jpg" );
-	m_pGUIBase->AddFileName( 11, imgParam, L"Img\\StoryScene\\Story_12.jpg" );
-	m_pGUIBase->AddFileName( 12, imgParam, L"Img\\StoryScene\\Story_13.jpg" );
-	m_pGUIBase->AddFileName( 13, imgParam, L"Img\\StoryScene\\Story_14.jpg" );
-	m_pGUIBase->AddFileName( 14, imgParam, L"Img\\StoryScene\\Story_15.jpg" );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_1.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_2.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_3.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_4.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_5.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_6.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_7.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_8.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_9.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_10.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_11.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_12.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_13.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_14.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_15.jpg", 3000 );
 
 	m_pGUIBackground->Create( imgParam );
 }
@@ -66,39 +66,12 @@ VOID StoryGUI::CreateButton()
 	FLOAT fWidth	= 50.0f;
 	FLOAT fHeight	= 50.0f;
 
-	imgNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgNormal.fX			= fX;
-	imgNormal.fY			= fY;
-	imgNormal.fWidth		= fWidth;
-	imgNormal.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgNormal, L"Img\\arrow-up-Normal.png" );
-
-	imgHot.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgHot.fX			= fX;
-	imgHot.fY			= fY;
-	imgHot.fWidth		= fWidth;
-	imgHot.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgHot, L"Img\\arrow-up-Hot.png" );
-
-	imgDown.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgDown.fX			= fX;
-	imgDown.fY			= fY;
-	imgDown.fWidth		= fWidth;
-	imgDown.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgDown, L"Img\\arrow-up-Down.png" );
-
-	imgDisable.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgDisable.fX			= fX;
-	imgDisable.fY			= fY;
-	imgDisable.fWidth		= fWidth;
-	imgDisable.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\arrow-up-Disable.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_STORY_NEXT, 0, imgNormal, imgHot, imgDown, imgDisable );
+	m_pGUIBtnManager->Create( GUIBTN_STORY_SKIP, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
 }
 
 VOID StoryGUI::Create()

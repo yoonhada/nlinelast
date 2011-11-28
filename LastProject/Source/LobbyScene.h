@@ -1,32 +1,48 @@
-#ifndef _CLobbyScene_H_
-#define _CLobbyScene_H_
+#pragma once
+#ifndef _LOBBYSCENE_H_
+#define _LOBBYSCENE_H_
 
 #include "Scene.h"
 
-class CLobbyScene : public IScene
+class LobbyGUI;
+class OptionScene;
+
+class LobbyScene : public IScene
 {
-public:
-	CLobbyScene();
-	~CLobbyScene();
+private:
+	VOID		Initialize();
+	VOID		Release();
 
 public:
-	VOID			Clear();
-	virtual HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
-	HRESULT			Release();
+	LobbyScene() 
+	{
+		this->Initialize();
+	}
+	virtual ~LobbyScene()
+	{
+		this->Release();
+	}
+
+	virtual HRESULT	Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd );
 	virtual VOID	Update();
 	virtual VOID	Render();
-
+	
 	virtual INT		GetSceneNext();
 	virtual INT		GetSceneState();
 
 private:
-	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
-
-	//네트워크
-	WSADATA m_wsadata;
-
+	LPDIRECT3DDEVICE9		m_pd3dDevice;
+	LPD3DXSPRITE			m_pSprite;
+	HWND					m_hWnd;
+	
 	INT						m_scnNext;
 	INT						m_scnState;
+
+	LobbyGUI*				m_pLobbyGUI;
+	OptionScene*			m_pOptionScene;
+
+public:
+
 };
 
 #endif

@@ -27,34 +27,29 @@ public:
 	
 	typedef struct _DATA
 	{
-		BOOL	bActivate;
 		RECT	rtText;
 		TCHAR	Str[ 1024 ];
 
-		IMAGE	Image;
+		IMAGE2D	img2DBackground;
+		IMAGE2D	img2DCaret;
 
-		_DATA()
-		{
-			bActivate = FALSE;
-		}
+		INT		iX, iY;
+		//INT		iWidth, iHeight;
+
 	}DATA, *LPDATA;
 
-	VOID		Create( GUIBase::IMAGEPARAM& _imgParam );
-	VOID		Update();
-	VOID		Render();
+	VOID			Create( GUIBase::IMAGEPARAM& _imgParam );
+	VOID			Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, GUIBase::IMAGEPARAM& _imgParam );
+	VOID			Update();
+	VOID			Render();
+
+	BOOL			TakeMessage( LPWSTR _pStr );
 
 private:
-	//	GUIBase::m_hFont 
-	//	GUIBase에 넣어야 하나?
-	LPD3DXFONT		m_pFont;
-	
-	HDC				m_hDC;
-	HFONT			m_hFont, m_hOldFont;
-
 	DATA			m_Data;
-
-	D3DXVECTOR3		m_vecPosition;
-	IMAGE2D			m_img2DCaret;
+	
+	BOOL			m_bActivate;
+	BOOL			m_bMessage;
 
 public:
 

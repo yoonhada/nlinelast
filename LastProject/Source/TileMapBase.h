@@ -72,7 +72,7 @@ public:
 
 	VOID		CreateTileImage( IMAGE& _TileImage, INT _iVertices, LPTILEVERTEX _pVertex, INT _iIndices, LPINDEX _pIndex, INT _itexWidth, INT _itexHeight );
 	VOID		CreateLineImage( IMAGE& _LineImage, INT _iVertices, LPLINEVERTEX _pVertex );
-
+	
 	VOID		RenderTileImage( LPIMAGE _pTileImage );
 	VOID		RenderLineImage( LPIMAGE _pLineImage );
 

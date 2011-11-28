@@ -6,7 +6,7 @@
 
 VOID MenuScene::Initialize()
 {
-	m_scnNext			= SCENE_MAIN;
+	m_scnNext			= SCENE_LOBBY;
 	m_scnState			= SCENE_RUNNING;
 
 	m_bLoginScene		= FALSE;
