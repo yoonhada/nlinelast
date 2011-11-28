@@ -793,6 +793,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="LogoScene"
+				>
+				<File
+					RelativePath=".\Source\LogoScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LogoScene.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Network"
