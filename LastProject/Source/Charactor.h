@@ -66,7 +66,6 @@ public:
 	VOID TestBreakCube();
 	VOID BreakCubeAll();
 	VOID BreakListMake(INT, D3DXVECTOR3&);
-	std::list<INT> m_BreakList;
 
 	const D3DXVECTOR3& Get_CharaPos()
 	{

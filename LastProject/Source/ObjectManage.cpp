@@ -44,12 +44,6 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	m_pCharactors = new CCharactor[ m_iMaxCharaNum ];
 
-	for ( int i = 0; i < m_iMaxCharaNum; ++i )
-	{
-		m_pCharactors[i].Create(m_pD3dDevice);
-		m_pCharactors[i].LoadKindChar( i );
-	}
-
 	//Set_CharactorList( m_pCharactorList );
 
 	m_pMonster = new CMonster;

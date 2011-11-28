@@ -161,7 +161,7 @@ HRESULT CShadowCell::LoadTexture( LPCWSTR a_FileName )
 		D3DX_DEFAULT, 0,
 		D3DFMT_X8R8G8B8,
 		D3DPOOL_MANAGED,
-		D3DX_DEFAULT, D3DX_DEFAULT, 0,
+		D3DX_DEFAULT, D3DX_DEFAULT, 0, 
 		NULL, NULL, &m_pTexture ) ) )
 	{
 		MessageBox( NULL, a_FileName, L"Load Failed ShadowCell.cpp Line 171", MB_OK );

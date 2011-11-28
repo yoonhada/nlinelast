@@ -186,6 +186,7 @@ VOID CTree::CreateChild( NODE *pNode, FLOAT fLeft, FLOAT fTop, FLOAT fRight, FLO
 
 BOOL CTree::IsRect( NODE *pNode, CBoundBox * pBoundBox)
 {
+	// X, Z
 	assert(pNode != NULL);
 
 	FRECT rect2 = pBoundBox->GetFRect();

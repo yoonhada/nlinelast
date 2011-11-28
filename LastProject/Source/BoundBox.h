@@ -46,7 +46,7 @@ public:
 	FLOAT GetRadiusShort() const;
 
 	// Set
-	VOID SetSize(INT n, float f)		{ m_fSize[n] = f; }
+	VOID SetSize(INT n, float f);
 	VOID SetPosition(D3DXVECTOR3 v)		{ m_vPosition = v; m_matAxis._43 = -7.5f;}	///< 중심좌표
 	VOID SetDirection(D3DXVECTOR3 v)	{ m_vDirection = v; }	///< 동좌표
 	VOID SetScale(FLOAT fScale);
@@ -59,8 +59,8 @@ public:
 private:
 	CCharactor * m_pCharactors;
 	D3DXVECTOR3 m_vPosition;		///< 중심좌표
+	D3DXVECTOR3 m_vVertex[8];		///< 원점기준 각 꼭지점
+	D3DXVECTOR3 m_vDirection;		///< 운동량벡터
 	D3DXMATRIXA16 m_matAxis;		///< 큐브 매트릭스
-	D3DXVECTOR3 m_vDirection;		///< 동좌표
 	FLOAT m_fSize[6];
-	//D3DXMATRIXA16 m_vMatWorld;
 };

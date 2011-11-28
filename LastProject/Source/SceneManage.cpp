@@ -7,6 +7,7 @@
 #include "MainScene.h"
 //#include "LoadScene.h"
 #include "LobbyScene.h"
+#include "LogoScene.h"
 
 #define _TEST
 
@@ -51,9 +52,9 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	//m_pScene = new CLobbyScene;
 	//m_pLoadScene = m_pScene;
 #ifdef _TEST
-	m_pScene			= new StoryScene;
+	m_pScene			= new CMainScene;
 #else
-	m_pScene			= new StoryScene;
+	m_pScene			= new LogoScene;
 #endif // _DEBUG	
 	m_pLoadingScene		= new LoadingScene;
 

@@ -33,10 +33,20 @@ CBoundBox::~CBoundBox(void)
 
 VOID CBoundBox::Clear()
 {
-	m_vPosition = D3DXVECTOR3(0, 0, 0);
-	m_vDirection = D3DXVECTOR3(0, 0, 0);
+	//    v0----- v1
+	//   /|      /|
+	//  v3------v2|
+	//  | |     | |
+	//  | |v4---|-|v5
+	//  |/      |/
+	//  v7------v6
+
+	m_vPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vDirection = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vVertex[0] = m_vVertex[1] = m_vVertex[2] = m_vVertex[3] = m_vVertex[4] = \
+		m_vVertex[5] = m_vVertex[6] = m_vVertex[7] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXMatrixIdentity( &m_matAxis );
-	m_fSize[0] = m_fSize[1] = m_fSize[2] = m_fSize[3] = m_fSize[4] = m_fSize[5] = 0;
+	m_fSize[0] = m_fSize[1] = m_fSize[2] = m_fSize[3] = m_fSize[4] = m_fSize[5] = 0.0f;
 }
 
 D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
@@ -56,42 +66,7 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 	}
 	else
 	{
-
-		//    v0----- v1
-		//   /|      /|
-		//  v3------v2|
-		//  | |     | |
-		//  | |v4---|-|v5
-		//  |/      |/
-		//  v7------v6
-
-		switch (nPoint)
-		{
-		case 0:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 1:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 2:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		case 3:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::PLUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		case 4:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 5:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::PLUSZ));
-			break;
-		case 6:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::PLUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		case 7:
-			vRet = D3DXVECTOR3(GetSize(CBoundBox::MINUSX), GetSize(CBoundBox::MINUSY), GetSize(CBoundBox::MINUSZ));
-			break;
-		}
+		vRet = m_vVertex[nPoint];
 		if ( m_pCharactors )		
 		{
 			vRet.y -= GetSize(CBoundBox::MINUSY);
@@ -105,20 +80,6 @@ D3DXVECTOR3 CBoundBox::GetPosition(INT nPoint) const
 	}
 
 	return vRet;
-}
-
-FLOAT CBoundBox::GetWidth()
-{
-	//if (m_pCharactors)		return 15.0f;
-	//else					
-	return ( ABSDEF(m_fSize[PLUSX]) - ABSDEF(m_fSize[MINUSX]) );
-}
-
-FLOAT CBoundBox::GetHeight()
-{
-	//if (m_pCharactors)		return 15.0f;
-	//else					
-	return ( ABSDEF(m_fSize[PLUSZ] - ABSDEF(m_fSize[MINUSZ]) ) );
 }
 
 FRECT CBoundBox::GetFRect()
@@ -136,8 +97,6 @@ FRECT CBoundBox::GetFRect()
 
 FLOAT CBoundBox::GetSize(INT n) const
 {
-	//if (m_pCharactors)		return ( n < 3 ) ? -7.5f : 7.5f;
-	//else					
 	return ( m_fSize[n] );
 }
 
@@ -217,5 +176,58 @@ D3DXMATRIXA16 CBoundBox::GetAxisMat() const
 	else
 	{
 		return m_matAxis;
+	}
+}
+
+VOID CBoundBox::SetSize(INT n, float f)		
+{
+	m_fSize[n] = f; 
+
+	//    v0----- v1
+	//   /|      /|
+	//  v3------v2|
+	//  | |     | |
+	//  | |v4---|-|v5
+	//  |/      |/
+	//  v7------v6
+
+	switch ( n )
+	{
+	case MINUSX:
+		m_vVertex[0].x = f;
+		m_vVertex[3].x = f;
+		m_vVertex[4].x = f;
+		m_vVertex[7].x = f;
+		break;
+	case MINUSY:
+		m_vVertex[4].y = f;
+		m_vVertex[5].y = f;
+		m_vVertex[6].y = f;
+		m_vVertex[7].y = f;
+		break;
+	case MINUSZ:
+		m_vVertex[2].z = f;
+		m_vVertex[3].z = f;
+		m_vVertex[6].z = f;
+		m_vVertex[7].z = f;
+		break;
+	case PLUSX:
+		m_vVertex[1].x = f;
+		m_vVertex[2].x = f;
+		m_vVertex[5].x = f;
+		m_vVertex[6].x = f;
+		break;
+	case PLUSY:
+		m_vVertex[0].y = f;
+		m_vVertex[1].y = f;
+		m_vVertex[2].y = f;
+		m_vVertex[3].y = f;
+		break;
+	case PLUSZ:
+		m_vVertex[0].z = f;
+		m_vVertex[1].z = f;
+		m_vVertex[4].z = f;
+		m_vVertex[5].z = f;
+		break;
 	}
 }

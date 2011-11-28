@@ -786,7 +786,7 @@ VOID CCharactor::Render()
 	m_pShadowCell->Set_ControlTranslate( 2, m_vControl.z );
 	m_pShadowCell->Calcul_MatWorld();
 	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pShadowCell->Get_MatWorld() );
-	m_pShadowCell->Render();
+	m_pShadowCell->Render( );
 
 	m_pD3dDevice->SetTexture( 0, NULL );
 

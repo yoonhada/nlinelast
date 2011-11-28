@@ -13,6 +13,8 @@ VOID LogoScene::Initialize()
 VOID LogoScene::Release()
 {
 	SAFE_DELETE_ARRAY( m_pLogo );
+
+	CTree::DestoryInstance();
 }
 
 HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
@@ -46,6 +48,7 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	m_pLogo[ 5 ].Set_Position( D3DXVECTOR3( -280.0f, 0.0f, 200.0f ) );
 
 	
+	CTree::GetInstance()->Create( 0, 0 );
 	return S_OK;
 }
 
