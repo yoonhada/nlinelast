@@ -45,23 +45,23 @@ VOID NormalLine::Create( D3DCOLOR _Color, INT _iNumVertex, LPD3DXVECTOR3 _pPosit
 
 VOID NormalLine::Render()
 {
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 
 	LPDATALIST::iterator itE;
 
 	for( itE = m_pDataList.begin() ; itE != m_pDataList.end() ; itE++ )
 	{
-		m_pd3dDevice->SetStreamSource( 0, (*itE)->pVB, 0, sizeof( VERTEX ) );
-		m_pd3dDevice->SetFVF( VERTEX::FVF );
-		m_pd3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, (*itE)->iNumLine );
+		m_pD3dDevice->SetStreamSource( 0, (*itE)->pVB, 0, sizeof( VERTEX ) );
+		m_pD3dDevice->SetFVF( VERTEX::FVF );
+		m_pD3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, (*itE)->iNumLine );
 	}
 
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 	
 HRESULT	NormalLine::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
 {
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer(	_nVertex * _Size,
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer(	_nVertex * _Size,
 													0,
 													_FVF,
 													D3DPOOL_DEFAULT,

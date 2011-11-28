@@ -147,28 +147,28 @@ VOID Map::Update()
 VOID Map::RenderASEData( INT _Index )
 {
 	if( m_pASEData[ _Index ].pTex != NULL )
-		m_pd3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
+		m_pD3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
 
 	D3DXMATRIX matWorld;
 	D3DXMatrixIdentity( &matWorld );
 	m_pASEParser->GetAniTrack( matWorld, _Index );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
-	m_pd3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
-	m_pd3dDevice->SetFVF( ASEParser::VERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
+	m_pD3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
+	m_pD3dDevice->SetFVF( ASEParser::VERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
+	m_pD3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
 
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity( &matIdentity );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
 
 }
 
 VOID Map::RenderASEData( INT _Index, D3DXMATRIX _matCharacter )
 {
 	if( m_pASEData[ _Index ].pTex != NULL )
-		m_pd3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
+		m_pD3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
 
 	D3DXMATRIX matWorld;
 	D3DXMatrixIdentity( &matWorld );
@@ -177,29 +177,29 @@ VOID Map::RenderASEData( INT _Index, D3DXMATRIX _matCharacter )
 	//	New
 	matWorld = matWorld * _matCharacter;
 	//	End
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
-	m_pd3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
-	m_pd3dDevice->SetFVF( ASEParser::VERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
+	m_pD3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
+	m_pD3dDevice->SetFVF( ASEParser::VERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
+	m_pD3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
 
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity( &matIdentity );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
-	m_pd3dDevice->SetTexture( 0, NULL );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
+	m_pD3dDevice->SetTexture( 0, NULL );
 }
 
 VOID Map::RenderBBXData( INT _Index )
 {
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	
-	m_pd3dDevice->SetStreamSource( 0, m_pBBXData[ _Index ].pVB, 0, sizeof( BBXParser::VERTEX ) );
-	m_pd3dDevice->SetFVF( BBXParser::VERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pBBXData[ _Index ].pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( /*BBXParser::DATA::PT*/D3DPT_LINELIST, 0, 0, m_pBBXData[ _Index ].iNumVertex, 0, m_pBBXData[ _Index ].iNumIndex );
+	m_pD3dDevice->SetStreamSource( 0, m_pBBXData[ _Index ].pVB, 0, sizeof( BBXParser::VERTEX ) );
+	m_pD3dDevice->SetFVF( BBXParser::VERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pBBXData[ _Index ].pIB );
+	m_pD3dDevice->DrawIndexedPrimitive( /*BBXParser::DATA::PT*/D3DPT_LINELIST, 0, 0, m_pBBXData[ _Index ].iNumVertex, 0, m_pBBXData[ _Index ].iNumIndex );
 
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 
 VOID Map::Render()
@@ -259,7 +259,7 @@ VOID Map::CleanupAnimationData()
 
 HRESULT	Map::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
 {
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer(	_nVertex * _Size,
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer(	_nVertex * _Size,
 													0,
 													_FVF,
 													D3DPOOL_DEFAULT,
@@ -289,7 +289,7 @@ HRESULT	Map::SetVB( LPDIRECT3DVERTEXBUFFER9 _pVB, LPVOID _pvertices, INT _nVerte
 }
 HRESULT	Map::CreateIB( LPDIRECT3DINDEXBUFFER9* _ppIB, INT _nIndex, INT _Size )
 {
-	if( FAILED( m_pd3dDevice->CreateIndexBuffer(	_nIndex * _Size,
+	if( FAILED( m_pD3dDevice->CreateIndexBuffer(	_nIndex * _Size,
 													0,
 													D3DFMT_INDEX32,
 													D3DPOOL_DEFAULT,
@@ -321,7 +321,7 @@ HRESULT	Map::SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT _nIndex, I
 HRESULT Map::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppTexture, LPCWSTR FileName )
 {
 	if( FAILED( D3DXCreateTextureFromFileEx(	
-					m_pd3dDevice,
+					m_pD3dDevice,
 					FileName,				//	컴파일러 설정이 Unicode를 요구하고 있는 경우 데이터 타입 LPCSTR은 LPCWSTR이 된다
 					D3DX_DEFAULT_NONPOW2,	//	원본 크기를 받아온다 2의 승수로도 받아올수 있다
 					D3DX_DEFAULT_NONPOW2,	//	원본 크기를 받아온다

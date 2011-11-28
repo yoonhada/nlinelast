@@ -172,7 +172,7 @@ VOID TileMap::Update()
 }
 
 VOID TileMap::Render()
-{
+{	
 	RenderTileImage( &m_Data.imgTile );
 	RenderLineImage( &m_Data.imgLine );
 }

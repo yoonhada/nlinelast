@@ -30,6 +30,18 @@ VOID ASEViewer::Release()
 
 	SAFE_DELETE( m_pASEParser );
 	SAFE_DELETE( m_pBBXParser );
+
+	for( std::vector<CBoundBox*>::iterator iter = m_pBoundBoxVector.begin(); 
+		 iter!=m_pBoundBoxVector.end(); ++iter)
+	{
+		delete *iter;
+	}
+
+	if ( m_pBoundBoxVector.empty() == FALSE )
+	{
+		m_pBoundBoxVector.clear();
+		m_pBoundBoxVector.erase( m_pBoundBoxVector.begin(), m_pBoundBoxVector.end() );
+	}
 }
 
 VOID ASEViewer::InitASE( LPWSTR _ASEFileName )
@@ -118,6 +130,7 @@ VOID ASEViewer::CreateDataFromBBX( const INT _Index )
 
 	pBoundBox->SetPosition( BBXData.Info.vPivot );
 	CTree::GetInstance()->InsertObject( CTree::GetInstance()->GetRoot(), pBoundBox );
+	m_pBoundBoxVector.push_back(pBoundBox);
 	//	End
 }
 
@@ -151,34 +164,34 @@ VOID ASEViewer::Update()
 VOID ASEViewer::RenderASEData( INT _Index )
 {
 	if( m_pASEData[ _Index ].pTex != NULL )
-		m_pd3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
+		m_pD3dDevice->SetTexture( 0, m_pASEData[ _Index ].pTex );
 
 	D3DXMATRIX matWorld;
 	D3DXMatrixIdentity( &matWorld );
 	m_pASEParser->GetAniTrack( matWorld, _Index );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
-	m_pd3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
-	m_pd3dDevice->SetFVF( ASEParser::VERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
+	m_pD3dDevice->SetStreamSource( 0, m_pASEData[ _Index ].pVB, 0, sizeof( ASEParser::VERTEX ) );
+	m_pD3dDevice->SetFVF( ASEParser::VERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pASEData[ _Index ].pIB );
+	m_pD3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, 0, m_pASEData[ _Index ].iNumVertex, 0, m_pASEData[ _Index ].iNumIndex );
 
 	D3DXMATRIX matIdentity;
 	D3DXMatrixIdentity( &matIdentity );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matIdentity );
 
 }
 
 VOID ASEViewer::RenderBBXData( INT _Index )
 {
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	
-	m_pd3dDevice->SetStreamSource( 0, m_pBBXData[ _Index ].pVB, 0, sizeof( BBXParser::VERTEX ) );
-	m_pd3dDevice->SetFVF( BBXParser::VERTEX::FVF );
-	m_pd3dDevice->SetIndices( m_pBBXData[ _Index ].pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( /*BBXParser::DATA::PT*/D3DPT_LINELIST, 0, 0, m_pBBXData[ _Index ].iNumVertex, 0, m_pBBXData[ _Index ].iNumIndex );
+	m_pD3dDevice->SetStreamSource( 0, m_pBBXData[ _Index ].pVB, 0, sizeof( BBXParser::VERTEX ) );
+	m_pD3dDevice->SetFVF( BBXParser::VERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pBBXData[ _Index ].pIB );
+	m_pD3dDevice->DrawIndexedPrimitive( /*BBXParser::DATA::PT*/D3DPT_LINELIST, 0, 0, m_pBBXData[ _Index ].iNumVertex, 0, m_pBBXData[ _Index ].iNumIndex );
 
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 
 VOID ASEViewer::Render()

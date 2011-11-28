@@ -34,7 +34,7 @@ class CWeapon : public IObject
 private:
 	enum { READ, WRITE };
 
-	LPDIRECT3DDEVICE9 m_pd3dDevice;
+	LPDIRECT3DDEVICE9 m_pD3dDevice;
 	INT m_nState;
 	INT m_nReversing;
 	WEAPONTYPE m_WeaponType;

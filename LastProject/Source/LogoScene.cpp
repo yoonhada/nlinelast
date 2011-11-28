@@ -19,7 +19,7 @@ VOID LogoScene::Release()
 
 HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
 {
-	m_pd3dDevice	=	_pd3dDevice;
+	m_pD3dDevice	=	_pd3dDevice;
 	//·Î°í
 	m_pLogo = new CCharactor[6];
 
@@ -84,13 +84,13 @@ VOID LogoScene::Render()
 	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
-	m_pd3dDevice->SetTransform( D3DTS_VIEW, &matView );
+	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH( &matProj, D3DX_PI / 4, 1.0f, 1.0f, 10000.0f );
-	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
+	m_pD3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
 
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
 	for( INT i=0; i<6; i++ )
 		m_pLogo[ i ].Render();

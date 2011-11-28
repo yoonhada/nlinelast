@@ -7,10 +7,10 @@
 VOID SetupGUI::Initialize()
 {
 	m_pMouse			= new Mouse;
-	m_pGUIBase			= new GUIBase( m_pd3dDevice, m_pSprite );
-	m_pGUIBackground	= new GUIBackground( m_pd3dDevice, m_pSprite );
-	m_pGUIEffectSound	= new GUIScrollbar( m_pd3dDevice, m_pSprite );
-	m_pGUIBackSound		= new GUIScrollbar( m_pd3dDevice, m_pSprite );
+	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
+	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIEffectSound	= new GUIScrollbar( m_pD3dDevice, m_pSprite );
+	m_pGUIBackSound		= new GUIScrollbar( m_pD3dDevice, m_pSprite );
 }
 
 VOID SetupGUI::Release()
@@ -86,7 +86,7 @@ VOID SetupGUI::CreateScrollbar()
 VOID SetupGUI::Create()
 {
 	D3DVIEWPORT9 Vp;
-	m_pd3dDevice->GetViewport( &Vp );
+	m_pD3dDevice->GetViewport( &Vp );
 
 	m_fWidth	= 512.0f;
 	m_fHeight	= 512.0f;

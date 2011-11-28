@@ -15,7 +15,7 @@ private:
 	HRESULT		SetVB( LPDIRECT3DVERTEXBUFFER9 _pVB, LPVOID _pvertices, INT _nVertex, INT _Size );
 
 public:
-	NormalLine( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pd3dDevice( _pd3dDevice )
+	NormalLine( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pD3dDevice( _pd3dDevice )
 	{
 		this->Initialize();
 	}
@@ -53,7 +53,7 @@ private:
 
 	typedef std::list< LPDATA > LPDATALIST;
 
-	LPDIRECT3DDEVICE9	m_pd3dDevice;
+	LPDIRECT3DDEVICE9	m_pD3dDevice;
 	
 	LPDATALIST			m_pDataList;
 

@@ -36,7 +36,7 @@ public:
 	VOID SetLife(INT _nLife)					{ m_nLife = _nLife; }
 	BOOL IsLife()								{ return ( m_nLife > 0 ); }
 private:
-	LPDIRECT3DDEVICE9		m_pd3dDevice;
+	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPDIRECT3DTEXTURE9		m_pTexBillboard[4];
 	INT m_nStep;
 	INT m_nLife;

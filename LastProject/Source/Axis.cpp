@@ -14,7 +14,7 @@
 @brief	생성자
 */
 Axis::Axis( LPDIRECT3DDEVICE9 _pd3dDevice )
-: m_pd3dDevice(_pd3dDevice)
+: m_pD3dDevice(_pd3dDevice)
 , m_pVB(NULL)
 , m_fSize(1000)
 {
@@ -71,7 +71,7 @@ HRESULT Axis::InitVB()
 	INT nSize = (int)(pow( 2.0f, m_nDeep ) + 0.5f) + 1;
 	UINT uLength = nSize * 4 * sizeof( VERTEX );
 	// 정점 버퍼 생성
-	if ( FAILED( m_pd3dDevice->CreateVertexBuffer( uLength, 0, VERTEX::FVF, D3DPOOL_DEFAULT, &m_pVB, NULL ) ) )
+	if ( FAILED( m_pD3dDevice->CreateVertexBuffer( uLength, 0, VERTEX::FVF, D3DPOOL_DEFAULT, &m_pVB, NULL ) ) )
 	{
 		Release();
 		return E_FAIL;
@@ -115,7 +115,7 @@ HRESULT Axis::InitVB2()
 	
 	UINT uLength = 40 * sizeof( VERTEX );
 	// 정점 버퍼 생성
-	if ( FAILED( m_pd3dDevice->CreateVertexBuffer( uLength, 0, VERTEX::FVF, D3DPOOL_DEFAULT, &m_pVB, NULL ) ) )
+	if ( FAILED( m_pD3dDevice->CreateVertexBuffer( uLength, 0, VERTEX::FVF, D3DPOOL_DEFAULT, &m_pVB, NULL ) ) )
 	{
 		Release();
 		return E_FAIL;
@@ -169,10 +169,10 @@ VOID Axis::Render()
 	
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity( &matWorld );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
-	m_pd3dDevice->SetStreamSource( 0, m_pVB, 0, sizeof( VERTEX ) );
-	m_pd3dDevice->SetFVF( VERTEX::FVF );
+	m_pD3dDevice->SetStreamSource( 0, m_pVB, 0, sizeof( VERTEX ) );
+	m_pD3dDevice->SetFVF( VERTEX::FVF );
 
-	m_pd3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, nSize * 2 );
+	m_pD3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, nSize * 2 );
 }

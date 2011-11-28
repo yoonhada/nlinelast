@@ -4,8 +4,8 @@
 
 VOID LoadingGUI::Initialize()
 {
-	m_pGUIBase			= new GUIBase( m_pd3dDevice, m_pSprite );
-	m_pGUIBackground	= new GUIBackground( m_pd3dDevice, m_pSprite );
+	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
+	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
 }
 
 VOID LoadingGUI::Release()
@@ -18,7 +18,7 @@ VOID LoadingGUI::CreateBackground()
 {
 	//	Create Background
 	D3DVIEWPORT9 Vp;
-	m_pd3dDevice->GetViewport( &Vp );
+	m_pD3dDevice->GetViewport( &Vp );
 
 	FLOAT fWidth	= static_cast<FLOAT>( Vp.Width );
 	FLOAT fHeight	= static_cast<FLOAT>( Vp.Height );
