@@ -21,8 +21,8 @@ VOID Chase::Enter( CMonster* a_pMonster )
 	m_pCurrentPath = a_pMonster->Get_Path();
 	m_vPos = a_pMonster->Get_Pos();
 	m_iCurrentX = INT( m_vPos.x + m_pMapInfo->vecEnd.x ) / m_pMapInfo->fTileSize;
-	m_iCurrentZ = INT( m_vPos.z + m_pMapInfo->vecEnd.z ) / m_pMapInfo->fTileSize;
-//	a_pMonster->Set_Angle( D3DXToRadian( GetDegree() ) );
+	m_iCurrentZ = INT( -( m_vPos.z - m_pMapInfo->vecEnd.z ) ) / m_pMapInfo->fTileSize;
+	a_pMonster->Set_Angle( D3DXToRadian( GetDegree() ) );
 }
 
 
@@ -58,7 +58,7 @@ VOID Chase::Execute( CMonster* a_pMonster )
 		D3DXVECTOR3 Pos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 		D3DXVECTOR3 NextPos = D3DXVECTOR3( m_pMapInfo->vecStart.x + m_pMapInfo->fTileSize * m_pCurrentPath->x + m_pMapInfo->fTileSize / 2,
 										   0.0f,
-										   m_pMapInfo->vecStart.z + m_pMapInfo->fTileSize * m_pCurrentPath->y + m_pMapInfo->fTileSize / 2 );
+										   m_pMapInfo->vecEnd.z - m_pMapInfo->fTileSize * m_pCurrentPath->y - m_pMapInfo->fTileSize / 2 );
 
 		D3DXVec3Lerp( &Pos, &m_vPos, &NextPos, t / 0.25f );
 		a_pMonster->Set_Pos( Pos );
@@ -81,9 +81,9 @@ VOID Chase::Initialize( TileMap::INFO* a_pMapInfo )
 FLOAT Chase::GetDegree()
 {
 	static FLOAT fDegree[3][3] = {
-		{ 135.0f, 90.0f,  45.0f },
+		{ 225.0f, 270.0f, 315.0f },
 		{ 180.0f, 0.0f,   0.0f },
-		{ 225.0f, 270.0f, 315.0f }
+		{ 135.0f, 90.0f,  45.0f }
 	};
 
 	INT iDirX = m_pCurrentPath->x - m_iCurrentX + 1;
