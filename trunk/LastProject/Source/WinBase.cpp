@@ -203,9 +203,10 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		switch( wParam & 0xFFF0)
 		{
 		case SC_KEYMENU:
-			return 0;
+			if( !CInput::GetInstance()->EnableInput() )
+				return 0;
 		}
-		break;
+		return DefWindowProc(hWnd, message, wParam, lParam);
 
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);

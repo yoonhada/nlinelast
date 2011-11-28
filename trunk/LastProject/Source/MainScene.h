@@ -44,12 +44,9 @@ private:
 	CCamera*				m_pCamera;
 	CGrid*					m_pGrid;
 	CCharactor*				m_pCharactors;
-	//CCharactor*				m_pMyCharactor;
 	CMonster*				m_pMonster;
 	CLight*					m_pLight;
 	CTimeLifeItem * m_pFirstAidKit;
-
-	CCharactor*				m_pCharactorList[4];
 
 	TileMap*				m_pTileMap;
 	ASEViewer*				m_pASEViewer;
@@ -74,42 +71,6 @@ private:
 
 	INT						m_scnNext;
 	INT						m_scnState;
-
-//public:
-//	CCharactor* Get_Charactors()
-//	{
-//		return m_pCharactors;
-//	}
-//
-//	CCharactor* Get_MyCharactor()
-//	{
-//		return m_pMyCharactor;
-//	}
-//
-//	CCharactor** Get_CharactorList()
-//	{
-//		return m_pCharactorList;
-//	}
-//
-//	VOID Set_Host( BOOL a_bHost )
-//	{
-//		m_bHost = a_bHost;
-//	}
-//
-//	VOID Set_ClientNumber( WORD a_iClientNumber )
-//	{
-//		m_iClientNumber = a_iClientNumber;
-//	}
-//
-//	WORD Get_ClientNumber()
-//	{
-//		return m_iClientNumber;
-//	}
-//
-//	CCharactor* Get_pAlphaMon()
-//	{
-//		return m_pAlphaMon;
-//	}
 };
 
 #endif

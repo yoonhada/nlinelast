@@ -19,6 +19,9 @@
 #ifdef _DEBUG
 #include "Seek.h"
 #include "Chase.h"
+#else
+#include "Seek.h"
+#include "Chase.h"
 #endif
 
 
@@ -53,16 +56,10 @@ VOID	CMainScene::Clear()
 	m_pMainGUI		= NULL;
 	m_pOptionScene	= NULL;
 
-	for( INT i=0; i<4; ++i )
-	{
-		m_pCharactorList[i] = NULL;
-	}
-
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 
 	//m_bHost = FALSE;
 	//m_iClientNumber = 0;
-
 	m_pLogo		= NULL;
 }
 
@@ -131,55 +128,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pOptionScene = new OptionScene;
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
-	//로고
-	/*m_pLogo = new CCharactor[6];
-	D3DXVECTOR3 vec[6] = { 
-		D3DXVECTOR3( -130.0f, 0.0f, 200.0f ), 
-		D3DXVECTOR3( -160.0f, 0.0f, 200.0f ), 
-		D3DXVECTOR3( -190.0f, 0.0f, 200.0f ), 
-		D3DXVECTOR3( -220.0f, 0.0f, 200.0f ), 
-		D3DXVECTOR3( -250.0f, 0.0f, 200.0f ), 
-		D3DXVECTOR3( -280.0f, 0.0f, 200.0f ) 
-	};
-	for(INT Loop=0; Loop<6; ++Loop )
-	{
-		m_pLogo[Loop].Create( m_pD3dDevice, m_pMatrices );
-		if(Loop == 0)
-		{
-			m_pLogo[Loop].Load( L"Data/Logo/N.csav" );
-		}
-		else if(Loop == 1)
-		{
-			m_pLogo[Loop].Load( L"Data/Logo/-.csav" );
-		}
-		else if(Loop == 2)
-		{
-			m_pLogo[Loop].Load( L"Data/Logo/L.csav" );
-		}
-		else if(Loop == 3)
-		{
-			m_pLogo[Loop].Load( L"Data/Logo/I.csav" );
-		}
-		else if(Loop == 4)
-		{
-			m_pLogo[Loop].Load( L"Data/Logo/N.csav" );
-		}
-		else if(Loop == 5)
-		{
-			m_pLogo[Loop].Load( L"Data/Logo/E.csav" );
-		}
-
-		m_pLogo[Loop].Set_Position( vec[Loop] );
-	}*/
-
-	CDebugConsole::GetInstance()->Messagef( L"**** Create End **** \n\n" );
-
-	//CObjectManage::GetInstance()->Set_MyCharactor( m_pMyCharactor );
-	//CObjectManage::GetInstance()->Set_Charactors( m_pCharactors );
-	//CObjectManage::GetInstance()->Set_CharactorList( m_pCharactorList );
-	//CObjectManage::GetInstance()->Set_pAlphaMon( m_pAlphaMon );
-
 	CInput::GetInstance()->EnableInput(FALSE);
+	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 
 	return S_OK;
 }
@@ -218,6 +168,13 @@ VOID CMainScene::CreateCharactor()
 	//캐릭터 생성
 	FLOAT fYawZero = 1.0f;
 	m_pCharactors = CObjectManage::GetInstance()->Get_Charactors();
+
+	for ( int i = 0; i < m_iMaxCharaNum; ++i )
+	{
+		m_pCharactors[i].Create(m_pD3dDevice);
+		m_pCharactors[i].LoadKindChar( i );
+	}
+
 	//m_pMyCharactor = CObjectManage::GetInstance()->Get_Charactors();
 	//m_pCharactors[0].LoadKindChar( 0 );
 	m_pCharactors[0].Set_Active( TRUE );
@@ -244,32 +201,6 @@ VOID CMainScene::CreateCharactor()
 
 VOID	CMainScene::Update()
 {
-	
-	// 맵 로드
-	//if( CInput::GetInstance()->Get_F9button() == TRUE )
-	//{
-	//	OPENFILENAME OFN;
-	//	WCHAR lpstrFile[MAX_PATH]=L"";
-
-	//	memset(&OFN, 0, sizeof(OPENFILENAME));
-	//	OFN.lStructSize = sizeof(OPENFILENAME);
-	//	OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
-	//	OFN.lpstrFilter=TEXT("ASE 파일(*.ASE)\0*.ASE\0");
-	//	OFN.lpstrFile=lpstrFile;
-	//	OFN.nMaxFile=MAX_PATH;
-	//	if (GetSaveFileName(&OFN)!=0)
-	//	{
-	//		WCHAR* ptr = wcstok( lpstrFile, L"." );
-	//		WCHAR Temp[255];
-	//		WCHAR Temp2[255];
-	//		wsprintf( Temp, L"%s.ASE", ptr );
-	//		wsprintf( Temp2, L"%s.BBX", ptr );
-	//		//m_pMap->Release();
-	//		m_pMap->Create( Temp, Temp2 );
-	//		//m_CharEdit.Load( OFN.lpstrFile );
-	//	}
-	//}
-
 	// 캐릭터: 인풋 값 받아오기
 	m_pCharactors[0].UpdateByInput();
 	m_pCharactors[0].Update();
@@ -303,25 +234,15 @@ VOID	CMainScene::Update()
 		//}
 	}
 
-	////로고
-	//for( INT Loop=0; Loop<6; ++Loop )
-	//{
-	//	m_pLogo[Loop].UpdateOtherPlayer();
-	//	if( CInput::GetInstance()->Get_Lbutton() )
-	//	{
-	//		//m_pLogo[Loop].BreakCubeAll();
-	//	}
-	//}
-
-	//static FLOAT TimeElapsed = 0.0f;
-	static FLOAT fMonsterRun = 0.0f;\
-	static FLOAT fMonsterAngle = 0.0f;
-	//TimeElapsed += CFrequency::GetInstance()->getFrametime();
-	//if( TimeElapsed >= 0.1f )
-	//{
-		fMonsterRun += 1.0f * CFrequency::GetInstance()->getFrametime();
-		fMonsterAngle += 0.3f * CFrequency::GetInstance()->getFrametime();
-		//TimeElapsed = 0.0f;
+	////static FLOAT TimeElapsed = 0.0f;
+	//static FLOAT fMonsterRun = 0.0f;
+	//static FLOAT fMonsterAngle = 0.0f;
+	////TimeElapsed += CFrequency::GetInstance()->getFrametime();
+	////if( TimeElapsed >= 0.1f )
+	////{
+	//	fMonsterRun += 1.0f * CFrequency::GetInstance()->getFrametime();
+	//	fMonsterAngle += 0.3f * CFrequency::GetInstance()->getFrametime();
+	//	//TimeElapsed = 0.0f;
 	//}
 
 	m_pMonster->Update();
@@ -379,10 +300,10 @@ VOID	CMainScene::Render()
 	}
 
 	//로고
-	/*for( INT Loop=0; Loop<6; ++Loop )
-	{
-		m_pLogo[Loop].Render();
-	}*/
+	//for( INT Loop=0; Loop<6; ++Loop )
+	//{
+	//	m_pLogo[Loop].Render();
+	//}
 
 	m_pMonster->Render();
 

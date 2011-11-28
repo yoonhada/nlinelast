@@ -105,22 +105,20 @@ VOID ASEViewer::CreateDataFromBBX( const INT _Index )
 	CreateIB( &m_pBBXData[ _Index ].pIB, m_pBBXData[ _Index ].iNumIndex, sizeof( BBXParser::INDEX ) );
 	SetIB( m_pBBXData[ _Index ].pIB, BBXData.aIndex, m_pBBXData[ _Index ].iNumIndex, sizeof( BBXParser::INDEX ) );
 
-	////	BoundBox
-	//CBoundBox* pBoundBox = new CBoundBox();
-	//
-	//pBoundBox->SetSize( 0, BBXData.Info.fMinusSize[ 0 ] );
-	//pBoundBox->SetSize( 1, BBXData.Info.fMinusSize[ 1 ] );
-	//pBoundBox->SetSize( 2, BBXData.Info.fMinusSize[ 2 ] );
+	//	BoundBox
+	CBoundBox* pBoundBox = new CBoundBox();
+	
+	pBoundBox->SetSize( 0, BBXData.Info.fMinusSize[ 0 ] );
+	pBoundBox->SetSize( 1, BBXData.Info.fMinusSize[ 1 ] );
+	pBoundBox->SetSize( 2, BBXData.Info.fMinusSize[ 2 ] );
 
-	//pBoundBox->SetSize( 3, BBXData.Info.fPlusSize[ 0 ] );
-	//pBoundBox->SetSize( 4, BBXData.Info.fPlusSize[ 1 ] );
-	//pBoundBox->SetSize( 5, BBXData.Info.fPlusSize[ 2 ] );
+	pBoundBox->SetSize( 3, BBXData.Info.fPlusSize[ 0 ] );
+	pBoundBox->SetSize( 4, BBXData.Info.fPlusSize[ 1 ] );
+	pBoundBox->SetSize( 5, BBXData.Info.fPlusSize[ 2 ] );
 
-	//pBoundBox->SetPosition( BBXData.Info.vPivot );
-
-	//CTree::InsertObject( CTree::GetRoot(), pBoundBox );
-	////	End
-
+	pBoundBox->SetPosition( BBXData.Info.vPivot );
+	CTree::GetInstance()->InsertObject( CTree::GetInstance()->GetRoot(), pBoundBox );
+	//	End
 }
 
 VOID ASEViewer::Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName )
