@@ -64,7 +64,7 @@ public:
 	VOID BreakCube(D3DXVECTOR3& _vPosition);
 	VOID BreakQube(D3DXMATRIXA16 &mat);
 	VOID TestBreakCube();
-	VOID BreakCubeAll(BOOL = FALSE);
+	VOID BreakCubeAll();
 	VOID BreakListMake(INT, D3DXVECTOR3&);
 	std::list<INT> m_BreakList;
 

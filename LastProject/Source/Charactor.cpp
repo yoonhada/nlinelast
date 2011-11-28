@@ -883,7 +883,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					}
 				}
 			}
-
+#ifdef _DEBUG
 			if( !m_bMonster )
 			{
 				if (nCount > 50)
@@ -898,8 +898,8 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					break;
 				}
 			}
+#endif // _DEBUG
 		}
-
 		if( m_bMonster && nCount != 0 )
 		{
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
@@ -990,9 +990,9 @@ VOID CCharactor::RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir
 	}	
 }
 
-VOID CCharactor::BreakCubeAll(BOOL bBreak)
+VOID CCharactor::BreakCubeAll()
 {
-	if( bBreak != m_bAliveCheck)
+	if( m_bAliveCheck == TRUE )
 	{
 		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
 		{
@@ -1003,25 +1003,22 @@ VOID CCharactor::BreakCubeAll(BOOL bBreak)
 
 			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
 			{
-				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, bBreak );
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
 
-				if ( bBreak )
+				if( m_bMonster )
 				{
-					if( m_bMonster )
-					{
-						D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
-					}
-					else
-					{
-						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
-					}
+					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+				}
+				else
+				{
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 				}
 			}
 		}
-
-		m_bAliveCheck = bBreak;
 	}
+
+	m_bAliveCheck=FALSE;
 }
 
 VOID CCharactor::TestBreakCube()
