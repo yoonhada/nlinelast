@@ -108,6 +108,9 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -950.0f ), D3DXVECTOR3( 510.0f, 0.0f, 950.0f ), 10.0f );
 	m_pTileMap->LoadBBXFile( L"ASE File/Map/Stage_Beta_Box.BBX" );
 
+	//ÀÌº¥Æ®
+	m_pGameEvent = new CGameEvent;
+
 	Seek::GetInstance()->Initialize( m_pTileMap );
 	Chase::GetInstance()->Initialize( m_pTileMap->GetInfo() );
 
