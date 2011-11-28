@@ -94,7 +94,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
-	m_pMonster[0].Create( m_pD3dDevice, L"Data/CharData/27_pierro_body1234567890" );
+	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
@@ -115,7 +115,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pTileMap->LoadBBXFile( L"ASE File/Map/Stage_Beta_Box.BBX" );
 
 	//이벤트
-	m_pGameEvent = new CGameEvent;
+	m_pGameEvent = new CGameEvent( CObjectManage::GetInstance()->Get_MaxCharaNum() );
 
 	Seek::GetInstance()->Initialize( m_pTileMap );
 	Chase::GetInstance()->Initialize( m_pTileMap->GetInfo() );
@@ -303,21 +303,6 @@ VOID	CMainScene::Update()
 		//}
 	}
 
-	std::vector<CBoundBox*> * vecBoundBox;
-	std::vector<CBoundBox*>::iterator Iter;
-	vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();
-	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
-	{			
-		Iter = vecBoundBox->begin();
-		while ( Iter != vecBoundBox->end() )
-		{
-			delete ( *Iter );
-			Iter++;
-		}
-	}
-	
-	vecBoundBox->erase( vecBoundBox->begin(), vecBoundBox->end() );
-
 	////로고
 	//for( INT Loop=0; Loop<6; ++Loop )
 	//{
@@ -329,7 +314,7 @@ VOID	CMainScene::Update()
 	//}
 
 	//static FLOAT TimeElapsed = 0.0f;
-	static FLOAT fMonsterRun = 0.0f;
+	static FLOAT fMonsterRun = 0.0f;\
 	static FLOAT fMonsterAngle = 0.0f;
 	//TimeElapsed += CFrequency::GetInstance()->getFrametime();
 	//if( TimeElapsed >= 0.1f )
@@ -366,8 +351,8 @@ VOID	CMainScene::Update()
 	m_pMainGUI->Update();
 	m_pOptionScene->Update();
 
-
 	CNetwork::GetInstance()->Update();
+	m_pGameEvent->Update();	CTree::GetInstance()->SetMonsAtkClear();
 }
 
 VOID	CMainScene::Render()

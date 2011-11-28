@@ -139,9 +139,10 @@ VOID CCharactor::_LoadRelease()
 	{
 		if( m_vectorCube[Loop] != NULL )
 		{
+			SAFE_DELETE(m_vectorCube[Loop]);
 			//m_vectorCube[Loop]->Release();
-			delete m_vectorCube[Loop];
-			m_vectorCube[Loop] = NULL;
+			//delete m_vectorCube[Loop];
+			//m_vectorCube[Loop] = NULL;
 		}
 	}
 
@@ -151,11 +152,12 @@ VOID CCharactor::_LoadRelease()
 		m_vectorCube.erase( m_vectorCube.begin(), m_vectorCube.end() );
 	}
 
-	if( m_pObject !=NULL )
-	{
-		delete m_pObject;
-		m_pObject=NULL;
-	}
+	SAFE_DELETE( m_pObject );
+	//if( m_pObject !=NULL )
+	//{
+	//	delete m_pObject;
+	//	m_pObject=NULL;
+	//}
 }
 
 VOID CCharactor::_SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor )
@@ -324,7 +326,8 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 							//氦磐俊 积己等 货 钮宏 林家 持扁
 							if( iVectorIndex != -1 )
 							{
-								m_vectorCube[ iVectorIndex ] = _CreateCube();
+								m_vectorCube[ iVectorIndex ] = new CCharCube;
+								//m_vectorCube[ iVectorIndex ] = _CreateCube();
 
 								m_vectorCube[ iVectorIndex ]->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, /*(iVectorIndex * CCube::CUBEVERTEX::VertexNum)*/0, 0 );
 								m_vectorCube[ iVectorIndex ]->InitTexture( dwColor );

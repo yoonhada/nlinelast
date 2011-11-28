@@ -236,3 +236,19 @@ std::vector <CBoundBox*> * CTree::GetMapVector( NODE *pNode, D3DXVECTOR3 vPos )
 
 	return NULL;
 }
+
+VOID CTree::SetMonsAtkClear()
+{
+	std::vector<CBoundBox*>::iterator Iter;
+	if ( !_vecMonsAtk.empty() )
+	{			
+		Iter = _vecMonsAtk.begin();
+		while ( Iter != _vecMonsAtk.end() )
+		{
+			delete ( *Iter );
+			Iter++;
+		}
+	}
+
+	_vecMonsAtk.erase( _vecMonsAtk.begin(), _vecMonsAtk.end() );
+}
