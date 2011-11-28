@@ -67,14 +67,15 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 범위에 없으면 가장 가까운 목표 추격
-	else if( min >= 20.0f && min <= 2500.0f )
+	else if( min >= 20.0f && min <= 500.0f )
 	{
 		// 위치를 0, 0 기준으로 맞춘 후 계산한다.
 		INT StartX = INT( a_pMonster->Get_Pos().x + m_pTileMap->GetInfo()->vecEnd.x ) / m_pTileMap->GetInfo()->fTileSize;
-		INT StartZ = INT( a_pMonster->Get_Pos().z + m_pTileMap->GetInfo()->vecEnd.z ) / m_pTileMap->GetInfo()->fTileSize;
+		INT StartZ = INT( -( a_pMonster->Get_Pos().z - m_pTileMap->GetInfo()->vecEnd.z ) ) / m_pTileMap->GetInfo()->fTileSize;
 		INT EndX = INT( pCharactors[Target].Get_CharaPos().x + m_pTileMap->GetInfo()->vecEnd.x ) / m_pTileMap->GetInfo()->fTileSize;
-		INT EndZ = INT( pCharactors[Target].Get_CharaPos().z + m_pTileMap->GetInfo()->vecEnd.z ) / m_pTileMap->GetInfo()->fTileSize;
+		INT EndZ = INT( -( pCharactors[Target].Get_CharaPos().z - m_pTileMap->GetInfo()->vecEnd.z ) ) / m_pTileMap->GetInfo()->fTileSize;
 
+#ifdef _DEBUG
 		static FLOAT sx = 0;
 		static FLOAT sz = 0;
 		static FLOAT ex = 0;
@@ -89,6 +90,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		CDebugInterface::GetInstance()->AddMessageFloat( "sz", sz );
 		CDebugInterface::GetInstance()->AddMessageFloat( "ex", ex );
 		CDebugInterface::GetInstance()->AddMessageFloat( "ez", ez );
+#endif
 
 		a_pMonster->Set_TargetPos( EndX, EndZ );
 
@@ -102,13 +104,10 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
 		Astar::GetInstance()->clearMap();
 
-		m_pTileMap->SetInfo( TileMap::TLM_COURSE, (INT)ex, (INT)ez );
-		m_pTileMap->SetInfo( TileMap::TLM_COURSE, (INT)sx, (INT)sz );
-
 		// 새 Path를 표시한다.
 		SetPath( path );
 
-//		a_pMonster->Set_Path( path );
+		a_pMonster->Set_Path( path );
 
 		// Path가 있으면 Chase 상태로
 		if( path )
@@ -162,7 +161,7 @@ VOID Seek::SetPath( PathNode* a_pPath )
 	{
 		while( temp->next != NULL )
 		{
-			m_pTileMap->SetInfo( TileMap::TLM_WAY, temp->x, temp->y );
+			m_pTileMap->SetInfo( TileMap::TLM_COURSE, temp->x, temp->y );
 
 			temp = temp->next;
 			if( temp == NULL )
