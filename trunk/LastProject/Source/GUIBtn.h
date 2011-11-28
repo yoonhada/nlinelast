@@ -34,21 +34,11 @@ public:
 
 	typedef struct _DATA
 	{
-		IMAGE				Image[ 4 ];
+		IMAGE3D				aImage3D[ 4 ];
 		D3DXVECTOR3			vecPosition;
 		FLOAT				fWidth;
 		FLOAT				fHeight;
 	}DATA, *LPDATA;
-
-	//VOID		Create(		DWORD _ID,						//	ID Resource
-	//						DWORD _Style,					//	Style GBS_PUSH || GBS_CHECK
-	//						FLOAT _fX, FLOAT _fY,			//	Button Position
-	//						FLOAT _fWidth, FLOAT _fHeight,	//	Button Width, Height
-	//						LPCWSTR _Normal,				//	Normal TextureFileName
-	//						LPCWSTR _Hot,					//	Hot TextureFileName
-	//						LPCWSTR _Down,					//	Down TextureFileName
-	//						LPCWSTR _Disable				//	Disable TextureFileName
-	//						);
 
 	VOID		Create(		DWORD _dID, 
 							DWORD _dStyle, 
@@ -56,6 +46,15 @@ public:
 							IMAGEPARAM& _imgHot, 
 							IMAGEPARAM& _imgDown, 
 							IMAGEPARAM& _imgDisable );
+
+	VOID		Create(		DWORD _dID,							//	ID Resource
+							DWORD _dStyle,						//	Style GBS_PUSH || GBS_CHECK
+							FLOAT _fX, FLOAT _fY,				//	Button Position
+							FLOAT _fWidth, FLOAT _fHeight,		//	Button Width, Height
+							IMAGEPARAM& _imgNormal, 			//	Normal TextureFileName
+							IMAGEPARAM& _imgHot, 				//	Hot TextureFileName
+							IMAGEPARAM& _imgDown, 				//	Down TextureFileName
+							IMAGEPARAM& _imgDisable );			//	Disable TextureFileName
 
 	eState		GetState() { return m_State; }
 	VOID		SetState( eState _State );

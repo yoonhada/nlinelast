@@ -41,6 +41,30 @@ VOID GUIBtnManager::Create( DWORD _dID, DWORD _dStyle,
 	m_iNumData++;
 }
 
+VOID GUIBtnManager::Create( DWORD _dID, DWORD _dStyle, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight,
+						GUIBase::IMAGEPARAM& _imgNormal, GUIBase::IMAGEPARAM& _imgHot, GUIBase::IMAGEPARAM& _imgDown, GUIBase::IMAGEPARAM& _imgDisable )
+{
+	LPDATA	pData = new DATA;
+
+	//	Init ID
+	pData->ID	=	_dID;
+
+	//	Init Btn
+	pData->pGUIBtn = new GUIBtn( m_pd3dDevice, m_pSprite );
+
+	pData->pGUIBtn->Create( _dID,
+							_dStyle,
+							_fX, _fY,
+							_fWidth, _fHeight,
+							_imgNormal,
+							_imgHot,
+							_imgDown,
+							_imgDisable );
+
+	m_vecData.push_back( pData );
+
+	m_iNumData++;
+}
 VOID GUIBtnManager::OnDown( INT x, INT y )
 {
 	for( INT i=0 ; i<m_iNumData ; i++ )
@@ -76,7 +100,7 @@ VOID GUIBtnManager::GetCommandID( DWORD& _ID )
 			break;
 		}
 	}
-	//GUIBtn::btnMessage	=	0;
+	
 }
 
 VOID GUIBtnManager::Render()

@@ -1,122 +1,125 @@
 #include "stdafx.h"
 #include "GUIEdit.h"
 #include "GUIWriting.h"
+#include "GUIFont.h"
 
 VOID GUIEdit::Initialize()
 {
-	m_pFont = NULL;
-
 	memset( m_Data.Str, 0, sizeof( m_Data.Str ) );
+
+	m_bActivate		= FALSE;
+	m_bMessage		= FALSE;
 }
 
 VOID GUIEdit::Release()
 {
-	m_pFont->Release();
-
-	SelectObject( m_hDC, m_hOldFont );
-	DeleteObject( m_hFont );
-	ReleaseDC( GUIWriting::GetInstance().GetHWND(), m_hDC );
-}
-
-VOID GUIEdit::CreateDFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight )
-{
-	//	Create Directx Font
-	if( m_pFont != NULL )
-		m_pFont->Release();
-
-	D3DXFONT_DESC desc;
-	ZeroMemory( &desc, sizeof( D3DXFONT_DESC ) );
-
-	desc.Width				=	_iWidth;
-	desc.Height				=	_iHeight;
-	desc.Weight				=	FW_NORMAL;
-	desc.MipLevels			=	D3DX_DEFAULT;
-	desc.Italic				=	FALSE;
-	desc.CharSet			=	DEFAULT_CHARSET;
-	desc.OutputPrecision	=	OUT_DEFAULT_PRECIS;
-	desc.Quality			=	DEFAULT_QUALITY;
-	desc.PitchAndFamily		=	DEFAULT_PITCH;
-
-	lstrcpy( desc.FaceName, _pFaceName );
-
-	if( FAILED( D3DXCreateFontIndirect( GUIBase::m_pd3dDevice, &desc, &m_pFont ) ) )
-		MessageBox( NULL, L"D3DXCreateFontIndirect() failed", NULL, MB_OK );
-
-	//	Get HDC
-	//	GetTextExtentPoint32W에 들어갈 글자 정보가 있는 HDC를 구한다
-	LOGFONTW lf;
-	ZeroMemory( &lf, sizeof( LOGFONTW ) );
-
-	lf.lfWidth				= desc.Width;		
-	lf.lfHeight				= desc.Height;
-	lf.lfWeight				= desc.Weight;
-	lf.lfItalic				= desc.Italic;
-	lf.lfCharSet			= desc.CharSet;
-	lf.lfOutPrecision		= desc.OutputPrecision;
-	lf.lfQuality			= desc.Quality;
-	lf.lfPitchAndFamily		= desc.PitchAndFamily;
-
-	lstrcpy( lf.lfFaceName, desc.FaceName );
-
-	m_hDC		= GetDC( GUIWriting::GetInstance().GetHWND() );
-	m_hFont		= CreateFontIndirectW( &lf );
-	m_hOldFont	= (HFONT)SelectObject( m_hDC, m_hFont );
-}
-BOOL GUIEdit::TextOutput( RECT& _rt, LPCWSTR lpszStr, DWORD Color )
-{
-	m_pFont->DrawTextW( NULL, lpszStr, -1, &_rt, DT_LEFT, Color );
-
-	return TRUE;
 }
 
 VOID GUIEdit::Create( GUIBase::IMAGEPARAM& _imgParam )
 {
+	m_Data.iX		= static_cast<INT>( _imgParam.fX + ( 10 ) * 0.5f );
+	m_Data.iY		= static_cast<INT>( _imgParam.fY + ( _imgParam.fHeight - 20 ) * 0.5f );
+	
 	// Create Edit
 	SetRect(	&m_Data.rtText,
-				static_cast<INT>( _imgParam.fX + 10.0f ),
-				static_cast<INT>( _imgParam.fY + 5.0f ),
+				m_Data.iX,
+				m_Data.iY,
 				static_cast<INT>( _imgParam.fX + _imgParam.fWidth ),
 				static_cast<INT>( _imgParam.fY + _imgParam.fHeight ) );
 
-	CreateImage( m_Data.Image, _imgParam );
+	CreateImage2D( m_Data.img2DBackground, _imgParam );
 
 	//	Test Caret Image2D
 	GUIBase::IMAGEPARAM imgCaret;
 
 	imgCaret.dPivotType = GUIBase::GBS_TOPLEFT;
-	imgCaret.fX			= _imgParam.fX;
-	imgCaret.fY			= _imgParam.fY;
+	imgCaret.fX			= static_cast<FLOAT>( m_Data.iX );
+	imgCaret.fY			= static_cast<FLOAT>( m_Data.iY );
 	imgCaret.fWidth		= 5.0f;
-	imgCaret.fHeight	= 20.0f;
+	imgCaret.fHeight	= static_cast<FLOAT>( 10 );
 
-	AddFileName( 0, imgCaret, L"Img\\Caret0.png" );
-	AddFileName( 0, imgCaret, L"Img\\Caret1.png" );
+	AddFileName( 0, imgCaret, L"Img\\Caret0.png", 500 );
+	AddFileName( 0, imgCaret, L"Img\\Caret1.png", 500 );
 
-	CreateImage2D( m_img2DCaret, imgCaret );
+	CreateImage2D( m_Data.img2DCaret, imgCaret );
+}
+VOID GUIEdit::Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, GUIBase::IMAGEPARAM& _imgParam )
+{
+	m_Data.iX		= static_cast<INT>( _fX + ( 10 ) * 0.5f );
+	m_Data.iY		= static_cast<INT>( _fY + ( _fHeight - 20 ) * 0.5f );
+	
+	// Create Edit
+	SetRect(	&m_Data.rtText,
+				m_Data.iX,
+				m_Data.iY,
+				static_cast<INT>( _fX + _fWidth ),
+				static_cast<INT>( _fY + _fHeight ) );
 
-	m_img2DCaret.vec2Tex[ 0 ][ 0 ]->iFrameSpeed = 500;
-	m_img2DCaret.vec2Tex[ 0 ][ 1 ]->iFrameSpeed = 500;
+	CreateImage2D( m_Data.img2DBackground, _fX, _fY, _fWidth, _fHeight, _imgParam );
 
-	m_vecPosition.x = _imgParam.fX;
-	m_vecPosition.y = _imgParam.fY;
+	//	Test Caret Image2D
+	GUIBase::IMAGEPARAM imgCaret;
 
-	//	Create Font
-	CreateDFont( L"휴먼매직체", 10, 20 );
+	imgCaret.dPivotType = GUIBase::GBS_TOPLEFT;
+	imgCaret.fX			= static_cast<FLOAT>( m_Data.iX );
+	imgCaret.fY			= static_cast<FLOAT>( m_Data.iY );
+	imgCaret.fWidth		= 5.0f;
+	imgCaret.fHeight	= static_cast<FLOAT>( 20 );
+
+	AddFileName( 0, imgCaret, L"Img\\Caret0.png", 500 );
+	AddFileName( 0, imgCaret, L"Img\\Caret1.png", 500 );
+
+	CreateImage2D( m_Data.img2DCaret, imgCaret );
 }
 
 VOID GUIEdit::Update()
 {
-	GUIWriting::GetInstance().GetText( m_Data.Str );
+	INT iNum = 0;
+	GUIWriting::GetInstance().GetText( m_Data.Str, iNum );
 
+	if( m_Data.Str[ 0 ] == '\n' )
+	{
+		m_bActivate = !m_bActivate;
+
+		GUIWriting::GetInstance().Cleanup();
+	}
+	
+	if( !m_bActivate )
+	{
+		GUIWriting::GetInstance().Cleanup();
+		return;
+	}
+
+	if( m_Data.Str[ iNum - 1 ] == '\n' && iNum != 1 )
+	{
+		GUIWriting::GetInstance().Cleanup();
+		m_bMessage = TRUE;
+	}
+
+	GUIFont::GetInstance().Create( L"휴먼매직체", 20, 20, m_pd3dDevice );
 	SIZE Size;
-	GetTextExtentPoint32W( m_hDC, m_Data.Str, lstrlen( m_Data.Str ), &Size );
-	m_img2DCaret.vecPosition.x = m_vecPosition.x + static_cast<FLOAT>( Size.cx );
+	GUIFont::GetInstance().GetTextSize( m_Data.Str, Size );
+	m_Data.img2DCaret.vecPosition.x = static_cast<FLOAT>( m_Data.iX + Size.cx );
 }
 
 VOID GUIEdit::Render()
 {
-	RenderImage( m_Data.Image );
-	//RenderImage( m_imgCaret );	
-	RenderImage2D( m_img2DCaret );
-	TextOutput( m_Data.rtText, m_Data.Str, 0xff000000 );
+	if( !m_bActivate )
+		return;
+	RenderImage2D( &m_Data.img2DBackground );
+	RenderImage2D( &m_Data.img2DCaret );
+
+	GUIFont::GetInstance().Render( m_Data.Str, &m_Data.rtText, 0xff000000 );
+}
+
+BOOL GUIEdit::TakeMessage( LPWSTR _pStr )
+{
+	if( !m_bMessage )
+		return FALSE;
+
+	memcpy( _pStr, m_Data.Str, sizeof( m_Data.Str ) );
+
+	m_bMessage = FALSE;
+
+	return TRUE;
 }

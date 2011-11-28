@@ -29,12 +29,12 @@ private:
 public:
 	VOID			IMEUpdate( WPARAM& _wParam, LPARAM& _lParam );
 	VOID			CHARUpdate( WPARAM& _wParam, LPARAM& _lParam );
-	VOID			GetText( LPWSTR _pStr );
+	VOID			GetText( LPWSTR _pStr, INT& _iNum );	// Test
 
 	VOID			Cleanup();
 
-	VOID			SetHWND( HWND& _hWnd );
-	const HWND&		GetHWND();
+	//VOID			SetHWND( HWND& _hWnd );
+	//const HWND&		GetHWND();
 	//	문자열 길이를 넘기는 함수도 있어야 할듯	
 };
 

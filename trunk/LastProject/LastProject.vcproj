@@ -586,22 +586,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\LobbyScene.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\LobbyScene.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\MainScene.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\MainScene.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Source\ObjectManage.cpp"
 				>
 			</File>
@@ -677,7 +661,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\MenuGUI.h"
+					RelativePath=".\Source\MenuGUI.h"
 					>
 				</File>
 				<File
@@ -685,7 +669,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\MenuScene.h"
+					RelativePath=".\Source\MenuScene.h"
 					>
 				</File>
 			</Filter>
@@ -766,6 +750,46 @@
 				</File>
 				<File
 					RelativePath=".\Source\LoginScene.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="LobbyScene"
+				>
+				<File
+					RelativePath=".\Source\LobbyGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LobbyGUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LobbyScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\LobbyScene.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="MainScene"
+				>
+				<File
+					RelativePath=".\Source\MainGUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\MainGUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\MainScene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\MainScene.h"
 					>
 				</File>
 			</Filter>
@@ -1042,6 +1066,18 @@
 				</File>
 				<File
 					RelativePath=".\Source\GUIWriting.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUIFont"
+				>
+				<File
+					RelativePath=".\Source\GUIFont.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIFont.h"
 					>
 				</File>
 			</Filter>

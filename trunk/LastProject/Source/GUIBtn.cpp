@@ -19,49 +19,6 @@ VOID GUIBtn::Release()
 {
 }
 
-//VOID GUIBtn::Create( DWORD _ID, DWORD _Style, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, 
-//					LPCWSTR _Normal, LPCWSTR _Hot, LPCWSTR _Down, LPCWSTR _Disable )
-//{
-//	//	Init ID
-//	m_ID	=	_ID;
-//
-//	//	Init Style
-//	m_Style		=	_Style;
-//
-//	//	Init Position
-//	m_Data.vecPosition.x = _fX;	
-//	m_Data.vecPosition.y = _fY;
-//
-//	//	Init Source
-//	m_Data.fWidth	= _fWidth;
-//	m_Data.fHeight	= _fHeight;
-//	
-//	//	Init Image
-//	CreateImage(	m_Data.Image[ GB_NORMAL ],
-//					GUIBase::GBS_TOPLEFT,
-//					_fX, _fY,
-//					_fWidth, _fHeight,
-//					_Normal );
-//
-//	CreateImage(	m_Data.Image[ GB_HOT ],
-//					GUIBase::GBS_TOPLEFT,
-//					_fX, _fY,
-//					_fWidth, _fHeight,
-//					_Hot );
-//
-//	CreateImage(	m_Data.Image[ GB_DOWN ],
-//					GUIBase::GBS_TOPLEFT,
-//					_fX, _fY,
-//					_fWidth, _fHeight,
-//					_Down );
-//
-//	CreateImage(	m_Data.Image[ GB_DISABLE ],
-//					GUIBase::GBS_TOPLEFT,
-//					_fX, _fY,
-//					_fWidth, _fHeight,
-//					_Disable );
-//}
-
 VOID GUIBtn::Create( DWORD _dID, DWORD _dStyle, IMAGEPARAM& _imgNormal, IMAGEPARAM& _imgHot, IMAGEPARAM& _imgDown, IMAGEPARAM& _imgDisable )
 {
 	//	Init ID
@@ -79,21 +36,40 @@ VOID GUIBtn::Create( DWORD _dID, DWORD _dStyle, IMAGEPARAM& _imgNormal, IMAGEPAR
 	m_Data.fHeight	= _imgNormal.fHeight;
 	
 	//	Init Image
-	CreateImage(	m_Data.Image[ GB_NORMAL ], _imgNormal );
-					
-	CreateImage(	m_Data.Image[ GB_HOT ], _imgHot );
-
-	CreateImage(	m_Data.Image[ GB_DOWN ], _imgDown );
-
-	CreateImage(	m_Data.Image[ GB_DISABLE ], _imgDisable );
+	CreateImage3D(	m_Data.aImage3D[ GB_NORMAL ], _imgNormal );
+	CreateImage3D(	m_Data.aImage3D[ GB_HOT ], _imgHot );
+	CreateImage3D(	m_Data.aImage3D[ GB_DOWN ], _imgDown );
+	CreateImage3D(	m_Data.aImage3D[ GB_DISABLE ], _imgDisable );
 }
 
+VOID GUIBtn::Create( DWORD _dID, DWORD _dStyle, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight,
+					IMAGEPARAM& _imgNormal, IMAGEPARAM& _imgHot, IMAGEPARAM& _imgDown, IMAGEPARAM& _imgDisable )
+{
+	//	Init ID
+	m_ID		=	_dID;
 
+	//	Init Style
+	m_Style		=	_dStyle;
+
+	//	Init Position
+	m_Data.vecPosition.x	= _fX;	
+	m_Data.vecPosition.y	= _fY;
+
+	//	Init Source
+	m_Data.fWidth	= _fWidth;
+	m_Data.fHeight	= _fHeight;
+	
+	//	Init Image
+	CreateImage3D(	m_Data.aImage3D[ GB_NORMAL ], _fX, _fY, _fWidth, _fHeight, _imgNormal );
+	CreateImage3D(	m_Data.aImage3D[ GB_HOT ], _fX, _fY, _fWidth, _fHeight, _imgHot );
+	CreateImage3D(	m_Data.aImage3D[ GB_DOWN ], _fX, _fY, _fWidth, _fHeight, _imgDown );
+	CreateImage3D(	m_Data.aImage3D[ GB_DISABLE ], _fX, _fY, _fWidth, _fHeight, _imgDisable );
+}
 VOID GUIBtn::Render()
 {
 	if( m_State == GB_HIDDEN ) return;
 
-	RenderImage( m_Data.Image[ m_State ] );
+	RenderImage3D( &m_Data.aImage3D[ m_State ] );
 }
 
 VOID GUIBtn::SetState( eState _State )

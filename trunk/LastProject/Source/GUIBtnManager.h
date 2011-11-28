@@ -42,6 +42,15 @@ public:
 						GUIBase::IMAGEPARAM& _imgDown, 
 						GUIBase::IMAGEPARAM& _imgDisable );
 
+	VOID		Create( DWORD _dID, 
+						DWORD _dStyle, 
+						FLOAT _fX, FLOAT _fY,
+						FLOAT _fWidth, FLOAT _fHeight,
+						GUIBase::IMAGEPARAM& _imgNormal, 
+						GUIBase::IMAGEPARAM& _imgHot, 
+						GUIBase::IMAGEPARAM& _imgDown, 
+						GUIBase::IMAGEPARAM& _imgDisable );
+
 	VOID		Update( INT x, INT y );
 	VOID		Render();
 

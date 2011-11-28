@@ -12,6 +12,9 @@
 #include "TimeLifeItem.h"
 #include "GameEvent.h"
 
+#include "MainGUI.h"
+#include "OptionScene.h"
+
 // AI 테스트용
 #ifdef _DEBUG
 #include "Seek.h"
@@ -46,6 +49,9 @@ VOID	CMainScene::Clear()
 	m_pTileMap		= NULL;
 	m_pASEViewer	= NULL;
 	m_pGameEvent	= NULL;
+	
+	m_pMainGUI		= NULL;
+	m_pOptionScene	= NULL;
 
 	for( INT i=0; i<4; ++i )
 	{
@@ -119,6 +125,11 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
+	// GUI 생성
+	m_pMainGUI = new MainGUI( m_pD3dDevice, a_Sprite, a_hWnd );
+	m_pMainGUI->Create();
+	m_pOptionScene = new OptionScene;
+	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
 	//로고
 	/*m_pLogo = new CCharactor[6];
@@ -195,6 +206,9 @@ HRESULT CMainScene::Release()
 
 	SAFE_DELETE_ARRAY( m_pLogo );
 
+	SAFE_DELETE( m_pMainGUI );
+	SAFE_DELETE( m_pOptionScene );
+
 
 	return S_OK;
 }
@@ -230,6 +244,7 @@ VOID CMainScene::CreateCharactor()
 
 VOID	CMainScene::Update()
 {
+	
 	// 맵 로드
 	//if( CInput::GetInstance()->Get_F9button() == TRUE )
 	//{
@@ -348,12 +363,17 @@ VOID	CMainScene::Update()
 
 	m_pASEViewer->Update();
 
+	m_pMainGUI->Update();
+	m_pOptionScene->Update();
+
 
 	CNetwork::GetInstance()->Update();
 }
 
 VOID	CMainScene::Render()
 {
+	m_pMatrices->SetupProjection();
+
 	m_pLight->EnableLight();
 
 #ifdef _DEBUG
@@ -397,6 +417,14 @@ VOID	CMainScene::Render()
 #ifdef _DEBUG
 	TwDraw();
 #endif
+
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+	D3DXMATRIX matView;
+	D3DXMatrixIdentity( &matView );
+	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
+	m_pMainGUI->Render();
+	m_pOptionScene->Render();
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
 }
 

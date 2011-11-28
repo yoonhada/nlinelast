@@ -33,15 +33,9 @@ VOID LoginGUI::CreateBackground()
 	
 	GUIBase::IMAGEPARAM imgParam;
 
-	imgParam.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgParam.fX			= fX;
-	imgParam.fY			= fY;
-	imgParam.fWidth		= fWidth;
-	imgParam.fHeight	= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LoginScene\\Background.png" );
 	
-	m_pGUIBackground->Create( imgParam );
+	m_pGUIBackground->Create( fX, fY, fWidth, fHeight, imgParam );
 }
 
 VOID LoginGUI::CreateButton()
@@ -57,55 +51,27 @@ VOID LoginGUI::CreateButton()
 	FLOAT fWidth	= 128.0f;
 	FLOAT fHeight	= 64.0f;
 
-	imgNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgNormal.fX			= fX;
-	imgNormal.fY			= fY;
-	imgNormal.fWidth		= fWidth;
-	imgNormal.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgNormal, L"Img\\LoginScene\\Go_Normal.png" );
-
-	imgHot.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgHot.fX			= fX;
-	imgHot.fY			= fY;
-	imgHot.fWidth		= fWidth;
-	imgHot.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgHot, L"Img\\LoginScene\\Go_Normal.png" );
-
-	imgDown.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgDown.fX			= fX;
-	imgDown.fY			= fY;
-	imgDown.fWidth		= fWidth;
-	imgDown.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgDown, L"Img\\LoginScene\\Go_Down.png" );
-
-	imgDisable.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgDisable.fX			= fX;
-	imgDisable.fY			= fY;
-	imgDisable.fWidth		= fWidth;
-	imgDisable.fHeight		= fHeight;
-
 	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\LoginScene\\Go_Down.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_LOGIN_GO, 0, imgNormal, imgHot, imgDown, imgDisable );
+	m_pGUIBtnManager->Create( GUIBTN_LOGIN_GO, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
 	
 }
 
 VOID LoginGUI::CreateEdit()
 {
-	GUIBase::IMAGEPARAM imgParam;
+	FLOAT fX		= m_fX + 250.0f;
+	FLOAT fY		= m_fY + 200.0f;
+	FLOAT fWidth	= 128.0f;
+	FLOAT fHeight	= 64.0f;
 
-	imgParam.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgParam.fX			= m_fX + 250.0f;
-	imgParam.fY			= m_fY + 200.0f;
-	imgParam.fWidth		= 128.0f;
-	imgParam.fHeight	= 64.0f;
+	GUIBase::IMAGEPARAM imgParam;
 
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LoginScene\\Name_Edit.png" );
 
-	m_pGUIEdit->Create( imgParam );
+	m_pGUIEdit->Create( fX, fY, fWidth, fHeight, imgParam );
 }
 
 VOID LoginGUI::Create()

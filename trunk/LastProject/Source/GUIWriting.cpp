@@ -29,6 +29,9 @@ VOID GUIWriting::CHARUpdate( WPARAM& _wParam, LPARAM& _lParam )
 {
 	switch( _wParam )
 	{
+	case VK_RETURN:
+		m_Str[ m_iNum++ ] = '\n';
+		break;
 	case VK_BACK:
 		if( m_iNum - 1 >= 0 )
 			m_Str[ --m_iNum ] = '\0';
@@ -37,12 +40,17 @@ VOID GUIWriting::CHARUpdate( WPARAM& _wParam, LPARAM& _lParam )
 		m_Str[ m_iNum++ ] = static_cast<TCHAR>( _wParam );
 		break;
 	}
+
+	//Console::GetInstance().Messagef( L"%s\n", m_Str );
 }
 
-VOID GUIWriting::GetText( LPWSTR _pStr )
+VOID GUIWriting::GetText( LPWSTR _pStr, INT& _iNum )
 {
 	memset( _pStr, 0, sizeof( _pStr ) );
 	wcsncpy( _pStr, m_Str, sizeof( TCHAR ) * m_iNum );
+
+	//	Test
+	_iNum = m_iNum;
 }
 
 VOID GUIWriting::Cleanup()
@@ -52,13 +60,13 @@ VOID GUIWriting::Cleanup()
 	m_iNum = 0;
 }
 
-VOID GUIWriting::SetHWND( HWND& _hWnd )
-{
-	m_hWnd = _hWnd;
-}
-
-const HWND& GUIWriting::GetHWND()
-{
-	return m_hWnd;
-}
-
+//VOID GUIWriting::SetHWND( HWND& _hWnd )
+//{
+//	m_hWnd = _hWnd;
+//}
+//
+//const HWND& GUIWriting::GetHWND()
+//{
+//	return m_hWnd;
+//}
+//
