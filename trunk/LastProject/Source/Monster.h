@@ -63,7 +63,7 @@ public:
 	}
 
 	VOID CreateAttackBoundBox();
-
+	VOID BreakCubeAll();
 
 private:
 	VOID AniInterpolation();

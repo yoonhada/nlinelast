@@ -37,7 +37,7 @@ VOID CQube::Update( CBoundBox * pBB )
 	fLen = CFrequency::GetInstance()->getFrametime();
 	m_vAccelerate *= CPhysics::GetInstance()->m_fAirRegistance;		// 가속도 공기저항 감속
 	
-	if ( fLen > 0.0333f )
+	if ( fLen > 0.0333f )			// 최저값 보정
 	{
 		vDir = D3DXVECTOR3( 0.00000000f, 0.020153461f, 0.00000000f );
 	}
@@ -49,7 +49,7 @@ VOID CQube::Update( CBoundBox * pBB )
 	m_vMomentum = m_vMomentum - vDir;
 
 	// 이동값 갱신
-	vDir = m_vPos + m_vAccelerate + m_vMomentum;// * CFrequency::GetInstance()->getFrametime();
+	vDir = m_vPos + m_vAccelerate + m_vMomentum;
 	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), vDir );
 	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
 	{
@@ -102,12 +102,12 @@ VOID CQube::Update( CBoundBox * pBB )
 		m_vAccelerate.y *= -1.0f;
 
 		//회전량의 방향성 추가		
-		//m_vRotateTemp.x = -m_vAccelerate.z * CPhysics::GetInstance()->m_fElastic;
-		//m_vRotateTemp.z = -m_vAccelerate.x * CPhysics::GetInstance()->m_fElastic;
+		m_vRotateTemp.x = -m_vAccelerate.z * CPhysics::GetInstance()->m_fElastic;
+		m_vRotateTemp.z = -m_vAccelerate.x * CPhysics::GetInstance()->m_fElastic;
 
 		m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
-		//m_vRotateTemp = CPhysics::GetInstance()->m_fElastic;
-		//vDir = m_vPos + m_vMomentum;
+		m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
+		vDir = m_vPos + m_vMomentum;
 		if( !m_bVisiable )
 			return;
 	}
@@ -115,10 +115,10 @@ VOID CQube::Update( CBoundBox * pBB )
 	m_bVisiable = TRUE;
 	m_vPos = vDir;
 
-	//m_vRotate += m_vRotateTemp;
-	//Set_ControlRotate( 0, m_vRotate.x );
-	//Set_ControlRotate( 1, m_vRotate.y );
-	//Set_ControlRotate( 2, m_vRotate.z );
+	m_vRotate += m_vRotateTemp;
+	Set_ControlRotate( 0, m_vRotate.x );
+	Set_ControlRotate( 1, m_vRotate.y );
+	Set_ControlRotate( 2, m_vRotate.z );
 	Set_ControlTranslate( 0, m_vPos.x );
 	Set_ControlTranslate( 1, m_vPos.y );
 	Set_ControlTranslate( 2, m_vPos.z );

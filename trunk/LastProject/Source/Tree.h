@@ -73,7 +73,7 @@ public:
 	std::vector <CBoundBox*> * GetMapVector( NODE *pNode, D3DXVECTOR3 vPos );
 
 	VOID SetMonsAtkClear();
-
+	VOID SetCharAtkClear();
 
 private:
 	std::vector <CBoundBox*> _vecChar;

@@ -286,7 +286,7 @@ VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WOR
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_CS_UTOM_ATTACK;
+	WORD wMsgID = MSG_UTOM_ATTACK;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -357,11 +357,11 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	}	
 }
 
-VOID CNetwork::CS_MTOU_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection )
+VOID CNetwork::CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wDestroyCount, std::vector<WORD>& a_pList )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_CS_MTOU_ATTACK;
+	WORD wMsgID = MSG_MTOU_ATTACK;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -369,7 +369,6 @@ VOID CNetwork::CS_MTOU_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 	sendPk.Write( a_vDirection.x );
 	sendPk.Write( a_vDirection.y );
 	sendPk.Write( a_vDirection.z );
-	sendPk.Write( a_cDestroyPart );
 	sendPk.Write( a_wDestroyCount );
 
 	for( WORD i=0; i<a_wDestroyCount; ++i )
@@ -388,17 +387,16 @@ VOID CNetwork::CS_MTOU_ATTACK( CHAR a_cDestroyPart, WORD a_wDestroyCount, std::v
 
 VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 {
-	FLOAT fDirX, fDirY, fDirZ;
 	WORD wClientNumber;
+	FLOAT fDirX, fDirY, fDirZ;
 	CHAR cDestroyPart;
 	WORD wDestroyCount;
-	WORD wList[1000];
+	WORD wList[100];
 
+	a_pk.Read( &wClientNumber );
 	a_pk.Read( &fDirX);
 	a_pk.Read( &fDirY);
 	a_pk.Read( &fDirZ);
-	a_pk.Read( &wClientNumber );
-	a_pk.Read( &cDestroyPart );
 	a_pk.Read( &wDestroyCount );
 
 
@@ -408,6 +406,7 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
+	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 	//CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );

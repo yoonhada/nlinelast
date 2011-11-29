@@ -172,6 +172,8 @@ VOID	CMainScene::Update()
 		D3DXMATRIXA16 mat;
 		D3DXMatrixIdentity( &mat );
 		m_pCharactors[0].BreakQube( mat );
+
+		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
 	}
 
 	// 카메라: 캐릭터 위치,각도 받아오기
@@ -207,6 +209,9 @@ VOID	CMainScene::Update()
 
 	CNetwork::GetInstance()->Update();
 	m_pGameEvent->Update();	CTree::GetInstance()->SetMonsAtkClear();
+
+	if ( CInput::GetInstance()->Get_NumKey(7) )
+		m_pMonster->BreakCubeAll();
 }
 
 VOID	CMainScene::Render()

@@ -75,16 +75,36 @@ VOID CObjectManage::Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDes
 	++m_wTotalDestroyPart;
 }
 
-VOID CObjectManage::Send_NetworkSendDestroyData()
+//VOID CObjectManage::Set_NetworkSendDestroyData( WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir )
+//{
+//	m_wDestroyPart[m_wTotalDestroyPart] = 0;
+//	m_wDestroyCount[m_wTotalDestroyPart] = a_wDestroyCount;
+//	m_vDestroyDir = a_vDestroyDir;
+//
+//	++m_wTotalDestroyPart;
+//}
+
+VOID CObjectManage::Send_NetworkSendDestroyData(BOOL _bIsCharter)
 {
-	if( m_wTotalDestroyPart > 0 )
+	if( m_wTotalDestroyPart <= 0 )
+		return;
+
+	if( _bIsCharter == FALSE)
 	{
 		CNetwork::GetInstance()->CS_UTOM_ATTACK( m_vDestroyDir, m_wTotalDestroyPart, m_wDestroyPart, m_wDestroyCount, m_NetworkSendTempVector );
 		m_NetworkSendTempVector.clear();
-		CDebugConsole::GetInstance()->Messagef( L"m_NetworkSendTempVector Size : %d\n", m_NetworkSendTempVector.size() );
-		m_wTotalDestroyPart = 0;
-		ZeroMemory( &m_wDestroyPart, sizeof(m_wDestroyPart) );
-		ZeroMemory( &m_wDestroyCount, sizeof(m_wDestroyCount) );
-		ZeroMemory( m_vDestroyDir, sizeof(m_vDestroyDir) );
+		CDebugConsole::GetInstance()->Messagef( L"U-M m_NetworkSendTempVector Size : %d\n", m_NetworkSendTempVector.size() );
 	}
+	else
+	{
+		CNetwork::GetInstance()->CS_MTOU_ATTACK( m_vDestroyDir, m_wDestroyCount[0], m_NetworkSendTempVector );
+		m_NetworkSendTempVector.clear();
+		CDebugConsole::GetInstance()->Messagef( L"M-U m_NetworkSendTempVector Size : %d\n", m_NetworkSendTempVector.size() );
+	}
+
+	m_wTotalDestroyPart = 0;
+	ZeroMemory( &m_wDestroyPart, sizeof(m_wDestroyPart) );
+	ZeroMemory( &m_wDestroyCount, sizeof(m_wDestroyCount) );
+	ZeroMemory( m_vDestroyDir, sizeof(m_vDestroyDir) );
+
 }
