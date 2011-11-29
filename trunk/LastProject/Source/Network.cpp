@@ -268,7 +268,7 @@ VOID CNetwork::CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_CS_MOVE;
+	WORD wMsgID = MSG_MOVE;
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
@@ -484,6 +484,11 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 
 	// 捞悼 贸府
 	case MSG_SC_MOVE:
+		SC_MOVEMENT( a_pk );
+		break;
+
+		// 捞悼 贸府
+	case MSG_MOVE:
 		SC_MOVEMENT( a_pk );
 		break;
 
