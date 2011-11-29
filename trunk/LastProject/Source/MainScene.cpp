@@ -252,9 +252,6 @@ VOID	CMainScene::Render()
 #endif
 
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
-	D3DXMATRIX matView;
-	D3DXMatrixIdentity( &matView );
-	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );

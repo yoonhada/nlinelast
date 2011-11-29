@@ -6,6 +6,7 @@
 
 class LobbyGUI;
 class OptionScene;
+class CCharactor;
 
 class LobbyScene : public IScene
 {
@@ -22,6 +23,22 @@ public:
 	{
 		this->Release();
 	}
+	
+	typedef struct _DATA
+	{
+		CCharactor*		pCharacter;
+		D3DXVECTOR3		vecPosition;
+		
+		BOOL			bRotate;
+
+		DWORD			dID;
+
+		_DATA()
+		{
+			pCharacter	= NULL;
+			bRotate		= FALSE;
+		}
+	}DATA, *LPDATA;
 
 	virtual HRESULT	Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd );
 	virtual VOID	Update();
@@ -29,6 +46,9 @@ public:
 	
 	virtual INT		GetSceneNext();
 	virtual INT		GetSceneState();
+
+	VOID			CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecPosition );
+	VOID			ActivateRotate( INT _iIndex );
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
@@ -40,6 +60,14 @@ private:
 
 	LobbyGUI*				m_pLobbyGUI;
 	OptionScene*			m_pOptionScene;
+	
+	LPDATA					m_aData;
+	FLOAT					m_fChrRotate;
+	FLOAT					m_fIncRotate;
+	
+	CLight*					m_pLight;
+	CMatrices*				m_pMatrices;
+
 
 public:
 

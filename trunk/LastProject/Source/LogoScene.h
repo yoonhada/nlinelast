@@ -22,6 +22,13 @@ public:
 		this->Release();
 	}
 
+	typedef struct _DATA
+	{
+		BOOL	bActivate;
+		DWORD	dFrameSpeed;
+		DWORD	dBeginTime;
+	}DATA, *LPDATA;
+
 	virtual HRESULT	Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd );
 	virtual VOID	Update();
 	virtual VOID	Render();
@@ -38,6 +45,12 @@ private:
 	INT						m_scnState;
 
 	CCharactor*				m_pLogo;
+
+	CLight*					m_pLight;
+	CMatrices*				m_pMatrices;
+
+	DATA					m_datLogo;
+	DATA					m_datScene;
 
 public:
 

@@ -2,11 +2,12 @@
 #include "SceneManage.h"
 #include "Scene.h"
 #include "LoadingScene.h"
+#include "LogoScene.h"
 #include "StoryScene.h"
 #include "MenuScene.h"
+#include "LobbyScene.h"
 #include "MainScene.h"
 //#include "LoadScene.h"
-#include "LobbyScene.h"
 #include "LogoScene.h"
 
 #define _TEST
@@ -81,6 +82,8 @@ HRESULT CSceneManage::Release()
 	SAFE_DELETE( m_pScene );
 	SAFE_DELETE( m_pLoadingScene );
 
+	SAFE_RELEASE( m_pSprite );
+
 	CObjectManage::DestoryInstance();
 
 	return S_OK;
@@ -129,7 +132,7 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 	{
 	case IScene::SCENE_LOGO:
 		CDebugConsole::GetInstance()->Messagef( L"SCENE_LOGO\n" );
-		//m_pNextScene = new CLogoScene;
+		m_pNextScene = new LogoScene;
 		break;
 	case IScene::SCENE_STORY:
 		CDebugConsole::GetInstance()->Messagef( L"SCENE_STORY\n" );
@@ -151,7 +154,6 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 
 	//m_pNextScene	= m_pScene;
 	m_pScene		= m_pLoadingScene;
-
 
 	//m_bThreadOn = TRUE;
 	m_hThread = (HANDLE)_beginthreadex(NULL, 0, ThreadFunc, NULL, 0, &m_uiThreadID);
