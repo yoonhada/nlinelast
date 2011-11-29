@@ -73,6 +73,8 @@ VOID Astar::clearMap()
 			{
 				m_Map[i][j].visit = FALSE;
 				m_Map[i][j].map = 0;
+				m_Map[i][j].cameX = -1;
+				m_Map[i][j].cameY = -1;
 			}
 		}
 	}
@@ -176,6 +178,7 @@ PathNode* Astar::createPath( INT a_iX, INT a_iY )
 	PathNode *path = new PathNode;
 	path->x = a_iX;
 	path->y = a_iY;
+	path->remainedNode = 0;
 	path->next = NULL;
 
 	return path;
@@ -190,12 +193,15 @@ PathNode* Astar::getPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy )
 	INT y = a_iEy;
 	INT tx = x;
 	INT ty = y;
+//	INT tx = m_Map[x][y].cameX;
+//	INT ty = m_Map[x][y].cameY;
 
 	if( m_Map[x][y].cameX < 0 || m_Map[x][y].cameY < 0 )
 	{
 		return NULL;
 	}
 
+	INT remainedNode = 0;
 	while( a_iSx != x || a_iSy != y )
 	{
 		temp = createPath( x, y );
@@ -203,6 +209,8 @@ PathNode* Astar::getPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy )
 		{
 			return NULL;
 		}
+
+		temp->remainedNode = remainedNode++;
 		temp->next = path;
 		path = temp;
 		tx = x;

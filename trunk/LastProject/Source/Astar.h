@@ -22,6 +22,7 @@ typedef struct TreeRoot
 typedef struct PathNode
 {
 	INT x, y;
+	INT remainedNode;
 	struct PathNode *next;
 }PathNode;
 
