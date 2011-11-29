@@ -157,7 +157,7 @@ VOID CMainScene::CreateCharactor()
 		}
 		else
 		{
-			m_pCharactors[Loop].Set_Position( D3DXVECTOR3(0, 0, 0) );
+			m_pCharactors[Loop].Set_Position( D3DXVECTOR3(-100, 0, 600) );
 		}
 		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
 	}
@@ -175,6 +175,7 @@ VOID	CMainScene::Update()
 
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
 	}
+	CTree::GetInstance()->SetMonsAtkClear();
 
 	// 카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
@@ -208,7 +209,7 @@ VOID	CMainScene::Update()
 	m_pOptionScene->Update();
 
 	CNetwork::GetInstance()->Update();
-	m_pGameEvent->Update();	CTree::GetInstance()->SetMonsAtkClear();
+	m_pGameEvent->Update();	
 
 	//if ( CInput::GetInstance()->Get_NumKey(7) )
 	//	m_pMonster->BreakCubeAll();
