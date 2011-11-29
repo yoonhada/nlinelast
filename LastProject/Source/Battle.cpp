@@ -40,7 +40,7 @@ VOID Battle::Execute( CMonster* a_pMonster )
 	CDebugInterface::GetInstance()->AddMessageFloat( "target", target );
 
 	// 근접 공격범위 안에 들어왔으면 밀리나 회전 공격중 랜덤 선택
-	if( fDistance <= 20.0f )
+	if( fDistance < 25.0f )
 	{
 		// 근접 공격
 		//if( FastRand2() < 0.5f )

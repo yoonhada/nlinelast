@@ -59,7 +59,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 가장 가까이에 있는 목표가 공격 범위에 있으면 전투 상태로 전환
-	if( min < 20.0f )
+	if( min < 25.0f )
 	{
 		a_pMonster->Set_Target( Target );
 		a_pMonster->Set_TargetDistance( min );
@@ -67,7 +67,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 범위에 없으면 가장 가까운 목표 추격
-	else if( min >= 20.0f && min <= 500.0f )
+	else if( min >= 25.0f && min <= 500.0f )
 	{
 		// 위치를 0, 0 기준으로 맞춘 후 계산한다.
 		INT StartX = INT( a_pMonster->Get_Pos().x + m_pTileMap->GetInfo()->vecEnd.x ) / m_pTileMap->GetInfo()->fTileSize;
@@ -99,6 +99,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		FLOAT time = ( timeGetTime() - oldTime ) * 0.001f;
 		CDebugConsole::GetInstance()->Messagef( "Search Time : %f \n", time );
 
+#ifdef _DEBUG
 		// 이전 Path 표시를 없앤다.
 		ClearPath( a_pMonster->Get_Path() );
 		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
@@ -106,14 +107,14 @@ VOID Seek::Execute( CMonster* a_pMonster )
 
 		// 새 Path를 표시한다.
 		SetPath( path );
+#endif
 
 		a_pMonster->Set_Path( path );
 
 		// Path가 있으면 Chase 상태로
 		if( path )
 		{
-//			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
-//			a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
+			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 		}
 	}
 	else
@@ -142,13 +143,11 @@ VOID Seek::ClearPath( PathNode* a_pPath )
 	PathNode* temp = a_pPath;
 	if( temp )
 	{
-		while( temp->next != NULL )
+		while( temp != NULL )
 		{
 			m_pTileMap->SetInfo( TileMap::TLM_WAY, temp->x, temp->y );
 
 			temp = temp->next;
-			if( temp == NULL )
-				break;
 		}
 	}
 }
@@ -159,13 +158,11 @@ VOID Seek::SetPath( PathNode* a_pPath )
 	PathNode* temp = a_pPath;
 	if( temp )
 	{
-		while( temp->next != NULL )
+		while( temp != NULL )
 		{
 			m_pTileMap->SetInfo( TileMap::TLM_COURSE, temp->x, temp->y );
 
 			temp = temp->next;
-			if( temp == NULL )
-				break;
 		}
 	}
 }

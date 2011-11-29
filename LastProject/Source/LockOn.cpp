@@ -153,7 +153,7 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	// 공격 각도내에 들어왔으면
 	if( isInSight() )
 	{
-//		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
 //		a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
 	}
 }
