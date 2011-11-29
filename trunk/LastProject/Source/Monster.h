@@ -7,6 +7,9 @@ class CCharactor;
 
 class CMonster : public CObjectSRT
 {
+public:
+	// 애니메이션 번호
+	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK, ANIM_MELEE_ATTACK, ANIM_STAND, };
 
 public:
 	CMonster();

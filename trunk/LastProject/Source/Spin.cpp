@@ -16,14 +16,14 @@ Spin* Spin::GetInstance()
 
 VOID Spin::Enter( CMonster* a_pMonster )
 {
-
+	// Spin 공격 애니메이션으로 바꾼다.
+	a_pMonster->ChangeAnimation( CMonster::ANIM_SPIN_ATTACK );
 }
 
 
 VOID Spin::Execute( CMonster* a_pMonster )
 {
-	a_pMonster->ChangeAnimation( 1 );
-
+	// 경직 상태로
 	a_pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
 }
 
