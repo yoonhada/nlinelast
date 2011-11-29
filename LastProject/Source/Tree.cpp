@@ -256,16 +256,16 @@ VOID CTree::SetMonsAtkClear()
 
 VOID CTree::SetCharAtkClear()
 {
-	std::vector<CBoundBox*>::iterator Iter;
-	if ( !_vecCharAtk.empty() )
-	{			
-		Iter = _vecCharAtk.begin();
-		while ( Iter != _vecCharAtk.end() )
-		{
-			delete ( *Iter );
-			Iter++;
-		}
-	}
+	//std::vector<CBoundBox*>::iterator Iter;
+	//if ( !_vecCharAtk.empty() )
+	//{			
+	//	Iter = _vecCharAtk.begin();
+	//	while ( Iter != _vecCharAtk.end() )
+	//	{
+	//		delete ( *Iter );
+	//		Iter++;
+	//	}
+	//}
 
 	_vecCharAtk.erase( _vecCharAtk.begin(), _vecCharAtk.end() );
 }

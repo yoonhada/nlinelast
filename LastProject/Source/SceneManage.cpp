@@ -49,10 +49,10 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	CObjectManage::GetInstance()->Create( m_pD3dDevice );
 
-	//m_pScene = new CLobbyScene;
+	m_pScene = new LobbyScene;
 	//m_pLoadScene = m_pScene;
 #ifdef _TEST
-	m_pScene			= new CMainScene;
+	//m_pScene			= new CMainScene;
 #else
 	m_pScene			= new LogoScene;
 #endif // _DEBUG	
