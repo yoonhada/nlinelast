@@ -210,8 +210,8 @@ VOID	CMainScene::Update()
 	CNetwork::GetInstance()->Update();
 	m_pGameEvent->Update();	CTree::GetInstance()->SetMonsAtkClear();
 
-	if ( CInput::GetInstance()->Get_NumKey(7) )
-		m_pMonster->BreakCubeAll();
+	//if ( CInput::GetInstance()->Get_NumKey(7) )
+	//	m_pMonster->BreakCubeAll();
 }
 
 VOID	CMainScene::Render()
