@@ -14,6 +14,8 @@ public:
 		MSG_CS_LOGON,
 		MSG_CS_CHAT,
 		MSG_CS_MOVE,
+		MSG_UTOM_ATTACK,
+		MSG_MTOU_ATTACK,
 		MSG_CS_UTOM_ATTACK,
 		MSG_CS_MTOU_ATTACK,
 		MSG_CS_UTOM_ATTACK_ANIMATION,
@@ -81,7 +83,7 @@ public:
 	VOID CS_CHAT();
 	VOID CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
 	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
-	VOID CS_MTOU_ATTACK( CHAR cDestroyPart, WORD cDestroyCount, std::vector<WORD>& a_pList, D3DXVECTOR3 a_vDirection );
+	VOID CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );
 
 	VOID CS_UTOM_Attack_Animation( WORD a_wAnimationNumber );
 	

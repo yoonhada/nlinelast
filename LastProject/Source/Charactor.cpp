@@ -75,7 +75,7 @@ VOID CCharactor::Clear()
 	m_fAniAngle = 0.0f;
 	m_vAniVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	m_chMonsterPart = -1;
+	m_chMonsterPart = 0;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
@@ -140,9 +140,6 @@ VOID CCharactor::_LoadRelease()
 		if( m_vectorCube[Loop] != NULL )
 		{
 			SAFE_DELETE(m_vectorCube[Loop]);
-			//m_vectorCube[Loop]->Release();
-			//delete m_vectorCube[Loop];
-			//m_vectorCube[Loop] = NULL;
 		}
 	}
 
@@ -153,11 +150,6 @@ VOID CCharactor::_LoadRelease()
 	}
 
 	SAFE_DELETE( m_pObject );
-	//if( m_pObject !=NULL )
-	//{
-	//	delete m_pObject;
-	//	m_pObject=NULL;
-	//}
 }
 
 VOID CCharactor::_SetBoxOutLineColor( CCharCube* a_zCube, DWORD a_dwColor )
@@ -243,12 +235,9 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 	
 	//m_pOctTree->Build( iTemp );
 	FLOAT fSize = 0.5f * iTemp;
-	m_pBoundBox->SetSize(0, -fSize);
-	m_pBoundBox->SetSize(1, -fSize);
-	m_pBoundBox->SetSize(2, -fSize);
-	m_pBoundBox->SetSize(3,  fSize);
-	m_pBoundBox->SetSize(4,  fSize);
-	m_pBoundBox->SetSize(5,  fSize);
+	FLOAT fBBSize[2][3];
+	fBBSize[0][0] = fBBSize[0][1] = fBBSize[0][2] = 0.0f;	// MIN
+	fBBSize[1][0] = fBBSize[1][1] = fBBSize[1][2] = 0.0f;	// MAX
 
 	// 버텍스, 인덱스 버퍼 생성
 	if( FAILED( m_pD3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
@@ -321,24 +310,16 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 						//if( iVectorIndex != -1 )
 							//m_pOctTree->SetChildIndex(vPos, iVectorIndex );
 
-						if( Loop == EnumCharFrame::BASE )
-						{
-							//벡터에 생성된 새 큐브 주소 넣기
-							if( iVectorIndex != -1 )
-							{
-								m_vectorCube[ iVectorIndex ] = new CCharCube;
-								//m_vectorCube[ iVectorIndex ] = _CreateCube();
-
-								m_vectorCube[ iVectorIndex ]->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, /*(iVectorIndex * CCube::CUBEVERTEX::VertexNum)*/0, 0 );
-								m_vectorCube[ iVectorIndex ]->InitTexture( dwColor );
-								
-
-							}
-
-						}
-
 						if( iVectorIndex != -1 )
 						{
+							if( Loop == EnumCharFrame::BASE )
+							{
+								//벡터에 생성된 새 큐브 주소 넣기
+								m_vectorCube[ iVectorIndex ] = new CCharCube;
+								m_vectorCube[ iVectorIndex ]->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, /*(iVectorIndex * CCube::CUBEVERTEX::VertexNum)*/0, 0 );
+								m_vectorCube[ iVectorIndex ]->InitTexture( dwColor );								
+							}
+
 							m_vectorCube[ iVectorIndex ]->Set_NumIndex( Loop, iIndex );
 							m_vectorCube[ iVectorIndex ]->Set_Type( Loop, iType );
 							m_vectorCube[ iVectorIndex ]->Set_Color( Loop, dwColor );
@@ -356,6 +337,14 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 							m_vectorCube[iVectorIndex]->Set_ControlTranslate( 2, m_vectorCube[iVectorIndex]->Get_Pos( Loop ).z );
 							m_vectorCube[iVectorIndex]->Calcul_MatWorld();
 							m_vectorCube[iVectorIndex]->Set_Matrix( Loop, m_vectorCube[iVectorIndex]->Get_MatWorld() );
+
+							// Set BoundBox Size
+							if (fBBSize[0][0] > vPos.x)		fBBSize[0][0] = vPos.x;
+							if (fBBSize[0][1] > vPos.y)		fBBSize[0][1] = vPos.y;
+							if (fBBSize[0][2] > vPos.z)		fBBSize[0][2] = vPos.z;
+							if (fBBSize[1][0] < vPos.x)		fBBSize[1][0] = vPos.x;
+							if (fBBSize[1][1] < vPos.y)		fBBSize[1][1] = vPos.y;
+							if (fBBSize[1][2] < vPos.z)		fBBSize[1][2] = vPos.z;
 						}
 					}
 				}
@@ -364,6 +353,13 @@ VOID CCharactor::Load( WCHAR* a_pFileName )
 
 		fwscanf( pFile, L"%s", szTemp );
 	}
+
+	m_pBoundBox->SetSize(0, fBBSize[0][0]);
+	m_pBoundBox->SetSize(1, fBBSize[0][1]);
+	m_pBoundBox->SetSize(2, fBBSize[0][2]);
+	m_pBoundBox->SetSize(3, fBBSize[1][0]);
+	m_pBoundBox->SetSize(4, fBBSize[1][1]);
+	m_pBoundBox->SetSize(5, fBBSize[1][2]);
 
 	fclose( pFile );
 
@@ -902,10 +898,6 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		{
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
 			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
-		}
-		else
-		{
-			//CNetwork::GetInstance()->CS_MTOU_ATTACK( 0, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
 		m_fKnockBack = (FLOAT)nCount;
 		//NetworkSendTempVector.clear();

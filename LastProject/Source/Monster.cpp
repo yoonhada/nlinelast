@@ -928,9 +928,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	CObjectManage::GetInstance()->Send_NetworkSendDestroyData();
 
-	CTree::GetInstance()->GetCharAtkVector()->erase(
-		CTree::GetInstance()->GetCharAtkVector()->begin(), 
-		CTree::GetInstance()->GetCharAtkVector()->end() );
+	CTree::GetInstance()->SetCharAtkClear();
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
@@ -1348,3 +1346,8 @@ VOID CMonster::Render()
 	}
 }
 
+VOID CMonster::BreakCubeAll()
+{
+	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+		m_pBox[Loop].BreakCubeAll();
+}
