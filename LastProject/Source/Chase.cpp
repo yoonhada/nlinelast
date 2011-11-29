@@ -43,6 +43,9 @@ VOID Chase::Enter( CMonster* a_pMonster )
 		m_fAngle0 = m_fCurrentAngle;
 		m_fAngle1 = m_fNextAngle;
 	}
+
+	// 이동 애니메이션으로 바꾼다.
+	a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
 }
 
 

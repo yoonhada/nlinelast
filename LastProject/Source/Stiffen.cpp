@@ -26,12 +26,12 @@ VOID Stiffen::Execute( CMonster* a_pMonster )
 	static FLOAT t = 0.0f;
 	t += CFrequency::GetInstance()->getFrametime();
 
-	if( t >= 1.5f )
+	if( t >= 1.0f )
 	{
 		t = 0.0f;
 
-		// 애니메이션 0번 복구
-		a_pMonster->ChangeAnimation( 0 );
+		// 대기 애니메이션으로 바꾼다.
+		a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
 
 		// 경직상태가 끝나면 애니메이션 보간을 위해 보간 대기 상태로
 		a_pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );

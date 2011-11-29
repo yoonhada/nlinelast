@@ -18,7 +18,8 @@ Seek* Seek::GetInstance()
 
 VOID Seek::Enter( CMonster* a_pMonster )
 {
-
+	// 대기 애니메이션으로 바꾼다.
+	a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 }
 
 
