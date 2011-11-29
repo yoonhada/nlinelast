@@ -93,7 +93,8 @@ VOID CLight::EnableLight()
 	light.Falloff = 1.0f;
 	light.Attenuation0 = 1.0f;
 
-	vecDir = D3DXVECTOR3( 1.0f, -1.0f, 0.0f );
+	//vecDir = D3DXVECTOR3( 1.0f, -1.0f, 0.0f );
+	vecDir = D3DXVECTOR3( 0.0f, 0.0f, -1.0f );
 
 	D3DXVec3Normalize( ( D3DXVECTOR3* )&light.Direction, &vecDir );
 	

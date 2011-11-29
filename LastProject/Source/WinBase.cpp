@@ -62,6 +62,7 @@ HRESULT CWinBase::Release()
 	Astar::DestoryInstance();
 
 	m_bThreadEndCheck = FALSE;
+	
 
 	return S_OK;
 }

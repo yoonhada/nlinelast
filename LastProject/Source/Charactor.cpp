@@ -1005,6 +1005,7 @@ VOID CCharactor::BreakCubeAll()
 					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
 				}
 			}
+
 		}
 	}
 

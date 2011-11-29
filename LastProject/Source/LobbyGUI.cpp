@@ -79,23 +79,23 @@ VOID LobbyGUI::CreateButton()
 
 	fX			= 50.0f;
 	fY			= 100.0f;
-	fWidth		= 200.0f;
-	fHeight		= 450.0f;
+	fWidth		= 300.0f;
+	fHeight		= 600.0f;
 
 	m_pGUIBase->AddFileName( 0, imgSelectNormal, L"Img\\LobbyScene\\Select_Normal.png" );
 	m_pGUIBase->AddFileName( 0, imgSelectHot, L"Img\\LobbyScene\\Select_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgSelectDown, L"Img\\LobbyScene\\Select_Down.png" );
-	m_pGUIBase->AddFileName( 0, imgSelectDisable, L"Img\\LobbyScene\\Select_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectDown, L"Img\\LobbyScene\\Select_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectDisable, L"Img\\LobbyScene\\Select_Normal.png" );
 
 	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_1, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 210.0f;
+	fX += 310.0f;
 	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_2, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 210.0f;
+	fX += 310.0f;
 	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_3, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 210.0f;
+	fX += 310.0f;
 	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_4, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 }
 
@@ -149,7 +149,7 @@ VOID LobbyGUI::Update()
 
 VOID LobbyGUI::Render()
 {
-	m_pGUIBackground->Render();
+	//m_pGUIBackground->Render();
 	m_pGUIBtnManager->Render();
 }
 

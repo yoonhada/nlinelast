@@ -199,6 +199,10 @@ VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, IMAGEPARAM& _imgParam )
 
 VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 {
+	m_pD3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
+	m_pD3dDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
+	m_pD3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
+
 	//	Set World, Projection Matrix
 	SetMatrix( _pImage3D->vecScale, _pImage3D->vecRotate, _pImage3D->vecTrans );
 
@@ -243,6 +247,8 @@ VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 
 	//	Identity ProjectionMatrix
 	m_pD3dDevice->SetTransform( D3DTS_PROJECTION, &matIdentity );
+
+	m_pD3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
 }
 
 VOID GUIBase::RenderImage2D( LPIMAGE2D _pImage2D )
@@ -303,6 +309,11 @@ VOID GUIBase::SetMatrix( D3DXVECTOR3& _vecScale, D3DXVECTOR3& _vecRotate, D3DXVE
 	matWorld = matScale * matRotateX * matRotateY * matRotateZ * matTranslate;
 	
 	m_pD3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
+
+	//	Identity View Matrix
+	D3DXMATRIX matView;
+	D3DXMatrixIdentity( &matView );
+	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 
 	//	Set Projection Matrix
 	D3DVIEWPORT9 vp;
