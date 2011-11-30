@@ -10,6 +10,7 @@ class CNetwork : public CSingleton<CNetwork>
 public:
 	enum MESSAGE_ID
 	{
+/*
 		MSG_START = 0,
 		MSG_CS_LOGON,
 		MSG_CS_CHAT,
@@ -34,7 +35,23 @@ public:
 		MSG_SC_MTOU_ATTACK_ANIMATION,
 		MSG_SC_DISCONNECT,
 		MSG_END,
+*/
+		MSG_START = 0,
 
+		MSG_LOGON,
+		MSG_INITDATA,
+		MSG_NEWUSER,
+		MSG_DISCONNECT,
+
+		MSG_CHAT,
+		MSG_MOVE,
+	
+		MSG_UTOM_ATTACK,
+		MSG_MTOU_ATTACK,
+	
+		MSG_ATTACK_ANIMATION,
+
+		MSG_END,
 	};
 
 	enum MONSTER_PART
@@ -78,7 +95,7 @@ public:
 	VOID SC_MTOU_ATTACK( CPacket& a_pk );
 	VOID SC_DISCONNECT( CPacket& a_pk );
 
-	VOID SC_UTOM_Attack_Animation( CPacket& a_pk );
+	VOID SC_Attack_Animation( CPacket& a_pk );
 
 	VOID CS_LOGON();
 	VOID CS_CHAT();
@@ -86,7 +103,7 @@ public:
 	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
 	VOID CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );
 
-	VOID CS_UTOM_Attack_Animation( WORD a_wAnimationNumber );
+	VOID CS_Attack_Animation( WORD a_wAnimationNumber );
 	
 
 	VOID Update();

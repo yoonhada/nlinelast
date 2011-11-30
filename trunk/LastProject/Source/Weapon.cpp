@@ -307,7 +307,7 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::A;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::ATTACK1 && 
 		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -316,7 +316,7 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK2;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::BASE && nCurrFrame == 0 )
 	{
@@ -324,7 +324,7 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK1;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Attack_Animation( m_nState );
 	} 
 }
 
@@ -340,7 +340,7 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP4;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Attack_Animation( m_nState );
 	}
 	//else if ( m_nState == EnumCharFrame::TEMP2 &&
 	//	( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -358,7 +358,7 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP3;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Attack_Animation( m_nState );
 	}
 	else if ( m_nState == EnumCharFrame::BASE  && nCurrFrame == 0 )
 	{
@@ -366,7 +366,7 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP1;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_UTOM_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Attack_Animation( m_nState );
 	}
 }
 

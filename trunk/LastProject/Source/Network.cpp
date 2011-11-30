@@ -232,7 +232,7 @@ VOID CNetwork::CS_LOGON()
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_CS_LOGON;
+	WORD wMsgID = MSG_LOGON;
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 
@@ -252,7 +252,7 @@ VOID CNetwork::CS_CHAT()
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_CS_CHAT;
+	WORD wMsgID = MSG_CHAT;
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 
@@ -412,11 +412,11 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 }
 
-VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
+VOID CNetwork::CS_Attack_Animation( WORD a_wAnimationNumber )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_CS_UTOM_ATTACK_ANIMATION;
+	WORD wMsgID = MSG_ATTACK_ANIMATION;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -432,7 +432,7 @@ VOID CNetwork::CS_UTOM_Attack_Animation( WORD a_wAnimationNumber )
 }
 
 
-VOID CNetwork::SC_UTOM_Attack_Animation( CPacket& a_pk )
+VOID CNetwork::SC_Attack_Animation( CPacket& a_pk )
 {
 	WORD wClientNumber;
 	WORD wAnimationNumber;
@@ -463,52 +463,47 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	switch( wMsgType )
 	{
 	// 로그온 처리
-	case MSG_CS_LOGON:
+	case MSG_LOGON:
 		SC_LOGON( a_pk );
 		break;
 
 	// 초기 정보
-	case MSG_SC_INITDATA:
+	case MSG_INITDATA:
 		SC_InitData( a_pk );
 		break;
 
 	// 새로운 유저 추가 처리
-	case MSG_SC_NEWUSER:
+	case MSG_NEWUSER:
 		SC_NEWUSER( a_pk );
 		break;
 
+		// 유저 접속 종료
+	case MSG_DISCONNECT:
+		SC_DISCONNECT( a_pk );
+		break;
+
 	// 채팅 처리
-	case MSG_SC_CHAT:
+	case MSG_CHAT:
 		SC_CHAT( a_pk );
 		break;
 
 	// 이동 처리
-	case MSG_SC_MOVE:
-		SC_MOVEMENT( a_pk );
-		break;
-
-		// 이동 처리
 	case MSG_MOVE:
 		SC_MOVEMENT( a_pk );
 		break;
 
 	// 공격 ( 유저 -> 몬스터 )
-	case MSG_SC_UTOM_ATTACK:
+	case MSG_UTOM_ATTACK:
 		SC_UTOM_ATTACK( a_pk );
 		break;
 
 	// 공격 : 몬스터 -> 유저
-	case MSG_CS_MTOU_ATTACK:
+	case MSG_MTOU_ATTACK:
 		SC_MTOU_ATTACK( a_pk );
 		break;
 
-	// 유저 접속 종료
-	case MSG_SC_DISCONNECT:
-		SC_DISCONNECT( a_pk );
-		break;
-
-	case MSG_SC_UTOM_ATTACK_ANIMATION:
-		SC_UTOM_Attack_Animation( a_pk );
+	case MSG_ATTACK_ANIMATION:
+		SC_Attack_Animation( a_pk );
 		break;
 	}
 }

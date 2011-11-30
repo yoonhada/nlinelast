@@ -27,7 +27,7 @@ VOID Melee::Execute( CMonster* a_pMonster )
 	{
 		// 공격 충돌 박스 생성
 		a_pMonster->CreateAttackBoundBox();
-
+		
 		// 경직 상태로
 		a_pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
 	}
