@@ -103,7 +103,7 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	return S_OK;
 }
 
-VOID LobbyScene::ActivateRotate( INT _iIndex )
+VOID LobbyScene::EnableRotate( INT _iIndex )
 {
 	if( m_aData[ _iIndex ].bRotate )
 		return;
@@ -115,6 +115,11 @@ VOID LobbyScene::ActivateRotate( INT _iIndex )
 	
 	m_fChrRotate = 3.14f;
 	m_fIncRotate = 0.005f;
+}
+
+VOID LobbyScene::DisableRotate( INT _iIndex )
+{
+	m_aData[ _iIndex ].bRotate	= FALSE;
 }
 
 VOID LobbyScene::Update()
@@ -144,7 +149,7 @@ VOID LobbyScene::Update()
 	case GUIBTN_LOBBY_SELECT_3:
 	case GUIBTN_LOBBY_SELECT_4:
 		m_nCharSelect = dID - GUIBTN_LOBBY_SELECT_1;
-		ActivateRotate( dID - GUIBTN_LOBBY_SELECT_1 );
+		EnableRotate( dID - GUIBTN_LOBBY_SELECT_1 );
 		break;
 	//case GUIBTN_LOBBY_SELECT_1:
 	//	ActivateRotate( 0 );
@@ -159,6 +164,15 @@ VOID LobbyScene::Update()
 	//	ActivateRotate( 3 );
 	//	break;
 	}
+
+	if( GetKeyState( '1' ) & 0x8000 )
+		DisableRotate( 0 );
+	if( GetKeyState( '2' ) & 0x8000 )
+		DisableRotate( 1 );
+	if( GetKeyState( '3' ) & 0x8000 )
+		DisableRotate( 2 );
+	if( GetKeyState( '4' ) & 0x8000 )
+		DisableRotate( 3 );
 	
 	if( m_fChrRotate > 3140000.0f )
 		m_fChrRotate = 3.14f;
