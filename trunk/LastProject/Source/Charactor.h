@@ -214,7 +214,7 @@ private:
 	CShadowCell* m_pShadowCell;
 
 public:
-	VOID EnableShadow(BOOL bEnable);
+	VOID EnableShadow( BOOL bEnable )	{ m_bShadowEnable = bEnable; }
 	BOOL AliveCheck(BOOL bState = -1);
 
 };

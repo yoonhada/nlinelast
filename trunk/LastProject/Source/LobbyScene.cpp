@@ -34,7 +34,6 @@ VOID LobbyScene::Release()
 
 	SAFE_DELETE( m_pLight );
 	//CTree::DestoryInstance();
-
 }
 
 VOID LobbyScene::CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecPosition )
@@ -46,7 +45,7 @@ VOID LobbyScene::CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecP
 	_pData->pCharacter->Create( m_pD3dDevice );
 	_pData->pCharacter->Load( _pFileName );
 	_pData->pCharacter->Set_Position( _vecPosition );
-
+	_pData->pCharacter->EnableShadow( FALSE );
 	_pData->vecPosition = _vecPosition;
 
 }
@@ -125,6 +124,7 @@ VOID LobbyScene::DisableRotate( INT _iIndex )
 
 VOID LobbyScene::Update()
 {
+	CNetwork::GetInstance()->UpdateLobby();
 	m_pLobbyGUI->Update();
 	m_pOptionScene->Update();
 

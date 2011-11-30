@@ -45,7 +45,7 @@ HRESULT CDebugInterface::Release()
 VOID CDebugInterface::CreateDebugInterface()
 {
 	m_barDebug = TwNewBar("Debug");
-	TwDefine(" Debug color='128 128 128' alpha=155 text=light contained=true size='240 500' position='0 0' refresh=0.01 ");
+	TwDefine(" Debug color='128 128 128' alpha=155 text=light contained=true size='240 500' position='0 150' refresh=0.01 ");
 }
 
 VOID CDebugInterface::AddMessageFloat( CHAR* a_szLabel, FLOAT& a_fValue )

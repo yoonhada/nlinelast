@@ -67,6 +67,7 @@ public:
 
 	VOID CreateAttackBoundBox();
 	VOID BreakCubeAll();
+	VOID EnableShadow( BOOL bEnable );
 
 private:
 	VOID AniInterpolation();
@@ -257,24 +258,6 @@ private:
 
 	BOOL m_bAnimationEndCheck;			  ///< 애니메이션 끝낫나 체크 FALSE = 끝남
 
-
-
-	
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif

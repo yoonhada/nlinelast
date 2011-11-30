@@ -72,8 +72,33 @@ BOOL CNetwork::ConnectToServer( CHAR* a_szIP, WORD a_wPort )
 	return TRUE;
 }
 
+VOID CNetwork::UpdateLobby()
+{
+	// 서버로 부터 받은 패킷을 처리한다.
+	EnterCriticalSection( &m_cs );
 
-VOID CNetwork::Update()
+	if( m_VectorPackets.empty() )
+	{
+		LeaveCriticalSection( &m_cs );
+		return;
+	}
+
+	std::vector<CPacket>::iterator it;
+	for( it = m_VectorPackets.begin(); it != m_VectorPackets.end(); ++it )
+	{
+		ProcessPacket( *it );
+	}
+
+
+	m_VectorPackets.clear();
+	//m_VectorPackets.erase( m_VectorPackets.begin(), m_VectorPackets.end() );
+
+	LeaveCriticalSection( &m_cs );
+
+
+}
+
+VOID CNetwork::UpdateGame()
 {
 	// 이동 데이터 서버로 보내기
 	// 초당 1번 이동 데이터를 보낸다.

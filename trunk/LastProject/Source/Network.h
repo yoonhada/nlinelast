@@ -119,7 +119,8 @@ public:
 	VOID CS_Attack_Animation( WORD a_wAnimationNumber );
 	
 
-	VOID Update();
+	VOID UpdateLobby();
+	VOID UpdateGame();
 
 	BOOL SendToServer( CPacket& a_pk );
 
