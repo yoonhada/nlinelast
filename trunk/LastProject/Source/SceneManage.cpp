@@ -50,9 +50,8 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	CObjectManage::GetInstance()->Create( m_pD3dDevice );
 
-
 #ifdef _TEST
-	m_pScene			= new LogoScene;
+	m_pScene			= new MenuScene;
 #else
 	m_pScene			= new LogoScene;
 #endif // _DEBUG	
@@ -144,6 +143,8 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 	case IScene::SCENE_LOBBY:
 		CDebugConsole::GetInstance()->Messagef( L"SCENE_LOBBY\n" );
 		m_pNextScene = new LobbyScene;
+		// Use NetWork
+		CObjectManage::GetInstance()->SetLobbyScene( dynamic_cast<LobbyScene*>( m_pNextScene ) );
 		break;
 	case IScene::SCENE_MAIN:
 		CDebugConsole::GetInstance()->Messagef( L"SCENE_MAIN\n" );
