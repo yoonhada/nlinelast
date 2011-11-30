@@ -7,6 +7,7 @@
 class LobbyGUI;
 class OptionScene;
 class CCharactor;
+class CMonster;
 
 class LobbyScene : public IScene
 {
@@ -67,6 +68,9 @@ private:
 	
 	CLight*					m_pLight;
 	CMatrices*				m_pMatrices;
+
+	CMonster*				m_pClown;
+	CMonster*				m_pPanda;
 
 
 public:

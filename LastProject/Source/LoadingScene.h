@@ -5,6 +5,7 @@
 #include "Scene.h"
 
 class LoadingGUI;
+class CMonster;
 
 class LoadingScene : public IScene
 {
@@ -39,6 +40,9 @@ private:
 	INT						m_scnState;
 
 	LoadingGUI*				m_pLoadingGUI;
+
+	CMonster*				m_pClown;
+	CMonster*				m_pPanda;
 
 public:
 

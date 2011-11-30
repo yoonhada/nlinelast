@@ -97,6 +97,20 @@ VOID LobbyGUI::CreateButton()
 
 	fX += 310.0f;
 	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_4, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+
+	//	Ready
+	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown;
+
+	fX			= 400.0f;
+	fY			= 800.0f;
+	fWidth		= 200.0f;
+	fHeight		= 200.0f;
+	
+	m_pGUIBase->AddFileName( 0, imgReadyNormal, L"Img\\LobbyScene\\quote-Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyHot, L"Img\\LobbyScene\\quote-Hot.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyDown, L"Img\\LobbyScene\\quote-Down.png" );
+
+	m_pGUIBtnManager->Create( GUIBTN_LOBBY_READY, 0, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDown );
 }
 
 VOID LobbyGUI::Create()

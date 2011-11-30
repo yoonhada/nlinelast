@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "LoadingScene.h"
 #include "LoadingGUI.h"
+#include "Monster.h"
 
 VOID LoadingScene::Initialize()
 {
@@ -8,12 +9,16 @@ VOID LoadingScene::Initialize()
 	m_scnState		= SCENE_RUNNING;
 
 	m_pLoadingGUI	= NULL;
+
+	m_pClown		= NULL;
+	m_pPanda		= NULL;
 }
 
 VOID LoadingScene::Release()
 {
-	if( m_pLoadingGUI != NULL )
-		delete m_pLoadingGUI;
+	SAFE_DELETE( m_pLoadingGUI );
+	SAFE_DELETE( m_pClown );
+	SAFE_DELETE( m_pPanda );
 }
 
 HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
