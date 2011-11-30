@@ -53,8 +53,9 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	for ( int i = 0; i < m_iMaxCharaNum; ++i )
 	{
-		m_ppVirtualCharactors[i] = NULL;
+		m_ppVirtualCharactors[i] = &(m_pCharactors[i]);
 	}
+
 	return S_OK;
 }
 
