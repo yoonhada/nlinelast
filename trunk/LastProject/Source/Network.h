@@ -41,14 +41,17 @@ public:
 		MSG_LOGON,
 		MSG_INITDATA,
 		MSG_NEWUSER,
+		MSG_SELECT_CHARACTER,
+		MSG_READY,
+		MSG_GAME_START,
 		MSG_DISCONNECT,
 
 		MSG_CHAT,
 		MSG_MOVE,
-	
+
 		MSG_UTOM_ATTACK,
 		MSG_MTOU_ATTACK,
-	
+
 		MSG_ATTACK_ANIMATION,
 
 		MSG_END,
@@ -86,8 +89,13 @@ public:
 
 	BOOL ConnectToServer( CHAR* a_szIP, WORD a_wPort );
 
+	// Server -> Client
 	VOID SC_LOGON( CPacket& a_pk );
 	VOID SC_InitData( CPacket& a_pk );
+	VOID SC_SELECT_CHARACTER( CPacket& a_pk );
+	VOID SC_READY( CPacket& a_pk );
+	VOID SC_GAME_START( CPacket& a_pk );
+
 	VOID SC_CHAT( CPacket& a_pk );
 	VOID SC_MOVEMENT( CPacket& a_pk );
 	VOID SC_NEWUSER( CPacket& a_pk );
@@ -97,7 +105,12 @@ public:
 
 	VOID SC_Attack_Animation( CPacket& a_pk );
 
+	// Client -> Server
 	VOID CS_LOGON();
+	VOID CS_SELECT_CHARACTER( WORD a_wSelect );
+	VOID CS_READY();
+	VOID CS_GAME_START();
+
 	VOID CS_CHAT();
 	VOID CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
 	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );

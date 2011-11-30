@@ -145,6 +145,31 @@ VOID CNetwork::SC_LOGON( CPacket& a_pk )
 
 }
 
+VOID CNetwork::SC_SELECT_CHARACTER( CPacket& a_pk )
+{
+	WORD wUserNumber;
+	WORD wSelect;
+
+	a_pk.Read( &wUserNumber );
+	a_pk.Read( &wSelect );
+
+	// 캐릭터 선택
+	
+	// 선택 불가능 하면 현재 선택된 상태 FALSE
+}
+
+
+VOID CNetwork::SC_READY( CPacket& a_pk )
+{
+	
+}
+
+
+VOID CNetwork::SC_GAME_START( CPacket& a_pk )
+{
+
+}
+
 
 VOID CNetwork::SC_CHAT( CPacket& a_pk )
 {
@@ -246,6 +271,33 @@ VOID CNetwork::CS_LOGON()
 	sendPk.WriteString( szPass, strlen( szPass ) );
 
 	SendToServer( sendPk );
+}
+
+
+VOID CNetwork::CS_SELECT_CHARACTER( WORD a_wSelect )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_SELECT_CHARACTER;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	sendPk.Write( a_wSelect );
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
+}
+
+
+VOID CNetwork::CS_READY()
+{
+
+}
+
+
+VOID CNetwork::CS_GAME_START()
+{
 
 }
 
