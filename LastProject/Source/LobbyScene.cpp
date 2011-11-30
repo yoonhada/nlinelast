@@ -20,6 +20,7 @@ VOID LobbyScene::Initialize()
 	m_pLight		= NULL;
 	m_pMatrices		= NULL;
 
+	m_nSelectState = 0;
 }
 
 VOID LobbyScene::Release()
@@ -136,9 +137,17 @@ VOID LobbyScene::Update()
 	switch( dID )
 	{
 	case GUIBTN_LOBBY_START:
-	case GUIBTN_LOBBY_READY:
-		
 		m_scnState = IScene::SCENE_END;
+		break;
+	case GUIBTN_LOBBY_READY:
+		if ( m_nSelectState == 0 )
+		{
+			CNetwork::GetInstance()->CS_READY( m_nCharSelect );
+		}
+		else
+		{
+			
+		}
 		break;
 	case GUIBTN_LOBBY_BACK:
 		m_scnNext	= IScene::SCENE_MENU;

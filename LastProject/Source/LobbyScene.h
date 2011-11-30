@@ -70,8 +70,8 @@ private:
 	CLight*					m_pLight;
 	CMatrices*				m_pMatrices;
 
+	INT						m_nSelectState;
 public:
-
 };
 
 #endif

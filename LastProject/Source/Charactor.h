@@ -210,9 +210,11 @@ private:
 	const FLOAT fAniMagicNum;
 
 private:
+	BOOL m_bShadowEnable;
 	CShadowCell* m_pShadowCell;
 
 public:
+	VOID EnableShadow(BOOL bEnable);
 	BOOL AliveCheck(BOOL bState = -1);
 
 };

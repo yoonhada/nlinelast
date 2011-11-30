@@ -108,7 +108,7 @@ public:
 	// Client -> Server
 	VOID CS_LOGON();
 	VOID CS_SELECT_CHARACTER( WORD a_wSelect );
-	VOID CS_READY();
+	VOID CS_READY( WORD a_wSelect );
 	VOID CS_GAME_START();
 
 	VOID CS_CHAT();
