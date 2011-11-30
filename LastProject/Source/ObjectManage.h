@@ -61,7 +61,8 @@ public:
 	//CCharactor** Get_Charactors()		{ return m_pCharactors;			}
 	CMonster* Get_Monster()				{ return m_pMonster;			}
 	CTimeLifeItem * Get_FirstAidKit()	{ return m_pFirstAidKit;		}
-	ASEViewer* Get_ASEViewer()			{ return 	m_pASEViewer;		}
+	ASEViewer* Get_ASEViewer()			{ return m_pASEViewer;			}
+	BOOL IsHost()						{ return m_bHost;				}
 
 	// Set
 	VOID Set_Host( BOOL a_bHost )						{ m_bHost = a_bHost; }

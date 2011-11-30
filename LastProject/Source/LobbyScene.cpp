@@ -20,7 +20,7 @@ VOID LobbyScene::Initialize()
 	m_pLight		= NULL;
 	m_pMatrices		= NULL;
 
-	m_nSelectState = 0;
+	m_nSelectState[0] = m_nSelectState[1] = m_nSelectState[2] = m_nSelectState[3] = -1;
 }
 
 VOID LobbyScene::Release()
@@ -137,16 +137,17 @@ VOID LobbyScene::Update()
 	switch( dID )
 	{
 	case GUIBTN_LOBBY_START:
+		//UpdateCharArray();
 		m_scnState = IScene::SCENE_END;
 		break;
 	case GUIBTN_LOBBY_READY:
-		if ( m_nSelectState == 0 )
+		if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
 		{
-			CNetwork::GetInstance()->CS_READY( m_nCharSelect );
+			CNetwork::GetInstance()->CS_READY( m_nCharSelect, TRUE );
 		}
-		else
+		else if ( m_nSelectState[pOM->Get_ClientNumber()] == m_nCharSelect )
 		{
-			
+			CNetwork::GetInstance()->CS_READY( m_nCharSelect, FALSE );
 		}
 		break;
 	case GUIBTN_LOBBY_BACK:
@@ -157,8 +158,11 @@ VOID LobbyScene::Update()
 	case GUIBTN_LOBBY_SELECT_2:
 	case GUIBTN_LOBBY_SELECT_3:
 	case GUIBTN_LOBBY_SELECT_4:
-		m_nCharSelect = dID - GUIBTN_LOBBY_SELECT_1;
-		EnableRotate( dID - GUIBTN_LOBBY_SELECT_1 );
+		if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
+		{
+			m_nCharSelect = dID - GUIBTN_LOBBY_SELECT_1;
+			EnableRotate( dID - GUIBTN_LOBBY_SELECT_1 );
+		}
 		break;
 	//case GUIBTN_LOBBY_SELECT_1:
 	//	ActivateRotate( 0 );
@@ -187,7 +191,6 @@ VOID LobbyScene::Update()
 		m_fChrRotate = 3.14f;
 
 	m_fChrRotate += m_fIncRotate;
-
 
 	for( INT i=0 ; i<4 ; i++ )
 	{

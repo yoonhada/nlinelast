@@ -58,7 +58,6 @@ private:
 	
 	INT						m_scnNext;
 	INT						m_scnState;
-	INT						m_nCharSelect;
 
 	LobbyGUI*				m_pLobbyGUI;
 	OptionScene*			m_pOptionScene;
@@ -70,7 +69,14 @@ private:
 	CLight*					m_pLight;
 	CMatrices*				m_pMatrices;
 
-	INT						m_nSelectState;
+public:
+	INT						m_nCharSelect;		// 선택된 케릭터 번호.
+	INT						m_nSelectState[4];	// 호스트의 선택상태.
+
+public:
+
+	//BOOL SelectState( INT a_nIndex, BOOL a_bState ) {return FALSE; }
+	//VOID UpdateCharArray();
 public:
 };
 

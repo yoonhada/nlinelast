@@ -214,24 +214,67 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 	// 캐릭터 선택
 	CObjectManage * pOM = CObjectManage::GetInstance();
 	//pOM->Set_Char( wUserNumber, wSelect );
-	if ( bSelect == FALSE && pOM->Get_ClientNumber() == wUserNumber)
+	if ( pOM->Get_ClientNumber() == wUserNumber )
 	{
-		// 케릭터 선택 실패.. 회전 제거.
-		pOM->GetLobbyScene()->DisableRotate( wSelect );
+		if ( bSelect == TRUE )
+		{
+			// 케릭터 선택 
+			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelect;
+		}
+		else
+		{
+			// 케릭터 선택 실패.. 회전 제거.
+			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
+			pOM->GetLobbyScene()->DisableRotate( wSelect );
+		}
 	}
-	else if ( bSelect == TRUE && pOM->Get_ClientNumber() == wUserNumber)
+	else 
 	{
-		// 케릭터 선택 
-	}
-	else if ( bSelect == TRUE && pOM->Get_ClientNumber() != wUserNumber)
-	{
-		// 다른 플레이어 선택
-		pOM->GetLobbyScene()->EnableRotate( wSelect );
+		if ( bSelect == TRUE )
+		{
+			// 다른 케릭터 선택, 선택차단....
+			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelect;
+			pOM->GetLobbyScene()->EnableRotate( wSelect );
+		}
+		else
+		{
+			// 다른 플레이어 선택해지,  차단 해지...
+			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
+			pOM->GetLobbyScene()->DisableRotate( wSelect );
+		}
 	}
 
-	// 선택 불가능 하면 현재 선택된 상태 FALSE	
+	//if ( pOM->IsHost() && 
+	//	pOM->GetLobbyScene()->m_nSelectState[0] == LobbyScene::SELECT &&
+	//	pOM->GetLobbyScene()->m_nSelectState[1] == LobbyScene::SELECT &&
+	//	pOM->GetLobbyScene()->m_nSelectState[2] == LobbyScene::SELECT &&
+	//	pOM->GetLobbyScene()->m_nSelectState[3] == LobbyScene::SELECT )
+	//{
+	//	// 스타트 버튼 활성화
+	//}
+
 }
 
+VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
+{
+	BOOL bStart;
+	a_pk.Read( &bStart );
+
+	if ( bStart )
+	{
+		// 스타트 버튼 활성화
+#ifdef _DEBUG
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableRotate( 3 );
+#endif // _DEBUG
+	}
+	else
+	{
+		// 스타트 버튼 비활성화
+#ifdef _DEBUG
+		CObjectManage::GetInstance()->GetLobbyScene()->DisableRotate( 3 );
+#endif // _DEBUG
+	}
+}
 
 VOID CNetwork::SC_GAME_START( CPacket& a_pk )
 {
@@ -347,7 +390,7 @@ VOID CNetwork::CS_SELECT_CHARACTER( WORD a_wSelect )
 }
 
 
-VOID CNetwork::CS_READY( WORD a_wSelect )
+VOID CNetwork::CS_READY( WORD a_wSelect, BOOL a_bSelect )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -357,11 +400,11 @@ VOID CNetwork::CS_READY( WORD a_wSelect )
 	sendPk.Write( wMsgID );
 	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
 	sendPk.Write( a_wSelect );
+	sendPk.Write( a_bSelect );
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );
 }
-
 
 VOID CNetwork::CS_GAME_START()
 {
@@ -599,6 +642,10 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 
 	case MSG_READY:
 		SC_READY( a_pk );
+		break;
+
+	case MSG_ENABLE_START:
+		SC_ENABLE_START( a_pk );
 		break;
 
 		// 유저 접속 종료

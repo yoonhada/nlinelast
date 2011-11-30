@@ -43,6 +43,7 @@ public:
 		MSG_NEWUSER,
 		MSG_SELECT_CHARACTER,
 		MSG_READY,
+		MSG_ENABLE_START,
 		MSG_GAME_START,
 		MSG_DISCONNECT,
 
@@ -94,6 +95,7 @@ public:
 	VOID SC_InitData( CPacket& a_pk );
 	VOID SC_SELECT_CHARACTER( CPacket& a_pk );
 	VOID SC_READY( CPacket& a_pk );
+	VOID SC_ENABLE_START( CPacket& a_pk );
 	VOID SC_GAME_START( CPacket& a_pk );
 
 	VOID SC_CHAT( CPacket& a_pk );
@@ -108,7 +110,7 @@ public:
 	// Client -> Server
 	VOID CS_LOGON();
 	VOID CS_SELECT_CHARACTER( WORD a_wSelect );
-	VOID CS_READY( WORD a_wSelect );
+	VOID CS_READY( WORD a_wSelect, BOOL a_bSelect );
 	VOID CS_GAME_START();
 
 	VOID CS_CHAT();
