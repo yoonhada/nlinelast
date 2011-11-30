@@ -58,13 +58,6 @@ VOID	CMainScene::Clear()
 
 HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprite, HWND a_hWnd )
 {
-//#ifdef _DEBUG
-//	CObjectManage::GetInstance()->Set_Char( 0, 0 );
-//	CObjectManage::GetInstance()->Set_Char( 1, 1 );
-//	CObjectManage::GetInstance()->Set_Char( 2, 2 );
-//	CObjectManage::GetInstance()->Set_Char( 3, 3 );
-//#endif // _DEBUG
-
 	m_pD3dDevice = a_pD3dDevice;
 
 	m_pMatrices = CMatrices::GetInstance();
