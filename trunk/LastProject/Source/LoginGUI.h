@@ -38,8 +38,8 @@ public:
 	VOID		Render();
 
 	VOID		Command( DWORD& _dOut );
-
-	BOOL		NextBackgroundImage();
+	VOID		GetEditTexture( LPWSTR _pEditTexture );
+	
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;

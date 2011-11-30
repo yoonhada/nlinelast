@@ -79,6 +79,8 @@ public:
 	VOID		OnMove( INT x, INT y );
 	VOID		OnUp( INT x, INT y );
 
+	VOID		SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight );
+
 private:
 	DATA			m_Data;
 	//ITEMLIST		m_lstItem;
@@ -94,6 +96,11 @@ private:
 
 	GUIScrollbar*	m_pGUIScrollbar;
 	BOOL			m_bActScrollbar;
+
+	TCHAR			m_aFaceName[ 1024 ];
+	INT				m_iFontX, m_iFontY;
+	INT				m_iFontWidth, m_iFontHeight;
+
 public:
 
 };

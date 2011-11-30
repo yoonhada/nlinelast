@@ -45,8 +45,6 @@ private:
 	OptionScene*			m_pOptionScene;
 	LoginScene*				m_pLoginScene;
 
-	BOOL					m_bLoginScene;
-
 public:
 
 };

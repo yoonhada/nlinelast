@@ -12,10 +12,11 @@ private:
 
 	VOID		Cleanup();
 
-	VOID		CreateDFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight );	// CreateDirectxFont
-	BOOL		TextOutput( RECT& _rt, LPCWSTR lpszStr, DWORD Color );
+	VOID		CreateGUICaret();
 
 public:
+	enum { EDT_STATIC = 0, EDT_DYNAMIC };
+
 	GUIEdit( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite ) : GUIBase( _pd3dDevice, _pSprite )
 	{
 		this->Initialize();
@@ -33,9 +34,6 @@ public:
 		IMAGE2D	img2DBackground;
 		IMAGE2D	img2DCaret;
 
-		INT		iX, iY;
-		//INT		iWidth, iHeight;
-
 	}DATA, *LPDATA;
 
 	VOID			Create( GUIBase::IMAGEPARAM& _imgParam );
@@ -43,13 +41,22 @@ public:
 	VOID			Update();
 	VOID			Render();
 
+	VOID			SetStyle( DWORD _dStyle );
+	VOID			SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight );
 	BOOL			TakeMessage( LPWSTR _pStr );
 
 private:
 	DATA			m_Data;
 	
+	DWORD			m_dStyle;
+
 	BOOL			m_bActivate;
 	BOOL			m_bMessage;
+
+	//	Font Info
+	TCHAR			m_aFaceName[ 1024 ];
+	INT				m_iFontX, m_iFontY;
+	INT				m_iFontWidth, m_iFontHeight;
 
 public:
 

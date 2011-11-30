@@ -57,7 +57,13 @@ VOID LoginGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\LoginScene\\Go_Down.png" );
 
 	m_pGUIBtnManager->Create( GUIBTN_LOGIN_GO, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
-	
+
+	fX		= m_fX + m_fWidth - 60.0f;
+	fY		= m_fY + 10.0f;
+	fWidth	= 50.0f;
+	fHeight = 50.0f;
+
+	m_pGUIBtnManager->Create( GUIBTN_LOGIN_EXIT, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
 }
 
 VOID LoginGUI::CreateEdit()
@@ -72,6 +78,7 @@ VOID LoginGUI::CreateEdit()
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LoginScene\\Name_Edit.png" );
 
 	m_pGUIEdit->Create( fX, fY, fWidth, fHeight, imgParam );
+	m_pGUIEdit->SetFont( L"ÈŞ¸Õ¸ÅÁ÷Ã¼", 30, 80 );
 }
 
 VOID LoginGUI::Create()
@@ -152,7 +159,8 @@ VOID LoginGUI::Command( DWORD& _dOut )
 	m_pGUIBtnManager->GetCommandID( _dOut );
 }
 
-BOOL LoginGUI::NextBackgroundImage()
+VOID LoginGUI::GetEditTexture( LPWSTR _pEditTexture )
 {
-	return m_pGUIBackground->NextAnimation();
+	m_pGUIEdit->TakeMessage( _pEditTexture );
 }
+

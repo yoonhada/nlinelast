@@ -16,7 +16,12 @@ VOID GUIListbox::Initialize()
 	m_fX		= 0.0f;	m_fY		= 0.0f;
 	m_fWidth	= 0.0f; m_fHeight	= 0.0f;
 
-	m_pGUIScrollbar		= new GUIScrollbar( GUIBase::m_pD3dDevice, GUIBase::m_pSprite );
+	//	Init Font Info
+	_tcscpy_s( m_aFaceName, L"휴먼매직체" );
+	m_iFontWidth	= 10;
+	m_iFontHeight	= 10;
+
+	m_pGUIScrollbar		= new GUIScrollbar( GUIBase::m_pd3dDevice, GUIBase::m_pSprite );
 }
 
 VOID GUIListbox::Release()
@@ -181,6 +186,10 @@ VOID GUIListbox::CopyItemToFront( INT _iIndex, LPIMAGE2D _pimg2DItem, LPIMAGE2D 
 
 VOID GUIListbox::Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, IMAGEPARAM& _imgBackground )
 {
+	//	Set Font X, Y
+	m_iFontX	= m_iFontWidth / 2;
+	m_iFontY	= ( m_iItemGap - m_iFontHeight ) / 2;
+
 	//	Init Info
 	m_fX		= _fX;
 	m_fY		= _fY;
@@ -229,6 +238,9 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 	LPITEM pItem	= new ITEM;
 
 	IMAGEPARAM imgParamItemNormal, imgParamItemDown;
+	
+	AddFileName( 0, imgParamItemNormal, L"Img\\Listbox_Item_Normal.png" );
+	AddFileName( 0, imgParamItemDown, L"Img\\Listbox_Item_Down.png" );
 
 	pItem->pimg2DNormal = new IMAGE2D;
 	pItem->pimg2DDown	= new IMAGE2D;
@@ -268,8 +280,10 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 	AddFileName( 0, imgParamText, L"Img\\Listbox_Item_Normal.png" );
 	CreateImage2D( *pimg2DText, fTextX, fTextY, fTextWidth, fTextHeight, imgParamText ); 
 	
-	GUIFont::GetInstance().Create( L"궁서", 10, 10, m_pD3dDevice );
+	GUIFont::GetInstance().Create( m_aFaceName, m_iFontWidth, m_iFontHeight, m_pd3dDevice );
 	GUIFont::GetInstance().DrawOnTexture(	_Text, 0x00000000, pimg2DText->vec2Tex[ 0 ][ 0 ]->pTex, 
+											m_iFontX,
+											m_iFontY,
 											static_cast<INT>( fTextWidth ), 
 											static_cast<INT>( fTextHeight ) );
 
@@ -292,7 +306,7 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 	//	push_back을 했으니 갱신한다
 	iItemSize = m_Data.lstItem.size();
 	INT iHeight = static_cast<INT>( m_fHeight );
-
+	
 	INT iMaxScrollbarValue = m_iItemGap * iItemSize - iHeight;
 	if( iMaxScrollbarValue < 0 )
 	{
@@ -301,7 +315,6 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 	}
 	else
 	{
-		// 스크롤바 값 세팅?? 있었는데;;
 		m_pGUIScrollbar->SetValue( iMaxScrollbarValue );
 		m_bActScrollbar = TRUE;
 	}
@@ -413,4 +426,11 @@ VOID GUIListbox::OnUp( INT x, INT y )
 {
 	if( m_bActScrollbar )
 		m_pGUIScrollbar->OnUp( x, y );
+}
+
+VOID GUIListbox::SetFont(LPWSTR _pFaceName, INT _iWidth, INT _iHeight)
+{
+	_tcscpy_s( m_aFaceName, _pFaceName );
+	m_iFontWidth	= _iWidth;
+	m_iFontHeight	= _iHeight;
 }

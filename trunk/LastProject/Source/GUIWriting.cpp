@@ -10,7 +10,8 @@ GUIWriting& GUIWriting::GetInstance()
 
 VOID GUIWriting::Initialize()
 {
-	m_iNum = 0;
+	m_iNum		= 0;
+	m_bReturn	= FALSE;
 }
 
 VOID GUIWriting::Release()
@@ -30,7 +31,7 @@ VOID GUIWriting::CHARUpdate( WPARAM& _wParam, LPARAM& _lParam )
 	switch( _wParam )
 	{
 	case VK_RETURN:
-		m_Str[ m_iNum++ ] = '\n';
+		m_bReturn = TRUE;
 		break;
 	case VK_BACK:
 		if( m_iNum - 1 >= 0 )
@@ -44,13 +45,21 @@ VOID GUIWriting::CHARUpdate( WPARAM& _wParam, LPARAM& _lParam )
 	//Console::GetInstance().Messagef( L"%s\n", m_Str );
 }
 
-VOID GUIWriting::GetText( LPWSTR _pStr, INT& _iNum )
+BOOL GUIWriting::GetText( LPWSTR _pStr, INT& _iNum )
 {
 	memset( _pStr, 0, sizeof( _pStr ) );
 	wcsncpy( _pStr, m_Str, sizeof( TCHAR ) * m_iNum );
 
 	//	Test
 	_iNum = m_iNum;
+
+	if( m_bReturn )
+	{
+		m_bReturn = FALSE;
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 VOID GUIWriting::Cleanup()

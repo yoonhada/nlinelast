@@ -22,12 +22,14 @@ public:
 		this->Release();
 	}
 
-	virtual HRESULT	Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd );
-	virtual VOID	Update();
-	virtual VOID	Render();
+	virtual HRESULT			Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd );
+	virtual VOID			Update();
+	virtual VOID			Render();
 	
-	virtual INT		GetSceneNext();
-	virtual INT		GetSceneState();
+	virtual INT				GetSceneNext();
+	virtual INT				GetSceneState();
+
+	VOID					SetActivate( BOOL _bActivate );
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
@@ -38,6 +40,8 @@ private:
 	INT						m_scnState;
 
 	LoginGUI*				m_pLoginGUI;
+
+	BOOL					m_bActivate;
 
 public:
 

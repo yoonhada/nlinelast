@@ -30,7 +30,7 @@ private:
 	VOID		Cleanup();
 public:
 	VOID		Create( LPWSTR _pFaceName, INT _iWidht, INT _iHeight, LPDIRECT3DDEVICE9 _pd3dDevice );
-	VOID		DrawOnTexture( LPWSTR _pStr, DWORD _dColor, LPDIRECT3DTEXTURE9 _pTexture, INT _itexWidth, INT _itexHeight );
+	VOID		DrawOnTexture( LPWSTR _pStr, DWORD _dColor, LPDIRECT3DTEXTURE9 _pTexture, INT _itexX, INT _itexY, INT _itexWidth, INT _itexHeight );
 	VOID		Render( LPWSTR _pStr, LPRECT _prt, DWORD _dColor );
 
 	VOID		SetHWND( HWND& _hWnd );	//	m_hWnd를 먼저 셋팅해주어야 한다
