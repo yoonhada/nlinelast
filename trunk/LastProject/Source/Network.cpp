@@ -5,7 +5,7 @@
 #include "Charactor.h"
 #include "Monster.h"
 #include "MainScene.h"
-
+#include "LobbyScene.h"
 
 CNetwork::CNetwork()
 {
@@ -149,12 +149,29 @@ VOID CNetwork::SC_SELECT_CHARACTER( CPacket& a_pk )
 {
 	WORD wUserNumber;
 	WORD wSelect;
+	BOOL bSelect;
 
 	a_pk.Read( &wUserNumber );
 	a_pk.Read( &wSelect );
+	a_pk.Read( &bSelect );
 
 	// 캐릭터 선택
-	
+	CObjectManage * pOM = CObjectManage::GetInstance();
+	//pOM->Set_Char( wUserNumber, wSelect );
+	if ( bSelect == FALSE && pOM->Get_ClientNumber() == wUserNumber)
+	{
+		// 케릭터 선택 실패.. 회전 제거.
+		pOM->GetLobbyScene()->DisableRotate( wSelect );
+	}
+	else if ( bSelect == TRUE && pOM->Get_ClientNumber() == wUserNumber)
+	{
+		// 케릭터 선택 
+	}
+	else if ( bSelect == TRUE && pOM->Get_ClientNumber() != wUserNumber)
+	{
+		// 다른 플레이어 선택
+	}
+
 	// 선택 불가능 하면 현재 선택된 상태 FALSE
 }
 
@@ -276,9 +293,14 @@ VOID CNetwork::CS_LOGON()
 
 VOID CNetwork::CS_SELECT_CHARACTER( WORD a_wSelect )
 {
+}
+
+
+VOID CNetwork::CS_READY( WORD a_wSelect )
+{
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_SELECT_CHARACTER;
+	WORD wMsgID = MSG_READY;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -290,17 +312,10 @@ VOID CNetwork::CS_SELECT_CHARACTER( WORD a_wSelect )
 }
 
 
-VOID CNetwork::CS_READY()
-{
-
-}
-
-
 VOID CNetwork::CS_GAME_START()
 {
 
 }
-
 
 VOID CNetwork::CS_CHAT()
 {
@@ -529,6 +544,10 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	// 새로운 유저 추가 처리
 	case MSG_NEWUSER:
 		SC_NEWUSER( a_pk );
+		break;
+
+	case MSG_READY:
+		SC_READY( a_pk );
 		break;
 
 		// 유저 접속 종료
