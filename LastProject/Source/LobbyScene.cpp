@@ -82,8 +82,9 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	m_pLight->Create( _pd3dDevice );
 
 	//	Create Matrices
-	m_pMatrices = CMatrices::GetInstance();	FILE* pFile;
-
+	m_pMatrices = CMatrices::GetInstance();	
+	
+	FILE* pFile;
 	pFile = _wfopen( L"Data/IP.txt", L"r" );
 
 	if( NULL == pFile )
@@ -106,17 +107,17 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	CNetwork::GetInstance()->CS_LOGON();
 
 	// Create Monster
-	m_pClown = CObjectManage::GetInstance()->Get_Monster();
+	m_pClown = new CMonster;
 	m_pClown->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 	m_pClown->Set_Pos( D3DXVECTOR3( 24.0f, 0.0f, 100.0f ) );
-	//m_pClown->Set_iSelectedFrameNum( 4 );
+	m_pClown->Set_iSelectedFrameNum( 4 );
 
-	m_pPanda = CObjectManage::GetInstance()->Get_Monster();
+	m_pPanda = new CMonster;
 	m_pPanda->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
-//	m_pPanda->Set_Pos( D3DXVECTOR3( -24.0f, 0.0f, 100.0f ) );
-	m_pPanda->ChangeAnimation( 0 );
+	m_pPanda->Set_Pos( D3DXVECTOR3( -24.0f, 0.0f, 100.0f ) );
+	m_pPanda->Set_Angle( D3DXToRadian(180.0f) );
+	m_pPanda->ChangeAnimation( 1 );
 	//m_pPanda->Set_iSelectedFrameNum( 1 );
-
 
 	return S_OK;
 }
@@ -143,11 +144,14 @@ VOID LobbyScene::Update()
 	for( INT i=0 ; i<4 ; i++ )
 		m_aData[ i ].pCharacter->UpdateOtherPlayer( TRUE );
 
+	CObjectManage * pOM = CObjectManage::GetInstance();
 	DWORD dID;
 	m_pLobbyGUI->Command( dID );
 	switch( dID )
 	{
 	case GUIBTN_LOBBY_START:
+	case GUIBTN_LOBBY_READY:
+		
 		m_scnState = IScene::SCENE_END;
 		break;
 	case GUIBTN_LOBBY_BACK:
@@ -155,19 +159,24 @@ VOID LobbyScene::Update()
 		m_scnState	= IScene::SCENE_END;
 		break;
 	case GUIBTN_LOBBY_SELECT_1:
-		ActivateRotate( 0 );
-		break;
 	case GUIBTN_LOBBY_SELECT_2:
-		ActivateRotate( 1 );
-		break;
 	case GUIBTN_LOBBY_SELECT_3:
-		ActivateRotate( 2 );
-		break;
 	case GUIBTN_LOBBY_SELECT_4:
-		ActivateRotate( 3 );
+		m_nCharSelect = dID - GUIBTN_LOBBY_SELECT_1;
+		ActivateRotate( dID - GUIBTN_LOBBY_SELECT_1 );
 		break;
-	case GUIBTN_LOBBY_READY:
-		break;
+	//case GUIBTN_LOBBY_SELECT_1:
+	//	ActivateRotate( 0 );
+	//	break;
+	//case GUIBTN_LOBBY_SELECT_2:
+	//	ActivateRotate( 1 );
+	//	break;
+	//case GUIBTN_LOBBY_SELECT_3:
+	//	ActivateRotate( 2 );
+	//	break;
+	//case GUIBTN_LOBBY_SELECT_4:
+	//	ActivateRotate( 3 );
+	//	break;
 	}
 	
 	if( m_fChrRotate > 3140000.0f )
@@ -183,15 +192,14 @@ VOID LobbyScene::Update()
 		else
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
 	}
-
 	//	Update Monster
 	m_pClown->Update();
 	m_pClown->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pPanda->Update();
 	m_pPanda->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 
-	D3DXVECTOR3 vecPos = m_pClown->Get_Pos();
-	CDebugConsole::GetInstance()->Messagef( L"%f %f %f\n", vecPos.x, vecPos.y, vecPos.z );
+	//D3DXVECTOR3 vecPos = m_pClown->Get_Pos();
+	//CDebugConsole::GetInstance()->Messagef( L"%f %f %f\n", vecPos.x, vecPos.y, vecPos.z );
 }
 
 VOID LobbyScene::Render()
@@ -212,7 +220,7 @@ VOID LobbyScene::Render()
 		m_aData[ i ].pCharacter->Render();
 
 	//	Render Monster
-	//m_pClown->Render();
+	m_pClown->Render();
 	m_pPanda->Render();
 
 	m_pLight->DisableLight();

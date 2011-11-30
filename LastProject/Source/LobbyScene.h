@@ -58,6 +58,7 @@ private:
 	
 	INT						m_scnNext;
 	INT						m_scnState;
+	INT						m_nCharSelect;
 
 	LobbyGUI*				m_pLobbyGUI;
 	OptionScene*			m_pOptionScene;

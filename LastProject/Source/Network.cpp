@@ -86,9 +86,9 @@ VOID CNetwork::Update()
 
 	if( time > NETWORK_RECV_TIME )
 	{
-		CCharactor &rCharactors = CObjectManage::GetInstance()->Get_Charactors()[0];	
+		CCharactor *pCharactors = CObjectManage::GetInstance()->Get_Charactors()[0];	
 		// 이동 데이터 서버로 보내기
-		CS_MOVEMENT( rCharactors.Get_CharaPos().x, rCharactors.Get_CharaPos().z, rCharactors.Get_CharaAngle() );
+		CS_MOVEMENT( pCharactors->Get_CharaPos().x, pCharactors->Get_CharaPos().z, pCharactors->Get_CharaAngle() );
 		time = 0.0f;
 	}
 
@@ -167,11 +167,12 @@ VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
 
 	m_vMove = D3DXVECTOR3( x, 0.0f, z );
 
-	for( INT Loop=0; Loop<3; ++Loop )
+	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
+	for( INT Loop = 1; Loop < 4; ++Loop )
 	{
-		if( CObjectManage::GetInstance()->Get_Charactors()[Loop].Get_ClientNumber() == number  )
+		if( pCharactors[Loop]->Get_ClientNumber() == number  )
 		{
-			CObjectManage::GetInstance()->Get_Charactors()[Loop].UpdateByValue( m_vMove, angle );
+			pCharactors[Loop]->UpdateByValue( m_vMove, angle );
 			//CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
 			break;
 		}
@@ -188,10 +189,11 @@ VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
 	WORD wNumber;
 	a_pk.Read( &wNumber );
 
-	if( CObjectManage::GetInstance()->Get_Charactors()[wNumber].Get_Active() == FALSE )
+	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
+	if( pCharactors[wNumber]->Get_Active() == FALSE )
 	{
-		CObjectManage::GetInstance()->Get_Charactors()[wNumber].Set_Active( TRUE );
-		CObjectManage::GetInstance()->Get_Charactors()[wNumber].Set_ClientNumber( wNumber );
+		pCharactors[wNumber]->Set_Active( TRUE );
+		pCharactors[wNumber]->Set_ClientNumber( wNumber );
 	}
 
 	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
@@ -212,16 +214,16 @@ VOID CNetwork::SC_InitData( CPacket& a_pk )
 	CObjectManage::GetInstance()->Set_Host( host );
 	CObjectManage::GetInstance()->Set_ClientNumber( user_no );
 	//CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
-
+	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
 	// 유저수 만큼 루프
 	for( WORD i=0; i<userCount; ++i )
 	{
 		a_pk.Read( &user_list );
 
-		if( CObjectManage::GetInstance()->Get_Charactors()[user_list].Get_Active() == FALSE )
+		if( pCharactors[user_list]->Get_Active() == FALSE )
 		{
-			CObjectManage::GetInstance()->Get_Charactors()[user_list].Set_Active( TRUE );
-			CObjectManage::GetInstance()->Get_Charactors()[user_list].Set_ClientNumber( user_list );
+			pCharactors[user_list]->Set_Active( TRUE );
+			pCharactors[user_list]->Set_ClientNumber( user_list );
 		}
 	}
 
@@ -406,7 +408,7 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
-	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 	//CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
@@ -440,7 +442,7 @@ VOID CNetwork::SC_Attack_Animation( CPacket& a_pk )
 	a_pk.Read( &wClientNumber );
 	a_pk.Read( &wAnimationNumber );
 
-	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber].Set_WeaponAnimationState( wAnimationNumber );
+	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber]->Set_WeaponAnimationState( wAnimationNumber );
 }
 
 
@@ -450,7 +452,7 @@ VOID CNetwork::SC_DISCONNECT( CPacket& a_pk )
 	a_pk.Read( &wClientNumber );
 
 	// 접속 유저 비활성화
-	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber].Set_Active( FALSE );
+	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber]->Set_Active( FALSE );
 }
 
 
