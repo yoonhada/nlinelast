@@ -48,7 +48,8 @@ public:
 	virtual INT		GetSceneState();
 
 	VOID			CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecPosition );
-	VOID			ActivateRotate( INT _iIndex );
+	VOID			EnableRotate( INT _iIndex );
+	VOID			DisableRotate( INT _iIndex );
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
