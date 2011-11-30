@@ -12,6 +12,7 @@
 #include "Monster.h"
 #include "TimeLifeItem.h"
 #include "ASEViewer.h"
+#include "LobbyScene.h"
 
 CObjectManage::CObjectManage()
 {
@@ -25,11 +26,12 @@ CObjectManage::~CObjectManage()
 
 VOID CObjectManage::Clear()
 {
-	m_bHost = FALSE;
-	m_pCharactors = NULL;
-	m_pASEViewer = NULL;
+	m_bHost			= FALSE;
+	m_pCharactors	= NULL;
+	m_pASEViewer	= NULL;
+	m_pLobbyScene	= NULL;
 	m_iClientNumber = 0;
-	m_iMaxCharaNum = 4;
+	m_iMaxCharaNum	= 4;
 
 	m_wTotalDestroyPart = 0;
 }
@@ -120,3 +122,4 @@ VOID CObjectManage::Set_Char(INT nSelect, INT nChar )
 {
 	m_ppVirtualCharactors[nSelect] = &m_pCharactors[nChar];
 }
+

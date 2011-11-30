@@ -46,10 +46,10 @@ VOID LoginGUI::CreateButton()
 	D3DVIEWPORT9 Vp;
 	m_pD3dDevice->GetViewport( &Vp );
 
-	FLOAT fX		= m_fX + 250.0f;
+	FLOAT fX		= m_fX + 150.0f;
 	FLOAT fY		= m_fY + 350.0f;
-	FLOAT fWidth	= 128.0f;
-	FLOAT fHeight	= 64.0f;
+	FLOAT fWidth	= 200.0f;
+	FLOAT fHeight	= 100.0f;
 
 	m_pGUIBase->AddFileName( 0, imgNormal, L"Img\\LoginScene\\Go_Normal.png" );
 	m_pGUIBase->AddFileName( 0, imgHot, L"Img\\LoginScene\\Go_Normal.png" );
@@ -62,10 +62,10 @@ VOID LoginGUI::CreateButton()
 
 VOID LoginGUI::CreateEdit()
 {
-	FLOAT fX		= m_fX + 250.0f;
-	FLOAT fY		= m_fY + 200.0f;
-	FLOAT fWidth	= 128.0f;
-	FLOAT fHeight	= 64.0f;
+	FLOAT fX		= m_fX + 50.0f;
+	FLOAT fY		= m_fY + 100.0f;
+	FLOAT fWidth	= 400.0f;
+	FLOAT fHeight	= 150.0f;
 
 	GUIBase::IMAGEPARAM imgParam;
 
@@ -149,6 +149,7 @@ VOID LoginGUI::OnUp( INT x, INT y )
 
 VOID LoginGUI::Command( DWORD& _dOut )
 {
+	m_pGUIBtnManager->GetCommandID( _dOut );
 }
 
 BOOL LoginGUI::NextBackgroundImage()

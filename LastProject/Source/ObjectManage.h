@@ -12,6 +12,7 @@ class CMonster;
 class CCharactor;
 class CTimeLifeItem;
 class ASEViewer;
+class LobbyScene;
 
 class CObjectManage : public CSingleton<CObjectManage>
 {
@@ -21,18 +22,20 @@ private:
 	CObjectManage();
 	virtual ~CObjectManage();
 
-	LPDIRECT3DDEVICE9 m_pD3dDevice;
+	LPDIRECT3DDEVICE9	m_pD3dDevice;
 
-	BOOL m_bHost;
-	WORD m_iClientNumber;
-	INT m_iMaxCharaNum;
+	BOOL				m_bHost;
+	WORD				m_iClientNumber;
+	INT					m_iMaxCharaNum;
 
-	CCharactor*  m_pCharactors;
-	CCharactor** m_ppVirtualCharactors;
-	CMonster* m_pMonster;
-	CTimeLifeItem* m_pFirstAidKit;
+	CCharactor*			m_pCharactors;
+	CCharactor**		m_ppVirtualCharactors;
+	CMonster*			m_pMonster;
+	CTimeLifeItem*		m_pFirstAidKit;
 
-	ASEViewer* m_pASEViewer;
+	ASEViewer*			m_pASEViewer;
+
+	LobbyScene*			m_pLobbyScene;
 
 
 private:
@@ -69,6 +72,9 @@ public:
 	VOID Set_PushBackNetworkSendTempVector( WORD a_wData );
 	VOID Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir );
 	VOID Send_NetworkSendDestroyData(BOOL = FALSE);
+
+	LobbyScene*		GetLobbyScene(){ return m_pLobbyScene; }
+	VOID			SetLobbyScene( LobbyScene* a_pLobbyScene ){ m_pLobbyScene = a_pLobbyScene; }
 };
 
 #endif;
