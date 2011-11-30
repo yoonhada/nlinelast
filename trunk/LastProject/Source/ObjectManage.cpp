@@ -47,12 +47,19 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 	m_pASEViewer = new ASEViewer( m_pD3dDevice );
 	
+	m_ppVirtualCharactors = new CCharactor * [m_iMaxCharaNum];
+
+	for ( int i = 0; i < m_iMaxCharaNum; ++i )
+	{
+		m_ppVirtualCharactors[i] = NULL;
+	}
 	return S_OK;
 }
 
 HRESULT CObjectManage::Release()
 {
 	SAFE_DELETE_ARRAY( m_pCharactors );
+	SAFE_DELETE_ARRAY( m_ppVirtualCharactors );
 	SAFE_DELETE( m_pMonster );
 	SAFE_DELETE( m_pFirstAidKit );
 	SAFE_DELETE( m_pASEViewer );
@@ -107,4 +114,9 @@ VOID CObjectManage::Send_NetworkSendDestroyData(BOOL _bIsCharter)
 	ZeroMemory( &m_wDestroyCount, sizeof(m_wDestroyCount) );
 	ZeroMemory( m_vDestroyDir, sizeof(m_vDestroyDir) );
 
+}
+
+VOID CObjectManage::Set_Char(INT nSelect, INT nChar )
+{
+	m_ppVirtualCharactors[nSelect] = &m_pCharactors[nChar];
 }

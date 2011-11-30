@@ -27,7 +27,8 @@ private:
 	WORD m_iClientNumber;
 	INT m_iMaxCharaNum;
 
-	CCharactor* m_pCharactors;
+	CCharactor*  m_pCharactors;
+	CCharactor** m_ppVirtualCharactors;
 	CMonster* m_pMonster;
 	CTimeLifeItem* m_pFirstAidKit;
 
@@ -53,7 +54,8 @@ public:
 	// Get
 	INT Get_MaxCharaNum()				{ return m_iMaxCharaNum;		}
 	WORD Get_ClientNumber()				{ return m_iClientNumber;		}
-	CCharactor* Get_Charactors()		{ return m_pCharactors;			}
+	CCharactor** Get_Charactors()		{ return m_ppVirtualCharactors; }
+	//CCharactor** Get_Charactors()		{ return m_pCharactors;			}
 	CMonster* Get_Monster()				{ return m_pMonster;			}
 	CTimeLifeItem * Get_FirstAidKit()	{ return m_pFirstAidKit;		}
 	ASEViewer* Get_ASEViewer()			{ return 	m_pASEViewer;		}
@@ -63,6 +65,7 @@ public:
 	VOID Set_ClientNumber( WORD a_iClientNumber )		{ m_iClientNumber = a_iClientNumber; }
 
 public:
+	VOID Set_Char(INT nSelect, INT nChar );
 	VOID Set_PushBackNetworkSendTempVector( WORD a_wData );
 	VOID Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir );
 	VOID Send_NetworkSendDestroyData(BOOL = FALSE);

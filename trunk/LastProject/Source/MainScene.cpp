@@ -148,30 +148,33 @@ VOID CMainScene::CreateCharactor()
 
 	for(INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		m_pCharactors[Loop].Create(m_pD3dDevice);
-		m_pCharactors[Loop].LoadKindChar( Loop );
+		if( !m_pCharactors[Loop] )
+			continue;
+
+		m_pCharactors[Loop]->Create( m_pD3dDevice );
+		m_pCharactors[Loop]->LoadKindChar( Loop );
 
 		if (Loop == 0)
 		{
-			m_pCharactors[0].Set_Active( TRUE );
+			m_pCharactors[0]->Set_Active( TRUE );
 		}
 		else
 		{
-			m_pCharactors[Loop].Set_Position( D3DXVECTOR3(-100, 0, 600) );
+			m_pCharactors[Loop]->Set_Position( D3DXVECTOR3(-100, 0, 600) );
 		}
-		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop].GetBoundBox() );
+		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop]->GetBoundBox() );
 	}
 }
 
 VOID	CMainScene::Update()
 {
 	// 캐릭터: 인풋 값 받아오기
-	m_pCharactors[0].UpdateByInput();
-	if ( m_pCharactors[0].CollisionAtk( ) )
+	m_pCharactors[0]->UpdateByInput();
+	if ( m_pCharactors[0]->CollisionAtk( ) )
 	{
 		D3DXMATRIXA16 mat;
 		D3DXMatrixIdentity( &mat );
-		m_pCharactors[0].BreakQube( mat );
+		m_pCharactors[0]->BreakQube( mat );
 
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
 	}
@@ -179,21 +182,21 @@ VOID	CMainScene::Update()
 
 	// 카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
-		m_pCharactors[0].Get_CharaPos2Camera(), 
-		m_pCharactors[0].Get_PreCharaPos2Camera(), 
+		m_pCharactors[0]->Get_CharaPos2Camera(), 
+		m_pCharactors[0]->Get_PreCharaPos2Camera(), 
 		10.0f, 75.0f, 
-		m_pCharactors[0].Get_CharaAngle(),
+		m_pCharactors[0]->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
 	m_pCamera->CheckObjectCollision( 
 		m_pCamera->GetEye(), 
-		m_pCharactors[0].Get_CharaPos(), 
-		m_pCharactors[0].Get_CharaAngle() );
+		m_pCharactors[0]->Get_CharaPos(), 
+		m_pCharactors[0]->Get_CharaAngle() );
 
 	// 다른 플레이어는 값으로 이동
 	for( INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
 	{			
-		m_pCharactors[Loop].UpdateOtherPlayer();
+		m_pCharactors[Loop]->UpdateOtherPlayer();
 	}
 
 	m_pMonster->Update();
@@ -230,9 +233,12 @@ VOID	CMainScene::Render()
 
 	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		if( m_pCharactors[Loop].Get_Active() )
+		if( !m_pCharactors[Loop] )
+			continue;
+
+		if( m_pCharactors[Loop]->Get_Active() )
 		{
-			m_pCharactors[Loop].Render();
+			m_pCharactors[Loop]->Render();
 		}
 	}
 
