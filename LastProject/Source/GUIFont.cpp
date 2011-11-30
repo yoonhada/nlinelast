@@ -82,7 +82,7 @@ VOID GUIFont::Create( LPWSTR _pFaceName, INT _iWidth, INT _iHeight, LPDIRECT3DDE
 	m_hOldFont	= (HFONT)SelectObject( m_hDC, m_hFont );
 }
 
-VOID GUIFont::DrawOnTexture( LPWSTR _pStr, DWORD _dColor, LPDIRECT3DTEXTURE9 _pTexture, INT _itexWidth, INT _itexHeight )
+VOID GUIFont::DrawOnTexture( LPWSTR _pStr, DWORD _dColor, LPDIRECT3DTEXTURE9 _pTexture, INT _itexX, INT _itexY, INT _itexWidth, INT _itexHeight )
 {
 	if( _pTexture == NULL )
 	{
@@ -125,7 +125,7 @@ VOID GUIFont::DrawOnTexture( LPWSTR _pStr, DWORD _dColor, LPDIRECT3DTEXTURE9 _pT
 	SetTextColor( hDC, _dColor );
 	
 	//	2,2 대신 좌상단, 중단, 좌하단 3가지로 나누어 할 수 있게 하면 좋을 듯
-	TextOut( hDC, 10, 10, _pStr, lstrlen( _pStr ) );
+	TextOut( hDC, _itexX, _itexY, _pStr, lstrlen( _pStr ) );
 	
 	D3DLOCKED_RECT	d3drt;
 	_pTexture->LockRect( 0, &d3drt, NULL, 0 );

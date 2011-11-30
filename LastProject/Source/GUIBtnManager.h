@@ -13,7 +13,7 @@ private:
 	VOID		Release();
 
 public:
-	GUIBtnManager( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite ) : m_pD3dDevice( _pd3dDevice ), m_pSprite( _pSprite )
+	GUIBtnManager( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite ) : m_pd3dDevice( _pd3dDevice ), m_pSprite( _pSprite )
 	{
 		this->Initialize();
 	}
@@ -60,7 +60,7 @@ public:
 
 	VOID		GetCommandID( DWORD& _ID );
 private:
-	LPDIRECT3DDEVICE9		m_pD3dDevice;
+	LPDIRECT3DDEVICE9		m_pd3dDevice;
 	LPD3DXSPRITE			m_pSprite;
 
 	DATAVECTOR				m_vecData;

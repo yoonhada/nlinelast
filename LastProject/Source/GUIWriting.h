@@ -10,6 +10,8 @@ private:
 	TCHAR		m_Str[ 1024 ];
 	INT			m_iNum;
 
+	BOOL		m_bReturn;
+
 public:
 	static GUIWriting& GetInstance();
 
@@ -27,11 +29,11 @@ private:
 	VOID		Release();
 
 public:
-	VOID			IMEUpdate( WPARAM& _wParam, LPARAM& _lParam );
-	VOID			CHARUpdate( WPARAM& _wParam, LPARAM& _lParam );
-	VOID			GetText( LPWSTR _pStr, INT& _iNum );	// Test
+	VOID		IMEUpdate( WPARAM& _wParam, LPARAM& _lParam );
+	VOID		CHARUpdate( WPARAM& _wParam, LPARAM& _lParam );
+	BOOL		GetText( LPWSTR _pStr, INT& _iNum );	// Test
 
-	VOID			Cleanup();
+	VOID		Cleanup();
 
 	//VOID			SetHWND( HWND& _hWnd );
 	//const HWND&		GetHWND();

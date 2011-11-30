@@ -9,8 +9,6 @@ VOID MenuScene::Initialize()
 	m_scnNext			= SCENE_LOBBY;
 	m_scnState			= SCENE_RUNNING;
 
-	m_bLoginScene		= FALSE;
-
 	m_pMenuGUI			= NULL;
 	m_pOptionScene		= NULL;
 	m_pLoginScene		= NULL;
@@ -39,30 +37,29 @@ VOID MenuScene::Update()
 {
 	m_pMenuGUI->Update();
 	m_pOptionScene->Update();
-
-	if( m_bLoginScene )
-		m_pLoginScene->Update();
+	m_pLoginScene->Update();
 
 	DWORD dID;
 	m_pMenuGUI->Command( dID );
 	switch( dID )
 	{
 	case GUIBTN_MENU_START:
-		m_bLoginScene = !m_bLoginScene;
+		m_pLoginScene->SetActivate( TRUE );
 		break;
 	case GUIBTN_MENU_END:
 		m_scnState = IScene::SCENE_END;
 		break;
 	}
+
+	if( m_pLoginScene->GetSceneState() == IScene::SCENE_END )
+		m_scnState = IScene::SCENE_END;
 }
 
 VOID MenuScene::Render()
 {
 	m_pMenuGUI->Render();
 	m_pOptionScene->Render();
-
-	if( m_bLoginScene )
-		m_pLoginScene->Render();
+	m_pLoginScene->Render();
 }
 
 INT MenuScene::GetSceneNext()

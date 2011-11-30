@@ -8,6 +8,9 @@ VOID LoginScene::Initialize()
 	m_scnState		= SCENE_RUNNING;
 
 	m_pLoginGUI		= NULL;
+
+	//	Popup창이라 생각하자
+	m_bActivate		= FALSE;
 }
 
 VOID LoginScene::Release()
@@ -26,20 +29,34 @@ HRESULT LoginScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 
 VOID LoginScene::Update()
 {
+	if( !m_bActivate )
+		return;
+
 	m_pLoginGUI->Update();
 
-	
+	TCHAR Str[ 1024 ];
+	ZeroMemory( Str, sizeof( Str ) );
+
 	DWORD dID;
 	m_pLoginGUI->Command( dID );
 	switch( dID )
 	{
 	case GUIBTN_LOGIN_GO:
+		m_pLoginGUI->GetEditTexture( Str );
+		MessageBox( NULL, Str, NULL, MB_OK );
+		m_scnState = IScene::SCENE_END;
+		break;
+	case GUIBTN_LOGIN_EXIT:
+		m_bActivate = FALSE;
 		break;
 	}
 }
 
 VOID LoginScene::Render()
 {
+	if( !m_bActivate )
+		return;
+
 	m_pLoginGUI->Render();
 }
 
@@ -51,4 +68,9 @@ INT LoginScene::GetSceneNext()
 INT LoginScene::GetSceneState()
 {
 	return m_scnState;
+}
+
+VOID LoginScene::SetActivate( BOOL _bActivate )
+{
+	m_bActivate = _bActivate;
 }
