@@ -262,14 +262,12 @@ VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
 
 	if ( bStart )
 	{
-		// 스타트 버튼 활성화
 #ifdef _DEBUG
 		CObjectManage::GetInstance()->GetLobbyScene()->EnableRotate( 3 );
 #endif // _DEBUG
 	}
 	else
 	{
-		// 스타트 버튼 비활성화
 #ifdef _DEBUG
 		CObjectManage::GetInstance()->GetLobbyScene()->DisableRotate( 3 );
 #endif // _DEBUG
