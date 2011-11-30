@@ -3,6 +3,7 @@
 #include "LobbyGUI.h"
 #include "OptionScene.h"
 #include "Charactor.h"
+#include "Monster.h"
 
 VOID LobbyScene::Initialize()
 {
@@ -19,6 +20,9 @@ VOID LobbyScene::Initialize()
 	m_pLight		= NULL;
 	m_pMatrices		= NULL;
 
+	m_pClown		= NULL;
+	m_pPanda		= NULL;
+
 }
 
 VOID LobbyScene::Release()
@@ -33,6 +37,9 @@ VOID LobbyScene::Release()
 	SAFE_DELETE( m_pLight );
 	//SAFE_DELETE( m_pMatrices );
 	//CTree::DestoryInstance();
+
+	SAFE_DELETE( m_pClown );
+	SAFE_DELETE( m_pPanda );
 }
 
 VOID LobbyScene::CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecPosition )
@@ -98,6 +105,19 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 );
 	CNetwork::GetInstance()->CS_LOGON();
 
+	// Create Monster
+	m_pClown = CObjectManage::GetInstance()->Get_Monster();
+	m_pClown->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
+	m_pClown->Set_Pos( D3DXVECTOR3( 24.0f, 0.0f, 100.0f ) );
+	//m_pClown->Set_iSelectedFrameNum( 4 );
+
+	m_pPanda = CObjectManage::GetInstance()->Get_Monster();
+	m_pPanda->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
+//	m_pPanda->Set_Pos( D3DXVECTOR3( -24.0f, 0.0f, 100.0f ) );
+	m_pPanda->ChangeAnimation( 0 );
+	//m_pPanda->Set_iSelectedFrameNum( 1 );
+
+
 	return S_OK;
 }
 
@@ -122,7 +142,6 @@ VOID LobbyScene::Update()
 
 	for( INT i=0 ; i<4 ; i++ )
 		m_aData[ i ].pCharacter->UpdateOtherPlayer( TRUE );
-	
 
 	DWORD dID;
 	m_pLobbyGUI->Command( dID );
@@ -147,12 +166,15 @@ VOID LobbyScene::Update()
 	case GUIBTN_LOBBY_SELECT_4:
 		ActivateRotate( 3 );
 		break;
+	case GUIBTN_LOBBY_READY:
+		break;
 	}
 	
-	if( m_fChrRotate > 314000.0f )
+	if( m_fChrRotate > 3140000.0f )
 		m_fChrRotate = 3.14f;
 
 	m_fChrRotate += m_fIncRotate;
+
 
 	for( INT i=0 ; i<4 ; i++ )
 	{
@@ -162,6 +184,14 @@ VOID LobbyScene::Update()
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
 	}
 
+	//	Update Monster
+	m_pClown->Update();
+	m_pClown->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+	m_pPanda->Update();
+	m_pPanda->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+
+	D3DXVECTOR3 vecPos = m_pClown->Get_Pos();
+	CDebugConsole::GetInstance()->Messagef( L"%f %f %f\n", vecPos.x, vecPos.y, vecPos.z );
 }
 
 VOID LobbyScene::Render()
@@ -180,6 +210,10 @@ VOID LobbyScene::Render()
 
 	for( INT i=0 ; i<4 ; i++ )
 		m_aData[ i ].pCharacter->Render();
+
+	//	Render Monster
+	//m_pClown->Render();
+	m_pPanda->Render();
 
 	m_pLight->DisableLight();
 	m_pLobbyGUI->Render();
