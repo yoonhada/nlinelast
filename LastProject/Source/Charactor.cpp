@@ -67,6 +67,7 @@ VOID CCharactor::Clear()
 	m_iClientNumber = 0;
 	m_bActive = FALSE;
 	m_pShadowCell = NULL;
+	m_bShadowEnable = TRUE;
 
 	m_fKnockBack = 0.0f;
 	m_fTransition = 0.0f;
@@ -773,14 +774,17 @@ VOID CCharactor::Render()
 	if( m_pWeapon )	
 		m_pWeapon->Render( /*m_pWeapon->Get_MatWorld() * */this->Get_MatWorld() );
 
-	m_pShadowCell->Set_ControlScale( 0, 10.0f );
-	m_pShadowCell->Set_ControlScale( 2, 10.0f );
-	m_pShadowCell->Set_ControlTranslate( 0, m_vControl.x );
-	m_pShadowCell->Set_ControlTranslate( 1, 0.51f );
-	m_pShadowCell->Set_ControlTranslate( 2, m_vControl.z );
-	m_pShadowCell->Calcul_MatWorld();
-	m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pShadowCell->Get_MatWorld() );
-	m_pShadowCell->Render( );
+	if ( m_bShadowEnable )
+	{
+		m_pShadowCell->Set_ControlScale( 0, 10.0f );
+		m_pShadowCell->Set_ControlScale( 2, 10.0f );
+		m_pShadowCell->Set_ControlTranslate( 0, m_vControl.x );
+		m_pShadowCell->Set_ControlTranslate( 1, 0.51f );
+		m_pShadowCell->Set_ControlTranslate( 2, m_vControl.z );
+		m_pShadowCell->Calcul_MatWorld();
+		m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pShadowCell->Get_MatWorld() );
+		m_pShadowCell->Render( );
+	}
 
 	m_pD3dDevice->SetTexture( 0, NULL );
 

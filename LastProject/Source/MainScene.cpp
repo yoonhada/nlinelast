@@ -58,6 +58,13 @@ VOID	CMainScene::Clear()
 
 HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprite, HWND a_hWnd )
 {
+//#ifdef _DEBUG
+//	CObjectManage::GetInstance()->Set_Char( 0, 0 );
+//	CObjectManage::GetInstance()->Set_Char( 1, 1 );
+//	CObjectManage::GetInstance()->Set_Char( 2, 2 );
+//	CObjectManage::GetInstance()->Set_Char( 3, 3 );
+//#endif // _DEBUG
+
 	m_pD3dDevice = a_pD3dDevice;
 
 	m_pMatrices = CMatrices::GetInstance();
@@ -119,6 +126,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
 	CInput::GetInstance()->EnableInput(FALSE);
+
+	////m_pStateMachine->SetCurrentState( Seek::GetInstance() );
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 
 	return S_OK;
@@ -211,7 +220,7 @@ VOID	CMainScene::Update()
 	m_pMainGUI->Update();
 	m_pOptionScene->Update();
 
-	CNetwork::GetInstance()->Update();
+	CNetwork::GetInstance()->UpdateGame();
 	m_pGameEvent->Update();	
 
 	//if ( CInput::GetInstance()->Get_NumKey(7) )
