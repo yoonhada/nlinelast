@@ -147,6 +147,37 @@ VOID CNetwork::SC_LOGON( CPacket& a_pk )
 
 VOID CNetwork::SC_SELECT_CHARACTER( CPacket& a_pk )
 {
+	//WORD wUserNumber;
+	//WORD wSelect;
+	//BOOL bSelect;
+
+	//a_pk.Read( &wUserNumber );
+	//a_pk.Read( &wSelect );
+	//a_pk.Read( &bSelect );
+
+	//// 캐릭터 선택
+	//CObjectManage * pOM = CObjectManage::GetInstance();
+	////pOM->Set_Char( wUserNumber, wSelect );
+	//if ( bSelect == FALSE && pOM->Get_ClientNumber() == wUserNumber)
+	//{
+	//	// 케릭터 선택 실패.. 회전 제거.
+	//	pOM->GetLobbyScene()->DisableRotate( wSelect );
+	//}
+	//else if ( bSelect == TRUE && pOM->Get_ClientNumber() == wUserNumber)
+	//{
+	//	// 케릭터 선택 
+	//}
+	//else if ( bSelect == TRUE && pOM->Get_ClientNumber() != wUserNumber)
+	//{
+	//	// 다른 플레이어 선택
+	//}
+
+	//// 선택 불가능 하면 현재 선택된 상태 FALSE
+}
+
+
+VOID CNetwork::SC_READY( CPacket& a_pk )
+{
 	WORD wUserNumber;
 	WORD wSelect;
 	BOOL bSelect;
@@ -170,15 +201,10 @@ VOID CNetwork::SC_SELECT_CHARACTER( CPacket& a_pk )
 	else if ( bSelect == TRUE && pOM->Get_ClientNumber() != wUserNumber)
 	{
 		// 다른 플레이어 선택
+		pOM->GetLobbyScene()->EnableRotate( wSelect );
 	}
 
-	// 선택 불가능 하면 현재 선택된 상태 FALSE
-}
-
-
-VOID CNetwork::SC_READY( CPacket& a_pk )
-{
-	
+	// 선택 불가능 하면 현재 선택된 상태 FALSE	
 }
 
 
