@@ -35,7 +35,7 @@ VOID CLight::DisableLight()
 	m_pD3dDevice->SetRenderState( D3DRS_AMBIENT, 0x00000000 );
 }
 
-VOID CLight::EnableLight()
+VOID CLight::EnableLight( D3DXVECTOR3 _vecDir )
 {
 	m_Mtrl.Diffuse.r = 1.0f;
 	m_Mtrl.Diffuse.g = 1.0f;
@@ -94,7 +94,7 @@ VOID CLight::EnableLight()
 	light.Attenuation0 = 1.0f;
 
 	//vecDir = D3DXVECTOR3( 1.0f, -1.0f, 0.0f );
-	vecDir = D3DXVECTOR3( 0.0f, 0.0f, -1.0f );
+	vecDir = _vecDir;
 
 	D3DXVec3Normalize( ( D3DXVECTOR3* )&light.Direction, &vecDir );
 	

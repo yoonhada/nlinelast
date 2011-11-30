@@ -52,7 +52,7 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 
 
 #ifdef _TEST
-	m_pScene			= new LobbyScene;
+	m_pScene			= new LogoScene;
 #else
 	m_pScene			= new LogoScene;
 #endif // _DEBUG	

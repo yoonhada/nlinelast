@@ -41,6 +41,9 @@ private:
 
 	LoadingGUI*				m_pLoadingGUI;
 
+	CLight*					m_pLight;
+	CMatrices*				m_pMatrices;
+
 	CMonster*				m_pClown;
 	CMonster*				m_pPanda;
 
