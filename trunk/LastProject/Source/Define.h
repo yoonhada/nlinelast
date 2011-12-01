@@ -36,6 +36,11 @@ extern FLOAT FastRand2();
 #define WEAPONFILE L".\\WeaponFile.ini"
 
 // GUI Resource
+// GUI State
+#define GUIBTN_NORMAL			100
+#define GUIBTN_DOWN				101
+#define GUIBTN_DISABLE			102
+
 #define GUIBTN_STORY_SKIP		1000
 
 #define GUIBTN_MENU_START		1001

@@ -260,11 +260,18 @@ VOID LobbyScene::EnableButton( DWORD _dID, BOOL _bEnable )
 {
 	m_pLobbyGUI->EnableButton( _dID, _bEnable );
 }
+
 VOID LobbyScene::SetText( LPWSTR _pText )
 {
 	m_pLobbyGUI->SetText( _pText );
 }
+
 VOID LobbyScene::GetText( LPWSTR _pText )
 {
 	m_pLobbyGUI->GetText( _pText );
+}
+
+VOID LobbyScene::ChangeStateButton( DWORD _dID, DWORD _dState )
+{
+	m_pLobbyGUI->ChangeScene( _dID, _dState );
 }
