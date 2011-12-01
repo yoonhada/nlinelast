@@ -8,6 +8,9 @@
 
 VOID LobbyGUI::Initialize()
 {
+	m_pStr = new TCHAR[ 1024 ];
+	ZeroMemory( m_pStr, sizeof( TCHAR ) * 1024 );
+
 	m_pMouse			= new Mouse;
 	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
 	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
@@ -18,6 +21,8 @@ VOID LobbyGUI::Initialize()
 
 VOID LobbyGUI::Release()
 {
+	delete[] m_pStr;
+
 	delete m_pMouse;
 	delete m_pGUIBase;
 	delete m_pGUIBackground;
@@ -199,9 +204,8 @@ VOID LobbyGUI::Update()
 		bFirst = FALSE;
 	}
 
-	TCHAR Str[ 1024 ];
-	if( m_pGUIEdit->TakeMessage( Str ) )
-		m_pGUIListbox->AddItem( Str );
+	if( m_pGUIEdit->TakeMessage( m_pStr ) )
+		m_pGUIListbox->AddItem( m_pStr );
 }
 
 VOID LobbyGUI::Render()
@@ -240,3 +244,12 @@ VOID LobbyGUI::EnableButton( DWORD _dID, BOOL _bEnable )
 	m_pGUIBtnManager->Enable( _dID, _bEnable );
 }
 
+VOID LobbyGUI::SetText( LPWSTR _pText )
+{
+	m_pGUIListbox->AddItem( _pText );
+}
+VOID LobbyGUI::GetText( LPWSTR _pText )
+{
+	_tcscpy( _pText, m_pStr );
+	ZeroMemory( m_pStr, sizeof( TCHAR ) * 1024 );
+}
