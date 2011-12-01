@@ -237,7 +237,7 @@ VOID LobbyScene::UpdateCharArray()
 	{
 		if( m_nSelectState[i] != -1 )
 		{
-			CObjectManage::GetInstance()->Set_Char( m_nSelectState[i], i );
+			CObjectManage::GetInstance()->Set_Char( m_nSelectState[i], i, TRUE );
 			CObjectManage::GetInstance()->Set_Char( i, m_nSelectState[i] );
 		}		
 	}
