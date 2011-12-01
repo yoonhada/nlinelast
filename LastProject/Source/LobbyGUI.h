@@ -41,6 +41,7 @@ public:
 
 	VOID		Command( DWORD& _dOut );
 	VOID		EnableButton( DWORD _dID, BOOL _bEnable );
+	VOID		ChangeScene( DWORD _dID, DWORD _dState );
 	VOID		SetText( LPWSTR _pText );
 	VOID		GetText( LPWSTR _pText );
 	

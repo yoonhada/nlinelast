@@ -111,7 +111,7 @@ VOID LobbyGUI::CreateButton()
 	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_4, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
 	//	Ready
-	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown;
+	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable;
 
 	fX			= m_fX + m_fWidth - 800.0f;
 	fY			= m_fY + m_fHeight - 100.0f;
@@ -121,8 +121,9 @@ VOID LobbyGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgReadyNormal, L"Img\\LobbyScene\\quote-Normal.png" );
 	m_pGUIBase->AddFileName( 0, imgReadyHot, L"Img\\LobbyScene\\quote-Hot.png" );
 	m_pGUIBase->AddFileName( 0, imgReadyDown, L"Img\\LobbyScene\\quote-Down.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyDisable, L"Img\\LobbyScene\\quote-Disable.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_READY, 1, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDown );
+	m_pGUIBtnManager->Create( GUIBTN_LOBBY_READY, 1, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable );
 }
 
 VOID LobbyGUI::CreateEdit()
@@ -252,4 +253,9 @@ VOID LobbyGUI::GetText( LPWSTR _pText )
 {
 	_tcscpy( _pText, m_pStr );
 	ZeroMemory( m_pStr, sizeof( TCHAR ) * 1024 );
+}
+
+VOID LobbyGUI::ChangeScene( DWORD _dID, DWORD _dState )
+{
+	m_pGUIBtnManager->ChangeState( _dID, _dState );
 }

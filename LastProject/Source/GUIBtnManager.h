@@ -60,6 +60,7 @@ public:
 
 	VOID		GetCommandID( DWORD& _ID );
 	VOID		Enable( DWORD _dID, BOOL _bEnable );
+	VOID		ChangeState( DWORD _dID, DWORD _dState );
 
 private:
 	LPDIRECT3DDEVICE9		m_pd3dDevice;

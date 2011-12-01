@@ -114,6 +114,35 @@ VOID GUIBtnManager::Enable( DWORD _dID, BOOL _bEnable )
 	}
 }
 
+VOID GUIBtnManager::ChangeState( DWORD _dID, DWORD _dState )
+{
+	eState ES;
+
+	switch( _dState )
+	{
+	case GUIBTN_NORMAL:
+		ES = GB_NORMAL;
+		break;
+	case GUIBTN_DOWN:
+		ES = GB_DOWN;
+		break;
+	case GUIBTN_DISABLE:
+		ES = GB_DISABLE;
+		break;
+	default:
+		return;
+	}
+
+	for( INT i=0 ; i<m_iNumData ; i++ )
+	{
+		if( m_vecData[ i ]->ID == _dID )
+		{
+			m_vecData[ i ]->pGUIBtn->SetState( ES );
+			break;
+		}
+	}
+}
+
 VOID GUIBtnManager::Render()
 {
 	for( INT i=0 ; i<m_iNumData ; i++ )
