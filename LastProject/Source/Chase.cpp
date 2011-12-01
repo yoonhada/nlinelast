@@ -67,6 +67,7 @@ VOID Chase::Execute( CMonster* a_pMonster )
 		m_iCurrentX = m_pNextPath->x;
 		m_iCurrentZ = m_pNextPath->y;
  
+		// 도착했으면 Seek 상태로
 		m_pNextPath = m_pNextPath->next;
 		if( m_pNextPath->remainedNode <= 0 )
 		{

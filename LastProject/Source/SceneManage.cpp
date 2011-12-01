@@ -77,7 +77,7 @@ HRESULT CSceneManage::Release()
 	//}
 	//SAFE_DELETE(m_pPrevScene);
 	//SAFE_DELETE(m_pNextScene);
-
+ 
 	SAFE_DELETE( m_pScene );
 	SAFE_DELETE( m_pLoadingScene );
 

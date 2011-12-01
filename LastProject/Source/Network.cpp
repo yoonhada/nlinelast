@@ -170,6 +170,14 @@ VOID CNetwork::SC_LOGON( CPacket& a_pk )
 
 }
 
+
+VOID CNetwork::SC_CHANGE_HOST( CPacket& a_pk )
+{
+	// 호스트로 설정한다.
+	CObjectManage::GetInstance()->Set_Host( TRUE );
+}
+
+
 VOID CNetwork::SC_SELECT_CHARACTER( CPacket& a_pk )
 {
 	//WORD wUserNumber;
@@ -263,13 +271,13 @@ VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
 	if ( bStart )
 	{
 #ifdef _DEBUG
-		CObjectManage::GetInstance()->GetLobbyScene()->EnableRotate( 3 );
+		CObjectManage::GetInstance()->GetLobbyScene()->m_pLobbyGUI->EnableButton( GUIBTN_LOBBY_START, TRUE );
 #endif // _DEBUG
 	}
 	else
 	{
 #ifdef _DEBUG
-		CObjectManage::GetInstance()->GetLobbyScene()->DisableRotate( 3 );
+		CObjectManage::GetInstance()->GetLobbyScene()->m_pLobbyGUI->EnableButton( GUIBTN_LOBBY_START, FALSE );
 #endif // _DEBUG
 	}
 }
@@ -644,6 +652,10 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	// 새로운 유저 추가 처리
 	case MSG_NEWUSER:
 		SC_NEWUSER( a_pk );
+		break;
+
+	case MSG_CHANGE_HOST:
+		SC_CHANGE_HOST( a_pk );
 		break;
 
 	case MSG_READY:
