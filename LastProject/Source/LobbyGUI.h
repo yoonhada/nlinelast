@@ -41,6 +41,8 @@ public:
 
 	VOID		Command( DWORD& _dOut );
 	VOID		EnableButton( DWORD _dID, BOOL _bEnable );
+	VOID		SetText( LPWSTR _pText );
+	VOID		GetText( LPWSTR _pText );
 	
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
@@ -49,6 +51,8 @@ private:
 
 	FLOAT					m_fX, m_fY;
 	FLOAT					m_fWidth, m_fHeight;
+
+	LPWSTR					m_pStr;
 
 	Mouse*					m_pMouse;
 	GUIBase*				m_pGUIBase;
