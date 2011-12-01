@@ -431,7 +431,7 @@ VOID CNetwork::CS_CHAT( LPWSTR a_szText )
 	WORD wMsgID = MSG_CHAT;
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
-	sendPk.WriteString( a_szText, lstrlen( a_szText ) );
+	sendPk.WriteString( a_szText, lstrlen( a_szText ) * 2 );
 
 	SendToServer( sendPk );
 }

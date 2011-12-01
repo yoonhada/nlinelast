@@ -34,6 +34,7 @@ VOID LoginScene::Update()
 
 	m_pLoginGUI->Update();
 
+	char strIP[ 64 ];
 	TCHAR Str[ 1024 ];
 	
 	ZeroMemory( Str, sizeof( Str ) );
@@ -44,8 +45,16 @@ VOID LoginScene::Update()
 	{
 	case GUIBTN_LOGIN_GO:
 		m_pLoginGUI->GetEditTexture( Str );
-		MessageBox( NULL, Str, NULL, MB_OK );
-		m_scnState = IScene::SCENE_END;
+		WideCharToMultiByte( CP_ACP, 0, Str, -1, strIP, 64, NULL, NULL );
+		if ( CNetwork::GetInstance()->ConnectToServer( strIP, 20202 ) )
+		{
+			CNetwork::GetInstance()->CS_LOGON( L"NickName" );
+			m_scnState = IScene::SCENE_END;
+		}
+		else
+		{
+			MessageBox( GHWND, L"접속 실패", L"에러", MB_OK );
+		}
 		break;
 	case GUIBTN_LOGIN_EXIT:
 		m_bActivate = FALSE;
