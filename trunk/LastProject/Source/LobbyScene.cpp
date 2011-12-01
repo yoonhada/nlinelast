@@ -145,6 +145,7 @@ VOID LobbyScene::Update()
 	case GUIBTN_LOBBY_READY:
 		if ( m_nCharSelect < 0 )
 			break;
+		// 최초선택
 		if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
 		{
 			CNetwork::GetInstance()->CS_READY( m_nCharSelect, TRUE );
@@ -152,6 +153,7 @@ VOID LobbyScene::Update()
 		else if ( m_nSelectState[pOM->Get_ClientNumber()] == m_nCharSelect )
 		{
 			CNetwork::GetInstance()->CS_READY( m_nCharSelect, FALSE );
+			m_nCharSelect = -1;
 		}
 		break;
 	case GUIBTN_LOBBY_BACK:
