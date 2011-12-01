@@ -62,11 +62,9 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	m_pMatrices = CMatrices::GetInstance();
 
-	//트리 생성
+#ifdef _DEBUG
 	FLOAT fSize = 1000.0f;
 	INT nDeep = 4;
-	CTree::GetInstance()->Create( fSize, nDeep );
-#ifdef _DEBUG
 	m_pAxis = new Axis( m_pD3dDevice );
 	m_pAxis->Create( fSize, nDeep );
 #endif

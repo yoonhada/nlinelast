@@ -25,7 +25,7 @@ VOID LogoScene::Release()
 
 	SAFE_DELETE( m_pLight );
 
-	CTree::DestoryInstance();
+	//CTree::DestoryInstance();
 }
 
 HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
@@ -66,7 +66,7 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	m_pLogo[ 5 ].EnableShadow( FALSE );
 
 	//	Create Tree
-	CTree::GetInstance()->Create( 0, 0 );
+	//CTree::GetInstance()->Create( 0, 0 );
 
 	//	Create Light
 	m_pLight = new CLight;
@@ -75,7 +75,7 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	//	Create Matrices
 	m_pMatrices = CMatrices::GetInstance();
 	
-	CTree::GetInstance()->Create( 0, 0 );
+	//CTree::GetInstance()->Create( 0, 0 );
 
 	//	Set Logo Time
 	m_datLogo.dBeginTime	= timeGetTime();
