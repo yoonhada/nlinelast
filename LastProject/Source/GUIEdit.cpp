@@ -112,6 +112,9 @@ VOID GUIEdit::Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, GUIBa
 
 	CreateImage2D( m_Data.img2DCaret, imgCaret );
 
+	// 버퍼 초기화
+	GUIWriting::GetInstance().Cleanup();
+
 }
 
 VOID GUIEdit::Update()
