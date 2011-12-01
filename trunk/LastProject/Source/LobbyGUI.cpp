@@ -205,8 +205,9 @@ VOID LobbyGUI::Update()
 		bFirst = FALSE;
 	}
 
-	if( m_pGUIEdit->TakeMessage( m_pStr ) )
-		m_pGUIListbox->AddItem( m_pStr );
+	/*if( m_pGUIEdit->TakeMessage( m_pStr ) )
+		m_pGUIListbox->AddItem( m_pStr );*/
+
 }
 
 VOID LobbyGUI::Render()
@@ -258,4 +259,16 @@ VOID LobbyGUI::GetText( LPWSTR _pText )
 VOID LobbyGUI::ChangeScene( DWORD _dID, DWORD _dState )
 {
 	m_pGUIBtnManager->ChangeState( _dID, _dState );
+}
+
+BOOL LobbyGUI::TakeChattingMassage( LPWSTR _pText )
+{
+	if( m_pGUIEdit->TakeMessage( m_pStr ) )
+	{
+		m_pGUIListbox->AddItem( m_pStr );
+
+		_tcscpy( m_pStr, _pText );
+		return TRUE;
+	}
+	return FALSE;
 }

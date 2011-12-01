@@ -44,6 +44,7 @@ public:
 	VOID		ChangeScene( DWORD _dID, DWORD _dState );
 	VOID		SetText( LPWSTR _pText );
 	VOID		GetText( LPWSTR _pText );
+	BOOL		TakeChattingMassage( LPWSTR _pText );
 	
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;

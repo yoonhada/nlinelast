@@ -293,10 +293,11 @@ VOID CNetwork::SC_GAME_START( CPacket& a_pk )
 
 VOID CNetwork::SC_CHAT( CPacket& a_pk )
 {
-	CHAR szText[128] = { 0, };
-	a_pk.ReadString( szText, 128 );
+	WCHAR szText[256] = { 0, };
+	a_pk.ReadString( szText, 256 );
 
-	//cout << szText << endl;
+	// 채팅창에 출력
+	CObjectManage::GetInstance()->GetLobbyScene()->SetText( szText );
 }
 
 
@@ -375,7 +376,7 @@ VOID CNetwork::SC_InitData( CPacket& a_pk )
 	//CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 }
 
-VOID CNetwork::CS_LOGON()
+VOID CNetwork::CS_LOGON( LPCWSTR a_szNickName )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -383,12 +384,7 @@ VOID CNetwork::CS_LOGON()
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 
-	CHAR* szName = "HelloWorld";
-	CHAR* szPass = "Beautiful";
-
-
-	sendPk.WriteString( szName, strlen( szName ) );
-	sendPk.WriteString( szPass, strlen( szPass ) );
+	sendPk.WriteString( a_szNickName, lstrlen( a_szNickName ) );
 
 	SendToServer( sendPk );
 }
