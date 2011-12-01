@@ -10,6 +10,8 @@ class CNTClient
 public:
 	SOCKET	m_Socket;
 	WORD	m_Index;
+	BOOL	m_bHost;
+	BOOL	m_bReady;
 
 	OVERLAPPED_PLUS m_OV_IN;
 	OVERLAPPED_PLUS m_OV_OUT;

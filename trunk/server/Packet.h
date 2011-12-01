@@ -20,8 +20,8 @@ public:
 	CHAR*	GetBuff()		{ return m_Buff; }
 	UINT	GetLength()		{ return m_DataSize; }
 
-	BOOL	ReadString( CHAR* pOut, WORD wMaxSize );
-	BOOL	WriteString( CHAR* pData, WORD wSize );
+	BOOL	ReadString( LPWSTR pOut, WORD wMaxSize );
+	BOOL	WriteString( LPWSTR pData, WORD wSize );
 	VOID	CalcSize();
 
 
