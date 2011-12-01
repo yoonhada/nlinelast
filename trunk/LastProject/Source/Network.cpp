@@ -276,7 +276,7 @@ VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
 
 VOID CNetwork::SC_GAME_START( CPacket& a_pk )
 {
-
+	CObjectManage::GetInstance()->GetLobbyScene()->UpdateCharArray();
 }
 
 
@@ -406,7 +406,15 @@ VOID CNetwork::CS_READY( WORD a_wSelect, BOOL a_bSelect )
 
 VOID CNetwork::CS_GAME_START()
 {
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_START;
 
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
 }
 
 VOID CNetwork::CS_CHAT()
