@@ -23,7 +23,7 @@ VOID CPacket::Copy( CHAR* pData, UINT nSize )
 }
 
 
-BOOL CPacket::ReadString( CHAR* pOut, WORD wMaxSize )	// wMaxSize : pOut의 최대크기
+BOOL CPacket::ReadString( LPWSTR pOut, WORD wMaxSize )	// wMaxSize : pOut의 최대크기
 {
 	WORD wSize;
 	if( Read( &wSize ) != TRUE )
@@ -45,7 +45,7 @@ BOOL CPacket::ReadString( CHAR* pOut, WORD wMaxSize )	// wMaxSize : pOut의 최대�
 }
 
 
-BOOL CPacket::WriteString( CHAR* pData, WORD wSize )
+BOOL CPacket::WriteString( LPWSTR pData, WORD wSize )
 {
 	UINT remained = PACKET_SIZE - m_BuffPoint;
 	if( wSize > remained )

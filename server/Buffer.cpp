@@ -47,8 +47,9 @@ BOOL CBuffer::ReadCommit( UINT nSize )
 	}
 
 	// 데이터를 앞으로 당긴다.
-	memmove( m_Buffer, m_Buffer + nSize, nSize );
 	m_End -= nSize;
+	memmove( m_Buffer, m_Buffer + nSize, m_End );
+	
 
 	return TRUE;
 }

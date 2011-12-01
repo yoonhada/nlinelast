@@ -19,10 +19,13 @@
 
 using std::cin;
 using std::cout;
+using std::wcout;
 using std::endl;
 using std::vector;
 using std::map;
 
+
+#define _DEBUG_
 
 
 // 안전한 메모리 해제를 위한 매크로

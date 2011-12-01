@@ -11,12 +11,7 @@ CSocketServer::CSocketServer()
 	m_hAcceptThread		= INVALID_HANDLE_VALUE;
 	m_hIOCPThread		= INVALID_HANDLE_VALUE;
 
-	for( WORD i=0; i<4; ++i )
-	{
-		m_wIndexList[i][0] = TRUE;
-		m_wIndexList[i][1] = i;
-	}
-	m_wIndex = 0;
+	Clear();
 }
 
 
@@ -64,6 +59,23 @@ BOOL CSocketServer::Initialize()
 	m_hIOCPThread = (HANDLE)_beginthreadex( NULL, 0, IOCPWorkerProc, this, 0, &dwThreadID );
 
 	return TRUE;
+}
+
+
+VOID CSocketServer::Clear()
+{
+	m_bHostClient = FALSE;
+	m_pHostClient = NULL;
+
+	m_iClientCount = 0;
+	m_iReadyCount = 0;
+
+	for( WORD i=0; i<4; ++i )
+	{
+		m_wUserNumber[i] = TRUE;
+
+		m_bSelected[i] = FALSE;
+	}
 }
 
 
@@ -130,21 +142,22 @@ VOID CSocketServer::OnAccept( SOCKET hSocket )
 	CNTClient* pClient = new CNTClient;
 	pClient->Initialize();
 	pClient->m_Socket = hSocket;
-	
-	// 유저 인식 번호 0 ~ 3
+
+	// 유저 인식 번호 0 ~ 3중 가장 가능한 번호를 찾는다.
 	WORD find = 0;
 	for( INT i=0; i<4; ++i )
 	{
-		if( m_wIndexList[i][0] == TRUE )
+		if( m_wUserNumber[i] == TRUE )
 		{
 			find = i;
-			m_wIndexList[i][0] = FALSE;
+			m_wUserNumber[i] = FALSE;
 
 			break;
 		}
 	}
 	pClient->m_Index = find;
 
+	// IOCP와 연결
 	if( CreateIoCompletionPort( (HANDLE)hSocket, m_hCompletionPort, (ULONG_PTR)pClient, 0 ) == NULL )
 	{
 		cout << "CreateIoCompletionPort() Error : " << WSAGetLastError() << endl;
@@ -154,147 +167,271 @@ VOID CSocketServer::OnAccept( SOCKET hSocket )
 		return;
 	}
 
+	// 수신 대기 상태로 만든다.
 	pClient->PostRecv();
+}
+
+
+VOID CSocketServer::OnClientClose( CNTClient* pClient )
+{
+	// 접속 해제한 유저번호가 다시 활성화 상태로
+	m_wUserNumber[pClient->m_Index] = FALSE;
+
+	// 다른 접속자들에게 해당 유저의 접속 해제를 알린다.
+	SC_Disconnect( pClient );
+
+	m_Map_LogonClients.erase( pClient->m_Index );
+
+	// 클라이언트 수 -1
+	--m_iClientCount;
+	if( m_iClientCount == 0 )
+	{
+		Clear();
+	}
+	else
+	{
+		// READY 상태였으면 ReadyCount -1
+		if( pClient->m_bReady == TRUE )
+		{
+			--m_iReadyCount;
+		}
+	}
+	
+	// 접속 종료한게 호스트이면 호스트 재설정
+	if( pClient->m_bHost == TRUE )
+	{
+		m_bHostClient = FALSE;
+
+		INT iSize = m_Map_LogonClients.size();
+
+		if( iSize > 0 )
+		{
+			CPacket sendPk;
+			WORD wMsgSize = 0;
+			WORD wMsgID = MSG_CHANGE_HOST;
+			sendPk.Write( wMsgSize );
+			sendPk.Write( wMsgID );
+			sendPk.CalcSize();
+
+			map<WORD, CNTClient*>::iterator it = m_Map_LogonClients.begin();
+			it->second->Send( sendPk );
+
+			m_bHostClient = TRUE;
+		}
+	}
+
+#ifdef _DEBUG_
+	cout << "Current User Count : " << m_iClientCount << endl;
+#endif
+
+	pClient->Close();
+	SAFE_DELETE( pClient );
 }
 
 
 VOID CSocketServer::CS_Logon( CNTClient* pClient, CPacket& pk )
 {
-	CHAR szName[128] = { 0, };
-	CHAR szPass[128] = { 0, };
+	WCHAR szName[256] = { 0, };
 
-	pk.ReadString( szName, 128 );
-	pk.ReadString( szPass, 128 );
-
-	cout << szName << " " << szPass << endl;
+	pk.ReadString( szName, 256 );
+	wcout << szName << endl;
 
 	// 유저 추가
 	m_Map_LogonClients.insert( map<WORD, CNTClient*>::value_type( pClient->m_Index, pClient ) );
-	cout << "User Count : " << m_Map_LogonClients.size() << endl;
+	++m_iClientCount;
+
+#ifdef _DEBUG_
+	cout << "User Count : " << m_iClientCount << endl;
+#endif
 
 	// 접속한 유저에게 초기 정보를 보내준다.
 	SC_INITDATA( pClient );
 
-	// 다른 유저들에게 접속 정보를 보낸다.
-	map<WORD, CNTClient*>::iterator it;
-	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
-	{
-		if( it->second->m_Index == pClient->m_Index )
-		{
-			continue;
-		}
+	// 다른 유저들에게 보낼 패킷을 만든다.
+	CPacket sendpk;
+	WORD wMsgSize = 0;
+	WORD wMsgType = MSG_NEWUSER;
+	sendpk.Write( wMsgSize );
+	sendpk.Write( wMsgType );
+	sendpk.Write( pClient->m_Index );
+	sendpk.CalcSize();
 
-		SC_NEWUSER( it->second, pClient );
-	}
-
+	SendToClient( pClient, sendpk );
 }
 
 
 VOID CSocketServer::SC_INITDATA( CNTClient* pClient )
 {
+	// 접속한 유저에게 초기 좌표를 보내준다.
+	static FLOAT x = -100.0f;
+	static FLOAT z = 600.0f;
+
 	CPacket pk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_SC_INITDATA;
-
-	// 접속한 유저에게 초기 좌표를 보내준다.
-	static FLOAT x = 200.0f;
-	static FLOAT z = 0.0f;
-
-	// 최초 접속한 유저가 방장  
-	static bool host = TRUE;
-
-	// 유저들을 구분할 번호
-	static WORD user_no = 0;
-
-	// 자신을 뺀 나머지 유저 수
-	WORD userCount = m_Map_LogonClients.size() - 1;
+	WORD wMsgID = MSG_INITDATA;
 
 	pk.Write( wMsgSize );
 	pk.Write( wMsgID );
-	pk.Write( host );
+	pk.Write( m_bHostClient );
 	pk.Write( pClient->m_Index );
-	pk.Write( userCount );
+	pk.Write( m_iClientCount - 1 );
 
+	// 접속되어있는 클라이언트들의 번호
 	map<WORD, CNTClient*>::iterator it;
 	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
 	{
-		if( pClient->m_Index == it->second->m_Index )
+		if( pClient->m_Index != it->second->m_Index )
 		{
-			continue;
+			pk.Write( it->second->m_Index );
 		}
-
-		pk.Write( it->second->m_Index );
 	}
 
-	// 패킷 크기 계산
+	// 현재 선택되어있는 캐릭터
+	for( INT i=0; i<4; ++i )
+	{
+		pk.Write( m_bSelected[i] );
+	}
+
 	pk.CalcSize();
 
 	pClient->Send( pk );
 
-	x += 50.0f;
-	if( x >= 400.0f )
+	// 호스트 상태 설정
+	if( m_bHostClient == FALSE )
 	{
-		x = 200.0f;
+		m_pHostClient = pClient;
+		m_bHostClient = TRUE;
+		pClient->m_bHost = TRUE;
 	}
-
-	if( host )
+	else
 	{
-		host = FALSE;
+		pClient->m_bHost = FALSE;
 	}
-
-	++user_no;
 }
 
 
-VOID CSocketServer::SC_NEWUSER( CNTClient* pClient, CNTClient* pOtherClientInfo )
+VOID CSocketServer::CS_SELECT_CHARACTER( CNTClient* pClient, CPacket& a_pk )
 {
-	CPacket pk;
+
+}
+
+
+VOID CSocketServer::CS_READY( CNTClient* pClient, CPacket& a_pk )
+{
+	WORD wUserNumber;
+	WORD wSelect;
+	BOOL bSelect;
+
+	a_pk.Read( &wUserNumber );
+	a_pk.Read( &wSelect );
+	a_pk.Read( &bSelect );
+
+	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgType = MSG_SC_NEWUSER;
-	pk.Write( wMsgSize );
-	pk.Write( wMsgType );
-	pk.Write( pOtherClientInfo->m_Index );
-	pk.CalcSize();
+	WORD wMsgID = MSG_READY;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( wUserNumber );
+	sendPk.Write( wSelect );
+
+	// READY 선택 패킷이면
+	if( bSelect == TRUE )
+	{
+		// 선택 가능한 캐릭터이면
+		if( m_bSelected[wSelect] == FALSE )
+		{
+			++m_iReadyCount;
+			m_bSelected[wSelect] = TRUE;
+			bSelect = TRUE;
+		}
+		else
+		{
+			bSelect = FALSE;
+		}
+	}
+	// READY 해제 패킷이면
+	else
+	{
+		--m_iReadyCount;
+		m_bSelected[wSelect] = FALSE;
+		bSelect = FALSE;
+	}
+
+	sendPk.Write( bSelect );
+	sendPk.CalcSize();
+
+	pClient->Send( sendPk );
+	SendToClient( pClient, sendPk );
+
+	cout << m_iClientCount << " " << m_iReadyCount << endl;
 	
-	pClient->Send( pk );
+	// 모두 READY 상태면 방장 START 버튼 활성화
+	if( m_iClientCount == m_iReadyCount )
+	{
+		cout << "Enable ok" << endl;
+		CPacket pk;
+
+		WORD wMsgSize = 0;
+		WORD wMsgID = MSG_ENABLE_START;
+		BOOL bStart = TRUE;
+
+		pk.Write( wMsgSize );
+		pk.Write( wMsgID );
+		pk.Write( bStart );
+		pk.CalcSize();
+
+		m_pHostClient->Send( pk );
+	}
+	else
+	{
+		cout << "Enable no" << endl;
+		CPacket pk;
+
+		WORD wMsgSize = 0;
+		WORD wMsgID = MSG_ENABLE_START;
+		BOOL bStart = FALSE;
+
+		pk.Write( wMsgSize );
+		pk.Write( wMsgID );
+		pk.Write( bStart );
+		pk.CalcSize();
+
+		m_pHostClient->Send( pk );
+	}
+}
+
+
+VOID CSocketServer::CS_GAME_START( CNTClient* pClient, CPacket& a_pk )
+{
+	a_pk.Rewind();
+
+	SendToClient( pClient, a_pk );
 }
 
 
 VOID CSocketServer::CS_Chat( CNTClient* pClient, CPacket& pk )
 {
-	CHAR szChat[128] = { 0, };
-
-	pk.ReadString( szChat, 128 );
+/*
+	WCHAR szChat[256] = { 0, };
+	
+	pk.ReadString( szChat, 256 );
 
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgType = MSG_SC_CHAT;
+	WORD wMsgType = MSG_CHAT;
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgType );
-	sendPk.WriteString( szChat, strlen( szChat ) );
-
-	SC_Chat( pClient, sendPk ); 
-}
-
-
-VOID CSocketServer::SC_Chat( CNTClient* pClient, CPacket& pk )
-{
-	// 다른 유저들에게 패킷을 보낸다.
-	map<WORD, CNTClient*>::iterator it;
-	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
-	{
-		if( it->second->m_Index == pClient->m_Index )
-		{
-			continue;
-		}
-
-		it->second->Send( pk );
-	}
+	sendPk.WriteString( szChat, lstrlen( szChat ) );
+*/
+	pk.Rewind();
+	SendToClient( pClient, pk ); 
 }
 
 
 VOID CSocketServer::CS_Move( CNTClient* pClient, CPacket& pk )
 {
+/*
 	WORD wClientNumber;
 	FLOAT fX, fZ, fAngle;
 
@@ -303,13 +440,11 @@ VOID CSocketServer::CS_Move( CNTClient* pClient, CPacket& pk )
 	pk.Read( &fZ );
 	pk.Read( &fAngle );
 
-	//cout << wClientNumber << " : " << fX << " " << fZ << " " << fAngle << endl;
-
 	// 보낼 패킷을 새로 구성한다.
 	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_SC_MOVE;
-	
+
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( wClientNumber );
@@ -318,29 +453,16 @@ VOID CSocketServer::CS_Move( CNTClient* pClient, CPacket& pk )
 	sendPk.Write( fAngle );
 	sendPk.CalcSize();
 
-	// 다른 유저들에게 패킷을 보낸다.
-	map<WORD, CNTClient*>::iterator it;
-	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
-	{
-		if( pClient->m_Index == it->second->m_Index )
-		{
-			continue;
-		}
-		
-		SC_Move( it->second, sendPk );
-		//cout << "send to : " << it->second->m_Index << endl;
-	}
-}
-
-
-VOID CSocketServer::SC_Move( CNTClient* pClient, CPacket& pk )
-{
+	SendToClient( pClient, sendPk );
+*/
+	pk.Rewind();
 	pClient->Send( pk );
 }
 
 
 VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 {
+/*
 	WORD wClientNumber;
 	FLOAT fDirX, fDirY, fDirZ;
 	WORD wTotalParts = 0;
@@ -356,7 +478,7 @@ VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 	
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_SC_UTOM_ATTACK;
+	WORD wMsgID = MSG_UTOM_ATTACK;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -366,7 +488,9 @@ VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 	sendPk.Write( fDirZ );
 	sendPk.Write( wTotalParts );
 
+#ifdef _DEBUG_
 	cout << "cTotalParts : " << wTotalParts << endl;
+#endif
 
 	static WORD wTemp;
 	for( WORD i=0; i<wTotalParts; ++i )
@@ -376,8 +500,10 @@ VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 		sendPk.Write( wDestroyPart );
 		sendPk.Write( wDestroyCount );
 
+#ifdef _DEBUG_
 		cout << "cDestroyPart : " << wDestroyPart << "  wDestroyCount : " << wDestroyCount << endl;
 		cout << "Destroy list" << endl;
+#endif
 
 		for( WORD j=0; j<wDestroyCount; ++j )
 		{
@@ -392,94 +518,20 @@ VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 	cout << endl;
 
 	sendPk.CalcSize();
-
+*/
+	pk.Rewind();
 	// 클라이언트들에게 패킷을 보낸다.
-	SC_UTOM_Attack( pClient, sendPk );
+	SendToClient( pClient, pk );
+
+#ifdef _DEBUG_
+	cout << "UTOM Attack send" << endl;
+#endif
 }
 
 
-VOID CSocketServer::SC_UTOM_Attack( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_Attack_Animation( CNTClient* pClient, CPacket& pk )
 {
-
-	cout << "Size : " << m_Map_LogonClients.size() << endl;
-	// 클라이언트들에게 패킷을 보낸다.
-	map<WORD, CNTClient*>::iterator it;
-	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
-	{
-		if( it->second->m_Index == pClient->m_Index )
-		{
-			continue;
-		}
-		
-		it->second->Send( pk );
-		cout << "UTOM Attack send to : " << it->second->m_Index << endl;
-	}
-}
-
-
-VOID CSocketServer::CS_MTOU_Attack( CNTClient* pClient, CPacket& pk )
-{
-	WORD wClientNumber;
-	FLOAT fDirX, fDirY, fDirZ;
-	CHAR cDestroyPart;
-	WORD wDestroyCount;
-	WORD wList;
-
-	pk.Read( &wClientNumber );
-	pk.Read( &fDirX );
-	pk.Read( &fDirY );
-	pk.Read( &fDirZ );
-	pk.Read( &cDestroyPart );
-	pk.Read( &wDestroyCount );
-
-	CPacket sendPk;
-	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_SC_MTOU_ATTACK;
-
-	sendPk.Write( wMsgSize );
-	sendPk.Write( wMsgID );
-	sendPk.Write( wClientNumber );
-	sendPk.Write( fDirX );
-	sendPk.Write( fDirY );
-	sendPk.Write( fDirZ );
-	sendPk.Write( cDestroyPart );
-	sendPk.Write( wDestroyCount );
-
-	for( WORD i=0; i<wDestroyCount; ++i )
-	{
-		pk.Read( &wList );
-		sendPk.Write( wList );
-		//cout << "Destroy list : " << wList << endl;
-	}
-
-	//cout << "wDestroyCount : " << static_cast<INT>(cDestroyPart) << ":" << wDestroyCount << endl;
-
-	sendPk.CalcSize();
-
-	// 클라이언트들에게 패킷을 보낸다.
-	SC_MTOU_Attack( pClient, sendPk );
-}
-
-
-VOID CSocketServer::SC_MTOU_Attack( CNTClient* pClient, CPacket& pk )
-{
-	// 클라이언트들에게 패킷을 보낸다.
-	map<WORD, CNTClient*>::iterator it;
-	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
-	{
-		if( it->second->m_Index == pClient->m_Index )
-		{
-			continue;
-		}
-
-		it->second->Send( pk );
-		//cout << "send to : " << it->second->m_Index << endl;
-	}
-}
-
-
-VOID CSocketServer::CS_UTOM_Attack_Animation( CNTClient* pClient, CPacket& pk )
-{
+/*
 	WORD wClientNumber;
 	WORD wAnimationNumber;
 
@@ -488,35 +540,45 @@ VOID CSocketServer::CS_UTOM_Attack_Animation( CNTClient* pClient, CPacket& pk )
 
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_SC_UTOM_ATTACK_ANIMATION;
+	WORD wMsgID = MSG_UTOM_ATTACK_ANIMATION;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( wClientNumber );
 	sendPk.Write( wAnimationNumber );
 
+#ifdef _DEBUG_
 	cout << "Attack Ani "<< wClientNumber << "/" << wAnimationNumber << endl;
+#endif
 
 	sendPk.CalcSize();
-
+*/
+	pk.Rewind();
 	// 클라이언트들에게 패킷을 보낸다.
-	SC_UTOM_Attack_Animation( pClient, sendPk );
+	SendToClient( pClient, pk );
+	cout << "Attack Ani send" << endl;
 }
 
 
-VOID CSocketServer::SC_UTOM_Attack_Animation( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_MTOU_Attack( CNTClient* pClient, CPacket& pk )
+{
+	pk.Rewind();
+	
+	SendToClient( pClient, pk );
+	cout << "MTOU Attack send" << endl;
+}
+
+
+VOID CSocketServer::SendToClient( CNTClient* a_pClient, CPacket& a_pk )
 {
 	// 클라이언트들에게 패킷을 보낸다.
 	map<WORD, CNTClient*>::iterator it;
 	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
 	{
-		if( it->second->m_Index == pClient->m_Index )
+		if( it->second->m_Index != a_pClient->m_Index )
 		{
-			continue;
+			it->second->Send( a_pk );
 		}
-		
-		it->second->Send( pk );
-		cout << "Attack Ani send to : " << it->second->m_Index << endl;
 	}
 }
 
@@ -530,33 +592,38 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 	switch( wMsgType )
 	{
 	// 로그온
-	case MSG_CS_LOGON:
+	case MSG_LOGON:
 		CS_Logon( pClient, pk );
 		break;
 
+	// 캐릭터 선택
+	case MSG_READY:
+		CS_READY( pClient, pk );
+		break;
+
 	// 채팅
-	case MSG_CS_CHAT:
+	case MSG_CHAT:
 		CS_Chat( pClient, pk );
 		break;
 
 	// 이동
-	case MSG_CS_MOVE:
+	case MSG_MOVE:
 		CS_Move( pClient, pk );
 		break;
 
 	// 공격 : 유저 -> 몬스터
-	case MSG_CS_UTOM_ATTACK:
+	case MSG_UTOM_ATTACK:
 		CS_UTOM_Attack( pClient, pk );
 		break;
 
 	// 공격 : 유저 -> 몬스터
-	case MSG_CS_UTOM_ATTACK_ANIMATION:
-		CS_UTOM_Attack_Animation( pClient, pk );
+	case MSG_ATTACK_ANIMATION:
+		CS_Attack_Animation( pClient, pk );
 		break;
 
 	// 공격 : 몬스터 -> 유저
-	case MSG_CS_MTOU_ATTACK:
-//		CS_MTOU_Attack( pClient, pk );
+	case MSG_MTOU_ATTACK:
+		CS_MTOU_Attack( pClient, pk );
 		break;
 	}
 }
@@ -566,43 +633,18 @@ VOID CSocketServer::SC_Disconnect( CNTClient* pClient )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_SC_DISCONNECT;
+	WORD wMsgID = MSG_DISCONNECT;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( pClient->m_Index );
-
 	sendPk.CalcSize();
 
+#ifdef _DEBUG_
 	cout << "Disconnect : " << pClient->m_Index << endl;
+#endif
 
-	// 클라이언트들에게 패킷을 보낸다.
-	map<WORD, CNTClient*>::iterator it;
-	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
-	{
-		if( it->second->m_Index == pClient->m_Index )
-		{
-			continue;
-		}
-		
-		it->second->Send( sendPk );
-	}
-}
-
-
-VOID CSocketServer::OnClientClose( CNTClient* pClient )
-{
-	// 접속 해제한 유저번호가 다시 활성화 상태로
-	m_wIndexList[pClient->m_Index][0] = TRUE;
-
-	// 다른 접속자들에게 해당 유저의 접속 해제를 알린다.
-	SC_Disconnect( pClient );
-
-	m_Map_LogonClients.erase( pClient->m_Index );
-	cout << "Current User Count : " << m_Map_LogonClients.size() << endl;
-
-	pClient->Close();
-	SAFE_DELETE( pClient );
+	SendToClient( pClient, sendPk );
 }
 
 
@@ -658,7 +700,7 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 				}
 				return 0;
 			}
-			
+
 			// 클라이언트 접속 종료
 			pServer->OnClientClose( pClient );
 			continue;
@@ -679,16 +721,12 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 
 				if( wMsgSize <= DataSize )
 				{
-					if( wMsgSize > 18 )
-						cout << "wMsgSize : " << wMsgSize << endl;
-
 					// 패킷수신완료, 패킷을 구성해서 처리함수로 넘긴다.
 					CPacket pk;
 					pk.Copy( pClient->m_RecvBuffer.m_Buffer, wMsgSize );
 					pClient->m_RecvBuffer.ReadCommit( wMsgSize );
-
+					
 					// 완성된 패킷을 처리한다.
-					Sleep(1);
 					pServer->ProcessPacket( pClient, pk );
 				}
 
