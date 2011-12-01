@@ -99,7 +99,7 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	WSAStartup( MAKEWORD( 2, 2), &wsadata );
 	CNetwork::GetInstance()->CreateSocket();
 	CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 );
-	CNetwork::GetInstance()->CS_LOGON();
+	CNetwork::GetInstance()->CS_LOGON( L"NickName" );
 
 	return S_OK;
 }
@@ -208,7 +208,13 @@ VOID LobbyScene::Update()
 		else
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
 	}
-	
+
+	//	Chatting Massage
+	WCHAR aStr[ 256 ];
+	if( m_pLobbyGUI->TakeChattingMassage( aStr ) )
+	{
+		CNetwork::GetInstance()->CS_CHAT( aStr );
+	}
 }
 
 VOID LobbyScene::Render()
