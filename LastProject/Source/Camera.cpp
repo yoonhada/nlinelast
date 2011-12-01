@@ -1,5 +1,6 @@
 #include "Stdafx.h"
 #include "Camera.h"
+#include "Monster.h"
 
 CCamera::CCamera() 
 : m_fMinZoom( 15.0f )
@@ -86,16 +87,20 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 		m_fEffectValue = 0;
 		break;
 	case 1:
-		a_vLook += D3DXVECTOR3(1, 0, 1) * sin(m_fEffectValue) * 10.0f;
-		m_fEffectValue += (D3DX_PI * 0.5f );
-		if (m_fEffectValue > 100.0f)
 		{
-			m_nEffect = 0;
-			m_fEffectValue = 0;
+			D3DXVECTOR3 vUp(0, 1, 0);
+			D3DXVec3Cross( &vUp, &m_vDir, &vUp );
+			a_vLook += vUp * sin(m_fEffectValue) * 2.5f;
+			m_fEffectValue += ( D3DX_PI * 0.25f );
+			if (m_fEffectValue > 31.4f)
+			{
+				m_nEffect = 0;
+				m_fEffectValue = 0;
+			}
 		}
 		break;
 	case 2:
-		a_vLook = D3DXVECTOR3(300, 0, 0);
+		a_vLook = CObjectManage::GetInstance()->Get_Monster()->Get_Pos();
 		break;
 	}	
 }

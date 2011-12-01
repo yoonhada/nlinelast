@@ -74,6 +74,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pCamera->Create( m_pD3dDevice );
 
 	//캐릭터 생성
+	m_nClientID = CObjectManage::GetInstance()->Get_ClientNumber();
 	CreateCharactor();
 
 	//몬스터 생성

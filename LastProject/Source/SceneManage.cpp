@@ -10,7 +10,7 @@
 //#include "LoadScene.h"
 #include "LogoScene.h"
 
-//#define _TEST
+#define _TEST
 
 CSceneManage::CSceneManage()
 {
@@ -51,8 +51,8 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	CObjectManage::GetInstance()->Create( m_pD3dDevice );
 
 #ifdef _TEST
-	m_pScene			= new LobbyScene;
-	//m_pScene			= new CMainScene;
+	//m_pScene			= new LobbyScene;
+	m_pScene			= new CMainScene;
 #else
 	m_pScene			= new LogoScene;
 #endif // _DEBUG	
