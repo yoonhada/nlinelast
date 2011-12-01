@@ -267,7 +267,7 @@ BOOL LobbyGUI::TakeChattingMassage( LPWSTR _pText )
 	{
 		m_pGUIListbox->AddItem( m_pStr );
 
-		_tcscpy( m_pStr, _pText );
+		_tcscpy( _pText, m_pStr );
 		return TRUE;
 	}
 	return FALSE;

@@ -110,12 +110,12 @@ public:
 	VOID SC_Attack_Animation( CPacket& a_pk );
 
 	// Client -> Server
-	VOID CS_LOGON( LPCWSTR a_szNickName );
+	VOID CS_LOGON( LPWSTR a_szNickName );
 	VOID CS_SELECT_CHARACTER( WORD a_wSelect );
 	VOID CS_READY( WORD a_wSelect, BOOL a_bSelect );
 	VOID CS_GAME_START();
 
-	VOID CS_CHAT( LPCWSTR a_szNickName );
+	VOID CS_CHAT( LPWSTR a_szText );
 	VOID CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
 	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
 	VOID CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );

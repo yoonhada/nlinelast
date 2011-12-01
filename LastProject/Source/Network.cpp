@@ -376,7 +376,7 @@ VOID CNetwork::SC_InitData( CPacket& a_pk )
 	//CSceneManage::GetInstance()->OrderChangeScene( new CMainScene );
 }
 
-VOID CNetwork::CS_LOGON( LPCWSTR a_szNickName )
+VOID CNetwork::CS_LOGON( LPWSTR a_szNickName )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -424,17 +424,14 @@ VOID CNetwork::CS_GAME_START()
 	SendToServer( sendPk );
 }
 
-VOID CNetwork::CS_CHAT()
+VOID CNetwork::CS_CHAT( LPWSTR a_szText )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_CHAT;
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
-
-	CHAR* szText = "Who Are You?";
-
-	sendPk.WriteString( szText, strlen( szText ) );
+	sendPk.WriteString( a_szText, lstrlen( a_szText ) );
 
 	SendToServer( sendPk );
 }

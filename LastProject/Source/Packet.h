@@ -20,8 +20,8 @@ public:
 	CHAR*	GetBuff()	{ return m_Buff; }
 	INT		GetLength()	{ return m_DataSize; }
 
-	BOOL	ReadString( LPCWSTR a_pOut, WORD a_wMaxSize );	// wMaxSize : pOut의 최대크기
-	BOOL	WriteString( LPCWSTR a_pData, WORD a_wSize );
+	BOOL	ReadString( LPWSTR a_pOut, WORD a_wMaxSize );	// wMaxSize : pOut의 최대크기
+	BOOL	WriteString( LPWSTR a_pData, WORD a_wSize );
 	VOID	CalcSize();
 
 

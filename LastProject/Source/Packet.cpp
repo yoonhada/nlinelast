@@ -26,7 +26,7 @@ VOID CPacket::Copy( CHAR* a_pData, INT a_nSize )
 }
 
 
-BOOL CPacket::WriteString( LPCWSTR a_pData, WORD a_wSize )
+BOOL CPacket::WriteString( LPWSTR a_pData, WORD a_wSize )
 {
 	INT remained = PACKET_SIZE - m_BuffPoint;
 	if( a_wSize > remained )
@@ -49,7 +49,7 @@ BOOL CPacket::WriteString( LPCWSTR a_pData, WORD a_wSize )
 }
 
 
-BOOL CPacket::ReadString( LPCWSTR a_pOut, WORD a_wMaxSize )
+BOOL CPacket::ReadString( LPWSTR a_pOut, WORD a_wMaxSize )
 {
 	WORD wSize;
 	if( Read( &wSize ) != TRUE )

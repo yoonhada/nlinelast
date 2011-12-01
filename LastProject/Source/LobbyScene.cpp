@@ -210,7 +210,7 @@ VOID LobbyScene::Update()
 	}
 
 	//	Chatting Massage
-	WCHAR aStr[ 256 ];
+	WCHAR aStr[ 256 ] = { 0, };
 	if( m_pLobbyGUI->TakeChattingMassage( aStr ) )
 	{
 		CNetwork::GetInstance()->CS_CHAT( aStr );
