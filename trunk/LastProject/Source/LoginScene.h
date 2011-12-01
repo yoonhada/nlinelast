@@ -43,6 +43,7 @@ private:
 
 	BOOL					m_bActivate;
 
+	VOID DefaultIP( CHAR * );
 public:
 
 };

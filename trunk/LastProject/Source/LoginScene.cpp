@@ -38,14 +38,22 @@ VOID LoginScene::Update()
 	TCHAR Str[ 1024 ];
 	
 	ZeroMemory( Str, sizeof( Str ) );
-
+	
 	DWORD dID;
 	m_pLoginGUI->Command( dID );
 	switch( dID )
 	{
 	case GUIBTN_LOGIN_GO:
 		m_pLoginGUI->GetEditTexture( Str );
-		WideCharToMultiByte( CP_ACP, 0, Str, -1, strIP, 64, NULL, NULL );
+		if ( lstrlen( Str ) > 7 )// == 0
+		{
+			WideCharToMultiByte( CP_ACP, 0, Str, -1, strIP, 64, NULL, NULL );
+		}
+		else
+		{
+			DefaultIP( strIP );
+		}
+
 		if ( CNetwork::GetInstance()->ConnectToServer( strIP, 20202 ) )
 		{
 			CNetwork::GetInstance()->CS_LOGON( L"NickName" );
@@ -83,4 +91,22 @@ INT LoginScene::GetSceneState()
 VOID LoginScene::SetActivate( BOOL _bActivate )
 {
 	m_bActivate = _bActivate;
+}
+
+VOID LoginScene::DefaultIP( CHAR * a_strIP )
+{
+	FILE* pFile;
+	pFile = _wfopen( L"Data/IP.txt", L"r" );
+
+	if( NULL == pFile )
+	{
+		MessageBox(GHWND, L"IP File Load Error", NULL, MB_OK);
+		return ;
+	}
+
+	fseek( pFile, 0L, SEEK_SET );
+
+	fscanf( pFile, "%s", a_strIP );
+
+	fclose(pFile);
 }
