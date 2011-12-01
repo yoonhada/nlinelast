@@ -40,7 +40,7 @@ private:
 
 	CMatrices*				m_pMatrices;
 	CCamera*				m_pCamera;
-	CCharactor**				m_pCharactors;
+	CCharactor**			m_pCharactors;
 	CMonster*				m_pMonster;
 	CTimeLifeItem *			m_pFirstAidKit;
 
@@ -48,6 +48,7 @@ private:
 	ASEViewer*				m_pASEViewer;
 	
 	INT						m_iMaxCharaNum;
+	INT						m_nClientID;
 
 	Axis*					m_pAxis;
 	CLight*					m_pLight;

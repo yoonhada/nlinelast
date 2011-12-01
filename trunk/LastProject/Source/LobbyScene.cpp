@@ -117,8 +117,6 @@ VOID LobbyScene::Update()
 	{
 	case GUIBTN_LOBBY_START:
 		CNetwork::GetInstance()->CS_GAME_START();
-		//UpdateCharArray();
-//		m_scnState = IScene::SCENE_END;
 		break;
 	case GUIBTN_LOBBY_READY:
 		if ( m_nCharSelect < 0 )
