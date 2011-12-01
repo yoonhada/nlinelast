@@ -235,6 +235,7 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 			// 케릭터 선택 실패.. 회전 제거.
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
 			pOM->GetLobbyScene()->DisableRotate( wSelect );
+			pOM->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_READY, FALSE );
 		}
 	}
 	else 
@@ -345,7 +346,7 @@ VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
 //처음 접속시
 VOID CNetwork::SC_InitData( CPacket& a_pk )
 {
-	bool host;	// 1바이트 bool 사용
+	BOOL host;
 	WORD user_no;
 	WORD userCount;
 	WORD user_list;
