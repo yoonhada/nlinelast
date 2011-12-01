@@ -120,8 +120,10 @@ VOID GUIEdit::Update()
 	
 	if( GUIWriting::GetInstance().GetText( m_Data.Str, iNum ) && m_dStyle == EDT_DYNAMIC )
 	{
+		if( iNum !=  0 )
+			m_bMessage	= TRUE;
+		
 		m_bActivate = !m_bActivate;
-		m_bMessage	= TRUE;
 		GUIWriting::GetInstance().Cleanup();
 	}
 	
