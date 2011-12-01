@@ -63,7 +63,7 @@ private:
 	INT						m_scnNext;
 	INT						m_scnState;
 
-//	LobbyGUI*				m_pLobbyGUI;
+	LobbyGUI*				m_pLobbyGUI;
 	OptionScene*			m_pOptionScene;
 	
 	LPDATA					m_aData;
@@ -76,7 +76,7 @@ private:
 public:
 	INT						m_nCharSelect;		// 선택된 케릭터 번호.
 	INT						m_nSelectState[4];	// 호스트의 선택상태.
-	LobbyGUI*				m_pLobbyGUI;
+
 
 public:
 

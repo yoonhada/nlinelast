@@ -7,6 +7,7 @@
 #include "MainScene.h"
 #include "LobbyScene.h"
 
+
 CNetwork::CNetwork()
 {
 	m_socket		= INVALID_SOCKET;
@@ -271,13 +272,13 @@ VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
 	if ( bStart )
 	{
 #ifdef _DEBUG
-		CObjectManage::GetInstance()->GetLobbyScene()->m_pLobbyGUI->EnableButton( GUIBTN_LOBBY_START, TRUE );
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, TRUE );
 #endif // _DEBUG
 	}
 	else
 	{
 #ifdef _DEBUG
-		CObjectManage::GetInstance()->GetLobbyScene()->m_pLobbyGUI->EnableButton( GUIBTN_LOBBY_START, FALSE );
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, FALSE );
 #endif // _DEBUG
 	}
 }
