@@ -69,7 +69,7 @@ public:
 	VOID Set_ClientNumber( WORD a_iClientNumber )		{ m_iClientNumber = a_iClientNumber; }
 
 public:
-	VOID Set_Char(INT nSelect, INT nChar );
+	VOID Set_Char(INT nSelect, INT nChar, BOOL = FALSE );
 	VOID Set_PushBackNetworkSendTempVector( WORD a_wData );
 	VOID Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir );
 	VOID Send_NetworkSendDestroyData(BOOL = FALSE);

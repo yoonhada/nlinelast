@@ -119,8 +119,13 @@ VOID CObjectManage::Send_NetworkSendDestroyData(BOOL _bIsCharter)
 
 }
 
-VOID CObjectManage::Set_Char(INT nSelect, INT nChar )
+VOID CObjectManage::Set_Char(INT nSelect, INT nChar, BOOL bActive )
 {
 	m_ppVirtualCharactors[nSelect] = &m_pCharactors[nChar];
+
+	if ( bActive )
+	{
+		m_pCharactors[nChar].Set_Active( TRUE );
+	}
 }
 
