@@ -229,13 +229,14 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		{
 			// 케릭터 선택 
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelect;
+			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_DOWN );
 		}
 		else
 		{
 			// 케릭터 선택 실패.. 회전 제거.
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
 			pOM->GetLobbyScene()->DisableRotate( wSelect );
-			pOM->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_READY, FALSE );
+			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_NORMAL );
 		}
 	}
 	else 

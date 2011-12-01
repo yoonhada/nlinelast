@@ -144,7 +144,10 @@ VOID LobbyScene::Update()
 		break;
 	case GUIBTN_LOBBY_READY:
 		if ( m_nCharSelect < 0 )
+		{
+			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_NORMAL );
 			break;
+		}
 		// 최초선택
 		if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
 		{
