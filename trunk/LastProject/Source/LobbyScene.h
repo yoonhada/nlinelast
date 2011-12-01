@@ -50,6 +50,10 @@ public:
 	VOID			CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecPosition );
 	VOID			EnableRotate( INT _iIndex );
 	VOID			DisableRotate( INT _iIndex );
+	
+	VOID			EnableButton( DWORD _dID, BOOL _bEnable );
+	VOID			SetText( LPWSTR _pText );
+	VOID			GetText( LPWSTR _pText );
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;

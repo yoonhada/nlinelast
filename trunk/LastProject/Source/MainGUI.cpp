@@ -59,6 +59,7 @@ VOID MainGUI::Create()
 	GUIBase::IMAGEPARAM imgParamEdit;
 	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\MainScene\\Listbox.png" );
 	m_pChatEdit->Create( fX, fY, fWidth, fHeight, imgParamEdit );
+	m_pChatEdit->SetStyle( GUIEdit::EDT_DYNAMIC );
 
 	fX		= 50.0f;
 	fY		= 300.0f;
