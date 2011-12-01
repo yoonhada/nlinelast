@@ -83,6 +83,7 @@ public:
 
 	//BOOL SelectState( INT a_nIndex, BOOL a_bState ) {return FALSE; }
 	VOID UpdateCharArray();
+	VOID SetSceneState( INT a_iSceneState );
 public:
 };
 
