@@ -10,7 +10,7 @@
 //#include "LoadScene.h"
 #include "LogoScene.h"
 
-#define _TEST
+//#define _TEST
 
 CSceneManage::CSceneManage()
 {
