@@ -20,6 +20,7 @@ VOID LobbyScene::Initialize()
 	m_pLight		= NULL;
 	m_pMatrices		= NULL;
 
+	m_nCharSelect = -1;
 	m_nSelectState[0] = m_nSelectState[1] = m_nSelectState[2] = m_nSelectState[3] = -1;
 }
 
@@ -137,10 +138,13 @@ VOID LobbyScene::Update()
 	switch( dID )
 	{
 	case GUIBTN_LOBBY_START:
+		CNetwork::GetInstance()->CS_GAME_START();
 		//UpdateCharArray();
 		m_scnState = IScene::SCENE_END;
 		break;
 	case GUIBTN_LOBBY_READY:
+		if ( m_nCharSelect < 0 )
+			break;
 		if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
 		{
 			CNetwork::GetInstance()->CS_READY( m_nCharSelect, TRUE );
@@ -233,4 +237,19 @@ INT LobbyScene::GetSceneNext()
 INT LobbyScene::GetSceneState()
 {
 	return m_scnState;
+}
+
+VOID LobbyScene::UpdateCharArray()
+{
+	//INT						m_nCharSelect;		// 선택된 케릭터 번호.
+	//INT						m_nSelectState[4];	// 호스트의 선택상태.
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if( m_nSelectState[i] != -1 )
+		{
+			CObjectManage::GetInstance()->Set_Char( m_nSelectState[i], i );
+			CObjectManage::GetInstance()->Set_Char( i, m_nSelectState[i] );
+		}		
+	}
 }

@@ -76,7 +76,7 @@ public:
 public:
 
 	//BOOL SelectState( INT a_nIndex, BOOL a_bState ) {return FALSE; }
-	//VOID UpdateCharArray();
+	VOID UpdateCharArray();
 public:
 };
 
