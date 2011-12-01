@@ -40,6 +40,7 @@ public:
 
 		MSG_LOGON,
 		MSG_INITDATA,
+		MSG_CHANGE_HOST,
 		MSG_NEWUSER,
 		MSG_SELECT_CHARACTER,
 		MSG_READY,
@@ -93,6 +94,8 @@ public:
 	// Server -> Client
 	VOID SC_LOGON( CPacket& a_pk );
 	VOID SC_InitData( CPacket& a_pk );
+	VOID SC_NEWUSER( CPacket& a_pk );
+	VOID SC_CHANGE_HOST( CPacket& a_pk );
 	VOID SC_SELECT_CHARACTER( CPacket& a_pk );
 	VOID SC_READY( CPacket& a_pk );
 	VOID SC_ENABLE_START( CPacket& a_pk );
@@ -100,7 +103,6 @@ public:
 
 	VOID SC_CHAT( CPacket& a_pk );
 	VOID SC_MOVEMENT( CPacket& a_pk );
-	VOID SC_NEWUSER( CPacket& a_pk );
 	VOID SC_UTOM_ATTACK( CPacket& a_pk );
 	VOID SC_MTOU_ATTACK( CPacket& a_pk );
 	VOID SC_DISCONNECT( CPacket& a_pk );
