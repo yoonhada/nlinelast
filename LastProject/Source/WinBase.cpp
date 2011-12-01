@@ -31,7 +31,11 @@ HRESULT CWinBase::Create()
 	//CTextureManage::GetInstance();
 	CInput::GetInstance();
 	CPhysics::GetInstance();
-	CTree::GetInstance();
+
+	//트리 생성
+	FLOAT fSize = 1000.0f;
+	INT nDeep = 4;
+	CTree::GetInstance()->Create( fSize, nDeep );
 
 	Astar::GetInstance();
 
