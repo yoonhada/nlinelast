@@ -35,6 +35,7 @@ VOID LoginScene::Update()
 	m_pLoginGUI->Update();
 
 	TCHAR Str[ 1024 ];
+	
 	ZeroMemory( Str, sizeof( Str ) );
 
 	DWORD dID;

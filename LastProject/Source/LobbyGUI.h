@@ -6,6 +6,8 @@ class Mouse;
 class GUIBase;
 class GUIBackground;
 class GUIBtnManager;
+class GUIEdit;
+class GUIListbox;
 
 class LobbyGUI
 {
@@ -15,6 +17,8 @@ private:
 
 	VOID		CreateBackground();
 	VOID		CreateButton();
+	VOID		CreateEdit();
+	VOID		CreateListbox();
 	
 	VOID		OnDown( INT x, INT y );
 	VOID		OnMove( INT x, INT y );
@@ -36,9 +40,8 @@ public:
 	VOID		Render();
 
 	VOID		Command( DWORD& _dOut );
-
-	BOOL		NextBackgroundImage();
-
+	VOID		EnableButton( DWORD _dID, BOOL _bEnable );
+	
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
@@ -51,6 +54,8 @@ private:
 	GUIBase*				m_pGUIBase;
 	GUIBackground*			m_pGUIBackground;
 	GUIBtnManager*			m_pGUIBtnManager;
+	GUIEdit*				m_pGUIEdit;
+	GUIListbox*				m_pGUIListbox;
 
 public:
 
