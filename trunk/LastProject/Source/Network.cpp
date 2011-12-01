@@ -213,11 +213,11 @@ VOID CNetwork::SC_SELECT_CHARACTER( CPacket& a_pk )
 VOID CNetwork::SC_READY( CPacket& a_pk )
 {
 	WORD wUserNumber;
-	WORD wSelect;
+	WORD wSelectNumber;
 	BOOL bSelect;
 
 	a_pk.Read( &wUserNumber );
-	a_pk.Read( &wSelect );
+	a_pk.Read( &wSelectNumber );
 	a_pk.Read( &bSelect );
 
 	// 캐릭터 선택
@@ -228,14 +228,14 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		if ( bSelect == TRUE )
 		{
 			// 케릭터 선택 
-			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelect;
+			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelectNumber;
 			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_DOWN );
 		}
 		else
 		{
 			// 케릭터 선택 실패.. 회전 제거.
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
-			pOM->GetLobbyScene()->DisableRotate( wSelect );
+			pOM->GetLobbyScene()->DisableRotate( wSelectNumber );
 			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_NORMAL );
 		}
 	}
@@ -244,14 +244,14 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		if ( bSelect == TRUE )
 		{
 			// 다른 케릭터 선택, 선택차단....
-			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelect;
-			pOM->GetLobbyScene()->EnableRotate( wSelect );
+			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelectNumber;
+			pOM->GetLobbyScene()->EnableRotate( wSelectNumber );
 		}
 		else
 		{
 			// 다른 플레이어 선택해지,  차단 해지...
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
-			pOM->GetLobbyScene()->DisableRotate( wSelect );
+			pOM->GetLobbyScene()->DisableRotate( wSelectNumber );
 		}
 	}
 
@@ -285,9 +285,11 @@ VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
 	}
 }
 
+
 VOID CNetwork::SC_GAME_START( CPacket& a_pk )
 {
 	CObjectManage::GetInstance()->GetLobbyScene()->UpdateCharArray();
+	CObjectManage::GetInstance()->GetLobbyScene()->SetSceneState( IScene::SCENE_END );
 }
 
 
@@ -352,6 +354,7 @@ VOID CNetwork::SC_InitData( CPacket& a_pk )
 	WORD user_no;
 	WORD userCount;
 	WORD user_list;
+	BOOL bSelected;
 
 	a_pk.Read( &host );
 	a_pk.Read( &user_no );
@@ -370,6 +373,15 @@ VOID CNetwork::SC_InitData( CPacket& a_pk )
 		{
 			pCharactors[user_list]->Set_Active( TRUE );
 			pCharactors[user_list]->Set_ClientNumber( user_list );
+		}
+	}
+
+	for( INT i=0; i<4; ++i )
+	{
+		a_pk.Read( &bSelected );
+		if( bSelected == TRUE )
+		{
+			// 선택되어 있는 캐릭터들 표시
 		}
 	}
 
@@ -411,6 +423,7 @@ VOID CNetwork::CS_READY( WORD a_wSelect, BOOL a_bSelect )
 	SendToServer( sendPk );
 }
 
+
 VOID CNetwork::CS_GAME_START()
 {
 	CPacket sendPk;
@@ -423,6 +436,7 @@ VOID CNetwork::CS_GAME_START()
 
 	SendToServer( sendPk );
 }
+
 
 VOID CNetwork::CS_CHAT( LPWSTR a_szText )
 {
