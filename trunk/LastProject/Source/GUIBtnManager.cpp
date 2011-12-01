@@ -102,6 +102,18 @@ VOID GUIBtnManager::GetCommandID( DWORD& _ID )
 	}
 }
 
+VOID GUIBtnManager::Enable( DWORD _dID, BOOL _bEnable )
+{
+	for( INT i=0 ; i<m_iNumData ; i++ )
+	{
+		if( m_vecData[ i ]->ID == _dID )
+		{
+			m_vecData[ i ]->pGUIBtn->Enable( _bEnable );
+			break;
+		}
+	}
+}
+
 VOID GUIBtnManager::Render()
 {
 	for( INT i=0 ; i<m_iNumData ; i++ )

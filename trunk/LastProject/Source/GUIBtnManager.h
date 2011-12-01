@@ -59,6 +59,8 @@ public:
 	VOID		OnUp( INT x, INT y );
 
 	VOID		GetCommandID( DWORD& _ID );
+	VOID		Enable( DWORD _dID, BOOL _bEnable );
+
 private:
 	LPDIRECT3DDEVICE9		m_pd3dDevice;
 	LPD3DXSPRITE			m_pSprite;
