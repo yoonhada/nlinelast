@@ -428,7 +428,7 @@ VOID CNetwork::CS_GAME_START()
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_START;
+	WORD wMsgID = MSG_GAME_START;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -674,6 +674,10 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 
 	case MSG_ENABLE_START:
 		SC_ENABLE_START( a_pk );
+		break;
+
+	case MSG_GAME_START:
+		SC_GAME_START( a_pk );
 		break;
 
 		// 유저 접속 종료
