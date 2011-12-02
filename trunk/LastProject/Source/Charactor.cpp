@@ -55,7 +55,7 @@ VOID CCharactor::Clear()
 	m_vPreControl		 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vFowardVector		 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vSideStepVector	 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-	m_fAngle = D3DXToRadian( -180.0f );
+	m_fAngle = -MTP_FUN::Deg2Rad<180>::radians;			// D3DXToRadian( -180.0f );
 
 	D3DXMatrixIdentity( &m_matMultWorld );
 	D3DXMatrixIdentity( &m_matControl );
@@ -522,8 +522,10 @@ VOID CCharactor::UpdateByInput(  )
 	a_fAngle += m_fAngle;
 	
 	// 360도 넘으면 라디언 360 빼기.
-	const float f360 = D3DXToRadian( 360.0f );
-	a_fAngle < 0.0f ? a_fAngle += f360 : ( a_fAngle > f360 ? a_fAngle -= f360 : NULL );
+	//const float f360 = D3DXToRadian( 360.0f );
+	a_fAngle < 0.0f ? 
+		a_fAngle += MTP_FUN::Deg2Rad<360>::radians : 
+		( a_fAngle > MTP_FUN::Deg2Rad<360>::radians ? a_fAngle -= MTP_FUN::Deg2Rad<360>::radians : NULL );
 
 	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f); 
 
@@ -576,7 +578,7 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	if( m_fPreAngle > m_fAngle )
 	{
-		m_fPreAngle -= D3DXToRadian( 360.0f );
+		m_fPreAngle -= MTP_FUN::Deg2Rad<360>::radians;	// D3DXToRadian( 360.0f );
 	}
 
 	//CDebugInterface::GetInstance()->AddMessageFloat( "PreAngle", m_fPreAngle  );

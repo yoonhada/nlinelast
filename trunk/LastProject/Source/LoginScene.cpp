@@ -43,7 +43,7 @@ VOID LoginScene::Update()
 	m_pLoginGUI->Command( dID );
 	switch( dID )
 	{
-	case GUIBTN_LOGIN_GO:
+	case LOGIN_GO:
 		m_pLoginGUI->GetEditTexture( Str );
 		if ( lstrlen( Str ) > 7 )// == 0
 		{
@@ -64,7 +64,7 @@ VOID LoginScene::Update()
 			MessageBox( GHWND, L"접속 실패", L"에러", MB_OK );
 		}
 		break;
-	case GUIBTN_LOGIN_EXIT:
+	case LOGIN_EXIT:
 		m_bActivate = FALSE;
 		break;
 	}

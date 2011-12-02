@@ -38,16 +38,16 @@ VOID CWeapon::Clear()
 		m_WeaponType.vDir[i].x = m_WeaponType.vDir[i].y = m_WeaponType.vDir[i].z = 0.0f;
 	}
 
-	m_fZAng[0] = D3DXToRadian( 0.0f);
-	m_fZAng[1] = D3DXToRadian( 0.0f);
-	m_fZAng[2] = D3DXToRadian( 0.0f);
-	m_fZAng[3] = D3DXToRadian( -90.0f);
-	m_fZAng[4] = D3DXToRadian( -15.0f);
-	m_fZAng[5] = D3DXToRadian( 0.0f);
-	m_fZAng[6] = D3DXToRadian( 45.0f);
-	m_fZAng[7] = D3DXToRadian( 90.0f);
-	m_fZAng[8] = D3DXToRadian( 135.0f);
-	m_fZAng[9] = D3DXToRadian( 0.0f);
+	m_fZAng[0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[2] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[3] = -MTP_FUN::Deg2Rad<90>::radians;	// D3DXToRadian( -90.0f);
+	m_fZAng[4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
+	m_fZAng[5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[6] = MTP_FUN::Deg2Rad<45>::radians;		// D3DXToRadian( 45.0f);
+	m_fZAng[7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
+	m_fZAng[8] = MTP_FUN::Deg2Rad<135>::radians;	// D3DXToRadian( 135.0f);
+	m_fZAng[9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 
 	// XYZ Min
 	m_fBBSize[0] =-10.5f;

@@ -120,13 +120,13 @@ VOID GUIBtnManager::ChangeState( DWORD _dID, DWORD _dState )
 
 	switch( _dState )
 	{
-	case GUIBTN_NORMAL:
+	case UP:
 		ES = GB_NORMAL;
 		break;
-	case GUIBTN_DOWN:
+	case DOWN:
 		ES = GB_DOWN;
 		break;
-	case GUIBTN_DISABLE:
+	case DISABLE:
 		ES = GB_DISABLE;
 		break;
 	default:

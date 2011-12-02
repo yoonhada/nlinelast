@@ -27,11 +27,21 @@ CObjectManage::~CObjectManage()
 VOID CObjectManage::Clear()
 {
 	m_bHost			= FALSE;
-	m_pCharactors	= NULL;
-	m_pASEViewer	= NULL;
 	m_pLobbyScene	= NULL;
 	m_iClientNumber = 0;
 	m_iMaxCharaNum	= 4;
+
+	m_pCharactors = NULL;
+	m_ppVirtualCharactors = NULL;
+
+	m_pClown = NULL;
+	m_pPanda = NULL;
+	m_pMonster = NULL;
+	m_pFirstAidKit = NULL;
+
+	m_pASEViewer = NULL;
+
+	m_pLobbyScene = NULL;
 
 	m_wTotalDestroyPart = 0;
 }
@@ -40,17 +50,23 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 {
 	m_pD3dDevice = a_pD3dDevice;
 
-	LoadLogoObject();
+	LoadLoadingObject();
 	LoadLobbyObject();
 	LoadMainObject();
 
 	return S_OK;
 }	
 	
-HRESULT CObjectManage::LoadLogoObject()
+HRESULT CObjectManage::LoadLoadingObject()
 {
 	// Monster
-	m_pMonster = new CMonster;
+	m_pClown = new CMonster;
+	//m_pClown->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
+
+	m_pPanda = new CMonster;
+	//m_pPanda->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
+
+	//m_pMonster = new CMonster;
 	m_pFirstAidKit = new CTimeLifeItem;
 	return S_OK;
 }
@@ -85,6 +101,8 @@ HRESULT CObjectManage::Release()
 {
 	SAFE_DELETE_ARRAY( m_pCharactors );
 	SAFE_DELETE_ARRAY( m_ppVirtualCharactors );
+	SAFE_DELETE( m_pClown );
+	SAFE_DELETE( m_pPanda );
 	SAFE_DELETE( m_pMonster );
 	SAFE_DELETE( m_pFirstAidKit );
 	SAFE_DELETE( m_pASEViewer );

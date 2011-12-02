@@ -57,7 +57,7 @@ VOID MenuGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgStartDown, L"Img\\MenuScene\\Start_Down.png" );
 	m_pGUIBase->AddFileName( 0, imgStartDisable, L"Img\\MenuScene\\Start_Down.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_MENU_START, 0, fX, fY, fWidth, fHeight, imgStartNormal, imgStartHot, imgStartDown, imgStartDisable );
+	m_pGUIBtnManager->Create( MENU_START, 0, fX, fY, fWidth, fHeight, imgStartNormal, imgStartHot, imgStartDown, imgStartDisable );
 
 	GUIBase::IMAGEPARAM imgEndNormal, imgEndHot, imgEndDown, imgEndDisable;
 	//	Background Next Button
@@ -71,7 +71,7 @@ VOID MenuGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgEndDown, L"Img\\MenuScene\\End_Down.png" );
 	m_pGUIBase->AddFileName( 0, imgEndDisable, L"Img\\MenuScene\\End_Down.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_MENU_END, 0, fX, fY, fWidth, fHeight, imgEndNormal, imgEndHot, imgEndDown, imgEndDisable );
+	m_pGUIBtnManager->Create( MENU_END, 0, fX, fY, fWidth, fHeight, imgEndNormal, imgEndHot, imgEndDown, imgEndDisable );
 }
 
 VOID MenuGUI::Create()

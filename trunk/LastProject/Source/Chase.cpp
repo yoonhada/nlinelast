@@ -20,8 +20,8 @@ VOID Chase::Enter( CMonster* a_pMonster )
 {
 	m_vCurrentPos = a_pMonster->Get_Pos();
 	m_vPreviousPos = m_vCurrentPos;
-	m_iCurrentX = INT( m_vCurrentPos.x + m_pMapInfo->vecEnd.x ) / m_pMapInfo->fTileSize;
-	m_iCurrentZ = INT( -( m_vCurrentPos.z - m_pMapInfo->vecEnd.z ) ) / m_pMapInfo->fTileSize;
+	m_iCurrentX = INT(  ( m_vCurrentPos.x + m_pMapInfo->vecEnd.x ) / m_pMapInfo->fTileSize );
+	m_iCurrentZ = INT( -( m_vCurrentPos.z - m_pMapInfo->vecEnd.z ) / m_pMapInfo->fTileSize );
 	m_pNextPath = a_pMonster->Get_Path();
 	m_iTotalPathCnt = m_pNextPath->remainedNode;
 
@@ -127,13 +127,13 @@ VOID Chase::Execute( CMonster* a_pMonster )
 			D3DXVECTOR3 p2 = GetWorldPos( m_pNextPath->x, m_pNextPath->y );
 			D3DXVECTOR3 p3 = GetWorldPos( m_pNextPath->next->x, m_pNextPath->next->y );
 
-			D3DXVec3CatmullRom( &pos, &p0, &p1, &p2, &p3, t / 0.5f );
+			D3DXVec3CatmullRom( &pos, &p0, &p1, &p2, &p3, t * 2.0f ); // / 0.5f );
 
 			// °¢µµ
 			D3DXVECTOR2 vCurrentAngle( 0.0f, m_fAngle0 );
 			D3DXVECTOR2 vNextAngle( 0.0f, m_fAngle1 );
 
-			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / 0.5f );
+			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t * 2.0f ); // / 0.5f );
 		}
 
 		a_pMonster->Set_Pos( pos );

@@ -19,15 +19,22 @@ VOID LoadingScene::Initialize()
 
 VOID LoadingScene::Release()
 {
+	m_pClown->Set_Pos( D3DXVECTOR3( 0, 0, 0 ) );
+	m_pClown->Set_Angle( 0.0f );
+	m_pClown->Set_iSelectedFrameNum( 0 );
 	m_pClown->EnableShadow( TRUE );
+
+	m_pPanda->Set_Pos( D3DXVECTOR3( 0, 0, 0 ) );
+	m_pPanda->Set_Angle( 0.0f );
+	m_pPanda->ChangeAnimation( 0 );
 	m_pPanda->EnableShadow( TRUE );
 
 	SAFE_DELETE( m_pLoadingGUI );
 
 	SAFE_DELETE( m_pLight );
 
-	SAFE_DELETE( m_pClown );
-	SAFE_DELETE( m_pPanda );
+	//SAFE_DELETE( m_pClown );
+	//SAFE_DELETE( m_pPanda );
 }
 
 HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
@@ -45,14 +52,14 @@ HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSpri
 	m_pMatrices = CMatrices::GetInstance();	
 
 	// Create Monster
-	m_pClown = new CMonster;
+	m_pClown = CObjectManage::GetInstance()->Get_Clown();	// new CMonster;
 	m_pClown->Create( _pd3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 	m_pClown->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 81.0f ) );
 	m_pClown->Set_Angle( 2.49f );
 	m_pClown->Set_iSelectedFrameNum( 4 );
 	m_pClown->EnableShadow( FALSE );
 
-	m_pPanda = new CMonster;
+	m_pPanda = CObjectManage::GetInstance()->Get_Panda();		// new CMonster;
 	m_pPanda->Create( _pd3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 	m_pPanda->Set_Pos( D3DXVECTOR3( -17.0f, 0.0f, 117.0f ) );
 	m_pPanda->Set_Angle( 5.44f );

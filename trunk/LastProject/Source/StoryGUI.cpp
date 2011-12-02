@@ -71,7 +71,7 @@ VOID StoryGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgDown, L"Img\\arrow-up-Down.png" );
 	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\arrow-up-Disable.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_STORY_SKIP, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
+	m_pGUIBtnManager->Create( STORY_SKIP, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
 }
 
 VOID StoryGUI::Create()

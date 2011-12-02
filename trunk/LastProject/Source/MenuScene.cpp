@@ -66,10 +66,10 @@ VOID MenuScene::Update()
 	m_pMenuGUI->Command( dID );
 	switch( dID )
 	{
-	case GUIBTN_MENU_START:
+	case MENU_START:
 		m_pLoginScene->SetActivate( TRUE );
 		break;
-	case GUIBTN_MENU_END:
+	case MENU_END:
 		m_scnState = IScene::SCENE_END;
 		break;
 	}

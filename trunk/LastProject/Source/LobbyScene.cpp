@@ -115,13 +115,14 @@ VOID LobbyScene::Update()
 	m_pLobbyGUI->Command( dID );
 	switch( dID )
 	{
-	case GUIBTN_LOBBY_START:
+	case LOBBY_START:
 		CNetwork::GetInstance()->CS_GAME_START();
 		break;
-	case GUIBTN_LOBBY_READY:
+	case LOBBY_READY:
 		if ( m_nCharSelect < 0 )
 		{
-			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_NORMAL );
+
+			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, UP );
 			break;
 		}
 		// 최초선택
@@ -135,18 +136,18 @@ VOID LobbyScene::Update()
 			m_nCharSelect = -1;
 		}
 		break;
-	case GUIBTN_LOBBY_BACK:
+	case LOBBY_BACK:
 		m_scnNext	= IScene::SCENE_MENU;
 		m_scnState	= IScene::SCENE_END;
 		break;
-	case GUIBTN_LOBBY_SELECT_1:
-	case GUIBTN_LOBBY_SELECT_2:
-	case GUIBTN_LOBBY_SELECT_3:
-	case GUIBTN_LOBBY_SELECT_4:
+	case LOBBY_SELECT_1:
+	case LOBBY_SELECT_2:
+	case LOBBY_SELECT_3:
+	case LOBBY_SELECT_4:
 		if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
 		{
-			m_nCharSelect = dID - GUIBTN_LOBBY_SELECT_1;
-			EnableRotate( dID - GUIBTN_LOBBY_SELECT_1 );
+			m_nCharSelect = dID - LOBBY_SELECT_1;
+			EnableRotate( dID - LOBBY_SELECT_1 );
 		}
 		break;
 	//case GUIBTN_LOBBY_SELECT_1:

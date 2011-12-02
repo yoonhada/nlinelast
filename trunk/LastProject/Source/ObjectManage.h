@@ -31,6 +31,9 @@ private:
 	INT					m_nCharTable[4];
 	CCharactor*			m_pCharactors;
 	CCharactor**		m_ppVirtualCharactors;
+
+	CMonster*			m_pClown;
+	CMonster*			m_pPanda;
 	CMonster*			m_pMonster;
 	CTimeLifeItem*		m_pFirstAidKit;
 
@@ -60,7 +63,7 @@ public:
 	//VOID	Update();
 	//VOID	Render();
 
-	HRESULT LoadLogoObject();
+	HRESULT LoadLoadingObject();
 	HRESULT LoadLobbyObject();
 	HRESULT LoadMainObject();
 
@@ -70,7 +73,10 @@ public:
 	WORD Get_ClientNumber()				{ return m_iClientNumber;		}
 	CCharactor** Get_Charactors()		{ return m_ppVirtualCharactors; }
 	CCharactor* Get_Charactor()			{ return m_pCharactors;			}
-	CMonster* Get_Monster()				{ return m_pMonster;			}
+
+	CMonster* Get_Clown()				{ return m_pClown;				}
+	CMonster* Get_Panda()				{ return m_pPanda;				}
+	CMonster* Get_Monster()				{ return m_pClown;				}
 	CTimeLifeItem * Get_FirstAidKit()	{ return m_pFirstAidKit;		}
 	ASEViewer* Get_ASEViewer()			{ return m_pASEViewer;			}
 	BOOL IsHost()						{ return m_bHost;				}

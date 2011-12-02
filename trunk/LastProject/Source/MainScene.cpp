@@ -80,32 +80,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pGameEvent = new CGameEvent( nMaxCharaNum );
 	m_pGameEvent->Create();
 
-	//캐릭터 생성
-	m_nClientID = CObjectManage::GetInstance()->Get_ClientNumber();
-	CreateCharactor();
-
-	//몬스터 생성
-	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
-	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
-	if( CObjectManage::GetInstance()->IsHost() == TRUE )
-	{
-		// a
-		m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
-	}
-	else
-	{
-		m_pMonster->GetFSM()->SetCurrentState( NULL );
-	}
-	
-	// 아이템 생성
-	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
-	m_pFirstAidKit->Create( m_pD3dDevice );
-	m_pFirstAidKit->Load( L"Data/CharData/FirstAidKit_1.csav" );
-
-	//조명 생성
-	m_pLight = new CLight;
-	m_pLight->Create( m_pD3dDevice );
-
 	//맵 생성
 	// Error 예외생성 
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
@@ -116,6 +90,26 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -950.0f ), D3DXVECTOR3( 510.0f, 0.0f, 950.0f ), 10.0f );
 	m_pTileMap->LoadBBXFile( L"ASE File/Map/Stage_Beta_Box.BBX" );
 
+	//캐릭터 생성
+	m_nClientID = CObjectManage::GetInstance()->Get_ClientNumber();
+	CreateCharactor();
+
+	//몬스터 생성
+	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
+	//m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
+	m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
+	m_pMonster->Set_Angle( 0.0f );
+	m_pMonster->Set_iSelectedFrameNum( 0 );
+	m_pMonster->EnableShadow( TRUE );
+
+	// 아이템 생성
+	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
+	m_pFirstAidKit->Create( m_pD3dDevice );
+	m_pFirstAidKit->Load( L"Data/CharData/FirstAidKit_1.csav" );
+
+	//조명 생성
+	m_pLight = new CLight;
+	m_pLight->Create( m_pD3dDevice );
 
 	Seek::GetInstance()->Initialize( m_pTileMap );
 	Chase::GetInstance()->Initialize( m_pTileMap->GetInfo() );
@@ -130,6 +124,17 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pMainGUI->Create();
 	m_pOptionScene = new OptionScene;
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
+
+
+	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	{
+		// a
+		m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
+	}
+	else
+	{
+		m_pMonster->GetFSM()->SetCurrentState( NULL );
+	}
 
 	CInput::GetInstance()->EnableInput(FALSE);
 
@@ -186,6 +191,7 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::Update()
 {
+	//m_pGameEvent->Update()
 	CCharactor * pChar;
 
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);

@@ -87,7 +87,7 @@ VOID OptionGUI::CreateButton()
 
 	m_pGUIBase->AddFileName( 0, imgSetupDisable, L"Img\\OptionScene\\Setup_Down.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_OPTION_SETUP, 0, imgSetupNormal, imgSetupHot, imgSetupDown, imgSetupDisable );
+	m_pGUIBtnManager->Create( OPTION_SETUP, 0, imgSetupNormal, imgSetupHot, imgSetupDown, imgSetupDisable );
 
 	GUIBase::IMAGEPARAM imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable;
 	//	Background Next Button
@@ -128,7 +128,7 @@ VOID OptionGUI::CreateButton()
 
 	m_pGUIBase->AddFileName( 0, imgHelpDisable, L"Img\\OptionScene\\Help_Down.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_OPTION_HELP, 0, imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable );
+	m_pGUIBtnManager->Create( OPTION_HELP, 0, imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable );
 }
 
 VOID OptionGUI::Create()
