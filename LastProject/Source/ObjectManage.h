@@ -60,6 +60,10 @@ public:
 	//VOID	Update();
 	//VOID	Render();
 
+	HRESULT LoadLogoObject();
+	HRESULT LoadLobbyObject();
+	HRESULT LoadMainObject();
+
 public:
 	// Get
 	INT Get_MaxCharaNum()				{ return m_iMaxCharaNum;		}
