@@ -53,8 +53,10 @@ VOID CCharactor::Clear()
 	m_iAliveCount = 0;
 	m_bAliveCheck = TRUE;
 
-	m_vControl			 = D3DXVECTOR3(-100.0f, 0.0f, 650.0f);
-	m_vPreControl		 = D3DXVECTOR3(-100.0f, 0.0f, 650.0f);
+	//m_vControl		 = D3DXVECTOR3(-100.0f, 0.0f, 650.0f);
+	//m_vPreControl		 = D3DXVECTOR3(-100.0f, 0.0f, 650.0f);
+	m_vControl			 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f);
+	m_vPreControl		 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f);
 	m_vFowardVector		 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vSideStepVector	 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	//m_fKnockBack = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
