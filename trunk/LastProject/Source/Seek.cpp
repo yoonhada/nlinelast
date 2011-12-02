@@ -28,31 +28,25 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	INT Target = -1;
 	D3DXVECTOR3 pos( 0.0f, 0.0f, 0.0f );
 	FLOAT length = 0.0f;
-	static FLOAT min = 0.0f;
+	FLOAT min = 99999999999.0f;
 
 	// 몬스터와 가장 가까이에 있는 유저를 찾는다.
-	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();	
+	INT nClientNum;
+	CCharactor * pCharactors = CObjectManage::GetInstance()->Get_Charactor();	
 	for( INT i=0; i<4; ++i )
-	{
-		if( pCharactors[i]->Get_Active() )
+	{		
+		nClientNum = CObjectManage::GetInstance()->Get_CharTable( i );
+		if( nClientNum != -1 )
 		{
-			// 몬스터와 유저의 거리를 구한다.
-			pos = pCharactors[i]->Get_CharaPos() - a_pMonster->Get_Pos();
+			// 몬스터와 유저의 거리.를 구한다.
+			pos = pCharactors[ nClientNum ].Get_CharaPos() - a_pMonster->Get_Pos();
 			length = D3DXVec3Length( &pos );
 
-			if( i == 0 )
-			{
-				min = length;
-				Target = i;
-			}
-			else
+			if( length < min )
 			{
 				// 더 가까이 있으면
-				if( length < min )
-				{
-					min = length;
-					Target = i;
-				}
+				min = length;
+				Target = nClientNum;
 			}
 		}
 	}
@@ -75,7 +69,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	else if( min >= 25.0f && min <= 500.0f )
 	{
 		D3DXVECTOR3 vMonsterPos = a_pMonster->Get_Pos();
-		D3DXVECTOR3 vPlayerPos = pCharactors[Target]->Get_CharaPos();
+		D3DXVECTOR3 vPlayerPos = pCharactors[Target].Get_CharaPos();
 		D3DXVECTOR3 vEnd = m_pTileMap->GetInfo()->vecEnd;
 		FLOAT fTileSize = m_pTileMap->GetInfo()->fTileSize;
 
@@ -117,8 +111,6 @@ VOID Seek::Execute( CMonster* a_pMonster )
 
 		// 새 Path를 표시한다.
 		SetPath( path );
-
-		CDebugInterface::GetInstance()->AddMessageFloat( "length", min );
 #endif
 
 		a_pMonster->Set_Path( path );
