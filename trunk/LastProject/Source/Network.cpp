@@ -90,9 +90,7 @@ VOID CNetwork::UpdateLobby()
 		ProcessPacket( *it );
 	}
 
-
 	m_VectorPackets.clear();
-	//m_VectorPackets.erase( m_VectorPackets.begin(), m_VectorPackets.end() );
 
 	LeaveCriticalSection( &m_cs );
 
@@ -101,24 +99,21 @@ VOID CNetwork::UpdateLobby()
 
 VOID CNetwork::UpdateGame()
 {
-	// 이동 데이터 서버로 보내기
-	// 초당 1번 이동 데이터를 보낸다.
-	/*FLOAT x = 100.0f;
-	FLOAT z = 200.0f;
-	FLOAT angle = 300.0f;*/
-
 	static FLOAT time = 0.0f;
 	time += CFrequency::GetInstance()->getFrametime();
 
+	// 이동 데이터 서버로 보내기
 	if( time > NETWORK_RECV_TIME )
 	{
-		CCharactor *pCharactors = CObjectManage::GetInstance()->Get_Charactors()[0];	
-		// 이동 데이터 서버로 보내기
-		CS_MOVEMENT( pCharactors->Get_CharaPos().x, pCharactors->Get_CharaPos().z, pCharactors->Get_CharaAngle() );
 		time = 0.0f;
+
+		D3DXVECTOR3 vPos = CObjectManage::GetInstance()->Get_Charactors()[0]->Get_CharaPos();
+		FLOAT fAngle = CObjectManage::GetInstance()->Get_Charactors()[0]->Get_CharaAngle();
+	
+		CS_MOVEMENT( vPos.x, vPos.z, fAngle );
 	}
 
-	// 서버로 부터 받은 패킷을 처리한다.
+	// 서버로 부터 받은 패킷들을 처리한다.
 	EnterCriticalSection( &m_cs );
 
 	if( m_VectorPackets.empty() )
@@ -133,13 +128,9 @@ VOID CNetwork::UpdateGame()
 		ProcessPacket( *it );
 	}
 
-	
 	m_VectorPackets.clear();
-	//m_VectorPackets.erase( m_VectorPackets.begin(), m_VectorPackets.end() );
 
 	LeaveCriticalSection( &m_cs );
-
-
 }
 
 
