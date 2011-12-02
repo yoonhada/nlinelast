@@ -105,11 +105,13 @@ VOID CNetwork::UpdateGame()
 	// 이동 데이터 서버로 보내기
 	if( time > NETWORK_RECV_TIME )
 	{
-		CObjectManage * pOM = CObjectManage::GetInstance();
 		time = 0.0f;
 
-		D3DXVECTOR3 vPos = pOM->Get_Charactors()[pOM->Get_ClientNumber()]->Get_CharaPos();
-		FLOAT fAngle = pOM->Get_Charactors()[pOM->Get_ClientNumber()]->Get_CharaAngle();
+		CObjectManage * pOM = CObjectManage::GetInstance();
+		CCharactor& rChar = pOM->Get_Charactor()[ pOM->Get_CharTable( pOM->Get_ClientNumber() ) ];
+
+		D3DXVECTOR3 vPos = rChar.Get_CharaPos();
+		FLOAT fAngle = rChar.Get_CharaAngle();
 	
 		CS_MOVEMENT( vPos.x, vPos.z, fAngle );
 	}
@@ -307,7 +309,11 @@ VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
 
 	m_vMove = D3DXVECTOR3( x, 0.0f, z );
 
-	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
+	CObjectManage* pOM = CObjectManage::GetInstance();
+	CCharactor& pChar = pOM->Get_Charactor()[ pOM->Get_CharTable( number ) ];
+
+	pChar.UpdateByValue( m_vMove, angle );
+/*
 	for( INT Loop = 0; Loop < 4; ++Loop )
 	{
 		if( pCharactors[Loop]->Get_ClientNumber() == number  )
@@ -317,7 +323,7 @@ VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
 			break;
 		}
 	}
-	
+*/	
 
 	// 이동 데이터 처리
 }

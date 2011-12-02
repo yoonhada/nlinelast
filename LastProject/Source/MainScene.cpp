@@ -180,7 +180,7 @@ VOID CMainScene::Update()
 {
 	CCharactor * pChar;
 
-	pChar = &(m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( 0 ) ]);
+	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
 
 	// 캐릭터: 인풋 값 받아오기
 	pChar->UpdateByInput();
@@ -209,8 +209,10 @@ VOID CMainScene::Update()
 
 	// 다른 플레이어는 값으로 이동
 	INT nIndex;
-	for( INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
+	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
+		if( Loop == m_nClientID )
+			continue;
 		nIndex = CObjectManage::GetInstance()->Get_CharTable( Loop );
 		if ( nIndex != -1 )
 		{
