@@ -594,7 +594,10 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
-	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	CObjectManage * pOM = CObjectManage::GetInstance();
+	CCharactor& rChar = pOM->Get_Charactor()[ pOM->Get_CharTable( wClientNumber ) ];
+
+	rChar.RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 	//CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
@@ -628,7 +631,10 @@ VOID CNetwork::SC_Attack_Animation( CPacket& a_pk )
 	a_pk.Read( &wClientNumber );
 	a_pk.Read( &wAnimationNumber );
 
-	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber]->Set_WeaponAnimationState( wAnimationNumber );
+	CObjectManage * pOM = CObjectManage::GetInstance();
+	CCharactor& rChar = pOM->Get_Charactor()[ pOM->Get_CharTable( wClientNumber ) ];
+	
+	rChar.Set_WeaponAnimationState( wAnimationNumber );
 }
 
 
@@ -638,7 +644,12 @@ VOID CNetwork::SC_DISCONNECT( CPacket& a_pk )
 	a_pk.Read( &wClientNumber );
 
 	// 立加 蜡历 厚劝己拳
-	CObjectManage::GetInstance()->Get_Charactors()[wClientNumber]->Set_Active( FALSE );
+	CObjectManage * pOM = CObjectManage::GetInstance();
+	pOM->Get_CharTable()[ wClientNumber ] = -1;
+	//
+	//CCharactor& rChar = pOM->Get_Charactor()[ pOM->Get_CharTable( wClientNumber ) ];
+
+	//CObjectManage::GetInstance()->Get_Charactors()[wClientNumber]->Set_Active( FALSE );
 }
 
 
