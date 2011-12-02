@@ -37,24 +37,32 @@ private:
 	enum ClassType { NONE, CHARACTOR, MONSTER };
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
+	OptionScene*			m_pOptionScene;
+	MainGUI*				m_pMainGUI;
 
+	// Equipment
 	CMatrices*				m_pMatrices;
 	CCamera*				m_pCamera;
+	Axis*					m_pAxis;
+	CLight*					m_pLight;
+
+	// Charactor
+	CCharactor*				m_pMyCharactors;
+	CCharactor**			m_pOtherCharactors;
 	CCharactor**			m_pCharactors;
 	CMonster*				m_pMonster;
 	CTimeLifeItem *			m_pFirstAidKit;
 
+	// Map
 	TileMap*				m_pTileMap;
 	ASEViewer*				m_pASEViewer;
-	
+
+	// Game
+	CGameEvent*				m_pGameEvent;
+
 	INT						m_iMaxCharaNum;
 	INT						m_nClientID;
 
-	Axis*					m_pAxis;
-	CLight*					m_pLight;
-	CGameEvent*				m_pGameEvent;
-	MainGUI*				m_pMainGUI;
-	OptionScene*			m_pOptionScene;
 
 	INT						m_scnNext;
 	INT						m_scnState;

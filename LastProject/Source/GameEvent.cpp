@@ -10,12 +10,14 @@
 
 CGameEvent::CGameEvent( )
 : m_iMaxCharaNum ( 4 )
+, m_pPosition( 0 )
 {
 	Clear();
 }
 
 CGameEvent::CGameEvent(INT nMaxChar)
 : m_iMaxCharaNum ( nMaxChar )
+, m_pPosition( 0 )
 {
 	Clear();
 }
@@ -40,7 +42,8 @@ HRESULT CGameEvent::Release()
 {
 	SAFE_DELETE ( m_pAttackPoint );
 	SAFE_DELETE ( m_pShotedPoint );
-
+	
+	SAFE_DELETE_ARRAY( m_pPosition );
 	return S_OK;
 }
 
@@ -54,6 +57,13 @@ VOID CGameEvent::Clear()
 
 	m_nHPMonstor = 0;
 	m_nGameEvent = 0;
+
+	SAFE_DELETE_ARRAY( m_pPosition );
+	m_pPosition = new D3DXVECTOR3[4];
+	m_pPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 650.0f);
+	m_pPosition[1] = D3DXVECTOR3(-120.0f, 0.0f, 650.0f);
+	m_pPosition[2] = D3DXVECTOR3(-140.0f, 0.0f, 650.0f);
+	m_pPosition[3] = D3DXVECTOR3(-160.0f, 0.0f, 650.0f);
 }
 
 VOID CGameEvent::Update()
@@ -65,11 +75,13 @@ VOID CGameEvent::Update()
 
 	m_pShotedPoint[0] += CTree::GetInstance()->GetCharAtkVector()->size();
 	m_nHPMonstor = CTree::GetInstance()->GetMonsAtkVector()->size();
-
-
-	m_nGameEvent = FastRand2();
 }
 
 VOID CGameEvent::Render()
 {
+}
+
+D3DXVECTOR3& CGameEvent::GetDefaultCharPosition( INT nClient )
+{
+	return m_pPosition[ nClient ];
 }

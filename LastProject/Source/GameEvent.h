@@ -13,6 +13,9 @@ public:
 	// Host
 	BOOL m_bHost;
 
+	// Const 
+	D3DXVECTOR3 * m_pPosition;
+
 	// Char
 	INT m_iMaxCharaNum;
 	INT * m_pAttackPoint;
@@ -34,4 +37,7 @@ public:
 	HRESULT Release();	///< 오브젝트들 제거
 	VOID Update();		///< Update
 	VOID Render();		///< Render
+
+	// Get
+	D3DXVECTOR3& GetDefaultCharPosition( INT nClient );
 };
