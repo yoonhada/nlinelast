@@ -39,27 +39,44 @@ VOID CObjectManage::Clear()
 HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 {
 	m_pD3dDevice = a_pD3dDevice;
+
+	LoadLogoObject();
+	LoadLobbyObject();
+	LoadMainObject();
+
+	return S_OK;
+}	
 	
-	//캐릭터 생성
+HRESULT CObjectManage::LoadLogoObject()
+{
+	// Monster
+	m_pMonster = new CMonster;
+	m_pFirstAidKit = new CTimeLifeItem;
+	return S_OK;
+}
+
+HRESULT CObjectManage::LoadLobbyObject()
+{
+	// 캐릭터 생성
 	m_pCharactors = new CCharactor[ m_iMaxCharaNum ];
 	for(INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
 		m_pCharactors[Loop].Create( m_pD3dDevice );
 		m_pCharactors[Loop].LoadKindChar( Loop );
 	}
-
-	m_pMonster = new CMonster;
-
-	m_pFirstAidKit = new CTimeLifeItem;
-
-	m_pASEViewer = new ASEViewer( m_pD3dDevice );
-	
 	m_ppVirtualCharactors = new CCharactor * [m_iMaxCharaNum];
 
 	for ( int i = 0; i < m_iMaxCharaNum; ++i )
 	{
 		m_ppVirtualCharactors[i] = &(m_pCharactors[i]);
 	}
+	return S_OK;
+}
+
+HRESULT CObjectManage::LoadMainObject()
+{
+	// Map
+	m_pASEViewer = new ASEViewer( m_pD3dDevice );
 
 	return S_OK;
 }

@@ -347,7 +347,7 @@ VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
 
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
-		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, GUIBTN_DISABLE );
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, FALSE );
 	}
 	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
 }
