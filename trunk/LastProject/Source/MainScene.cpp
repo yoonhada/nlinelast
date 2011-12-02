@@ -184,6 +184,7 @@ VOID CMainScene::Update()
 
 	// 캐릭터: 인풋 값 받아오기
 	pChar->UpdateByInput();
+
 	if ( pChar->CollisionAtk( ) )
 	{
 		D3DXMATRIXA16 mat;
@@ -221,6 +222,8 @@ VOID CMainScene::Update()
 		}
 	}
 
+	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
+
 	m_pMonster->Update();
 	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 
@@ -235,9 +238,6 @@ VOID CMainScene::Update()
 
 	CNetwork::GetInstance()->UpdateGame();
 	m_pGameEvent->Update();	
-
-	//if ( CInput::GetInstance()->Get_NumKey(7) )
-	//	m_pMonster->BreakCubeAll();
 }
 
 VOID	CMainScene::Render()

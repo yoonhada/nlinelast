@@ -312,7 +312,10 @@ VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
 	CObjectManage* pOM = CObjectManage::GetInstance();
 	CCharactor& pChar = pOM->Get_Charactor()[ pOM->Get_CharTable( number ) ];
 
-	pChar.UpdateByValue( m_vMove, angle );
+	if ( pOM->Get_ClientNumber() != number )
+	{
+		pChar.UpdateByValue( m_vMove, angle );
+	}
 /*
 	for( INT Loop = 0; Loop < 4; ++Loop )
 	{
