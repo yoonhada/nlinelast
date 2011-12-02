@@ -189,7 +189,7 @@ VOID CMainScene::Update()
 		m_pCharactors[m_nClientID]->Get_CharaPos2Camera(), 
 		m_pCharactors[m_nClientID]->Get_PreCharaPos2Camera(), 
 		10.0f, 75.0f, 
-		m_pCharactors[0]->Get_CharaAngle(),
+		m_pCharactors[m_nClientID]->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
 	m_pCamera->CheckObjectCollision( 

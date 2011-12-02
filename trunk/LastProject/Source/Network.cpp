@@ -98,17 +98,18 @@ VOID CNetwork::UpdateLobby()
 }
 
 VOID CNetwork::UpdateGame()
-{
+{	
 	static FLOAT time = 0.0f;
 	time += CFrequency::GetInstance()->getFrametime();
 
 	// 이동 데이터 서버로 보내기
 	if( time > NETWORK_RECV_TIME )
 	{
+		CObjectManage * pOM = CObjectManage::GetInstance();
 		time = 0.0f;
 
-		D3DXVECTOR3 vPos = CObjectManage::GetInstance()->Get_Charactors()[0]->Get_CharaPos();
-		FLOAT fAngle = CObjectManage::GetInstance()->Get_Charactors()[0]->Get_CharaAngle();
+		D3DXVECTOR3 vPos = pOM->Get_Charactors()[pOM->Get_ClientNumber()]->Get_CharaPos();
+		FLOAT fAngle = pOM->Get_Charactors()[pOM->Get_ClientNumber()]->Get_CharaAngle();
 	
 		CS_MOVEMENT( vPos.x, vPos.z, fAngle );
 	}
