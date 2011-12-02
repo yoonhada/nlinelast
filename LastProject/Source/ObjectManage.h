@@ -40,11 +40,17 @@ private:
 
 
 private:
-	WORD m_wTotalDestroyPart;
-	WORD m_wDestroyPart[7];
-	WORD m_wDestroyCount[7];
-	std::vector<WORD> m_NetworkSendTempVector;
-	D3DXVECTOR3 m_vDestroyDir;
+	//typedef struct _DESTROYDATA
+	//{
+		WORD m_wTotalDestroyPart;
+		WORD m_wDestroyPart[7];
+		WORD m_wDestroyCount[7];
+		std::vector<WORD> m_NetworkSendTempVector;
+		D3DXVECTOR3 m_vDestroyDir;
+	//} DestroyData;
+
+	//DestroyData m_DestoryDataCharactor;
+	//DestroyData m_DestoryDataMonster;
 
 public:
 
@@ -75,9 +81,9 @@ public:
 	VOID Set_Char(INT nSelect, INT nChar, BOOL = FALSE );
 	VOID Set_CharTable( INT * nTable );
 
-	VOID Set_PushBackNetworkSendTempVector( WORD a_wData );
-	VOID Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir );
-	VOID Send_NetworkSendDestroyData(BOOL = FALSE);
+	VOID Set_PushBackNetworkSendTempVector( WORD a_wData);
+	VOID Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir);
+	VOID Send_NetworkSendDestroyData(BOOL IsMonster );
 
 	LobbyScene*		GetLobbyScene(){ return m_pLobbyScene; }
 	VOID			SetLobbyScene( LobbyScene* a_pLobbyScene ){ m_pLobbyScene = a_pLobbyScene; }

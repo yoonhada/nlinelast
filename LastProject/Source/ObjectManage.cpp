@@ -77,11 +77,11 @@ HRESULT CObjectManage::Release()
 
 VOID CObjectManage::Set_PushBackNetworkSendTempVector( WORD a_wData )
 {
-	CDebugConsole::GetInstance()->Messagef( L"PushBack Size : %d / Data : %d\n", m_NetworkSendTempVector.size(), a_wData );
+	//CDebugConsole::GetInstance()->Messagef( L"PushBack Size : %d / Data : %d\n", m_NetworkSendTempVector.size(), a_wData );
 	m_NetworkSendTempVector.push_back(a_wData);
 }
 
-VOID CObjectManage::Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir )
+VOID CObjectManage::Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir)
 {
 	m_wDestroyPart[m_wTotalDestroyPart] = a_cDestroyPart;
 	m_wDestroyCount[m_wTotalDestroyPart] = a_wDestroyCount;
@@ -90,38 +90,25 @@ VOID CObjectManage::Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDes
 	++m_wTotalDestroyPart;
 }
 
-//VOID CObjectManage::Set_NetworkSendDestroyData( WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir )
-//{
-//	m_wDestroyPart[m_wTotalDestroyPart] = 0;
-//	m_wDestroyCount[m_wTotalDestroyPart] = a_wDestroyCount;
-//	m_vDestroyDir = a_vDestroyDir;
-//
-//	++m_wTotalDestroyPart;
-//}
-
-VOID CObjectManage::Send_NetworkSendDestroyData(BOOL _bIsCharter)
+VOID CObjectManage::Send_NetworkSendDestroyData( BOOL IsMonster )
 {
 	if( m_wTotalDestroyPart <= 0 )
 		return;
 
-	if( _bIsCharter == FALSE)
+	if( IsMonster )	
 	{
 		CNetwork::GetInstance()->CS_UTOM_ATTACK( m_vDestroyDir, m_wTotalDestroyPart, m_wDestroyPart, m_wDestroyCount, m_NetworkSendTempVector );
-		m_NetworkSendTempVector.clear();
-		CDebugConsole::GetInstance()->Messagef( L"U-M m_NetworkSendTempVector Size : %d\n", m_NetworkSendTempVector.size() );
 	}
 	else
 	{
 		CNetwork::GetInstance()->CS_MTOU_ATTACK( m_vDestroyDir, m_wDestroyCount[0], m_NetworkSendTempVector );
-		m_NetworkSendTempVector.clear();
-		CDebugConsole::GetInstance()->Messagef( L"M-U m_NetworkSendTempVector Size : %d\n", m_NetworkSendTempVector.size() );
 	}
 
 	m_wTotalDestroyPart = 0;
+	m_NetworkSendTempVector.erase( m_NetworkSendTempVector.begin(), m_NetworkSendTempVector.end() );
 	ZeroMemory( &m_wDestroyPart, sizeof(m_wDestroyPart) );
 	ZeroMemory( &m_wDestroyCount, sizeof(m_wDestroyCount) );
 	ZeroMemory( m_vDestroyDir, sizeof(m_vDestroyDir) );
-
 }
 
 VOID CObjectManage::Set_Char(INT nSelect, INT nChar, BOOL bActive )
