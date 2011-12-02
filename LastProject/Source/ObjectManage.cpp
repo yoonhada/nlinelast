@@ -134,3 +134,15 @@ VOID CObjectManage::Set_Char(INT nSelect, INT nChar, BOOL bActive )
 	}
 }
 
+VOID CObjectManage::Set_CharTable( INT * nTable )
+{
+	for (INT i = 0; i < 4; ++i )
+	{
+		m_nCharTable[i] = nTable[i];
+
+		if (m_nCharTable[i] != -1)
+		{
+			m_pCharactors[ m_nCharTable[i] ].Set_Active( TRUE );
+		}
+	}
+}

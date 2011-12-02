@@ -64,8 +64,8 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create Character
 	m_aData		= new DATA[ 4 ];
 
-	CreateData( &m_aData[ 0 ], L"Data\\CharData\\MOM.csav",		D3DXVECTOR3(  8.0f, 0.0f, 100.0f ) );
-	CreateData( &m_aData[ 1 ], L"Data\\CharData\\APPA_0.csav",	D3DXVECTOR3( 24.0f, 0.0f, 100.0f ) );
+	CreateData( &m_aData[ 0 ], L"Data\\CharData\\APPA_0.csav",	D3DXVECTOR3( 24.0f, 0.0f, 100.0f ) );
+	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM.csav",		D3DXVECTOR3(  8.0f, 0.0f, 100.0f ) );
 	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_0.csav", D3DXVECTOR3( -8.0f, 0.0f, 100.0f ) );
 	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_0.csav",	D3DXVECTOR3( -24.0f, 0.0f, 100.0f ) );
 	
@@ -231,14 +231,16 @@ VOID LobbyScene::UpdateCharArray()
 	//INT						m_nCharSelect;		// 선택된 케릭터 번호.
 	//INT						m_nSelectState[4];	// 호스트의 선택상태.
 
-	for (int i = 0; i < 4; ++i)
-	{
-		if( m_nSelectState[i] != -1 )
-		{
-			CObjectManage::GetInstance()->Set_Char( i, m_nSelectState[i], TRUE );
-			CObjectManage::GetInstance()->Set_Char( m_nSelectState[i], i );
-		}		
-	}
+	CObjectManage::GetInstance()->Set_CharTable( m_nSelectState );
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	if( m_nSelectState[i] != -1 )
+	//	{
+	//		CObjectManage::GetInstance()->Get_Charactors()[i]->Set_Active( TRUE );
+	//		//CObjectManage::GetInstance()->Set_Char( i, m_nSelectState[i], TRUE );
+	//		//CObjectManage::GetInstance()->Set_Char( m_nSelectState[i], i );
+	//	}		
+	//}
 }
 
 VOID LobbyScene::EnableButton( DWORD _dID, BOOL _bEnable )
