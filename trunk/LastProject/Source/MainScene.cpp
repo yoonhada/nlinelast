@@ -87,8 +87,16 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
-	m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
-
+	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	{
+		// a
+		m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
+	}
+	else
+	{
+		m_pMonster->GetFSM()->SetCurrentState( NULL );
+	}
+	
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
 	m_pFirstAidKit->Create( m_pD3dDevice );
@@ -191,7 +199,7 @@ VOID CMainScene::Update()
 		D3DXMatrixIdentity( &mat );
 		pChar->BreakQube( mat );
 
-		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
+		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
 	}
 	CTree::GetInstance()->SetMonsAtkClear();
 
