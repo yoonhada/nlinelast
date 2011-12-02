@@ -87,6 +87,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
+	m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
 
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
@@ -124,7 +125,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	CInput::GetInstance()->EnableInput(FALSE);
 
-	////m_pStateMachine->SetCurrentState( Seek::GetInstance() );
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 
 	return S_OK;
