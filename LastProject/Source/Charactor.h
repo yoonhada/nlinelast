@@ -100,6 +100,11 @@ public:
 		m_vControl = m_vPreControl = a_vControl;
 	}
 
+	VOID Set_Angle( FLOAT a_fAngle )				
+	{ 
+		m_fAngle = a_fAngle; 
+	}
+
 	VOID Set_ClientNumber( WORD a_iClientNumber )
 	{
 		m_iClientNumber = a_iClientNumber;

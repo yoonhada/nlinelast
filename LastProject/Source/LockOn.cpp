@@ -113,6 +113,7 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 		w = 4;
 	}
 
+	static FLOAT fMonsterAngle = 0.0f;
 #ifdef _DEBUG
 	// 몬스터 기준 플레이어 각 ( +x축이 0도, CW가 +각도)
 	CDebugInterface::GetInstance()->AddMessageFloat( "Player_Angle", fAngle );
@@ -126,7 +127,7 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	CDebugInterface::GetInstance()->AddMessageFloat( "w", w );
 
 	// 몬스터 각 ( +x축이 0도, CW가 +각도 )
-	static FLOAT fMonsterAngle = 0.0f;
+	
 	fMonsterAngle = D3DXToDegree( a_pMonster->Get_Angle() );
 	CDebugInterface::GetInstance()->AddMessageFloat( "Monster_Angle", fMonsterAngle );
 #endif
