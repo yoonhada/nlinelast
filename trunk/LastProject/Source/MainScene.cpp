@@ -150,35 +150,45 @@ HRESULT CMainScene::Release()
 VOID CMainScene::CreateCharactor()
 {
 	//캐릭터 생성
-	m_pCharactors = CObjectManage::GetInstance()->Get_Charactors();
+	CCharactor * pChar;
+	m_pCharactors = CObjectManage::GetInstance()->Get_Charactor();
 
+	INT nIndex;
 	for(INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		if( !m_pCharactors[Loop] )
-			continue;
+		nIndex = CObjectManage::GetInstance()->Get_CharTable(Loop);
 
-		//m_pCharactors[Loop]->Create( m_pD3dDevice );
-		//m_pCharactors[Loop]->LoadKindChar( Loop );
-
-		if (Loop == m_nClientID)
+		if ( nIndex != -1 )
 		{
-			m_pCharactors[m_nClientID]->Set_Active( TRUE );
-		}
+			pChar = &( m_pCharactors[ nIndex ] );
 
-		m_pCharactors[m_nClientID]->Set_Position( m_pGameEvent->GetDefaultCharPosition( Loop ) );
-		CTree::GetInstance()->GetCharVector()->push_back( m_pCharactors[Loop]->GetBoundBox() );
+			//m_pCharactors[Loop]->Create( m_pD3dDevice );
+			//m_pCharactors[Loop]->LoadKindChar( Loop );
+
+			//if (Loop == m_nClientID)
+			//{
+			//	m_pCharactors[m_nClientID]->Set_Active( TRUE );
+			//}
+
+			pChar->Set_Position( m_pGameEvent->GetDefaultCharPosition( Loop ) );
+			CTree::GetInstance()->GetCharVector()->push_back( pChar->GetBoundBox() );
+		}
 	}
 }
 
 VOID CMainScene::Update()
 {
+	CCharactor * pChar;
+
+	pChar = &(m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( 0 ) ]);
+
 	// 캐릭터: 인풋 값 받아오기
-	m_pCharactors[ m_nClientID ]->UpdateByInput();
-	if ( m_pCharactors[ m_nClientID ]->CollisionAtk( ) )
+	pChar->UpdateByInput();
+	if ( pChar->CollisionAtk( ) )
 	{
 		D3DXMATRIXA16 mat;
 		D3DXMatrixIdentity( &mat );
-		m_pCharactors[ m_nClientID ]->BreakQube( mat );
+		pChar->BreakQube( mat );
 
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
 	}
@@ -186,23 +196,26 @@ VOID CMainScene::Update()
 
 	// 카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
-		m_pCharactors[m_nClientID]->Get_CharaPos2Camera(), 
-		m_pCharactors[m_nClientID]->Get_PreCharaPos2Camera(), 
+		pChar->Get_CharaPos2Camera(), 
+		pChar->Get_PreCharaPos2Camera(), 
 		10.0f, 75.0f, 
-		m_pCharactors[m_nClientID]->Get_CharaAngle(),
+		pChar->Get_CharaAngle(),
 		CInput::GetInstance()->Get_MouseXRotate() );
 
 	m_pCamera->CheckObjectCollision( 
 		m_pCamera->GetEye(), 
-		m_pCharactors[m_nClientID]->Get_CharaPos(), 
-		m_pCharactors[m_nClientID]->Get_CharaAngle() );
+		pChar->Get_CharaPos(), 
+		pChar->Get_CharaAngle() );
 
 	// 다른 플레이어는 값으로 이동
-	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
+	INT nIndex;
+	for( INT Loop = 1; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		if ( Loop != m_nClientID)
+		nIndex = CObjectManage::GetInstance()->Get_CharTable( Loop );
+		if ( nIndex != -1 )
 		{
-			m_pCharactors[Loop]->UpdateOtherPlayer();
+			pChar = &( m_pCharactors[ nIndex ] );
+			pChar->UpdateOtherPlayer();
 		}
 	}
 
@@ -227,6 +240,7 @@ VOID CMainScene::Update()
 
 VOID	CMainScene::Render()
 {
+	CCharactor * pChar;
 	m_pMatrices->SetupProjection();
 
 	m_pLight->EnableLight();
@@ -238,14 +252,14 @@ VOID	CMainScene::Render()
 	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pASEViewe->Get_MatWorld() );
 	m_pASEViewer->Render();
 
+	INT nIndex;
 	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		if( !m_pCharactors[Loop] )
-			continue;
-
-		if( m_pCharactors[Loop]->Get_Active() )
+		nIndex = CObjectManage::GetInstance()->Get_CharTable( Loop );
+		if ( nIndex != -1 )
 		{
-			m_pCharactors[Loop]->Render();
+			pChar = &( m_pCharactors[ nIndex ] );
+			pChar->Render();
 		}
 	}
 

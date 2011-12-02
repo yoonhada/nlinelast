@@ -49,7 +49,7 @@ private:
 	// Charactor
 	CCharactor*				m_pMyCharactors;
 	CCharactor**			m_pOtherCharactors;
-	CCharactor**			m_pCharactors;
+	CCharactor*				m_pCharactors;
 	CMonster*				m_pMonster;
 	CTimeLifeItem *			m_pFirstAidKit;
 
