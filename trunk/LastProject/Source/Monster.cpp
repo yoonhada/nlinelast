@@ -926,7 +926,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		}
 	}
 
-	CObjectManage::GetInstance()->Send_NetworkSendDestroyData();
+	CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
 
 	CTree::GetInstance()->SetCharAtkClear();
 

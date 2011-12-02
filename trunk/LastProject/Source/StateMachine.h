@@ -43,7 +43,10 @@ public:
 		m_pCurrentState = pNewState;
 
 		// 새로운 상태로 Enter
-		m_pCurrentState->Enter( m_pOwner );
+		if ( pNewState )
+		{
+			m_pCurrentState->Enter( m_pOwner );
+		}
 	}
 
 

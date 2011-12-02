@@ -191,7 +191,7 @@ VOID CMainScene::Update()
 		D3DXMatrixIdentity( &mat );
 		pChar->BreakQube( mat );
 
-		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
+		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
 	}
 	CTree::GetInstance()->SetMonsAtkClear();
 

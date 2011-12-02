@@ -517,14 +517,15 @@ VOID CCharactor::UpdateByInput(  )
 	}
 
 	a_vControl.z -= ( m_fKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
-	m_fKnockBack *= 0.9f;
+	( m_fKnockBack > 0.1f ) ?  m_fKnockBack *= 0.9f : m_fKnockBack = 0.0f;
+	
 	a_fAngle += m_fAngle;
 	
 	// 360도 넘으면 라디언 360 빼기.
 	const float f360 = D3DXToRadian( 360.0f );
 	a_fAngle < 0.0f ? a_fAngle += f360 : ( a_fAngle > f360 ? a_fAngle -= f360 : NULL );
 
-	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//m_vControl;
+	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f); 
 
 	a_vControl.z += AnimateAttack();
 
@@ -859,7 +860,6 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
 					(*Iter)->GetPosition();
 
-
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
 						++nCount;
@@ -867,13 +867,10 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 						vPos = (*Iter)->GetDirection();	
 						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
 						//m_vKnockBack = vPos;
-						vPos = D3DXVECTOR3(0, 0, 0);
+						vPos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 						BreakListMake( Loop, vPos );
 						//NetworkSendTempVector.push_back( Loop );
-						if( m_bMonster )
-						{
-							CObjectManage::GetInstance()->Set_PushBackNetworkSendTempVector( static_cast<WORD>(Loop) );
-						}
+						CObjectManage::GetInstance()->Set_PushBackNetworkSendTempVector( static_cast<WORD>(Loop) );
 						vDir = vPos;
 					}
 				}
@@ -888,18 +885,20 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 			else
 			{
-				if (nCount > 20)
+				if (nCount > 50)
 				{
 					break;
 				}
 			}
 #endif // _DEBUG
 		}
-		if( m_bMonster && nCount != 0 )
+
+		if( nCount != 0 )
 		{
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
 			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
+
 		m_fKnockBack = (FLOAT)nCount;
 		//NetworkSendTempVector.clear();
 	}

@@ -338,13 +338,17 @@ VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
 	WORD wNumber;
 	a_pk.Read( &wNumber );
 
-	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
-	if( pCharactors[wNumber]->Get_Active() == FALSE )
-	{
-		pCharactors[wNumber]->Set_Active( TRUE );
-		pCharactors[wNumber]->Set_ClientNumber( wNumber );
-	}
+	//CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
+	//if( pCharactors[wNumber]->Get_Active() == FALSE )
+	//{
+	//	pCharactors[wNumber]->Set_Active( TRUE );
+	//	pCharactors[wNumber]->Set_ClientNumber( wNumber );
+	//}
 
+	if ( CObjectManage::GetInstance()->IsHost() )
+	{
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, GUIBTN_DISABLE );
+	}
 	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
 }
 
@@ -364,16 +368,16 @@ VOID CNetwork::SC_InitData( CPacket& a_pk )
 	CObjectManage::GetInstance()->Set_Host( host );
 	CObjectManage::GetInstance()->Set_ClientNumber( user_no );
 	//CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
-	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
+	CCharactor * pCharactors = CObjectManage::GetInstance()->Get_Charactor();
 	// 유저수 만큼 루프
 	for( WORD i=0; i<userCount; ++i )
 	{
 		a_pk.Read( &user_list );
 
-		if( pCharactors[user_list]->Get_Active() == FALSE )
+		if( pCharactors[user_list].Get_Active() == FALSE )
 		{
-			pCharactors[user_list]->Set_Active( TRUE );
-			pCharactors[user_list]->Set_ClientNumber( user_list );
+			pCharactors[user_list].Set_Active( TRUE );
+			pCharactors[user_list].Set_ClientNumber( user_list );
 		}
 	}
 
