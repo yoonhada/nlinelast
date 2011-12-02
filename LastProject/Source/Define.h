@@ -37,27 +37,51 @@ extern FLOAT FastRand2();
 
 // GUI Resource
 // GUI State
-#define GUIBTN_NORMAL			100
-#define GUIBTN_DOWN				101
-#define GUIBTN_DISABLE			102
+enum GUIBTN { UP			= 100,	DOWN, DISABLE, 
+			  STORY_SKIP	= 1000, 
+			  MENU_START	= 1010,	MENU_END, 
+			  OPTION_HELP	= 1020,	OPTION_SETUP, 
+			  LOGIN_GO		= 1030,	LOGIN_EXIT, 
+			  LOBBY_START	= 1040,	LOBBY_READY, LOBBY_BACK, LOBBY_SELECT_1, LOBBY_SELECT_2, LOBBY_SELECT_3, LOBBY_SELECT_4
+};
 
-#define GUIBTN_STORY_SKIP		1000
+namespace MTP_FUN
+{
+	const float RAD_TO_DEG = 180.0f / 3.14159265f;
+	const float DEG_TO_RAD = 3.14159265f / 180.0f;
 
-#define GUIBTN_MENU_START		1001
-#define GUIBTN_MENU_END			1002
+	template <int degrees>
+	struct Deg2Rad
+	{
+		static const float radians;
+	};
 
-#define GUIBTN_OPTION_HELP		1010
-#define GUIBTN_OPTION_SETUP		1011
+	template <int degrees>
+	const float Deg2Rad<degrees>::radians = degrees * 3.14159265f / 180.0f;
+}
 
-#define GUIBTN_LOGIN_GO			1020
-#define GUIBTN_LOGIN_EXIT		1021
 
-#define GUIBTN_LOBBY_START		1030
-#define GUIBTN_LOBBY_READY		1031
-#define GUIBTN_LOBBY_BACK		1032
-#define GUIBTN_LOBBY_SELECT_1	1033
-#define GUIBTN_LOBBY_SELECT_2	1034
-#define GUIBTN_LOBBY_SELECT_3	1035
-#define GUIBTN_LOBBY_SELECT_4	1036
+//#define GUIBTN_UP			100
+//#define GUIBTN_DOWN				101
+//#define GUIBTN_DISABLE			102
+//
+//#define GUIBTN_STORY_SKIP		1000
+//
+//#define GUIBTN_MENU_START		1010
+//#define GUIBTN_MENU_END			1011
+//
+//#define GUIBTN_OPTION_HELP		1020
+//#define GUIBTN_OPTION_SETUP		1021
+//
+//#define GUIBTN_LOGIN_GO			1030
+//#define GUIBTN_LOGIN_EXIT		1031
+//
+//#define GUIBTN_LOBBY_START		1040
+//#define GUIBTN_LOBBY_READY		1041
+//#define GUIBTN_LOBBY_BACK		1042
+//#define GUIBTN_LOBBY_SELECT_1	1043
+//#define GUIBTN_LOBBY_SELECT_2	1044
+//#define GUIBTN_LOBBY_SELECT_3	1045
+//#define GUIBTN_LOBBY_SELECT_4	1046
 
 #endif

@@ -27,7 +27,7 @@ VOID CInput::Clear()
 	m_vPos			= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	//m_fXPos = 0.0f;
 	m_fYRotate = 0.0f;
-	m_fXRotate = D3DXToRadian( -45.0f );
+	m_fXRotate = -MTP_FUN::Deg2Rad<45>::radians;	// D3DXToRadian( -45.0f );
 
 	D3DXMatrixIdentity( &m_matMatrix );
 
@@ -90,8 +90,8 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 				static_cast<FLOAT>(dy) * a_fCameraRotateSpeed *  a_fFrameTime,
 				0.0f );
 
-			FLOAT fYaw	= D3DXToRadian(m_vRotate.x * 0.1f);
-			FLOAT fPitch = D3DXToRadian(m_vRotate.y * 0.1f);
+			FLOAT fYaw	= D3DXToRadian( m_vRotate.x * 0.1f );
+			FLOAT fPitch = D3DXToRadian( m_vRotate.y * 0.1f );
 			// Y축 회전 값
 			m_fYRotate = fYaw;
 			m_fXRotate = fPitch;

@@ -50,11 +50,11 @@ VOID OptionScene::Update()
 	m_pOptionGUI->Command( dID );
 	switch( dID )
 	{
-	case GUIBTN_OPTION_SETUP:
+	case OPTION_SETUP:
 		m_bSetupScene	= !m_bSetupScene;
 		m_bHelpScene	= FALSE;
 		break;
-	case GUIBTN_OPTION_HELP:
+	case OPTION_HELP:
 		m_bHelpScene	= !m_bHelpScene;
 		m_bSetupScene	= FALSE;
 		break;

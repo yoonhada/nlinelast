@@ -38,37 +38,37 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	m_pLogo[ 0 ].Create( m_pD3dDevice );
 	m_pLogo[ 0 ].Load( L"Data/Logo/N_Beta.csav" );
 	m_pLogo[ 0 ].Set_Position( D3DXVECTOR3( 50.0f, 0.0f, 0.0f ) );
-	m_pLogo[ 0 ].Set_Angle( D3DXToRadian( -30.0f ) );
+	m_pLogo[ 0 ].Set_Angle( -MTP_FUN::Deg2Rad<30>::radians ); // D3DXToRadian( -30.0f ) );
 	m_pLogo[ 0 ].EnableShadow( FALSE );
 
 	m_pLogo[ 1 ].Create( m_pD3dDevice );
 	m_pLogo[ 1 ].Load( L"Data/Logo/-_Beta.csav" );
 	m_pLogo[ 1 ].Set_Position( D3DXVECTOR3( 30.0f, 0.0f,-5.0f ) );
-	m_pLogo[ 1 ].Set_Angle( D3DXToRadian( -15.0f ) );
+	m_pLogo[ 1 ].Set_Angle( -MTP_FUN::Deg2Rad<15>::radians ); // D3DXToRadian( -15.0f ) );
 	m_pLogo[ 1 ].EnableShadow( FALSE );
 
 	m_pLogo[ 2 ].Create( m_pD3dDevice );
 	m_pLogo[ 2 ].Load( L"Data/Logo/L_Beta.csav" );
 	m_pLogo[ 2 ].Set_Position( D3DXVECTOR3( 10.0f, 0.0f,-10.0f ) );
-	m_pLogo[ 2 ].Set_Angle( D3DXToRadian( 90.0f ) );
+	m_pLogo[ 2 ].Set_Angle( MTP_FUN::Deg2Rad<90>::radians ); // D3DXToRadian( 90.0f ) );
 	m_pLogo[ 2 ].EnableShadow( FALSE );
 
 	m_pLogo[ 3 ].Create( m_pD3dDevice );
 	m_pLogo[ 3 ].Load( L"Data/Logo/I_Beta.csav" );
 	m_pLogo[ 3 ].Set_Position( D3DXVECTOR3(-10.0f, 0.0f,-10.0f ) );
-	m_pLogo[ 3 ].Set_Angle( D3DXToRadian( 0.0f ) );
+	//m_pLogo[ 3 ].Set_Angle( MTP_FUN::Deg2Rad<0>::radians ); //D3DXToRadian( 0.0f ) );
 	m_pLogo[ 3 ].EnableShadow( FALSE );
 
 	m_pLogo[ 4 ].Create( m_pD3dDevice );
 	m_pLogo[ 4 ].Load( L"Data/Logo/N_Beta.csav" );
 	m_pLogo[ 4 ].Set_Position( D3DXVECTOR3(-30.0f, 0.0f,-5.0f ) );
-	m_pLogo[ 4 ].Set_Angle( D3DXToRadian( 7.5f ) );
+	m_pLogo[ 4 ].Set_Angle( MTP_FUN::Deg2Rad<15>::radians ); // D3DXToRadian( 7.5f ) );
 	m_pLogo[ 4 ].EnableShadow( FALSE );
 
 	m_pLogo[ 5 ].Create( m_pD3dDevice );
 	m_pLogo[ 5 ].Load( L"Data/Logo/E_Beta.csav" );
 	m_pLogo[ 5 ].Set_Position( D3DXVECTOR3(-50.0f, 0.0f, 0.0f ) );
-	m_pLogo[ 5 ].Set_Angle( D3DXToRadian( 195.0f ) );
+	m_pLogo[ 5 ].Set_Angle( MTP_FUN::Deg2Rad<195>::radians ); //D3DXToRadian( 195.0f ) );
 	m_pLogo[ 5 ].EnableShadow( FALSE );
 
 	//	Create Tree

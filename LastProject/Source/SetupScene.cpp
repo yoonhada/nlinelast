@@ -33,9 +33,9 @@ VOID SetupScene::Update()
 	m_pSetupGUI->Command( dID );
 	switch( dID )
 	{
-	case GUIBTN_OPTION_SETUP:
+	case OPTION_SETUP:
 		break;
-	case GUIBTN_OPTION_HELP:
+	case OPTION_HELP:
 		break;
 	}
 }

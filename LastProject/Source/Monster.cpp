@@ -46,6 +46,7 @@ VOID CMonster::Clear()
 	m_fTargetDistance = 0.0f;
 
 	m_pPath = NULL;
+	m_pBox = NULL;
 }
 
 HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )

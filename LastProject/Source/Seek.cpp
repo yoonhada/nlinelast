@@ -85,10 +85,10 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		static FLOAT ex = 0;
 		static FLOAT ez = 0;
 		
-		sx = StartX;
-		sz = StartZ;
-		ex = EndX;
-		ez = EndZ;
+		sx = (FLOAT)StartX;
+		sz = (FLOAT)StartZ;
+		ex = (FLOAT)EndX;
+		ez = (FLOAT)EndZ;
 
 		CDebugInterface::GetInstance()->AddMessageFloat( "sx", sx );
 		CDebugInterface::GetInstance()->AddMessageFloat( "sz", sz );

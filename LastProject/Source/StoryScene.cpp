@@ -34,7 +34,7 @@ VOID StoryScene::Update()
 	m_pStoryGUI->Command( dID );
 	switch( dID )
 	{
-	case GUIBTN_STORY_SKIP:
+	case STORY_SKIP:
 		bEndStory = m_pStoryGUI->NextBackgroundImage();
 		break;
 	}

@@ -56,14 +56,14 @@ VOID LoginGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgDown, L"Img\\LoginScene\\Go_Down.png" );
 	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\LoginScene\\Go_Down.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_LOGIN_GO, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
+	m_pGUIBtnManager->Create( LOGIN_GO, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
 
 	fX		= m_fX + m_fWidth - 60.0f;
 	fY		= m_fY + 10.0f;
 	fWidth	= 50.0f;
 	fHeight = 50.0f;
 
-	m_pGUIBtnManager->Create( GUIBTN_LOGIN_EXIT, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
+	m_pGUIBtnManager->Create( LOGIN_EXIT, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
 }
 
 VOID LoginGUI::CreateEdit()

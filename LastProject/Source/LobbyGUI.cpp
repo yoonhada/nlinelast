@@ -68,8 +68,8 @@ VOID LobbyGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgStartDown, L"Img\\LobbyScene\\Start_Down.png" );
 	m_pGUIBase->AddFileName( 0, imgStartDisable, L"Img\\LobbyScene\\Start_Disable.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_START, 0, fX, fY, fWidth,fHeight, imgStartNormal, imgStartHot, imgStartDown, imgStartDisable );
-	m_pGUIBtnManager->Enable( GUIBTN_LOBBY_START, FALSE );
+	m_pGUIBtnManager->Create( LOBBY_START, 0, fX, fY, fWidth,fHeight, imgStartNormal, imgStartHot, imgStartDown, imgStartDisable );
+	m_pGUIBtnManager->Enable( LOBBY_START, FALSE );
 
 	// End Button
 	GUIBase::IMAGEPARAM imgEndNormal, imgEndHot, imgEndDown, imgEndDisable;
@@ -84,7 +84,7 @@ VOID LobbyGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgEndDown, L"Img\\LobbyScene\\Back_Down.png" );
 	m_pGUIBase->AddFileName( 0, imgEndDisable, L"Img\\LobbyScene\\Back_Down.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_BACK, 0, fX, fY, fWidth,fHeight, imgEndNormal, imgEndHot, imgEndDown, imgEndDisable );
+	m_pGUIBtnManager->Create( LOBBY_BACK, 0, fX, fY, fWidth,fHeight, imgEndNormal, imgEndHot, imgEndDown, imgEndDisable );
 
 	//	Character Select
 	GUIBase::IMAGEPARAM imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable;
@@ -99,16 +99,16 @@ VOID LobbyGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgSelectDown, L"Img\\LobbyScene\\Select_Normal.png" );
 	m_pGUIBase->AddFileName( 0, imgSelectDisable, L"Img\\LobbyScene\\Select_Normal.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_1, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	m_pGUIBtnManager->Create( LOBBY_SELECT_1, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
 	fX += 310.0f;
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_2, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	m_pGUIBtnManager->Create( LOBBY_SELECT_2, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
 	fX += 310.0f;
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_3, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	m_pGUIBtnManager->Create( LOBBY_SELECT_3, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
 	fX += 310.0f;
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_SELECT_4, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	m_pGUIBtnManager->Create( LOBBY_SELECT_4, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
 	//	Ready
 	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable;
@@ -123,7 +123,7 @@ VOID LobbyGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgReadyDown, L"Img\\LobbyScene\\quote-Down.png" );
 	m_pGUIBase->AddFileName( 0, imgReadyDisable, L"Img\\LobbyScene\\quote-Disable.png" );
 
-	m_pGUIBtnManager->Create( GUIBTN_LOBBY_READY, 1, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable );
+	m_pGUIBtnManager->Create( LOBBY_READY, 1, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable );
 }
 
 VOID LobbyGUI::CreateEdit()

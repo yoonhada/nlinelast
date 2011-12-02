@@ -223,14 +223,14 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		{
 			// 케릭터 선택 
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelectNumber;
-			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_DOWN );
+			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, DOWN );
 		}
 		else
 		{
 			// 케릭터 선택 실패.. 회전 제거.
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
 			pOM->GetLobbyScene()->DisableRotate( wSelectNumber );
-			pOM->GetLobbyScene()->ChangeStateButton( GUIBTN_LOBBY_READY, GUIBTN_NORMAL );
+			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, UP );
 		}
 	}
 	else 
@@ -268,13 +268,13 @@ VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
 	if ( bStart )
 	{
 #ifdef _DEBUG
-		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, TRUE );
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( LOBBY_START, TRUE );
 #endif // _DEBUG
 	}
 	else
 	{
 #ifdef _DEBUG
-		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, FALSE );
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( LOBBY_START, FALSE );
 #endif // _DEBUG
 	}
 }
@@ -347,7 +347,7 @@ VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
 
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
-		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( GUIBTN_LOBBY_START, FALSE );
+		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( LOBBY_START, FALSE );
 	}
 	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
 }
