@@ -34,10 +34,12 @@ VOID Battle::Execute( CMonster* a_pMonster )
 
 	FLOAT fDistance = a_pMonster->Get_TargetDistance();
 
+#ifdef _DEBUG
 	// 타겟 번호
-	static FLOAT target;
+	static FLOAT target = 0;
 	target = static_cast<FLOAT>( a_pMonster->Get_Target() );
 	CDebugInterface::GetInstance()->AddMessageFloat( "target", target );
+#endif
 
 	// 근접 공격범위 안에 들어왔으면 밀리나 회전 공격중 랜덤 선택
 	if( fDistance < 25.0f )

@@ -25,7 +25,15 @@ VOID WaitInterPolation::Execute( CMonster* a_pMonster )
 	// 애니메이션 보간이 끝나면 다시 탐색 상태로
 	if( a_pMonster->Get_ChangingAnimation() == FALSE )
 	{
-		a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+		// 호스트이면 상태를 바꾼다.
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+		}
+		else
+		{
+			a_pMonster->GetFSM()->ChangeState( NULL );
+		}
 	}
 }
 

@@ -26,7 +26,7 @@ VOID Seek::Enter( CMonster* a_pMonster )
 VOID Seek::Execute( CMonster* a_pMonster )
 {
 	INT Target = -1;
-	D3DXVECTOR3 pos;
+	D3DXVECTOR3 pos( 0.0f, 0.0f, 0.0f );
 	FLOAT length = 0.0f;
 	static FLOAT min = 0.0f;
 
@@ -36,10 +36,8 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	{
 		if( pCharactors[i]->Get_Active() )
 		{
-			// 유저 위치 - 보스 몬스터
+			// 몬스터와 유저의 거리를 구한다.
 			pos = pCharactors[i]->Get_CharaPos() - a_pMonster->Get_Pos();
-
-			// 거리 구하기
 			length = D3DXVec3Length( &pos );
 
 			if( i == 0 )
@@ -59,6 +57,12 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		}
 	}
 
+	// 선택된 타겟이 없으면 종료
+	if( Target == -1 )
+	{
+		return;
+	}
+
 	// 가장 가까이에 있는 목표가 공격 범위에 있으면 전투 상태로 전환
 	if( min < 25.0f )
 	{
@@ -70,11 +74,16 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	// 범위에 없으면 가장 가까운 목표 추격
 	else if( min >= 25.0f && min <= 500.0f )
 	{
+		D3DXVECTOR3 vMonsterPos = a_pMonster->Get_Pos();
+		D3DXVECTOR3 vPlayerPos = pCharactors[Target]->Get_CharaPos();
+		D3DXVECTOR3 vEnd = m_pTileMap->GetInfo()->vecEnd;
+		FLOAT fTileSize = m_pTileMap->GetInfo()->fTileSize;
+
 		// 위치를 0, 0 기준으로 맞춘 후 계산한다.
-		INT StartX = INT( a_pMonster->Get_Pos().x + m_pTileMap->GetInfo()->vecEnd.x ) / m_pTileMap->GetInfo()->fTileSize;
-		INT StartZ = INT( -( a_pMonster->Get_Pos().z - m_pTileMap->GetInfo()->vecEnd.z ) ) / m_pTileMap->GetInfo()->fTileSize;
-		INT EndX = INT( pCharactors[Target]->Get_CharaPos().x + m_pTileMap->GetInfo()->vecEnd.x ) / m_pTileMap->GetInfo()->fTileSize;
-		INT EndZ = INT( -( pCharactors[Target]->Get_CharaPos().z - m_pTileMap->GetInfo()->vecEnd.z ) ) / m_pTileMap->GetInfo()->fTileSize;
+		INT StartX	= INT( ( vMonsterPos.x + vEnd.x ) / fTileSize );
+		INT StartZ	= INT( ( vEnd.z - vMonsterPos.z ) / fTileSize );
+		INT EndX	= INT( ( vPlayerPos.x + vEnd.x )  / fTileSize );
+		INT EndZ	= INT( ( vEnd.z - vPlayerPos.z )  / fTileSize );
 
 #ifdef _DEBUG
 		static FLOAT sx = 0;
@@ -108,6 +117,8 @@ VOID Seek::Execute( CMonster* a_pMonster )
 
 		// 새 Path를 표시한다.
 		SetPath( path );
+
+		CDebugInterface::GetInstance()->AddMessageFloat( "length", min );
 #endif
 
 		a_pMonster->Set_Path( path );
@@ -122,8 +133,6 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	{
 //		a_pMonster->ChangeAnimation( 0 );
 	}
-
-	CDebugInterface::GetInstance()->AddMessageFloat( "length", min );
 }
 
 

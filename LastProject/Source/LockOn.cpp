@@ -69,19 +69,15 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	D3DXVECTOR3 vPlayerPos	= CObjectManage::GetInstance()->Get_Charactors()[a_pMonster->Get_Target()]->Get_CharaPos();
 	D3DXVECTOR3 vMonsterPos	= a_pMonster->Get_Pos();
 
-	// 이웃변
-	FLOAT x = vPlayerPos.x - vMonsterPos.x;
-	// 대변
-	FLOAT z = vPlayerPos.z - vMonsterPos.z;
-	
-//	if( x == 0.0f )		x = 1.0f;
-//	if( z == 0.0f )		z = 1.0f;
+	// 이웃변, 대변
+	FLOAT fX = vPlayerPos.x - vMonsterPos.x;
+	FLOAT fZ = vPlayerPos.z - vMonsterPos.z;
 
 	static FLOAT w = 0;
 
 	// 각을 구한다.
 	static FLOAT fAngle = 0.0f;
-	fAngle = D3DXToDegree( (FLOAT)atan( z / x ) );
+	fAngle = D3DXToDegree( (FLOAT)atan( fZ / fX ) );
 
 	// DX 방식으로 계산하기 위해 변환한다. 3시부터 시계방향
 	//          |
@@ -117,6 +113,7 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 		w = 4;
 	}
 
+#ifdef _DEBUG
 	// 몬스터 기준 플레이어 각 ( +x축이 0도, CW가 +각도)
 	CDebugInterface::GetInstance()->AddMessageFloat( "Player_Angle", fAngle );
 
@@ -132,6 +129,7 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	static FLOAT fMonsterAngle = 0.0f;
 	fMonsterAngle = D3DXToDegree( a_pMonster->Get_Angle() );
 	CDebugInterface::GetInstance()->AddMessageFloat( "Monster_Angle", fMonsterAngle );
+#endif
 
 	// 0˚가 90˚방향으로 보고 있으므로 -90˚해서 방향을 맞춘다.
 	// 0˚~ 360˚사이의 값이 되도록 변환한다.
@@ -154,7 +152,6 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 	if( isInSight() )
 	{
 		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
-//		a_pMonster->GetFSM()->GetCurrentState()->Enter( a_pMonster );
 	}
 }
 
