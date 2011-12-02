@@ -308,7 +308,7 @@ VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
 	m_vMove = D3DXVECTOR3( x, 0.0f, z );
 
 	CCharactor ** pCharactors = CObjectManage::GetInstance()->Get_Charactors();
-	for( INT Loop = 1; Loop < 4; ++Loop )
+	for( INT Loop = 0; Loop < 4; ++Loop )
 	{
 		if( pCharactors[Loop]->Get_ClientNumber() == number  )
 		{
