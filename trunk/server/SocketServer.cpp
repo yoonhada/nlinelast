@@ -64,7 +64,7 @@ BOOL CSocketServer::Initialize()
 
 VOID CSocketServer::Clear()
 {
-	m_bHostClient = FALSE;
+	m_bExistHost = FALSE;
 	m_pHostClient = NULL;
 
 	m_iClientCount = 0;
@@ -200,7 +200,7 @@ VOID CSocketServer::OnClientClose( CNTClient* pClient )
 	// 접속 종료한게 호스트이면 호스트 재설정
 	if( pClient->m_bHost == TRUE )
 	{
-		m_bHostClient = FALSE;
+		m_bExistHost = FALSE;
 
 		INT iSize = m_Map_LogonClients.size();
 
@@ -216,7 +216,7 @@ VOID CSocketServer::OnClientClose( CNTClient* pClient )
 			map<WORD, CNTClient*>::iterator it = m_Map_LogonClients.begin();
 			it->second->Send( sendPk );
 
-			m_bHostClient = TRUE;
+			m_bExistHost = TRUE;
 		}
 	}
 
@@ -266,13 +266,26 @@ VOID CSocketServer::SC_INITDATA( CNTClient* pClient )
 	static FLOAT x = -100.0f;
 	static FLOAT z = 600.0f;
 
+	// 호스트가 있는지 확인
+	if( m_bExistHost == FALSE )
+	{
+		m_bExistHost = TRUE;
+		m_pHostClient = pClient;
+		m_pHostClient->m_bHost = TRUE;
+	}
+	else
+	{
+		m_bExistHost = FALSE;
+		pClient->m_bHost = FALSE;
+	}
+
 	CPacket pk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_INITDATA;
 
 	pk.Write( wMsgSize );
 	pk.Write( wMsgID );
-	pk.Write( m_bHostClient );
+	pk.Write( pClient->m_bHost );
 	pk.Write( pClient->m_Index );
 	pk.Write( m_iClientCount - 1 );
 
@@ -295,18 +308,6 @@ VOID CSocketServer::SC_INITDATA( CNTClient* pClient )
 	pk.CalcSize();
 
 	pClient->Send( pk );
-
-	// 호스트 상태 설정
-	if( m_bHostClient == FALSE )
-	{
-		m_pHostClient = pClient;
-		m_bHostClient = TRUE;
-		pClient->m_bHost = TRUE;
-	}
-	else
-	{
-		pClient->m_bHost = FALSE;
-	}
 }
 
 
@@ -406,6 +407,7 @@ VOID CSocketServer::CS_GAME_START( CNTClient* pClient, CPacket& a_pk )
 {
 	a_pk.Rewind();
 
+	pClient->Send( a_pk );
 	SendToClient( pClient, a_pk );
 }
 
@@ -429,7 +431,7 @@ VOID CSocketServer::CS_Chat( CNTClient* pClient, CPacket& pk )
 }
 
 
-VOID CSocketServer::CS_Move( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_Player_Move( CNTClient* pClient, CPacket& pk )
 {
 /*
 	WORD wClientNumber;
@@ -456,7 +458,14 @@ VOID CSocketServer::CS_Move( CNTClient* pClient, CPacket& pk )
 	SendToClient( pClient, sendPk );
 */
 	pk.Rewind();
-	pClient->Send( pk );
+	SendToClient( pClient, pk );
+}
+
+
+VOID CSocketServer::CS_Monster_Move( CNTClient* pClient, CPacket& pk )
+{
+	pk.Rewind();
+	SendToClient( pClient, pk );
 }
 
 
@@ -520,7 +529,6 @@ VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 	sendPk.CalcSize();
 */
 	pk.Rewind();
-	// 클라이언트들에게 패킷을 보낸다.
 	SendToClient( pClient, pk );
 
 #ifdef _DEBUG_
@@ -601,14 +609,24 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 		CS_READY( pClient, pk );
 		break;
 
+	// 게임 스타트
+	case MSG_GAME_START:
+		CS_GAME_START( pClient, pk );
+		break;
+
 	// 채팅
 	case MSG_CHAT:
 		CS_Chat( pClient, pk );
 		break;
 
-	// 이동
-	case MSG_MOVE:
-		CS_Move( pClient, pk );
+	//  유저 이동
+	case MSG_PLAYER_MOVE:
+		CS_Player_Move( pClient, pk );
+		break;
+
+	// 몬스터 이동
+	case MSG_MONSTER_MOVE:
+		CS_Monster_Move( pClient, pk );
 		break;
 
 	// 공격 : 유저 -> 몬스터

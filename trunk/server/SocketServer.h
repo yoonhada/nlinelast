@@ -15,8 +15,8 @@ public:
 	HANDLE	m_hIOCPThread;
 
 	CNTClient* m_pHostClient;
+	BOOL	m_bExistHost;
 	INT		m_iClientCount;
-	BOOL	m_bHostClient;
 	INT		m_iReadyCount;
 	WORD	m_wUserNumber[4];
 	BOOL	m_bSelected[4];
@@ -42,7 +42,8 @@ public:
 	VOID CS_READY( CNTClient* pClient, CPacket& a_pk );
 	VOID CS_GAME_START( CNTClient* pClient, CPacket& a_pk );
 	VOID CS_Chat( CNTClient* pClient, CPacket& pk );
-	VOID CS_Move( CNTClient* pClient, CPacket& pk );
+	VOID CS_Player_Move( CNTClient* pClient, CPacket& pk );
+	VOID CS_Monster_Move( CNTClient* pClient, CPacket& pk );
 	VOID CS_UTOM_Attack( CNTClient* pClient, CPacket& pk );
 	VOID CS_MTOU_Attack( CNTClient* pClient, CPacket& pk );
 	VOID CS_Attack_Animation( CNTClient* pClient, CPacket& pk );
