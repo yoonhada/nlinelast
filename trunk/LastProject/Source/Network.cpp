@@ -749,7 +749,7 @@ VOID CNetwork::SC_Monster_LockOn( CPacket& a_pk )
 	a_pk.Read( &wMonsterNumber );
 	a_pk.Read( &fAngle );
 
-	CObjectManage::GetInstance()->Get_Monster()->Set_Angle( fAngle );
+	CObjectManage::GetInstance()->Get_Monster()->Set_Angle( D3DXToRadian( fAngle ) );
 }
 
 
