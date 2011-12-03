@@ -71,9 +71,6 @@ private:
 	TreeNode*	insertNode( TreeNode* a_p, TreeNode* a_node );
 	VOID		removeTree( TreeRoot* a_pRoot );
 	VOID		deleteNode( TreeNode* a_pNode );
-
-	/*Path*/
-	PathNode*	createPath( INT a_iX, INT a_iY );	
 	
 	/*Astar*/	
 	VOID		openMap( INT bx, INT by, INT vx, INT vy );
@@ -93,6 +90,8 @@ public:
 	PathNode*	findPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy );
 	PathNode*	getPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy );
 
+	/*Path*/
+	PathNode*	createPath( INT a_iX, INT a_iY );
 	VOID		removePath( PathNode* a_pPath );
 };
 
