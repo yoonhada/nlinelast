@@ -46,7 +46,9 @@ public:
 	VOID CS_Monster_Move( CNTClient* pClient, CPacket& pk );
 	VOID CS_UTOM_Attack( CNTClient* pClient, CPacket& pk );
 	VOID CS_MTOU_Attack( CNTClient* pClient, CPacket& pk );
-	VOID CS_Attack_Animation( CNTClient* pClient, CPacket& pk );
+	VOID CS_Player_Attack_Animation( CNTClient* pClient, CPacket& pk );
+	VOID CS_Monster_Attack_Animation( CNTClient* pClient, CPacket& pk );
+	VOID CS_Monster_LockOn( CNTClient* pClient, CPacket& pk );
 
 	VOID SC_INITDATA( CNTClient* pClient );
 	VOID SC_Disconnect( CNTClient* pClient );

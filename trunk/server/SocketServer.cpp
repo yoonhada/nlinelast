@@ -250,7 +250,7 @@ VOID CSocketServer::CS_Logon( CNTClient* pClient, CPacket& pk )
 	// 다른 유저들에게 보낼 패킷을 만든다.
 	CPacket sendpk;
 	WORD wMsgSize = 0;
-	WORD wMsgType = MSG_NEWUSER;
+	WORD wMsgType = MSG_ADD_USER;
 	sendpk.Write( wMsgSize );
 	sendpk.Write( wMsgType );
 	sendpk.Write( pClient->m_Index );
@@ -537,7 +537,16 @@ VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 }
 
 
-VOID CSocketServer::CS_Attack_Animation( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_MTOU_Attack( CNTClient* pClient, CPacket& pk )
+{
+	pk.Rewind();
+
+	SendToClient( pClient, pk );
+	cout << "MTOU Attack send" << endl;
+}
+
+
+VOID CSocketServer::CS_Player_Attack_Animation( CNTClient* pClient, CPacket& pk )
 {
 /*
 	WORD wClientNumber;
@@ -562,18 +571,27 @@ VOID CSocketServer::CS_Attack_Animation( CNTClient* pClient, CPacket& pk )
 	sendPk.CalcSize();
 */
 	pk.Rewind();
-	// 클라이언트들에게 패킷을 보낸다.
 	SendToClient( pClient, pk );
-	cout << "Attack Ani send" << endl;
+
+	cout << "Player Attack Ani send" << endl;
 }
 
 
-VOID CSocketServer::CS_MTOU_Attack( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_Monster_Attack_Animation( CNTClient* pClient, CPacket& pk )
 {
 	pk.Rewind();
-	
 	SendToClient( pClient, pk );
-	cout << "MTOU Attack send" << endl;
+
+	cout << "Monster Attack Ani send" << endl;
+}
+
+
+VOID CSocketServer::CS_Monster_LockOn( CNTClient* pClient, CPacket& pk )
+{
+	pk.Rewind();
+	SendToClient( pClient, pk );
+
+	cout << "Monster LockOn send" << endl;
 }
 
 
@@ -634,14 +652,24 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 		CS_UTOM_Attack( pClient, pk );
 		break;
 
-	// 공격 : 유저 -> 몬스터
-	case MSG_ATTACK_ANIMATION:
-		CS_Attack_Animation( pClient, pk );
-		break;
-
 	// 공격 : 몬스터 -> 유저
 	case MSG_MTOU_ATTACK:
 		CS_MTOU_Attack( pClient, pk );
+		break;
+
+	// 유저 애니메이션
+	case MSG_PLAYER_ATTACK_ANIMATION:
+		CS_Player_Attack_Animation( pClient, pk );
+		break;
+
+	// 몬스터 애니메이션
+	case MSG_MONSTER_ATTACK_ANIMATION:
+		CS_Monster_Attack_Animation( pClient, pk );
+		break;
+
+	// 몬스터 각도
+	case MSG_MONSTER_LOCKON:
+		CS_Monster_LockOn( pClient, pk );
 		break;
 	}
 }
