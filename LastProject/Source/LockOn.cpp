@@ -146,12 +146,16 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 
 	if( fMonsterAngle != fAngle )
 	{	
+		CNetwork::GetInstance()->CS_Monster_LockOn( 0, f );
+
 		a_pMonster->Set_Angle( D3DXToRadian( f )  );
 	}
 
 	// 공격 각도내에 들어왔으면
 	if( isInSight() )
 	{
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation( 0, 1 );
+
 		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
 }
