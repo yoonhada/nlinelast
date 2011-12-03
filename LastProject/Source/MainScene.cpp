@@ -77,7 +77,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//이벤트
 	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
-	m_pGameEvent = new CGameEvent( nMaxCharaNum );
+	m_pGameEvent = new CGameEvent( nMaxCharaNum, this );
 	m_pGameEvent->Create();
 
 	//맵 생성
@@ -97,10 +97,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	//m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
-	m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
-	m_pMonster->Set_Angle( 0.0f );
-	m_pMonster->Set_iSelectedFrameNum( 0 );
-	m_pMonster->EnableShadow( TRUE );
 
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
@@ -126,20 +122,20 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
 
-	if( CObjectManage::GetInstance()->IsHost() == TRUE )
-	{
-		// a
-		m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
-	}
-	else
-	{
-		m_pMonster->GetFSM()->SetCurrentState( NULL );
-	}
+	m_pMonster->GetFSM()->SetCurrentState( NULL );
 
 	CInput::GetInstance()->EnableInput(FALSE);
 
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 
+	m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
+	m_pMonster->Set_Angle( 0.0f );
+	m_pMonster->Set_iSelectedFrameNum( 0 );
+	m_pMonster->EnableShadow( TRUE );
+	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	{
+	m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
+	}
 	return S_OK;
 }
 
@@ -191,9 +187,9 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::Update()
 {
-	//m_pGameEvent->Update()
-	CCharactor * pChar;
+	m_pGameEvent->Update();
 
+	CCharactor * pChar;
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
 
 	// 캐릭터: 인풋 값 받아오기

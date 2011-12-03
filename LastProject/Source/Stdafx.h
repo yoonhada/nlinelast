@@ -6,7 +6,6 @@
 #pragma comment( lib, "d3d9.lib" )
 #pragma comment( lib, "d3dx9.lib" )
 
-
 // Window 라이브러리
 #pragma comment ( lib, "winmm.lib" )
 #pragma comment( lib, "ws2_32.lib" )
@@ -29,7 +28,7 @@
 //#include <CommCtrl.h>
 //#include <process.h>
 
-//#include <list>
+#include <list>
 #include <vector>
 #include <algorithm>
 //#include <string>

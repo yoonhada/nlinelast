@@ -7,17 +7,17 @@
 
 #include "stdafx.h"
 #include "GameEvent.h"
+#include "MainScene.h"
 
 CGameEvent::CGameEvent( )
 : m_iMaxCharaNum ( 4 )
-, m_pPosition( 0 )
 {
 	Clear();
 }
 
-CGameEvent::CGameEvent(INT nMaxChar)
+CGameEvent::CGameEvent(INT nMaxChar, CMainScene * pScen )
 : m_iMaxCharaNum ( nMaxChar )
-, m_pPosition( 0 )
+, m_pScen( pScen )
 {
 	Clear();
 }
@@ -49,6 +49,8 @@ HRESULT CGameEvent::Release()
 
 VOID CGameEvent::Clear()
 {
+	m_pCurrentEvent = NULL;
+
 	m_bHost = FALSE;
 	m_iMaxCharaNum = 0;
 	
@@ -56,9 +58,7 @@ VOID CGameEvent::Clear()
 	m_pShotedPoint = NULL;
 
 	m_nHPMonstor = 0;
-	m_nGameEvent = 0;
 
-	SAFE_DELETE_ARRAY( m_pPosition );
 	m_pPosition = new D3DXVECTOR3[4];
 	m_pPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 650.0f);
 	m_pPosition[1] = D3DXVECTOR3(-120.0f, 0.0f, 650.0f);

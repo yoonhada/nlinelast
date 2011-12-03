@@ -6,12 +6,20 @@
 */
 
 #pragma once
+class CMainScene;
 
 class CGameEvent : public IObject
 {
-public:
+private:
+	typedef struct _EVENT
+	{
+		FLOAT fTime;
+		INT nKind;
+	} EVENT;
+
 	// Host
 	BOOL m_bHost;
+	CMainScene * m_pScen;
 
 	// Const 
 	D3DXVECTOR3 * m_pPosition;
@@ -25,11 +33,12 @@ public:
 	INT m_nHPMonstor;
 	
 	// Event
-	INT m_nGameEvent;
+	std::list<EVENT*> m_ListEvent;
+	EVENT * m_pCurrentEvent;
 
 public:
 	CGameEvent();
-	CGameEvent( INT );
+	CGameEvent( INT, CMainScene *);
 	virtual ~CGameEvent();
 
 	VOID Clear();
