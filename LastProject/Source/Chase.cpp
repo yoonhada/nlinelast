@@ -71,7 +71,17 @@ VOID Chase::Execute( CMonster* a_pMonster )
 		m_pNextPath = m_pNextPath->next;
 		if( m_pNextPath->remainedNode <= 0 )
 		{
-			a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+			if( CObjectManage::GetInstance()->IsHost() == TRUE )
+			{
+				a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+			}
+			else
+			{
+				// Path Á¦°Å
+				Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
+
+				a_pMonster->GetFSM()->ChangeState( NULL );
+			}
 		}
 		else
 		{
@@ -186,3 +196,5 @@ D3DXVECTOR3 Chase::GetWorldPos( INT a_iX, INT a_iZ )
 
 	return pos;
 }
+
+
