@@ -10,38 +10,12 @@ class CNetwork : public CSingleton<CNetwork>
 public:
 	enum MESSAGE_ID
 	{
-/*
-		MSG_START = 0,
-		MSG_CS_LOGON,
-		MSG_CS_CHAT,
-		MSG_CS_MOVE,
-		MSG_MOVE,
-		MSG_UTOM_ATTACK,
-		MSG_MTOU_ATTACK,
-		MSG_CS_UTOM_ATTACK,
-		MSG_CS_MTOU_ATTACK,
-		MSG_CS_UTOM_ATTACK_ANIMATION,
-		MSG_CS_MTOU_ATTACK_ANIMATION,
-		///
-		///
-		MSG_SC_LOGON = 100,
-		MSG_SC_INITDATA,
-		MSG_SC_NEWUSER,
-		MSG_SC_CHAT,
-		MSG_SC_MOVE,
-		MSG_SC_UTOM_ATTACK,
-		MSG_SC_MTOU_ATTACK,
-		MSG_SC_UTOM_ATTACK_ANIMATION,
-		MSG_SC_MTOU_ATTACK_ANIMATION,
-		MSG_SC_DISCONNECT,
-		MSG_END,
-*/
 		MSG_START = 0,
 
 		MSG_LOGON,
 		MSG_INITDATA,
 		MSG_CHANGE_HOST,
-		MSG_NEWUSER,
+		MSG_ADD_USER,
 		MSG_READY,
 		MSG_ENABLE_START,
 		MSG_GAME_START,
@@ -54,7 +28,9 @@ public:
 		MSG_UTOM_ATTACK,
 		MSG_MTOU_ATTACK,
 
-		MSG_ATTACK_ANIMATION,
+		MSG_PLAYER_ATTACK_ANIMATION,
+		MSG_MONSTER_ATTACK_ANIMATION,
+		MSG_MONSTER_LOCKON,
 
 		MSG_END,
 	};
@@ -94,7 +70,7 @@ public:
 	// Server -> Client
 	VOID SC_LOGON( CPacket& a_pk );
 	VOID SC_InitData( CPacket& a_pk );
-	VOID SC_NEWUSER( CPacket& a_pk );
+	VOID SC_ADD_USER( CPacket& a_pk );
 	VOID SC_CHANGE_HOST( CPacket& a_pk );
 	VOID SC_READY( CPacket& a_pk );
 	VOID SC_ENABLE_START( CPacket& a_pk );
@@ -107,7 +83,9 @@ public:
 	VOID SC_MTOU_ATTACK( CPacket& a_pk );
 	VOID SC_DISCONNECT( CPacket& a_pk );
 
-	VOID SC_Attack_Animation( CPacket& a_pk );
+	VOID SC_Player_Attack_Animation( CPacket& a_pk );
+	VOID SC_Monster_Attack_Animation( CPacket& a_pk );
+	VOID SC_Monster_LockOn( CPacket& a_pk );
 
 	// Client -> Server
 	VOID CS_LOGON( LPWSTR a_szNickName );
@@ -120,8 +98,9 @@ public:
 	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
 	VOID CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );
 
-	VOID CS_Attack_Animation( WORD a_wAnimationNumber );
-	
+	VOID CS_Player_Attack_Animation( WORD a_wAnimationNumber );
+	VOID CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnimationNumber );
+	VOID CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle );
 
 	VOID UpdateLobby();
 	VOID UpdateGame();

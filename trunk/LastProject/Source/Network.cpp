@@ -7,6 +7,9 @@
 #include "MainScene.h"
 #include "LobbyScene.h"
 #include "Chase.h"
+#include "Melee.h"
+#include "Spin.h"
+#include "Dash.h"
 
 
 CNetwork::CNetwork()
@@ -343,7 +346,7 @@ VOID CNetwork::SC_MONSTER_MOVEMENT( CPacket& a_pk )
 
 
 //추가 유저 접속시
-VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
+VOID CNetwork::SC_ADD_USER( CPacket& a_pk )
 {
 	// 유저 접속 처리
 	WORD wNumber;
@@ -646,11 +649,11 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 }
 
-VOID CNetwork::CS_Attack_Animation( WORD a_wAnimationNumber )
+VOID CNetwork::CS_Player_Attack_Animation( WORD a_wAnimationNumber )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_ATTACK_ANIMATION;
+	WORD wMsgID = MSG_PLAYER_ATTACK_ANIMATION;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -659,14 +662,48 @@ VOID CNetwork::CS_Attack_Animation( WORD a_wAnimationNumber )
 
 	sendPk.CalcSize();
 
-	CDebugConsole::GetInstance()->Messagef("MSG_CS_UTOM_ATTACK_ANIMATION : %d - %d\n", CObjectManage::GetInstance()->Get_ClientNumber(), a_wAnimationNumber);
-
 	SendToServer( sendPk );
-	CDebugConsole::GetInstance()->Messagef( L"****ATK ANI\n" );
+	CDebugConsole::GetInstance()->Messagef( L"Player ATK ANI send \n" );
 }
 
 
-VOID CNetwork::SC_Attack_Animation( CPacket& a_pk )
+VOID CNetwork::CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnimationNumber )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_MONSTER_ATTACK_ANIMATION;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_wMonsterNumber );
+	sendPk.Write( a_wAnimationNumber );
+
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
+	CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI send \n" );
+}
+
+
+VOID CNetwork::CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_MONSTER_LOCKON;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_wMonsterNumber );
+	sendPk.Write( a_fAngle );
+
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
+	CDebugConsole::GetInstance()->Messagef( L"Monster LockOn send \n ");
+}
+
+
+VOID CNetwork::SC_Player_Attack_Animation( CPacket& a_pk )
 {
 	WORD wClientNumber;
 	WORD wAnimationNumber;
@@ -678,6 +715,41 @@ VOID CNetwork::SC_Attack_Animation( CPacket& a_pk )
 	CCharactor& rChar = pOM->Get_Charactor()[ pOM->Get_CharTable( wClientNumber ) ];
 	
 	rChar.Set_WeaponAnimationState( wAnimationNumber );
+}
+
+
+VOID CNetwork::SC_Monster_Attack_Animation( CPacket& a_pk )
+{
+	WORD wMonsterNumber;
+	WORD wAnimationNumber;
+
+	a_pk.Read( &wMonsterNumber );
+	a_pk.Read( &wAnimationNumber );
+
+	if( wAnimationNumber == 1 )
+	{
+		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Melee::GetInstance() );
+	}
+	else if( wAnimationNumber == 2 )
+	{
+		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Spin::GetInstance() );
+	}
+	else if( wAnimationNumber == 3 )
+	{
+		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Dash::GetInstance() );
+	}
+}
+
+
+VOID CNetwork::SC_Monster_LockOn( CPacket& a_pk )
+{
+	WORD wMonsterNumber;
+	FLOAT fAngle;
+
+	a_pk.Read( &wMonsterNumber );
+	a_pk.Read( &fAngle );
+
+	CObjectManage::GetInstance()->Get_Monster()->Set_Angle( fAngle );
 }
 
 
@@ -715,8 +787,8 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		break;
 
 	// 새로운 유저 추가
-	case MSG_NEWUSER:
-		SC_NEWUSER( a_pk );
+	case MSG_ADD_USER:
+		SC_ADD_USER( a_pk );
 		break;
 
 	// 호스트 변경
@@ -769,9 +841,19 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		SC_MTOU_ATTACK( a_pk );
 		break;
 
-	// 공격 애니메이션
-	case MSG_ATTACK_ANIMATION:
-		SC_Attack_Animation( a_pk );
+	// 유저 공격 애니메이션
+	case MSG_PLAYER_ATTACK_ANIMATION:
+		SC_Player_Attack_Animation( a_pk );
+		break;
+
+	// 몬스터 공격 애니메이션
+	case MSG_MONSTER_ATTACK_ANIMATION:
+		SC_Monster_Attack_Animation( a_pk );
+		break;
+
+	// 몬스터 각도
+	case MSG_MONSTER_LOCKON:
+		SC_Monster_LockOn( a_pk );
 		break;
 	}
 }
