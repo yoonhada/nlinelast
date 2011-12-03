@@ -163,7 +163,7 @@ VOID LobbyScene::Update()
 	//	ActivateRotate( 3 );
 	//	break;
 	}
-
+/*
 	if( GetKeyState( '1' ) & 0x8000 )
 		ChangeStateButton( GUIBTN_LOBBY_START, GUIBTN_NORMAL );
 	if( GetKeyState( '2' ) & 0x8000 )
@@ -172,7 +172,7 @@ VOID LobbyScene::Update()
 		DisableRotate( 2 );
 	if( GetKeyState( '4' ) & 0x8000 )
 		DisableRotate( 3 );
-	
+*/	
 	if( m_fChrRotate > 3140000.0f )
 		m_fChrRotate = 3.14f;
 

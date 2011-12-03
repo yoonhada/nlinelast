@@ -6,6 +6,7 @@
 #include "Monster.h"
 #include "MainScene.h"
 #include "LobbyScene.h"
+#include "Chase.h"
 
 
 CNetwork::CNetwork()
@@ -113,7 +114,7 @@ VOID CNetwork::UpdateGame()
 		D3DXVECTOR3 vPos = rChar.Get_CharaPos();
 		FLOAT fAngle = rChar.Get_CharaAngle();
 	
-		CS_MOVEMENT( vPos.x, vPos.z, fAngle );
+		CS_PLAYER_MOVEMENT( vPos.x, vPos.z, fAngle );
 	}
 
 	// 서버로 부터 받은 패킷들을 처리한다.
@@ -742,7 +743,7 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 
 	// 몬스터 이동
 	case MSG_MONSTER_MOVE:
-		CS_MONSTER_MOVEMENT( a_pk );
+		SC_MONSTER_MOVEMENT( a_pk );
 		break;
 
 	// 공격 ( 유저 -> 몬스터 )

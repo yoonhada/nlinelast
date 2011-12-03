@@ -61,8 +61,8 @@
 #include "Input.h"
 #include "Mouse.h"
 #include "DebugInterface.h"
-#include "Network.h"
 #include "Astar.h"
+#include "Network.h"
 
 // None Sigleton Module
 #include "Light.h"
