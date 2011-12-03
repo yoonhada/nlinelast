@@ -307,7 +307,9 @@ VOID CNetwork::SC_MONSTER_MOVEMENT( CPacket& a_pk )
 	WORD wMonsterNumber;
 	WORD wPathCount;
 	WORD wX, wY, wRemainedNode;
-	PathNode* pPath = NULL;
+	PathNode* pStartPath = NULL;
+	PathNode* pPrev = NULL;
+	PathNode* ptemp = NULL;
 
 	a_pk.Read( &wMonsterNumber );
 	a_pk.Read( &wPathCount );
@@ -318,13 +320,24 @@ VOID CNetwork::SC_MONSTER_MOVEMENT( CPacket& a_pk )
 		a_pk.Read( &wY );
 		a_pk.Read( &wRemainedNode );
 
-		pPath = Astar::GetInstance()->createPath( wX, wY );
-		pPath->remainedNode = wRemainedNode;
+		ptemp = Astar::GetInstance()->createPath( wX, wY );
+		ptemp->remainedNode = wRemainedNode;
+
+		if( i == 0 )
+		{
+			pStartPath = ptemp;
+			pPrev = ptemp;
+		}
+		else
+		{
+			pPrev->next = ptemp;
+			pPrev = ptemp;
+		}
 	}
 
 	// 몬스터에게 적용한다.
 	CMonster* pMonster = CObjectManage::GetInstance()->Get_Monster();
-	pMonster->Set_Path( pPath );
+	pMonster->Set_Path( pStartPath );
 	pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 }
 
