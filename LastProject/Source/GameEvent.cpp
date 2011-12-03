@@ -7,7 +7,14 @@
 
 #include "stdafx.h"
 #include "GameEvent.h"
+
 #include "MainScene.h"
+#include "Monster.h"
+#include "Charactor.h"
+#include "Weapon.h"
+#include "Seek.h"
+
+using namespace std;
 
 CGameEvent::CGameEvent( )
 : m_iMaxCharaNum ( 4 )
@@ -29,12 +36,12 @@ CGameEvent::~CGameEvent()
 
 HRESULT CGameEvent::Create()
 {
+	m_bHost = CObjectManage::GetInstance()->IsHost();
 	m_pAttackPoint = new INT[4];
 	m_pShotedPoint = new INT[4];
-
-	m_pAttackPoint[0] = m_pAttackPoint[1] = m_pAttackPoint[2] = m_pAttackPoint[3] = 0;
-	m_pShotedPoint[0] = m_pShotedPoint[1] = m_pShotedPoint[2] = m_pShotedPoint[3] = 0;
 	
+	AddEvent( INIT, 0.0f );
+	m_pCurrentEvent = m_listEvent.front();
 	return S_OK;
 }
 
@@ -44,6 +51,14 @@ HRESULT CGameEvent::Release()
 	SAFE_DELETE ( m_pShotedPoint );
 	
 	SAFE_DELETE_ARRAY( m_pPosition );
+
+	for ( Iter = m_listEvent.begin(); Iter != m_listEvent.end( ); Iter++ )
+	{
+		SAFE_DELETE( (*Iter) );
+	}
+	m_listEvent.erase( m_listEvent.begin(), m_listEvent.end() );
+
+
 	return S_OK;
 }
 
@@ -68,13 +83,30 @@ VOID CGameEvent::Clear()
 
 VOID CGameEvent::Update()
 {
-	if (!m_bHost)
+	INT nEvent = NONE;
+	if ( m_bHost && m_pCurrentEvent != NULL)
 	{
-		return;
+		m_pCurrentEvent->fTime -= CFrequency::GetInstance()->getFrametime();
+		if ( m_pCurrentEvent->fTime < 0.0f )
+		{
+			nEvent = m_pCurrentEvent->nKind;
+			m_listEvent.pop_front();
+			SAFE_DELETE( m_pCurrentEvent );
+			if (!m_listEvent.empty())
+			{
+				m_pCurrentEvent = m_listEvent.front();
+			}			
+		}
 	}
 
-	m_pShotedPoint[0] += CTree::GetInstance()->GetCharAtkVector()->size();
-	m_nHPMonstor = CTree::GetInstance()->GetMonsAtkVector()->size();
+	switch ( nEvent )
+	{
+	case INIT:
+		EventInit();
+		break;
+	default:
+		break;
+	}
 }
 
 VOID CGameEvent::Render()
@@ -84,4 +116,45 @@ VOID CGameEvent::Render()
 D3DXVECTOR3& CGameEvent::GetDefaultCharPosition( INT nClient )
 {
 	return m_pPosition[ nClient ];
+}
+
+VOID CGameEvent::AddEvent( EVENTKIND enumKind, FLOAT fTime )
+{
+	BOOL bChk = FALSE;
+
+	for ( Iter = m_listEvent.begin(); Iter != m_listEvent.end( ); Iter++ )
+	{
+		if ( (*Iter)->fTime > fTime )
+		{
+			m_listEvent.insert( Iter, new EVENT( enumKind, fTime ) );
+			bChk = TRUE;
+		}		
+	}
+
+	if ( !bChk )
+	{
+		m_listEvent.push_back( new EVENT( enumKind, fTime ) );
+	}
+}
+
+
+
+VOID CGameEvent::EventInit()
+{
+	// Game Setting
+	m_pScen->m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
+	m_pScen->m_pMonster->Set_Angle( 0.0f );
+	m_pScen->m_pMonster->Set_iSelectedFrameNum( 0 );
+	m_pScen->m_pMonster->EnableShadow( TRUE );
+	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	{
+		m_pScen->m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
+	}
+
+	// Game Point
+	for ( int i = 0; i < 4; ++i )
+	{
+		m_pAttackPoint[i] = 0;
+		m_pShotedPoint[i] = 0;
+	}
 }

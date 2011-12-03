@@ -127,15 +127,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	CInput::GetInstance()->EnableInput(FALSE);
 
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
-
-	m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
-	m_pMonster->Set_Angle( 0.0f );
-	m_pMonster->Set_iSelectedFrameNum( 0 );
-	m_pMonster->EnableShadow( TRUE );
-	if( CObjectManage::GetInstance()->IsHost() == TRUE )
-	{
-	m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
-	}
 	return S_OK;
 }
 

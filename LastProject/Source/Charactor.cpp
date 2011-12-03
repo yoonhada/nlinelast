@@ -55,6 +55,7 @@ VOID CCharactor::Clear()
 	m_vPreControl		 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vFowardVector		 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vSideStepVector	 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	m_vKnockControl		 = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_fAngle = -MTP_FUN::Deg2Rad<180>::radians;			// D3DXToRadian( -180.0f );
 
 	D3DXMatrixIdentity( &m_matMultWorld );
@@ -516,9 +517,19 @@ VOID CCharactor::UpdateByInput(  )
 		a_fAngle = CInput::GetInstance()->Get_MouseYRotate();
 	}
 
-	a_vControl.z -= ( m_fKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
-	( m_fKnockBack > 0.1f ) ?  m_fKnockBack *= 0.9f : m_fKnockBack = 0.0f;
-	
+	if (m_fKnockBack > 0.1)
+	{
+		m_vKnockControl = m_vControl - m_vKnockControl;
+		m_vKnockControl.y = 0;
+		D3DXVec3Normalize( &m_vKnockControl, &m_vKnockControl );
+		a_vControl = a_vControl + m_vKnockControl * ( m_fKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
+		m_fKnockBack *= 0.9f;
+	}
+	else
+	{
+		m_fKnockBack = 0.0f;
+	}
+
 	a_fAngle += m_fAngle;
 	
 	// 360도 넘으면 라디언 360 빼기.
@@ -860,8 +871,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					// 케릭터 매트릭스 					
 					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
 					D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
-					(*Iter)->GetPosition();
-
+					m_vKnockControl = (*Iter)->GetPosition();
 					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
 					{
 						++nCount;
