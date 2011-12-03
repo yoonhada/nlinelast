@@ -165,9 +165,9 @@ VOID LobbyScene::Update()
 	}
 
 	if( GetKeyState( '1' ) & 0x8000 )
-		DisableRotate( 0 );
+		ChangeStateButton( GUIBTN_LOBBY_START, GUIBTN_NORMAL );
 	if( GetKeyState( '2' ) & 0x8000 )
-		DisableRotate( 1 );
+		ChangeStateButton( GUIBTN_LOBBY_START, GUIBTN_DISABLE );
 	if( GetKeyState( '3' ) & 0x8000 )
 		DisableRotate( 2 );
 	if( GetKeyState( '4' ) & 0x8000 )

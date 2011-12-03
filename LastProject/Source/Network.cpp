@@ -173,37 +173,6 @@ VOID CNetwork::SC_CHANGE_HOST( CPacket& a_pk )
 }
 
 
-VOID CNetwork::SC_SELECT_CHARACTER( CPacket& a_pk )
-{
-	//WORD wUserNumber;
-	//WORD wSelect;
-	//BOOL bSelect;
-
-	//a_pk.Read( &wUserNumber );
-	//a_pk.Read( &wSelect );
-	//a_pk.Read( &bSelect );
-
-	//// 캐릭터 선택
-	//CObjectManage * pOM = CObjectManage::GetInstance();
-	////pOM->Set_Char( wUserNumber, wSelect );
-	//if ( bSelect == FALSE && pOM->Get_ClientNumber() == wUserNumber)
-	//{
-	//	// 케릭터 선택 실패.. 회전 제거.
-	//	pOM->GetLobbyScene()->DisableRotate( wSelect );
-	//}
-	//else if ( bSelect == TRUE && pOM->Get_ClientNumber() == wUserNumber)
-	//{
-	//	// 케릭터 선택 
-	//}
-	//else if ( bSelect == TRUE && pOM->Get_ClientNumber() != wUserNumber)
-	//{
-	//	// 다른 플레이어 선택
-	//}
-
-	//// 선택 불가능 하면 현재 선택된 상태 FALSE
-}
-
-
 VOID CNetwork::SC_READY( CPacket& a_pk )
 {
 	WORD wUserNumber;
@@ -297,7 +266,7 @@ VOID CNetwork::SC_CHAT( CPacket& a_pk )
 }
 
 
-VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
+VOID CNetwork::SC_PLAYER_MOVEMENT( CPacket& a_pk )
 {
 	FLOAT x, z, angle;
 	WORD number;
@@ -330,6 +299,15 @@ VOID CNetwork::SC_MOVEMENT( CPacket& a_pk )
 
 	// 이동 데이터 처리
 }
+
+
+VOID CNetwork::SC_MONSTER_MOVEMENT( CPacket& a_pk )
+{
+	// 몬스터 이동 설정
+	WORD wMonsterNumber;
+
+}
+
 
 //추가 유저 접속시
 VOID CNetwork::SC_NEWUSER( CPacket& a_pk )
@@ -407,11 +385,6 @@ VOID CNetwork::CS_LOGON( LPWSTR a_szNickName )
 }
 
 
-VOID CNetwork::CS_SELECT_CHARACTER( WORD a_wSelect )
-{
-}
-
-
 VOID CNetwork::CS_READY( WORD a_wSelect, BOOL a_bSelect )
 {
 	CPacket sendPk;
@@ -456,11 +429,11 @@ VOID CNetwork::CS_CHAT( LPWSTR a_szText )
 }
 
 
-VOID CNetwork::CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle )
+VOID CNetwork::CS_PLAYER_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_MOVE;
+	WORD wMsgID = MSG_PLAYER_MOVE;
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
@@ -471,6 +444,37 @@ VOID CNetwork::CS_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a
 
 	SendToServer( sendPk );
 	//CDebugConsole::GetInstance()->Messagef( L"****MOV\n" );
+}
+
+
+VOID CNetwork::CS_MONSTER_MOVEMENT( WORD a_iMonsterNumber, PathNode* a_pPath )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_MONSTER_MOVE;
+	WORD wX, wY, wRemainedNode;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_iMonsterNumber );
+
+	// Path를 읽어 패킷에 넣는다.
+	while( a_pPath != NULL )
+	{
+		wX = a_pPath->x;
+		wY = a_pPath->y;
+		wRemainedNode = a_pPath->remainedNode;
+
+		sendPk.Write( wX );
+		sendPk.Write( wY );
+		sendPk.Write( wRemainedNode );
+
+		a_pPath = a_pPath->next;
+	}
+
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
 }
 
 
@@ -665,7 +669,7 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 
 	switch( wMsgType )
 	{
-	// 로그온 처리
+	// 로그온
 	case MSG_LOGON:
 		SC_LOGON( a_pk );
 		break;
@@ -675,40 +679,49 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		SC_InitData( a_pk );
 		break;
 
-	// 새로운 유저 추가 처리
+	// 새로운 유저 추가
 	case MSG_NEWUSER:
 		SC_NEWUSER( a_pk );
 		break;
 
+	// 호스트 변경
 	case MSG_CHANGE_HOST:
 		SC_CHANGE_HOST( a_pk );
 		break;
 
+	// READY
 	case MSG_READY:
 		SC_READY( a_pk );
 		break;
 
+	// 게임 스타트 버튼 활성화
 	case MSG_ENABLE_START:
 		SC_ENABLE_START( a_pk );
 		break;
 
+	// 게임 시작
 	case MSG_GAME_START:
 		SC_GAME_START( a_pk );
 		break;
 
-		// 유저 접속 종료
+	// 유저 접속 종료
 	case MSG_DISCONNECT:
 		SC_DISCONNECT( a_pk );
 		break;
 
-	// 채팅 처리
+	// 채팅
 	case MSG_CHAT:
 		SC_CHAT( a_pk );
 		break;
 
-	// 이동 처리
-	case MSG_MOVE:
-		SC_MOVEMENT( a_pk );
+	// 유저 이동
+	case MSG_PLAYER_MOVE:
+		SC_PLAYER_MOVEMENT( a_pk );
+		break;
+
+	// 몬스터 이동
+	case MSG_MONSTER_MOVE:
+		CS_MONSTER_MOVEMENT( a_pk );
 		break;
 
 	// 공격 ( 유저 -> 몬스터 )
@@ -721,6 +734,7 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		SC_MTOU_ATTACK( a_pk );
 		break;
 
+	// 공격 애니메이션
 	case MSG_ATTACK_ANIMATION:
 		SC_Attack_Animation( a_pk );
 		break;
