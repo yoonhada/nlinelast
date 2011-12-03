@@ -11,10 +11,15 @@ class CMainScene;
 class CGameEvent : public IObject
 {
 private:
+	enum EVENTKIND{
+		NONE = -1, INIT, 
+	};
 	typedef struct _EVENT
 	{
-		FLOAT fTime;
 		INT nKind;
+		FLOAT fTime;
+
+		_EVENT(INT n, FLOAT f) : nKind(n), fTime(f) {}
 	} EVENT;
 
 	// Host
@@ -33,9 +38,14 @@ private:
 	INT m_nHPMonstor;
 	
 	// Event
-	std::list<EVENT*> m_ListEvent;
+	std::list<EVENT*> m_listEvent;
+	std::list <EVENT*>::iterator Iter;
 	EVENT * m_pCurrentEvent;
+	//INT m_nEvent;
 
+	VOID AddEvent( EVENTKIND, FLOAT );
+
+	VOID EventInit();
 public:
 	CGameEvent();
 	CGameEvent( INT, CMainScene *);

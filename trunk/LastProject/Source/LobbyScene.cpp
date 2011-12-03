@@ -121,7 +121,6 @@ VOID LobbyScene::Update()
 	case LOBBY_READY:
 		if ( m_nCharSelect < 0 )
 		{
-
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, UP );
 			break;
 		}
