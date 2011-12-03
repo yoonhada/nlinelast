@@ -19,6 +19,7 @@ class OptionScene;
 
 class CMainScene : public IScene
 {
+	friend class CGameEvent;
 public:
 	CMainScene();
 	virtual ~CMainScene();

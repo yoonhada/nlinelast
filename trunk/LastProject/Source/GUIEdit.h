@@ -44,7 +44,6 @@ public:
 	VOID			SetStyle( DWORD _dStyle );
 	VOID			SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight );
 	BOOL			TakeMessage( LPWSTR _pStr );
-
 private:
 	DATA			m_Data;
 	
