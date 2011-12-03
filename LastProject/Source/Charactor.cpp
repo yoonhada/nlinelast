@@ -70,7 +70,6 @@ VOID CCharactor::Clear()
 	m_fKnockBack = 0.0f;
 	m_fTransition = 0.0f;
 	m_nAniAttackFrame = 0;
-	m_fAniAngleAttack = 0.0f;
 	m_fAniAngle = 0.0f;
 	m_vAniVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -509,8 +508,10 @@ VOID CCharactor::UpdateByInput(  )
 {
 	BOOL bSetAni = FALSE;
 	D3DXVECTOR3 a_vControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f); 
 	FLOAT a_fAngle = 0.0f;
 
+	// 공격중이 아닐때만 이동
 	if ( m_pWeapon->Get_nFrame() == 0 )
 	{
 		a_vControl = CInput::GetInstance()->Get_Pos();
@@ -519,10 +520,11 @@ VOID CCharactor::UpdateByInput(  )
 
 	if (m_fKnockBack > 0.1)
 	{
-		m_vKnockControl = m_vControl - m_vKnockControl;
-		m_vKnockControl.y = 0;
-		D3DXVec3Normalize( &m_vKnockControl, &m_vKnockControl );
-		a_vControl = a_vControl + m_vKnockControl * ( m_fKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
+		D3DXVECTOR3 vKnockControl;
+		vKnockControl = m_vControl - m_vKnockControl;
+		vKnockControl.y = 0;
+		D3DXVec3Normalize( &vKnockControl, &vKnockControl );
+		m_vColissionControl = vKnockControl * ( m_fKnockBack * 2.5f * CFrequency::GetInstance()->getFrametime() );
 		m_fKnockBack *= 0.9f;
 	}
 	else
@@ -532,13 +534,14 @@ VOID CCharactor::UpdateByInput(  )
 
 	a_fAngle += m_fAngle;
 	
-	// 360도 넘으면 라디언 360 빼기.
-	//const float f360 = D3DXToRadian( 360.0f );
-	a_fAngle < 0.0f ? 
-		a_fAngle += MTP_FUN::Deg2Rad<360>::radians : 
-		( a_fAngle > MTP_FUN::Deg2Rad<360>::radians ? a_fAngle -= MTP_FUN::Deg2Rad<360>::radians : NULL );
-
-	m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f); 
+	if ( a_fAngle < 0.0f )
+	{
+		a_fAngle += MTP_FUN::Deg2Rad<360>::radians;
+	} 
+	else if ( a_fAngle > MTP_FUN::Deg2Rad<360>::radians )
+	{
+		a_fAngle -= MTP_FUN::Deg2Rad<360>::radians;
+	}
 
 	a_vControl.z += AnimateAttack();
 
@@ -549,7 +552,7 @@ VOID CCharactor::UpdateByInput(  )
 		D3DXMatrixRotationY( &m_matControl, a_fAngle );
 		m_vFowardVector = D3DXVECTOR3(m_matControl._13, 0.0f, -m_matControl._33);
 		D3DXVec3Normalize(&m_vFowardVector, &m_vFowardVector);
-		m_vColissionControl = (m_vFowardVector * a_vControl.z);	
+		m_vColissionControl += (m_vFowardVector * a_vControl.z);	
 	}
 	// 좌우 처리
 	if( a_vControl.x != 0)
@@ -566,14 +569,15 @@ VOID CCharactor::UpdateByInput(  )
 	m_pBoundBox->MatrixIdentity();
 	m_pBoundBox->SetAngleY( a_fAngle );
 	Collision( m_vColissionControl );
+	
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
-
 	m_fAngle = a_fAngle;
+
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
-	Set_ControlRotate( 1, m_fAngle + m_fAniAngle + m_fAniAngleAttack );
+	Set_ControlRotate( 1, m_fAngle + m_fAniAngle );
 	Calcul_MatWorld();
 
 	Update();
@@ -710,7 +714,10 @@ VOID CCharactor::AnimateMove( BOOL bSetAni )
 	else
 	{
 		if ( -fAniAngleTurn < m_fAniAngle && m_fAniAngle < fAniAngleTurn )
+		{
 			m_fTransition = 0;
+			CDebugConsole::GetInstance()->Messagef("%d\n", m_pWeapon->Get_nFrame() );
+		}
 	}
 
 

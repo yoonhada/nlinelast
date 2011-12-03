@@ -43,7 +43,6 @@ public:
 	};
 
 	CCharactor();
-	//CCharactor( LPDIRECT3DDEVICE9 a_pD3dDevice );
 	virtual ~CCharactor();
 
 	VOID Clear();
@@ -54,12 +53,12 @@ public:
 	HRESULT Release();
 	VOID Update();
 	VOID UpdateByInput( );
-	//VOID UpdateByInput( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID UpdateOtherPlayer();
 	VOID UpdateOtherPlayer(BOOL);
 	VOID Render();
 
+	VOID LoadKindChar( INT nKind );
 	VOID World2Model(D3DXVECTOR3& _vPosition);
 	VOID BreakCube(D3DXVECTOR3& _vPosition);
 	VOID BreakQube(D3DXMATRIXA16 &mat);
@@ -67,15 +66,9 @@ public:
 	VOID BreakCubeAll();
 	VOID BreakListMake(INT, D3DXVECTOR3&);
 
-	const D3DXVECTOR3& Get_CharaPos()
-	{
-		return m_vControl;
-	}
-
-	const FLOAT Get_CharaAngle()
-	{
-		return m_fAngle;
-	}
+	const D3DXVECTOR3&	Get_CharaPos()		{ return m_vControl;	}
+	const D3DXVECTOR3&	Get_PreControl()	{ return m_vPreControl; }
+	const FLOAT			Get_CharaAngle()	{ return m_fAngle;		}
 
 	const D3DXVECTOR3& Get_CharaPos2Camera();
 	const D3DXVECTOR3& Get_PreCharaPos2Camera();
@@ -83,65 +76,27 @@ public:
 	VOID UpdateMonsterPos( const D3DXVECTOR3& a_vPrePos, const D3DXVECTOR3& a_vPos, const FLOAT a_fAngle );
 	VOID UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster );
 
-	CBoundBox * GetBoundBox()			{ return m_pBoundBox; }
+	CBoundBox * GetBoundBox()				{ return m_pBoundBox;	}
+
 	BOOL Collision( D3DXVECTOR3& a_vCollisionControl );
 	BOOL CollisionAtk( );
 	VOID Load( WCHAR* a_pFileName );
 
-	// 
-	const D3DXVECTOR3& Get_PreControl()
-	{
-		return m_vPreControl;
-	}
-
 	// 초기 위치 강제 세팅
-	VOID Set_Position( const D3DXVECTOR3& a_vControl )
-	{
-		m_vControl = m_vPreControl = a_vControl;
-	}
-
-	VOID Set_Angle( FLOAT a_fAngle )				
-	{ 
-		m_fAngle = a_fAngle; 
-	}
-
-	VOID Set_ClientNumber( WORD a_iClientNumber )
-	{
-		m_iClientNumber = a_iClientNumber;
-	}
-
-	WORD Get_ClientNumber()
-	{
-		return m_iClientNumber;
-	}
-
-	VOID Set_Active( BOOL a_bActive )
-	{
-		m_bActive = a_bActive;
-	}
-
-	const BOOL Get_Active()
-	{
-		return m_bActive;
-	}
-
-	const BOOL Get_bMonster()
-	{
-		return m_bMonster;
-	}
-
+	VOID Set_Position( const D3DXVECTOR3& a_vControl )	{ m_vControl = m_vPreControl = a_vControl;	}
+	VOID Set_Angle( FLOAT a_fAngle )					{ m_fAngle = a_fAngle;						}
+	VOID Set_ClientNumber( WORD a_iClientNumber )		{ m_iClientNumber = a_iClientNumber;		}
+	VOID Set_Active( BOOL a_bActive )					{ m_bActive = a_bActive;					}
+	VOID Set_MonsterPart( CHAR a_chMonsterPart )		{ m_chMonsterPart = a_chMonsterPart;		}
+	VOID Set_iSelectedFrameNum( INT a_iAniNum )			{ m_iSelectedFrameNum = a_iAniNum;			}
 	VOID Set_WeaponAnimationState( const WORD a_iNumber );
 
+	const WORD Get_ClientNumber()						{ return m_iClientNumber;					}
+	const BOOL Get_Active()								{ return m_bActive;							}
+	const BOOL Get_bMonster()							{ return m_bMonster;						}
 	const INT Get_WeaponAnimationState();
 
 	VOID RecvBreakList( INT a_iCount, WORD* a_pList, D3DXVECTOR3& a_vDir );
-
-	VOID Set_MonsterPart( CHAR a_chMonsterPart )
-	{
-		m_chMonsterPart = a_chMonsterPart;
-	}
-
-	VOID LoadKindChar( INT nKind );
 
 private:
 	VOID _LoadRelease();
@@ -208,7 +163,6 @@ private:
 	INT m_nAniAttackFrame;
 	FLOAT m_fKnockBack;
 	FLOAT m_fTransition;
-	FLOAT m_fAniAngleAttack;
 	FLOAT m_fAniAngle;
 	D3DXVECTOR3 m_vAniVector;
 	const FLOAT fAniAngleTurn;
