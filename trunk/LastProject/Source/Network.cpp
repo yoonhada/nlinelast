@@ -303,9 +303,28 @@ VOID CNetwork::SC_PLAYER_MOVEMENT( CPacket& a_pk )
 
 VOID CNetwork::SC_MONSTER_MOVEMENT( CPacket& a_pk )
 {
-	// 몬스터 이동 설정
 	WORD wMonsterNumber;
+	WORD wPathCount;
+	WORD wX, wY, wRemainedNode;
+	PathNode* pPath = NULL;
 
+	a_pk.Read( &wMonsterNumber );
+	a_pk.Read( &wPathCount );
+
+	for( WORD i=0; i<wPathCount; ++i )
+	{
+		a_pk.Read( &wX );
+		a_pk.Read( &wY );
+		a_pk.Read( &wRemainedNode );
+
+		pPath = Astar::GetInstance()->createPath( wX, wY );
+		pPath->remainedNode = wRemainedNode;
+	}
+
+	// 몬스터에게 적용한다.
+	CMonster* pMonster = CObjectManage::GetInstance()->Get_Monster();
+	pMonster->Set_Path( pPath );
+	pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 }
 
 
@@ -452,11 +471,13 @@ VOID CNetwork::CS_MONSTER_MOVEMENT( WORD a_iMonsterNumber, PathNode* a_pPath )
 	CPacket sendPk;
 	WORD wMsgSize = 0;
 	WORD wMsgID = MSG_MONSTER_MOVE;
+	WORD wPathCount = a_pPath->remainedNode + 1;
 	WORD wX, wY, wRemainedNode;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( a_iMonsterNumber );
+	sendPk.Write( wPathCount );
 
 	// Path를 읽어 패킷에 넣는다.
 	while( a_pPath != NULL )

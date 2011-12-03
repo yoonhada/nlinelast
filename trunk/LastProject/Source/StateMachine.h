@@ -37,7 +37,10 @@ public:
 		m_pPreviousState = m_pCurrentState;
 
 		// 현재 상태 Exit
-		m_pCurrentState->Exit( m_pOwner );
+		if( m_pCurrentState )
+		{
+			m_pCurrentState->Exit( m_pOwner );
+		}
 
 		// 새로운 상태를 현재 상태로
 		m_pCurrentState = pNewState;

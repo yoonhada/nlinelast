@@ -28,7 +28,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	INT Target = -1;
 	D3DXVECTOR3 pos( 0.0f, 0.0f, 0.0f );
 	FLOAT length = 0.0f;
-	FLOAT min = 99999999999.0f;
+	FLOAT min = 99999.0f;
 
 	// 몬스터와 가장 가까이에 있는 유저를 찾는다.
 	INT nClientNum;
@@ -104,6 +104,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		CDebugConsole::GetInstance()->Messagef( "Search Time : %f \n", time );
 
 #ifdef _DEBUG
+
 		// 이전 Path 표시를 없앤다.
 		ClearPath( a_pMonster->Get_Path() );
 		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
@@ -118,6 +119,9 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		// Path가 있으면 Chase 상태로
 		if( path )
 		{
+			// 다른 클라이언트에게 AI를 보낸다.
+			CNetwork::GetInstance()->CS_MONSTER_MOVEMENT( 0, path );
+
 			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 		}
 	}
