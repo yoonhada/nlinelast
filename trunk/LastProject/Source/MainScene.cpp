@@ -78,7 +78,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//이벤트
 	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 	m_pGameEvent = new CGameEvent( nMaxCharaNum, this );
-	m_pGameEvent->Create();
+	m_pGameEvent->Create( m_pD3dDevice );
 
 	//맵 생성
 	// Error 예외생성 
@@ -178,8 +178,6 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::Update()
 {
-	m_pGameEvent->Update();
-
 	CCharactor * pChar;
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
 
@@ -190,8 +188,8 @@ VOID CMainScene::Update()
 	{
 		D3DXMATRIXA16 mat;
 		D3DXMatrixIdentity( &mat );
-		pChar->BreakQube( mat );
-
+		if ( pChar->BreakQube( mat ) )
+			m_pCamera->SetEffect( 1 );
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
 	}
 	CTree::GetInstance()->SetMonsAtkClear();
@@ -252,8 +250,9 @@ VOID	CMainScene::Render()
 	m_pAxis->Render();
 #endif
 
-	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pASEViewe->Get_MatWorld() );
+	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
 	m_pASEViewer->Render();
+	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	INT nIndex;
 	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
@@ -286,6 +285,8 @@ VOID	CMainScene::Render()
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+
+	m_pGameEvent->Render();
 }
 
 INT CMainScene::GetSceneNext()

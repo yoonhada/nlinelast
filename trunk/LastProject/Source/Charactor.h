@@ -61,7 +61,7 @@ public:
 	VOID LoadKindChar( INT nKind );
 	VOID World2Model(D3DXVECTOR3& _vPosition);
 	VOID BreakCube(D3DXVECTOR3& _vPosition);
-	VOID BreakQube(D3DXMATRIXA16 &mat);
+	BOOL BreakQube(D3DXMATRIXA16 &mat);
 	VOID TestBreakCube();
 	VOID BreakCubeAll();
 	VOID BreakListMake(INT, D3DXVECTOR3&);

@@ -832,8 +832,9 @@ VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
 	}
 }
 
-VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
+BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 {
+	BOOL bRet = FALSE;
 	INT Loop;
 	INT nCount = 0;
 	D3DXVECTOR3 vPos;
@@ -856,7 +857,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 		if ( !(vecBoundBox != NULL && vecBoundBox->size()) )
 		{
-			return;
+			return bRet;
 		}
 		
 		for( Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
@@ -914,6 +915,7 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 		if( nCount != 0 )
 		{
+			bRet = TRUE;
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
 			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
 		}
@@ -921,6 +923,8 @@ VOID CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		m_fKnockBack = (FLOAT)nCount;
 		//NetworkSendTempVector.clear();
 	}
+
+	return bRet;
 }
 
 VOID CCharactor::BreakListMake( INT Loop, D3DXVECTOR3& vDir )

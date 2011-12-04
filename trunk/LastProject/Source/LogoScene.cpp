@@ -2,6 +2,7 @@
 #include "LogoScene.h"
 #include "Charactor.h"
 #include "CameraWork.h"
+#include "GameEventCombo.h"
 
 VOID LogoScene::Initialize()
 {
@@ -113,9 +114,9 @@ VOID LogoScene::Update()
 	}
 
 	D3DXVECTOR3 vPos;
-	if( GetAsyncKeyState( VK_LBUTTON ) & 0x8000 )
+	if( GetKeyState( VK_LBUTTON ) & 0x8000 )
 	{
-		m_scnState = IScene::SCENE_END;
+		//m_scnState = IScene::SCENE_END;
 	}
 	if( GetKeyState( VK_DOWN ) & 0x8001 )
 	{
@@ -231,8 +232,6 @@ VOID LogoScene::Render()
 		m_pLogo[ i ].Render();
 
 	m_pLight->DisableLight();
-
-	//m_pCameraWork->Render();
 }
 
 INT LogoScene::GetSceneNext()

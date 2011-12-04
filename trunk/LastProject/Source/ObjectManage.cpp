@@ -50,6 +50,14 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 {
 	m_pD3dDevice = a_pD3dDevice;
 
+	if( FAILED( D3DXCreateSprite( m_pD3dDevice, &m_pSprite ) ) )
+	{
+		MessageBox( NULL, L"CObjectManage::CreateSprite() failed", NULL, MB_OK );
+		return E_FAIL;
+	}
+
+
+
 	LoadLoadingObject();
 	LoadLobbyObject();
 	LoadMainObject();
@@ -99,6 +107,8 @@ HRESULT CObjectManage::LoadMainObject()
 
 HRESULT CObjectManage::Release()
 {
+	SAFE_RELEASE( m_pSprite );
+
 	SAFE_DELETE_ARRAY( m_pCharactors );
 	SAFE_DELETE_ARRAY( m_ppVirtualCharactors );
 	SAFE_DELETE( m_pClown );
