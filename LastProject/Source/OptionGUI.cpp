@@ -1,14 +1,12 @@
 #include "Stdafx.h"
 #include "OptionGUI.h"
 #include "Mouse.h"
-#include "GUIBackground.h"
 #include "GUIBtnManager.h"
 
 VOID OptionGUI::Initialize()
 {
 	m_pMouse			= new Mouse;
 	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
-	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIBtnManager	= new GUIBtnManager( m_pD3dDevice, m_pSprite );
 }
 
@@ -16,30 +14,7 @@ VOID OptionGUI::Release()
 {
 	delete m_pMouse;
 	delete m_pGUIBase;
-	delete m_pGUIBackground;
 	delete m_pGUIBtnManager;
-}
-
-VOID OptionGUI::CreateBackground()
-{
-	//	Create Background
-	D3DVIEWPORT9 Vp;
-	m_pD3dDevice->GetViewport( &Vp );
-
-	FLOAT fWidth	= static_cast<FLOAT>( Vp.Width );
-	FLOAT fHeight	= 32.0f;
-	
-	GUIBase::IMAGEPARAM imgParam;
-
-	imgParam.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgParam.fX			= 0.0f;
-	imgParam.fY			= 0.0f;
-	imgParam.fWidth		= fWidth;
-	imgParam.fHeight	= fHeight;
-
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\OptionScene\\Background.png" );
-	
-	m_pGUIBackground->Create( imgParam );
 }
 
 VOID OptionGUI::CreateButton()
@@ -50,10 +25,10 @@ VOID OptionGUI::CreateButton()
 	D3DVIEWPORT9 Vp;
 	m_pD3dDevice->GetViewport( &Vp );
 
-	FLOAT fX		= static_cast<FLOAT>( Vp.Width ) - 64.0f;
+	FLOAT fX		= 1080.0f;
 	FLOAT fY		= 0.0f;
-	FLOAT fWidth	= 32.0f;
-	FLOAT fHeight	= 32.0f;
+	FLOAT fWidth	= 79.0f;
+	FLOAT fHeight	= 79.0f;
 
 	imgSetupNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgSetupNormal.fX			= fX;
@@ -91,10 +66,10 @@ VOID OptionGUI::CreateButton()
 
 	GUIBase::IMAGEPARAM imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable;
 	//	Background Next Button
-	fX		= static_cast<FLOAT>( Vp.Width ) - 32.0f;
+	fX		= 1180.0f;
 	fY		= 0.0f;
-	fWidth	= 32.0f;
-	fHeight	= 32.0f;
+	fWidth	= 79.0f;
+	fHeight	= 79.0f;
 
 	imgHelpNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgHelpNormal.fX			= fX;
@@ -135,7 +110,6 @@ VOID OptionGUI::Create()
 {
 	m_pMouse->Initialize( m_hWnd );
 
-	CreateBackground();
 	CreateButton();
 }
 
@@ -144,7 +118,6 @@ VOID OptionGUI::Update()
 	POINT pt = m_pMouse->GetPosition();
 
 	m_pMouse->Update();
-	m_pGUIBackground->Update();
 	m_pGUIBtnManager->Update( pt.x, pt.y );
 
 	static BOOL bFirst = FALSE;
@@ -174,7 +147,6 @@ VOID OptionGUI::Update()
 
 VOID OptionGUI::Render()
 {
-	m_pGUIBackground->Render();
 	m_pGUIBtnManager->Render();
 }
 
@@ -196,9 +168,4 @@ VOID OptionGUI::OnUp( INT x, INT y )
 VOID OptionGUI::Command( DWORD& _dOut )
 {
 	m_pGUIBtnManager->GetCommandID( _dOut );
-}
-
-BOOL OptionGUI::NextBackgroundImage()
-{
-	return m_pGUIBackground->NextAnimation();
 }

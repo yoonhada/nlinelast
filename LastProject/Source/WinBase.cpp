@@ -15,8 +15,8 @@ HRESULT CWinBase::Create()
 	m_bFirstRun = TRUE;
 	ZeroMemory( &m_WinRect, sizeof(m_WinRect) );
 	m_hWnd = NULL;
-	m_WinRect.right = 800;
-	m_WinRect.bottom = 600;
+	m_WinRect.right = 1280;
+	m_WinRect.bottom = 1024;
 	m_WinRect.top = 0;
 	m_WinRect.left = 0;
 

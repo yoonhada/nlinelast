@@ -40,7 +40,7 @@ VOID LoginGUI::CreateBackground()
 
 VOID LoginGUI::CreateButton()
 {
-	GUIBase::IMAGEPARAM imgNormal, imgHot, imgDown, imgDisable;
+	GUIBase::IMAGEPARAM imgGoNormal, imgGoHot, imgGoDown, imgGoDisable;
 
 	//	Create Background
 	D3DVIEWPORT9 Vp;
@@ -51,19 +51,26 @@ VOID LoginGUI::CreateButton()
 	FLOAT fWidth	= 200.0f;
 	FLOAT fHeight	= 100.0f;
 
-	m_pGUIBase->AddFileName( 0, imgNormal, L"Img\\LoginScene\\Go_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgHot, L"Img\\LoginScene\\Go_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgDown, L"Img\\LoginScene\\Go_Down.png" );
-	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\LoginScene\\Go_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgGoNormal, L"Img\\LoginScene\\Go_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgGoHot, L"Img\\LoginScene\\Go_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgGoDown, L"Img\\LoginScene\\Go_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgGoDisable, L"Img\\LoginScene\\Go_Down.png" );
 
-	m_pGUIBtnManager->Create( LOGIN_GO, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
+	m_pGUIBtnManager->Create( LOGIN_GO, 0, fX, fY, fWidth, fHeight, imgGoNormal, imgGoHot, imgGoDown, imgGoDisable );
+
+	GUIBase::IMAGEPARAM imgExitNormal, imgExitHot, imgExitDown, imgExitDisable;
 
 	fX		= m_fX + m_fWidth - 60.0f;
 	fY		= m_fY + 10.0f;
 	fWidth	= 50.0f;
 	fHeight = 50.0f;
 
-	m_pGUIBtnManager->Create( LOGIN_EXIT, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
+	m_pGUIBase->AddFileName( 0, imgExitNormal, L"Img\\LoginScene\\Exit_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgExitHot, L"Img\\LoginScene\\Exit_Hot.png" );
+	m_pGUIBase->AddFileName( 0, imgExitDown, L"Img\\LoginScene\\Exit_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgExitDisable, L"Img\\LoginScene\\Exit_Down.png" );
+
+	m_pGUIBtnManager->Create( LOGIN_EXIT, 0, fX, fY, fWidth, fHeight, imgExitNormal, imgExitHot, imgExitDown, imgExitDisable );
 }
 
 VOID LoginGUI::CreateEdit()

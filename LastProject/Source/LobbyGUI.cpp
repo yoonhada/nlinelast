@@ -59,82 +59,82 @@ VOID LobbyGUI::CreateButton()
 	GUIBase::IMAGEPARAM imgStartNormal, imgStartHot, imgStartDown, imgStartDisable;
 
 	FLOAT fX		= 50.0f;
-	FLOAT fY		= m_fY + m_fHeight - 100.0f;
-	FLOAT fWidth	= 256.0f;
-	FLOAT fHeight	= 64.0f;
+	FLOAT fY		= 940.0f;
+	FLOAT fWidth	= 252.0f;
+	FLOAT fHeight	= 70.0f;
 
-	m_pGUIBase->AddFileName( 0, imgStartNormal, L"Img\\LobbyScene\\Start_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgStartHot, L"Img\\LobbyScene\\Start_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgStartDown, L"Img\\LobbyScene\\Start_Down.png" );
-	m_pGUIBase->AddFileName( 0, imgStartDisable, L"Img\\LobbyScene\\Start_Disable.png" );
+	m_pGUIBase->AddFileName( 0, imgStartNormal,		L"Img\\LobbyScene\\Start_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgStartHot,		L"Img\\LobbyScene\\Start_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgStartDown,		L"Img\\LobbyScene\\Start_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgStartDisable,	L"Img\\LobbyScene\\Start_Disable.png" );
 
 	m_pGUIBtnManager->Create( LOBBY_START, 0, fX, fY, fWidth,fHeight, imgStartNormal, imgStartHot, imgStartDown, imgStartDisable );
 	m_pGUIBtnManager->Enable( LOBBY_START, FALSE );
 
-	// End Button
-	GUIBase::IMAGEPARAM imgEndNormal, imgEndHot, imgEndDown, imgEndDisable;
+	// Back Button
+	GUIBase::IMAGEPARAM imgBackNormal, imgBackHot, imgBackDown, imgBackDisable;
 	
-	fX		= m_fX + m_fWidth - 300.0f;
-	fY		= m_fY + m_fHeight - 100.0f;
-	fWidth	= 256.0f;
-	fHeight	= 64.0f;
+	fX		= 1000.0f;
+	fY		= 940.0f;
+	fWidth	= 252.0f;
+	fHeight	= 70.0f;
 
-	m_pGUIBase->AddFileName( 0, imgEndNormal, L"Img\\LobbyScene\\Back_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgEndHot, L"Img\\LobbyScene\\Back_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgEndDown, L"Img\\LobbyScene\\Back_Down.png" );
-	m_pGUIBase->AddFileName( 0, imgEndDisable, L"Img\\LobbyScene\\Back_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgBackNormal,	L"Img\\LobbyScene\\Back_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgBackHot,		L"Img\\LobbyScene\\Back_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgBackDown,	L"Img\\LobbyScene\\Back_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgBackDisable,	L"Img\\LobbyScene\\Back_Down.png" );
 
-	m_pGUIBtnManager->Create( LOBBY_BACK, 0, fX, fY, fWidth,fHeight, imgEndNormal, imgEndHot, imgEndDown, imgEndDisable );
+	m_pGUIBtnManager->Create( LOBBY_BACK, 0, fX, fY, fWidth,fHeight, imgBackNormal, imgBackHot, imgBackDown, imgBackDisable );
 
 	//	Character Select
 	GUIBase::IMAGEPARAM imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable;
 
-	fX			= 50.0f;
-	fY			= 100.0f;
-	fWidth		= 300.0f;
-	fHeight		= 450.0f;
+	fX			= 20.0f;
+	fY			= 190.0f;
+	fWidth		= 286.0f;
+	fHeight		= 339.0f;
 
-	m_pGUIBase->AddFileName( 0, imgSelectNormal, L"Img\\LobbyScene\\Select_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgSelectHot, L"Img\\LobbyScene\\Select_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgSelectDown, L"Img\\LobbyScene\\Select_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgSelectDisable, L"Img\\LobbyScene\\Select_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectNormal,	L"Img\\LobbyScene\\Select_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectHot,		L"Img\\LobbyScene\\Select_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectDown,		L"Img\\LobbyScene\\Select_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectDisable,	L"Img\\LobbyScene\\Select_Normal.png" );
 
 	m_pGUIBtnManager->Create( LOBBY_SELECT_1, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 310.0f;
+	fX += 320.0f;
 	m_pGUIBtnManager->Create( LOBBY_SELECT_2, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 310.0f;
+	fX += 320.0f;
 	m_pGUIBtnManager->Create( LOBBY_SELECT_3, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 310.0f;
+	fX += 320.0f;
 	m_pGUIBtnManager->Create( LOBBY_SELECT_4, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
 	//	Ready
 	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable;
 
-	fX			= m_fX + m_fWidth - 800.0f;
-	fY			= m_fY + m_fHeight - 100.0f;
-	fWidth		= 256.0f;
-	fHeight		= 64.0f;
+	fX			= 350.0f;
+	fY			= 940.0f;
+	fWidth		= 252.0f;
+	fHeight		= 70.0f;
 	
-	m_pGUIBase->AddFileName( 0, imgReadyNormal, L"Img\\LobbyScene\\quote-Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgReadyHot, L"Img\\LobbyScene\\quote-Hot.png" );
-	m_pGUIBase->AddFileName( 0, imgReadyDown, L"Img\\LobbyScene\\quote-Down.png" );
-	m_pGUIBase->AddFileName( 0, imgReadyDisable, L"Img\\LobbyScene\\quote-Disable.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyNormal,		L"Img\\LobbyScene\\Ready_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyHot,		L"Img\\LobbyScene\\Ready_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyDown,		L"Img\\LobbyScene\\Ready_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyDisable,	L"Img\\LobbyScene\\Ready_Down.png" );
 
 	m_pGUIBtnManager->Create( LOBBY_READY, 1, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable );
 }
 
 VOID LobbyGUI::CreateEdit()
 {
-	FLOAT fX		= m_fX + 100.0f;
-	FLOAT fY		= m_fY + m_fHeight - 200.0f;
-	FLOAT fWidth	= m_fWidth - 300.0f;
-	FLOAT fHeight	= 50.0f;
+	FLOAT fX		= 40.0f;
+	FLOAT fY		= 860.0f;
+	FLOAT fWidth	= 726.0f;
+	FLOAT fHeight	= 53.0f;
 
 	GUIBase::IMAGEPARAM imgParam;
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Listbox.png" );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Edit.png" );
 
 	m_pGUIEdit->Create( fX, fY, fWidth, fHeight, imgParam );
 	m_pGUIEdit->SetStyle( GUIEdit::EDT_DYNAMIC );
@@ -143,12 +143,12 @@ VOID LobbyGUI::CreateEdit()
 VOID LobbyGUI::CreateListbox()
 {
 	FLOAT fX		= 50.0f;
-	FLOAT fY		= 560.0f;
-	FLOAT fWidth	= m_fWidth - 300.0f;
-	FLOAT fHeight	= 250.0f;
+	FLOAT fY		= 590.0f;
+	FLOAT fWidth	= 722.0f;
+	FLOAT fHeight	= 259.0f;
 
 	GUIBase::IMAGEPARAM imgParam;
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Select_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Listbox_Back.png" );
 
 	m_pGUIListbox->Create( fX, fY, fWidth, fHeight, imgParam );
 	m_pGUIListbox->SetFont( L"±Ã¼­", 20, 20 );

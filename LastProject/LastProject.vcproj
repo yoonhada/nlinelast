@@ -412,6 +412,26 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="CameraWork"
+				>
+				<File
+					RelativePath=".\Source\CameraWork.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\CameraWork.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\CameraWorkBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\CameraWorkBase.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="리소스 파일"
