@@ -7,12 +7,13 @@
 
 #pragma once
 class CMainScene;
+class CGameEventCombo;
 
 class CGameEvent : public IObject
 {
 private:
 	enum EVENTKIND{
-		NONE = -1, INIT, 
+		NONE = -1, INIT, COMBO,
 	};
 	typedef struct _EVENT
 	{
@@ -24,6 +25,7 @@ private:
 
 	// Host
 	BOOL m_bHost;
+	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 	CMainScene * m_pScen;
 
 	// Const 
@@ -43,9 +45,12 @@ private:
 	EVENT * m_pCurrentEvent;
 	//INT m_nEvent;
 
+	CGameEventCombo * m_pEventCombo;
+
 	VOID AddEvent( EVENTKIND, FLOAT );
 
 	VOID EventInit();
+	VOID EventCombo();
 public:
 	CGameEvent();
 	CGameEvent( INT, CMainScene *);
@@ -53,6 +58,7 @@ public:
 
 	VOID Clear();
 	HRESULT Create();	///< 초기화
+	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 	HRESULT Release();	///< 오브젝트들 제거
 	VOID Update();		///< Update
 	VOID Render();		///< Render

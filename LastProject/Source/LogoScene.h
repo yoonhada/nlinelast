@@ -6,6 +6,7 @@
 
 class CCharactor;
 class CameraWork;
+class CGameEventCombo;
 
 class LogoScene : public IScene
 {
@@ -55,7 +56,6 @@ private:
 	DATA					m_datScene;
 
 public:
-
 };
 
 #endif

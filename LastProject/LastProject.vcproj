@@ -432,6 +432,26 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Event"
+				>
+				<File
+					RelativePath=".\Source\GameEvent.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEvent.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventCombo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventCombo.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="리소스 파일"
@@ -580,14 +600,6 @@
 			</File>
 			<File
 				RelativePath=".\Source\BaseScene.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\GameEvent.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\GameEvent.h"
 				>
 			</File>
 			<File

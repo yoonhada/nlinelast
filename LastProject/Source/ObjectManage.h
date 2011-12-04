@@ -23,6 +23,7 @@ private:
 	virtual ~CObjectManage();
 
 	LPDIRECT3DDEVICE9	m_pD3dDevice;
+	LPD3DXSPRITE		m_pSprite;
 
 	BOOL				m_bHost;
 	WORD				m_iClientNumber;
@@ -97,6 +98,8 @@ public:
 
 	LobbyScene*		GetLobbyScene(){ return m_pLobbyScene; }
 	VOID			SetLobbyScene( LobbyScene* a_pLobbyScene ){ m_pLobbyScene = a_pLobbyScene; }
+
+	LPD3DXSPRITE	GetSprite()			{ return m_pSprite; }
 };
 
 #endif;

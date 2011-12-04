@@ -7,6 +7,7 @@
 
 #include "stdafx.h"
 #include "GameEvent.h"
+#include "GameEventCombo.h"
 
 #include "MainScene.h"
 #include "Monster.h"
@@ -36,6 +37,12 @@ CGameEvent::~CGameEvent()
 
 HRESULT CGameEvent::Create()
 {
+	return S_OK;
+}
+
+HRESULT CGameEvent::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
+{
+	m_pD3dDevice = a_pD3dDevice;
 	m_bHost = CObjectManage::GetInstance()->IsHost();
 	m_pAttackPoint = new INT[4];
 	m_pShotedPoint = new INT[4];
@@ -79,6 +86,8 @@ VOID CGameEvent::Clear()
 	m_pPosition[1] = D3DXVECTOR3(-120.0f, 0.0f, 650.0f);
 	m_pPosition[2] = D3DXVECTOR3(-140.0f, 0.0f, 650.0f);
 	m_pPosition[3] = D3DXVECTOR3(-160.0f, 0.0f, 650.0f);
+
+	m_pEventCombo = NULL;
 }
 
 VOID CGameEvent::Update()
@@ -86,6 +95,9 @@ VOID CGameEvent::Update()
 	INT nEvent = NONE;
 	if ( m_bHost && m_pCurrentEvent != NULL)
 	{
+		if ( FastRand2() * 100.0f > 98 )
+			AddEvent( COMBO, 100.0f );
+
 		m_pCurrentEvent->fTime -= CFrequency::GetInstance()->getFrametime();
 		if ( m_pCurrentEvent->fTime < 0.0f )
 		{
@@ -104,6 +116,8 @@ VOID CGameEvent::Update()
 	case INIT:
 		EventInit();
 		break;
+	case COMBO:
+		EventCombo();
 	default:
 		break;
 	}
@@ -111,6 +125,8 @@ VOID CGameEvent::Update()
 
 VOID CGameEvent::Render()
 {
+	if( m_pEventCombo )
+		m_pEventCombo->Render();
 }
 
 D3DXVECTOR3& CGameEvent::GetDefaultCharPosition( INT nClient )
@@ -156,5 +172,22 @@ VOID CGameEvent::EventInit()
 	{
 		m_pAttackPoint[i] = 0;
 		m_pShotedPoint[i] = 0;
+	}
+}
+
+VOID CGameEvent::EventCombo()
+{
+	if ( m_pEventCombo )
+	{
+		m_pEventCombo->Update();
+	}
+	else
+	{
+		m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+		INT nClient = CObjectManage::GetInstance()->Get_ClientNumber();
+		for ( int i = 0; i < nClient; ++i )
+		{
+			m_pEventCombo->AddCombo( i, (INT)(FastRand2() * nClient) + 1 );
+		}		
 	}
 }
