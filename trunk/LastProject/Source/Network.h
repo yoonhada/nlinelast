@@ -19,7 +19,10 @@ public:
 		MSG_READY,
 		MSG_ENABLE_START,
 		MSG_GAME_START,
-		MSG_DISCONNECT,
+		MSG_LODING_COMPLETE,
+		MSG_CHANGE_SCENE,
+		MSG_CLIENT_DISCONNECT,
+		MSG_SERVER_CLOSE,
 
 		MSG_CHAT,
 		MSG_PLAYER_MOVE,
@@ -56,12 +59,13 @@ public:
 
 	D3DXVECTOR3 m_vMove;
 
+
 private:
 	CNetwork();
 	~CNetwork();
 
-public:
 
+public:
 	BOOL CreateSocket();
 	VOID Close();
 
@@ -69,19 +73,21 @@ public:
 
 	// Server -> Client
 	VOID SC_LOGON( CPacket& a_pk );
-	VOID SC_InitData( CPacket& a_pk );
-	VOID SC_ADD_USER( CPacket& a_pk );
+	VOID SC_INIT( CPacket& a_pk );
 	VOID SC_CHANGE_HOST( CPacket& a_pk );
+	VOID SC_ADD_USER( CPacket& a_pk );
 	VOID SC_READY( CPacket& a_pk );
 	VOID SC_ENABLE_START( CPacket& a_pk );
 	VOID SC_GAME_START( CPacket& a_pk );
+	VOID SC_LODING_COMPLETE( CPacket& a_pk );
+	VOID SC_CLIENT_DISCONNECT( CPacket& a_pk );
+	VOID SC_SERVER_CLOSE( CPacket& a_pk );
 
 	VOID SC_CHAT( CPacket& a_pk );
 	VOID SC_PLAYER_MOVEMENT( CPacket& a_pk );
 	VOID SC_MONSTER_MOVEMENT( CPacket& a_pk );
 	VOID SC_UTOM_ATTACK( CPacket& a_pk );
 	VOID SC_MTOU_ATTACK( CPacket& a_pk );
-	VOID SC_DISCONNECT( CPacket& a_pk );
 
 	VOID SC_Player_Attack_Animation( CPacket& a_pk );
 	VOID SC_Monster_Attack_Animation( CPacket& a_pk );
@@ -91,6 +97,8 @@ public:
 	VOID CS_LOGON( LPWSTR a_szNickName );
 	VOID CS_READY( WORD a_wSelect, BOOL a_bSelect );
 	VOID CS_GAME_START();
+	VOID CS_LODING_COMPLETE();
+	VOID CS_CLIENT_DISCONNECT();
 
 	VOID CS_CHAT( LPWSTR a_szText );
 	VOID CS_PLAYER_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
@@ -102,13 +110,13 @@ public:
 	VOID CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnimationNumber );
 	VOID CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle );
 
-	VOID UpdateLobby();
-	VOID UpdateGame();
-
 	BOOL SendToServer( CPacket& a_pk );
 
 	VOID InsertPacket( CPacket& a_pk );
 	VOID ProcessPacket( CPacket& a_pk );
+
+	VOID UpdateLobby();
+	VOID UpdateGame();
 
 	friend static UINT WINAPI RecvThread( LPVOID a_p );
 };

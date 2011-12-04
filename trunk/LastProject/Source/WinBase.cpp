@@ -200,6 +200,7 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		return 0;
 
 	case WM_DESTROY:
+		CNetwork::GetInstance()->CS_CLIENT_DISCONNECT();
 		PostQuitMessage(0);
 		CWinBase::DestoryInstance();
 		return 0;
@@ -225,9 +226,12 @@ VOID CWinBase::Update()
 	CFrequency &rFre = *CFrequency::GetInstance();
 	
 	rFre.Update();
+
+#ifdef _DEBUG
 	WCHAR buf[256];
 	swprintf( buf, 256, L"%0.4f", rFre.getFrequency() );
 	SetWindowText( GHWND, buf );
+#endif
 
 	CInput::GetInstance()->Update( 50.0f, 150.0f, rFre.getFrametime() );
 	CSceneManage::GetInstance()->Update();

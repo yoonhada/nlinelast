@@ -79,7 +79,7 @@ VOID Chase::Execute( CMonster* a_pMonster )
 			{
 				// Path Á¦°Å
 				Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
-
+				a_pMonster->Set_Path( NULL );
 				a_pMonster->GetFSM()->ChangeState( NULL );
 			}
 		}
