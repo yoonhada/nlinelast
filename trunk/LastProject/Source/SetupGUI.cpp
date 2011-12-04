@@ -54,7 +54,7 @@ VOID SetupGUI::CreateScrollbar()
 	imgThumbParam.fWidth		= 50.0f;
 	imgThumbParam.fHeight		= 50.0f;
 
-	m_pGUIBase->AddFileName( 0, imgThumbParam, L"Img\\SetupScene\\Brick.png" );
+	m_pGUIBase->AddFileName( 0, imgThumbParam, L"Img\\SetupScene\\Scrollbar_Thumb.png" );
 
 	imgBackParam.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgBackParam.fX			= m_fX + 100.0f;
@@ -62,7 +62,7 @@ VOID SetupGUI::CreateScrollbar()
 	imgBackParam.fWidth		= 300.0f;
 	imgBackParam.fHeight	= 50.0f;
 	
-	m_pGUIBase->AddFileName( 0, imgBackParam, L"Img\\SetupScene\\Brick.png" );
+	m_pGUIBase->AddFileName( 0, imgBackParam, L"Img\\SetupScene\\Scrollbar_Back.png" );
 
 	m_pGUIEffectSound->Create( imgThumbParam, imgBackParam );
 	m_pGUIEffectSound->SetStyle( GUIScrollbar::SCL_HROZ );

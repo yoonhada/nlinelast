@@ -4,7 +4,6 @@
 
 class Mouse;
 class GUIBase;
-class GUIBackground;
 class GUIBtnManager;
 
 class OptionGUI
@@ -13,7 +12,6 @@ private:
 	VOID		Initialize();
 	VOID		Release();
 
-	VOID		CreateBackground();
 	VOID		CreateButton();
 	
 	VOID		OnDown( INT x, INT y );
@@ -37,8 +35,6 @@ public:
 
 	VOID		Command( DWORD& _dOut );
 
-	BOOL		NextBackgroundImage();
-
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
@@ -46,7 +42,6 @@ private:
 
 	Mouse*					m_pMouse;
 	GUIBase*				m_pGUIBase;
-	GUIBackground*			m_pGUIBackground;
 	GUIBtnManager*			m_pGUIBtnManager;
 
 public:

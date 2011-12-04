@@ -5,6 +5,7 @@
 #include "Scene.h"
 
 class CCharactor;
+class CameraWork;
 
 class LogoScene : public IScene
 {
@@ -45,6 +46,7 @@ private:
 	INT						m_scnState;
 
 	CCharactor*				m_pLogo;
+	CameraWork*				m_pCameraWork;
 
 	CLight*					m_pLight;
 	CMatrices*				m_pMatrices;

@@ -219,8 +219,8 @@ VOID GUIListbox::Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, IM
 	imgBack.fWidth		= 20.0f;
 	imgBack.fHeight		= _fHeight;
 	
-	AddFileName( 0, imgThumb, L"Img\\Brick.png" );
-	AddFileName( 0, imgBack, L"Img\\Brick.png" );
+	AddFileName( 0, imgThumb, L"Img\\Scrollbar_Thumb.png" );
+	AddFileName( 0, imgBack, L"Img\\Scrollbar_Back.png" );
 
 	m_pGUIScrollbar->Create( imgThumb, imgBack );
 }

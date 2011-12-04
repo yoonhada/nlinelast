@@ -61,15 +61,15 @@ VOID StoryGUI::CreateButton()
 	GUIBase::IMAGEPARAM imgNormal, imgHot, imgDown, imgDisable;
 
 	//	Background Next Button
-	FLOAT fX		= 700.0f;
-	FLOAT fY		= 400.0f;
-	FLOAT fWidth	= 50.0f;
-	FLOAT fHeight	= 50.0f;
+	FLOAT fX		= 1150.0f;
+	FLOAT fY		= 900.0f;
+	FLOAT fWidth	= 121.0f;
+	FLOAT fHeight	= 114.0f;
 
-	m_pGUIBase->AddFileName( 0, imgNormal, L"Img\\arrow-up-Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgHot, L"Img\\arrow-up-Hot.png" );
-	m_pGUIBase->AddFileName( 0, imgDown, L"Img\\arrow-up-Down.png" );
-	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\arrow-up-Disable.png" );
+	m_pGUIBase->AddFileName( 0, imgNormal,	L"Img\\StoryScene\\Skip_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgHot,		L"Img\\StoryScene\\Skip_Hot.png" );
+	m_pGUIBase->AddFileName( 0, imgDown,	L"Img\\StoryScene\\Skip_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\StoryScene\\Skip_Down.png" );
 
 	m_pGUIBtnManager->Create( STORY_SKIP, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
 }

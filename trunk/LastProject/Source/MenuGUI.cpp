@@ -47,13 +47,13 @@ VOID MenuGUI::CreateButton()
 	GUIBase::IMAGEPARAM imgStartNormal, imgStartHot, imgStartDown, imgStartDisable;
 
 	//	Background Next Button
-	FLOAT fX		= 400.0f;
-	FLOAT fY		= 400.0f;
-	FLOAT fWidth	= 256.0f;
-	FLOAT fHeight	= 64.0f;
+	FLOAT fX		= 450.0f;
+	FLOAT fY		= 700.0f;
+	FLOAT fWidth	= 350.0f;
+	FLOAT fHeight	= 97.0f;
 
 	m_pGUIBase->AddFileName( 0, imgStartNormal, L"Img\\MenuScene\\Start_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgStartHot, L"Img\\MenuScene\\Start_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgStartHot, L"Img\\MenuScene\\Start_Hot.png" );
 	m_pGUIBase->AddFileName( 0, imgStartDown, L"Img\\MenuScene\\Start_Down.png" );
 	m_pGUIBase->AddFileName( 0, imgStartDisable, L"Img\\MenuScene\\Start_Down.png" );
 
@@ -61,13 +61,13 @@ VOID MenuGUI::CreateButton()
 
 	GUIBase::IMAGEPARAM imgEndNormal, imgEndHot, imgEndDown, imgEndDisable;
 	//	Background Next Button
-	fX		= 400.0f;
-	fY		= 500.0f;
-	fWidth	= 256.0f;
-	fHeight	= 64.0f;
+	fX		= 450.0f;
+	fY		= 850.0f;
+	fWidth	= 350.0f;
+	fHeight	= 97.0f;
 
 	m_pGUIBase->AddFileName( 0, imgEndNormal, L"Img\\MenuScene\\End_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgEndHot, L"Img\\MenuScene\\End_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgEndHot, L"Img\\MenuScene\\End_Hot.png" );
 	m_pGUIBase->AddFileName( 0, imgEndDown, L"Img\\MenuScene\\End_Down.png" );
 	m_pGUIBase->AddFileName( 0, imgEndDisable, L"Img\\MenuScene\\End_Down.png" );
 
