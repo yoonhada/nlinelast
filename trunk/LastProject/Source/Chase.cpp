@@ -45,7 +45,7 @@ VOID Chase::Enter( CMonster* a_pMonster )
 	}
 
 	// 이동 애니메이션으로 바꾼다.
-	a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
+	a_pMonster->ChangeAnimation( 5/*CMonster::ANIM_MOVE*/ );
 }
 
 
