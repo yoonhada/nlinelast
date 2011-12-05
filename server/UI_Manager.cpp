@@ -22,8 +22,8 @@ CUI_Manager::~CUI_Manager()
 
 VOID CUI_Manager::Initialize()
 {
-	UI_ConnectionList = new CUI_ConnectionList;
-	UI_PacketState = new CUI_PacketState;
+	UI_ConnectionList	= new CUI_ConnectionList;
+	UI_PacketState		= new CUI_PacketState;
 }
 
 

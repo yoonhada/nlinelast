@@ -55,7 +55,7 @@ BOOL CSocketServer::Initialize()
 	}
 
 	// Worker 쓰레드 생성
-	UINT dwThreadID;
+	UINT dwThreadID = 0;
 	m_hIOCPThread = (HANDLE)_beginthreadex( NULL, 0, IOCPWorkerProc, this, 0, &dwThreadID );
 
 	return TRUE;
@@ -82,6 +82,7 @@ VOID CSocketServer::Clear()
 
 BOOL CSocketServer::StartServer( WORD Port )
 {
+	// listen 소켓 생성
 	m_ListenSocket = WSASocket( AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED );
 	if( m_ListenSocket == INVALID_SOCKET )
 	{
@@ -89,6 +90,7 @@ BOOL CSocketServer::StartServer( WORD Port )
 		return FALSE;
 	}
 
+	// binding
 	SOCKADDR_IN addr;
 	memset( &addr, 0, sizeof( SOCKADDR_IN ) );
 	addr.sin_family = AF_INET;
@@ -102,6 +104,7 @@ BOOL CSocketServer::StartServer( WORD Port )
 		return FALSE;
 	}
 
+	// listen
 	r = listen( m_ListenSocket, SOMAXCONN );
 	if( r != 0 )
 	{
@@ -109,7 +112,8 @@ BOOL CSocketServer::StartServer( WORD Port )
 		return FALSE;
 	}
 
-	UINT dwThreadID;
+	// accept 쓰레드 생성
+	UINT dwThreadID = 0;
 	m_hAcceptThread = (HANDLE)_beginthreadex( NULL, 0, AcceptProc, this, 0, &dwThreadID );
 
 	cout << "Started Server!" << endl;
@@ -245,7 +249,7 @@ VOID CSocketServer::OnClientClose( CNTClient* pClient )
 		}
 	}
 
-#ifdef _DEBUG_
+#ifdef _DEBUG
 	cout << "Current User Count : " << m_iClientCount << endl;
 #endif
 
@@ -265,7 +269,7 @@ VOID CSocketServer::CS_LOGON( CNTClient* pClient, CPacket& pk )
 	m_Map_LogonClients.insert( map<WORD, CNTClient*>::value_type( pClient->m_Index, pClient ) );
 	++m_iClientCount;
 
-#ifdef _DEBUG_
+#ifdef _DEBUG
 	cout << "User Count : " << m_iClientCount << endl;
 #endif
 
@@ -339,11 +343,11 @@ VOID CSocketServer::CS_READY( CNTClient* pClient, CPacket& a_pk )
 	if( m_iClientCount == m_iReadyCount )
 	{
 #ifdef _DEBUG
-		cout << "Enable ok" << endl;
+		cout << "CS_READY : START Button Enable" << endl;
 #endif
 		CPacket sendPk;
 		WORD wMsgSize = 0;
-		WORD wMsgID = MSG_ENABLE_START;
+		WORD wMsgID = MSG_START_BUTTON_STATE;
 		BOOL bStart = TRUE;
 
 		sendPk.Write( wMsgSize );
@@ -356,11 +360,11 @@ VOID CSocketServer::CS_READY( CNTClient* pClient, CPacket& a_pk )
 	else
 	{
 #ifdef _DEBUG
-		cout << "Enable no" << endl;
+		cout << "CS_READY : START Button Disable" << endl;
 #endif
 		CPacket sendPk;
 		WORD wMsgSize = 0;
-		WORD wMsgID = MSG_ENABLE_START;
+		WORD wMsgID = MSG_START_BUTTON_STATE;
 		BOOL bStart = FALSE;
 
 		sendPk.Write( wMsgSize );
@@ -498,7 +502,7 @@ VOID CSocketServer::CS_UTOM_ATTACK( CNTClient* pClient, CPacket& pk )
 	sendPk.Write( fDirZ );
 	sendPk.Write( wTotalParts );
 
-#ifdef _DEBUG_
+#ifdef _DEBUG
 	cout << "cTotalParts : " << wTotalParts << endl;
 #endif
 
@@ -510,7 +514,7 @@ VOID CSocketServer::CS_UTOM_ATTACK( CNTClient* pClient, CPacket& pk )
 		sendPk.Write( wDestroyPart );
 		sendPk.Write( wDestroyCount );
 
-#ifdef _DEBUG_
+#ifdef _DEBUG
 		cout << "cDestroyPart : " << wDestroyPart << "  wDestroyCount : " << wDestroyCount << endl;
 		cout << "Destroy list" << endl;
 #endif
@@ -532,7 +536,7 @@ VOID CSocketServer::CS_UTOM_ATTACK( CNTClient* pClient, CPacket& pk )
 	pk.Rewind();
 	SendToClient( pClient, pk );
 
-#ifdef _DEBUG_
+#ifdef _DEBUG
 	cout << "UTOM Attack send" << endl;
 #endif
 }
@@ -565,7 +569,7 @@ VOID CSocketServer::CS_PLAYER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk 
 	sendPk.Write( wClientNumber );
 	sendPk.Write( wAnimationNumber );
 
-#ifdef _DEBUG_
+#ifdef _DEBUG
 	cout << "Attack Ani "<< wClientNumber << "/" << wAnimationNumber << endl;
 #endif
 
@@ -584,6 +588,15 @@ VOID CSocketServer::CS_MONSTER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk
 	SendToClient( pClient, pk );
 
 	cout << "Monster Attack Ani send" << endl;
+}
+
+
+VOID CSocketServer::CS_MONSTER_ATTACK_ANIMATION2( CNTClient* pClient, CPacket& pk )
+{
+	pk.Rewind();
+	SendToClient( pClient, pk );
+
+	cout << "Monster Attack Ani2 send" << endl;
 }
 
 
@@ -748,6 +761,11 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 		CS_MONSTER_ATTACK_ANIMATION( pClient, pk );
 		break;
 
+	// 몬스터 애니메이션2
+	case MSG_MONSTER_ATTACK_ANIMATION2:
+		CS_MONSTER_ATTACK_ANIMATION2( pClient, pk );
+		break;
+
 	// 몬스터 각도
 	case MSG_MONSTER_LOCKON:
 		CS_MONSTER_LockOn( pClient, pk );
@@ -778,6 +796,8 @@ UINT WINAPI CSocketServer::AcceptProc( VOID* p )
 		pServer->OnAccept( hSocket );
 	}
 
+	cout << "AcceptProc Terminated" << endl;
+
 	return 0;
 }
 
@@ -800,14 +820,6 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 			// 서버 종료
 			if( pClient == NULL )
 			{
-				// 접속중인 모든 클라이언트를 종료한다.
-/*
-				map<WORD, CNTClient*>::iterator it;
-				for( it = pServer->m_Map_LogonClients.begin(); it != pServer->m_Map_LogonClients.end(); ++it )
-				{
-					pServer->OnClientClose( it->second );
-				}
-*/
 				pServer->OnServerClose();
 				return 0;
 			}
@@ -824,7 +836,7 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 
 			// 수신데이터가 매세지로 완성되었는지 확인하고 처리
 			UINT DataSize = pClient->m_RecvBuffer.GetStoredSize();
-			while( DataSize >= 2/*HEADER_SIZE*/ )
+			while( DataSize >= HEADER_SIZE )
 			{
 				// 헤더에서 크기정보를 얻어온다.
 				WORD wMsgSize;
