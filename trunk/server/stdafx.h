@@ -25,8 +25,6 @@ using std::vector;
 using std::map;
 
 
-#define _DEBUG_
-
 
 // 안전한 메모리 해제를 위한 매크로
 #define SAFE_DELETE(p)			{ if(p) { delete	(p);	(p) = NULL; } }

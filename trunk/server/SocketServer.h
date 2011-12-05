@@ -52,6 +52,7 @@ public:
 	VOID CS_MTOU_ATTACK( CNTClient* pClient, CPacket& pk );
 	VOID CS_PLAYER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk );
 	VOID CS_MONSTER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk );
+	VOID CS_MONSTER_ATTACK_ANIMATION2( CNTClient* pClient, CPacket& pk );
 	VOID CS_MONSTER_LockOn( CNTClient* pClient, CPacket& pk );
 
 	VOID SC_INIT( CNTClient* pClient );

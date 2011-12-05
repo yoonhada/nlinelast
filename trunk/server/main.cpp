@@ -1,12 +1,9 @@
-#define _DEBUG_
-
-
 #include "stdafx.h"
 
 #include "SocketServer.h"
 #include "UI_Manager.h"
 
-#ifdef _DEBUG_
+#ifdef _DEBUG
 #include <crtdbg.h>
 #endif
 
@@ -21,7 +18,7 @@ VOID Draw_Menu()
 
 INT main( INT argc, CHAR* argv[] )
 {
-#ifdef _DEBUG_
+#ifdef _DEBUG
 	// 메모릭 릭 탐지
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
@@ -29,23 +26,20 @@ INT main( INT argc, CHAR* argv[] )
 	CSocketServer SocketServer;
 	SocketServer.Initialize();
 	SocketServer.StartServer( 20202 );
+/*
+	Draw_Menu();
 
-	CHAR str[128];
-
-//	Draw_Menu();
-
-//	CUI_Manager manager;
-
-//	manager.Initialize();
-
-		
+	CUI_Manager UIManager;
+	UIManager.Initialize();
+*/
 	while( 1 )
 	{
 		SocketServer.UpdateFrame();
 		
-		cin >> str;
-		if( !strcmp( str, "quit" ) )
+		if( GetKeyState( 'Q' ) & 0x8000 )
+		{
 			break;
+		}
 
 		Sleep( 1 );
 	}
