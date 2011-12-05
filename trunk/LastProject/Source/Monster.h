@@ -9,7 +9,7 @@ class CMonster : public CObjectSRT
 {
 public:
 	// 애니메이션 번호
-	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK, ANIM_MELEE_ATTACK, ANIM_STAND, };
+	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK = 1, ANIM_MELEE_ATTACK = 2, ANIM_STAND = 3, };
 
 public:
 	CMonster();

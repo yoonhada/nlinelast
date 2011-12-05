@@ -17,7 +17,7 @@ Melee* Melee::GetInstance()
 VOID Melee::Enter( CMonster* a_pMonster )
 {
 	// Melee 공격 애니메이션으로 바꾼다.
-	a_pMonster->ChangeAnimation( 6/*CMonster::ANIM_MELEE_ATTACK*/ );
+	a_pMonster->ChangeAnimation( CMonster::ANIM_MELEE_ATTACK );
 }
 
 

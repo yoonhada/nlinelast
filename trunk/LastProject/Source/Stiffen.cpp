@@ -31,7 +31,7 @@ VOID Stiffen::Execute( CMonster* a_pMonster )
 		t = 0.0f;
 
 		// 대기 애니메이션으로 바꾼다.
-		a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
+//		a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
 
 		// 경직상태가 끝나면 애니메이션 보간을 위해 보간 대기 상태로
 		a_pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );

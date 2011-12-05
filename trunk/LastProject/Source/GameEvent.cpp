@@ -160,7 +160,7 @@ VOID CGameEvent::EventInit()
 	// Game Setting
 	m_pScen->m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
 	m_pScen->m_pMonster->Set_Angle( 0.0f );
-	m_pScen->m_pMonster->Set_iSelectedFrameNum( 0 );
+	m_pScen->m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 	m_pScen->m_pMonster->EnableShadow( TRUE );
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
