@@ -895,10 +895,10 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					}
 				}
 			}
-#ifdef _DEBUG
+
 			if( !m_bMonster )
 			{
-				if (nCount > 50)
+				if (nCount > 100)
 				{
 					break;
 				}
@@ -910,7 +910,7 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 					break;
 				}
 			}
-#endif // _DEBUG
+
 		}
 
 		if( nCount != 0 )

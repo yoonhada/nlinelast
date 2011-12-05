@@ -93,23 +93,24 @@ VOID CGameEvent::Clear()
 VOID CGameEvent::Update()
 {
 	INT nEvent = NONE;
+	if ( FastRand2() * 100.0f > 98 )
+		AddEvent( COMBO, 100.0f );
+
 	if ( m_bHost && m_pCurrentEvent != NULL)
 	{
-		if ( FastRand2() * 100.0f > 98 )
-			AddEvent( COMBO, 100.0f );
-
 		m_pCurrentEvent->fTime -= CFrequency::GetInstance()->getFrametime();
 		if ( m_pCurrentEvent->fTime < 0.0f )
 		{
 			nEvent = m_pCurrentEvent->nKind;
 			m_listEvent.pop_front();
 			SAFE_DELETE( m_pCurrentEvent );
-			if (!m_listEvent.empty())
-			{
-				m_pCurrentEvent = m_listEvent.front();
-			}			
 		}
 	}
+	if (!m_listEvent.empty())
+	{
+		m_pCurrentEvent = m_listEvent.front();
+	}			
+
 
 	switch ( nEvent )
 	{
