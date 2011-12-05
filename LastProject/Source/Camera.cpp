@@ -1,6 +1,7 @@
 #include "Stdafx.h"
 #include "Camera.h"
 #include "Monster.h"
+#include "CameraWork.h"
 
 CCamera::CCamera() 
 : m_fMinZoom( 15.0f )
@@ -14,7 +15,13 @@ CCamera::CCamera()
 
 CCamera::~CCamera()
 {
+	SAFE_DELETE ( m_pCameraWork ); 
+}
 
+VOID CCamera::Create( LPDIRECT3DDEVICE9 a_pD3dDevice ) 
+{
+	m_pD3dDevice = a_pD3dDevice; 
+	CreateEventCamera(); 
 }
 
 
@@ -40,6 +47,12 @@ VOID CCamera::Clear()
 
 void CCamera::SetCamera()
 {
+	if (m_nEffect == 3)
+	{
+		UpdateEventCamera();
+		return;
+	}
+
 	//상하 각도 고정
 	if ( m_fPitch < ( m_fHighAngle ) ) 
 	{
@@ -318,4 +331,39 @@ VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXV
 	}
 
 	//CDebugConsole::GetInstance()->Messagef( L"OUT : %f / %f\n", m_fZoomReduce, m_fZoom );
+}
+
+
+VOID CCamera::CreateEventCamera()
+{
+	//	Test Create
+	//	Create CameraWork
+	m_pCameraWork = new CameraWork( m_pD3dDevice );
+	m_pCameraWork->Create();
+	D3DXVECTOR3 vecBox0( 364.0f, 10.0f, -777.0f ), vecBox1( -1456.0f, 300.0f, 1083.0f ), vecBox2( 934.0f, 250.0f, 2092.0f ), vecBox3( 231.0f, 100.0f, -580.0f );
+	D3DXVECTOR3 vecBox4( -46.0f, 10.0f, 770.0f ), vecBox5( 244.0f, 10.0f, -194.0f );
+	m_pCameraWork->SetPosition_Box4( vecBox0, vecBox1, vecBox2, vecBox3 );
+	m_pCameraWork->SetLookAtCourse_Box2( vecBox4, vecBox5 );
+
+	m_pCameraWork->SetWorkingPeriod( 22000 );
+}
+
+VOID CCamera::UpdateEventCamera()
+{
+	if (m_pCameraWork->Update() == FALSE)
+	{
+		m_nEffect = 0;
+	}
+	
+	// Test Update
+	D3DXVECTOR3 vecCameraPosition, vecCameraLookAt;
+	m_pCameraWork->GetCameraPosition( vecCameraPosition );
+	m_pCameraWork->GetCameraLookAt( vecCameraLookAt );
+
+	D3DXVECTOR3		vecEyePt = vecCameraPosition; 
+	D3DXVECTOR3		vecLookatPt  = vecCameraLookAt;
+	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
+	D3DXMATRIXA16	matView;
+	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
+	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 }

@@ -1403,6 +1403,13 @@ VOID CMonster::EnableShadow( BOOL bEnable )
 {
 	for( INT Loop = 0; Loop < m_iCharEditorMax; ++Loop )
 	{
-		m_pBox[Loop].EnableShadow( bEnable );
+		if (Loop == 2 || Loop == 3 )
+		{
+			m_pBox[Loop].EnableShadow( bEnable );
+		}	
+		else
+		{
+			m_pBox[Loop].EnableShadow( FALSE );
+		}
 	}
 }

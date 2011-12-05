@@ -42,37 +42,37 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 
 	m_pLogo[ 0 ].Create( m_pD3dDevice );
 	m_pLogo[ 0 ].Load( L"Data/Logo/N_Beta.csav" );
-	m_pLogo[ 0 ].Set_Position( D3DXVECTOR3( 55.0f, 0.0f, 0.0f ) );
+	m_pLogo[ 0 ].Set_Position( D3DXVECTOR3( 55.0f, 100.0f, 0.0f ) );
 	m_pLogo[ 0 ].Set_Angle( -MTP_FUN::Deg2Rad<210>::radians ); // D3DXToRadian( -30.0f ) );
 	m_pLogo[ 0 ].EnableShadow( FALSE );
 
 	m_pLogo[ 1 ].Create( m_pD3dDevice );
 	m_pLogo[ 1 ].Load( L"Data/Logo/-_Beta.csav" );
-	m_pLogo[ 1 ].Set_Position( D3DXVECTOR3( 35.0f, 0.0f,-5.0f ) );
+	m_pLogo[ 1 ].Set_Position( D3DXVECTOR3( 35.0f, 100.0f,-5.0f ) );
 	m_pLogo[ 1 ].Set_Angle( -MTP_FUN::Deg2Rad<15>::radians ); // D3DXToRadian( -15.0f ) );
 	m_pLogo[ 1 ].EnableShadow( FALSE );
 
 	m_pLogo[ 2 ].Create( m_pD3dDevice );
 	m_pLogo[ 2 ].Load( L"Data/Logo/L_Beta.csav" );
-	m_pLogo[ 2 ].Set_Position( D3DXVECTOR3( 15.0f, 0.0f,-10.0f ) );
+	m_pLogo[ 2 ].Set_Position( D3DXVECTOR3( 15.0f, 100.0f,-10.0f ) );
 	m_pLogo[ 2 ].Set_Angle( MTP_FUN::Deg2Rad<90>::radians ); // D3DXToRadian( 90.0f ) );
 	m_pLogo[ 2 ].EnableShadow( FALSE );
 
 	m_pLogo[ 3 ].Create( m_pD3dDevice );
 	m_pLogo[ 3 ].Load( L"Data/Logo/I_Beta.csav" );
-	m_pLogo[ 3 ].Set_Position( D3DXVECTOR3( -5.0f, 0.0f,-10.0f ) );
+	m_pLogo[ 3 ].Set_Position( D3DXVECTOR3( -5.0f, 100.0f,-10.0f ) );
 	//m_pLogo[ 3 ].Set_Angle( MTP_FUN::Deg2Rad<0>::radians ); //D3DXToRadian( 0.0f ) );
 	m_pLogo[ 3 ].EnableShadow( FALSE );
 
 	m_pLogo[ 4 ].Create( m_pD3dDevice );
 	m_pLogo[ 4 ].Load( L"Data/Logo/N_Beta.csav" );
-	m_pLogo[ 4 ].Set_Position( D3DXVECTOR3(-25.0f, 0.0f,-5.0f ) );
+	m_pLogo[ 4 ].Set_Position( D3DXVECTOR3(-25.0f, 100.0f,-5.0f ) );
 	m_pLogo[ 4 ].Set_Angle( MTP_FUN::Deg2Rad<195>::radians ); // D3DXToRadian( 7.5f ) );
 	m_pLogo[ 4 ].EnableShadow( FALSE );
 
 	m_pLogo[ 5 ].Create( m_pD3dDevice );
 	m_pLogo[ 5 ].Load( L"Data/Logo/E_Beta.csav" );
-	m_pLogo[ 5 ].Set_Position( D3DXVECTOR3(-45.0f, 0.0f, 0.0f ) );
+	m_pLogo[ 5 ].Set_Position( D3DXVECTOR3(-45.0f, 100.0f, 0.0f ) );
 	m_pLogo[ 5 ].Set_Angle( MTP_FUN::Deg2Rad<195>::radians ); //D3DXToRadian( 195.0f ) );
 	m_pLogo[ 5 ].EnableShadow( FALSE );
 
@@ -117,6 +117,7 @@ VOID LogoScene::Update()
 	if( GetKeyState( VK_LBUTTON ) & 0x8000 )
 	{
 		m_scnState = IScene::SCENE_END;
+		return ;
 	}
 	//if( GetKeyState( VK_DOWN ) & 0x8001 )
 	//{
@@ -156,7 +157,10 @@ VOID LogoScene::Update()
 	if( m_datScene.bActivate )
 	{
 		if( dCurrentTime > m_datScene.dBeginTime + m_datScene.dFrameSpeed )
-			;//m_scnState = IScene::SCENE_END;
+		{
+			m_scnState = IScene::SCENE_END;
+			return ;
+		}
 	}
 
 	m_pCameraWork->Update();
@@ -229,7 +233,9 @@ VOID LogoScene::Render()
 	m_pMatrices->SetupProjection();
 
 	for( INT i=0; i<6; i++ )
+	{
 		m_pLogo[ i ].Render();
+	}
 
 	m_pLight->DisableLight();
 }
