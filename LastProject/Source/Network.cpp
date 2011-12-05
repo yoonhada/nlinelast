@@ -381,7 +381,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	for( WORD i=0; i<wTotalParts; ++i )
 	{
 		INT k = 0;
-		WORD wList[100];
+		WORD wList[500];
 
 		a_pk.Read( &wDestroyPart );
 		a_pk.Read( &wDestroyCount );

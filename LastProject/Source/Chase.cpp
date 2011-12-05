@@ -45,7 +45,7 @@ VOID Chase::Enter( CMonster* a_pMonster )
 	}
 
 	// 이동 애니메이션으로 바꾼다.
-	a_pMonster->ChangeAnimation( 5/*CMonster::ANIM_MOVE*/ );
+	a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
 }
 
 
@@ -54,7 +54,7 @@ VOID Chase::Execute( CMonster* a_pMonster )
 	static FLOAT t = 0.0f;
 	t += CFrequency::GetInstance()->getFrametime();
 
-	if( t >= 0.5f )
+	if( t >= 0.25f )
 	{
 		t = 0.0f;
 
@@ -120,13 +120,13 @@ VOID Chase::Execute( CMonster* a_pMonster )
 			D3DXVECTOR3 p1 = GetWorldPos( m_pNextPath->x, m_pNextPath->y );
 			D3DXVECTOR3 p2 = GetWorldPos( m_pNextPath->next->x, m_pNextPath->next->y );
 
-			D3DXVec3CatmullRom( &pos, &p0, &p0, &p1, &p2, t / 0.5f );
+			D3DXVec3CatmullRom( &pos, &p0, &p0, &p1, &p2, t / 0.25f );
 
 			// 각도
 			D3DXVECTOR2 vCurrentAngle( 0.0f, m_fAngle0 );
 			D3DXVECTOR2 vNextAngle( 0.0f, m_fAngle1 );
 
-			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / 0.5f );
+			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / 0.25f );
 		}
 		// 처음과 끝이 아닌 중간 Path
 		else
