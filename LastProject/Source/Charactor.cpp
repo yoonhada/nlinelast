@@ -716,7 +716,7 @@ VOID CCharactor::AnimateMove( BOOL bSetAni )
 		if ( -fAniAngleTurn < m_fAniAngle && m_fAniAngle < fAniAngleTurn )
 		{
 			m_fTransition = 0;
-			CDebugConsole::GetInstance()->Messagef("%d\n", m_pWeapon->Get_nFrame() );
+//			CDebugConsole::GetInstance()->Messagef("%d\n", m_pWeapon->Get_nFrame() );
 		}
 	}
 

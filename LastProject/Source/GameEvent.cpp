@@ -126,8 +126,10 @@ VOID CGameEvent::Update()
 
 VOID CGameEvent::Render()
 {
+/*
 	if( m_pEventCombo )
 		m_pEventCombo->Render();
+*/
 }
 
 D3DXVECTOR3& CGameEvent::GetDefaultCharPosition( INT nClient )

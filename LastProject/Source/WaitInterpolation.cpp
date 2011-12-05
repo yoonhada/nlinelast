@@ -29,6 +29,7 @@ VOID WaitInterPolation::Execute( CMonster* a_pMonster )
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
 			a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+
 		}
 		else
 		{

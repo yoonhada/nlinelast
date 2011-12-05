@@ -9,7 +9,7 @@ class CMonster : public CObjectSRT
 {
 public:
 	// 애니메이션 번호
-	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK = 1, ANIM_MELEE_ATTACK = 2, ANIM_STAND = 3, };
+	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK = 1, ANIM_MELEE_ATTACK = 2, ANIM_STAND = 3, ANIM_EVENT = 4, ANIM_DASH = 5, ANIM_SLIDING = 6, };
 
 public:
 	CMonster();
@@ -52,8 +52,8 @@ public:
 	StateMachine<CMonster>* GetFSM() const	{ return m_pStateMachine; }
 	D3DXVECTOR3& Get_Pos()					{ return m_vControl; }
 	INT Get_Target()						{ return m_iTarget; }
-	INT* Get_TargetPos()					{ return m_iTargetPos; }
-//	D3DXVECTOR3& Get_TargetPos()			{ return m_vTargetPos; }
+//	INT* Get_TargetPos()					{ return m_iTargetPos; }
+	D3DXVECTOR3& Get_TargetPos()			{ return m_vTargetPos; }
 	D3DXVECTOR3& Get_TargetUnitVector()		{ return m_vTargetUnitVector; }
 	INT Get_iSelectedFrameNum()				{ return m_iSelectedFrameNum; }
 	FLOAT Get_TargetDistance()				{ return m_fTargetDistance; }
