@@ -942,6 +942,11 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		SC_Monster_Attack_Animation( a_pk );
 		break;
 
+	// 몬스터 공격 애니메이션2
+	case MSG_MONSTER_ATTACK_ANIMATION2:
+		SC_Monster_Attack_Animation2( a_pk );
+		break;
+
 	// 몬스터 각도
 	case MSG_MONSTER_LOCKON:
 		SC_Monster_LockOn( a_pk );
@@ -1025,14 +1030,18 @@ UINT WINAPI RecvThread( LPVOID a_p )
 		INT nSize = recv( pNetwork->m_socket, buff + buffSize, BUF_SIZE - buffSize, 0 );
 		if( nSize == SOCKET_ERROR )
 		{
-			//cout << "recv Error : " << WSAGetLastError() << endl;
+#ifdef _DEBUG
+			CDebugConsole::GetInstance()->Messagef( "recv Error :  \n", WSAGetLastError() );
+#endif
 			break;
 		}
 
 		// 접속 정료
 		if( nSize == 0 )
 		{
-			//cout << "Disconnected" << endl;
+#ifdef _DEBUG
+			CDebugConsole::GetInstance()->Messagef( "Disconnected \n" );
+#endif
 			pNetwork->Close();
 			break;
 		}
