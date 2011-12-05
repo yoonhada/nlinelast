@@ -198,11 +198,12 @@ VOID ASEViewer::Render()
 {
 	for( INT i=0 ; i<m_iNumASEData ; i++ )
 		RenderASEData( i );
-	
-	#ifdef _DEBUG
+/*	
+#ifdef _DEBUG
 	for( INT i=0 ; i<m_iNumBBXData ; i++ )
 		RenderBBXData( i );
-	#endif
+#endif
+*/
 }
 
 INT ASEViewer::GetCurrentFrame()

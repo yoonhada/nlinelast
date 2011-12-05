@@ -118,6 +118,8 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		// 새 Path를 표시한다.
 		SetPath( path );
 #endif
+		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
+		Astar::GetInstance()->clearMap();
 
 		a_pMonster->Set_Path( path );
 
