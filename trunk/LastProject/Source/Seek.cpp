@@ -20,6 +20,7 @@ VOID Seek::Enter( CMonster* a_pMonster )
 {
 	// 대기 애니메이션으로 바꾼다.
 //	a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
+//	CDebugConsole::GetInstance()->Messagef( L"Seek : ANIM_STAND \n" );
 }
 
 
@@ -27,6 +28,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 {
 	INT Target = -1;
 	D3DXVECTOR3 pos( 0.0f, 0.0f, 0.0f );
+	D3DXVECTOR3 vTargetPos( 0.0f, 0.0f, 0.0f );
 	FLOAT length = 0.0f;
 	FLOAT min = 99999.0f;
 
@@ -47,6 +49,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 				// 더 가까이 있으면
 				min = length;
 				Target = nClientNum;
+				vTargetPos = pCharactors[ nClientNum ].Get_CharaPos();
 			}
 		}
 	}
@@ -58,15 +61,15 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 가장 가까이에 있는 목표가 공격 범위에 있으면 전투 상태로 전환
-	if( min < 25.0f )
+	if( min < 100.0f )
 	{
 		a_pMonster->Set_Target( Target );
+		a_pMonster->Set_TargetPos( vTargetPos );
 		a_pMonster->Set_TargetDistance( min );
 		a_pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
-
 	// 범위에 없으면 가장 가까운 목표 추격
-	else if( min >= 25.0f && min <= 500.0f )
+	else if( min >= 100.0f && min <= 300.0f )
 	{
 		D3DXVECTOR3 vMonsterPos = a_pMonster->Get_Pos();
 		D3DXVECTOR3 vPlayerPos = pCharactors[Target].Get_CharaPos();
@@ -84,7 +87,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		static FLOAT sz = 0;
 		static FLOAT ex = 0;
 		static FLOAT ez = 0;
-		
+
 		sx = (FLOAT)StartX;
 		sz = (FLOAT)StartZ;
 		ex = (FLOAT)EndX;
@@ -124,10 +127,6 @@ VOID Seek::Execute( CMonster* a_pMonster )
 
 			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 		}
-	}
-	else
-	{
-//		a_pMonster->ChangeAnimation( 0 );
 	}
 }
 

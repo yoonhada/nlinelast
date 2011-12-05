@@ -943,6 +943,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Sliding.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Sliding.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Spin.cpp"
 				>
 			</File>

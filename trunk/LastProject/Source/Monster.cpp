@@ -1183,7 +1183,7 @@ VOID CMonster::AniInterpolation()
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[1] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.y;
 			m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[2] = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.z;
 		}
-	}	
+	}
 }
 
 VOID CMonster::CreateAttackBoundBox()
@@ -1336,7 +1336,7 @@ VOID CMonster::Update()
 	}
 
 	// AI
-//	m_pStateMachine->Update();
+	m_pStateMachine->Update();
 }
 
 VOID CMonster::Render()

@@ -46,6 +46,7 @@ VOID Chase::Enter( CMonster* a_pMonster )
 
 	// 이동 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
+	CDebugConsole::GetInstance()->Messagef( L"Chase : ANIM_MOVE \n" );
 }
 
 
@@ -109,7 +110,7 @@ VOID Chase::Execute( CMonster* a_pMonster )
 	}
 	else
 	{
-		D3DXVECTOR3 pos( 0.0f, 0.0f, 0.0f );
+		D3DXVECTOR3 vPos( 0.0f, 0.0f, 0.0f );
 		D3DXVECTOR2 vAngle( 0.0f, 0.0f );
 
 		// 처음 이동할 Path인 경우
@@ -120,7 +121,7 @@ VOID Chase::Execute( CMonster* a_pMonster )
 			D3DXVECTOR3 p1 = GetWorldPos( m_pNextPath->x, m_pNextPath->y );
 			D3DXVECTOR3 p2 = GetWorldPos( m_pNextPath->next->x, m_pNextPath->next->y );
 
-			D3DXVec3CatmullRom( &pos, &p0, &p0, &p1, &p2, t / 0.25f );
+			D3DXVec3CatmullRom( &vPos, &p0, &p0, &p1, &p2, t / 0.25f );
 
 			// 각도
 			D3DXVECTOR2 vCurrentAngle( 0.0f, m_fAngle0 );
@@ -137,16 +138,16 @@ VOID Chase::Execute( CMonster* a_pMonster )
 			D3DXVECTOR3 p2 = GetWorldPos( m_pNextPath->x, m_pNextPath->y );
 			D3DXVECTOR3 p3 = GetWorldPos( m_pNextPath->next->x, m_pNextPath->next->y );
 
-			D3DXVec3CatmullRom( &pos, &p0, &p1, &p2, &p3, t * 2.0f ); // / 0.5f );
+			D3DXVec3CatmullRom( &vPos, &p0, &p1, &p2, &p3, t / 0.25f );
 
 			// 각도
 			D3DXVECTOR2 vCurrentAngle( 0.0f, m_fAngle0 );
 			D3DXVECTOR2 vNextAngle( 0.0f, m_fAngle1 );
 
-			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t * 2.0f ); // / 0.5f );
+			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / 0.25f );
 		}
 
-		a_pMonster->Set_Pos( pos );
+		a_pMonster->Set_Pos( vPos );
 		a_pMonster->Set_Angle( D3DXToRadian( vAngle.y ) );
 	}
 }
