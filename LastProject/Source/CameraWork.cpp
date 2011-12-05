@@ -174,10 +174,10 @@ VOID CameraWork::Create()
 	InitPositionToLookAt();
 }
 
-VOID CameraWork::UpdatePosition()
+BOOL CameraWork::UpdatePosition()
 {
 	if( m_datPosition.iNextIndex >= m_datPosition.infCourse.iNumVertices )
-		return;
+		return FALSE;
 
 
 	static FLOAT fInterporation = 0.0f;
@@ -220,13 +220,15 @@ VOID CameraWork::UpdatePosition()
 			//}
 		}
 	}
+
+	return TRUE;
 	
 }
 
-VOID CameraWork::UpdateLookAt()
+BOOL CameraWork::UpdateLookAt()
 {
 	if( m_datLookAt.iNextIndex >= m_datLookAt.infCourse.iNumVertices )
-		return;
+		return FALSE;
 	
 	static FLOAT fInterporation = 0.0f;
 
@@ -272,12 +274,16 @@ VOID CameraWork::UpdateLookAt()
 			//}
 		}
 	}
+
+	return TRUE;
 }
 
-VOID CameraWork::Update()
+BOOL CameraWork::Update()
 {
-	UpdatePosition();
-	UpdateLookAt();
+	BOOL bPosition, bLookAt;
+	
+	bPosition	= UpdatePosition();
+	bLookAt		= UpdateLookAt();
 
 	/*m_Data.infPositionToLookAt.pVertex[ 0 ].vecPos = m_vecCameraPosition;
 	m_Data.infPositionToLookAt.pVertex[ 1 ].vecPos = m_vecCameraLookAt;
@@ -290,7 +296,10 @@ VOID CameraWork::Update()
 	m_datPositionToLookAt.infBoxLink.pVertex[ 1 ].vecPos = m_vecCameraLookAt;
 	CreateImage_Course( &m_datPositionToLookAt.imgBoxLink, &m_datPositionToLookAt.infBoxLink );
 
+	if( bPosition == FALSE && bLookAt == FALSE )
+		return FALSE;
 
+	return TRUE;
 }
 
 VOID CameraWork::Render()
