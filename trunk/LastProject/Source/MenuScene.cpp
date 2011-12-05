@@ -70,6 +70,7 @@ VOID MenuScene::Update()
 		m_pLoginScene->SetActivate( TRUE );
 		break;
 	case MENU_END:
+		SendMessage( GHWND, WM_DESTROY, 0, 0 );
 		m_scnState = IScene::SCENE_END;
 		break;
 	}
