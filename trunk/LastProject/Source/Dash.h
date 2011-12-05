@@ -26,7 +26,7 @@ public:
 	virtual VOID Execute( CMonster* a_pMonster );
 	virtual VOID Exit( CMonster* a_pMonster );
 
-	VOID SetAngle( CMonster* a_pMonster );
+	FLOAT SetAngle( CMonster* a_pMonster );
 };
 
 
