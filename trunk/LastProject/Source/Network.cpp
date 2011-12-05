@@ -378,7 +378,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	for( WORD i=0; i<wTotalParts; ++i )
 	{
 		INT k = 0;
-		WORD wList[500];
+		WORD wList[1000];
 
 		a_pk.Read( &wDestroyPart );
 		a_pk.Read( &wDestroyCount );
@@ -402,7 +402,7 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 	FLOAT fDirX, fDirY, fDirZ;
 	CHAR cDestroyPart;
 	WORD wDestroyCount;
-	WORD wList[100];
+	WORD wList[1000];
 
 	a_pk.Read( &wClientNumber );
 	a_pk.Read( &fDirX);
