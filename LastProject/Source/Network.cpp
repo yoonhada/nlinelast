@@ -8,6 +8,7 @@
 #include "LobbyScene.h"
 #include "Chase.h"
 #include "Melee.h"
+#include "Melee2.h"
 #include "Spin.h"
 #include "Dash.h"
 
@@ -453,15 +454,15 @@ VOID CNetwork::SC_Monster_Attack_Animation( CPacket& a_pk )
 	a_pk.Read( &wMonsterNumber );
 	a_pk.Read( &wAnimationNumber );
 
-	if( wAnimationNumber == 1 )
+	if( wAnimationNumber == CMonster::ANIM_MELEE_ATTACK )
 	{
 		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
-	else if( wAnimationNumber == 2 )
+	else if( wAnimationNumber == CMonster::ANIM_MELEE_ATTACK2 )
 	{
-		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Spin::GetInstance() );
+		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Melee2::GetInstance() );
 	}
-	else if( wAnimationNumber == 3 )
+	else if( wAnimationNumber == CMonster::ANIM_DASH )
 	{
 		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Dash::GetInstance() );
 	}

@@ -61,7 +61,8 @@ VOID Seek::Execute( CMonster* a_pMonster )
 	}
 
 	// 가장 가까이에 있는 목표가 공격 범위에 있으면 전투 상태로 전환
-	if( min < 100.0f )
+	if( ( min < 25.0f ) ||
+		( min > 80.0f && min < 120.0f ) )
 	{
 		a_pMonster->Set_Target( Target );
 		a_pMonster->Set_TargetPos( vTargetPos );
@@ -69,7 +70,8 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		a_pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
 	// 범위에 없으면 가장 가까운 목표 추격
-	else if( min >= 100.0f && min <= 300.0f )
+	else if( ( min >= 25.0f  && min <= 80.0f  ) ||
+			 ( min >= 120.0f && min <= 300.0f ) )
 	{
 		D3DXVECTOR3 vMonsterPos = a_pMonster->Get_Pos();
 		D3DXVECTOR3 vPlayerPos = pCharactors[Target].Get_CharaPos();

@@ -2,6 +2,7 @@
 
 #include "LockOn.h"
 #include "Melee.h"
+#include "Melee2.h"
 
 #include "Charactor.h"
 #include "Monster.h"
@@ -150,13 +151,26 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 
 		a_pMonster->Set_Angle( D3DXToRadian( f )  );
 	}
-
+/*
 	// 공격 각도내에 들어왔으면
 	if( isInSight() )
 	{
 		CNetwork::GetInstance()->CS_Monster_Attack_Animation( 0, 1 );
 
 		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+	}
+*/
+	if( FastRand2() < 0.5f )
+	{
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation( 0, CMonster::ANIM_MELEE_ATTACK );
+
+		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+	}
+	else
+	{
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation( 0, CMonster::ANIM_MELEE_ATTACK2 );
+
+		a_pMonster->GetFSM()->ChangeState( Melee2::GetInstance() );
 	}
 }
 
