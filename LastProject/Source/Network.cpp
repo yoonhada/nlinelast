@@ -465,6 +465,40 @@ VOID CNetwork::SC_Monster_Attack_Animation( CPacket& a_pk )
 }
 
 
+VOID CNetwork::SC_Monster_Attack_Animation2( CPacket& a_pk )
+{
+	WORD wMonsterNumber;
+	WORD wAnimationNumber;
+	FLOAT fDegree;
+	FLOAT fPosX;
+	FLOAT fPosZ;
+	FLOAT fNextPosX;
+	FLOAT fNextPosZ;
+	FLOAT fDistance;
+
+	a_pk.Read( &wMonsterNumber );
+	a_pk.Read( &wAnimationNumber );
+	a_pk.Read( &fDegree );
+	a_pk.Read( &fPosX );
+	a_pk.Read( &fPosZ );
+	a_pk.Read( &fNextPosX );
+	a_pk.Read( &fNextPosZ );
+	a_pk.Read( &fDistance );
+
+	D3DXVECTOR3 vPos		= D3DXVECTOR3( fPosX, 0.0f, fPosZ );
+	D3DXVECTOR3 vNextPos	= D3DXVECTOR3( fNextPosX, 0.0f, fNextPosZ );
+
+	CMonster* pMonster = CObjectManage::GetInstance()->Get_Monster();
+	pMonster->Set_Angle( fDegree );
+	pMonster->Set_Pos( vPos );
+	pMonster->Set_TargetPos( vNextPos );
+	pMonster->Set_TargetDistance( fDistance );
+
+	CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Dash::GetInstance() );
+
+}
+
+
 VOID CNetwork::SC_Monster_LockOn( CPacket& a_pk )
 {
 	WORD wMonsterNumber;
@@ -753,6 +787,32 @@ VOID CNetwork::CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnima
 	sendPk.Write( wMsgID );
 	sendPk.Write( a_wMonsterNumber );
 	sendPk.Write( a_wAnimationNumber );
+
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
+#ifdef _DEBUG
+	CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI send \n" );
+#endif
+}
+
+
+VOID CNetwork::CS_Monster_Attack_Animation2( WORD a_wMonsterNumber, WORD a_wAnimationNumber, FLOAT a_fDegree, D3DXVECTOR3 a_vPos, D3DXVECTOR3 a_vNextPos, FLOAT a_fDistance )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_MONSTER_ATTACK_ANIMATION2;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_wMonsterNumber );
+	sendPk.Write( a_wAnimationNumber );
+	sendPk.Write( a_fDegree );
+	sendPk.Write( a_vPos.x );
+	sendPk.Write( a_vPos.z );
+	sendPk.Write( a_vNextPos.x );
+	sendPk.Write( a_vNextPos.z );
+	sendPk.Write( a_fDistance );
 
 	sendPk.CalcSize();
 

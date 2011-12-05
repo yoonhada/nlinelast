@@ -33,6 +33,7 @@ public:
 
 		MSG_PLAYER_ATTACK_ANIMATION,
 		MSG_MONSTER_ATTACK_ANIMATION,
+		MSG_MONSTER_ATTACK_ANIMATION2,
 		MSG_MONSTER_LOCKON,
 
 		MSG_END,
@@ -91,6 +92,7 @@ public:
 
 	VOID SC_Player_Attack_Animation( CPacket& a_pk );
 	VOID SC_Monster_Attack_Animation( CPacket& a_pk );
+	VOID SC_Monster_Attack_Animation2( CPacket& a_pk );
 	VOID SC_Monster_LockOn( CPacket& a_pk );
 
 	// Client -> Server
@@ -108,6 +110,7 @@ public:
 
 	VOID CS_Player_Attack_Animation( WORD a_wAnimationNumber );
 	VOID CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnimationNumber );
+	VOID CS_Monster_Attack_Animation2( WORD a_wMonsterNumber, WORD a_wAnimationNumber, FLOAT a_fDegree, D3DXVECTOR3 a_vPos, D3DXVECTOR3 a_vNextPos, FLOAT a_fDistance );
 	VOID CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle );
 
 	BOOL SendToServer( CPacket& a_pk );
