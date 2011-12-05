@@ -19,8 +19,8 @@ private:
 									D3DXVECTOR3& _vecPoint2, 
 									D3DXVECTOR3& _vecPoint3 );
 
-	VOID		UpdatePosition();
-	VOID		UpdateLookAt();
+	BOOL		UpdatePosition();
+	BOOL		UpdateLookAt();
 
 public:
 	typedef struct _DATA
@@ -80,7 +80,7 @@ public:
 	}
 
 	VOID		Create();
-	VOID		Update();
+	BOOL		Update();
 	VOID		Render();
 
 	VOID		SetPosition_Box4( D3DXVECTOR3& _vecPosition0, D3DXVECTOR3& _vecPosition1, D3DXVECTOR3& _vecPosition2, D3DXVECTOR3& _vecPosition3 );
