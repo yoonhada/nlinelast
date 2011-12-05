@@ -232,15 +232,11 @@ VOID CNetwork::SC_ENABLE_START( CPacket& a_pk )
 
 	if ( bStart )
 	{
-#ifdef _DEBUG
 		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( LOBBY_START, TRUE );
-#endif // _DEBUG
 	}
 	else
 	{
-#ifdef _DEBUG
 		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( LOBBY_START, FALSE );
-#endif // _DEBUG
 	}
 }
 

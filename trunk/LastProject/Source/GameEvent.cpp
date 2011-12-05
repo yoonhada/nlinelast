@@ -14,6 +14,7 @@
 #include "Charactor.h"
 #include "Weapon.h"
 #include "Seek.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -47,7 +48,7 @@ HRESULT CGameEvent::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pAttackPoint = new INT[4];
 	m_pShotedPoint = new INT[4];
 	
-	AddEvent( INIT, 0.0f );
+	AddEvent( INIT, 1.0f );
 	m_pCurrentEvent = m_listEvent.front();
 	return S_OK;
 }
@@ -82,10 +83,10 @@ VOID CGameEvent::Clear()
 	m_nHPMonstor = 0;
 
 	m_pPosition = new D3DXVECTOR3[4];
-	m_pPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 650.0f);
-	m_pPosition[1] = D3DXVECTOR3(-120.0f, 0.0f, 650.0f);
-	m_pPosition[2] = D3DXVECTOR3(-140.0f, 0.0f, 650.0f);
-	m_pPosition[3] = D3DXVECTOR3(-160.0f, 0.0f, 650.0f);
+	m_pPosition[0] = D3DXVECTOR3( 180.0f, 0.0f, -330.0f);
+	m_pPosition[1] = D3DXVECTOR3( 220.0f, 0.0f, -330.0f);
+	m_pPosition[2] = D3DXVECTOR3( 260.0f, 0.0f, -330.0f);
+	m_pPosition[3] = D3DXVECTOR3( 300.0f, 0.0f, -330.0f);
 
 	m_pEventCombo = NULL;
 }
@@ -93,8 +94,8 @@ VOID CGameEvent::Clear()
 VOID CGameEvent::Update()
 {
 	INT nEvent = NONE;
-	if ( FastRand2() * 100.0f > 98 )
-		AddEvent( COMBO, 100.0f );
+	//if ( FastRand2() * 100.0f > 98 )
+	//	AddEvent( COMBO, 100.0f );
 
 	if ( m_bHost && m_pCurrentEvent != NULL)
 	{
@@ -161,10 +162,17 @@ VOID CGameEvent::AddEvent( EVENTKIND enumKind, FLOAT fTime )
 VOID CGameEvent::EventInit()
 {
 	// Game Setting
+	for ( int i = 0; i < 4; ++i )
+	{
+		m_pScen->m_pCharactors[i].Set_Position( m_pPosition[i] );
+	}	
+	m_pScen->m_pCamera->SetEffect( 3 );
 	m_pScen->m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
 	m_pScen->m_pMonster->Set_Angle( 0.0f );
 	m_pScen->m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 	m_pScen->m_pMonster->EnableShadow( TRUE );
+
+	m_pScen->m_pCharactors->Set_Position( m_pPosition[0] );
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
 		m_pScen->m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
@@ -176,6 +184,16 @@ VOID CGameEvent::EventInit()
 		m_pAttackPoint[i] = 0;
 		m_pShotedPoint[i] = 0;
 	}
+
+	// Event
+	m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+	INT nClient = CObjectManage::GetInstance()->Get_ClientNumber();
+	for ( int i = 0; i < nClient; ++i )
+	{
+		m_pEventCombo->AddCombo( i, i );
+	}		
+
+	m_pEventCombo->Create();
 }
 
 VOID CGameEvent::EventCombo()
@@ -186,11 +204,11 @@ VOID CGameEvent::EventCombo()
 	}
 	else
 	{
-		m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
-		INT nClient = CObjectManage::GetInstance()->Get_ClientNumber();
-		for ( int i = 0; i < nClient; ++i )
-		{
-			m_pEventCombo->AddCombo( i, (INT)(FastRand2() * nClient) + 1 );
-		}		
+		//m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+		//INT nClient = CObjectManage::GetInstance()->Get_ClientNumber();
+		//for ( int i = 0; i < nClient; ++i )
+		//{
+		//	m_pEventCombo->AddCombo( i, (INT)(FastRand2() * nClient) + 1 );
+		//}		
 	}
 }

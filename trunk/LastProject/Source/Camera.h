@@ -1,6 +1,7 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
+class CameraWork;
 
 class CCamera
 {
@@ -49,7 +50,7 @@ public:
 	CCamera();
 	virtual ~CCamera();
 
-	VOID		 Create( LPDIRECT3DDEVICE9 a_pD3dDevice ) {  m_pD3dDevice = a_pD3dDevice; }
+	VOID Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 
 	VOID SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch );
 	D3DXVECTOR3* GetCameraLookAt() { return &m_vLook; }
@@ -75,6 +76,10 @@ public:
 
 	VOID SetEffect(INT nType);
 	VOID Effect( D3DXVECTOR3 & a_vLook );
+	VOID CreateEventCamera();
+	VOID UpdateEventCamera();
+
+	CameraWork * m_pCameraWork;
 };
 
 #endif 

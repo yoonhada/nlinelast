@@ -37,21 +37,21 @@ VOID StoryGUI::CreateBackground()
 	imgParam.fWidth		= fWidth;
 	imgParam.fHeight	= fHeight;
 
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_1.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_2.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_3.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_4.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_5.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_6.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_7.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_8.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_9.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_10.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_11.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_12.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_13.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_14.jpg", 3000 );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_15.jpg", 3000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_1.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_2.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_3.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_4.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_5.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_6.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_7.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_8.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_9.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_10.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_11.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_12.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_13.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_14.jpg", 2000 );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\StoryScene\\Story_15.jpg", 2000 );
 
 	m_pGUIBackground->Create( imgParam );
 }
