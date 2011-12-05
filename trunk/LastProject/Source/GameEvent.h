@@ -13,7 +13,7 @@ class CGameEvent : public IObject
 {
 private:
 	enum EVENTKIND{
-		NONE = -1, INIT, COMBO,
+		NONE = -1, INIT, EVENTCAMERA, COMBO,
 	};
 	typedef struct _EVENT
 	{
