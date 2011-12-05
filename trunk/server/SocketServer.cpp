@@ -25,13 +25,13 @@ CSocketServer::~CSocketServer()
 		CloseHandle( m_hCompletionPort );
 	}
 
-	// Accept 쓰레드 종료
+	// Accept 쓰레드 종료 대기
 	if( m_hAcceptThread != INVALID_HANDLE_VALUE )
 	{
 		WaitForSingleObject( m_hAcceptThread, INFINITE );
 	}
 
-	// IOCP 쓰레드 종료
+	// IOCP 쓰레드 종료 대기
 	if( m_hIOCPThread != INVALID_HANDLE_VALUE )
 	{
 		WaitForSingleObject( m_hIOCPThread, INFINITE );
@@ -69,6 +69,7 @@ VOID CSocketServer::Clear()
 
 	m_iClientCount = 0;
 	m_iReadyCount = 0;
+	m_iLodingCompleteCount = 0;
 
 	for( WORD i=0; i<4; ++i )
 	{
@@ -172,14 +173,38 @@ VOID CSocketServer::OnAccept( SOCKET hSocket )
 }
 
 
+VOID CSocketServer::OnServerClose()
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_SERVER_CLOSE;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.CalcSize();
+
+	// 접속되어 있는 클라이언트들에게 서버 종료를 알린다.
+	map<WORD, CNTClient*>::iterator it;
+	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
+	{
+		it->second->Send( sendPk );
+		it->second->Close();
+		SAFE_DELETE( it->second );
+	}
+
+	// map 요소 클리어
+	m_Map_LogonClients.clear();
+}
+
+
 VOID CSocketServer::OnClientClose( CNTClient* pClient )
 {
 	// 접속 해제한 유저번호가 다시 활성화 상태로
 	m_wUserNumber[pClient->m_Index] = FALSE;
-
+/*
 	// 다른 접속자들에게 해당 유저의 접속 해제를 알린다.
-	SC_Disconnect( pClient );
-
+	SC_CLIENT_DISCONNECT( pClient );
+*/
 	m_Map_LogonClients.erase( pClient->m_Index );
 
 	// 클라이언트 수 -1
@@ -229,7 +254,7 @@ VOID CSocketServer::OnClientClose( CNTClient* pClient )
 }
 
 
-VOID CSocketServer::CS_Logon( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_LOGON( CNTClient* pClient, CPacket& pk )
 {
 	WCHAR szName[256] = { 0, };
 
@@ -245,7 +270,7 @@ VOID CSocketServer::CS_Logon( CNTClient* pClient, CPacket& pk )
 #endif
 
 	// 접속한 유저에게 초기 정보를 보내준다.
-	SC_INITDATA( pClient );
+	SC_INIT( pClient );
 
 	// 다른 유저들에게 보낼 패킷을 만든다.
 	CPacket sendpk;
@@ -257,63 +282,6 @@ VOID CSocketServer::CS_Logon( CNTClient* pClient, CPacket& pk )
 	sendpk.CalcSize();
 
 	SendToClient( pClient, sendpk );
-}
-
-
-VOID CSocketServer::SC_INITDATA( CNTClient* pClient )
-{
-	// 접속한 유저에게 초기 좌표를 보내준다.
-	static FLOAT x = -100.0f;
-	static FLOAT z = 600.0f;
-
-	// 호스트가 있는지 확인
-	if( m_bExistHost == FALSE )
-	{
-		m_bExistHost = TRUE;
-		m_pHostClient = pClient;
-		m_pHostClient->m_bHost = TRUE;
-	}
-	else
-	{
-		m_bExistHost = FALSE;
-		pClient->m_bHost = FALSE;
-	}
-
-	CPacket pk;
-	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_INITDATA;
-
-	pk.Write( wMsgSize );
-	pk.Write( wMsgID );
-	pk.Write( pClient->m_bHost );
-	pk.Write( pClient->m_Index );
-	pk.Write( m_iClientCount - 1 );
-
-	// 접속되어있는 클라이언트들의 번호
-	map<WORD, CNTClient*>::iterator it;
-	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
-	{
-		if( pClient->m_Index != it->second->m_Index )
-		{
-			pk.Write( it->second->m_Index );
-		}
-	}
-
-	// 현재 선택되어있는 캐릭터
-	for( INT i=0; i<4; ++i )
-	{
-		pk.Write( m_bSelected[i] );
-	}
-
-	pk.CalcSize();
-
-	pClient->Send( pk );
-}
-
-
-VOID CSocketServer::CS_SELECT_CHARACTER( CNTClient* pClient, CPacket& a_pk )
-{
-
 }
 
 
@@ -370,35 +338,37 @@ VOID CSocketServer::CS_READY( CNTClient* pClient, CPacket& a_pk )
 	// 모두 READY 상태면 방장 START 버튼 활성화
 	if( m_iClientCount == m_iReadyCount )
 	{
+#ifdef _DEBUG
 		cout << "Enable ok" << endl;
-		CPacket pk;
-
+#endif
+		CPacket sendPk;
 		WORD wMsgSize = 0;
 		WORD wMsgID = MSG_ENABLE_START;
 		BOOL bStart = TRUE;
 
-		pk.Write( wMsgSize );
-		pk.Write( wMsgID );
-		pk.Write( bStart );
-		pk.CalcSize();
+		sendPk.Write( wMsgSize );
+		sendPk.Write( wMsgID );
+		sendPk.Write( bStart );
+		sendPk.CalcSize();
 
-		m_pHostClient->Send( pk );
+		m_pHostClient->Send( sendPk );
 	}
 	else
 	{
+#ifdef _DEBUG
 		cout << "Enable no" << endl;
-		CPacket pk;
-
+#endif
+		CPacket sendPk;
 		WORD wMsgSize = 0;
 		WORD wMsgID = MSG_ENABLE_START;
 		BOOL bStart = FALSE;
 
-		pk.Write( wMsgSize );
-		pk.Write( wMsgID );
-		pk.Write( bStart );
-		pk.CalcSize();
+		sendPk.Write( wMsgSize );
+		sendPk.Write( wMsgID );
+		sendPk.Write( bStart );
+		sendPk.CalcSize();
 
-		m_pHostClient->Send( pk );
+		m_pHostClient->Send( sendPk );
 	}
 }
 
@@ -412,7 +382,38 @@ VOID CSocketServer::CS_GAME_START( CNTClient* pClient, CPacket& a_pk )
 }
 
 
-VOID CSocketServer::CS_Chat( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_LODING_COMPLETE( CNTClient* pClient, CPacket& a_pk )
+{
+	++m_iLodingCompleteCount;
+
+	if( m_iLodingCompleteCount == m_iClientCount )
+	{
+		m_iLodingCompleteCount = 0;
+
+		CPacket sendPk;
+		WORD wMsgSize = 0;
+		WORD wMsgID = MSG_CHANGE_SCENE;
+		
+		sendPk.Write( wMsgSize );
+		sendPk.Write( wMsgID );
+		sendPk.CalcSize();
+
+		pClient->Send( sendPk );
+		SendToClient( pClient, sendPk );
+	}
+}
+
+
+VOID CSocketServer::CS_CLIENT_DISCONNECT( CNTClient* pClient, CPacket& a_pk )
+{
+	// 다른 접속자들에게 해당 유저의 접속 해제를 알린다.
+	SC_CLIENT_DISCONNECT( pClient );
+
+//	OnClientClose( pClient );
+}
+
+
+VOID CSocketServer::CS_CHAT( CNTClient* pClient, CPacket& pk )
 {
 /*
 	WCHAR szChat[256] = { 0, };
@@ -431,7 +432,7 @@ VOID CSocketServer::CS_Chat( CNTClient* pClient, CPacket& pk )
 }
 
 
-VOID CSocketServer::CS_Player_Move( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_PLAYER_MOVE( CNTClient* pClient, CPacket& pk )
 {
 /*
 	WORD wClientNumber;
@@ -462,14 +463,14 @@ VOID CSocketServer::CS_Player_Move( CNTClient* pClient, CPacket& pk )
 }
 
 
-VOID CSocketServer::CS_Monster_Move( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_MONSTER_MOVE( CNTClient* pClient, CPacket& pk )
 {
 	pk.Rewind();
 	SendToClient( pClient, pk );
 }
 
 
-VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_UTOM_ATTACK( CNTClient* pClient, CPacket& pk )
 {
 /*
 	WORD wClientNumber;
@@ -537,7 +538,7 @@ VOID CSocketServer::CS_UTOM_Attack( CNTClient* pClient, CPacket& pk )
 }
 
 
-VOID CSocketServer::CS_MTOU_Attack( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_MTOU_ATTACK( CNTClient* pClient, CPacket& pk )
 {
 	pk.Rewind();
 
@@ -546,7 +547,7 @@ VOID CSocketServer::CS_MTOU_Attack( CNTClient* pClient, CPacket& pk )
 }
 
 
-VOID CSocketServer::CS_Player_Attack_Animation( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_PLAYER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk )
 {
 /*
 	WORD wClientNumber;
@@ -577,7 +578,7 @@ VOID CSocketServer::CS_Player_Attack_Animation( CNTClient* pClient, CPacket& pk 
 }
 
 
-VOID CSocketServer::CS_Monster_Attack_Animation( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_MONSTER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk )
 {
 	pk.Rewind();
 	SendToClient( pClient, pk );
@@ -586,12 +587,82 @@ VOID CSocketServer::CS_Monster_Attack_Animation( CNTClient* pClient, CPacket& pk
 }
 
 
-VOID CSocketServer::CS_Monster_LockOn( CNTClient* pClient, CPacket& pk )
+VOID CSocketServer::CS_MONSTER_LockOn( CNTClient* pClient, CPacket& pk )
 {
 	pk.Rewind();
 	SendToClient( pClient, pk );
 
 	cout << "Monster LockOn send" << endl;
+}
+
+
+VOID CSocketServer::SC_INIT( CNTClient* pClient )
+{
+	// 접속한 유저에게 초기 좌표를 보내준다.
+	static FLOAT x = -100.0f;
+	static FLOAT z = 600.0f;
+
+	// 호스트가 있는지 확인
+	if( m_bExistHost == FALSE )
+	{
+		m_bExistHost = TRUE;
+		m_pHostClient = pClient;
+		m_pHostClient->m_bHost = TRUE;
+	}
+	else
+	{
+		m_bExistHost = FALSE;
+		pClient->m_bHost = FALSE;
+	}
+
+	CPacket pk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_INIT;
+
+	pk.Write( wMsgSize );
+	pk.Write( wMsgID );
+	pk.Write( pClient->m_bHost );
+	pk.Write( pClient->m_Index );
+	pk.Write( m_iClientCount - 1 );
+
+	// 접속되어있는 클라이언트들의 번호
+	map<WORD, CNTClient*>::iterator it;
+	for( it = m_Map_LogonClients.begin(); it != m_Map_LogonClients.end(); ++it )
+	{
+		if( pClient->m_Index != it->second->m_Index )
+		{
+			pk.Write( it->second->m_Index );
+		}
+	}
+
+	// 현재 선택되어있는 캐릭터
+	for( INT i=0; i<4; ++i )
+	{
+		pk.Write( m_bSelected[i] );
+	}
+
+	pk.CalcSize();
+
+	pClient->Send( pk );
+}
+
+
+VOID CSocketServer::SC_CLIENT_DISCONNECT( CNTClient* pClient )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_CLIENT_DISCONNECT;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( pClient->m_Index );
+	sendPk.CalcSize();
+
+#ifdef _DEBUG
+	cout << "Disconnect : " << pClient->m_Index << endl;
+#endif
+
+	SendToClient( pClient, sendPk );
 }
 
 
@@ -619,7 +690,7 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 	{
 	// 로그온
 	case MSG_LOGON:
-		CS_Logon( pClient, pk );
+		CS_LOGON( pClient, pk );
 		break;
 
 	// 캐릭터 선택
@@ -632,65 +703,56 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 		CS_GAME_START( pClient, pk );
 		break;
 
+	// 로딩 완료
+	case MSG_LODING_COMPLETE:
+		CS_LODING_COMPLETE( pClient, pk );
+		break;
+
+	// 클라이언트 접속 종료
+	case MSG_CLIENT_DISCONNECT:
+		CS_CLIENT_DISCONNECT( pClient, pk );
+		break;
+
 	// 채팅
 	case MSG_CHAT:
-		CS_Chat( pClient, pk );
+		CS_CHAT( pClient, pk );
 		break;
 
 	//  유저 이동
 	case MSG_PLAYER_MOVE:
-		CS_Player_Move( pClient, pk );
+		CS_PLAYER_MOVE( pClient, pk );
 		break;
 
 	// 몬스터 이동
 	case MSG_MONSTER_MOVE:
-		CS_Monster_Move( pClient, pk );
+		CS_MONSTER_MOVE( pClient, pk );
 		break;
 
 	// 공격 : 유저 -> 몬스터
 	case MSG_UTOM_ATTACK:
-		CS_UTOM_Attack( pClient, pk );
+		CS_UTOM_ATTACK( pClient, pk );
 		break;
 
 	// 공격 : 몬스터 -> 유저
 	case MSG_MTOU_ATTACK:
-		CS_MTOU_Attack( pClient, pk );
+		CS_MTOU_ATTACK( pClient, pk );
 		break;
 
 	// 유저 애니메이션
 	case MSG_PLAYER_ATTACK_ANIMATION:
-		CS_Player_Attack_Animation( pClient, pk );
+		CS_PLAYER_ATTACK_ANIMATION( pClient, pk );
 		break;
 
 	// 몬스터 애니메이션
 	case MSG_MONSTER_ATTACK_ANIMATION:
-		CS_Monster_Attack_Animation( pClient, pk );
+		CS_MONSTER_ATTACK_ANIMATION( pClient, pk );
 		break;
 
 	// 몬스터 각도
 	case MSG_MONSTER_LOCKON:
-		CS_Monster_LockOn( pClient, pk );
+		CS_MONSTER_LockOn( pClient, pk );
 		break;
 	}
-}
-
-
-VOID CSocketServer::SC_Disconnect( CNTClient* pClient )
-{
-	CPacket sendPk;
-	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_DISCONNECT;
-
-	sendPk.Write( wMsgSize );
-	sendPk.Write( wMsgID );
-	sendPk.Write( pClient->m_Index );
-	sendPk.CalcSize();
-
-#ifdef _DEBUG_
-	cout << "Disconnect : " << pClient->m_Index << endl;
-#endif
-
-	SendToClient( pClient, sendPk );
 }
 
 
@@ -739,11 +801,14 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 			if( pClient == NULL )
 			{
 				// 접속중인 모든 클라이언트를 종료한다.
+/*
 				map<WORD, CNTClient*>::iterator it;
 				for( it = pServer->m_Map_LogonClients.begin(); it != pServer->m_Map_LogonClients.end(); ++it )
 				{
 					pServer->OnClientClose( it->second );
 				}
+*/
+				pServer->OnServerClose();
 				return 0;
 			}
 
