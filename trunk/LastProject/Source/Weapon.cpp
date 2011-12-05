@@ -448,6 +448,7 @@ VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 
 	m_pMap->Render( Get_MatWorld() * _matCharacter );	
 
+/*
 #ifdef _DEBUG
 	m_pD3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
 	m_pD3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
@@ -458,6 +459,7 @@ VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 	m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pCube->Get_MatWorld() * _matCharacter ) );
 	m_pCube->Render();
 #endif // _DEBUG
+*/
 }
 
 INT CWeapon::Get_nFrame(INT nType)

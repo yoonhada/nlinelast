@@ -246,11 +246,11 @@ VOID	CMainScene::Render()
 	m_pMatrices->SetupProjection();
 
 	m_pLight->EnableLight();
-
+/*
 #ifdef _DEBUG
 	m_pAxis->Render();
 #endif
-
+*/
 	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
 	m_pASEViewer->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
@@ -270,6 +270,7 @@ VOID	CMainScene::Render()
 
 	m_pFirstAidKit->Render();
 
+/*
 #ifdef _DEBUG
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity( &matWorld );
@@ -281,7 +282,7 @@ VOID	CMainScene::Render()
 
 	TwDraw();
 #endif
-
+*/
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();

@@ -888,7 +888,7 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		break;
 
 	// 게임 스타트 버튼 활성화
-	case MSG_ENABLE_START:
+	case MSG_START_BUTTON_STATE:
 		SC_ENABLE_START( a_pk );
 		break;
 
