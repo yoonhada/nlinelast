@@ -49,6 +49,7 @@ HRESULT CGameEvent::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pShotedPoint = new INT[4];
 	
 	AddEvent( INIT, 1.0f );
+	AddEvent( EVENTCAMERA, 0.5f );
 	m_pCurrentEvent = m_listEvent.front();
 	return S_OK;
 }
@@ -94,8 +95,6 @@ VOID CGameEvent::Clear()
 VOID CGameEvent::Update()
 {
 	INT nEvent = NONE;
-	//if ( FastRand2() * 100.0f > 98 )
-	//	AddEvent( COMBO, 100.0f );
 
 	if ( m_bHost && m_pCurrentEvent != NULL)
 	{

@@ -1381,6 +1381,11 @@ VOID CMonster::Update()
 
 	// AI
 	m_pStateMachine->Update();
+
+	if ( !CInput::GetInstance()->Get_NumKey(9) )
+	{
+		m_pBox[0].BreakCubeAll();
+	}
 }
 
 VOID CMonster::Render()
