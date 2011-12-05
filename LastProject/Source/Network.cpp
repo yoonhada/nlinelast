@@ -489,7 +489,7 @@ VOID CNetwork::SC_Monster_Attack_Animation2( CPacket& a_pk )
 	D3DXVECTOR3 vNextPos	= D3DXVECTOR3( fNextPosX, 0.0f, fNextPosZ );
 
 	CMonster* pMonster = CObjectManage::GetInstance()->Get_Monster();
-	pMonster->Set_Angle( fDegree );
+	pMonster->Set_Angle( D3DXToRadian( fDegree ) );
 	pMonster->Set_Pos( vPos );
 	pMonster->Set_TargetPos( vNextPos );
 	pMonster->Set_TargetDistance( fDistance );
