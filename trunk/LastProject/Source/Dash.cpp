@@ -22,7 +22,7 @@ VOID Dash::Enter( CMonster* a_pMonster )
 
 	m_vPos		= a_pMonster->Get_Pos();
 	m_vNextPos	= a_pMonster->Get_TargetPos();
-	m_fT		= a_pMonster->Get_TargetDistance() / 10.0f * 0.25f;
+	m_fT		= a_pMonster->Get_TargetDistance() / 10.0f * 0.15f;
 /*
 	CDebugConsole::GetInstance()->Messagef( L"Pos     : %f %f \n", m_vPos.x, m_vPos.z );
 	CDebugConsole::GetInstance()->Messagef( L"NextPos : %f %f \n", m_vNextPos.x, m_vNextPos.z );

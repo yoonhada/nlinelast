@@ -1194,24 +1194,68 @@ VOID CMonster::CreateAttackBoundBox()
 		//프레임에 해당 하는 바운드 박스 생성
 		switch( m_iSelectedFrameNum )
 		{
-		case 2:
-			// 몬스터 공격 바운드 박스.
-			CBoundBox * m_pBBx = new CBoundBox;
-			m_pBBx->SetPosition( Get_Pos() );
-			//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
+		case ANIM_MELEE_ATTACK:
+			{
+				// 몬스터 공격 바운드 박스.
+				CBoundBox * m_pBBx = new CBoundBox;
+				m_pBBx->SetPosition( Get_Pos() );
+				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
 
-			m_pBBx->SetSize( 0, -27.0f );
-			m_pBBx->SetSize( 1, -27.0f );
-			m_pBBx->SetSize( 2, -27.0f );
+				m_pBBx->SetSize( 0, -27.0f );
+				m_pBBx->SetSize( 1, -27.0f );
+				m_pBBx->SetSize( 2, -27.0f );
 
-			m_pBBx->SetSize( 3,  27.0f );
-			m_pBBx->SetSize( 4,  27.0f );
-			m_pBBx->SetSize( 5,  27.0f );
+				m_pBBx->SetSize( 3,  27.0f );
+				m_pBBx->SetSize( 4,  27.0f );
+				m_pBBx->SetSize( 5,  27.0f );
 
-			m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
+				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
 
-			CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+			}
+			break;
 
+		case ANIM_MELEE_ATTACK2:
+			{
+				// 몬스터 공격 바운드 박스.
+				CBoundBox * m_pBBx = new CBoundBox;
+				m_pBBx->SetPosition( Get_Pos() );
+				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
+
+				m_pBBx->SetSize( 0, -27.0f );
+				m_pBBx->SetSize( 1, -27.0f );
+				m_pBBx->SetSize( 2, -27.0f );
+
+				m_pBBx->SetSize( 3,  27.0f );
+				m_pBBx->SetSize( 4,  27.0f );
+				m_pBBx->SetSize( 5,  27.0f );
+
+				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
+
+				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+			}
+			break;
+		
+
+		case ANIM_SLIDING:
+			{
+				// 몬스터 공격 바운드 박스.
+				CBoundBox * m_pBBx = new CBoundBox;
+				m_pBBx->SetPosition( Get_Pos() );
+				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
+
+				m_pBBx->SetSize( 0, -50.0f );
+				m_pBBx->SetSize( 1, -50.0f );
+				m_pBBx->SetSize( 2, -50.0f );
+
+				m_pBBx->SetSize( 3,  50.0f );
+				m_pBBx->SetSize( 4,  50.0f );
+				m_pBBx->SetSize( 5,  50.0f );
+
+				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
+
+				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+			}
 			break;
 		}
 //	}

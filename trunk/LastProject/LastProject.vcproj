@@ -935,6 +935,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Melee2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Melee2.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Seek.cpp"
 				>
 			</File>

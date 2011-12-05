@@ -55,13 +55,11 @@ VOID Battle::Execute( CMonster* a_pMonster )
 			pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
 		}	*/
 	}
-
 	// 대시 공격 범위면
-	else if( fDistance > 25.0f && fDistance < 100.0f )
+	else if( fDistance > 80.0f && fDistance < 120.0f )
 	{
 		a_pMonster->GetFSM()->ChangeState( Dash::GetInstance() );
 	}
-
 	// 공격범위가 아니면 다시 탐색 상태로
 	else
 	{
