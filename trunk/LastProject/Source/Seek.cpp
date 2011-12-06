@@ -117,10 +117,10 @@ VOID Seek::Execute( CMonster* a_pMonster )
 
 		// 새 Path를 표시한다.
 		SetPath( path );
-#endif
+#else
 		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
 		Astar::GetInstance()->clearMap();
-
+#endif
 		a_pMonster->Set_Path( path );
 
 		// Path가 있으면 Chase 상태로
