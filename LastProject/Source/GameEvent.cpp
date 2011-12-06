@@ -15,6 +15,7 @@
 #include "Weapon.h"
 #include "Seek.h"
 #include "Camera.h"
+#include "TimeLifeItem.h"
 
 using namespace std;
 
@@ -49,8 +50,7 @@ HRESULT CGameEvent::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pShotedPoint = new INT[4];
 	
 	AddEvent( INIT, 1.0f );
-	AddEvent( EVENTCAMERA, 0.5f );
-	m_pCurrentEvent = m_listEvent.front();
+	AddEvent( EVENTCAMERA, 0.1f );
 	return S_OK;
 }
 
@@ -90,51 +90,7 @@ VOID CGameEvent::Clear()
 	m_pPosition[3] = D3DXVECTOR3( 300.0f, 0.0f, -330.0f);
 
 	m_pEventCombo = NULL;
-}
-
-VOID CGameEvent::Update()
-{
-	INT nEvent = NONE;
-
-	if ( m_bHost && m_pCurrentEvent != NULL)
-	{
-		m_pCurrentEvent->fTime -= CFrequency::GetInstance()->getFrametime();
-		if ( m_pCurrentEvent->fTime < 0.0f )
-		{
-			nEvent = m_pCurrentEvent->nKind;
-			m_listEvent.pop_front();
-			SAFE_DELETE( m_pCurrentEvent );
-		}
-	}
-	if (!m_listEvent.empty())
-	{
-		m_pCurrentEvent = m_listEvent.front();
-	}			
-
-
-	switch ( nEvent )
-	{
-	case INIT:
-		EventInit();
-		break;
-	case COMBO:
-		EventCombo();
-	default:
-		break;
-	}
-}
-
-VOID CGameEvent::Render()
-{
-/*
-	if( m_pEventCombo )
-		m_pEventCombo->Render();
-*/
-}
-
-D3DXVECTOR3& CGameEvent::GetDefaultCharPosition( INT nClient )
-{
-	return m_pPosition[ nClient ];
+	m_bEventCombo = FALSE;
 }
 
 VOID CGameEvent::AddEvent( EVENTKIND enumKind, FLOAT fTime )
@@ -156,58 +112,168 @@ VOID CGameEvent::AddEvent( EVENTKIND enumKind, FLOAT fTime )
 	}
 }
 
+VOID CGameEvent::Update()
+{
+	INT nEvent = NONE;
 
+	if (!m_listEvent.empty())
+	{
+		m_pCurrentEvent = m_listEvent.front();
+	}			
+
+	if ( m_bHost )
+	{
+		Iter = m_listEvent.begin();
+
+		while ( Iter != m_listEvent.end() )
+		{
+			(*Iter)->fTime -= CFrequency::GetInstance()->getFrametime();
+			Iter++;
+		}
+
+		if ( m_pCurrentEvent != NULL)
+		{
+			m_pCurrentEvent->fTime -= CFrequency::GetInstance()->getFrametime();
+			if ( m_pCurrentEvent->fTime < 0.0f )
+			{
+				nEvent = m_pCurrentEvent->nKind;
+				m_listEvent.pop_front();
+				SAFE_DELETE( m_pCurrentEvent );
+			}
+		}
+
+
+		// ComboEvent
+		if ( m_pEventCombo )
+		{
+			BOOL bCheck = m_pEventCombo->CheckKindEvent( CObjectManage::GetInstance()->Get_LastAtkPlayer() );
+
+			if ( bCheck == FALSE )
+			{
+				AddEvent( EVENTDESTORYCOMBO, 0.1f );
+			}
+			else
+			{
+				if ( m_pEventCombo->GetKindIndex() == 4 )
+				{
+					m_pEventCombo->ReSetKindIndex();
+				}
+			}
+		}
+	}
+	else
+	{
+		// host network....  받기.
+	}
+
+	switch ( nEvent )
+	{
+	case INIT:
+		CDebugConsole::GetInstance()->Message("Game Event : INIT \n");
+		EventInit();
+		break;
+	case EVENTCAMERA:
+		CDebugConsole::GetInstance()->Message("Game Event : EVENTCAMERA \n");
+#ifndef _DEBUG
+		EventCamera();
+#endif // _DEBUG
+		break;
+	case EVENTCOMBO:
+		if (m_bEventCombo == TRUE)
+			break;
+		CDebugConsole::GetInstance()->Message("Game Event : EVENTCOMBO \n");
+		EventCombo();
+		m_bEventCombo = TRUE;
+		AddEvent( EVENTDESTORYCOMBO, 20.0f );
+		break;
+	case EVENTDESTORYCOMBO:
+		CDebugConsole::GetInstance()->Message("Game Event : EVENTDESTORYCOMBO \n");
+		EventDestoryCombo();
+		m_bEventCombo = FALSE;
+		break;
+	case EVENTFAK:
+		CDebugConsole::GetInstance()->Message("Game Event : EVENTFAK \n");
+		EventFirstAidKit();
+		break;
+	default:
+		break;
+	}
+}
+
+VOID CGameEvent::Render()
+{
+	if( m_pEventCombo )
+	{
+		m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+		m_pEventCombo->Render();
+		m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+	}
+}
 
 VOID CGameEvent::EventInit()
 {
-	// Game Setting
-	for ( int i = 0; i < 4; ++i )
-	{
-		m_pScen->m_pCharactors[i].Set_Position( m_pPosition[i] );
-	}	
-	m_pScen->m_pCamera->SetEffect( 3 );
-	m_pScen->m_pMonster->Set_Pos( D3DXVECTOR3(-250.0f, 0.0f, 650.0f) );
+	// 케릭터 위치 조정
+	m_pScen->m_pCharactors[0].Set_Position( m_pPosition[0] );	
+	m_pScen->m_pCharactors[1].Set_Position( m_pPosition[1] );	
+	m_pScen->m_pCharactors[2].Set_Position( m_pPosition[2] );	
+	m_pScen->m_pCharactors[3].Set_Position( m_pPosition[3] );	
+	
+	// 몬스터 위치 조정
+	m_pScen->m_pMonster->Set_Pos( D3DXVECTOR3(-130.0f, 0.0f, 660.0f) );
 	m_pScen->m_pMonster->Set_Angle( 0.0f );
 	m_pScen->m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 	m_pScen->m_pMonster->EnableShadow( TRUE );
 
-	m_pScen->m_pCharactors->Set_Position( m_pPosition[0] );
+	// AI 초기화
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
 		m_pScen->m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
 	}
 
 	// Game Point
-	for ( int i = 0; i < 4; ++i )
-	{
-		m_pAttackPoint[i] = 0;
-		m_pShotedPoint[i] = 0;
-	}
+	m_pAttackPoint[0] = m_pAttackPoint[1] = m_pAttackPoint[2] = m_pAttackPoint[3] = 0;
+	m_pShotedPoint[0] = m_pShotedPoint[1] = m_pShotedPoint[2] = m_pShotedPoint[3] = 0;
+}
 
-	// Event
-	m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
-	INT nClient = CObjectManage::GetInstance()->Get_ClientNumber();
-	for ( int i = 0; i < nClient; ++i )
-	{
-		m_pEventCombo->AddCombo( i, i );
-	}		
 
-	m_pEventCombo->Create();
+VOID CGameEvent::EventCamera()
+{
+	m_pScen->m_pCamera->SetEffect( 3 );
 }
 
 VOID CGameEvent::EventCombo()
 {
-	if ( m_pEventCombo )
+	if ( !m_pEventCombo )
 	{
-		m_pEventCombo->Update();
+		CObjectManage * pOM = CObjectManage::GetInstance();
+		m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+		INT nClient = 0;
+		// 접속 클라이언트 찾기.
+		for ( int i = 0; i < 4; ++i )
+		{
+			if (pOM->Get_CharTable()[i] != -1 )
+			{
+				nClient++;
+			}
+		}
+
+		INT nSelect;
+		for ( int i = 0; i < 4; ++i )
+		{
+			nSelect = static_cast<int>( FastRand2() * nClient );
+			m_pEventCombo->AddCombo( i, pOM->Get_CharTable()[nSelect] + 1 );
+		}		
+
+		m_pEventCombo->Create();
 	}
-	else
-	{
-		//m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
-		//INT nClient = CObjectManage::GetInstance()->Get_ClientNumber();
-		//for ( int i = 0; i < nClient; ++i )
-		//{
-		//	m_pEventCombo->AddCombo( i, (INT)(FastRand2() * nClient) + 1 );
-		//}		
-	}
+}
+
+VOID CGameEvent::EventDestoryCombo()
+{
+	SAFE_DELETE( m_pEventCombo );
+}
+
+VOID CGameEvent::EventFirstAidKit()
+{
+	m_pScen->m_pFirstAidKit->SetActive( TRUE );
 }

@@ -20,6 +20,7 @@ private:
 	GUIBase*				m_pGUIBase;
 	GUIBackground*			m_pGUIBackground[4];
 
+	INT						m_nKindIndex;
 	INT						m_nKindEvent[4];
 public:
 	CGameEventCombo( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite);
@@ -32,4 +33,8 @@ public:
 	VOID Render();		///< Render
 
 	VOID AddCombo(INT nIndex, INT nKind)	{ m_nKindEvent[nIndex] = nKind; }
+
+	INT GetKindIndex()						{ return m_nKindIndex; }
+	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
+	BOOL CheckKindEvent( INT nKindEvent );
 };

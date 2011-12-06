@@ -171,7 +171,7 @@ VOID CMainScene::CreateCharactor()
 			//	m_pCharactors[m_nClientID]->Set_Active( TRUE );
 			//}
 
-			pChar->Set_Position( m_pGameEvent->GetDefaultCharPosition( Loop ) );
+			//pChar->Set_Position( m_pGameEvent->GetDefaultCharPosition( Loop ) );
 			CTree::GetInstance()->GetCharVector()->push_back( pChar->GetBoundBox() );
 		}
 	}
@@ -179,6 +179,7 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::Update()
 {
+	// 치트키 처리
 	CCharactor * pChar;
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
 
@@ -236,8 +237,8 @@ VOID CMainScene::Update()
 	m_pMainGUI->Update();
 	m_pOptionScene->Update();
 
-	CNetwork::GetInstance()->UpdateGame();
 	m_pGameEvent->Update();	
+	CNetwork::GetInstance()->UpdateGame();
 }
 
 VOID	CMainScene::Render()
@@ -267,7 +268,6 @@ VOID	CMainScene::Render()
 	}
 
 	m_pMonster->Render();
-
 	m_pFirstAidKit->Render();
 
 /*

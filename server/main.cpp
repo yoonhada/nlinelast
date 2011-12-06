@@ -36,10 +36,10 @@ INT main( INT argc, CHAR* argv[] )
 	{
 		SocketServer.UpdateFrame();
 		
-		if( GetKeyState( 'Q' ) & 0x8000 )
-		{
-			break;
-		}
+		//if( GetKeyState( 'Q' ) & 0x8000 )
+		//{
+		//	break;
+		//}
 
 		Sleep( 1 );
 	}

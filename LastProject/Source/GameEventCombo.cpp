@@ -65,6 +65,7 @@ HRESULT CGameEventCombo::Create( )
 		m_pGUIBackground[Loop]->Create( fWidth * 0.5f - (400.0f - 100.0f * Loop ), fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[Loop] );
 	}	
 
+	m_nKindIndex = 0;
 	return S_OK;
 }
 
@@ -98,4 +99,19 @@ VOID CGameEventCombo::Render()
 	m_pGUIBackground[1]->Render();
 	m_pGUIBackground[2]->Render();
 	m_pGUIBackground[3]->Render();
+}
+
+BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
+{
+	BOOL bRet = FALSE;
+	if( m_nKindEvent[ m_nKindIndex ] == nKindEvent )
+	{
+		m_nKindIndex++;
+		bRet = TRUE;		
+	}
+
+	if ( bRet == FALSE )
+		m_nKindIndex = 0;
+
+	return bRet;
 }

@@ -12,9 +12,6 @@ class CGameEventCombo;
 class CGameEvent : public IObject
 {
 private:
-	enum EVENTKIND{
-		NONE = -1, INIT, EVENTCAMERA, COMBO,
-	};
 	typedef struct _EVENT
 	{
 		INT nKind;
@@ -43,15 +40,21 @@ private:
 	std::list<EVENT*> m_listEvent;
 	std::list <EVENT*>::iterator Iter;
 	EVENT * m_pCurrentEvent;
+	BOOL m_bEventCombo;
 	//INT m_nEvent;
 
 	CGameEventCombo * m_pEventCombo;
 
-	VOID AddEvent( EVENTKIND, FLOAT );
-
 	VOID EventInit();
+	VOID EventCamera();
 	VOID EventCombo();
+	VOID EventDestoryCombo();
+	VOID EventFirstAidKit();
 public:
+	enum EVENTKIND{
+		NONE = -1, INIT, EVENTCAMERA, EVENTCOMBO, EVENTDESTORYCOMBO, EVENTFAK,
+	};
+
 	CGameEvent();
 	CGameEvent( INT, CMainScene *);
 	virtual ~CGameEvent();
@@ -63,6 +66,5 @@ public:
 	VOID Update();		///< Update
 	VOID Render();		///< Render
 
-	// Get
-	D3DXVECTOR3& GetDefaultCharPosition( INT nClient );
+	VOID AddEvent( EVENTKIND, FLOAT );
 };
