@@ -188,13 +188,14 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		{
 			// 케릭터 선택 
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelectNumber;
+			pOM->GetLobbyScene()->CreateWeapon( pOM->GetLobbyScene()->m_nCharSelect );
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, DOWN );
 		}
 		else
 		{
 			// 케릭터 선택 실패.. 회전 제거.
+			pOM->GetLobbyScene()->DestoryWeapon( pOM->GetLobbyScene()->m_nSelectState[wUserNumber] );
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
-			pOM->GetLobbyScene()->DisableRotate( wSelectNumber );
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, UP );
 		}
 	}

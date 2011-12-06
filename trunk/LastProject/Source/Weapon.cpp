@@ -145,7 +145,7 @@ VOID CWeapon::PrivateProfile( LPWSTR lpwStr, BOOL bRW )
 		_GetProfileVector( m_WeaponType.vDir, lpwStr, L"Dir", EnumCharFrame::TEMP3,	 - 3, -10, - 3, 0.1f );
 		_GetProfileVector( m_WeaponType.vDir, lpwStr, L"Dir", EnumCharFrame::TEMP4,	 -13,   0, - 3, 0.1f );
 		
-		m_pMap->AddAnimationData ( IDLE		,  EnumCharFrame::BASE  , m_WeaponType.nFrameBegin[EnumCharFrame::BASE	 ], m_WeaponType.nFrameTime[EnumCharFrame::BASE	  ], TRUE );
+		m_pMap->AddAnimationData ( IDLE		, EnumCharFrame::BASE  , m_WeaponType.nFrameBegin[EnumCharFrame::BASE	 ], m_WeaponType.nFrameTime[EnumCharFrame::BASE	  ], TRUE );
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK1, m_WeaponType.nFrameBegin[EnumCharFrame::ATTACK1], m_WeaponType.nFrameTime[EnumCharFrame::ATTACK1], FALSE);
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::ATTACK2, m_WeaponType.nFrameBegin[EnumCharFrame::ATTACK2], m_WeaponType.nFrameTime[EnumCharFrame::ATTACK2], FALSE);
 		m_pMap->AddAnimationData2( POST_IDLE, EnumCharFrame::A		, m_WeaponType.nFrameBegin[EnumCharFrame::A		 ], m_WeaponType.nFrameTime[EnumCharFrame::A	  ], FALSE);

@@ -179,17 +179,13 @@ VOID CGameEvent::Update()
 #endif // _DEBUG
 		break;
 	case EVENTCOMBO:
-		if (m_bEventCombo == TRUE)
-			break;
 		CDebugConsole::GetInstance()->Message("Game Event : EVENTCOMBO \n");
 		EventCombo();
-		m_bEventCombo = TRUE;
 		AddEvent( EVENTDESTORYCOMBO, 20.0f );
 		break;
 	case EVENTDESTORYCOMBO:
 		CDebugConsole::GetInstance()->Message("Game Event : EVENTDESTORYCOMBO \n");
 		EventDestoryCombo();
-		m_bEventCombo = FALSE;
 		break;
 	case EVENTFAK:
 		CDebugConsole::GetInstance()->Message("Game Event : EVENTFAK \n");

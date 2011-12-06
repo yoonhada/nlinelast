@@ -49,6 +49,7 @@ public:
 	HRESULT Create() { return S_OK; }
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 	VOID CreateWeapon( INT nType );
+	VOID DestoryWeapon( );
 
 	HRESULT Release();
 	VOID Update();
