@@ -4,6 +4,7 @@
 #include "OptionScene.h"
 #include "Charactor.h"
 #include "Monster.h"
+#include "CharCube.h"
 
 VOID LobbyScene::Initialize()
 {
@@ -48,8 +49,18 @@ VOID LobbyScene::CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecP
 	_pData->pCharacter->Set_Position( _vecPosition );
 	_pData->pCharacter->EnableShadow( FALSE );
 	_pData->vecPosition = _vecPosition;
-
 }
+
+VOID LobbyScene::CreateWeapon( INT _nKind )
+{
+	m_aData[ _nKind ].pCharacter->CreateWeapon( _nKind + 1 );
+}
+
+VOID LobbyScene::DestoryWeapon( INT _nKind )
+{
+	m_aData[ _nKind ].pCharacter->DestoryWeapon( );
+}
+
 HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
 {
 	m_pD3dDevice	= _pd3dDevice;
@@ -119,6 +130,9 @@ VOID LobbyScene::Update()
 		CNetwork::GetInstance()->CS_GAME_START();
 		break;
 	case LOBBY_READY:
+		for( INT i=0 ; i<4 ; i++ )
+			m_aData[ i ].bRotate = FALSE;
+
 		if ( m_nCharSelect < 0 )
 		{
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, UP );
@@ -149,18 +163,6 @@ VOID LobbyScene::Update()
 			EnableRotate( dID - LOBBY_SELECT_1 );
 		}
 		break;
-	//case GUIBTN_LOBBY_SELECT_1:
-	//	ActivateRotate( 0 );
-	//	break;
-	//case GUIBTN_LOBBY_SELECT_2:
-	//	ActivateRotate( 1 );
-	//	break;
-	//case GUIBTN_LOBBY_SELECT_3:
-	//	ActivateRotate( 2 );
-	//	break;
-	//case GUIBTN_LOBBY_SELECT_4:
-	//	ActivateRotate( 3 );
-	//	break;
 	}
 /*
 	if( GetKeyState( '1' ) & 0x8000 )

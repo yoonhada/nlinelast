@@ -48,6 +48,8 @@ public:
 	virtual INT		GetSceneState();
 
 	VOID			CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecPosition );
+	VOID			CreateWeapon( INT _nKind );
+	VOID			DestoryWeapon( INT _nKind );
 	VOID			EnableRotate( INT _iIndex );
 	VOID			DisableRotate( INT _iIndex );
 	
@@ -80,7 +82,6 @@ public:
 
 
 public:
-
 	//BOOL SelectState( INT a_nIndex, BOOL a_bState ) {return FALSE; }
 	VOID UpdateCharArray();
 	VOID SetSceneState( INT a_iSceneState );

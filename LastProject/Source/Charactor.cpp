@@ -112,6 +112,10 @@ VOID CCharactor::CreateWeapon( INT nType )
 	m_pWeapon->Create();
 }
 
+VOID CCharactor::DestoryWeapon( )
+{
+	SAFE_DELETE( m_pWeapon );
+}
 
 HRESULT CCharactor::Release()
 {

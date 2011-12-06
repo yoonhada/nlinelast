@@ -81,7 +81,6 @@ public:
 	D3DXVECTOR3 Get_Direction();
 	VOID Set_Animation( INT _nState );
 	VOID Set_nState( INT _nState );
-
 #ifdef _DEBUG
 	// Debug
 	LPDIRECT3DVERTEXBUFFER9 m_pTotalVB;   ///< 큐브 통합 버텍스
