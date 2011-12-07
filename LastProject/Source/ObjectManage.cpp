@@ -80,8 +80,8 @@ HRESULT CObjectManage::LoadLoadingObject()
 	//m_pClown->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 
 	m_pMonster = new CMonster*[3];
-	m_pMonster[0] = m_pBear;
-	m_pMonster[1] = m_pPanda;
+	m_pMonster[0] = m_pPanda;
+	m_pMonster[1] = m_pBear;
 	m_pMonster[2] = m_pClown;
 
 	m_pFirstAidKit = new CTimeLifeItem;
