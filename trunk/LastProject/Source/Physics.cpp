@@ -1,13 +1,32 @@
 #include "stdafx.h"
 
-INT CPhysics::nVI[6][3] = 
+//    v0----- v1
+//   /|      /|
+//  v3------v2|
+//  | |     | |
+//  | |v4---|-|v5
+//  |/      |/
+//  v7------v6
+
+
+INT CPhysics::nVI[2][6][3] = 
 {
-	{ 3, 2, 6 },	// Front(3-2-6)
-	{ 1, 0, 4 }, 	// Back	(1-0-4)
-	{ 0, 3, 7 },	// Left	(0-3-7)
-	{ 2, 1, 5 },	// Right(2-1-5)
-	{ 0, 1, 2 },	// Up	(0-1-2)
-	{ 4, 7, 6 },	// Down	(4-7-6)
+	{
+		{ 3, 2, 6 },	// Front(3-2-6)
+		{ 1, 0, 4 }, 	// Back	(1-0-4)
+		{ 0, 3, 7 },	// Left	(0-3-7)
+		{ 2, 1, 5 },	// Right(2-1-5)
+		{ 0, 1, 2 },	// Up	(0-1-2)
+		{ 4, 7, 6 },	// Down	(4-7-6)
+	}, 
+	{
+		{ 3, 6, 7 },	// Front(3-6-7)
+		{ 1, 4, 5 }, 	// Back	(1-4-5)
+		{ 0, 7, 4 },	// Left	(0-7-4)
+		{ 2, 5, 6 },	// Right(2-5-6)
+		{ 0, 2, 3 },	// Up	(0-2-3)
+		{ 4, 6, 5 },	// Down	(4-6-5)
+	}
 };
 
 CPhysics::CPhysics( void )
@@ -113,9 +132,9 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube)
 	for (int i = 0; i < 6; ++i)									
 	{															// Plane A+B+C+D
 		D3DXPlaneFromPoints( &Plane, 							// A = Nx		
-							 &v[nVI[i][0]], 					// B = Ny
-							 &v[nVI[i][1]], 					// C = Nz
-							 &v[nVI[i][2]] );					// D = -(NdotX)	
+							 &v[nVI[0][i][0]], 					// B = Ny
+							 &v[nVI[0][i][1]], 					// C = Nz
+							 &v[nVI[0][i][2]] );					// D = -(NdotX)	
 		if (  D3DXPlaneDotCoord( &Plane, &vPos ) > 0 )
 		{
 			return FALSE;
@@ -161,7 +180,7 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDire
 	//CDebugConsole::GetInstance()->MessageQube(m_vBBPos);
 	for ( i = 0; i < 6; ++i )
 	{
-		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[i][0]], &m_vBBPos[nVI[i][1]], &m_vBBPos[nVI[i][2]] );	
+		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[0][i][0]], &m_vBBPos[nVI[0][i][1]], &m_vBBPos[nVI[0][i][2]] );	
 		if (  D3DXPlaneDotCoord( &m_plane, &vDir ) <= 0 )
 		{
 			if ( D3DXPlaneDotCoord( &m_plane, &vPosition )  > 0 )
@@ -186,10 +205,10 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoun
 	for ( i = 0; i < 4; ++i )
 	{
 		// 최단거리 계산 Ds = ( Pi - Ps ) DOT N
-		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[i][0]], &m_vBBPos[nVI[i][1]], &m_vBBPos[nVI[i][2]]);
+		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[0][i][0]], &m_vBBPos[nVI[0][i][1]], &m_vBBPos[nVI[0][i][2]]);
 		m_vColNormal = D3DXVECTOR3( m_plane.a, m_plane.b, m_plane.c );
 
-		v0 = vCenter - m_vBBPos[nVI[i][0]];
+		v0 = vCenter - m_vBBPos[nVI[0][i][0]];
 		m_fD_s = D3DXVec3Dot( &v0, &m_vColNormal );
 		
 		if ( m_fD_s < fRadius )
@@ -203,4 +222,23 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoun
 	}
 
 	return TRUE;
+}
+
+BOOL CPhysics::Collision( INT nIndex, const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube )
+{
+	D3DXVECTOR3 v[8];							
+	for ( int i = 0; i < 8; ++i )				
+	{											
+		v[i] = _pCube->GetPosition( i );		
+	}											
+
+	BOOL bRet;
+	bRet = IntersectTri ( v[nVI[0][nIndex][0]], v[nVI[0][nIndex][1]], v[nVI[0][nIndex][2]], vPosition, vDirection );
+	if (bRet == TRUE)
+	{
+		return TRUE;
+	}
+	bRet = IntersectTri ( v[nVI[1][nIndex][0]], v[nVI[1][nIndex][1]], v[nVI[1][nIndex][2]], vPosition, vDirection );
+
+	return bRet;
 }

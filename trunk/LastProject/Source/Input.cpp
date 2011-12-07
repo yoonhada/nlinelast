@@ -42,6 +42,10 @@ VOID CInput::Clear()
 	m_iLbuttonCheck = -1;
 	m_iRbuttonCheck = -1;
 
+	m_bNumKey[0] = m_bNumKey[1] = m_bNumKey[2] = m_bNumKey[3] = m_bNumKey[4] = \
+	m_bNumKey[5] = m_bNumKey[6] = m_bNumKey[7] = m_bNumKey[8] = m_bNumKey[9] = FALSE;
+
+
 }
 
 
@@ -195,7 +199,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 
 			for (int i = 0; i < 10; ++i)
 			{
-				if( ( GetAsyncKeyState( '0' + i ) & 0x8001 ) )
+				if( ( GetAsyncKeyState( '0' + i ) & 0x8000 ) )
 				{
 					m_bNumKey[i] = TRUE;
 				}

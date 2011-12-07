@@ -179,15 +179,13 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::Update()
 {
+	// 치트키 처리
 	if( GetKeyState( '5' ) & 0x8000 )
 		m_pCamera->SetEffect(1);
 	if( GetKeyState( '6' ) & 0x8000 )
 		m_pGameEvent->AddEvent( CGameEvent::EVENTCOMBO, 0.1f);
-	//if( GetKeyState( '7' ) & 0x8000 )
-	//	m_pCamera->SetEffect(1);
 
 
-	// 치트키 처리
 	CCharactor * pChar;
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
 
