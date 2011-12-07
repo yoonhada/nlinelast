@@ -96,11 +96,10 @@ VOID CMonster::Realese()
 	{
 		for( INT LoopFrame=0; LoopFrame<m_iFrameMax; ++LoopFrame )
 		{
-			delete []m_pFrame[LoopFrame].m_pBoxData;
-			m_pFrame[LoopFrame].m_pBoxData=NULL;
+			SAFE_DELETE_ARRAY( m_pFrame[LoopFrame].m_pBoxData );
 		}
-		delete []m_pFrame;
-		m_pFrame=NULL;
+
+		SAFE_DELETE_ARRAY( m_pFrame );
 	}
 
 	//SAFE_DELETE(m_pBoundBox);
