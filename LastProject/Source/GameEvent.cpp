@@ -80,7 +80,7 @@ VOID CGameEvent::Clear()
 	m_pShotedPoint = NULL;
 
 	m_nHPMonstor = 0;
-	m_nMonsterState = 3;
+	m_nMonsterState = 4;
 
 	m_pCharactorPosition = new D3DXVECTOR3[4];
 	m_pCharactorPosition[0] = D3DXVECTOR3( 180.0f, 0.0f, -330.0f);

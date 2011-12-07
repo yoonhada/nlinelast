@@ -14,17 +14,6 @@ private:
 	Chase( const Chase& a_rhs );
 	Chase& operator=( const Chase& a_rhs );
 
-	PathNode*	m_pNextPath;
-	D3DXVECTOR3 m_vCurrentPos;
-	D3DXVECTOR3 m_vPreviousPos;
-	INT			m_iCurrentX;
-	INT			m_iCurrentZ;
-	INT			m_iTotalPathCnt;
-	FLOAT		m_fCurrentAngle;
-	FLOAT		m_fNextAngle;
-	FLOAT		m_fAngle0;
-	FLOAT		m_fAngle1;
-
 	TileMap::INFO*	m_pMapInfo;
 
 
