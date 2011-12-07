@@ -932,8 +932,6 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
 
-	CTree::GetInstance()->SetCharAtkClear();
-
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
 	static FLOAT fTemp = 11.0f;

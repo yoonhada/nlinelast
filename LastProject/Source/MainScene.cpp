@@ -203,7 +203,6 @@ VOID CMainScene::Update()
 			m_pCamera->SetEffect( 1 );
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
 	}
-	CTree::GetInstance()->SetMonsAtkClear();
 
 	// 카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
@@ -256,6 +255,8 @@ VOID CMainScene::Update()
 
 	m_pGameEvent->Update();	
 	CNetwork::GetInstance()->UpdateGame();
+	CTree::GetInstance()->SetMonsAtkClear();
+	CTree::GetInstance()->SetCharAtkClear();
 }
 
 VOID	CMainScene::Render()

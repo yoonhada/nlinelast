@@ -122,6 +122,7 @@ HRESULT CObjectManage::Release()
 	SAFE_DELETE_ARRAY( m_ppVirtualCharactors );
 	SAFE_DELETE( m_pClown );
 	SAFE_DELETE( m_pPanda );
+	SAFE_DELETE( m_pBear );
 	SAFE_DELETE( m_pMonster );
 	SAFE_DELETE( m_pFirstAidKit );
 	SAFE_DELETE( m_pASEViewer );
