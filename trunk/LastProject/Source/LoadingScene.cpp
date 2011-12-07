@@ -74,9 +74,9 @@ VOID LoadingScene::Update()
 	m_pLoadingGUI->Update();
 
 	m_pClown->Update();
-	m_pClown->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+	//m_pClown->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pPanda->Update();
-	m_pPanda->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+	//m_pPanda->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 
 	/*static D3DXVECTOR3 vecClown( 19.0f, 0.0f, 81.0f ), vecPanda( -17.0f, 0.0f, 117.0f );
 	static FLOAT		fClown = 2.49f, fPanda = 5.44f;

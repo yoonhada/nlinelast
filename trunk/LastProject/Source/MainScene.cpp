@@ -16,14 +16,8 @@
 #include "OptionScene.h"
 
 // AI 테스트용
-#ifdef _DEBUG
 #include "Seek.h"
 #include "Chase.h"
-#else
-#include "Seek.h"
-#include "Chase.h"
-#endif
-
 
 CMainScene::CMainScene()
 {
@@ -81,7 +75,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pGameEvent->Create( m_pD3dDevice );
 
 	//맵 생성
-	// Error 예외생성 
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
 	m_pASEViewer->Create(  L"ASE File/Map/Stage_Beta.ASE", L"ASE File/Map/Stage_Beta_Box.BBX" );
 
@@ -97,7 +90,19 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	//m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
-	m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
+	//m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
+	if ( m_pGameEvent->m_nMonsterState & 0x01 )	//1 2 3 4
+	{
+		m_pMonster[0]->InitAniAndState();
+	}
+	if ( m_pGameEvent->m_nMonsterState & 0x02 )
+	{
+		m_pMonster[1]->InitAniAndState();
+	}
+	if ( m_pGameEvent->m_nMonsterState & 0x04 )
+	{
+		m_pMonster[2]->InitAniAndState();
+	}
 
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
@@ -121,9 +126,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pMainGUI->Create();
 	m_pOptionScene = new OptionScene;
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
-
-
-	m_pMonster->GetFSM()->SetCurrentState( NULL );
 
 	CInput::GetInstance()->EnableInput(FALSE);
 
@@ -231,8 +233,16 @@ VOID CMainScene::Update()
 
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
 
-	m_pMonster->Update();
-	m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+
+	if ( m_pGameEvent->m_nMonsterState & 0x01 )	//1 2 3 4
+		m_pMonster[0]->Update();
+	if ( m_pGameEvent->m_nMonsterState & 0x02 )
+		m_pMonster[1]->Update();
+	if ( m_pGameEvent->m_nMonsterState & 0x04 )
+		m_pMonster[2]->Update();
+
+	//m_pMonster->Update();
+	//m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 
 	// 아이템 쓸까나??
 	m_pFirstAidKit->Update();
@@ -273,7 +283,13 @@ VOID	CMainScene::Render()
 		}
 	}
 
-	m_pMonster->Render();
+	if ( m_pGameEvent->m_nMonsterState & 0x01 )	//1 2 3 4
+		m_pMonster[0]->Render();
+	if ( m_pGameEvent->m_nMonsterState & 0x02 )
+		m_pMonster[1]->Render();
+	if ( m_pGameEvent->m_nMonsterState & 0x04 )
+		m_pMonster[2]->Render();
+
 	m_pFirstAidKit->Render();
 
 /*

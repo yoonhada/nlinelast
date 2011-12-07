@@ -67,16 +67,22 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	
 HRESULT CObjectManage::LoadLoadingObject()
 {
-	// Monster
-	m_pClown = new CMonster;
-	//m_pClown->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
-
 	m_pPanda = new CMonster;
+	m_pPanda->Set_MonsterNumber( 0 );
 	//m_pPanda->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 
-	m_pMonster = new CMonster*[2];
-	m_pMonster[0] = m_pClown;
+	m_pBear = new CMonster;
+	m_pBear->Set_MonsterNumber( 1 );
+
+	// Monster
+	m_pClown = new CMonster;
+	m_pClown->Set_MonsterNumber( 2 );
+	//m_pClown->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
+
+	m_pMonster = new CMonster*[3];
+	m_pMonster[0] = m_pBear;
 	m_pMonster[1] = m_pPanda;
+	m_pMonster[2] = m_pClown;
 
 	m_pFirstAidKit = new CTimeLifeItem;
 	return S_OK;

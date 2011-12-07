@@ -35,6 +35,7 @@ private:
 
 	CMonster*			m_pClown;
 	CMonster*			m_pPanda;
+	CMonster*			m_pBear;
 	CMonster**			m_pMonster;
 	CTimeLifeItem*		m_pFirstAidKit;
 
@@ -78,6 +79,7 @@ public:
 
 	CMonster* Get_Clown()				{ return m_pClown;				}
 	CMonster* Get_Panda()				{ return m_pPanda;				}
+	CMonster* Get_Bear()				{ return m_pBear;				}
 	//CMonster* Get_Monster()				{ return m_pClown;				}
 	CMonster** Get_Monster()			{ return m_pMonster;			}
 	CTimeLifeItem * Get_FirstAidKit()	{ return m_pFirstAidKit;		}
