@@ -64,4 +64,6 @@ public:
 	VOID Render();		///< Render
 
 	VOID AddEvent( EVENTKIND, FLOAT );
+
+	INT m_nMonsterState;
 };

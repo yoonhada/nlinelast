@@ -41,6 +41,8 @@ VOID CMonster::Clear()
 	m_bChangingAnimation = FALSE;
 	m_bAnimationEndCheck = FALSE;
 
+	m_fTime = 0.0f;
+	m_fInterpolationTime = 0.0f;
 	m_iTarget = -1;
 	m_iTargetPos[0] = 0;
 	m_iTargetPos[1] = 0;
@@ -1407,9 +1409,135 @@ VOID CMonster::EnableShadow( BOOL bEnable )
 {
 	for( INT Loop = 0; Loop < m_iCharEditorMax; ++Loop )
 	{
-		m_pBox[Loop].EnableShadow( FALSE );
+		if (Loop == 2 || Loop == 3 )
+		{
+			m_pBox[Loop].EnableShadow( bEnable );
+		}	
+		else
+		{
+			m_pBox[Loop].EnableShadow( FALSE );
+		}
 	}
-	m_pBox[1].EnableShadow( bEnable );
+}
+
+
+VOID CMonster::Set_ChaseData()
+{
+	m_pNextPath	= m_pPath;
+	m_vCurrentPos = m_vControl;
+	m_vPreviousPos = m_vCurrentPos;
+	m_iCurrentX = INT(  ( m_vCurrentPos.x + 510.0f ) / 10.0f );
+	m_iCurrentZ = INT( -( m_vCurrentPos.z - 950.0f ) / 10.0f );
+	m_iTotalPathCnt = m_pPath->remainedNode;
+
+	m_fCurrentAngle = D3DXToDegree( Get_Angle() );
+	m_fNextAngle = GetDegree();
+
+	if( m_fCurrentAngle == 225.0f && m_fNextAngle == -90.0f )
+	{
+		m_fAngle0 = 225.0f;
+		m_fAngle1 = 270.0f;
+	}
+	else if( m_fCurrentAngle == -90.0f && m_fNextAngle == 225.0f )
+	{
+		m_fAngle0 = 270.0f;
+		m_fAngle1 = 225.0f;
+	}
+	else
+	{
+		m_fAngle0 = m_fCurrentAngle;
+		m_fAngle1 = m_fNextAngle;
+	}
+
+	D3DXVECTOR3 vNextPos = GetWorldPos( m_pNextPath->x, m_pNextPath->y );
+	D3DXVECTOR3 vDistance = vNextPos - m_vCurrentPos;
+	Set_InterpolationTime( D3DXVec3Length( &vDistance ) / 10.0f * 0.25f );
+}
+
+
+VOID CMonster::Set_ChaseNextData()
+{
+	ClearTime();
+
+	// 현재 위치를 이전 위치에
+	m_vPreviousPos = m_vCurrentPos;
+
+	// 각도 오차값이 있으므로 최종 각도값을 넣어준다.
+	Set_Angle( D3DXToRadian( m_fNextAngle ) );
+
+	m_iCurrentX = m_pNextPath->x;
+	m_iCurrentZ = m_pNextPath->y;
+
+	// 도착했으면 Seek 상태로
+	m_pNextPath = m_pNextPath->next;
+	if( m_pNextPath->remainedNode <= 0 )
+	{
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			GetFSM()->ChangeState( Seek::GetInstance() );
+		}
+		else
+		{
+			// Path 제거
+			Astar::GetInstance()->removePath( Get_Path() );
+			Set_Path( NULL );
+			GetFSM()->ChangeState( NULL );
+		}
+	}
+	else
+	{
+		m_vCurrentPos = Get_Pos();
+
+		m_fCurrentAngle = m_fNextAngle;
+		m_fNextAngle = GetDegree();
+
+		if( m_fCurrentAngle == 225.0f && m_fNextAngle == -90.0f )
+		{
+			m_fAngle0 = 225.0f;
+			m_fAngle1 = 270.0f;
+		}
+		else if( m_fCurrentAngle == -90.0f && m_fNextAngle == 225.0f )
+		{
+			m_fAngle0 = 270.0f;
+			m_fAngle1 = 225.0f;
+		}
+		else
+		{
+			m_fAngle0 = m_fCurrentAngle;
+			m_fAngle1 = m_fNextAngle;
+		}
+
+		D3DXVECTOR3 vNextPos = GetWorldPos( m_pNextPath->x, m_pNextPath->y );
+		D3DXVECTOR3 vDistance = vNextPos - m_vCurrentPos;
+		Set_InterpolationTime( D3DXVec3Length( &vDistance ) / 10.0f * 0.25f );
+	}
+}
+
+
+FLOAT CMonster::GetDegree()
+{
+	static FLOAT fDegree[3][3] = {
+		{ 135.0f, 180.0f, 225.0f },
+		{  90.0f,   0.0f, -90.0f },
+		{  45.0f,   0.0f, -45.0f }
+	};
+
+	INT iDirX = m_pNextPath->x - m_iCurrentX + 1;
+	INT iDirZ = m_pNextPath->y - m_iCurrentZ + 1;
+
+	return fDegree[iDirZ][iDirX];
+}
+
+
+D3DXVECTOR3 CMonster::GetWorldPos( INT a_iX, INT a_iZ )
+{
+	D3DXVECTOR3 pos;
+
+	pos.x = -510.0f + 10.0f * a_iX + 10.0f / 2;
+	pos.y = 0.0f;
+	pos.z = 950.0f - 10.0f * a_iZ - 10.0f / 2;
+
+	return pos;
 }
 
 VOID CMonster::InitAniAndState()

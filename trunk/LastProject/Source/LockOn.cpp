@@ -147,7 +147,7 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 
 	if( fMonsterAngle != fAngle )
 	{	
-		CNetwork::GetInstance()->CS_Monster_LockOn( 0, f );
+		CNetwork::GetInstance()->CS_Monster_LockOn( a_pMonster->Get_MonsterNumber(), f );
 
 		a_pMonster->Set_Angle( D3DXToRadian( f )  );
 	}
@@ -162,13 +162,13 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 */
 	if( FastRand2() < 0.5f )
 	{
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation( 0, CMonster::ANIM_MELEE_ATTACK );
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK );
 
 		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
 	else
 	{
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation( 0, CMonster::ANIM_MELEE_ATTACK2 );
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK2 );
 
 		a_pMonster->GetFSM()->ChangeState( Melee2::GetInstance() );
 	}

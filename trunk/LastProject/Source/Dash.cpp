@@ -20,9 +20,8 @@ VOID Dash::Enter( CMonster* a_pMonster )
 	a_pMonster->ChangeAnimation( CMonster::ANIM_DASH );
 	CDebugConsole::GetInstance()->Messagef( L"Dash : ANIM_DASH \n" );
 
-	m_vPos		= a_pMonster->Get_Pos();
-	m_vNextPos	= a_pMonster->Get_TargetPos();
-	m_fT		= a_pMonster->Get_TargetDistance() / 10.0f * 0.15f;
+	a_pMonster->Set_DashPos( a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos() );
+	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() / 10.0f * 0.15f );
 /*
 	CDebugConsole::GetInstance()->Messagef( L"Pos     : %f %f \n", m_vPos.x, m_vPos.z );
 	CDebugConsole::GetInstance()->Messagef( L"NextPos : %f %f \n", m_vNextPos.x, m_vNextPos.z );
@@ -32,29 +31,29 @@ VOID Dash::Enter( CMonster* a_pMonster )
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
 		FLOAT fAngle = SetAngle( a_pMonster );
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( 0, CMonster::ANIM_DASH, fAngle, m_vPos, m_vNextPos, a_pMonster->Get_TargetDistance() );
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH, fAngle, a_pMonster->Get_DashStartPos(), a_pMonster->Get_DashEndPos(), a_pMonster->Get_TargetDistance() );
 	}
 }
 
 
 VOID Dash::Execute( CMonster* a_pMonster )
 {
-	static FLOAT t = 0.0f;
-	t += CFrequency::GetInstance()->getFrametime();
+	a_pMonster->UpdateTime();
+
+	FLOAT t = a_pMonster->Get_Time();
 
 	// 도착했으면 Stiffen 상태로
-	if( t >= m_fT )
+	if( t >= a_pMonster->Get_InterpolationTime() )
 	{
-		t = 0.0f;
+		a_pMonster->ClearTime();
 
 		a_pMonster->GetFSM()->ChangeState( Sliding::GetInstance() );
-//		CDebugConsole::GetInstance()->Messagef( L"ok \n" );
 	}
 	else
 	{
 		D3DXVECTOR3 vPos( 0.0f, 0.0f, 0.0f );
 
-		D3DXVec3Lerp( &vPos, &m_vPos, &m_vNextPos, t / m_fT );
+		D3DXVec3Lerp( &vPos, &a_pMonster->Get_DashStartPos(), &a_pMonster->Get_DashEndPos(), t / a_pMonster->Get_InterpolationTime() );
 		a_pMonster->Set_Pos( vPos );
 	}
 }
@@ -127,7 +126,7 @@ FLOAT Dash::SetAngle( CMonster* a_pMonster )
 
 	if( fMonsterAngle != fAngle )
 	{	
-		CNetwork::GetInstance()->CS_Monster_LockOn( 0, f );
+		CNetwork::GetInstance()->CS_Monster_LockOn( a_pMonster->Get_MonsterNumber(), f );
 
 		a_pMonster->Set_Angle( D3DXToRadian( f )  );
 	}
