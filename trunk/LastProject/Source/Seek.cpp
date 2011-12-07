@@ -121,13 +121,14 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		Astar::GetInstance()->removePath( a_pMonster->Get_Path() );
 		Astar::GetInstance()->clearMap();
 #endif
+
 		a_pMonster->Set_Path( path );
 
 		// Path가 있으면 Chase 상태로
 		if( path )
 		{
 			// 다른 클라이언트에게 AI를 보낸다.
-			CNetwork::GetInstance()->CS_MONSTER_MOVEMENT( 0, path );
+			CNetwork::GetInstance()->CS_MONSTER_MOVEMENT( a_pMonster->Get_MonsterNumber(), path );
 
 			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
 		}

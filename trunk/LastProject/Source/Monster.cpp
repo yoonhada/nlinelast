@@ -1421,12 +1421,12 @@ VOID CMonster::EnableShadow( BOOL bEnable )
 
 VOID CMonster::Set_ChaseData()
 {
-	m_pNextPath	= m_pPath;
 	m_vCurrentPos = m_vControl;
 	m_vPreviousPos = m_vCurrentPos;
 	m_iCurrentX = INT(  ( m_vCurrentPos.x + 510.0f ) / 10.0f );
 	m_iCurrentZ = INT( -( m_vCurrentPos.z - 950.0f ) / 10.0f );
-	m_iTotalPathCnt = m_pPath->remainedNode;
+	m_pNextPath	= m_pPath;
+	m_iTotalPathCnt = m_pNextPath->remainedNode;
 
 	m_fCurrentAngle = D3DXToDegree( Get_Angle() );
 	m_fNextAngle = GetDegree();
@@ -1466,25 +1466,26 @@ VOID CMonster::Set_ChaseNextData()
 	m_iCurrentX = m_pNextPath->x;
 	m_iCurrentZ = m_pNextPath->y;
 
-	// 도착했으면 Seek 상태로
 	m_pNextPath = m_pNextPath->next;
+
+	// 도착했으면 Seek 상태로
 	if( m_pNextPath->remainedNode <= 0 )
 	{
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			GetFSM()->ChangeState( Seek::GetInstance() );
+			m_pStateMachine->ChangeState( Seek::GetInstance() );
 		}
 		else
 		{
 			// Path 제거
 			Astar::GetInstance()->removePath( Get_Path() );
-			Set_Path( NULL );
-			GetFSM()->ChangeState( NULL );
+			m_pPath = NULL;
+			m_pStateMachine->ChangeState( NULL );
 		}
 	}
 	else
 	{
-		m_vCurrentPos = Get_Pos();
+		m_vCurrentPos = m_vControl;
 
 		m_fCurrentAngle = m_fNextAngle;
 		m_fNextAngle = GetDegree();
