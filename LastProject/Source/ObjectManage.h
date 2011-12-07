@@ -35,7 +35,7 @@ private:
 
 	CMonster*			m_pClown;
 	CMonster*			m_pPanda;
-	CMonster*			m_pMonster;
+	CMonster**			m_pMonster;
 	CTimeLifeItem*		m_pFirstAidKit;
 
 	ASEViewer*			m_pASEViewer;
@@ -79,6 +79,7 @@ public:
 	CMonster* Get_Clown()				{ return m_pClown;				}
 	CMonster* Get_Panda()				{ return m_pPanda;				}
 	CMonster* Get_Monster()				{ return m_pClown;				}
+	//CMonster** Get_Monster()			{ return m_pMonster;			}
 	CTimeLifeItem * Get_FirstAidKit()	{ return m_pFirstAidKit;		}
 	ASEViewer* Get_ASEViewer()			{ return m_pASEViewer;			}
 	BOOL IsHost()						{ return m_bHost;				}

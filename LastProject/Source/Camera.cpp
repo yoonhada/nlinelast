@@ -308,12 +308,12 @@ VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXV
 		//m_fZoomReduce = 0.0f;
 
 		SetCamera();
-		CDebugConsole::GetInstance()->Messagef( L"Camera Coll \n" );
+		//CDebugConsole::GetInstance()->Messagef( L"Camera Coll \n" );
 		//CDebugConsole::GetInstance()->Messagef( L"Eye : %f %f %f \n", m_vEye.x, m_vEye.y, m_vEye.z );
 	}
 	else
 	{
-		CDebugConsole::GetInstance()->Messagef( L"                 Camera not Coll \n" );
+		//CDebugConsole::GetInstance()->Messagef( L"                 Camera not Coll \n" );
 		if( m_fZoom > m_fMinZoom )
 		{
 			//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
