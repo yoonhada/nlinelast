@@ -78,8 +78,8 @@ public:
 
 	CMonster* Get_Clown()				{ return m_pClown;				}
 	CMonster* Get_Panda()				{ return m_pPanda;				}
-	CMonster* Get_Monster()				{ return m_pClown;				}
-	//CMonster** Get_Monster()			{ return m_pMonster;			}
+	//CMonster* Get_Monster()				{ return m_pClown;				}
+	CMonster** Get_Monster()			{ return m_pMonster;			}
 	CTimeLifeItem * Get_FirstAidKit()	{ return m_pFirstAidKit;		}
 	ASEViewer* Get_ASEViewer()			{ return m_pASEViewer;			}
 	BOOL IsHost()						{ return m_bHost;				}

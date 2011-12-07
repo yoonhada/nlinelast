@@ -356,9 +356,9 @@ VOID CNetwork::SC_MONSTER_MOVEMENT( CPacket& a_pk )
 	}
 
 	// 몬스터에게 적용한다.
-	CMonster* pMonster = CObjectManage::GetInstance()->Get_Monster();
-	pMonster->Set_Path( pStartPath );
-	pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
+	CMonster** pMonster = CObjectManage::GetInstance()->Get_Monster();
+	pMonster[wMonsterNumber]->Set_Path( pStartPath );
+	pMonster[wMonsterNumber]->GetFSM()->ChangeState( Chase::GetInstance() );
 }
 
 
