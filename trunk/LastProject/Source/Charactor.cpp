@@ -451,14 +451,22 @@ BOOL CCharactor::CollisionAtk( )
 	std::vector<CBoundBox*> * vecBoundBox;
 	std::vector<CBoundBox*>::iterator Iter;
 
-	FLOAT fRadius = m_pBoundBox->GetSize( CBoundBox::PLUSX ) * 1.732f; // a * sqrt(3)
+	FLOAT fRadius;
+	FLOAT fRadiusX = m_pBoundBox->GetSize( CBoundBox::PLUSX ) * 1.732f; // a * sqrt(3)
+	FLOAT fRadiusY = m_pBoundBox->GetSize( CBoundBox::PLUSY ) * 1.732f; // a * sqrt(3)
+	FLOAT fRadiusZ = m_pBoundBox->GetSize( CBoundBox::PLUSZ ) * 1.732f; // a * sqrt(3)
+	fRadius = fRadiusX;
+	if (fRadius < fRadiusY)		fRadius = fRadiusY;
+	if (fRadius < fRadiusZ)		fRadius = fRadiusZ;
+	
 	D3DXVECTOR3 vDir, vPos;
 
 	if (m_bMonster == TRUE)
 	{
 		vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
-		if ( vecBoundBox != NULL && vecBoundBox->size() )
+		if ( !vecBoundBox->empty() )
 		{
+			// 케릭터가 때리는 바운드는 1개.
   			Iter = vecBoundBox->begin();
 			vPos = ( *Iter )->GetPosition();
 			if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
@@ -474,13 +482,17 @@ BOOL CCharactor::CollisionAtk( )
 		{
 			Iter = vecBoundBox->begin();
 
-			for (int i = 0; i < 8; ++i)
-			{				
-				vPos = ( *Iter )->GetPosition(i);
-				if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
-				{
-					return TRUE; 
-				}
+			//for (int i = 0; i < 8; ++i)
+			//{				
+			//	vPos = ( *Iter )->GetPosition(i);
+				//if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
+				//{
+				//	return TRUE; 
+				//}
+			//}
+			if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
+			{
+				return TRUE; 
 			}
 		}
 	}
@@ -880,21 +892,25 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 					//(*Iter)->GetPosVec();
 					// 케릭터 매트릭스 					
-					vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
-					D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
-					m_vKnockControl = (*Iter)->GetPosition();
-					if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
+					while( Iter != vecBoundBox->end() )
 					{
-						++nCount;
-						// 날아가는 방향 계산.
-						vPos = (*Iter)->GetDirection();	
-						D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
-						//m_vKnockBack = vPos;
-						vPos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-						BreakListMake( Loop, vPos );
-						//NetworkSendTempVector.push_back( Loop );
-						CObjectManage::GetInstance()->Set_PushBackNetworkSendTempVector( static_cast<WORD>(Loop) );
-						vDir = vPos;
+						vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
+						D3DXVec3TransformCoord( &vPos, &vPos, &matTemp );
+						m_vKnockControl = (*Iter)->GetPosition();
+						if( CPhysics::GetInstance()->Collision( vPos, D3DXVECTOR3(0, 0, 0), (*Iter) ) )
+						{
+							++nCount;
+							// 날아가는 방향 계산.
+							vPos = (*Iter)->GetDirection();	
+							D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
+							//m_vKnockBack = vPos;
+							vPos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+							BreakListMake( Loop, vPos );
+							//NetworkSendTempVector.push_back( Loop );
+							CObjectManage::GetInstance()->Set_PushBackNetworkSendTempVector( static_cast<WORD>(Loop) );
+							vDir = vPos;
+						}
+						Iter++;
 					}
 				}
 			}
