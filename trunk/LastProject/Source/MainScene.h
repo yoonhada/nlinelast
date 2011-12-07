@@ -69,6 +69,8 @@ private:
 	INT						m_scnState;
 
 	VOID					CreateCharactor();
+	VOID					InitCharState();
+	VOID					InitMonsterState();
 };
 
 #endif

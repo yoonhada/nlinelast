@@ -91,16 +91,16 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	//m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 	//m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
-	if ( m_pGameEvent->m_nMonsterState & 0x01 )	//1 2 3 4
+	if ( m_pGameEvent->GetMonsterState() & 0x01 )	//1 2 3 4
 	{
 		m_pMonster[0]->InitAniAndState();
 	}
-	if ( m_pGameEvent->m_nMonsterState & 0x02 )
+	if ( m_pGameEvent->GetMonsterState() & 0x02 )
 	{
 		m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 		m_pMonster[1]->InitAniAndState();
 	}
-	if ( m_pGameEvent->m_nMonsterState & 0x04 )
+	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
 	{
 		m_pMonster[2]->InitAniAndState();
 	}
@@ -235,11 +235,11 @@ VOID CMainScene::Update()
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
 
 
-	if ( m_pGameEvent->m_nMonsterState & 0x01 )	//1 2 3 4
+	if ( m_pGameEvent->GetMonsterState()  & 0x01 )	//1 2 3 4
 		m_pMonster[0]->Update();
-	if ( m_pGameEvent->m_nMonsterState & 0x02 )
+	if ( m_pGameEvent->GetMonsterState()  & 0x02 )
 		m_pMonster[1]->Update();
-	if ( m_pGameEvent->m_nMonsterState & 0x04 )
+	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
 		m_pMonster[2]->Update();
 
 	//m_pMonster->Update();
@@ -284,11 +284,11 @@ VOID	CMainScene::Render()
 		}
 	}
 
-	if ( m_pGameEvent->m_nMonsterState & 0x01 )	//1 2 3 4
+	if ( m_pGameEvent->GetMonsterState()  & 0x01 )	//1 2 3 4
 		m_pMonster[0]->Render();
-	if ( m_pGameEvent->m_nMonsterState & 0x02 )
+	if ( m_pGameEvent->GetMonsterState()  & 0x02 )
 		m_pMonster[1]->Render();
-	if ( m_pGameEvent->m_nMonsterState & 0x04 )
+	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
 		m_pMonster[2]->Render();
 
 	m_pFirstAidKit->Render();
@@ -322,4 +322,51 @@ INT CMainScene::GetSceneNext()
 INT CMainScene::GetSceneState()
 {
 	return m_scnState;
+}
+
+VOID					InitMonsterState();
+
+VOID CMainScene::InitCharState()
+{
+	for ( INT Loop = 0; Loop < 4; ++Loop )
+	{
+		m_pCharactors[Loop].Set_Position( m_pGameEvent->GetCharPosition( Loop ) );
+	}
+}
+
+VOID CMainScene::InitMonsterState()
+{
+	if ( m_pGameEvent->GetMonsterState()  & 0x01 )	//1 2 3 4
+	{
+		m_pMonster[0]->Set_Pos( m_pGameEvent->GetMonsPosition( 0 ) );
+		m_pMonster[0]->Set_Angle( 0.0f );
+		m_pMonster[0]->ChangeAnimation( CMonster::ANIM_STAND );
+		m_pMonster[0]->EnableShadow( TRUE );
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+		}
+	}
+	if ( m_pGameEvent->GetMonsterState()  & 0x02 )
+	{
+		m_pMonster[1]->Set_Pos( m_pGameEvent->GetMonsPosition( 1 ) );
+		m_pMonster[1]->Set_Angle( 0.0f );
+		m_pMonster[1]->ChangeAnimation( CMonster::ANIM_STAND );
+		m_pMonster[1]->EnableShadow( TRUE );
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+		}
+	}
+	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
+	{
+		m_pMonster[2]->Set_Pos( m_pGameEvent->GetMonsPosition( 2 ) );
+		m_pMonster[2]->Set_Angle( 0.0f );
+		m_pMonster[2]->ChangeAnimation( CMonster::ANIM_STAND );
+		m_pMonster[2]->EnableShadow( TRUE );
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+		}
+	}
 }

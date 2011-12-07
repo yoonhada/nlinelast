@@ -26,7 +26,8 @@ private:
 	CMainScene * m_pScen;
 
 	// Const 
-	D3DXVECTOR3 * m_pPosition;
+	D3DXVECTOR3 * m_pCharactorPosition;
+	D3DXVECTOR3 * m_pMonsterPosition;
 
 	// Char
 	INT m_iMaxCharaNum;
@@ -35,6 +36,7 @@ private:
 
 	// Monster
 	INT m_nHPMonstor;
+	INT m_nMonsterState;
 	
 	// Event
 	std::list<EVENT*> m_listEvent;
@@ -65,5 +67,11 @@ public:
 
 	VOID AddEvent( EVENTKIND, FLOAT );
 
-	INT m_nMonsterState;
+	// Get
+	INT GetMonsterState()			{ return m_nMonsterState; }
+	D3DXVECTOR3& GetCharPosition(INT nIndex) { return m_pCharactorPosition[nIndex]; }
+	D3DXVECTOR3& GetMonsPosition(INT nIndex) { return m_pMonsterPosition[nIndex]; }
+
+	// Set
+	//VOID SetMonsterState()
 };

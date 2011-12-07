@@ -59,7 +59,7 @@ HRESULT CGameEvent::Release()
 	SAFE_DELETE ( m_pAttackPoint );
 	SAFE_DELETE ( m_pShotedPoint );
 	
-	SAFE_DELETE_ARRAY( m_pPosition );
+	SAFE_DELETE_ARRAY( m_pCharactorPosition );
 
 	for ( Iter = m_listEvent.begin(); Iter != m_listEvent.end( ); Iter++ )
 	{
@@ -82,11 +82,16 @@ VOID CGameEvent::Clear()
 	m_nHPMonstor = 0;
 	m_nMonsterState = 3;
 
-	m_pPosition = new D3DXVECTOR3[4];
-	m_pPosition[0] = D3DXVECTOR3( 180.0f, 0.0f, -330.0f);
-	m_pPosition[1] = D3DXVECTOR3( 220.0f, 0.0f, -330.0f);
-	m_pPosition[2] = D3DXVECTOR3( 260.0f, 0.0f, -330.0f);
-	m_pPosition[3] = D3DXVECTOR3( 300.0f, 0.0f, -330.0f);
+	m_pCharactorPosition = new D3DXVECTOR3[4];
+	m_pCharactorPosition[0] = D3DXVECTOR3( 180.0f, 0.0f, -330.0f);
+	m_pCharactorPosition[1] = D3DXVECTOR3( 220.0f, 0.0f, -330.0f);
+	m_pCharactorPosition[2] = D3DXVECTOR3( 260.0f, 0.0f, -330.0f);
+	m_pCharactorPosition[3] = D3DXVECTOR3( 300.0f, 0.0f, -330.0f);
+
+	m_pMonsterPosition = new D3DXVECTOR3[3];
+	m_pMonsterPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 660.0f);
+	m_pMonsterPosition[1] = D3DXVECTOR3( -70.0f, 0.0f, 660.0f);
+	m_pMonsterPosition[2] = D3DXVECTOR3( -40.0f, 0.0f, 660.0f);
 
 	m_pEventCombo = NULL;
 }
@@ -179,28 +184,10 @@ VOID CGameEvent::Render()
 VOID CGameEvent::EventInit()
 {
 	// 케릭터 위치 조정
-	m_pScen->m_pCharactors[0].Set_Position( m_pPosition[0] );	
-	m_pScen->m_pCharactors[1].Set_Position( m_pPosition[1] );	
-	m_pScen->m_pCharactors[2].Set_Position( m_pPosition[2] );	
-	m_pScen->m_pCharactors[3].Set_Position( m_pPosition[3] );	
+	m_pScen->InitCharState();
 	
 	// 몬스터 위치 조정
-	m_pScen->m_pMonster[0]->Set_Pos( D3DXVECTOR3(-130.0f, 0.0f, 660.0f) );
-	m_pScen->m_pMonster[0]->Set_Angle( 0.0f );
-	m_pScen->m_pMonster[0]->ChangeAnimation( CMonster::ANIM_STAND );
-	m_pScen->m_pMonster[0]->EnableShadow( TRUE );
-	
-	m_pScen->m_pMonster[1]->Set_Pos( D3DXVECTOR3(-30.0f, 0.0f, 660.0f) );
-	m_pScen->m_pMonster[1]->Set_Angle( 0.0f );
-	m_pScen->m_pMonster[1]->ChangeAnimation( CMonster::ANIM_STAND );
-	m_pScen->m_pMonster[1]->EnableShadow( TRUE );
-
-	// AI 초기화
-	if( CObjectManage::GetInstance()->IsHost() == TRUE )
-	{
-		m_pScen->m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
-		m_pScen->m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
-	}
+	m_pScen->InitMonsterState();
 
 	// Game Point
 	m_pAttackPoint[0] = m_pAttackPoint[1] = m_pAttackPoint[2] = m_pAttackPoint[3] = 0;
