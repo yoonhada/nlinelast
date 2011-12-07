@@ -45,12 +45,11 @@ VOID CCamera::Clear()
 	m_fEffectValue = 0.0f;
 }
 
-void CCamera::SetCamera()
+BOOL CCamera::SetCamera()
 {
 	if (m_nEffect == 3)
 	{
-		UpdateEventCamera();
-		return;
+		return UpdateEventCamera();
 	}
 
 	//상하 각도 고정
@@ -83,6 +82,8 @@ void CCamera::SetCamera()
 	m_vPreLook = m_vLook;	
 	m_vPreDir = m_vDir;	
 	m_vPreEye = m_vEye;
+
+	return TRUE;
 }
 
 
@@ -104,7 +105,7 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 			D3DXVECTOR3 vUp(0, 1, 0);
 			D3DXVec3Cross( &vUp, &m_vDir, &vUp );
 			a_vLook += vUp * sin(m_fEffectValue) * 2.5f;
-			m_fEffectValue += ( D3DX_PI * 3.0f * CFrequency::GetInstance()->getFrametime() );
+			m_fEffectValue += ( D3DX_PI * 10.0f * CFrequency::GetInstance()->getFrametime() );
 			if (m_fEffectValue > 31.4f)
 			{
 				m_nEffect = 0;
@@ -118,7 +119,7 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 	}	
 }
 
-VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
+BOOL CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
 {
 	D3DXVECTOR3 vLook;
 	static FLOAT fZoom = m_fMaxZoom;
@@ -147,7 +148,7 @@ VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook
 	m_fYaw   = a_fYaw;
 	m_fPitch -= a_fPitch;
 
-    SetCamera();
+    return SetCamera();
 }
 
 
@@ -254,41 +255,37 @@ VOID CCamera::UpdateMatrix()
 
 BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara )
 {
-	//CDebugConsole::GetInstance()->Messagef( L"Camera Pos : %f / %f / %f\n", a_vPosCamera.x, a_vPosCamera.y, a_vPosCamera.z );
-	//CDebugConsole::GetInstance()->Messagef( L"Chara Pos : %f / %f / %f\n", a_vPosCharactor.x, a_vPosCharactor.y, a_vPosCharactor.z );
-
-	std::vector<CBoundBox*> * vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), a_vPosCharactor);
+	CTree * pTree = CTree::GetInstance();
+	std::vector<CBoundBox*> * vecBoundBox = pTree->GetMapVector( pTree->GetRoot(), a_vPosCharactor );
 	std::vector<CBoundBox*>::iterator Iter;
+	D3DXVECTOR3 vDir = a_vPosCamera - a_vPosCharactor;
 
-	BOOL bColl = TRUE;
+	BOOL bColl = FALSE;
 	if ( vecBoundBox )
 	{
-		//int i = 0;
+		D3DXVECTOR3 vN( 0, 0, 1);
+		D3DXVECTOR3 vE( 1, 0, 0);
+		D3DXVECTOR3 vW(-1, 0, 0);
+		D3DXVECTOR3 vS( 0, 0,-1);
+
 		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
 		{
-			//(*Iter)->SetAngle( a_fAngleChara );
-			if( CPhysics::GetInstance()->Collision( a_vPosCamera, a_vPosCharactor,  ( *Iter ) ) )
-			{
-				bColl = FALSE;
-				//CDebugConsole::GetInstance()->Messagef( L"bCol : %d\n", bColl );
-				break;
-			}
-		}
-	}
+			INT nIndex = 1;
+			FLOAT fMin;
+			FLOAT fN = D3DXVec3Dot( &vDir, &vN );
+			FLOAT fE = D3DXVec3Dot( &vDir, &vE );
+			FLOAT fW = D3DXVec3Dot( &vDir, &vW );
+			FLOAT fS = D3DXVec3Dot( &vDir, &vS );
 
-	vecBoundBox = CTree::GetInstance()->GetMapVector(CTree::GetInstance()->GetRoot(), a_vPosCamera);
-
-	//BOOL bColl = TRUE;
-	if ( vecBoundBox )
-	{
-		//int i = 0;
-		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
-		{
-			//(*Iter)->SetAngle( a_fAngleChara );
-			if( CPhysics::GetInstance()->Collision( a_vPosCamera, a_vPosCharactor,  ( *Iter ) ) )
+			fMin = fN;
+			if ( fMin > fE )		{ fMin = fE; nIndex = 3; }
+			if ( fMin > fW )		{ fMin = fW; nIndex = 2; }
+			if ( fMin > fS )		{ fMin = fS; nIndex = 0; }
+			
+			if( CPhysics::GetInstance()->Collision( nIndex, a_vPosCharactor, vDir,  ( *Iter ) ) )
 			{
-				bColl = FALSE;
-				//CDebugConsole::GetInstance()->Messagef( L"bCol : %d\n", bColl );
+				m_vEye = CPhysics::GetInstance()->m_vColPosition;
+				bColl = TRUE;
 				break;
 			}
 		}
@@ -299,16 +296,29 @@ BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_v
 
 VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara )
 {
-	static BOOL bCheck = FALSE;
-	if ( Collision( a_vPosCamera, a_vPosCharactor, a_fAngleChara ) == FALSE )
+	if ( Collision( a_vPosCamera, a_vPosCharactor, a_fAngleChara ) )
 	{
+		//if( m_fZoom < m_fMaxZoom )
+		//{
+		//	m_fZoom += 5.0f;
+		//}
+
+
+		//m_fZoom += m_fZoomReduce;
+		//m_fZoomReduce = 0.0f;
+
+		SetCamera();
+		CDebugConsole::GetInstance()->Messagef( L"Camera Coll \n" );
+		//CDebugConsole::GetInstance()->Messagef( L"Eye : %f %f %f \n", m_vEye.x, m_vEye.y, m_vEye.z );
+	}
+	else
+	{
+		CDebugConsole::GetInstance()->Messagef( L"                 Camera not Coll \n" );
 		if( m_fZoom > m_fMinZoom )
 		{
-			////CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
+			//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
 			m_fZoom -= 5.0f;
 		}
-
-		//bCheck = FALSE;
 
 		//m_fZoomReduce += 1.0f;
 		//m_fZoom -= m_fZoomReduce;
@@ -317,20 +327,6 @@ VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXV
 
 		//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
 	}
-	else
-	{
-		if( m_fZoom < m_fMaxZoom )
-		{
-			m_fZoom += 5.0f;
-			bCheck = TRUE;
-		}
-
-		
-		//m_fZoom += m_fZoomReduce;
-		//m_fZoomReduce = 0.0f;
-	}
-
-	//CDebugConsole::GetInstance()->Messagef( L"OUT : %f / %f\n", m_fZoomReduce, m_fZoom );
 }
 
 
@@ -348,9 +344,10 @@ VOID CCamera::CreateEventCamera()
 	m_pCameraWork->SetWorkingPeriod( 22000 );
 }
 
-VOID CCamera::UpdateEventCamera()
+BOOL CCamera::UpdateEventCamera()
 {
-	if (m_pCameraWork->Update() == FALSE)
+	BOOL bRet = m_pCameraWork->Update();
+	if ( bRet == FALSE)
 	{
 		m_nEffect = 0;
 	}
@@ -366,4 +363,6 @@ VOID CCamera::UpdateEventCamera()
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
+
+	return bRet;
 }

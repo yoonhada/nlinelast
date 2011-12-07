@@ -22,7 +22,7 @@
 
 #define ABSDEF( x )					( ( ( x ) > 0 ) ? ( x ) : - ( x ) )	
 
-#define FULLSCREEN TRUE
+#define FULLSCREEN FALSE
 
 extern VOID FastRand2Init();
 extern FLOAT FastRand2();

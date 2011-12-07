@@ -39,9 +39,6 @@ private:
 	// Event
 	std::list<EVENT*> m_listEvent;
 	std::list <EVENT*>::iterator Iter;
-	EVENT * m_pCurrentEvent;
-	BOOL m_bEventCombo;
-	//INT m_nEvent;
 
 	CGameEventCombo * m_pEventCombo;
 

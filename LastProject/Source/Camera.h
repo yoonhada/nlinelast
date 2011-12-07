@@ -7,7 +7,7 @@ class CCamera
 {
 private:
 	VOID Clear();
-	VOID SetCamera();
+	BOOL SetCamera();
 	BOOL Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice;              
@@ -52,7 +52,7 @@ public:
 
 	VOID Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 
-	VOID SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch );
+	BOOL SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch );
 	D3DXVECTOR3* GetCameraLookAt() { return &m_vLook; }
 	D3DXVECTOR3* GetCameraEye() { return &m_vEye; }
 	D3DXVECTOR3* GetCameraDir() { return &m_vDir; }
@@ -77,7 +77,7 @@ public:
 	VOID SetEffect(INT nType);
 	VOID Effect( D3DXVECTOR3 & a_vLook );
 	VOID CreateEventCamera();
-	VOID UpdateEventCamera();
+	BOOL UpdateEventCamera();
 
 	CameraWork * m_pCameraWork;
 };

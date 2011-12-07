@@ -19,7 +19,7 @@ class CPhysics : public CSingleton<CPhysics>
 	D3DXVECTOR3 m_vBBPos[8];
 	D3DXPLANE m_plane;
 
-	static INT nVI[6][3];
+	static INT nVI[2][6][3];
 	D3DXVECTOR3 vN, vDir;
 	D3DXVECTOR3 v0, v1, v2;
 
@@ -48,4 +48,6 @@ public:
 	// 111025
 	BOOL Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube );
 	BOOL Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoundBox *pBB );
+
+	BOOL Collision( INT nIndex, const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube );
 };

@@ -73,8 +73,6 @@ HRESULT CGameEvent::Release()
 
 VOID CGameEvent::Clear()
 {
-	m_pCurrentEvent = NULL;
-
 	m_bHost = FALSE;
 	m_iMaxCharaNum = 0;
 	
@@ -90,7 +88,6 @@ VOID CGameEvent::Clear()
 	m_pPosition[3] = D3DXVECTOR3( 300.0f, 0.0f, -330.0f);
 
 	m_pEventCombo = NULL;
-	m_bEventCombo = FALSE;
 }
 
 VOID CGameEvent::AddEvent( EVENTKIND enumKind, FLOAT fTime )
@@ -116,52 +113,25 @@ VOID CGameEvent::Update()
 {
 	INT nEvent = NONE;
 
-	if (!m_listEvent.empty())
-	{
-		m_pCurrentEvent = m_listEvent.front();
-	}			
-
-	if ( m_bHost )
+	if ( m_bHost && !m_listEvent.empty() )
 	{
 		Iter = m_listEvent.begin();
-
 		while ( Iter != m_listEvent.end() )
 		{
-			(*Iter)->fTime -= CFrequency::GetInstance()->getFrametime();
+			( *Iter )->fTime -= CFrequency::GetInstance()->getFrametime();
 			Iter++;
 		}
 
-		if ( m_pCurrentEvent != NULL)
+		Iter = m_listEvent.begin();
+		if ( ( *Iter )->fTime < 0.0f )
 		{
-			m_pCurrentEvent->fTime -= CFrequency::GetInstance()->getFrametime();
-			if ( m_pCurrentEvent->fTime < 0.0f )
-			{
-				nEvent = m_pCurrentEvent->nKind;
-				m_listEvent.pop_front();
-				SAFE_DELETE( m_pCurrentEvent );
-			}
-		}
+			nEvent = ( *Iter )->nKind;
 
-
-		// ComboEvent
-		if ( m_pEventCombo )
-		{
-			BOOL bCheck = m_pEventCombo->CheckKindEvent( CObjectManage::GetInstance()->Get_LastAtkPlayer() );
-
-			if ( bCheck == FALSE )
-			{
-				AddEvent( EVENTDESTORYCOMBO, 0.1f );
-			}
-			else
-			{
-				if ( m_pEventCombo->GetKindIndex() == 4 )
-				{
-					m_pEventCombo->ReSetKindIndex();
-				}
-			}
+			SAFE_DELETE ( *Iter );
+			Iter = m_listEvent.erase( Iter );
 		}
 	}
-	else
+	else if ( !m_bHost )
 	{
 		// host network....  받기.
 	}
@@ -174,9 +144,7 @@ VOID CGameEvent::Update()
 		break;
 	case EVENTCAMERA:
 		CDebugConsole::GetInstance()->Message("Game Event : EVENTCAMERA \n");
-#ifndef _DEBUG
 		EventCamera();
-#endif // _DEBUG
 		break;
 	case EVENTCOMBO:
 		CDebugConsole::GetInstance()->Message("Game Event : EVENTCOMBO \n");
@@ -186,6 +154,7 @@ VOID CGameEvent::Update()
 	case EVENTDESTORYCOMBO:
 		CDebugConsole::GetInstance()->Message("Game Event : EVENTDESTORYCOMBO \n");
 		EventDestoryCombo();
+		//AddEvent( EVENTCOMBO, 20.0f );
 		break;
 	case EVENTFAK:
 		CDebugConsole::GetInstance()->Message("Game Event : EVENTFAK \n");
@@ -242,7 +211,7 @@ VOID CGameEvent::EventCombo()
 	if ( !m_pEventCombo )
 	{
 		CObjectManage * pOM = CObjectManage::GetInstance();
-		m_pEventCombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+		m_pEventCombo = new CGameEventCombo( m_pD3dDevice, pOM->GetSprite() );
 		INT nClient = 0;
 		// 접속 클라이언트 찾기.
 		for ( int i = 0; i < 4; ++i )
