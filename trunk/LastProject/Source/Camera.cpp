@@ -113,9 +113,6 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 			}
 		}
 		break;
-	case 2:
-		a_vLook = CObjectManage::GetInstance()->Get_Monster()->Get_Pos();
-		break;
 	}	
 }
 

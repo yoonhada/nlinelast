@@ -74,7 +74,10 @@ HRESULT CObjectManage::LoadLoadingObject()
 	m_pPanda = new CMonster;
 	//m_pPanda->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 
-	//m_pMonster = new CMonster;
+	m_pMonster = new CMonster*[2];
+	m_pMonster[0] = m_pClown;
+	m_pMonster[1] = m_pPanda;
+
 	m_pFirstAidKit = new CTimeLifeItem;
 	return S_OK;
 }
