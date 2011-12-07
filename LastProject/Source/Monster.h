@@ -26,6 +26,7 @@ public:
 	VOID Load( WCHAR* a_pFileName );
 
 	// 애니메이션 변경용
+	VOID InitAniAndState();
 	VOID ChangeAnimation( INT a_iAniNum );
 	
 	// 보간 애니메이션 끝낫나 체크 얻어옴 ( FALSE = 끝남 TRUE = 안끝남 )
@@ -40,6 +41,8 @@ public:
 		return m_bAnimationEndCheck;
 	}
 
+	// Set
+	VOID Set_MonsterNumber( INT iMonsterNumber )	{ m_iMonsterNumber = iMonsterNumber; }
 	VOID Set_Angle( FLOAT a_fAngle )				{ m_fAngle = a_fAngle; }
 	VOID Set_Pos( D3DXVECTOR3& a_vPos )				{ m_vControl = a_vPos; }
 	VOID Set_Target( INT a_iTarget )				{ m_iTarget = a_iTarget; }
@@ -50,6 +53,8 @@ public:
 	VOID Set_iSelectedFrameNum( INT a_iAniNum )		{ m_iSelectedFrameNum = a_iAniNum; }
 	VOID Set_Path( PathNode* a_pPath )				{ m_pPath = a_pPath; }
 
+	// Get
+	INT Get_MonsterNumber()					{ return m_iMonsterNumber; }
 	StateMachine<CMonster>* GetFSM() const	{ return m_pStateMachine; }
 	D3DXVECTOR3& Get_Pos()					{ return m_vControl; }
 	INT Get_Target()						{ return m_iTarget; }
@@ -85,6 +90,7 @@ private:
 
 
 	//몬스터 관리
+	INT	  m_iMonsterNumber;				///<
 	INT	  m_iCharEditorMax;				///< 몬스터 박스 최대 갯수
 	INT	  m_iSelectedCharEditor;		///< 현재 선택중인 박스
 	FLOAT m_fBoxSize;					///< 박스 크기

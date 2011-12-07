@@ -104,8 +104,8 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 		{
 			D3DXVECTOR3 vUp(0, 1, 0);
 			D3DXVec3Cross( &vUp, &m_vDir, &vUp );
-			a_vLook += vUp * sin(m_fEffectValue) * 2.5f;
-			m_fEffectValue += ( D3DX_PI * 10.0f * CFrequency::GetInstance()->getFrametime() );
+			a_vLook += vUp * sin(m_fEffectValue) * 3.0f;
+			m_fEffectValue += ( D3DX_PI * 20.0f * CFrequency::GetInstance()->getFrametime() );
 			if (m_fEffectValue > 31.4f)
 			{
 				m_nEffect = 0;

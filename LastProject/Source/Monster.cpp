@@ -21,6 +21,7 @@ CMonster::~CMonster()
 
 VOID CMonster::Clear()
 {
+	m_iMonsterNumber = 0;
 	m_iCharEditorMax = 7;
 	m_iSelectedCharEditor=0;
 	m_fBoxSize = 15.0f;
@@ -1381,6 +1382,9 @@ VOID CMonster::Update()
 
 	// AI
 	m_pStateMachine->Update();
+
+
+	UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 }
 
 VOID CMonster::Render()
@@ -1406,4 +1410,10 @@ VOID CMonster::EnableShadow( BOOL bEnable )
 		m_pBox[Loop].EnableShadow( FALSE );
 	}
 	m_pBox[1].EnableShadow( bEnable );
+}
+
+VOID CMonster::InitAniAndState()
+{
+	ChangeAnimation( CMonster::ANIM_STAND );
+	GetFSM()->SetCurrentState( NULL );
 }

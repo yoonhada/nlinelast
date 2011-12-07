@@ -31,6 +31,7 @@ HRESULT CWinBase::Create()
 	//CTextureManage::GetInstance();
 	CInput::GetInstance();
 	CPhysics::GetInstance();
+	CGameEvent::GetInstance();
 
 	//트리 생성
 	FLOAT fSize = 1000.0f;
@@ -56,6 +57,7 @@ HRESULT CWinBase::Release()
 	CInput::DestoryInstance();
 	CPhysics::DestoryInstance();
 	CTree::DestoryInstance();
+	CGameEvent::DestoryInstance();
 	CDebugInterface::DestoryInstance();
 
 #ifndef _NETWORK
