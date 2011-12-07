@@ -97,6 +97,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	}
 	if ( m_pGameEvent->m_nMonsterState & 0x02 )
 	{
+		m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 		m_pMonster[1]->InitAniAndState();
 	}
 	if ( m_pGameEvent->m_nMonsterState & 0x04 )

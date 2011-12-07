@@ -365,12 +365,14 @@ VOID CNetwork::SC_MONSTER_MOVEMENT( CPacket& a_pk )
 VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 {
 	WORD wClientNumber = 0;
+	WORD wMonsterNumber = 0;
 	FLOAT fDirX, fDirY, fDirZ;
 	WORD wTotalParts = 0;
 	WORD wDestroyPart = 0;
 	WORD wDestroyCount = 0;
 
 	a_pk.Read( &wClientNumber );
+	a_pk.Read( &wMonsterNumber );
 	a_pk.Read( &fDirX);
 	a_pk.Read( &fDirY);
 	a_pk.Read( &fDirZ);
@@ -392,7 +394,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 		}
 
 		CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", wDestroyPart, wDestroyCount );
-		CObjectManage::GetInstance()->Get_Monster()->Get_MonsterPart()[wDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->Get_MonsterPart()[wDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 
 		CObjectManage::GetInstance()->Set_LastAtkPlayer( static_cast<int>( wClientNumber ) );
 	}	
@@ -403,7 +405,6 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 {
 	WORD wClientNumber;
 	FLOAT fDirX, fDirY, fDirZ;
-	CHAR cDestroyPart;
 	WORD wDestroyCount;
 	WORD wList[1000];
 
@@ -455,15 +456,15 @@ VOID CNetwork::SC_Monster_Attack_Animation( CPacket& a_pk )
 
 	if( wAnimationNumber == CMonster::ANIM_MELEE_ATTACK )
 	{
-		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Melee::GetInstance() );
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
 	else if( wAnimationNumber == CMonster::ANIM_MELEE_ATTACK2 )
 	{
-		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Melee2::GetInstance() );
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Melee2::GetInstance() );
 	}
 	else if( wAnimationNumber == CMonster::ANIM_DASH )
 	{
-		CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Dash::GetInstance() );
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Dash::GetInstance() );
 	}
 }
 
@@ -477,7 +478,7 @@ VOID CNetwork::SC_Monster_Attack_Animation2( CPacket& a_pk )
 	FLOAT fPosZ;
 	FLOAT fNextPosX;
 	FLOAT fNextPosZ;
-	FLOAT fDistance;
+	FLOAT fTargetDistance;
 
 	a_pk.Read( &wMonsterNumber );
 	a_pk.Read( &wAnimationNumber );
@@ -486,19 +487,18 @@ VOID CNetwork::SC_Monster_Attack_Animation2( CPacket& a_pk )
 	a_pk.Read( &fPosZ );
 	a_pk.Read( &fNextPosX );
 	a_pk.Read( &fNextPosZ );
-	a_pk.Read( &fDistance );
+	a_pk.Read( &fTargetDistance );
 
 	D3DXVECTOR3 vPos		= D3DXVECTOR3( fPosX, 0.0f, fPosZ );
 	D3DXVECTOR3 vNextPos	= D3DXVECTOR3( fNextPosX, 0.0f, fNextPosZ );
 
-	CMonster* pMonster = CObjectManage::GetInstance()->Get_Monster();
-	pMonster->Set_Angle( D3DXToRadian( fDegree ) );
-	pMonster->Set_Pos( vPos );
-	pMonster->Set_TargetPos( vNextPos );
-	pMonster->Set_TargetDistance( fDistance );
+	CMonster** pMonster = CObjectManage::GetInstance()->Get_Monster();
+	pMonster[wMonsterNumber]->Set_Angle( D3DXToRadian( fDegree ) );
+	pMonster[wMonsterNumber]->Set_Pos( vPos );
+	pMonster[wMonsterNumber]->Set_TargetPos( vNextPos );
+	pMonster[wMonsterNumber]->Set_TargetDistance( fTargetDistance );
 
-	CObjectManage::GetInstance()->Get_Monster()->GetFSM()->ChangeState( Dash::GetInstance() );
-
+	CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Dash::GetInstance() );
 }
 
 
@@ -510,7 +510,7 @@ VOID CNetwork::SC_Monster_LockOn( CPacket& a_pk )
 	a_pk.Read( &wMonsterNumber );
 	a_pk.Read( &fAngle );
 
-	CObjectManage::GetInstance()->Get_Monster()->Set_Angle( D3DXToRadian( fAngle ) );
+	CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->Set_Angle( D3DXToRadian( fAngle ) );
 }
 
 

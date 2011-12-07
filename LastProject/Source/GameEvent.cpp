@@ -80,6 +80,7 @@ VOID CGameEvent::Clear()
 	m_pShotedPoint = NULL;
 
 	m_nHPMonstor = 0;
+	m_nMonsterState = 3;
 
 	m_pPosition = new D3DXVECTOR3[4];
 	m_pPosition[0] = D3DXVECTOR3( 180.0f, 0.0f, -330.0f);
@@ -184,15 +185,21 @@ VOID CGameEvent::EventInit()
 	m_pScen->m_pCharactors[3].Set_Position( m_pPosition[3] );	
 	
 	// 몬스터 위치 조정
-	m_pScen->m_pMonster->Set_Pos( D3DXVECTOR3(-130.0f, 0.0f, 660.0f) );
-	m_pScen->m_pMonster->Set_Angle( 0.0f );
-	m_pScen->m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
-	m_pScen->m_pMonster->EnableShadow( TRUE );
+	m_pScen->m_pMonster[0]->Set_Pos( D3DXVECTOR3(-130.0f, 0.0f, 660.0f) );
+	m_pScen->m_pMonster[0]->Set_Angle( 0.0f );
+	m_pScen->m_pMonster[0]->ChangeAnimation( CMonster::ANIM_STAND );
+	m_pScen->m_pMonster[0]->EnableShadow( TRUE );
+	
+	m_pScen->m_pMonster[1]->Set_Pos( D3DXVECTOR3(-30.0f, 0.0f, 660.0f) );
+	m_pScen->m_pMonster[1]->Set_Angle( 0.0f );
+	m_pScen->m_pMonster[1]->ChangeAnimation( CMonster::ANIM_STAND );
+	m_pScen->m_pMonster[1]->EnableShadow( TRUE );
 
 	// AI 초기화
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
-		m_pScen->m_pMonster->GetFSM()->SetCurrentState( Seek::GetInstance() );
+		m_pScen->m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+		m_pScen->m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
 	}
 
 	// Game Point

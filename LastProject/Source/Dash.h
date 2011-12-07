@@ -12,10 +12,6 @@ private:
 	Dash( const Dash& a_rhs );
 	Dash& operator=( const Dash& a_rhs );
 
-	D3DXVECTOR3 m_vPos;
-	D3DXVECTOR3 m_vNextPos;
-	FLOAT		m_fT;
-
 
 public:
 	virtual ~Dash(){}

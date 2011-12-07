@@ -38,8 +38,8 @@ public:
 	virtual VOID Exit( CMonster* a_pMonster );
 
 	VOID		Initialize( TileMap::INFO* a_pMapInfo );
-	FLOAT		GetDegree();
-	D3DXVECTOR3 GetWorldPos( INT a_iX, INT a_iZ );
+//	FLOAT		GetDegree();
+//	D3DXVECTOR3 GetWorldPos( INT a_iX, INT a_iZ );
 };
 
 
