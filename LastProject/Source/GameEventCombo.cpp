@@ -41,24 +41,24 @@ HRESULT CGameEventCombo::Create( )
 		switch( m_nKindEvent[Loop] )
 		{
 		case 1:
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventF-1.png", 10000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 10000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 10000 );			
-			break;
-		case 2:
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventM-1.png", 10000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 10000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 10000 );			
-			break;
-		case 3:
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventS-1.png", 10000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 10000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 10000 );			
-			break;
-		case 4:
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventD-1.png", 10000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 10000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 10000 );			
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventF-1.png", 1000000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000000 );			
+			break;																	   
+		case 2:																		   
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventM-1.png", 1000000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000000 );			
+			break;																	   
+		case 3:																		   
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventS-1.png", 1000000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000000 );			
+			break;																	   
+		case 4:																		   
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventD-1.png", 1000000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 1000000 );			
 			break;
 		}
 		
