@@ -971,6 +971,17 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		SC_CLIENT_DISCONNECT( a_pk );
 		break;
 
+	case MSG_SERVER_CLOSE:
+		break;
+
+	case MSG_EVENT_STATE:
+		SC_EVENT_STATE( a_pk );
+		break;
+
+	case MSG_EVENT_COMBO:
+		SC_EVENT_COMBO( a_pk );
+		break;
+
 	// Ã¤ÆÃ
 	case MSG_CHAT:
 		SC_CHAT( a_pk );
