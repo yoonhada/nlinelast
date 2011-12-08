@@ -277,6 +277,21 @@ VOID CNetwork::SC_SERVER_CLOSE( CPacket& a_pk )
 }
 
 
+VOID CNetwork::SC_EVENT_STATE( CPacket& a_pk )
+{
+	WORD wEventID;
+	a_pk.Read( &wEventID );
+
+	// 이벤트 활성화
+}
+
+
+VOID CNetwork::SC_EVENT_COMBO( CPacket& a_pk )
+{
+	
+}
+
+
 VOID CNetwork::SC_CHAT( CPacket& a_pk )
 {
 	WCHAR szText[256] = { 0, };
@@ -598,6 +613,27 @@ VOID CNetwork::CS_CLIENT_DISCONNECT()
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );
+}
+
+
+VOID CNetwork::CS_EVENT_STATE( WORD a_wEventID )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_EVENT_STATE;
+	
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_wEventID );
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
+}
+
+
+VOID CNetwork::CS_EVENT_COMBO()
+{
+	
 }
 
 
