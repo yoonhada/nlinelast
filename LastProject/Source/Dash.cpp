@@ -19,33 +19,30 @@ VOID Dash::Enter( CMonster* a_pMonster )
 	// Dash 애니메이션으로 변경
 	a_pMonster->ChangeAnimation( CMonster::ANIM_DASH );
 	CDebugConsole::GetInstance()->Messagef( L"Dash : ANIM_DASH \n" );
-
-	a_pMonster->Set_DashPos( a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos() );
-	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() / 10.0f * 0.15f );
 /*
-	CDebugConsole::GetInstance()->Messagef( L"Pos     : %f %f \n", m_vPos.x, m_vPos.z );
-	CDebugConsole::GetInstance()->Messagef( L"NextPos : %f %f \n", m_vNextPos.x, m_vNextPos.z );
-	CDebugConsole::GetInstance()->Messagef( L"Distance: %f \n", a_pMonster->Get_TargetDistance() );
-	CDebugConsole::GetInstance()->Messagef( L"Time    : %f \n", m_fT );
+	m_vPos		= a_pMonster->Get_Pos();
+	m_vNextPos	= a_pMonster->Get_TargetPos();
 */
+	a_pMonster->Set_DashData( a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos() );
+	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() / 10.0f * 0.15f );
+
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
 		FLOAT fAngle = SetAngle( a_pMonster );
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH, fAngle, a_pMonster->Get_DashStartPos(), a_pMonster->Get_DashEndPos(), a_pMonster->Get_TargetDistance() );
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH, fAngle, a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos(), a_pMonster->Get_TargetDistance() );
 	}
 }
 
 
 VOID Dash::Execute( CMonster* a_pMonster )
 {
-	a_pMonster->UpdateTime();
-
-	FLOAT t = a_pMonster->Get_Time();
+	a_pMonster->Set_UpdateTime();
 
 	// 도착했으면 Stiffen 상태로
+	FLOAT t = a_pMonster->Get_Time();
 	if( t >= a_pMonster->Get_InterpolationTime() )
 	{
-		a_pMonster->ClearTime();
+		a_pMonster->Set_ClearTime();
 
 		a_pMonster->GetFSM()->ChangeState( Sliding::GetInstance() );
 	}

@@ -29,12 +29,14 @@ VOID Chase::Enter( CMonster* a_pMonster )
 
 VOID Chase::Execute( CMonster* a_pMonster )
 {
-	a_pMonster->UpdateTime();
+	a_pMonster->Set_UpdateTime();
 
 	FLOAT t = a_pMonster->Get_Time();
 
 	if( t >= 0.25f )
 	{
+		a_pMonster->Set_ClearTime();
+
 		a_pMonster->Set_ChaseNextData();
 	}
 	else
@@ -43,37 +45,37 @@ VOID Chase::Execute( CMonster* a_pMonster )
 		D3DXVECTOR2 vAngle( 0.0f, 0.0f );
 
 		// 처음 이동할 Path인 경우
-		if( a_pMonster->Get_TotalPathCnt() == a_pMonster->Get_NextPath()->remainedNode )
+		if( a_pMonster->Get_ChaseTotalPathCnt() == a_pMonster->Get_ChaseNextPath()->remainedNode )
 		{
 			// 위치
-			D3DXVECTOR3 p0 = a_pMonster->Get_CurrentPos();
-			D3DXVECTOR3 p1 = a_pMonster->GetWorldPos( a_pMonster->Get_NextPath()->x, a_pMonster->Get_NextPath()->y );
-			D3DXVECTOR3 p2 = a_pMonster->GetWorldPos( a_pMonster->Get_NextPath()->next->x, a_pMonster->Get_NextPath()->next->y );
+			D3DXVECTOR3 p0 = a_pMonster->Get_ChaseCurrentPos();
+			D3DXVECTOR3 p1 = a_pMonster->GetWorldPos( a_pMonster->Get_ChaseNextPath()->x, a_pMonster->Get_ChaseNextPath()->y );
+			D3DXVECTOR3 p2 = a_pMonster->GetWorldPos( a_pMonster->Get_ChaseNextPath()->next->x, a_pMonster->Get_ChaseNextPath()->next->y );
 
-			D3DXVec3CatmullRom( &vPos, &p0, &p0, &p1, &p2, t / a_pMonster->Get_InterpolationTime() );
+			D3DXVec3CatmullRom( &vPos, &p0, &p0, &p1, &p2, t / 0.25f );
 
 			// 각도
-			D3DXVECTOR2 vCurrentAngle( 0.0f, a_pMonster->Get_Angle0() );
-			D3DXVECTOR2 vNextAngle( 0.0f, a_pMonster->Get_Angle1() );
+			D3DXVECTOR2 vCurrentAngle( 0.0f, a_pMonster->Get_ChaseAngle0() );
+			D3DXVECTOR2 vNextAngle( 0.0f, a_pMonster->Get_ChaseAngle1() );
 
-			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / a_pMonster->Get_InterpolationTime() );
+			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / 0.25f );
 		}
 		// 처음과 끝이 아닌 중간 Path
 		else
 		{
 			// 위치
-			D3DXVECTOR3 p0 = a_pMonster->Get_PreviousPos();
-			D3DXVECTOR3 p1 = a_pMonster->Get_CurrentPos();
-			D3DXVECTOR3 p2 = a_pMonster->GetWorldPos( a_pMonster->Get_NextPath()->x, a_pMonster->Get_NextPath()->y );
-			D3DXVECTOR3 p3 = a_pMonster->GetWorldPos( a_pMonster->Get_NextPath()->next->x, a_pMonster->Get_NextPath()->next->y );
+			D3DXVECTOR3 p0 = a_pMonster->Get_ChasePreviousPos();
+			D3DXVECTOR3 p1 = a_pMonster->Get_ChaseCurrentPos();
+			D3DXVECTOR3 p2 = a_pMonster->GetWorldPos( a_pMonster->Get_ChaseNextPath()->x, a_pMonster->Get_ChaseNextPath()->y );
+			D3DXVECTOR3 p3 = a_pMonster->GetWorldPos( a_pMonster->Get_ChaseNextPath()->next->x, a_pMonster->Get_ChaseNextPath()->next->y );
 
-			D3DXVec3CatmullRom( &vPos, &p0, &p1, &p2, &p3, t / a_pMonster->Get_InterpolationTime() );
+			D3DXVec3CatmullRom( &vPos, &p0, &p1, &p2, &p3, t / 0.25f );
 
 			// 각도
-			D3DXVECTOR2 vCurrentAngle( 0.0f, a_pMonster->Get_Angle0() );
-			D3DXVECTOR2 vNextAngle( 0.0f, a_pMonster->Get_Angle1() );
+			D3DXVECTOR2 vCurrentAngle( 0.0f, a_pMonster->Get_ChaseAngle0() );
+			D3DXVECTOR2 vNextAngle( 0.0f, a_pMonster->Get_ChaseAngle1() );
 
-			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / a_pMonster->Get_InterpolationTime() );
+			D3DXVec2Lerp( &vAngle, &vCurrentAngle, &vNextAngle, t / 0.25f );
 		}
 
 		a_pMonster->Set_Pos( vPos );

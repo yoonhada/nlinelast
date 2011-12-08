@@ -356,10 +356,10 @@ VOID CMainScene::InitMonsterState()
 		m_pMonster[0]->Set_Angle( 0.0f );
 		m_pMonster[0]->ChangeAnimation( CMonster::ANIM_STAND );
 		m_pMonster[0]->EnableShadow( TRUE );
-		//if( CObjectManage::GetInstance()->IsHost() == TRUE )
-		//{
-		//	m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
-		//}
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+		}
 	}
 	if ( m_pGameEvent->GetMonsterState()  & 0x02 )
 	{
@@ -369,7 +369,7 @@ VOID CMainScene::InitMonsterState()
 		m_pMonster[1]->EnableShadow( TRUE );
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			//m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+			m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
 		}
 	}
 	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
@@ -380,7 +380,7 @@ VOID CMainScene::InitMonsterState()
 		m_pMonster[2]->EnableShadow( TRUE );
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			//m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+			m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
 		}
 	}
 }

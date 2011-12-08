@@ -23,11 +23,11 @@ VOID Stiffen::Enter( CMonster* a_pMonster )
 
 VOID Stiffen::Execute( CMonster* a_pMonster )
 {
-	a_pMonster->UpdateTime();
+	a_pMonster->Set_UpdateTime();
 
 	if( a_pMonster->Get_Time() >= 1.0f )
 	{
-		a_pMonster->ClearTime();
+		a_pMonster->Set_ClearTime();
 
 		// 대기 애니메이션으로 바꾼다.
 		a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
