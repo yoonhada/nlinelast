@@ -9,14 +9,14 @@ class CMonster : public CObjectSRT
 {
 public:
 	// 局聪皋捞记 锅龋
-
+/*
 	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK = 1, ANIM_MELEE_ATTACK = 2, ANIM_STAND = 3,
 		   ANIM_EVENT = 4, ANIM_DASH = 5, ANIM_SLIDING = 6, ANIM_MELEE_ATTACK2 = 7, };
+*/
 
-/*
 	enum { ANIM_MOVE = 3, ANIM_SPIN_ATTACK = 4, ANIM_MELEE_ATTACK = 4, ANIM_STAND = 2,
 		   ANIM_EVENT = 4, ANIM_DASH = 4, ANIM_SLIDING = 0, ANIM_MELEE_ATTACK2 = 3, };
-*/
+
 public:
 	CMonster();
 	~CMonster();
@@ -50,20 +50,13 @@ public:
 	VOID Set_MonsterNumber( INT iMonsterNumber )	{ m_iMonsterNumber = iMonsterNumber; }	VOID Set_iSelectedFrameNum( INT a_iAniNum )		{ m_iSelectedFrameNum = a_iAniNum; }
 	INT	Get_iSelectedFrameNum()						{ return m_iSelectedFrameNum; }
 
-	VOID UpdateTime()
+	VOID Set_ClearTime()							{ m_fTime = 0.0f; }
+
+	VOID Set_UpdateTime()
 	{
 		m_fTime += CFrequency::GetInstance()->getFrametime();
 	}
-
-	// Dash
-	VOID Set_DashPos( D3DXVECTOR3& a_vSPos, D3DXVECTOR3& a_vEPos )	{ m_vDashStartPos = a_vSPos; m_vDashEndPos = a_vEPos; }
-
-	// Chase
-	VOID Set_ChaseData();
-	VOID Set_ChaseNextData();
-
-	VOID ClearTime()								{ m_fTime = 0.0f; }
-	VOID Set_InterpolationTime( FLOAT a_fTime)		{ m_fInterpolationTime = a_fTime; }
+	VOID Set_InterpolationTime( FLOAT a_fTime )		{ m_fInterpolationTime = a_fTime; }
 	VOID Set_Angle( FLOAT a_fAngle )				{ m_fAngle = a_fAngle; }
 	VOID Set_Pos( D3DXVECTOR3& a_vPos )				{ m_vControl = a_vPos; }
 	VOID Set_Target( INT a_iTarget )				{ m_iTarget = a_iTarget; }
@@ -72,36 +65,50 @@ public:
 	VOID Set_TargetDistance( FLOAT a_fDistance )	{ m_fTargetDistance = a_fDistance; }
 	VOID Set_Path( PathNode* a_pPath )				{ m_pPath = a_pPath; }
 	
+	// Dash
+	VOID Set_DashData( D3DXVECTOR3 a_vStartPos, D3DXVECTOR3 a_vEndPos )
+	{
+		m_vDashStartPos = a_vStartPos;
+		m_vDashEndPos	= a_vEndPos;
+	}
+
+	VOID Set_ChaseData();
+	VOID Set_ChaseNextData();
+
+	FLOAT			Get_Degree();
+	D3DXVECTOR3		GetWorldPos( INT a_iX, INT a_iZ );
+
+
 	// Get
 	StateMachine<CMonster>* GetFSM() const			{ return m_pStateMachine; }
 	INT Get_MonsterNumber()							{ return m_iMonsterNumber; }
 
 	// Dash
-	D3DXVECTOR3&	Get_DashStartPos()				{ return m_vDashStartPos; }
-	D3DXVECTOR3&	Get_DashEndPos()				{ return m_vDashEndPos; }
+	D3DXVECTOR3		Get_DashStartPos()				{ return m_vDashStartPos; }
+	D3DXVECTOR3		Get_DashEndPos()				{ return m_vDashEndPos; }
 
 	// Chase
-	PathNode*		Get_NextPath()					{ return m_pNextPath; }
-	D3DXVECTOR3&	Get_CurrentPos()				{ return m_vCurrentPos; }
-	D3DXVECTOR3&	Get_PreviousPos()				{ return m_vPreviousPos; }
-	INT				Get_TotalPathCnt()				{ return m_iTotalPathCnt; }
-	FLOAT			Get_CurrentAngle()				{ return m_fCurrentAngle; }
-	FLOAT			Get_NextAngle()					{ return m_fNextAngle; }
-	FLOAT			Get_Angle0()					{ return m_fAngle0; }
-	FLOAT			Get_Angle1()					{ return m_fAngle1; }
+	PathNode*		Get_ChaseNextPath()				{ return m_pChaseNextPath; }
+	D3DXVECTOR3		Get_ChaseCurrentPos()			{ return m_vChaseCurrentPos; }
+	D3DXVECTOR3		Get_ChasePreviousPos()			{ return m_vChasePreviousPos; }
+	INT				Get_ChaseCurrentX()				{ return m_iChaseCurrentX; }
+	INT				Get_ChaseCurrentZ()				{ return m_iChaseCurrentZ; }
+	INT				Get_ChaseTotalPathCnt()			{ return m_iChaseTotalPathCnt; }
+	FLOAT			Get_ChaseCurrentAngle()			{ return m_fChaseCurrentAngle; }
+	FLOAT			Get_ChaseNextAngle()			{ return m_fChaseNextAngle; }
+	FLOAT			Get_ChaseAngle0()				{ return m_fChaseAngle0; }
+	FLOAT			Get_ChaseAngle1()				{ return m_fChaseAngle1; }
 
 	FLOAT			Get_Time()						{ return m_fTime; }
 	FLOAT			Get_InterpolationTime()			{ return m_fInterpolationTime; }
-	FLOAT			Get_Angle()						{ return m_fAngle; }
 	D3DXVECTOR3&	Get_Pos()						{ return m_vControl; }
 	INT				Get_Target()					{ return m_iTarget; }
-//	INT*			Get_TargetPos()					{ return m_iTargetPos; }
+//	INT* Get_TargetPos()							{ return m_iTargetPos; }
 	D3DXVECTOR3&	Get_TargetPos()					{ return m_vTargetPos; }
+//	INT				Get_iSelectedFrameNum()			{ return m_iSelectedFrameNum; }
 	FLOAT			Get_TargetDistance()			{ return m_fTargetDistance; }
+	FLOAT			Get_Angle()						{ return m_fAngle; }
 	PathNode*		Get_Path()						{ return m_pPath; }
-
-	FLOAT			GetDegree();
-	D3DXVECTOR3		GetWorldPos( INT a_iX, INT a_iZ );
 
 	CCharactor* Get_MonsterPart()
 	{
@@ -138,30 +145,31 @@ private:
 
 	// AI 包府
 	StateMachine<CMonster>* m_pStateMachine;
+
 	FLOAT		m_fTime;
 	FLOAT		m_fInterpolationTime;
-
-	// 鸥百
-	INT			m_iTarget;
-	INT			m_iTargetPos[2];
-	D3DXVECTOR3 m_vTargetPos;
-	FLOAT		m_fTargetDistance;
 
 	// Dash
 	D3DXVECTOR3 m_vDashStartPos;
 	D3DXVECTOR3 m_vDashEndPos;
 
 	// Chase
-	PathNode*	m_pNextPath;
-	D3DXVECTOR3 m_vCurrentPos;
-	D3DXVECTOR3 m_vPreviousPos;
-	INT			m_iCurrentX;
-	INT			m_iCurrentZ;
-	INT			m_iTotalPathCnt;
-	FLOAT		m_fCurrentAngle;
-	FLOAT		m_fNextAngle;
-	FLOAT		m_fAngle0;
-	FLOAT		m_fAngle1;
+	PathNode*	m_pChaseNextPath;
+	D3DXVECTOR3 m_vChaseCurrentPos;
+	D3DXVECTOR3 m_vChasePreviousPos;
+	INT			m_iChaseCurrentX;
+	INT			m_iChaseCurrentZ;
+	INT			m_iChaseTotalPathCnt;
+	FLOAT		m_fChaseCurrentAngle;
+	FLOAT		m_fChaseNextAngle;
+	FLOAT		m_fChaseAngle0;
+	FLOAT		m_fChaseAngle1;
+
+	// 鸥百
+	INT			m_iTarget;
+	INT			m_iTargetPos[2];
+	D3DXVECTOR3 m_vTargetPos;
+	FLOAT		m_fTargetDistance;
 
 	// Path
 	PathNode*	m_pPath;
