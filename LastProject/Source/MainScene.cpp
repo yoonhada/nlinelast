@@ -403,29 +403,29 @@ VOID CMainScene::InitMonsterState()
 
 VOID CMainScene::EventSwitch( INT nEvent )
 {
-	static int n = 0;
-
 	switch ( nEvent )
 	{
 	case CGameEvent::INIT:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::INIT \n" );
 		EventInit();
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_CAMERA:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_CAMERA \n" );
 		EventCamera();
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_COMBO:
-		n++;
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO \n" );
 		EventCombo();
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 30.0f );
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_COMBO_END:
-		n--;
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_END \n" );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 30.0f );
 		EventDestoryCombo();
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_COMBO_SUCCESS:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_SUCCESS \n" );
@@ -435,35 +435,44 @@ VOID CMainScene::EventSwitch( INT nEvent )
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );
 		}
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_COMBO_FAIL:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_FAIL \n" );
 		if ( m_pEventGUICombo )
 			m_pEventGUICombo->Fail();
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_FAK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_FAK \n" );
 		EventFirstAidKit();
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
+		CNetwork::GetInstance()->CS_EVENT_STATE( nEvent );
 		break;
 	case CGameEvent::TUTORIAL_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 1.0f );
+		SendNetwork( nEvent );
 		break;
 	case CGameEvent::MONSTER_BREAK_NOCKDOWN:
 		MonsterBreakNockdown();
+		SendNetwork( nEvent );
 		break;
 	default:
 		break;
 	}
-
-	CDebugConsole::GetInstance()->Messagef("%d", n );
 }
 
+VOID CMainScene::SendNetwork( INT nEvent )
+{
+	if ( CObjectManage::GetInstance()->IsHost() ) 
+		CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
+}
 
 VOID CMainScene::EventInit()
 {

@@ -69,9 +69,12 @@ private:
 	INT						m_scnNext;
 	INT						m_scnState;
 
+
 	VOID					CreateCharactor();
 	VOID					InitCharState();
 	VOID					InitMonsterState();
+
+	VOID SendNetwork( INT nEvent );
 
 	VOID EventSwitch( INT nEvent );
 	VOID EventInit();
