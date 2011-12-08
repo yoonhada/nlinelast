@@ -109,7 +109,7 @@ INT CGameEvent::Update()
 {
 	INT nEvent = NONE;
 
-	if ( m_bHost && !m_listEvent.empty() )
+	if ( !m_listEvent.empty() )
 	{
 		Iter = m_listEvent.begin();
 		while ( Iter != m_listEvent.end() )
