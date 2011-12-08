@@ -38,16 +38,6 @@ HRESULT CGameEventCombo::Create( )
 	FLOAT fHeight	= static_cast<FLOAT>( Vp.Height );
 
 	GUIBase::IMAGEPARAM imgParam[6];
-	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround3.png", 1000 );
-	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround2.png", 1000 );
-	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround1.png", 1000 );
-	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround.png", 1000000 );
-	m_pGUIBackground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[4] );
-	
-	m_pGUIForground->AddFileName( 0, imgParam[5], L"Img\\Event\\Event.png", 1000000 );
-	m_pGUIForground->AddFileName( 1, imgParam[5], L"Img\\Event\\EmptyS.png", 1000 );
-	m_pGUIForground->AddFileName( 2, imgParam[5], L"Img\\Event\\EmptyF.png", 1000 );
-	m_pGUIForground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[5] );
 
 	for (int Loop = 0; Loop < 4; ++Loop)
 	{
@@ -56,31 +46,50 @@ HRESULT CGameEventCombo::Create( )
 		case 1:
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventF-1.png", 1000000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000000 );			
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000 );			
 			break;																   
 		case 2:																	   
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventM-1.png", 1000000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000000 );			
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000 );			
 			break;																   
 		case 3:																	   
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventS-1.png", 1000000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000000 );			
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000 );			
 			break;																   
 		case 4:																	   
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventD-1.png", 1000000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 1000000 );			
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 1000 );			
 			break;
 		}
 		
 		m_pGUIButton[Loop]->Create( fWidth * 0.5f - (400.0f - 100.0f * Loop ), fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[Loop] );
 	}	
+
+	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround3.png", 1000 );
+	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround2.png", 1000 );
+	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround1.png", 1000 );
+	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround.png", 1000000 );
+	m_pGUIBackground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[4] );
+
+	m_pGUIBase->AddFileName( 0, imgParam[5], L"Img\\Event\\Event.png", 1000 );
+	m_pGUIBase->AddFileName( 1, imgParam[5], L"Img\\Event\\EmptyS.png", 1000 );
+	m_pGUIBase->AddFileName( 2, imgParam[5], L"Img\\Event\\EmptyF.png", 1000 );
+	m_pGUIForground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[5] );
 
 	m_nKindIndex = 0;
 	return S_OK;
