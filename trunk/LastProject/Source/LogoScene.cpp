@@ -84,9 +84,7 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	m_pCameraWork->SetPosition_Box4( vecBox0, vecBox1, vecBox2, vecBox3 );
 	m_pCameraWork->SetLookAtCourse_Box2( vecBox4, vecBox5 );
 	
-	m_pCameraWork->SetWorkingPeriod( 6000 );
-	//	Create Tree
-	//CTree::GetInstance()->Create( 0, 0 );
+	m_pCameraWork->SetWorkingPeriod( 5000 );
 
 	//	Create Light
 	m_pLight = new CLight;

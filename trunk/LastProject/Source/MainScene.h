@@ -13,6 +13,7 @@ class ASEViewer;
 class TileMap;
 class Axis;
 class CGameEvent;
+class CGameEventCombo;
 
 class MainGUI;
 class OptionScene;
@@ -58,8 +59,8 @@ private:
 	TileMap*				m_pTileMap;
 	ASEViewer*				m_pASEViewer;
 
-	// Game
 	CGameEvent*				m_pGameEvent;
+	CGameEventCombo *		m_pEventGUICombo;
 
 	INT						m_iMaxCharaNum;
 	INT						m_nClientID;
@@ -71,6 +72,13 @@ private:
 	VOID					CreateCharactor();
 	VOID					InitCharState();
 	VOID					InitMonsterState();
+
+	VOID EventSwitch( INT nEvent );
+	VOID EventInit();
+	VOID EventCamera();
+	VOID EventCombo();
+	VOID EventDestoryCombo();
+	VOID EventFirstAidKit();
 };
 
 #endif

@@ -63,6 +63,7 @@
 #include "DebugInterface.h"
 #include "Astar.h"
 #include "Network.h"
+#include "GameEvent.h"
 
 // None Sigleton Module
 #include "Light.h"

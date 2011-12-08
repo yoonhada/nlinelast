@@ -6,11 +6,10 @@
 */
 
 #pragma once
-class CMainScene;
-class CGameEventCombo;
 
-class CGameEvent : public IObject
+class CGameEvent : public CSingleton<CGameEvent>
 {
+	friend class CSingleton<CGameEvent>;
 private:
 	typedef struct _EVENT
 	{
@@ -23,7 +22,6 @@ private:
 	// Host
 	BOOL m_bHost;
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
-	CMainScene * m_pScen;
 
 	// Const 
 	D3DXVECTOR3 * m_pCharactorPosition;
@@ -35,42 +33,36 @@ private:
 	INT * m_pShotedPoint;
 
 	// Monster
-	INT m_nHPMonstor;
 	INT m_nMonsterState;
 	
 	// Event
 	std::list<EVENT*> m_listEvent;
 	std::list <EVENT*>::iterator Iter;
 
-	CGameEventCombo * m_pEventCombo;
-
-	VOID EventInit();
-	VOID EventCamera();
-	VOID EventCombo();
-	VOID EventDestoryCombo();
-	VOID EventFirstAidKit();
-public:
-	enum EVENTKIND{
-		NONE = -1, INIT, EVENTCAMERA, EVENTCOMBO, EVENTDESTORYCOMBO, EVENTFAK,
-	};
-
 	CGameEvent();
-	CGameEvent( INT, CMainScene *);
 	virtual ~CGameEvent();
 
-	VOID Clear();
-	HRESULT Create();	///< 초기화
-	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
-	HRESULT Release();	///< 오브젝트들 제거
-	VOID Update();		///< Update
-	VOID Render();		///< Render
+public:
+	enum EventKind {
+		NONE = -1, INIT, 
+		EVENTCAMERA, 
+		EVENTCOMBO, EVENTDESTORYCOMBO, 
+		EVENTFAK,
+		TUTORIALATK, TUTORIALATKEND, 
+		TUTORIALCOMBO, TUTORIALCOMBOEND, 
+	};
 
-	VOID AddEvent( EVENTKIND, FLOAT );
+	VOID Clear();
+	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, INT nClient );
+	HRESULT Release();	///< 오브젝트들 제거
+	INT Update();		///< Update
+
+	VOID AddEvent( INT, FLOAT );
 
 	// Get
-	INT GetMonsterState()			{ return m_nMonsterState; }
-	D3DXVECTOR3& GetCharPosition(INT nIndex) { return m_pCharactorPosition[nIndex]; }
-	D3DXVECTOR3& GetMonsPosition(INT nIndex) { return m_pMonsterPosition[nIndex]; }
+	INT GetMonsterState()						{ return m_nMonsterState; }
+	D3DXVECTOR3& GetCharPosition(INT nIndex)	{ return m_pCharactorPosition[nIndex]; }
+	D3DXVECTOR3& GetMonsPosition(INT nIndex)	{ return m_pMonsterPosition[nIndex]; }
 
 	// Set
 	//VOID SetMonsterState()

@@ -95,10 +95,12 @@ VOID CGameEventCombo::Update()
 
 VOID CGameEventCombo::Render()
 {
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pGUIBackground[0]->Render();
 	m_pGUIBackground[1]->Render();
 	m_pGUIBackground[2]->Render();
 	m_pGUIBackground[3]->Render();
+	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 
 BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )

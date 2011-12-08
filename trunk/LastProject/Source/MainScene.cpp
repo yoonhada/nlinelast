@@ -10,7 +10,8 @@
 #include "ASEViewer.h"
 #include "Weapon.h"
 #include "TimeLifeItem.h"
-#include "GameEvent.h"
+#include "GameEventCombo.h"
+
 
 #include "MainGUI.h"
 #include "OptionScene.h"
@@ -44,10 +45,10 @@ VOID	CMainScene::Clear()
 	m_pMonster		= NULL;
 	m_pTileMap		= NULL;
 	m_pASEViewer	= NULL;
-	m_pGameEvent	= NULL;
 	
 	m_pMainGUI		= NULL;
 	m_pOptionScene	= NULL;
+	m_pEventGUICombo= NULL;
 
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 }
@@ -71,8 +72,9 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//이벤트
 	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
-	m_pGameEvent = new CGameEvent( nMaxCharaNum, this );
-	m_pGameEvent->Create( m_pD3dDevice );
+	CGameEvent::GetInstance()->Create( m_pD3dDevice, nMaxCharaNum );
+	//m_pGameEvent = new CGameEvent( nMaxCharaNum, this );
+	//m_pGameEvent->Create( m_pD3dDevice );
 
 	//맵 생성
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
@@ -91,6 +93,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
 	//m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 	//m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
+
+	m_pGameEvent = CGameEvent::GetInstance();
 	if ( m_pGameEvent->GetMonsterState() & 0x01 )	//1 2 3 4
 	{
 		m_pMonster[0]->InitAniAndState();
@@ -140,7 +144,6 @@ HRESULT CMainScene::Release()
 	SAFE_DELETE( m_pAxis );
 	SAFE_DELETE( m_pOptionScene );
 	SAFE_DELETE( m_pMainGUI );
-	SAFE_DELETE( m_pGameEvent );
 	SAFE_DELETE( m_pTileMap );
 	SAFE_DELETE ( m_pCamera );
 
@@ -203,6 +206,7 @@ VOID CMainScene::Update()
 			m_pCamera->SetEffect( 1 );
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
 	}
+	CTree::GetInstance()->SetMonsAtkClear();
 
 	// 카메라: 캐릭터 위치,각도 받아오기
 	m_pCamera->SetView( 
@@ -253,9 +257,9 @@ VOID CMainScene::Update()
 	m_pMainGUI->Update();
 	m_pOptionScene->Update();
 
-	m_pGameEvent->Update();	
 	CNetwork::GetInstance()->UpdateGame();
-	CTree::GetInstance()->SetMonsAtkClear();
+	EventSwitch( m_pGameEvent->Update() );
+
 	CTree::GetInstance()->SetCharAtkClear();
 }
 
@@ -312,7 +316,8 @@ VOID	CMainScene::Render()
 	m_pOptionScene->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
-	m_pGameEvent->Render();
+	if ( m_pEventGUICombo )
+		m_pEventGUICombo->Render();
 }
 
 INT CMainScene::GetSceneNext()
@@ -324,8 +329,6 @@ INT CMainScene::GetSceneState()
 {
 	return m_scnState;
 }
-
-VOID					InitMonsterState();
 
 VOID CMainScene::InitCharState()
 {
@@ -370,4 +373,98 @@ VOID CMainScene::InitMonsterState()
 			m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
 		}
 	}
+}
+
+VOID CMainScene::EventSwitch( INT nEvent )
+{
+	switch ( nEvent )
+	{
+	case CGameEvent::INIT:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::INIT \n" );
+		EventInit();
+		break;
+	case CGameEvent::EVENTCAMERA:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTCAMERA \n" );
+		EventCamera();
+		break;
+	case CGameEvent::EVENTCOMBO:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTCOMBO \n" );
+		EventCombo();
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENTDESTORYCOMBO, 30.0f );
+		break;
+	case CGameEvent::EVENTDESTORYCOMBO:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTDESTORYCOMBO \n" );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENTCOMBO, 60.0f );
+		EventDestoryCombo();
+		break;
+	case CGameEvent::EVENTFAK:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTFAK \n" );
+		EventFirstAidKit();
+		break;
+	case CGameEvent::TUTORIALATK:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIALATK \n" );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIALCOMBO, 10.0f );
+		break;
+	case CGameEvent::TUTORIALCOMBO:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIALCOMBO \n" );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENTDESTORYCOMBO, 30.0f );
+		EventCombo();
+		break;
+	default:
+		break;
+	}
+}
+
+
+VOID CMainScene::EventInit()
+{
+	// 케릭터 위치 조정
+	InitCharState();
+
+	// 몬스터 위치 조정
+	InitMonsterState();
+
+	// Game Point
+}
+
+VOID CMainScene::EventCamera()
+{
+	m_pCamera->SetEffect( CCamera::EVENTWORK );
+}
+
+VOID CMainScene::EventCombo()
+{
+	if ( !m_pEventGUICombo )
+	{
+		CObjectManage * pOM = CObjectManage::GetInstance();
+		m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, pOM->GetSprite() );
+		INT nClient = 0;
+		// 접속 클라이언트 찾기.
+		for ( int i = 0; i < 4; ++i )
+		{
+			if (pOM->Get_CharTable()[i] != -1 )
+			{
+				nClient++;
+			}
+		}
+
+		INT nSelect;
+		for ( int i = 0; i < 4; ++i )
+		{
+			nSelect = static_cast<int>( FastRand2() * nClient );
+			m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[nSelect] + 1 );
+		}		
+
+		m_pEventGUICombo->Create();
+	}
+}
+
+VOID CMainScene::EventDestoryCombo()
+{
+	SAFE_DELETE( m_pEventGUICombo );
+}
+
+VOID CMainScene::EventFirstAidKit()
+{
+	m_pFirstAidKit->SetActive( TRUE );
 }

@@ -7,7 +7,7 @@ class CCamera
 {
 private:
 	VOID Clear();
-	BOOL SetCamera();
+	VOID SetCamera();
 	BOOL Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice;              
@@ -44,15 +44,19 @@ private:
 	// «¡∑ØΩ∫≈“
 	D3DXPLANE m_Frst[6];
 
+	// Effect
 	INT m_nEffect;
 	FLOAT m_fEffectValue;
+	CameraWork * m_pCameraWork;
+
 public:
+	enum { NONE = 0, SWING, WHAT, EVENTWORK, EVENTWORKEND, };
 	CCamera();
 	virtual ~CCamera();
 
 	VOID Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 
-	BOOL SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch );
+	VOID SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch );
 	D3DXVECTOR3* GetCameraLookAt() { return &m_vLook; }
 	D3DXVECTOR3* GetCameraEye() { return &m_vEye; }
 	D3DXVECTOR3* GetCameraDir() { return &m_vDir; }
@@ -79,7 +83,7 @@ public:
 	VOID CreateEventCamera();
 	BOOL UpdateEventCamera();
 
-	CameraWork * m_pCameraWork;
+	INT GetEffect()				{ return m_nEffect; }
 };
 
 #endif 
