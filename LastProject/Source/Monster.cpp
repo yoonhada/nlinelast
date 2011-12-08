@@ -1540,6 +1540,6 @@ D3DXVECTOR3 CMonster::GetWorldPos( INT a_iX, INT a_iZ )
 
 VOID CMonster::InitAniAndState()
 {
-	ChangeAnimation( CMonster::ANIM_STAND );
+	//ChangeAnimation( CMonster::ANIM_STAND );
 	GetFSM()->SetCurrentState( NULL );
 }

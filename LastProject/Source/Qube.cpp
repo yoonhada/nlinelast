@@ -34,17 +34,9 @@ VOID CQube::Update( CBoundBox * pBB )
 		m_bVisiable = FALSE;
 	}
 
-	fLen = CFrequency::GetInstance()->getFrametime();
 	m_vAccelerate *= CPhysics::GetInstance()->m_fAirRegistance;		// 가속도 공기저항 감속
 	
-	//if ( fLen > 0.0333f )			// 최저값 보정
-	//{
-	//	vDir = D3DXVECTOR3( 0.00000000f, 0.020153461f, 0.00000000f );
-	//}
-	//else
-	//{
-		vDir = CPhysics::GetInstance()->m_vGAccel * fLen * fLen ;
-//	}
+	vDir = CPhysics::GetInstance()->m_vGAccel * CFrequency::GetInstance()->getFrametime() ;
 
 	m_vMomentum = m_vMomentum - vDir;
 

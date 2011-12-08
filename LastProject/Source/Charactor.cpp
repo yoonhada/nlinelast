@@ -466,7 +466,6 @@ BOOL CCharactor::CollisionAtk( )
 		vecBoundBox = CTree::GetInstance()->GetCharAtkVector();
 		if ( !vecBoundBox->empty() )
 		{
-			// 케릭터가 때리는 바운드는 1개.
   			Iter = vecBoundBox->begin();
 			vPos = ( *Iter )->GetPosition();
 			if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
@@ -481,18 +480,15 @@ BOOL CCharactor::CollisionAtk( )
 		if ( vecBoundBox != NULL && vecBoundBox->size() )
 		{
 			Iter = vecBoundBox->begin();
+			vPos = ( *Iter )->GetPosition();
+			while ( Iter != vecBoundBox->end() )
+			{								
+				if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
+				{
+					return TRUE; 
+				}
 
-			//for (int i = 0; i < 8; ++i)
-			//{				
-			//	vPos = ( *Iter )->GetPosition(i);
-				//if( CPhysics::GetInstance()->Collision( ( *Iter ), D3DXVECTOR3(0, 0, 0),  m_pBoundBox ) )
-				//{
-				//	return TRUE; 
-				//}
-			//}
-			if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
-			{
-				return TRUE; 
+				Iter++;
 			}
 		}
 	}

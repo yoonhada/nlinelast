@@ -45,11 +45,13 @@ VOID CCamera::Clear()
 	m_fEffectValue = 0.0f;
 }
 
-BOOL CCamera::SetCamera()
+VOID CCamera::SetCamera()
 {
-	if (m_nEffect == 3)
+	if ( m_nEffect == EVENTWORK )
 	{
-		return UpdateEventCamera();
+		UpdateEventCamera();
+		
+		return;
 	}
 
 	//상하 각도 고정
@@ -67,10 +69,9 @@ BOOL CCamera::SetCamera()
     D3DXVec3TransformCoord( &m_vDir, &m_vDir, D3DXMatrixRotationX( &m, m_fPitch ) );
     D3DXVec3TransformCoord( &m_vDir, &m_vDir, D3DXMatrixRotationY( &m, m_fYaw ) );
 
-    m_vEye    = m_vLook;
-	if ( m_nEffect == 2 )	m_vDir = ( m_vDir + ( m_vLook - m_vPreLook ) / 2 ) * m_fZoom;
-	else					m_vDir *= m_fZoom;
-    m_vEye   -= m_vDir;
+    m_vEye = m_vLook;
+	m_vDir *= m_fZoom;
+    m_vEye -= m_vDir;
 	if ( m_vEye.y < 0.0f )
 		m_vEye.y = 0.0f;
 
@@ -82,8 +83,6 @@ BOOL CCamera::SetCamera()
 	m_vPreLook = m_vLook;	
 	m_vPreDir = m_vDir;	
 	m_vPreEye = m_vEye;
-
-	return TRUE;
 }
 
 
@@ -96,19 +95,19 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 {
 	switch ( m_nEffect )
 	{
-	case 0:
-		m_nEffect = 0;
+	case NONE:
 		m_fEffectValue = 0;
 		break;
-	case 1:
+	case SWING:
 		{
+			FLOAT fTime = D3DX_PI * 20.0f;
 			D3DXVECTOR3 vUp(0, 1, 0);
-			D3DXVec3Cross( &vUp, &m_vDir, &vUp );
-			a_vLook += vUp * sin(m_fEffectValue) * 3.0f;
-			m_fEffectValue += ( D3DX_PI * 20.0f * CFrequency::GetInstance()->getFrametime() );
-			if (m_fEffectValue > 31.4f)
+			D3DXVec3Cross( &vUp, &m_vDir, &vUp );	// Side
+			a_vLook += vUp * sin(m_fEffectValue) * 5.0f;
+			m_fEffectValue += ( fTime * CFrequency::GetInstance()->getFrametime() );
+			if ( m_fEffectValue > fTime )
 			{
-				m_nEffect = 0;
+				m_nEffect = NONE;
 				m_fEffectValue = 0;
 			}
 		}
@@ -116,7 +115,7 @@ VOID CCamera::Effect( D3DXVECTOR3 & a_vLook )
 	}	
 }
 
-BOOL CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
+VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook, FLOAT a_fY, FLOAT a_fZoom, FLOAT a_fYaw, FLOAT a_fPitch )
 {
 	D3DXVECTOR3 vLook;
 	static FLOAT fZoom = m_fMaxZoom;
@@ -145,7 +144,7 @@ BOOL CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook
 	m_fYaw   = a_fYaw;
 	m_fPitch -= a_fPitch;
 
-    return SetCamera();
+    SetCamera();
 }
 
 
@@ -346,7 +345,8 @@ BOOL CCamera::UpdateEventCamera()
 	BOOL bRet = m_pCameraWork->Update();
 	if ( bRet == FALSE)
 	{
-		m_nEffect = 0;
+		m_nEffect = NONE;
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIALATK, 0.1f );
 	}
 	
 	// Test Update

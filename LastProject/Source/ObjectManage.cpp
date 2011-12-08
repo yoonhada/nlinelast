@@ -56,8 +56,6 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 		return E_FAIL;
 	}
 
-
-
 	LoadLoadingObject();
 	LoadLobbyObject();
 	LoadMainObject();
