@@ -75,6 +75,7 @@ private:
 	VOID					InitMonsterState();
 
 	VOID SendNetwork( INT nEvent );
+	VOID SendNetworkCombo( INT nEvent );
 
 	VOID EventSwitch( INT nEvent );
 	VOID EventInit();

@@ -28,7 +28,8 @@ private:
 	BOOL				m_bHost;
 	WORD				m_iClientNumber;
 	INT					m_iMaxCharaNum;
-
+	
+	INT					m_nEventTable[4];
 	INT					m_nCharTable[4];
 	CCharactor*			m_pCharactors;
 	CCharactor**		m_ppVirtualCharactors;
@@ -84,6 +85,7 @@ public:
 	ASEViewer* Get_ASEViewer()			{ return m_pASEViewer;			}
 	BOOL IsHost()						{ return m_bHost;				}
 	INT* Get_CharTable()				{ return m_nCharTable;			}
+	INT* Get_EventTable()				{ return m_nEventTable;			}
 	INT Get_CharTable(INT n)			{ return m_nCharTable[n];		}
 
 	// Set
