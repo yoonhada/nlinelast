@@ -395,9 +395,9 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 
 		CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", wDestroyPart, wDestroyCount );
 		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->Get_MonsterPart()[wDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
-
-		CObjectManage::GetInstance()->Set_LastAtkPlayer( static_cast<int>( wClientNumber ) );
-	}	
+		CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( static_cast<int>( wClientNumber ) ) );
+		CGameEvent::GetInstance()->Set_MonsterIndex( static_cast<int>( wMonsterNumber ) );
+	}
 }
 
 

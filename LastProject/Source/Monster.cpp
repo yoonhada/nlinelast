@@ -925,7 +925,11 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	{
 		if ( m_pBox[Loop].CollisionAtk( ) )
 		{
-			m_pBox[Loop].BreakQube( mat );
+			if ( m_pBox[Loop].BreakQube( mat ) )
+			{
+				CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( CObjectManage::GetInstance()->Get_ClientNumber() ) );
+				CGameEvent::GetInstance()->Set_MonsterIndex( m_iMonsterNumber );
+			}
 		}
 	}
 

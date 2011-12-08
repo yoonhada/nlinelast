@@ -36,6 +36,8 @@ private:
 	INT m_nMonsterState;
 	
 	// Event
+	INT m_nMonsterIndex;
+	INT m_nPlayerIndex;
 	std::list<EVENT*> m_listEvent;
 	std::list <EVENT*>::iterator Iter;
 
@@ -60,10 +62,13 @@ public:
 	VOID AddEvent( INT, FLOAT );
 
 	// Get
+	INT GetMonsterIndex()						{ return m_nMonsterIndex; }
+	INT GetPlayerIndex()						{ return m_nPlayerIndex; }
 	INT GetMonsterState()						{ return m_nMonsterState; }
 	D3DXVECTOR3& GetCharPosition(INT nIndex)	{ return m_pCharactorPosition[nIndex]; }
 	D3DXVECTOR3& GetMonsPosition(INT nIndex)	{ return m_pMonsterPosition[nIndex]; }
 
 	// Set
-	//VOID SetMonsterState()
+	VOID Set_PlayerIndex( INT a_nPlayerIndex )	{ m_nPlayerIndex = a_nPlayerIndex; }
+	VOID Set_MonsterIndex( INT a_nMonsterIndex ){ m_nMonsterIndex = a_nMonsterIndex; }
 };

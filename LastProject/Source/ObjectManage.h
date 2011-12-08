@@ -43,8 +43,6 @@ private:
 
 	LobbyScene*			m_pLobbyScene;
 
-	INT					m_nLastAtkPlayer;
-
 private:
 	//typedef struct _DESTROYDATA
 	//{
@@ -87,12 +85,10 @@ public:
 	BOOL IsHost()						{ return m_bHost;				}
 	INT* Get_CharTable()				{ return m_nCharTable;			}
 	INT Get_CharTable(INT n)			{ return m_nCharTable[n];		}
-	INT Get_LastAtkPlayer( )			{ return m_nLastAtkPlayer;		}
 
 	// Set
 	VOID Set_Host( BOOL a_bHost )						{ m_bHost = a_bHost; }
 	VOID Set_ClientNumber( WORD a_iClientNumber )		{ m_iClientNumber = a_iClientNumber; }
-	VOID Set_LastAtkPlayer( INT a_nLastAtkPlayer )		{ m_nLastAtkPlayer = a_nLastAtkPlayer; }
 
 public:
 	VOID Set_Char(INT nSelect, INT nChar, BOOL = FALSE );
