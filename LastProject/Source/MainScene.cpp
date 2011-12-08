@@ -183,13 +183,29 @@ VOID CMainScene::CreateCharactor()
 	}
 }
 
+VOID CMainScene::MonsterBreakNockdown()
+{
+	if ( CGameEvent::GetInstance()->GetMonsterState()  & 0x01 )	//1 2 3 4
+	{
+		m_pMonster[0]->BreakNockdown();
+	}
+	if ( CGameEvent::GetInstance()->GetMonsterState()  & 0x02 )
+	{
+		m_pMonster[1]->BreakNockdown();
+	}
+	if ( CGameEvent::GetInstance()->GetMonsterState()  & 0x04 )
+	{
+		m_pMonster[2]->BreakNockdown();
+	}
+}
+
 VOID CMainScene::Update()
 {
 	// 치트키 처리
 	if( GetKeyState( '5' ) & 0x8000 )
 		m_pCamera->SetEffect(1);
 	if( GetKeyState( '6' ) & 0x8000 )
-		m_pGameEvent->AddEvent( CGameEvent::EVENTCOMBO, 0.1f);
+		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
 
 	CGameEvent::GetInstance()->Set_PlayerIndex( -1 );
 	CGameEvent::GetInstance()->Set_MonsterIndex( -1 );
@@ -387,42 +403,65 @@ VOID CMainScene::InitMonsterState()
 
 VOID CMainScene::EventSwitch( INT nEvent )
 {
+	static int n = 0;
+
 	switch ( nEvent )
 	{
 	case CGameEvent::INIT:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::INIT \n" );
 		EventInit();
 		break;
-	case CGameEvent::EVENTCAMERA:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTCAMERA \n" );
+	case CGameEvent::EVENT_CAMERA:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_CAMERA \n" );
 		EventCamera();
 		break;
-	case CGameEvent::EVENTCOMBO:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTCOMBO \n" );
+	case CGameEvent::EVENT_COMBO:
+		n++;
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO \n" );
 		EventCombo();
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENTDESTORYCOMBO, 30.0f );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 30.0f );
 		break;
-	case CGameEvent::EVENTDESTORYCOMBO:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTDESTORYCOMBO \n" );
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENTCOMBO, 60.0f );
+	case CGameEvent::EVENT_COMBO_END:
+		n--;
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_END \n" );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 30.0f );
 		EventDestoryCombo();
 		break;
-	case CGameEvent::EVENTFAK:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENTFAK \n" );
+	case CGameEvent::EVENT_COMBO_SUCCESS:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_SUCCESS \n" );
+		if ( m_pEventGUICombo )
+		{
+			m_pEventGUICombo->Success();
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );
+		}
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
+		break;
+	case CGameEvent::EVENT_COMBO_FAIL:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_FAIL \n" );
+		if ( m_pEventGUICombo )
+			m_pEventGUICombo->Fail();
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
+		break;
+	case CGameEvent::EVENT_FAK:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_FAK \n" );
 		EventFirstAidKit();
 		break;
-	case CGameEvent::TUTORIALATK:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIALATK \n" );
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIALCOMBO, 10.0f );
+	case CGameEvent::TUTORIAL_ATACK:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
 		break;
-	case CGameEvent::TUTORIALCOMBO:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIALCOMBO \n" );
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENTDESTORYCOMBO, 30.0f );
-		EventCombo();
+	case CGameEvent::TUTORIAL_COMBO:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 1.0f );
+		break;
+	case CGameEvent::MONSTER_BREAK_NOCKDOWN:
+		MonsterBreakNockdown();
 		break;
 	default:
 		break;
 	}
+
+	CDebugConsole::GetInstance()->Messagef("%d", n );
 }
 
 

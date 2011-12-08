@@ -1050,6 +1050,35 @@ VOID CCharactor::BreakCubeAll()
 	m_bAliveCheck=FALSE;
 }
 
+VOID CCharactor::BreakNockdown()
+{
+	if( m_bAliveCheck == TRUE )
+	{
+		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
+		{
+			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			{
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
+			}
+
+			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
+			{
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
+
+				if( m_bMonster )
+				{
+					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+				}
+				else
+				{
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+				}
+			}
+		}
+	}
+}
+
 VOID CCharactor::TestBreakCube()
 {
 	if( m_bAliveCheck == TRUE )

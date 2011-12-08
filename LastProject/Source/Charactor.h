@@ -65,6 +65,7 @@ public:
 	BOOL BreakQube(D3DXMATRIXA16 &mat);
 	VOID TestBreakCube();
 	VOID BreakCubeAll();
+	VOID BreakNockdown();
 	VOID BreakListMake(INT, D3DXVECTOR3&);
 
 	const D3DXVECTOR3&	Get_CharaPos()		{ return m_vControl;	}

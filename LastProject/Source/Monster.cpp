@@ -1406,6 +1406,15 @@ VOID CMonster::BreakCubeAll()
 	}
 }
 
+VOID CMonster::BreakNockdown()
+{
+	//m_pBox[0].BreakCubeAll();
+	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	{
+		m_pBox[Loop].BreakNockdown();
+	}
+}
+
 VOID CMonster::EnableShadow( BOOL bEnable )
 {
 	for( INT Loop = 0; Loop < m_iCharEditorMax; ++Loop )

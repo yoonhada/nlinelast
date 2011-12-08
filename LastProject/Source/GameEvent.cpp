@@ -35,7 +35,7 @@ HRESULT CGameEvent::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, INT a_nMaxChar )
 	m_pShotedPoint[0] = m_pShotedPoint[1] = m_pShotedPoint[2] = m_pShotedPoint[3] = 0;
 	
 	AddEvent( INIT, 1.0f );
-	AddEvent( EVENTCAMERA, 0.1f );
+	AddEvent( EVENT_CAMERA, 0.1f );
 	return S_OK;
 }
 
@@ -87,13 +87,16 @@ VOID CGameEvent::AddEvent( INT nKind, FLOAT fTime )
 {
 	BOOL bChk = FALSE;
 
-	for ( Iter = m_listEvent.begin(); Iter != m_listEvent.end( ); Iter++ )
+	Iter = m_listEvent.begin();
+	while ( Iter != m_listEvent.end( ) )
 	{
 		if ( (*Iter)->fTime > fTime )
 		{
 			m_listEvent.insert( Iter, new EVENT( nKind, fTime ) );
 			bChk = TRUE;
 		}		
+
+		Iter++;
 	}
 
 	if ( !bChk )
