@@ -289,7 +289,19 @@ VOID CNetwork::SC_EVENT_STATE( CPacket& a_pk )
 
 VOID CNetwork::SC_EVENT_COMBO( CPacket& a_pk )
 {
-	
+	INT iEventKind[4];
+	a_pk.Read( &iEventKind[0] );
+	a_pk.Read( &iEventKind[1] );
+	a_pk.Read( &iEventKind[2] );
+	a_pk.Read( &iEventKind[3] );
+
+	INT *nTable = CObjectManage::GetInstance()->Get_EventTable();
+	nTable[0] = iEventKind[0];
+	nTable[1] = iEventKind[1];
+	nTable[2] = iEventKind[2];
+	nTable[3] = iEventKind[3];
+
+	CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 0.01f );
 }
 
 
@@ -632,9 +644,21 @@ VOID CNetwork::CS_EVENT_STATE( WORD a_wEventID )
 }
 
 
-VOID CNetwork::CS_EVENT_COMBO()
+VOID CNetwork::CS_EVENT_COMBO( INT * a_iEventKind )
 {
-	
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_EVENT_STATE;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_iEventKind[0] );
+	sendPk.Write( a_iEventKind[1] );
+	sendPk.Write( a_iEventKind[2] );
+	sendPk.Write( a_iEventKind[3] );
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );	
 }
 
 

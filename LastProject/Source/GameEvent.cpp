@@ -34,6 +34,7 @@ HRESULT CGameEvent::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, INT a_nMaxChar )
 	m_pAttackPoint[0] = m_pAttackPoint[1] = m_pAttackPoint[2] = m_pAttackPoint[3] = 0;
 	m_pShotedPoint[0] = m_pShotedPoint[1] = m_pShotedPoint[2] = m_pShotedPoint[3] = 0;
 	
+
 	AddEvent( INIT, 1.0f );
 	AddEvent( EVENT_CAMERA, 0.1f );
 	return S_OK;
@@ -65,7 +66,7 @@ VOID CGameEvent::Clear()
 	m_pAttackPoint = NULL;
 	m_pShotedPoint = NULL;
 
-	m_nMonsterState = 3;
+	m_nMonsterState = 1;
 
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;

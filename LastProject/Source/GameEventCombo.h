@@ -37,6 +37,7 @@ public:
 
 	VOID AddCombo(INT nIndex, INT nKind)	{ m_nKindEvent[nIndex] = nKind; }
 
+	INT* GetKindEvet()						{ return m_nKindEvent; }
 	INT GetKindIndex()						{ return m_nKindIndex; }
 	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
 	BOOL CheckKindEvent( INT nKindEvent );

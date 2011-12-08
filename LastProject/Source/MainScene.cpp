@@ -408,18 +408,16 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	case CGameEvent::INIT:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::INIT \n" );
 		EventInit();
-		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_CAMERA:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_CAMERA \n" );
 		EventCamera();
-		SendNetwork( nEvent );
 		break;
 	case CGameEvent::EVENT_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO \n" );
 		EventCombo();
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 30.0f );
-		SendNetwork( nEvent );
+		SendNetworkCombo( nEvent );
 		break;
 	case CGameEvent::EVENT_COMBO_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_END \n" );
@@ -452,7 +450,6 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
-		CNetwork::GetInstance()->CS_EVENT_STATE( nEvent );
 		break;
 	case CGameEvent::TUTORIAL_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
@@ -472,6 +469,14 @@ VOID CMainScene::SendNetwork( INT nEvent )
 {
 	if ( CObjectManage::GetInstance()->IsHost() ) 
 		CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
+}
+
+VOID CMainScene::SendNetworkCombo( INT nEvent )
+{
+	if ( CObjectManage::GetInstance()->IsHost() ) 
+	{		
+		CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() ); 
+	}
 }
 
 VOID CMainScene::EventInit()
@@ -495,23 +500,37 @@ VOID CMainScene::EventCombo()
 	if ( !m_pEventGUICombo )
 	{
 		CObjectManage * pOM = CObjectManage::GetInstance();
-		m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, pOM->GetSprite() );
-		INT nClient = 0;
-		// 접속 클라이언트 찾기.
-		for ( int i = 0; i < 4; ++i )
-		{
-			if (pOM->Get_CharTable()[i] != -1 )
-			{
-				nClient++;
-			}
-		}
 
-		INT nSelect;
-		for ( int i = 0; i < 4; ++i )
+		if ( pOM->IsHost() )
 		{
-			nSelect = static_cast<int>( FastRand2() * nClient );
-			m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[nSelect] + 1 );
-		}		
+			m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, pOM->GetSprite() );
+
+			INT nClient = 0;
+			// 접속 클라이언트 찾기.
+			for ( int i = 0; i < 4; ++i )
+			{
+				if (pOM->Get_CharTable()[i] != -1 )
+				{
+					nClient++;
+				}
+			}
+
+			INT nSelect;
+			for ( int i = 0; i < 4; ++i )
+			{
+				nSelect = static_cast<int>( FastRand2() * nClient );
+				m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[nSelect] + 1 );
+			}		
+		}
+		else
+		{
+			m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, pOM->GetSprite() );
+
+			for ( int i = 0; i < 4; ++i )
+			{
+				m_pEventGUICombo->AddCombo( i, pOM->Get_EventTable()[i] );
+			}		
+		}
 
 		m_pEventGUICombo->Create();
 	}
