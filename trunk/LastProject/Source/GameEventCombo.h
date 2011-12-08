@@ -22,6 +22,7 @@ private:
 	GUIBackground*			m_pGUIForground;
 	GUIBackground*			m_pGUIButton[4];
 
+	BOOL					m_bComplate;
 	INT						m_nKindIndex;
 	INT						m_nKindEvent[4];
 public:
@@ -39,4 +40,7 @@ public:
 	INT GetKindIndex()						{ return m_nKindIndex; }
 	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
 	BOOL CheckKindEvent( INT nKindEvent );
+
+	VOID Success();
+	VOID Fail();
 };

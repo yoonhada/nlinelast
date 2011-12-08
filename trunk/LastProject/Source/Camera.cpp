@@ -346,7 +346,7 @@ BOOL CCamera::UpdateEventCamera()
 	if ( bRet == FALSE)
 	{
 		m_nEffect = NONE;
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIALATK, 0.1f );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 0.1f );
 	}
 	
 	// Test Update

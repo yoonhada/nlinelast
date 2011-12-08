@@ -79,6 +79,7 @@ private:
 	VOID EventCombo();
 	VOID EventDestoryCombo();
 	VOID EventFirstAidKit();
+	VOID MonsterBreakNockdown();
 };
 
 #endif

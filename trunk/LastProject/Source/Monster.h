@@ -117,6 +117,7 @@ public:
 
 	VOID CreateAttackBoundBox();
 	VOID BreakCubeAll();
+	VOID BreakNockdown();
 	VOID EnableShadow( BOOL bEnable );
 
 private:

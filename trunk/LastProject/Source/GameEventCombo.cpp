@@ -45,51 +45,56 @@ HRESULT CGameEventCombo::Create( )
 		{
 		case 1:
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventF-1.png", 1000000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000 );
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000 );			
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventF-1.png", 100000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 3000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 100000 );
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 3000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 100000 );			
 			break;																   
 		case 2:																	   
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventM-1.png", 1000000 );
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventM-1.png", 100000 );
 			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 100000 );
 			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000 );			
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 100000 );			
 			break;																   
 		case 3:																	   
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventS-1.png", 1000000 );
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventS-1.png", 100000 );
 			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 100000 );
 			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000 );			
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 100000 );			
 			break;																   
 		case 4:																	   
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
-			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventD-1.png", 1000000 );
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventD-1.png", 100000 );
 			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000 );
-			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000 );
+			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 100000 );
 			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 1000 );			
-			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 1000 );			
+			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 100000 );			
 			break;
 		}
 		
-		m_pGUIButton[Loop]->Create( fWidth * 0.5f - (400.0f - 100.0f * Loop ), fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[Loop] );
+		m_pGUIButton[Loop]->Create( 
+			fWidth * 0.5f - (400.0f - 100.0f * Loop ), 
+			fHeight * 0.33f - 100.0f, 
+			100.0f, 
+			100.0f, 
+			imgParam[Loop] );
 	}	
 
 	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround3.png", 1000 );
 	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround2.png", 1000 );
 	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround1.png", 1000 );
-	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround.png", 1000000 );
-	m_pGUIBackground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[4] );
+	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround.png", 100000 );
+	m_pGUIBackground->Create( fWidth * 0.5f - 407.0f, fHeight * 0.33f - 114.0f, 407.0f, 114.0f, imgParam[4] );
 
-	m_pGUIBase->AddFileName( 0, imgParam[5], L"Img\\Event\\Event.png", 1000 );
+	m_pGUIBase->AddFileName( 0, imgParam[5], L"Img\\Event\\Empty.png", 1000 );
 	m_pGUIBase->AddFileName( 1, imgParam[5], L"Img\\Event\\EmptyS.png", 1000 );
 	m_pGUIBase->AddFileName( 2, imgParam[5], L"Img\\Event\\EmptyF.png", 1000 );
-	m_pGUIForground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[5] );
+	m_pGUIForground->Create( fWidth * 0.5f - 407.0f, fHeight * 0.33f - 114.0f, 407.0f, 114.0f, imgParam[5] );
 
 	m_nKindIndex = 0;
 	return S_OK;
@@ -114,6 +119,8 @@ VOID CGameEventCombo::Clear()
 	m_nKindEvent[1] = 2;
 	m_nKindEvent[2] = 3;
 	m_nKindEvent[3] = 4;
+
+	m_bComplate = FALSE;
 }
 
 VOID CGameEventCombo::Update()
@@ -138,18 +145,56 @@ VOID CGameEventCombo::Render()
 
 BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 {
-	BOOL bRet = FALSE;
+	INT bRet = -1;
 
 	for ( INT Loop = 0; Loop < 4; ++Loop )
 	{
+		// ºó°÷ Ã£±â.
 		if ( !( ( 0x0001 << Loop ) & m_nKindIndex ) )
 		{
-			m_pGUIButton[Loop]->NextAnimation();
-			m_nKindIndex = m_nKindIndex | ( 0x0001 << Loop );
-			bRet = TRUE;
+			if ( ( nKindEvent + 1 ) == m_nKindEvent[Loop] )
+			{
+				m_pGUIButton[Loop]->NextAnimation();
+				m_nKindIndex += ( 0x0001 << Loop );
+				bRet = TRUE;
+			}
+			else
+			{
+				m_pGUIButton[Loop]->NextAnimation();
+				m_pGUIButton[Loop]->NextAnimation();
+				bRet = FALSE;
+			}
+
 			break;
 		}
 	}
 
+	if ( bRet == TRUE )
+	{
+		if ( m_nKindIndex == 0x000F )
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.1f );
+		}
+	}
+	else if  ( bRet == FALSE )
+	{
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.1f );
+	}
+
 	return bRet;
+}
+
+VOID CGameEventCombo::Success()
+{
+	m_bComplate = TRUE;
+	m_pGUIForground->NextAnimation();
+}
+
+VOID CGameEventCombo::Fail()
+{
+	if ( m_bComplate == FALSE )
+	{
+		m_pGUIForground->NextAnimation();
+		m_pGUIForground->NextAnimation();
+	}
 }
