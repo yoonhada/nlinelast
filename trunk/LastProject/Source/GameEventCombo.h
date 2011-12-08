@@ -18,7 +18,9 @@ private:
 	HWND					m_hWnd;
 
 	GUIBase*				m_pGUIBase;
-	GUIBackground*			m_pGUIBackground[4];
+	GUIBackground*			m_pGUIBackground;
+	GUIBackground*			m_pGUIForground;
+	GUIBackground*			m_pGUIButton[4];
 
 	INT						m_nKindIndex;
 	INT						m_nKindEvent[4];

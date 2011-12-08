@@ -23,12 +23,13 @@ CGameEventCombo::~CGameEventCombo()
 HRESULT CGameEventCombo::Create( )
 {
 	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
-	m_pGUIBackground[0]	= new GUIBackground( m_pD3dDevice, m_pSprite );
-	m_pGUIBackground[1]	= new GUIBackground( m_pD3dDevice, m_pSprite );
-	m_pGUIBackground[2]	= new GUIBackground( m_pD3dDevice, m_pSprite );
-	m_pGUIBackground[3]	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIBackground= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIForground	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIButton[0]	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIButton[1]	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIButton[2]	= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUIButton[3]	= new GUIBackground( m_pD3dDevice, m_pSprite );
 
-	GUIBase::IMAGEPARAM imgParam[4];
 
 	D3DVIEWPORT9 Vp;
 	m_pD3dDevice->GetViewport( &Vp );
@@ -36,33 +37,49 @@ HRESULT CGameEventCombo::Create( )
 	FLOAT fWidth	= static_cast<FLOAT>( Vp.Width );
 	FLOAT fHeight	= static_cast<FLOAT>( Vp.Height );
 
+	GUIBase::IMAGEPARAM imgParam[6];
+	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround3.png", 1000 );
+	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround2.png", 1000 );
+	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround1.png", 1000 );
+	m_pGUIBackground->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround.png", 1000000 );
+	m_pGUIBackground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[4] );
+	
+	m_pGUIForground->AddFileName( 0, imgParam[5], L"Img\\Event\\Event.png", 1000000 );
+	m_pGUIForground->AddFileName( 1, imgParam[5], L"Img\\Event\\EmptyS.png", 1000 );
+	m_pGUIForground->AddFileName( 2, imgParam[5], L"Img\\Event\\EmptyF.png", 1000 );
+	m_pGUIForground->Create( fWidth * 0.5f - 400.0f, fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[5] );
+
 	for (int Loop = 0; Loop < 4; ++Loop)
 	{
 		switch( m_nKindEvent[Loop] )
 		{
 		case 1:
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventF-1.png", 1000000 );
 			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000000 );
 			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000000 );			
-			break;																	   
-		case 2:																		   
+			break;																   
+		case 2:																	   
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventM-1.png", 1000000 );
 			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000000 );
 			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000000 );			
-			break;																	   
-		case 3:																		   
+			break;																   
+		case 3:																	   
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventS-1.png", 1000000 );
 			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000000 );
 			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000000 );			
-			break;																	   
-		case 4:																		   
+			break;																   
+		case 4:																	   
+			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 			m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventD-1.png", 1000000 );
 			m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000000 );
 			m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventD-3.png", 1000000 );			
 			break;
 		}
 		
-		m_pGUIBackground[Loop]->Create( fWidth * 0.5f - (400.0f - 100.0f * Loop ), fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[Loop] );
+		m_pGUIButton[Loop]->Create( fWidth * 0.5f - (400.0f - 100.0f * Loop ), fHeight * 0.33f - 100.0f, 100.0f, 100.0f, imgParam[Loop] );
 	}	
 
 	m_nKindIndex = 0;
@@ -72,10 +89,12 @@ HRESULT CGameEventCombo::Create( )
 HRESULT CGameEventCombo::Release()
 {
 	SAFE_DELETE ( m_pGUIBase );
-	SAFE_DELETE ( m_pGUIBackground[0] );
-	SAFE_DELETE ( m_pGUIBackground[1] );
-	SAFE_DELETE ( m_pGUIBackground[2] );
-	SAFE_DELETE ( m_pGUIBackground[3] );
+	SAFE_DELETE ( m_pGUIBackground );
+	SAFE_DELETE ( m_pGUIForground );
+	SAFE_DELETE ( m_pGUIButton[0] );
+	SAFE_DELETE ( m_pGUIButton[1] );
+	SAFE_DELETE ( m_pGUIButton[2] );
+	SAFE_DELETE ( m_pGUIButton[3] );
 
 	return S_OK;
 }
@@ -90,30 +109,38 @@ VOID CGameEventCombo::Clear()
 
 VOID CGameEventCombo::Update()
 {
-	//m_pGUIBackground->Update();
+	INT nPlayer = CGameEvent::GetInstance()->GetPlayerIndex();
+	
+	if ( nPlayer >= 0 )
+		CheckKindEvent( nPlayer );	
 }
 
 VOID CGameEventCombo::Render()
 {
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
-	m_pGUIBackground[0]->Render();
-	m_pGUIBackground[1]->Render();
-	m_pGUIBackground[2]->Render();
-	m_pGUIBackground[3]->Render();
+	m_pGUIBackground->Render();
+	m_pGUIButton[0]->Render();
+	m_pGUIButton[1]->Render();
+	m_pGUIButton[2]->Render();
+	m_pGUIButton[3]->Render();
+	m_pGUIForground->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 }
 
 BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 {
 	BOOL bRet = FALSE;
-	if( m_nKindEvent[ m_nKindIndex ] == nKindEvent )
-	{
-		m_nKindIndex++;
-		bRet = TRUE;		
-	}
 
-	if ( bRet == FALSE )
-		m_nKindIndex = 0;
+	for ( INT Loop = 0; Loop < 4; ++Loop )
+	{
+		if ( !( ( 0x0001 << Loop ) & m_nKindIndex ) )
+		{
+			m_pGUIButton[Loop]->NextAnimation();
+			m_nKindIndex = m_nKindIndex | ( 0x0001 << Loop );
+			bRet = TRUE;
+			break;
+		}
+	}
 
 	return bRet;
 }

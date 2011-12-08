@@ -91,6 +91,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
+	m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 	//m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 	//m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 
@@ -101,7 +102,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	}
 	if ( m_pGameEvent->GetMonsterState() & 0x02 )
 	{
-		m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 		m_pMonster[1]->InitAniAndState();
 	}
 	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
@@ -191,6 +191,8 @@ VOID CMainScene::Update()
 	if( GetKeyState( '6' ) & 0x8000 )
 		m_pGameEvent->AddEvent( CGameEvent::EVENTCOMBO, 0.1f);
 
+	CGameEvent::GetInstance()->Set_PlayerIndex( -1 );
+	CGameEvent::GetInstance()->Set_MonsterIndex( -1 );
 
 	CCharactor * pChar;
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
@@ -239,11 +241,17 @@ VOID CMainScene::Update()
 
 
 	if ( m_pGameEvent->GetMonsterState()  & 0x01 )	//1 2 3 4
+	{
 		m_pMonster[0]->Update();
+	}
 	if ( m_pGameEvent->GetMonsterState()  & 0x02 )
+	{
 		m_pMonster[1]->Update();
+	}
 	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
+	{
 		m_pMonster[2]->Update();
+	}
 
 	//m_pMonster->Update();
 	//m_pMonster->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
@@ -258,6 +266,8 @@ VOID CMainScene::Update()
 	m_pOptionScene->Update();
 
 	CNetwork::GetInstance()->UpdateGame();
+	if ( m_pEventGUICombo )
+		m_pEventGUICombo->Update();
 	EventSwitch( m_pGameEvent->Update() );
 
 	CTree::GetInstance()->SetCharAtkClear();
@@ -346,10 +356,10 @@ VOID CMainScene::InitMonsterState()
 		m_pMonster[0]->Set_Angle( 0.0f );
 		m_pMonster[0]->ChangeAnimation( CMonster::ANIM_STAND );
 		m_pMonster[0]->EnableShadow( TRUE );
-		if( CObjectManage::GetInstance()->IsHost() == TRUE )
-		{
-			m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
-		}
+		//if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		//{
+		//	m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+		//}
 	}
 	if ( m_pGameEvent->GetMonsterState()  & 0x02 )
 	{
@@ -359,7 +369,7 @@ VOID CMainScene::InitMonsterState()
 		m_pMonster[1]->EnableShadow( TRUE );
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+			//m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
 		}
 	}
 	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
@@ -370,7 +380,7 @@ VOID CMainScene::InitMonsterState()
 		m_pMonster[2]->EnableShadow( TRUE );
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+			//m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
 		}
 	}
 }
