@@ -233,6 +233,10 @@ BOOL TileMap::SetInfo( DWORD _dType, FLOAT _fX, FLOAT _fZ )
 
 BOOL TileMap::SetBBXData( LPD3DXVECTOR3 _pvecPivot, FLOAT* _pfMinus, FLOAT* _pfPlus )
 {
+	//	Y > 15.0f 이면 등록하지 않는다
+	if( ( _pvecPivot->y + _pfMinus[ 1 ] ) > 15 )
+		return;
+
 	FLOAT fStartX = _pvecPivot->x + _pfMinus[ 0 ];
 	FLOAT fStartZ = _pvecPivot->z + _pfMinus[ 2 ];
 
