@@ -305,6 +305,12 @@ VOID CNetwork::SC_EVENT_COMBO( CPacket& a_pk )
 }
 
 
+VOID CNetwork::SC_EVENT_COMBO_RESULT( CPacket& a_pk )
+{
+	
+}
+
+
 VOID CNetwork::SC_CHAT( CPacket& a_pk )
 {
 	WCHAR szText[256] = { 0, };
@@ -971,15 +977,24 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		SC_CLIENT_DISCONNECT( a_pk );
 		break;
 
+	// 서버 종료
 	case MSG_SERVER_CLOSE:
+		SC_SERVER_CLOSE( a_pk );
 		break;
 
+	// 이벤트 발생
 	case MSG_EVENT_STATE:
 		SC_EVENT_STATE( a_pk );
 		break;
 
+	// 콤보 정보
 	case MSG_EVENT_COMBO:
 		SC_EVENT_COMBO( a_pk );
+		break;
+
+	// 콤보 결과
+	case MSG_EVENT_COMBO_RESULT:
+		SC_EVENT_COMBO_RESULT( a_pk );
 		break;
 
 	// 채팅

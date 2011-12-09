@@ -1,65 +1,45 @@
 #include "stdafx.h"
 
+#include "DashReady.h"
 #include "Dash.h"
-#include "Stiffen.h"
-#include "Sliding.h"
+#include "Monster.h"
 #include "Charactor.h"
 
 
-Dash* Dash::GetInstance()
+DashReady* DashReady::GetInstance()
 {
-	static Dash Instance;
+	static DashReady Instance;
 
 	return &Instance;
 }
 
 
-VOID Dash::Enter( CMonster* a_pMonster )
+VOID DashReady::Enter( CMonster* a_pMonster )
 {
 	// Dash 애니메이션으로 변경
-//	a_pMonster->ChangeAnimation( CMonster::ANIM_DASH );
-	CDebugConsole::GetInstance()->Messagef( L"Dash : ANIM_DASH \n" );
+	a_pMonster->ChangeAnimation( CMonster::ANIM_DASH );
 
-	a_pMonster->Set_DashData( a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos() );
-	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() / 10.0f * 0.15f );
-
-	if( CObjectManage::GetInstance()->IsHost() == TRUE )
-	{
-//		FLOAT fAngle = SetAngle( a_pMonster );
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH, a_pMonster->Get_Angle(), a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos(), a_pMonster->Get_TargetDistance() );
-	}
+	FLOAT fAngle = SetAngle( a_pMonster );
 }
 
 
-VOID Dash::Execute( CMonster* a_pMonster )
+VOID DashReady::Execute( CMonster* a_pMonster )
 {
-	a_pMonster->Set_UpdateTime();
-
-	// 도착했으면 Stiffen 상태로
-	FLOAT t = a_pMonster->Get_Time();
-	if( t >= a_pMonster->Get_InterpolationTime() )
+	// 애니메이션 보간이 끝나면 다시 탐색 상태로
+	if( a_pMonster->Get_ChangingAnimation() == FALSE )
 	{
-		a_pMonster->Set_ClearTime();
-
-		a_pMonster->GetFSM()->ChangeState( Sliding::GetInstance() );
-	}
-	else
-	{
-		D3DXVECTOR3 vPos( 0.0f, 0.0f, 0.0f );
-
-		D3DXVec3Lerp( &vPos, &a_pMonster->Get_DashStartPos(), &a_pMonster->Get_DashEndPos(), t / a_pMonster->Get_InterpolationTime() );
-		a_pMonster->Set_Pos( vPos );
+		a_pMonster->GetFSM()->ChangeState( Dash::GetInstance() );
 	}
 }
 
 
-VOID Dash::Exit( CMonster* a_pMonster )
+VOID DashReady::Exit( CMonster* a_pMonster )
 {
 
 }
 
 
-FLOAT Dash::SetAngle( CMonster* a_pMonster )
+FLOAT DashReady::SetAngle( CMonster* a_pMonster )
 {
 	// 좌표 받아오기
 	D3DXVECTOR3 vPlayerPos	= CObjectManage::GetInstance()->Get_Charactor()[a_pMonster->Get_Target()].Get_CharaPos();

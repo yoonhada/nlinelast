@@ -9,14 +9,14 @@ class CMonster : public CObjectSRT
 {
 public:
 	// 애니메이션 번호
-/*
+
 	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK = 1, ANIM_MELEE_ATTACK = 2, ANIM_STAND = 3,
 		   ANIM_EVENT = 4, ANIM_DASH = 5, ANIM_SLIDING = 6, ANIM_MELEE_ATTACK2 = 7, };
-*/
 
+/*
 	enum { ANIM_MOVE = 3, ANIM_SPIN_ATTACK = 4, ANIM_MELEE_ATTACK = 4, ANIM_STAND = 2,
 		   ANIM_EVENT = 4, ANIM_DASH = 4, ANIM_SLIDING = 0, ANIM_MELEE_ATTACK2 = 3, };
-
+*/
 public:
 	CMonster();
 	~CMonster();

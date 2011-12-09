@@ -5,7 +5,7 @@
 #include "LockOn.h"
 #include "Melee.h"
 #include "Spin.h"
-#include "Dash.h"
+#include "DashReady.h"
 
 #include "Charactor.h"
 #include "Monster.h"
@@ -56,13 +56,13 @@ VOID Battle::Execute( CMonster* a_pMonster )
 		}	*/
 	}
 	// 대시 공격 범위면
-/*
+
 	else if( fDistance > 80.0f && fDistance < 120.0f )
 	{
 		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH );
-		a_pMonster->GetFSM()->ChangeState( Dash::GetInstance() );
+		a_pMonster->GetFSM()->ChangeState( DashReady::GetInstance() );
 	}
-*/
+
 	// 공격범위가 아니면 다시 탐색 상태로
 	else
 	{

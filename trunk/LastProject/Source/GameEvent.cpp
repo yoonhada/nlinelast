@@ -66,7 +66,7 @@ VOID CGameEvent::Clear()
 	m_pAttackPoint = NULL;
 	m_pShotedPoint = NULL;
 
-	m_nMonstersState = 1;
+	m_nMonsterState = 4;
 
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;

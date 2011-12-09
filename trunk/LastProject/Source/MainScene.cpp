@@ -327,7 +327,7 @@ VOID	CMainScene::Render()
 
 	m_pFirstAidKit->Render();
 
-/*
+
 #ifdef _DEBUG
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity( &matWorld );
@@ -339,7 +339,7 @@ VOID	CMainScene::Render()
 
 	TwDraw();
 #endif
-*/
+
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();

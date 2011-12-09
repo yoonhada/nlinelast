@@ -26,6 +26,7 @@ public:
 
 		MSG_EVENT_STATE,
 		MSG_EVENT_COMBO,
+		MSG_EVENT_COMBO_RESULT,
 
 		MSG_CHAT,
 		MSG_PLAYER_MOVE,
@@ -89,6 +90,7 @@ public:
 
 	VOID SC_EVENT_STATE( CPacket& a_pk );
 	VOID SC_EVENT_COMBO( CPacket& a_pk );
+	VOID SC_EVENT_COMBO_RESULT( CPacket& a_pk );
 
 	VOID SC_CHAT( CPacket& a_pk );
 	VOID SC_PLAYER_MOVEMENT( CPacket& a_pk );
