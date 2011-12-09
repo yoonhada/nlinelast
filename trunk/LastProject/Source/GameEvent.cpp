@@ -33,10 +33,7 @@ HRESULT CGameEvent::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, INT a_nMaxChar )
 
 	m_pAttackPoint[0] = m_pAttackPoint[1] = m_pAttackPoint[2] = m_pAttackPoint[3] = 0;
 	m_pShotedPoint[0] = m_pShotedPoint[1] = m_pShotedPoint[2] = m_pShotedPoint[3] = 0;
-	
 
-	AddEvent( INIT, 1.0f );
-	AddEvent( EVENT_CAMERA, 0.1f );
 	return S_OK;
 }
 
@@ -45,15 +42,11 @@ HRESULT CGameEvent::Release()
 	SAFE_DELETE ( m_pAttackPoint );
 	SAFE_DELETE ( m_pShotedPoint );
 	
-	SAFE_DELETE_ARRAY( m_pCharactorPosition );
-	SAFE_DELETE_ARRAY( m_pMonsterPosition );
-
 	for ( Iter = m_listEvent.begin(); Iter != m_listEvent.end( ); Iter++ )
 	{
 		SAFE_DELETE( (*Iter) );
 	}
 	m_listEvent.erase( m_listEvent.begin(), m_listEvent.end() );
-
 
 	return S_OK;
 }
@@ -66,19 +59,16 @@ VOID CGameEvent::Clear()
 	m_pAttackPoint = NULL;
 	m_pShotedPoint = NULL;
 
-	m_nMonsterState = 4;
+	m_nMonstersState = 4;
 
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;
 
+	m_pCharactorPosition[0][0] = D3DXVECTOR3( 202.0f, 0.0f, -505.0f);
+	m_pCharactorPosition[0][1] = D3DXVECTOR3( 227.0f, 0.0f, -505.0f);
+	m_pCharactorPosition[0][2] = D3DXVECTOR3( 253.0f, 0.0f, -505.0f);
+	m_pCharactorPosition[0][3] = D3DXVECTOR3( 277.0f, 0.0f, -505.0f);
 
-	m_pCharactorPosition = new D3DXVECTOR3[4];
-	m_pCharactorPosition[0] = D3DXVECTOR3( 180.0f, 0.0f, -330.0f);
-	m_pCharactorPosition[1] = D3DXVECTOR3( 220.0f, 0.0f, -330.0f);
-	m_pCharactorPosition[2] = D3DXVECTOR3( 260.0f, 0.0f, -330.0f);
-	m_pCharactorPosition[3] = D3DXVECTOR3( 300.0f, 0.0f, -330.0f);
-
-	m_pMonsterPosition = new D3DXVECTOR3[3];
 	m_pMonsterPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 660.0f);
 	m_pMonsterPosition[1] = D3DXVECTOR3( -70.0f, 0.0f, 660.0f);
 	m_pMonsterPosition[2] = D3DXVECTOR3( -40.0f, 0.0f, 660.0f);
@@ -104,6 +94,12 @@ VOID CGameEvent::AddEvent( INT nKind, FLOAT fTime )
 	{
 		m_listEvent.push_back( new EVENT( nKind, fTime ) );
 	}
+}
+
+VOID CGameEvent::IndexInit()
+{
+	m_nMonsterIndex = -1;
+	m_nPlayerIndex = -1;
 }
 
 INT CGameEvent::Update()

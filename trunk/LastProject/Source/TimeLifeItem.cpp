@@ -49,12 +49,8 @@ VOID CTimeLifeItem::SetActive( BOOL a_bActive )
 	//	{
 			AliveCheck( a_bActive );
 	//		m_nLife = m_nLifeTime;
-
-			FLOAT x = FastRand2() * 500.0f - 250.0f;
-			FLOAT z = FastRand2() * 500.0f - 250.0f;
-
-	//		
-			UpdateByValue( D3DXVECTOR3( x, 0, z ), 0.0f );
+						
+			UpdateByValue( D3DXVECTOR3( Get_CharaPos().x, 0.0f, Get_CharaPos().z ), 0.0f );
 			UpdateOtherPlayer( TRUE );
 	//	}
 	//}

@@ -357,36 +357,36 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 VOID CWeapon::Update()
 {
 	INT nCurrFrame = m_pMap->GetCurrentFrame();
-
-#ifdef _GRAP
-	if( CInput::GetInstance()->Get_F9button() )
-	{
-		CInput::GetInstance()->Set_F9button(FALSE);
-		OPENFILENAME OFN;
-		WCHAR lpstrFile[MAX_PATH]=L"";
-
-		memset(&OFN, 0, sizeof(OPENFILENAME));
-		OFN.lStructSize = sizeof(OPENFILENAME);
-		OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
-		OFN.lpstrFilter=TEXT("ASE 파일(*.ASE)\0*.ASE\0");
-		OFN.lpstrFile=lpstrFile;
-		OFN.nMaxFile=MAX_PATH;
-		if (GetOpenFileName(&OFN)!=0)
-		{
-			WCHAR* ptr = wcstok( lpstrFile, L"." );
-			WCHAR Temp[255];
-			wsprintf( Temp, L"%s.ASE", ptr );
-
-			m_pMap->Create( Temp, NULL );
-		}
-	}
-	if( CInput::GetInstance()->Get_F8button() )
-	{
-		WCHAR buffer[64];
-		swprintf_s(buffer, 64, L"FRAME%d", m_WeaponType.nType );
-		PrivateProfile( buffer );
-	}
-#endif // _GRAP
+//
+//#ifdef _GRAP
+//	if( CInput::GetInstance()->Get_F9button() )
+//	{
+//		CInput::GetInstance()->Set_F9button(FALSE);
+//		OPENFILENAME OFN;
+//		WCHAR lpstrFile[MAX_PATH]=L"";
+//
+//		memset(&OFN, 0, sizeof(OPENFILENAME));
+//		OFN.lStructSize = sizeof(OPENFILENAME);
+//		OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
+//		OFN.lpstrFilter=TEXT("ASE 파일(*.ASE)\0*.ASE\0");
+//		OFN.lpstrFile=lpstrFile;
+//		OFN.nMaxFile=MAX_PATH;
+//		if (GetOpenFileName(&OFN)!=0)
+//		{
+//			WCHAR* ptr = wcstok( lpstrFile, L"." );
+//			WCHAR Temp[255];
+//			wsprintf( Temp, L"%s.ASE", ptr );
+//
+//			m_pMap->Create( Temp, NULL );
+//		}
+//	}
+//	if( CInput::GetInstance()->Get_F8button() )
+//	{
+//		WCHAR buffer[64];
+//		swprintf_s(buffer, 64, L"FRAME%d", m_WeaponType.nType );
+//		PrivateProfile( buffer );
+//	}
+//#endif // _GRAP
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{

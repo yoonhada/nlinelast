@@ -54,6 +54,7 @@ private:
 	CCharactor*				m_pCharactors;
 	CMonster**				m_pMonster;
 	CTimeLifeItem *			m_pFirstAidKit;
+	CTimeLifeItem *			m_pWall;
 
 	// Map
 	TileMap*				m_pTileMap;
@@ -70,20 +71,26 @@ private:
 	INT						m_scnState;
 
 	VOID					CreateCharactor();
-	VOID					InitCharState();
-	VOID					InitMonsterState();
+	VOID					CreateMonster();
 
 	//VOID SendNetwork( INT nEvent);
 	//VOID SendNetworkCombo( INT nEvent );
 
 	VOID TutorialAtack();
+	
 	VOID EventSwitch( INT nEvent );
-	VOID EventInit();
-	VOID EventCamera();
+	VOID EventStateNetwork( INT nEvent );
+	VOID EventMapCameraWalk( INT nEvent );
+	VOID EventInitGameState( INT nEvent );
+	VOID EventInitCharState( INT nEvent );
+	VOID EventInitMonsterState( INT nEvent );
+	
 	VOID EventCombo();
 	VOID EventDestoryCombo();
 	VOID EventFirstAidKit();
 	VOID MonsterBreakNockdown();
+
+	typedef int (*FuncType)(int,int);
 };
 
 #endif

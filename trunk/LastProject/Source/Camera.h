@@ -50,7 +50,7 @@ private:
 	CameraWork * m_pCameraWork;
 
 public:
-	enum { NONE = 0, SWING, WHAT, EVENTWORK, EVENTWORKEND, };
+	enum { NONE = 0, SWING, WHAT, MAP_WALK, EVENTWORKEND, };
 	CCamera();
 	virtual ~CCamera();
 
@@ -81,7 +81,7 @@ public:
 	VOID SetEffect(INT nType);
 	VOID Effect( D3DXVECTOR3 & a_vLook );
 	VOID CreateEventCamera();
-	BOOL UpdateEventCamera();
+	VOID UpdateEventCamera();
 
 	INT GetEffect()				{ return m_nEffect; }
 };

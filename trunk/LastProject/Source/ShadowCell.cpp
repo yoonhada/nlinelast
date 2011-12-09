@@ -157,9 +157,9 @@ HRESULT CShadowCell::LoadTexture( LPCWSTR a_FileName )
 	SAFE_RELEASE(m_pTexture);
 
 	if( FAILED( D3DXCreateTextureFromFileEx( m_pD3dDevice, a_FileName, 
-		D3DX_DEFAULT_NONPOW2, D3DX_DEFAULT_NONPOW2,
+		D3DX_DEFAULT , D3DX_DEFAULT ,
 		D3DX_DEFAULT, 0,
-		D3DFMT_X8R8G8B8,
+		D3DFMT_UNKNOWN, //D3DFMT_X8R8G8B8,
 		D3DPOOL_MANAGED,
 		D3DX_DEFAULT, D3DX_DEFAULT, 0, 
 		NULL, NULL, &m_pTexture ) ) )
@@ -205,8 +205,8 @@ VOID CShadowCell::Render()
 	//m_pD3dDevice->SetRenderState( D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL );
 
 	//m_pD3dDevice->SetRenderState( D3DRS_ALPHATESTENABLE, TRUE );
-	m_pD3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCCOLOR );
-	m_pD3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ONE );
+	m_pD3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA );
+	m_pD3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
 	m_pD3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );
 
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );

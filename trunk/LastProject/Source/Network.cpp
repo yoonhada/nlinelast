@@ -283,7 +283,7 @@ VOID CNetwork::SC_EVENT_STATE( CPacket& a_pk )
 	a_pk.Read( &wEventID );
 
 	// 이벤트 활성화
-	CGameEvent::GetInstance()->AddEvent( wEventID, 0.1f );
+	CGameEvent::GetInstance()->AddEvent( wEventID, 0.01f );
 }
 
 

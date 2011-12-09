@@ -72,9 +72,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//이벤트
 	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
-	CGameEvent::GetInstance()->Create( m_pD3dDevice, nMaxCharaNum );
-	//m_pGameEvent = new CGameEvent( nMaxCharaNum, this );
-	//m_pGameEvent->Create( m_pD3dDevice );
+	m_pGameEvent = CGameEvent::GetInstance();
+	m_pGameEvent->Create( m_pD3dDevice, nMaxCharaNum );
 
 	//맵 생성
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
@@ -91,29 +90,18 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
-	m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
-	//m_pMonster->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
-	//m_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
-
-	m_pGameEvent = CGameEvent::GetInstance();
-	if ( m_pGameEvent->GetMonsterState() & 0x01 )	//1 2 3 4
-	{
-		m_pMonster[0]->InitAniAndState();
-	}
-	if ( m_pGameEvent->GetMonsterState() & 0x02 )
-	{
-		m_pMonster[1]->InitAniAndState();
-	}
-	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
-	{
-		m_pMonster[2]->InitAniAndState();
-	}
+	CreateMonster();
 
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
 	m_pFirstAidKit->Create( m_pD3dDevice );
 	m_pFirstAidKit->Load( L"Data/CharData/FirstAidKit_1.csav" );
 
+	// 잡동사니 생성
+	m_pWall = CObjectManage::GetInstance()->Get_Wall();
+	m_pWall->Create( m_pD3dDevice );
+	m_pWall->Load( L"Data/CharData/Obstacle_0.csav" );
+	
 	//조명 생성
 	m_pLight = new CLight;
 	m_pLight->Create( m_pD3dDevice );
@@ -132,7 +120,12 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pOptionScene = new OptionScene;
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
-	CInput::GetInstance()->EnableInput(FALSE);
+	CInput::GetInstance()->EnableInput( FALSE );
+
+	if ( CObjectManage::GetInstance()->IsHost() )
+	{
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK, 0.1f );
+	}
 
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 	return S_OK;
@@ -183,6 +176,24 @@ VOID CMainScene::CreateCharactor()
 	}
 }
 
+VOID CMainScene::CreateMonster()
+{
+	m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
+
+	if ( m_pGameEvent->GetMonsterState() & 0x01 )	//1 2 3 4
+	{
+		m_pMonster[0]->InitAniAndState();
+	}
+	if ( m_pGameEvent->GetMonsterState() & 0x02 )
+	{
+		m_pMonster[1]->InitAniAndState();
+	}
+	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
+	{
+		m_pMonster[2]->InitAniAndState();
+	}
+}
+
 VOID CMainScene::MonsterBreakNockdown()
 {
 //	CGameEvent::GetInstance()->GetMonsterIndex()
@@ -203,15 +214,15 @@ VOID CMainScene::MonsterBreakNockdown()
 VOID CMainScene::Update()
 {
 	// 치트키 처리
-#ifdef _DEBUG
-	if( GetKeyState( '5' ) & 0x8000 )
-		m_pCamera->SetEffect(1);
-	if( GetKeyState( '6' ) & 0x8000 )
+	if( CInput::GetInstance()->Get_NumKey( 5 ) )
+		m_pGameEvent->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.1f);
+	if( CInput::GetInstance()->Get_NumKey( 6 ) )
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
-#endif // _DEBUG
+	if( CInput::GetInstance()->Get_NumKey( 7 ) )
+		m_pCamera->SetEffect(1);
 
-	CGameEvent::GetInstance()->Set_PlayerIndex( -1 );
-	CGameEvent::GetInstance()->Set_MonsterIndex( -1 );
+
+	CGameEvent::GetInstance()->IndexInit();
 
 	CCharactor * pChar;
 	pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ]);
@@ -278,6 +289,8 @@ VOID CMainScene::Update()
 	// 아이템 쓸까나??
 	m_pFirstAidKit->Update();
 
+	m_pWall->Update();
+
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
 	m_pASEViewer->Update();
 
@@ -326,7 +339,7 @@ VOID	CMainScene::Render()
 		m_pMonster[2]->Render();
 
 	m_pFirstAidKit->Render();
-
+	m_pWall->Render();
 
 #ifdef _DEBUG
 	D3DXMATRIXA16 matWorld;
@@ -359,79 +372,98 @@ INT CMainScene::GetSceneState()
 	return m_scnState;
 }
 
-VOID CMainScene::InitCharState()
+VOID CMainScene::EventInitCharState( INT nEvent )
 {
-	for ( INT Loop = 0; Loop < 4; ++Loop )
+	switch ( nEvent )
 	{
-		m_pCharactors[Loop].Set_Position( m_pGameEvent->GetCharPosition( Loop ) );
+	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
+		m_pCharactors[0].Set_Position( m_pGameEvent->GetCharPosition( 0, 0 ) );
+		m_pCharactors[1].Set_Position( m_pGameEvent->GetCharPosition( 0, 1 ) );
+		m_pCharactors[2].Set_Position( m_pGameEvent->GetCharPosition( 0, 2 ) );
+		m_pCharactors[3].Set_Position( m_pGameEvent->GetCharPosition( 0, 3 ) );
+		break;
+	default:
+		break;
 	}
 }
 
-VOID CMainScene::InitMonsterState()
+VOID CMainScene::EventInitMonsterState( INT nEvent )
 {
-	if ( m_pGameEvent->GetMonsterState()  & 0x01 )	//1 2 3 4
+	switch ( nEvent )
 	{
-		m_pMonster[0]->Set_Pos( m_pGameEvent->GetMonsPosition( 0 ) );
-		m_pMonster[0]->Set_Angle( 0.0f );
-		m_pMonster[0]->ChangeAnimation( CMonster::ANIM_STAND );
-		m_pMonster[0]->EnableShadow( TRUE );
-		if( CObjectManage::GetInstance()->IsHost() == TRUE )
-		{
-			m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
-		}
+	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
+		m_pWall->Set_Position( D3DXVECTOR3( 241.4534f, 0.0f, -202.7f ) );
+		m_pWall->SetActive( TRUE );
+		break;
+	default:
+		break;
 	}
-	if ( m_pGameEvent->GetMonsterState()  & 0x02 )
-	{
-		m_pMonster[1]->Set_Pos( m_pGameEvent->GetMonsPosition( 1 ) );
-		m_pMonster[1]->Set_Angle( 0.0f );
-		m_pMonster[1]->ChangeAnimation( CMonster::ANIM_STAND );
-		m_pMonster[1]->EnableShadow( TRUE );
-		if( CObjectManage::GetInstance()->IsHost() == TRUE )
-		{
-			m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
-		}
-	}
-	if ( m_pGameEvent->GetMonsterState()  & 0x04 )
-	{
-		m_pMonster[2]->Set_Pos( m_pGameEvent->GetMonsPosition( 2 ) );
-		m_pMonster[2]->Set_Angle( 0.0f );
-		m_pMonster[2]->ChangeAnimation( CMonster::ANIM_STAND );
-		m_pMonster[2]->EnableShadow( TRUE );
-		if( CObjectManage::GetInstance()->IsHost() == TRUE )
-		{
-			m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
-		}
-	}
+
+	//if ( m_pGameEvent->GetMonsterState()  & 0x01 )	//1 2 3 4
+	//{
+	//	m_pMonster[0]->Set_Pos( m_pGameEvent->GetMonsPosition( 0 ) );
+	//	m_pMonster[0]->Set_Angle( 0.0f );
+	//	m_pMonster[0]->ChangeAnimation( CMonster::ANIM_STAND );
+	//	m_pMonster[0]->EnableShadow( TRUE );
+	//	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	//	{
+	//		m_pMonster[0]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+	//	}
+	//}
+	//if ( m_pGameEvent->GetMonsterState()  & 0x02 )
+	//{
+	//	m_pMonster[1]->Set_Pos( m_pGameEvent->GetMonsPosition( 1 ) );
+	//	m_pMonster[1]->Set_Angle( 0.0f );
+	//	m_pMonster[1]->ChangeAnimation( CMonster::ANIM_STAND );
+	//	m_pMonster[1]->EnableShadow( TRUE );
+	//	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	//	{
+	//		m_pMonster[1]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+	//	}
+	//}
+	//if ( m_pGameEvent->GetMonsterState()  & 0x04 )
+	//{
+	//	m_pMonster[2]->Set_Pos( m_pGameEvent->GetMonsPosition( 2 ) );
+	//	m_pMonster[2]->Set_Angle( 0.0f );
+	//	m_pMonster[2]->ChangeAnimation( CMonster::ANIM_STAND );
+	//	m_pMonster[2]->EnableShadow( TRUE );
+	//	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	//	{
+	//		m_pMonster[2]->GetFSM()->SetCurrentState( Seek::GetInstance() );
+	//	}
+	//}
 }
 
 VOID CMainScene::EventSwitch( INT nEvent )
 {
 	switch ( nEvent )
 	{
-	case CGameEvent::INIT:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::INIT \n" );
-		EventInit();
+	case CGameEvent::EVENT_MAP_CAMERA_WALK:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_MAP_CAMERA_WALK \n" );
+		EventStateNetwork( nEvent );
+		EventMapCameraWalk( CCamera::MAP_WALK );
 		break;
-	case CGameEvent::EVENT_CAMERA:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_CAMERA \n" );
-		EventCamera();
+	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_MAP_CAMERA_WALK_END \n" );
+		EventInitGameState( nEvent );
+		//CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 1.0f );
 		break;
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		// Do Something
 		TutorialAtack();
-		if ( CObjectManage::GetInstance()->IsHost() ) 
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
-			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-		}
+		//if ( CObjectManage::GetInstance()->IsHost() ) 
+		//{
+		//	CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
+		//	CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
+		//}
 		break;
 	case CGameEvent::TUTORIAL_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 1.0f );
-			SetTimer( GHWND, CGameEvent::TUTORIAL_COMBO, 1 * 1000, NULL );
+			//SetTimer( GHWND, CGameEvent::TUTORIAL_COMBO, 1 * 1000, NULL );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 		}
 		break;
@@ -494,20 +526,25 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	}
 }
 
-VOID CMainScene::EventInit()
+VOID CMainScene::EventStateNetwork( INT nEvent )
 {
-	// 케릭터 위치 조정
-	InitCharState();
-
-	// 몬스터 위치 조정
-	InitMonsterState();
-
-	// Game Point
+	if ( CObjectManage::GetInstance()->IsHost() )
+	{
+		CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
+	}
 }
 
-VOID CMainScene::EventCamera()
+VOID CMainScene::EventInitGameState( INT nEvent )
 {
-	m_pCamera->SetEffect( CCamera::EVENTWORK );
+	EventInitCharState( nEvent );
+	EventInitMonsterState( nEvent );
+
+	CGameEvent::GetInstance()->SetMonstersState( CGameEvent::EMPTY );
+}
+
+VOID CMainScene::EventMapCameraWalk( INT nEvent )
+{
+	m_pCamera->SetEffect( nEvent );
 }
 
 VOID CMainScene::TutorialAtack()

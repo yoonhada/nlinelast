@@ -47,7 +47,7 @@ VOID CCamera::Clear()
 
 VOID CCamera::SetCamera()
 {
-	if ( m_nEffect == EVENTWORK )
+	if ( m_nEffect == MAP_WALK )
 	{
 		UpdateEventCamera();
 		
@@ -340,13 +340,12 @@ VOID CCamera::CreateEventCamera()
 	m_pCameraWork->SetWorkingPeriod( 22000 );
 }
 
-BOOL CCamera::UpdateEventCamera()
+VOID CCamera::UpdateEventCamera()
 {
-	BOOL bRet = m_pCameraWork->Update();
-	if ( bRet == FALSE)
+	if ( m_pCameraWork->Update() == FALSE)
 	{
 		m_nEffect = NONE;
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 0.1f );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.01f );
 	}
 	
 	// Test Update
@@ -360,6 +359,4 @@ BOOL CCamera::UpdateEventCamera()
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
-
-	return bRet;
 }

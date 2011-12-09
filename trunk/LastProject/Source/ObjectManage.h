@@ -3,6 +3,10 @@
 @date	2011/11/11
 @author	백경훈
 @brief	오브젝트 관리 ( 네트워크와 클래스간 사용 )
+
+@date	2011/12/01
+@author yoon
+@brief	전역 오브젝트 관리로 변경
 */
 
 #ifndef _MainManage_H_
@@ -31,14 +35,16 @@ private:
 	
 	INT					m_nEventTable[4];
 	INT					m_nCharTable[4];
+	
 	CCharactor*			m_pCharactors;
-	CCharactor**		m_ppVirtualCharactors;
+	//CCharactor**		m_ppVirtualCharactors;
 
 	CMonster*			m_pClown;
 	CMonster*			m_pPanda;
 	CMonster*			m_pBear;
 	CMonster**			m_pMonster;
 	CTimeLifeItem*		m_pFirstAidKit;
+	CTimeLifeItem*		m_pWall;
 
 	ASEViewer*			m_pASEViewer;
 
@@ -73,7 +79,7 @@ public:
 	// Get
 	INT Get_MaxCharaNum()				{ return m_iMaxCharaNum;		}
 	WORD Get_ClientNumber()				{ return m_iClientNumber;		}
-	CCharactor** Get_Charactors()		{ return m_ppVirtualCharactors; }
+	//CCharactor** Get_Charactors()		{ return m_ppVirtualCharactors; }
 	CCharactor* Get_Charactor()			{ return m_pCharactors;			}
 
 	CMonster* Get_Clown()				{ return m_pClown;				}
@@ -82,6 +88,7 @@ public:
 	//CMonster* Get_Monster()				{ return m_pClown;				}
 	CMonster** Get_Monster()			{ return m_pMonster;			}
 	CTimeLifeItem * Get_FirstAidKit()	{ return m_pFirstAidKit;		}
+	CTimeLifeItem * Get_Wall()			{ return m_pWall;				}
 	ASEViewer* Get_ASEViewer()			{ return m_pASEViewer;			}
 	BOOL IsHost()						{ return m_bHost;				}
 	INT* Get_CharTable()				{ return m_nCharTable;			}
@@ -93,7 +100,7 @@ public:
 	VOID Set_ClientNumber( WORD a_iClientNumber )		{ m_iClientNumber = a_iClientNumber; }
 
 public:
-	VOID Set_Char(INT nSelect, INT nChar, BOOL = FALSE );
+	//VOID Set_Char(INT nSelect, INT nChar, BOOL = FALSE );
 	VOID Set_CharTable( INT * nTable );
 
 	VOID Set_PushBackNetworkSendTempVector( WORD a_wData);

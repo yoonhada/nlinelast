@@ -166,6 +166,8 @@ private:
 	FLOAT m_fKnockBack;
 	FLOAT m_fTransition;
 	FLOAT m_fAniAngle;
+	FLOAT m_fAtackMove;
+
 	D3DXVECTOR3 m_vAniVector;
 	const FLOAT fAniAngleTurn;
 	const FLOAT fAniAngleLimit;
@@ -178,7 +180,6 @@ private:
 public:
 	VOID EnableShadow( BOOL bEnable )	{ m_bShadowEnable = bEnable; }
 	BOOL AliveCheck(BOOL bState = -1);
-
 };
 
 #endif
