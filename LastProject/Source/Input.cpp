@@ -14,7 +14,6 @@ CInput::CInput()
 	Clear();
 }
 
-
 CInput::~CInput()
 {
 	Release();
@@ -32,6 +31,7 @@ VOID CInput::Clear()
 	D3DXMatrixIdentity( &m_matMatrix );
 
 	m_bF8button = m_bF9button = FALSE;
+	m_bESCKey = FALSE;
 
 	m_bEnable = TRUE;
 	ShowCursor( m_bEnable );
@@ -39,15 +39,9 @@ VOID CInput::Clear()
 	ZeroMemory( &m_MousePosOld, sizeof(m_MousePosOld) );
 	ZeroMemory( &m_MousePos, sizeof(m_MousePos) );
 
-	m_iLbuttonCheck = -1;
-	m_iRbuttonCheck = -1;
-
 	m_bNumKey[0] = m_bNumKey[1] = m_bNumKey[2] = m_bNumKey[3] = m_bNumKey[4] = \
 	m_bNumKey[5] = m_bNumKey[6] = m_bNumKey[7] = m_bNumKey[8] = m_bNumKey[9] = FALSE;
-
-
 }
-
 
 HRESULT CInput::Create( HWND a_hWnd )
 {
@@ -83,131 +77,71 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			INT dy = m_MousePosOld.y - m_MousePos.y;
 
 			// 변화값이 너무 크면 0으로 초기화 (처음 시작시 카메라 위치 이상한거 방지)
-			if( dx+dy > 1000 )
-			{
-				dx = 0;
-				dy = 0;
-			}
+			if( dx + dy > 1000 )		dx =  dy = 0;
 
-
-			m_vRotate = D3DXVECTOR3( static_cast<FLOAT>(dx) * a_fCameraRotateSpeed *  a_fFrameTime,
-				static_cast<FLOAT>(dy) * a_fCameraRotateSpeed *  a_fFrameTime,
+			m_vRotate = D3DXVECTOR3( 
+				static_cast<FLOAT>(dx) * a_fCameraRotateSpeed * a_fFrameTime,
+				static_cast<FLOAT>(dy) * a_fCameraRotateSpeed * a_fFrameTime,
 				0.0f );
 
-			FLOAT fYaw	= D3DXToRadian( m_vRotate.x * 0.1f );
-			FLOAT fPitch = D3DXToRadian( m_vRotate.y * 0.1f );
 			// Y축 회전 값
-			m_fYRotate = fYaw;
-			m_fXRotate = fPitch;
+			m_fYRotate = D3DXToRadian( m_vRotate.x * 0.075f );
+			m_fXRotate = D3DXToRadian( m_vRotate.y * 0.075f );
 			//CDebugConsole::GetInstance()->Messagef( "Input : %f\n", m_fXRotate );
 
 			// 마우스를 윈도우의 중앙으로 초기화
-			RECT	rc;
-			GetClientRect( m_hWnd, &rc );
-			m_MousePosOld.x = (rc.right - rc.left) / 2;
-			m_MousePosOld.y = (rc.bottom - rc.top) / 2;
-			ClientToScreen( m_hWnd, &m_MousePosOld );
-			SetCursorPos( m_MousePosOld.x, m_MousePosOld.y );
-			m_MousePos.x = m_MousePosOld.x;
-			m_MousePos.y = m_MousePosOld.y;
+			MouseMoveCenter();
 
-			//D3DXMatrixRotationY( &m_matMatrix, m_fYRotate );
-			//D3DXVec3TransformNormal( &m_vPos, &m_vPos, &m_matMatrix );
+			if ( GetAsyncKeyState( 'A' ) )			{ m_vPos.x =-a_fCameraMoveSpeed * a_fFrameTime;		}
+			if ( GetAsyncKeyState( 'D' ) )			{ m_vPos.x = a_fCameraMoveSpeed * a_fFrameTime;		}
+			if ( GetAsyncKeyState( 'W' ) )			{ m_vPos.z = a_fCameraMoveSpeed * a_fFrameTime;		}
+			if ( GetAsyncKeyState( 'S' ) )			{ m_vPos.z =-a_fCameraMoveSpeed * a_fFrameTime;		}
 
-			m_vPos.x = m_vPos.y = m_vPos.z = 0.0f;
-
-			if ( GetAsyncKeyState( 'A' ) )
-			{
-				m_vPos.x = -a_fCameraMoveSpeed * a_fFrameTime;
-			}
-
-			if ( GetAsyncKeyState( 'D' ) )
-			{
-				m_vPos.x = a_fCameraMoveSpeed * a_fFrameTime;
-			}
-
-			if ( GetAsyncKeyState( 'W' ) )
-			{
-				m_vPos.z = a_fCameraMoveSpeed * a_fFrameTime;
-			}
-
-			if ( GetAsyncKeyState( 'S' ) )
-			{
-				m_vPos.z = -a_fCameraMoveSpeed * a_fFrameTime;
-			}
-
-			if( GetAsyncKeyState( VK_ESCAPE ) )
-			{
-				PostMessage( m_hWnd, WM_DESTROY, NULL, NULL );
-			}
-
-			if ( GetAsyncKeyState( VK_LBUTTON ) )
-			{
-				++m_iLbuttonCheck;
-			}
-			else
-			{
-				m_bLbutton = FALSE;
-				m_iLbuttonCheck = -1;
-			}
-
-			if ( GetAsyncKeyState( VK_RBUTTON ) )
-			{
-				++m_iRbuttonCheck;
-			}
-			else
-			{
-				m_bRbutton = FALSE;
-				m_iRbuttonCheck = -1;
-			}
-
-			if( GetAsyncKeyState( VK_END ) )
-			{
-				m_bENdbutton = TRUE;
-			}
-			else
-			{
-				m_bENdbutton = FALSE;
-			}
-
-			if( GetAsyncKeyState( VK_HOME ) )
-			{
-				m_bHomebutton = TRUE;
-			}
-			else
-			{
-				m_bHomebutton = FALSE;
-			}
-
-			if( ( GetAsyncKeyState( VK_F9 ) & 0x0001 ) == TRUE )
-			{
-				m_bF9button = TRUE;
-			}
-			else
-			{
-				m_bF9button = FALSE;
-			}
-
-			if( ( GetAsyncKeyState( VK_F1 ) & 0x0001 ) == TRUE )
-			{
-				m_bF1button = TRUE;
-			}
-			else
-			{
-				m_bF1button = FALSE;
-			}
+			m_bLbutton = m_bRbutton = FALSE;
+			m_bESCKey = m_bEndbutton = m_bHomebutton = FALSE;
+			m_bF1button = m_bF8button = m_bF9button = FALSE;
+			if ( GetAsyncKeyState( VK_LBUTTON ) )	{ ++m_bLbutton;										}
+			if ( GetAsyncKeyState( VK_RBUTTON ) )	{ ++m_bRbutton;										}
+			if ( GetAsyncKeyState( VK_END ) )		{ m_bEndbutton = TRUE;								}
+			if ( GetAsyncKeyState( VK_HOME ) )		{ m_bHomebutton = TRUE;								}
+			if ( GetAsyncKeyState( VK_F1 ) )		{ ++m_bF1button;									}
+			if ( GetAsyncKeyState( VK_F9 ) )		{ ++m_bF9button;									}
+			if ( GetAsyncKeyState( VK_ESCAPE ) )	{ ++m_bESCKey;										}
 
 			for (int i = 0; i < 10; ++i)
 			{
-				if( ( GetAsyncKeyState( '0' + i ) & 0x8000 ) )
-				{
-					m_bNumKey[i] = TRUE;
-				}
-				else
-				{
-					m_bNumKey[i] = FALSE;
-				}
+				if( GetAsyncKeyState( '0' + i ) )		++m_bNumKey[i];
+				else									m_bNumKey[i] = FALSE;
 			}
 		}
 	}
+}
+
+VOID CInput::MouseMoveCenter()
+{
+	RECT	rc;
+	GetClientRect( m_hWnd, &rc );
+	m_MousePosOld.x = (rc.right - rc.left) / 2;
+	m_MousePosOld.y = (rc.bottom - rc.top) / 2;
+	ClientToScreen( m_hWnd, &m_MousePosOld );
+	SetCursorPos( m_MousePosOld.x, m_MousePosOld.y );
+	m_MousePos.x = m_MousePosOld.x;
+	m_MousePos.y = m_MousePosOld.y;
+
+	m_vPos.x = m_vPos.y = m_vPos.z = 0.0f;
+}
+
+VOID CInput::EnableInput( BOOL bEnable )
+{
+	m_bEnable = bEnable; 
+
+	ShowCursor( !m_bEnable );
+}
+
+BOOL CInput::Get_NumKey( INT nInput )
+{
+	if (nInput >= 10 || nInput < 0)
+		return FALSE;
+
+	return (m_bNumKey[nInput] == TRUE);
 }

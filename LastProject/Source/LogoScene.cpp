@@ -45,7 +45,7 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	m_pLogo[ 0 ].Set_Position( D3DXVECTOR3( 55.0f, 100.0f, 0.0f ) );
 	m_pLogo[ 0 ].Set_Angle( -MTP_FUN::Deg2Rad<210>::radians ); // D3DXToRadian( -30.0f ) );
 	m_pLogo[ 0 ].EnableShadow( FALSE );
-
+	
 	m_pLogo[ 1 ].Create( m_pD3dDevice );
 	m_pLogo[ 1 ].Load( L"Data/Logo/-_Beta.csav" );
 	m_pLogo[ 1 ].Set_Position( D3DXVECTOR3( 35.0f, 100.0f,-5.0f ) );

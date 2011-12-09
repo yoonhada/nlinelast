@@ -173,12 +173,12 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 	{
 		if ( m_nKindIndex == 0x000F )
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.1f );
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.01f );
 		}
 	}
 	else if  ( bRet == FALSE )
 	{
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.1f );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
 	}
 
 	return bRet;

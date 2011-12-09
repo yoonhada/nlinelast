@@ -24,8 +24,8 @@ private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 
 	// Const 
-	D3DXVECTOR3 * m_pCharactorPosition;
-	D3DXVECTOR3 * m_pMonsterPosition;
+	D3DXVECTOR3 m_pCharactorPosition[1][4];
+	D3DXVECTOR3 m_pMonsterPosition[3];
 
 	// Char
 	INT m_iMaxCharaNum;
@@ -55,7 +55,7 @@ public:
 	};
 	enum EventKind {
 		NONE = -1, INIT, 
-		EVENT_CAMERA, 
+		EVENT_MAP_CAMERA_WALK, EVENT_MAP_CAMERA_WALK_END,
 		EVENT_COMBO, EVENT_COMBO_END, EVENT_COMBO_SUCCESS, EVENT_COMBO_FAIL, 
 		EVENT_FAK,
 		TUTORIAL_ATACK, TUTORIAL_ATACK_END, 
@@ -69,15 +69,16 @@ public:
 	INT Update();		///< Update
 
 	VOID AddEvent( INT, FLOAT );
-
+	VOID IndexInit();
 	// Get
-	INT GetMonsterIndex()						{ return m_nMonsterIndex; }
-	INT GetPlayerIndex()						{ return m_nPlayerIndex; }
-	INT GetMonsterState()						{ return m_nMonstersState; }
-	D3DXVECTOR3& GetCharPosition(INT nIndex)	{ return m_pCharactorPosition[nIndex]; }
-	D3DXVECTOR3& GetMonsPosition(INT nIndex)	{ return m_pMonsterPosition[nIndex]; }
+	INT GetMonsterIndex()								{ return m_nMonsterIndex; }
+	INT GetPlayerIndex()								{ return m_nPlayerIndex; }
+	INT GetMonsterState()								{ return m_nMonstersState; }
+	D3DXVECTOR3& GetCharPosition(INT nType, INT nIndex)	{ return m_pCharactorPosition[nType][nIndex]; }
+	D3DXVECTOR3& GetMonsPosition(INT nIndex)			{ return m_pMonsterPosition[nIndex]; }
 
 	// Set
+	VOID SetMonstersState( INT a_nMonstersState ){ m_nMonstersState = a_nMonstersState; }
 	VOID Set_PlayerIndex( INT a_nPlayerIndex )	{ m_nPlayerIndex = a_nPlayerIndex; }
 	VOID Set_MonsterIndex( INT a_nMonsterIndex ){ m_nMonsterIndex = a_nMonsterIndex; }
 };

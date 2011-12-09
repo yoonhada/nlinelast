@@ -32,12 +32,13 @@ VOID CObjectManage::Clear()
 	m_iMaxCharaNum	= 4;
 
 	m_pCharactors = NULL;
-	m_ppVirtualCharactors = NULL;
+	//m_ppVirtualCharactors = NULL;
 
 	m_pClown = NULL;
 	m_pPanda = NULL;
 	m_pMonster = NULL;
 	m_pFirstAidKit = NULL;
+	m_pWall = NULL;
 
 	m_pASEViewer = NULL;
 
@@ -67,7 +68,6 @@ HRESULT CObjectManage::LoadLoadingObject()
 {
 	m_pPanda = new CMonster;
 	m_pPanda->Set_MonsterNumber( 0 );
-	//m_pPanda->Create( m_pD3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 
 	m_pBear = new CMonster;
 	m_pBear->Set_MonsterNumber( 1 );
@@ -75,14 +75,15 @@ HRESULT CObjectManage::LoadLoadingObject()
 	// Monster
 	m_pClown = new CMonster;
 	m_pClown->Set_MonsterNumber( 2 );
-	//m_pClown->Create( m_pD3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 
 	m_pMonster = new CMonster*[3];
 	m_pMonster[0] = m_pPanda;
 	m_pMonster[1] = m_pBear;
 	m_pMonster[2] = m_pClown;
 
-	m_pFirstAidKit = new CTimeLifeItem;
+	m_pFirstAidKit = new CTimeLifeItem[5];
+	m_pWall = new CTimeLifeItem;
+
 	return S_OK;
 }
 
@@ -95,12 +96,12 @@ HRESULT CObjectManage::LoadLobbyObject()
 		m_pCharactors[Loop].Create( m_pD3dDevice );
 		m_pCharactors[Loop].LoadKindChar( Loop );
 	}
-	m_ppVirtualCharactors = new CCharactor * [m_iMaxCharaNum];
+	//m_ppVirtualCharactors = new CCharactor * [m_iMaxCharaNum];
 
-	for ( int i = 0; i < m_iMaxCharaNum; ++i )
-	{
-		m_ppVirtualCharactors[i] = &(m_pCharactors[i]);
-	}
+	//for ( int i = 0; i < m_iMaxCharaNum; ++i )
+	//{
+	//	m_ppVirtualCharactors[i] = &(m_pCharactors[i]);
+	//}
 	return S_OK;
 }
 
@@ -118,11 +119,12 @@ HRESULT CObjectManage::Release()
 
 	SAFE_DELETE_ARRAY( m_pCharactors );
 	SAFE_DELETE_ARRAY( m_pMonster );
-	SAFE_DELETE_ARRAY( m_ppVirtualCharactors );
+	//SAFE_DELETE_ARRAY( m_ppVirtualCharactors );
 	SAFE_DELETE( m_pClown );
 	SAFE_DELETE( m_pPanda );
 	SAFE_DELETE( m_pBear );
-	SAFE_DELETE( m_pFirstAidKit );
+	SAFE_DELETE_ARRAY( m_pFirstAidKit );
+	SAFE_DELETE( m_pWall );
 	SAFE_DELETE( m_pASEViewer );
 
 	return S_OK;
@@ -164,15 +166,15 @@ VOID CObjectManage::Send_NetworkSendDestroyData( BOOL IsMonster )
 	ZeroMemory( m_vDestroyDir, sizeof(m_vDestroyDir) );
 }
 
-VOID CObjectManage::Set_Char(INT nSelect, INT nChar, BOOL bActive )
-{
-	m_ppVirtualCharactors[nSelect] = &m_pCharactors[nChar];
-
-	if ( bActive )
-	{
-		m_pCharactors[nChar].Set_Active( TRUE );
-	}
-}
+//VOID CObjectManage::Set_Char(INT nSelect, INT nChar, BOOL bActive )
+//{
+//	//m_ppVirtualCharactors[nSelect] = &m_pCharactors[nChar];
+//
+//	if ( bActive )
+//	{
+//		m_pCharactors[nChar].Set_Active( TRUE );
+//	}
+//}
 
 VOID CObjectManage::Set_CharTable( INT * nTable )
 {

@@ -65,7 +65,7 @@ VOID CCharactor::Clear()
 	m_iClientNumber = 0;
 	m_bActive = FALSE;
 	m_pShadowCell = NULL;
-	m_bShadowEnable = TRUE;
+	m_bShadowEnable = FALSE;
 
 	m_fKnockBack = 0.0f;
 	m_fTransition = 0.0f;
@@ -74,6 +74,8 @@ VOID CCharactor::Clear()
 	m_vAniVector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	m_chMonsterPart = 0;
+
+	m_fAtackMove = 50.0f;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
@@ -99,7 +101,7 @@ HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 							1.0f, 0.0f,
 							1.0f, 1.0f,
 							0.0f, 1.0f,
-							L"Img/shadow.tga"
+							L"Img/shadow.png"
 						  );
 	//m_pOctTree = new COctTree2Array;
 	return S_OK;
@@ -670,7 +672,13 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 }
 
 FLOAT CCharactor::AnimateAttack()
-{
+{	
+	if (CInput::GetInstance()->Get_NumKey( 8 ))
+		m_fAtackMove += 1.0f;
+	if (CInput::GetInstance()->Get_NumKey( 9 ))
+		m_fAtackMove -= 1.0f;
+
+
 	FLOAT fRet = 0.0f;
 	FLOAT fFrameTime = CFrequency::GetInstance()->getFrametime();
 	
@@ -687,7 +695,7 @@ FLOAT CCharactor::AnimateAttack()
 		if ( m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEBEGIN ) + m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK ) > m_pWeapon->Get_nFrame( WEAPONTYPE::CURRENTFRAME ) &&
 			 m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEBEGIN ) < m_pWeapon->Get_nFrame( WEAPONTYPE::CURRENTFRAME ) )
 		{
-			fRet = 5.0f / m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK );
+			fRet = m_fAtackMove;
 		}
 	}
 	else

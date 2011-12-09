@@ -23,105 +23,27 @@ public:
 
 	VOID Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed, FLOAT a_fFrameTime );
 
-	D3DXVECTOR3& Get_Pos()
-	{
-		return m_vPos;
-	}
+	// Get
+	D3DXVECTOR3& Get_Pos()		{ return m_vPos; }
 
-	FLOAT& Get_MouseYRotate()
-	{
-		return m_fYRotate;
-	}
-
-	FLOAT& Get_MouseXRotate()
-	{
-		return m_fXRotate;
-	}
-
-	BOOL Get_Lbutton()
-	{
-		if( m_iLbuttonCheck == 0 )
-		{
-			m_bLbutton = TRUE;
-		}
-		else
-		{
-			m_bLbutton = FALSE;
-		}
-
-		return m_bLbutton;
-	}
+	FLOAT& Get_MouseYRotate()	{ return m_fYRotate; }
+	FLOAT& Get_MouseXRotate()	{ return m_fXRotate; }
 	
-	BOOL Get_Rbutton()
-	{
-		if( m_iRbuttonCheck == 0 )
-		{
-			m_bRbutton = TRUE;
-		}
-		else
-		{
-			m_bRbutton = FALSE;
-		}
+	BOOL Get_Lbutton()			{ return ( m_bLbutton == TRUE ); }
+	BOOL Get_Rbutton()			{ return ( m_bRbutton == TRUE ); }
+	BOOL Get_ESCKey()			{ return ( m_bESCKey == TRUE ); }
+	BOOL Get_Endbutton()		{ return ( m_bEndbutton ); }
+	BOOL Get_Homebutton()		{ return ( m_bHomebutton ); }
+	BOOL Get_F1button()			{ return ( m_bF1button == TRUE ); }
+	BOOL Get_F8button()			{ return ( m_bF8button == TRUE ); }
+	BOOL Get_F9button()			{ return ( m_bF9button == TRUE ); }
+	BOOL Get_NumKey(INT nInput);
 
-		return m_bRbutton;
-	}
-
-	BOOL Get_Endbutton()
-	{
-		return m_bENdbutton;
-	}
-
-	BOOL Get_Homebutton()
-	{
-		return m_bHomebutton;
-	}
-
-	BOOL Get_F9button()
-	{
-		return m_bF9button;
-	}
-
-	BOOL Get_F1button()
-	{
-		return m_bF1button;
-	}
-
-	VOID Set_F9button(BOOL b)
-	{
-		m_bF9button = b;
-	}
-
-	BOOL Get_F8button()
-	{
-		return m_bF8button;
-	}
-
-	BOOL EnableInput(BOOL b = -1)		
-	{
-		if (b != -1) {
-			m_bEnable = b;
-
-			INT nCount;
-			do 
-			{
-				nCount = ShowCursor(b);
-
-			} while ( b == FALSE && nCount >= 0 );
-		}
-
-		return m_bEnable; 
-	}
-
-	BOOL Get_NumKey(INT nInput)
-	{
-		if (nInput >= 10 || nInput < 0)
-			return FALSE;
-
-		return m_bNumKey[nInput];
-	}
+	// Set
+	VOID EnableInput( BOOL bEnable );
 
 private:
-	HWND			  m_hWnd;					///< 윈도우 핸들
+	HWND		 m_hWnd;						///< 윈도우 핸들
 
 	POINT		m_MousePos;						///< 현재 마우스 위치
 	POINT		m_MousePosOld;					///< 이전 마우스 위치
@@ -131,20 +53,19 @@ private:
 	FLOAT		m_fYRotate;
 	FLOAT		m_fXRotate;
 	BOOL		m_bLbutton;						///< 왼쪽 버튼
-	BOOL		m_iLbuttonCheck;
 	BOOL		m_bRbutton;						///< 오른쪽 버튼
-	INT			m_iRbuttonCheck;
-	BOOL		m_bENdbutton;
+	BOOL		m_bESCKey;
+	BOOL		m_bEndbutton;
 	BOOL		m_bHomebutton;
 	BOOL		m_bF1button;
-	BOOL		m_bF9button;
 	BOOL		m_bF8button;
+	BOOL		m_bF9button;
 	BOOL		m_bNumKey[10];
-	//FLOAT		m_fXPos;						///< X축 이동
-	//FLOAT		m_fZPos;						///< Z축 이동
 	D3DXMATRIXA16 m_matMatrix;
 
 	BOOL		m_bEnable;						///< 입력 활성화
+
+	VOID MouseMoveCenter();
 };
 
 
