@@ -1,31 +1,31 @@
 #include "stdafx.h"
 
-#include "Stiffen.h"
+#include "Wait.h"
 #include "WaitInterPolation.h"
 
 #include "Monster.h"
 #include "Frequency.h"
 
 
-Stiffen* Stiffen::GetInstance()
+Wait* Wait::GetInstance()
 {
-	static Stiffen Instance;
+	static Wait Instance;
 
 	return &Instance;
 }
 
 
-VOID Stiffen::Enter( CMonster* a_pMonster )
+VOID Wait::Enter( CMonster* a_pMonster )
 {
 
 }
 
 
-VOID Stiffen::Execute( CMonster* a_pMonster )
+VOID Wait::Execute( CMonster* a_pMonster )
 {
 	a_pMonster->Set_UpdateTime();
 
-	if( a_pMonster->Get_Time() >= 2.0f )
+	if( a_pMonster->Get_Time() >= 0.1f )
 	{
 		a_pMonster->Set_ClearTime();
 
@@ -38,7 +38,7 @@ VOID Stiffen::Execute( CMonster* a_pMonster )
 }
 
 
-VOID Stiffen::Exit( CMonster* a_pMonster )
+VOID Wait::Exit( CMonster* a_pMonster )
 {
 
 }

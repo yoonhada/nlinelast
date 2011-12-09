@@ -5,6 +5,7 @@
 #include "Weapon.h"
 
 #include "Seek.h"
+#include "Wait.h"
 
 CMonster::CMonster()
 {
@@ -1507,11 +1508,11 @@ VOID CMonster::Set_ChaseNextData()
 
 	// 도착했으면 Seek 상태로
 	m_pChaseNextPath = m_pChaseNextPath->next;
-	if( m_pChaseNextPath->remainedNode <= 0 )
+	if( m_pChaseNextPath->remainedNode <= 0 || m_iChaseTotalPathCnt - m_pChaseNextPath->remainedNode == 5 )
 	{
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			m_pStateMachine->ChangeState( Seek::GetInstance() );
+			m_pStateMachine->ChangeState( Wait::GetInstance() );
 		}
 		else
 		{

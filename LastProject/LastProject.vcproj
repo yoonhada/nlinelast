@@ -920,6 +920,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\DashReady.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\DashReady.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\LockOn.cpp"
 				>
 			</File>
@@ -981,6 +989,14 @@
 			</File>
 			<File
 				RelativePath=".\Source\Stiffen.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Wait.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Wait.h"
 				>
 			</File>
 			<File
