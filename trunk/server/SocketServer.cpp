@@ -203,6 +203,13 @@ VOID CSocketServer::OnServerClose()
 
 VOID CSocketServer::OnClientClose( CNTClient* pClient )
 {
+	if( pClient == NULL )
+	{
+		return;
+	}
+
+	if( pClient->m_Index < 0 || pClient->m_Index > 3 )
+
 	// 접속 해제한 유저번호가 다시 활성화 상태로
 	m_wUserNumber[pClient->m_Index] = FALSE;
 /*
@@ -414,6 +421,26 @@ VOID CSocketServer::CS_CLIENT_DISCONNECT( CNTClient* pClient, CPacket& a_pk )
 	SC_CLIENT_DISCONNECT( pClient );
 
 //	OnClientClose( pClient );
+}
+
+VOID CSocketServer::CS_EVENT_STATE( CNTClient* pClient, CPacket& a_pk )
+{
+	a_pk.Rewind();
+	SendToClient( pClient, a_pk ); 
+}
+
+
+VOID CSocketServer::CS_EVENT_COMBO( CNTClient* pClient, CPacket& a_pk )
+{
+	a_pk.Rewind();
+	SendToClient( pClient, a_pk );
+}
+
+
+VOID CSocketServer::CS_EVENT_COMBO_RESULT( CNTClient* pClient, CPacket& a_pk )
+{
+	a_pk.Rewind();
+	SendToClient( pClient, a_pk );
 }
 
 
@@ -726,6 +753,21 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 		CS_CLIENT_DISCONNECT( pClient, pk );
 		break;
 
+	// 이벤트 발생
+	case MSG_EVENT_STATE:
+		CS_EVENT_STATE( pClient, pk );
+		break;
+
+	// 콤보 정보
+	case MSG_EVENT_COMBO:
+		CS_EVENT_COMBO( pClient, pk );
+		break;
+
+	// 콤보 결과
+	case MSG_EVENT_COMBO_RESULT:
+		CS_EVENT_COMBO_RESULT( pClient, pk );
+		break;
+
 	// 채팅
 	case MSG_CHAT:
 		CS_CHAT( pClient, pk );
@@ -792,8 +834,10 @@ UINT WINAPI CSocketServer::AcceptProc( VOID* p )
 
 			cout << "accept() Error : << " << err << endl;
 		}
-
-		pServer->OnAccept( hSocket );
+		else
+		{
+			pServer->OnAccept( hSocket );
+		}
 	}
 
 	cout << "AcceptProc Terminated" << endl;
@@ -818,7 +862,7 @@ UINT WINAPI CSocketServer::IOCPWorkerProc( VOID* p )
 		if( dwTransferred == 0 )
 		{		
 			// 서버 종료
-			if( pClient == NULL )
+			if( pClient == NULL && ov == NULL )
 			{
 				pServer->OnServerClose();
 				return 0;

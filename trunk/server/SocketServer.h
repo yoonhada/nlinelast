@@ -45,6 +45,10 @@ public:
 	VOID CS_LODING_COMPLETE( CNTClient* pClient, CPacket& a_pk );
 	VOID CS_CLIENT_DISCONNECT( CNTClient* pClient, CPacket& a_pk );
 
+	VOID CS_EVENT_STATE( CNTClient* pClient, CPacket& a_pk );
+	VOID CS_EVENT_COMBO( CNTClient* pClient, CPacket& a_pk );
+	VOID CS_EVENT_COMBO_RESULT( CNTClient* pClient, CPacket& a_pk );
+
 	VOID CS_CHAT( CNTClient* pClient, CPacket& pk );
 	VOID CS_PLAYER_MOVE( CNTClient* pClient, CPacket& pk );
 	VOID CS_MONSTER_MOVE( CNTClient* pClient, CPacket& pk );
