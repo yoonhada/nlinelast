@@ -185,6 +185,7 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::MonsterBreakNockdown()
 {
+//	CGameEvent::GetInstance()->GetMonsterIndex()
 	if ( CGameEvent::GetInstance()->GetMonsterState()  & 0x01 )	//1 2 3 4
 	{
 		m_pMonster[0]->BreakNockdown();
@@ -202,10 +203,12 @@ VOID CMainScene::MonsterBreakNockdown()
 VOID CMainScene::Update()
 {
 	// 치트키 처리
+#ifdef _DEBUG
 	if( GetKeyState( '5' ) & 0x8000 )
 		m_pCamera->SetEffect(1);
 	if( GetKeyState( '6' ) & 0x8000 )
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
+#endif // _DEBUG
 
 	CGameEvent::GetInstance()->Set_PlayerIndex( -1 );
 	CGameEvent::GetInstance()->Set_MonsterIndex( -1 );
@@ -413,6 +416,25 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_CAMERA \n" );
 		EventCamera();
 		break;
+	case CGameEvent::TUTORIAL_ATACK:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
+		// Do Something
+		TutorialAtack();
+		if ( CObjectManage::GetInstance()->IsHost() ) 
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
+			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
+		}
+		break;
+	case CGameEvent::TUTORIAL_COMBO:
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
+		if ( CObjectManage::GetInstance()->IsHost() ) 
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 1.0f );
+			SetTimer( GHWND, CGameEvent::TUTORIAL_COMBO, 1 * 1000, NULL );
+			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
+		}
+		break;
 	case CGameEvent::EVENT_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO \n" );
 		EventCombo();
@@ -427,7 +449,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventDestoryCombo();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 30.0f );
+			// CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 30.0f );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 		}
 		break;
@@ -439,13 +461,10 @@ VOID CMainScene::EventSwitch( INT nEvent )
 			if ( CObjectManage::GetInstance()->IsHost() ) 
 			{
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );				
+				// CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
+				CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 			}
 		}		
-		if ( CObjectManage::GetInstance()->IsHost() ) 
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
-			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-		}
 		break;
 	case CGameEvent::EVENT_COMBO_FAIL:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_FAIL \n" );
@@ -453,7 +472,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 			m_pEventGUICombo->Fail();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
+			// CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 5.0f );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 		}
 		break;
@@ -462,28 +481,12 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventFirstAidKit();
 		/// 미구현
 		break;
-	case CGameEvent::TUTORIAL_ATACK:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
-		if ( CObjectManage::GetInstance()->IsHost() ) 
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
-			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-		}
-		break;
-	case CGameEvent::TUTORIAL_COMBO:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
-		if ( CObjectManage::GetInstance()->IsHost() ) 
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 1.0f );
-			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-		}
-		break;
 	case CGameEvent::MONSTER_BREAK_NOCKDOWN:
 		MonsterBreakNockdown();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 1.0f );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
+			//CNetwork::GetInstance()->CS_EVENT_MON_ND()
 		}
 		break;
 	default:
@@ -505,6 +508,11 @@ VOID CMainScene::EventInit()
 VOID CMainScene::EventCamera()
 {
 	m_pCamera->SetEffect( CCamera::EVENTWORK );
+}
+
+VOID CMainScene::TutorialAtack()
+{
+
 }
 
 VOID CMainScene::EventCombo()

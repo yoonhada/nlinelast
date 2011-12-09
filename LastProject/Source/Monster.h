@@ -135,6 +135,7 @@ private:
 
 
 	//몬스터 관리
+	INT	  m_iBreakPart;					///< 파괴부위..
 	INT	  m_iMonsterNumber;				///<
 	INT	  m_iCharEditorMax;				///< 몬스터 박스 최대 갯수
 	INT	  m_iSelectedCharEditor;		///< 현재 선택중인 박스

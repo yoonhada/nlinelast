@@ -555,7 +555,7 @@ VOID CCharactor::UpdateByInput(  )
 		a_fAngle -= MTP_FUN::Deg2Rad<360>::radians;
 	}
 
-	a_vControl.z += AnimateAttack();
+	a_vControl.z += AnimateAttack() * CFrequency::GetInstance()->getFrametime();
 
 	// 전진 후진 처리
 	if( a_vControl.z != 0 )
@@ -1024,30 +1024,35 @@ VOID CCharactor::BreakCubeAll()
 	{
 		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
 		{
-			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			if( m_vectorCube[Loop] == NULL )
+				continue;
+
+			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
 			{
 				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 			}
-
-			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
+			else if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::HIDEMEAT )
 			{
 				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
 
 				if( m_bMonster )
 				{
-					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					if ( ( Loop & 0x0007 ) == 0x0007)
+					{
+						D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster );
+						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					}
 				}
 				else
 				{
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ), 2.0f);
 				}
 			}
 
 		}
 	}
 
-	m_bAliveCheck=FALSE;
+	m_bAliveCheck = FALSE;
 }
 
 VOID CCharactor::BreakNockdown()

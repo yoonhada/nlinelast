@@ -199,6 +199,15 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		return 0;
 
 	case WM_SIZE:
+		switch ( wParam )
+		{
+		case CGameEvent::TUTORIAL_COMBO:
+			break;
+		}
+		return 0;
+
+	case WM_TIMER:
+
 		return 0;
 
 	case WM_DESTROY:
@@ -206,15 +215,6 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		PostQuitMessage(0);
 		CWinBase::DestoryInstance();
 		return 0;
-
-	case WM_SYSCOMMAND:
-		switch( wParam & 0xFFF0)
-		{
-		case SC_KEYMENU:
-			if( !CInput::GetInstance()->EnableInput() )
-				return 0;
-		}
-		return DefWindowProc(hWnd, message, wParam, lParam);
 
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);

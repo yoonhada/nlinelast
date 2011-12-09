@@ -33,7 +33,7 @@ private:
 	INT * m_pShotedPoint;
 
 	// Monster
-	INT m_nMonsterState;
+	INT m_nMonstersState;
 	
 	// Event
 	INT m_nMonsterIndex;
@@ -45,6 +45,14 @@ private:
 	virtual ~CGameEvent();
 
 public:
+	enum MonstersName {
+		EMPTY, 
+		PANDA		= 0x0001, 
+		BEAR		= 0x0002, 
+		CLOWN		= 0x0004, 
+		DOOR		= 0x0008, 
+		ITEM_FAK	= 0x0010, 
+	};
 	enum EventKind {
 		NONE = -1, INIT, 
 		EVENT_CAMERA, 
@@ -65,7 +73,7 @@ public:
 	// Get
 	INT GetMonsterIndex()						{ return m_nMonsterIndex; }
 	INT GetPlayerIndex()						{ return m_nPlayerIndex; }
-	INT GetMonsterState()						{ return m_nMonsterState; }
+	INT GetMonsterState()						{ return m_nMonstersState; }
 	D3DXVECTOR3& GetCharPosition(INT nIndex)	{ return m_pCharactorPosition[nIndex]; }
 	D3DXVECTOR3& GetMonsPosition(INT nIndex)	{ return m_pMonsterPosition[nIndex]; }
 
