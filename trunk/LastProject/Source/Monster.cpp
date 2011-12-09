@@ -21,6 +21,7 @@ CMonster::~CMonster()
 
 VOID CMonster::Clear()
 {
+	m_iBreakPart = 0;
 	m_iMonsterNumber = 0;
 	m_iCharEditorMax = 7;
 	m_iSelectedCharEditor=0;
@@ -1408,11 +1409,36 @@ VOID CMonster::BreakCubeAll()
 
 VOID CMonster::BreakNockdown()
 {
-	//m_pBox[0].BreakCubeAll();
-	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	m_pBox[m_iBreakPart].BreakCubeAll();
+
+	switch ( m_iBreakPart )
 	{
-		m_pBox[Loop].BreakNockdown();
+	case 0:
+		m_iBreakPart = 4;
+		break;
+	case 1:
+		m_iBreakPart = 6;
+		break;
+	case 2:
+		m_iBreakPart = 3;
+		break;
+	case 3:
+		m_iBreakPart = 1;
+		break;
+	case 4:
+		m_iBreakPart = 5;
+		break;
+	case 5:
+		m_iBreakPart = 2;
+		break;
+	default:
+		break;
 	}
+
+	//for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	//{
+	//	m_pBox[Loop].BreakNockdown();
+	//}
 }
 
 VOID CMonster::EnableShadow( BOOL bEnable )

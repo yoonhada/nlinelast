@@ -69,7 +69,6 @@ private:
 	INT						m_scnNext;
 	INT						m_scnState;
 
-
 	VOID					CreateCharactor();
 	VOID					InitCharState();
 	VOID					InitMonsterState();
@@ -77,6 +76,7 @@ private:
 	//VOID SendNetwork( INT nEvent);
 	//VOID SendNetworkCombo( INT nEvent );
 
+	VOID TutorialAtack();
 	VOID EventSwitch( INT nEvent );
 	VOID EventInit();
 	VOID EventCamera();
