@@ -93,6 +93,9 @@ public:
 	/*Path*/
 	PathNode*	createPath( INT a_iX, INT a_iY );
 	VOID		removePath( PathNode* a_pPath );
+
+	VOID		SetWall( INT a_iTotalPathCnt, PathNode* a_pPath );
+	VOID		ClearWall( INT a_iTotalPathCnt, PathNode* a_pPath );
 };
 
 #endif

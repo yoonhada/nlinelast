@@ -19,8 +19,12 @@ Seek* Seek::GetInstance()
 VOID Seek::Enter( CMonster* a_pMonster )
 {
 	// 대기 애니메이션으로 바꾼다.
-//	a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
-//	CDebugConsole::GetInstance()->Messagef( L"Seek : ANIM_STAND \n" );
+	a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
+#ifdef _DEBUG
+	CDebugConsole::GetInstance()->Messagef( L"Seek : ANIM_STAND \n" );
+#endif
+
+	Astar::GetInstance()->ClearWall( a_pMonster->Get_ChaseTotalPathCnt(), a_pMonster->Get_Path() );
 }
 
 
@@ -69,6 +73,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		a_pMonster->Set_TargetDistance( min );
 		a_pMonster->GetFSM()->ChangeState( Battle::GetInstance() );
 	}
+
 	// 범위에 없으면 가장 가까운 목표 추격
 	else if( ( min >= 25.0f  && min <= 80.0f  ) ||
 			 ( min >= 120.0f && min <= 300.0f ) )
@@ -131,6 +136,8 @@ VOID Seek::Execute( CMonster* a_pMonster )
 			CNetwork::GetInstance()->CS_MONSTER_MOVEMENT( a_pMonster->Get_MonsterNumber(), path );
 
 			a_pMonster->GetFSM()->ChangeState( Chase::GetInstance() );
+
+			Astar::GetInstance()->SetWall( a_pMonster->Get_ChaseTotalPathCnt(), a_pMonster->Get_Path() );
 		}
 	}
 }

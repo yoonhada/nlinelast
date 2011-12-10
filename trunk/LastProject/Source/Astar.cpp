@@ -36,7 +36,7 @@ VOID Astar::Initialize( TileMap::LPINFO a_MapInfo )
 	m_pOpen = new TreeRoot;
 	m_pOpen->root = NULL;
 
-	// 12시 부터 시계방향
+	// 탐색 방법 - 12시 부터 시계방향
 	m_Dir[0][0] = 0;	m_Dir[0][1] = -1;
 	m_Dir[1][0] = 1;	m_Dir[1][1] = -1;
 	m_Dir[2][0] = 1;	m_Dir[2][1] = 0;
@@ -311,9 +311,25 @@ PathNode* Astar::findPath( INT a_iSx, INT a_iSy, INT a_iEx, INT a_iEy )
 {
 	PathNode* path = NULL;
 
+	// 타겟 위치와 같은 위치면 탐색 중지
 	if( a_iSx == a_iEx && a_iSy == a_iEy )
 	{
-		return path;
+		return NULL;
+	}
+
+	// 타겟 위치가 가지 못하는 곳이거나
+	// 타겟 위치 기준 8방향이 가지 못하는 곳이면 탐색 중지
+	if(  m_Map[a_iEx][a_iEy].map == 1 ||
+	   ( m_Map[a_iEx+0][a_iEy-1].map == 1 &&
+	     m_Map[a_iEx+1][a_iEy-1].map == 1 &&
+		 m_Map[a_iEx+1][a_iEy+0].map == 1 &&
+		 m_Map[a_iEx+1][a_iEy+1].map == 1 &&
+		 m_Map[a_iEx+0][a_iEy+1].map == 1 &&
+		 m_Map[a_iEx-1][a_iEy-1].map == 1 &&
+		 m_Map[a_iEx-1][a_iEy+0].map == 1 &&
+		 m_Map[a_iEx-1][a_iEy-1].map == 1 ) )
+	{
+		return NULL;
 	}
 
 	m_Start[0] = a_iSx;
@@ -376,4 +392,36 @@ FLOAT Astar::getDistH( INT x, INT y )
 FLOAT Astar::getDistF( INT x, INT y )
 {
 	return m_Map[x][y].g + m_Map[x][y].h;
+}
+
+
+VOID Astar::SetWall( INT a_iTotalPathCnt, PathNode* a_pPath )
+{
+	if( a_pPath == NULL )
+	{
+		return;
+	}
+
+	for( INT i=0; i<a_iTotalPathCnt-1; ++i )
+	{
+		m_Map[a_pPath->x][a_pPath->y].map = 1;
+
+		a_pPath = a_pPath->next;
+	}
+}
+
+
+VOID Astar::ClearWall( INT a_iTotalPathCnt, PathNode* a_pPath )
+{
+	if( a_pPath == NULL )
+	{
+		return;
+	}
+
+	for( INT i=0; i<a_iTotalPathCnt-1; ++i )
+	{
+		m_Map[a_pPath->x][a_pPath->y].map = 0;
+
+		a_pPath = a_pPath->next;
+	}
 }

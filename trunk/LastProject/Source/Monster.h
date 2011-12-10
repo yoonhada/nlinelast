@@ -9,14 +9,21 @@ class CMonster : public CObjectSRT
 {
 public:
 	// 애니메이션 번호
+	enum MONSTER_ANIMATION
+	{
+		ANIM_STAND = 0,
+		ANIM_MOVE,
+		ANIM_MELEE_ATTACK,
+		ANIM_MELEE_ATTACK2,
+		ANIM_SPIN_ATTACK,
+		ANIM_DASH,
+		ANIM_SLIDING,
+		ANIM_GROGGY,
+		ANIM_EVENT,
+		ANIM_LODING,
+	};
 
-	enum { ANIM_MOVE = 0, ANIM_SPIN_ATTACK = 1, ANIM_MELEE_ATTACK = 2, ANIM_STAND = 3,
-		   ANIM_EVENT = 4, ANIM_DASH = 5, ANIM_SLIDING = 6, ANIM_MELEE_ATTACK2 = 7, };
 
-/*
-	enum { ANIM_MOVE = 3, ANIM_SPIN_ATTACK = 4, ANIM_MELEE_ATTACK = 4, ANIM_STAND = 2,
-		   ANIM_EVENT = 4, ANIM_DASH = 4, ANIM_SLIDING = 0, ANIM_MELEE_ATTACK2 = 3, };
-*/
 public:
 	CMonster();
 	~CMonster();
@@ -47,15 +54,22 @@ public:
 	}
 
 	// Set
-	VOID Set_MonsterNumber( INT iMonsterNumber )	{ m_iMonsterNumber = iMonsterNumber; }	VOID Set_iSelectedFrameNum( INT a_iAniNum )		{ m_iSelectedFrameNum = a_iAniNum; }
-	INT	Get_iSelectedFrameNum()						{ return m_iSelectedFrameNum; }
+	VOID Set_MonsterNumber( INT iMonsterNumber )	{ m_iMonsterNumber = iMonsterNumber; }
+	VOID Set_iSelectedFrameNum( INT a_iAniNum )		{ m_iSelectedFrameNum = a_iAniNum; }
 
 	VOID Set_ClearTime()							{ m_fTime = 0.0f; }
+	VOID Set_ClearAttackTime()						{ m_fAttackTime = 0.0f; }
 
 	VOID Set_UpdateTime()
 	{
 		m_fTime += CFrequency::GetInstance()->getFrametime();
 	}
+	
+	VOID Set_UpdateAttackTime()
+	{
+		m_fAttackTime += CFrequency::GetInstance()->getFrametime();
+	}
+
 	VOID Set_InterpolationTime( FLOAT a_fTime )		{ m_fInterpolationTime = a_fTime; }
 	VOID Set_Angle( FLOAT a_fAngle )				{ m_fAngle = a_fAngle; }
 	VOID Set_Pos( D3DXVECTOR3& a_vPos )				{ m_vControl = a_vPos; }
@@ -80,8 +94,10 @@ public:
 
 
 	// Get
-	StateMachine<CMonster>* GetFSM() const			{ return m_pStateMachine; }
+	INT	Get_iSelectedFrameNum()						{ return m_iSelectedFrameNum; }
 	INT Get_MonsterNumber()							{ return m_iMonsterNumber; }
+
+	StateMachine<CMonster>* GetFSM() const			{ return m_pStateMachine; }
 
 	// Dash
 	D3DXVECTOR3		Get_DashStartPos()				{ return m_vDashStartPos; }
@@ -100,6 +116,7 @@ public:
 	FLOAT			Get_ChaseAngle1()				{ return m_fChaseAngle1; }
 
 	FLOAT			Get_Time()						{ return m_fTime; }
+	FLOAT			Get_AttackTime()				{ return m_fAttackTime; }
 	FLOAT			Get_InterpolationTime()			{ return m_fInterpolationTime; }
 	D3DXVECTOR3&	Get_Pos()						{ return m_vControl; }
 	INT				Get_Target()					{ return m_iTarget; }
@@ -149,6 +166,7 @@ private:
 	StateMachine<CMonster>* m_pStateMachine;
 
 	FLOAT		m_fTime;
+	FLOAT		m_fAttackTime;
 	FLOAT		m_fInterpolationTime;
 
 	// Dash

@@ -4,7 +4,6 @@
 #include "WaitInterPolation.h"
 
 #include "Monster.h"
-#include "Frequency.h"
 
 
 Stiffen* Stiffen::GetInstance()

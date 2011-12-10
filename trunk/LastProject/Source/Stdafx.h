@@ -10,12 +10,17 @@
 #pragma comment ( lib, "winmm.lib" )
 #pragma comment( lib, "ws2_32.lib" )
 
+// Sound 라이브러리
+#pragma comment( lib, "fmodex_vc.lib" )
+
 // TBB 라이브러리
 //#pragma  comment ( lib, "tbb.lib" )
 
 // AntTwearBar 라이브러리
+#ifdef _DEBUG
 #pragma comment (lib, "AntTweakBar.lib")
 #include "AntTweakBar.h"
+#endif
 
 
 // 헤더
@@ -42,6 +47,10 @@
 #include <d3dx9core.h>
 #include <D3dx9math.h>
 
+// FMOD
+#include <fmod.h>
+#include <fmod_errors.h>
+
 // TBB
 //#include <tbb/tbb.h>
 
@@ -64,6 +73,7 @@
 #include "Astar.h"
 #include "Network.h"
 #include "GameEvent.h"
+#include "Sound.h"
 
 // None Sigleton Module
 #include "Light.h"

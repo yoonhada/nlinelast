@@ -44,6 +44,7 @@ VOID CMonster::Clear()
 	m_bAnimationEndCheck = FALSE;
 
 	m_fTime = 0.0f;
+	m_fAttackTime = 0.0f;
 	m_fInterpolationTime = 0.0f;
 	m_iTarget = -1;
 	m_iTargetPos[0] = 0;
@@ -1207,13 +1208,13 @@ VOID CMonster::CreateAttackBoundBox()
 				m_pBBx->SetPosition( Get_Pos() );
 				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
 
-				m_pBBx->SetSize( 0, -27.0f );
-				m_pBBx->SetSize( 1, -27.0f );
-				m_pBBx->SetSize( 2, -27.0f );
+				m_pBBx->SetSize( 0, -25.0f );
+				m_pBBx->SetSize( 1, -25.0f );
+				m_pBBx->SetSize( 2, -25.0f );
 
-				m_pBBx->SetSize( 3,  27.0f );
-				m_pBBx->SetSize( 4,  27.0f );
-				m_pBBx->SetSize( 5,  27.0f );
+				m_pBBx->SetSize( 3,  25.0f );
+				m_pBBx->SetSize( 4,  25.0f );
+				m_pBBx->SetSize( 5,  25.0f );
 
 				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
 
@@ -1228,13 +1229,34 @@ VOID CMonster::CreateAttackBoundBox()
 				m_pBBx->SetPosition( Get_Pos() );
 				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
 
-				m_pBBx->SetSize( 0, -27.0f );
-				m_pBBx->SetSize( 1, -27.0f );
-				m_pBBx->SetSize( 2, -27.0f );
+				m_pBBx->SetSize( 0, -25.0f );
+				m_pBBx->SetSize( 1, -25.0f );
+				m_pBBx->SetSize( 2, -25.0f );
 
-				m_pBBx->SetSize( 3,  27.0f );
-				m_pBBx->SetSize( 4,  27.0f );
-				m_pBBx->SetSize( 5,  27.0f );
+				m_pBBx->SetSize( 3,  25.0f );
+				m_pBBx->SetSize( 4,  25.0f );
+				m_pBBx->SetSize( 5,  25.0f );
+
+				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
+
+				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+			}
+			break;
+
+		case ANIM_SPIN_ATTACK:
+			{
+				// 몬스터 공격 바운드 박스.
+				CBoundBox * m_pBBx = new CBoundBox;
+				m_pBBx->SetPosition( Get_Pos() );
+				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
+
+				m_pBBx->SetSize( 0, -25.0f );
+				m_pBBx->SetSize( 1, -25.0f );
+				m_pBBx->SetSize( 2, -25.0f );
+
+				m_pBBx->SetSize( 3,  25.0f );
+				m_pBBx->SetSize( 4,  25.0f );
+				m_pBBx->SetSize( 5,  25.0f );
 
 				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
 
@@ -1250,13 +1272,13 @@ VOID CMonster::CreateAttackBoundBox()
 				m_pBBx->SetPosition( Get_Pos() );
 				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
 
-				m_pBBx->SetSize( 0, -50.0f );
-				m_pBBx->SetSize( 1, -50.0f );
-				m_pBBx->SetSize( 2, -50.0f );
+				m_pBBx->SetSize( 0, -25.0f );
+				m_pBBx->SetSize( 1, -25.0f );
+				m_pBBx->SetSize( 2, -25.0f );
 
-				m_pBBx->SetSize( 3,  50.0f );
-				m_pBBx->SetSize( 4,  50.0f );
-				m_pBBx->SetSize( 5,  50.0f );
+				m_pBBx->SetSize( 3,  25.0f );
+				m_pBBx->SetSize( 4,  25.0f );
+				m_pBBx->SetSize( 5,  25.0f );
 
 				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
 
@@ -1508,7 +1530,7 @@ VOID CMonster::Set_ChaseNextData()
 
 	// 도착했으면 Seek 상태로
 	m_pChaseNextPath = m_pChaseNextPath->next;
-	if( m_pChaseNextPath->remainedNode <= 0 || m_iChaseTotalPathCnt - m_pChaseNextPath->remainedNode == 5 )
+	if( m_pChaseNextPath->remainedNode <= 0 || m_iChaseTotalPathCnt - m_pChaseNextPath->remainedNode == 10 )
 	{
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
