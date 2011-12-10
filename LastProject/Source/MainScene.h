@@ -70,14 +70,14 @@ private:
 	INT						m_scnNext;
 	INT						m_scnState;
 
-	VOID					CreateCharactor();
-	VOID					CreateMonster();
-
-	//VOID SendNetwork( INT nEvent);
-	//VOID SendNetworkCombo( INT nEvent );
+	VOID CreateCharactor();
+	VOID CreateMonster();
+	VOID CreateFirstAidKit();
+	VOID CreateWall();
 
 	VOID TutorialAtack();
-	
+	VOID TutorialAtackEnd();
+
 	VOID EventSwitch( INT nEvent );
 	VOID EventStateNetwork( INT nEvent );
 	VOID EventMapCameraWalk( INT nEvent );

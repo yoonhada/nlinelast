@@ -94,8 +94,6 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	//	Create Matrices
 	m_pMatrices = CMatrices::GetInstance();
 	
-	//CTree::GetInstance()->Create( 0, 0 );
-
 	//	Set Logo Time
 	m_datLogo.dBeginTime	= timeGetTime();
 
