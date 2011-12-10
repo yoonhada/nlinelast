@@ -61,17 +61,22 @@ VOID CGameEvent::Clear()
 
 	m_nMonstersState = 4;
 
+	m_nPrevEvent = NONE;
+	m_nTutorial = -1;
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;
 
-	m_pCharactorPosition[0][0] = D3DXVECTOR3( 202.0f, 0.0f, -505.0f);
-	m_pCharactorPosition[0][1] = D3DXVECTOR3( 227.0f, 0.0f, -505.0f);
-	m_pCharactorPosition[0][2] = D3DXVECTOR3( 253.0f, 0.0f, -505.0f);
-	m_pCharactorPosition[0][3] = D3DXVECTOR3( 277.0f, 0.0f, -505.0f);
+	m_vCharactorPosition[0][0] = D3DXVECTOR3( 202.0f, 0.0f, -505.0f);
+	m_vCharactorPosition[0][1] = D3DXVECTOR3( 227.0f, 0.0f, -505.0f);
+	m_vCharactorPosition[0][2] = D3DXVECTOR3( 253.0f, 0.0f, -505.0f);
+	m_vCharactorPosition[0][3] = D3DXVECTOR3( 277.0f, 0.0f, -505.0f);
 
-	m_pMonsterPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 660.0f);
-	m_pMonsterPosition[1] = D3DXVECTOR3( -70.0f, 0.0f, 660.0f);
-	m_pMonsterPosition[2] = D3DXVECTOR3( -40.0f, 0.0f, 660.0f);
+	m_vMonsterPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 660.0f);
+	m_vMonsterPosition[1] = D3DXVECTOR3( -70.0f, 0.0f, 660.0f);
+	m_vMonsterPosition[2] = D3DXVECTOR3( -40.0f, 0.0f, 660.0f);
+
+	m_vWallPosition = D3DXVECTOR3( 241.4534f, 0.0f, -202.7f );
+
 }
 
 VOID CGameEvent::AddEvent( INT nKind, FLOAT fTime )
@@ -105,7 +110,6 @@ VOID CGameEvent::IndexInit()
 INT CGameEvent::Update()
 {
 	INT nEvent = NONE;
-
 	if ( !m_listEvent.empty() )
 	{
 		Iter = m_listEvent.begin();
@@ -119,6 +123,7 @@ INT CGameEvent::Update()
 		if ( ( *Iter )->fTime < 0.0f )
 		{
 			nEvent = ( *Iter )->nKind;
+			m_nPrevEvent = nEvent;
 
 			SAFE_DELETE ( *Iter );
 			Iter = m_listEvent.erase( Iter );

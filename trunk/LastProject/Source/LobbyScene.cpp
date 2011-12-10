@@ -80,9 +80,6 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_0.csav", D3DXVECTOR3( -10.0f, 5.0f, 100.0f ) );
 	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_0.csav",	D3DXVECTOR3( -31.0f, 5.0f, 100.0f ) );
 	
-
-	//CTree::GetInstance()->Create( 0, 0 );
-
 	//	Create Light
 	m_pLight = new CLight;
 	m_pLight->Create( _pd3dDevice );

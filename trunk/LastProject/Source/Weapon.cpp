@@ -317,6 +317,13 @@ VOID CWeapon::SetKeyB()
 		m_nState = EnumCharFrame::TEMP1;
 		m_pMap->SetAnimation( m_nState );
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
+
+		if ( CGameEvent::GetInstance()->GetTutorial( ) )
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 0.01f );
+			if ( CObjectManage::GetInstance()->IsHost() )
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.1f );
+		}
 	}
 }
 

@@ -24,8 +24,9 @@ private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 
 	// Const 
-	D3DXVECTOR3 m_pCharactorPosition[1][4];
-	D3DXVECTOR3 m_pMonsterPosition[3];
+	D3DXVECTOR3 m_vCharactorPosition[1][4];
+	D3DXVECTOR3 m_vMonsterPosition[3];
+	D3DXVECTOR3 m_vWallPosition;
 
 	// Char
 	INT m_iMaxCharaNum;
@@ -36,6 +37,8 @@ private:
 	INT m_nMonstersState;
 	
 	// Event
+	INT m_nPrevEvent;
+	INT m_nTutorial;
 	INT m_nMonsterIndex;
 	INT m_nPlayerIndex;
 	std::list<EVENT*> m_listEvent;
@@ -70,15 +73,21 @@ public:
 
 	VOID AddEvent( INT, FLOAT );
 	VOID IndexInit();
+	
 	// Get
+	INT GetPrevEvent()									{ return m_nPrevEvent; }
+	INT GetTutorial()									{ return m_nTutorial; }
 	INT GetMonsterIndex()								{ return m_nMonsterIndex; }
 	INT GetPlayerIndex()								{ return m_nPlayerIndex; }
 	INT GetMonsterState()								{ return m_nMonstersState; }
-	D3DXVECTOR3& GetCharPosition(INT nType, INT nIndex)	{ return m_pCharactorPosition[nType][nIndex]; }
-	D3DXVECTOR3& GetMonsPosition(INT nIndex)			{ return m_pMonsterPosition[nIndex]; }
+
+	D3DXVECTOR3& GetCharPosition( INT nType, INT nIndex )	{ return m_vCharactorPosition[nType][nIndex]; }
+	D3DXVECTOR3& GetMonsPosition( INT nIndex )				{ return m_vMonsterPosition[nIndex]; }
+	D3DXVECTOR3& GetWallPosition( INT nIndex )				{ return m_vWallPosition; }
 
 	// Set
-	VOID SetMonstersState( INT a_nMonstersState ){ m_nMonstersState = a_nMonstersState; }
+	VOID SetTutorial( INT a_nTutorial )			{ m_nTutorial = a_nTutorial; }
+	VOID SetMonstersState( INT a_nMonstersState){ m_nMonstersState = a_nMonstersState; }
 	VOID Set_PlayerIndex( INT a_nPlayerIndex )	{ m_nPlayerIndex = a_nPlayerIndex; }
 	VOID Set_MonsterIndex( INT a_nMonsterIndex ){ m_nMonsterIndex = a_nMonsterIndex; }
 };

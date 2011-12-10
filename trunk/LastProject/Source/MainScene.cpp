@@ -94,13 +94,11 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	// 아이템 생성
 	m_pFirstAidKit = CObjectManage::GetInstance()->Get_FirstAidKit();
-	m_pFirstAidKit->Create( m_pD3dDevice );
-	m_pFirstAidKit->Load( L"Data/CharData/FirstAidKit_1.csav" );
+	CreateFirstAidKit();
 
 	// 잡동사니 생성
 	m_pWall = CObjectManage::GetInstance()->Get_Wall();
-	m_pWall->Create( m_pD3dDevice );
-	m_pWall->Load( L"Data/CharData/Obstacle_0.csav" );
+	CreateWall();
 	
 	//조명 생성
 	m_pLight = new CLight;
@@ -209,15 +207,40 @@ VOID CMainScene::MonsterBreakNockdown()
 	}
 }
 
+VOID CMainScene::CreateFirstAidKit()
+{
+	for ( int i = 0; i < 5; ++i )
+	{
+		m_pFirstAidKit[i].Create( m_pD3dDevice );
+		m_pFirstAidKit[i].Load( L"Data/CharData/FirstAidKit_1.csav" );
+		CTree::GetInstance()->GetMonsVector()->push_back( m_pFirstAidKit[i].GetBoundBox() );
+	}
+}
+
+VOID CMainScene::CreateWall()
+{
+	m_pWall->Create( m_pD3dDevice );
+	m_pWall->Load( L"Data/CharData/Obstacle_0.csav" );
+	CTree::GetInstance()->GetMonsVector()->push_back( m_pWall->GetBoundBox() );
+}
+
 VOID CMainScene::Update()
 {
 	// 치트키 처리
-	if( CInput::GetInstance()->Get_NumKey( 5 ) )
-		m_pGameEvent->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.1f);
+	if( CInput::GetInstance()->Get_ESCKey( ) )
+	{
+		m_pCamera->SetEffect( CCamera::NONE );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.01f );
+		EventStateNetwork( CGameEvent::EVENT_MAP_CAMERA_WALK_END );
+	}
 	if( CInput::GetInstance()->Get_NumKey( 6 ) )
+	{
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
+	}
 	if( CInput::GetInstance()->Get_NumKey( 7 ) )
+	{
 		m_pCamera->SetEffect(1);
+	}
 
 
 	CGameEvent::GetInstance()->IndexInit();
@@ -374,6 +397,7 @@ VOID CMainScene::EventInitCharState( INT nEvent )
 {
 	switch ( nEvent )
 	{
+	case CGameEvent::EVENT_MAP_CAMERA_WALK:
 	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
 		m_pCharactors[0].Set_Position( m_pGameEvent->GetCharPosition( 0, 0 ) );
 		m_pCharactors[1].Set_Position( m_pGameEvent->GetCharPosition( 0, 1 ) );
@@ -389,8 +413,9 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 {
 	switch ( nEvent )
 	{
+	case CGameEvent::EVENT_MAP_CAMERA_WALK:
 	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
-		m_pWall->Set_Position( D3DXVECTOR3( 241.4534f, 0.0f, -202.7f ) );
+		m_pWall->Set_Position( m_pGameEvent->GetWallPosition( 0 ) );
 		m_pWall->SetActive( TRUE );
 		break;
 	default:
@@ -437,34 +462,30 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	switch ( nEvent )
 	{
 	case CGameEvent::EVENT_MAP_CAMERA_WALK:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_MAP_CAMERA_WALK \n" );
 		EventStateNetwork( nEvent );
+		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_MAP_CAMERA_WALK \n" );
+		EventInitGameState( nEvent );
 		EventMapCameraWalk( CCamera::MAP_WALK );
 		break;
 	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_MAP_CAMERA_WALK_END \n" );
-		EventInitGameState( nEvent );
-		//CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 1.0f );
+		if ( CGameEvent::GetInstance()->GetPrevEvent() == CGameEvent::EVENT_MAP_CAMERA_WALK )
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 1.0f );
 		break;
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		// Do Something
 		TutorialAtack();
-		//if ( CObjectManage::GetInstance()->IsHost() ) 
-		//{
-		//	CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 10.0f );
-		//	CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-		//}
+		break;
+	case CGameEvent::TUTORIAL_ATACK_END:
+		TutorialAtackEnd();
 		break;
 	case CGameEvent::TUTORIAL_COMBO:
+		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
-		if ( CObjectManage::GetInstance()->IsHost() ) 
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 1.0f );
-			//SetTimer( GHWND, CGameEvent::TUTORIAL_COMBO, 1 * 1000, NULL );
-			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-		}
+		EventCombo();
 		break;
+
 	case CGameEvent::EVENT_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO \n" );
 		EventCombo();
@@ -547,7 +568,12 @@ VOID CMainScene::EventMapCameraWalk( INT nEvent )
 
 VOID CMainScene::TutorialAtack()
 {
+	CGameEvent::GetInstance()->SetTutorial( 0 );
+}
 
+VOID CMainScene::TutorialAtackEnd()
+{
+	CGameEvent::GetInstance()->SetTutorial( -1 );
 }
 
 VOID CMainScene::EventCombo()

@@ -97,16 +97,23 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			if ( GetAsyncKeyState( 'W' ) )			{ m_vPos.z = a_fCameraMoveSpeed * a_fFrameTime;		}
 			if ( GetAsyncKeyState( 'S' ) )			{ m_vPos.z =-a_fCameraMoveSpeed * a_fFrameTime;		}
 
-			m_bLbutton = m_bRbutton = FALSE;
-			m_bESCKey = m_bEndbutton = m_bHomebutton = FALSE;
-			m_bF1button = m_bF8button = m_bF9button = FALSE;
-			if ( GetAsyncKeyState( VK_LBUTTON ) )	{ ++m_bLbutton;										}
-			if ( GetAsyncKeyState( VK_RBUTTON ) )	{ ++m_bRbutton;										}
+			m_bEndbutton = m_bHomebutton = FALSE;
+
 			if ( GetAsyncKeyState( VK_END ) )		{ m_bEndbutton = TRUE;								}
 			if ( GetAsyncKeyState( VK_HOME ) )		{ m_bHomebutton = TRUE;								}
-			if ( GetAsyncKeyState( VK_F1 ) )		{ ++m_bF1button;									}
-			if ( GetAsyncKeyState( VK_F9 ) )		{ ++m_bF9button;									}
-			if ( GetAsyncKeyState( VK_ESCAPE ) )	{ ++m_bESCKey;										}
+
+			if ( GetAsyncKeyState( VK_ESCAPE ) )		{ ++m_bESCKey;									}
+			else if ( GetAsyncKeyState( VK_LBUTTON ) )	{ ++m_bLbutton;									}
+			else if ( GetAsyncKeyState( VK_RBUTTON ) )	{ ++m_bRbutton;									}
+			else if ( GetAsyncKeyState( VK_F1 ) )		{ ++m_bF1button;								}
+			else if ( GetAsyncKeyState( VK_F8 ) )		{ ++m_bF8button;								}
+			else if ( GetAsyncKeyState( VK_F9 ) )		{ ++m_bF9button;								}
+			else
+			{
+				m_bESCKey = FALSE;
+				m_bLbutton = m_bRbutton = FALSE;
+				m_bF1button = m_bF8button = m_bF9button = FALSE;
+			}
 
 			for (int i = 0; i < 10; ++i)
 			{
