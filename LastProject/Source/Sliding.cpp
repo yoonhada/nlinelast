@@ -1,8 +1,8 @@
 #include "stdafx.h"
 
 #include "Sliding.h"
-#include "Monster.h"
 #include "Stiffen.h"
+#include "Monster.h"
 
 
 Sliding* Sliding::GetInstance()
@@ -17,7 +17,9 @@ VOID Sliding::Enter( CMonster* a_pMonster )
 {
 	// Sliding 애니메이션으로 변경
 	a_pMonster->ChangeAnimation( CMonster::ANIM_SLIDING );
+#ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Sliding : ANIM_SLIDING \n" );
+#endif
 }
 
 

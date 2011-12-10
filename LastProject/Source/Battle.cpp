@@ -3,7 +3,6 @@
 #include "Battle.h"
 #include "Seek.h"
 #include "LockOn.h"
-#include "Melee.h"
 #include "Spin.h"
 #include "DashReady.h"
 
@@ -45,18 +44,17 @@ VOID Battle::Execute( CMonster* a_pMonster )
 	if( fDistance < 25.0f )
 	{
 		// 근접 공격
-		//if( FastRand2() < 0.5f )
-		//{
-			a_pMonster->GetFSM()->ChangeState( LockOn::GetInstance() );
-		//}
-		// 회전 공격
-		/*else
+		if( FastRand2() < 0.5f )
 		{
-			pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
-		}	*/
+			a_pMonster->GetFSM()->ChangeState( LockOn::GetInstance() );
+		}
+		// 회전 공격
+		else
+		{
+			a_pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
+		}
 	}
 	// 대시 공격 범위면
-
 	else if( fDistance > 80.0f && fDistance < 120.0f )
 	{
 		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH );

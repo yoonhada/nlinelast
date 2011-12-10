@@ -928,6 +928,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Groggy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Groggy.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\LockOn.cpp"
 				>
 			</File>
@@ -1159,6 +1167,18 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="Sound"
+			>
+			<File
+				RelativePath=".\Source\Sound.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Sound.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ClassDiagram11.cd"

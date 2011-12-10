@@ -25,10 +25,6 @@ public:
 	virtual VOID Enter( CMonster* a_pMonster );
 	virtual VOID Execute( CMonster* a_pMonster );
 	virtual VOID Exit( CMonster* a_pMonster );
-
-	VOID		Initialize( TileMap::INFO* a_pMapInfo );
-//	FLOAT		GetDegree();
-//	D3DXVECTOR3 GetWorldPos( INT a_iX, INT a_iZ );
 };
 
 
