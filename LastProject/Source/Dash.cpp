@@ -2,7 +2,7 @@
 
 #include "Dash.h"
 #include "Sliding.h"
-
+#include "Monster.h"
 
 Dash* Dash::GetInstance()
 {
@@ -15,7 +15,7 @@ Dash* Dash::GetInstance()
 VOID Dash::Enter( CMonster* a_pMonster )
 {
 	a_pMonster->Set_DashData( a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos() );
-	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() / 10.0f * 0.15f );
+	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() * 0.015f );		// /10 * 0.15f
 
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{

@@ -17,10 +17,8 @@
 //#pragma  comment ( lib, "tbb.lib" )
 
 // AntTwearBar 라이브러리
-#ifdef _DEBUG
 #pragma comment (lib, "AntTweakBar.lib")
 #include "AntTweakBar.h"
-#endif
 
 
 // 헤더
