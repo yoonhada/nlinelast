@@ -51,7 +51,8 @@ enum GUIEDIT {	LOGIN_IP	= 2000,
 };
 // CameraWork Resource
 enum CAMERAWORK {	CWK_LOGO_EVENT		= 10000,
-					CWK_MAIN_EVENT0		= 10010 
+					CWK_MAIN_EVENT0		= 10010,
+					CWK_MAIN_EVENT1		= 10011
 };
 
 namespace MTP_FUN
