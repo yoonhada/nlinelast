@@ -15,6 +15,9 @@
 CSceneManage::CSceneManage()
 {
 	Clear();
+
+	m_scnLodingState	= IScene::SCENE_LOGO;
+	m_scnCurrentState	= IScene::SCENE_LOGO;
 }
 
 CSceneManage::~CSceneManage()
@@ -162,6 +165,8 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 	{
 		MessageBox(NULL, L"Create SceneManage Thread Error",NULL, MB_OK);
 	}
+
+	m_scnLodingState = _scnNext;
 }
 VOID CSceneManage::Update()
 {
@@ -169,6 +174,8 @@ VOID CSceneManage::Update()
 	{
 		//ChangeScene();
 		m_pScene = m_pNextScene;
+
+		m_scnCurrentState = m_scnLodingState;
 	}
 
 	if( m_pScene->GetSceneState() == IScene::SCENE_END )

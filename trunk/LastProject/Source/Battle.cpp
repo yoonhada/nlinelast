@@ -3,6 +3,7 @@
 #include "Battle.h"
 #include "Seek.h"
 #include "LockOn.h"
+#include "Melee.h"
 #include "Spin.h"
 #include "DashReady.h"
 
@@ -51,7 +52,14 @@ VOID Battle::Execute( CMonster* a_pMonster )
 		// 회전 공격
 		else
 		{
-			a_pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
+			if( a_pMonster->Get_MonsterNumber() == CGameEvent::CLOWN )
+			{
+				a_pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
+			}
+			else
+			{
+				a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+			}
 		}
 	}
 	// 대시 공격 범위면

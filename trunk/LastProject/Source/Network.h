@@ -34,6 +34,7 @@ public:
 
 		MSG_UTOM_ATTACK,
 		MSG_MTOU_ATTACK,
+		MSG_EVENT_ATTACK,
 
 		MSG_PLAYER_ATTACK_ANIMATION,
 		MSG_MONSTER_ATTACK_ANIMATION,
@@ -97,6 +98,7 @@ public:
 	VOID SC_MONSTER_MOVEMENT( CPacket& a_pk );
 	VOID SC_UTOM_ATTACK( CPacket& a_pk );
 	VOID SC_MTOU_ATTACK( CPacket& a_pk );
+	VOID SC_EVENT_ATTACK( CPacket& a_pk );
 
 	VOID SC_Player_Attack_Animation( CPacket& a_pk );
 	VOID SC_Monster_Attack_Animation( CPacket& a_pk );
@@ -118,6 +120,7 @@ public:
 	VOID CS_MONSTER_MOVEMENT( WORD a_iMonsterNumber, PathNode* a_pPath );
 	VOID CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
 	VOID CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );
+	VOID CS_EVENT_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );
 
 	VOID CS_Player_Attack_Animation( WORD a_wAnimationNumber );
 	VOID CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnimationNumber );

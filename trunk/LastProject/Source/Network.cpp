@@ -11,6 +11,8 @@
 #include "Melee2.h"
 #include "Spin.h"
 #include "Dash.h"
+#include "DashReady.h"
+#include "TimeLifeItem.h"
 
 
 CNetwork::CNetwork()
@@ -465,6 +467,36 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 }
 
 
+VOID CNetwork::SC_EVENT_ATTACK( CPacket& a_pk )
+{
+	WORD wClientNumber = 0;
+	WORD wMonsterNumber = 0;
+	FLOAT fDirX, fDirY, fDirZ;
+	WORD wTotalParts = 0;
+	WORD wDestroyPart = 0;
+	WORD wDestroyCount = 0;
+
+	a_pk.Read( &wClientNumber );
+	a_pk.Read( &wMonsterNumber );
+	a_pk.Read( &fDirX);
+	a_pk.Read( &fDirY);
+	a_pk.Read( &fDirZ);
+	a_pk.Read( &wDestroyCount );
+
+#ifdef _DEBUG
+	CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount : %d \n", wDestroyCount );
+#endif
+
+	WORD wList[1000];
+	for( WORD i=0; i<wDestroyCount; ++i )
+	{
+		a_pk.Read( &wList[i] );
+	}
+
+	CObjectManage::GetInstance()->Get_Wall()[wMonsterNumber].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+}
+
+
 VOID CNetwork::SC_Player_Attack_Animation( CPacket& a_pk )
 {
 	WORD wClientNumber;
@@ -532,7 +564,7 @@ VOID CNetwork::SC_Monster_Attack_Animation2( CPacket& a_pk )
 	pMonster[wMonsterNumber]->Set_TargetPos( vNextPos );
 	pMonster[wMonsterNumber]->Set_TargetDistance( fTargetDistance );
 
-	CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Dash::GetInstance() );
+	CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( DashReady::GetInstance() );
 }
 
 
@@ -654,7 +686,7 @@ VOID CNetwork::CS_EVENT_COMBO( INT * a_iEventKind )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_EVENT_STATE;
+	WORD wMsgID = MSG_EVENT_COMBO;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -890,7 +922,7 @@ VOID CNetwork::CS_Monster_Attack_Animation2( WORD a_wMonsterNumber, WORD a_wAnim
 
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI send \n" );
+	CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI2 send \n" );
 #endif
 }
 
@@ -1022,6 +1054,11 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	// 공격 : 몬스터 -> 유저
 	case MSG_MTOU_ATTACK:
 		SC_MTOU_ATTACK( a_pk );
+		break;
+
+	// 이벤트
+	case MSG_EVENT_ATTACK:
+		SC_EVENT_ATTACK( a_pk );
 		break;
 
 	// 유저 공격 애니메이션

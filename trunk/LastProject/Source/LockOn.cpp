@@ -166,7 +166,6 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 
 		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
-
 	else
 	{
 		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK2 );
