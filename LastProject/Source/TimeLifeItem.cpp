@@ -37,7 +37,7 @@ VOID CTimeLifeItem::Update()
 
 	}
 
-	CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE, m_iMonsterNumber );
+	CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE + 1, m_iMonsterNumber );
 }
 
 VOID CTimeLifeItem::SetActive( BOOL a_bActive )
