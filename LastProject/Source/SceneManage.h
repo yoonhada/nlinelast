@@ -19,6 +19,8 @@ public:
 	VOID		Update();
 	VOID		Render();
 
+	INT			GetCurrentScene()	{ return m_scnCurrentState; }
+
 private:
 
 	static UINT WINAPI ThreadFunc(LPVOID lParam);
@@ -39,6 +41,8 @@ private:
 	LoadingScene*		m_pLoadingScene;
 	//IScene*				m_pNextScene;
 	//IScene*				m_pPrevScene;
+	INT					m_scnLodingState;
+	INT					m_scnCurrentState;
 
 };
 

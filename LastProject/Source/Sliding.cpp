@@ -16,7 +16,14 @@ Sliding* Sliding::GetInstance()
 VOID Sliding::Enter( CMonster* a_pMonster )
 {
 	// Sliding 애니메이션으로 변경
-	a_pMonster->ChangeAnimation( CMonster::ANIM_SLIDING );
+	if( a_pMonster->Get_MonsterNumber() == CGameEvent::CLOWN )
+	{
+		a_pMonster->ChangeAnimation( CMonster::ANIM_SLIDING );
+	}
+	else
+	{
+		a_pMonster->ChangeAnimation( CMonster::ANIM_MELEE_ATTACK );
+	}
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Sliding : ANIM_SLIDING \n" );
 #endif
