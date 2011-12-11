@@ -285,6 +285,7 @@ VOID CMainScene::Update()
 	for ( int Loop = 0; Loop < 3; ++Loop )
 	{
 		m_pWall[Loop].Update();
+		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE + 1, Loop );
 	}
 	
 	m_pASEViewer->Update();
