@@ -29,10 +29,10 @@ VOID MainGUI::Create()
 {
 	m_pMouse->Initialize( m_hWnd );
 	
-	FLOAT fX		= 0.0f;
-	FLOAT fY		= 0.0f;
-	FLOAT fWidth	= 300.0f;
-	FLOAT fHeight	= 200.0f;
+	FLOAT fX		= 30.0f;
+	FLOAT fY		= 30.0f;
+	FLOAT fWidth	= 654.0f;
+	FLOAT fHeight	= 224.0f;
 
 	GUIBase::IMAGEPARAM imgParamCharacterState;
 
@@ -40,10 +40,10 @@ VOID MainGUI::Create()
 	
 	m_pGUICharacterState->Create( fX, fY, fWidth, fHeight, imgParamCharacterState );
 
-	fX		= 600.0f;
-	fY		= 0.0f;
-	fWidth	= 200.0f;
-	fHeight = 200.0f;
+	fX		= 950.0f;
+	fY		= 100.0f;
+	fWidth	= 302.0f;
+	fHeight = 291.0f;
 
 	GUIBase::IMAGEPARAM imgParamMiniMap;
 
@@ -57,7 +57,7 @@ VOID MainGUI::Create()
 	fHeight	= 50.0f;
 
 	GUIBase::IMAGEPARAM imgParamEdit;
-	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\MainScene\\Listbox.png" );
+	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\MainScene\\Edit.png" );
 	m_pChatEdit->Create( fX, fY, fWidth, fHeight, imgParamEdit );
 	m_pChatEdit->SetStyle( GUIEdit::EDT_DYNAMIC );
 
@@ -66,7 +66,7 @@ VOID MainGUI::Create()
 	fWidth	= 500.0f;
 	fHeight	= 400.0f;
 	GUIBase::IMAGEPARAM imgParamChat;
-	m_pGUIBase->AddFileName( 0, imgParamChat, L"Img\\MainScene\\Listbox1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamChat, L"Img\\MainScene\\Edit.png" );
 	m_pChatWindow->Create( fX, fY, fWidth, fHeight, imgParamChat );
 
 }
