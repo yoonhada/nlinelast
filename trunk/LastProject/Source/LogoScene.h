@@ -6,7 +6,6 @@
 
 class CCharactor;
 class CameraWork;
-class CGameEventCombo;
 
 class LogoScene : public IScene
 {

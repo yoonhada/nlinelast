@@ -6,7 +6,7 @@ class Mouse;
 class GUIBase;
 class GUIBackground;
 class GUIListbox;
-class GUIEdit;
+class GUIEditManager;
 
 class MainGUI
 {
@@ -48,7 +48,7 @@ private:
 	GUIBackground*			m_pGUICharacterState;
 	GUIBackground*			m_pGUIMiniMap;
 	GUIListbox*				m_pChatWindow;
-	GUIEdit*				m_pChatEdit;
+	GUIEditManager*			m_pChatEdit;
 	
 	
 public:

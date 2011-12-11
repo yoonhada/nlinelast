@@ -6,7 +6,7 @@ class Mouse;
 class GUIBase;
 class GUIBackground;
 class GUIBtnManager;
-class GUIEdit;
+class GUIEditManager;
 class GUIListbox;
 
 class LobbyGUI
@@ -60,7 +60,7 @@ private:
 	GUIBase*				m_pGUIBase;
 	GUIBackground*			m_pGUIBackground;
 	GUIBtnManager*			m_pGUIBtnManager;
-	GUIEdit*				m_pGUIEdit;
+	GUIEditManager*			m_pGUIEditManager;
 	GUIListbox*				m_pGUIListbox;
 
 public:

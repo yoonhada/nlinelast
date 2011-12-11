@@ -1,168 +1,237 @@
 #include "stdafx.h"
 #include "GUIEdit.h"
-#include "GUIWriting.h"
 #include "GUIFont.h"
+#include "GUICaret.h"
+
+DWORD GUIEdit::EdtMessage = 0;
 
 VOID GUIEdit::Initialize()
 {
-	memset( m_Data.Str, 0, sizeof( m_Data.Str ) );
-
-	m_dStyle		= EDT_STATIC;
-
-	m_bActivate		= TRUE;
+	//	Init Data
+	m_dStyle		= EDT_STYLE_STATIC;
+	m_dState		= EDT_STATE_NORMAL;
+	m_bFocus		= FALSE;
 	m_bMessage		= FALSE;
-
+	
 	//	Init Font Info
 	_tcscpy_s( m_aFaceName, L"휴먼매직체" );
 	m_iFontWidth	= 10;
 	m_iFontHeight	= 10;
+
+	//	new GUICaret
+	m_pGUICaret = new GUICaret( m_pd3dDevice, m_pSprite );
 }
 
 VOID GUIEdit::Release()
 {
+	delete m_pGUICaret;
 }
 
-VOID GUIEdit::CreateGUICaret()
+//VOID GUIEdit::Create( GUIBase::IMAGEPARAM& _imgParam )
+//{
+//	//	Set Font X, Y
+//	m_iFontX	= static_cast<INT>( _imgParam.fX + ( m_iFontWidth ) * 0.5f );
+//	m_iFontY	= static_cast<INT>( _imgParam.fY + ( _imgParam.fHeight - m_iFontHeight ) * 0.5f );
+//	
+//	// Create Texture Area
+//	SetRect(	&m_Data.rtText,
+//				m_iFontX,
+//				m_iFontY,
+//				static_cast<INT>( _imgParam.fX + _imgParam.fWidth ),
+//				static_cast<INT>( _imgParam.fY + _imgParam.fHeight ) );
+//
+//	//	Create Imgae
+//	CreateImage2D( m_Data.img2DBackground, _imgParam );
+//
+//	//	Test Caret Image2D
+//	CreateGUICaret();
+//
+//}
+
+VOID GUIEdit::Create( DWORD _dID, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, IMAGEPARAM& _imgParamEdit, IMAGEPARAM& _imgParamCaret )
 {
-	//	Test Caret Image2D
-	GUIBase::IMAGEPARAM imgCaret;
+	// Init ID
+	m_dID = _dID;
 
-	imgCaret.dPivotType = GUIBase::GBS_TOPLEFT;
-	imgCaret.fX			= static_cast<FLOAT>( m_iFontX );
-	imgCaret.fY			= static_cast<FLOAT>( m_iFontY );
-	imgCaret.fWidth		= static_cast<FLOAT>( m_iFontWidth );
-	imgCaret.fHeight	= static_cast<FLOAT>( m_iFontHeight );
+	//	Set Font X, Y
+	m_iFontX		= static_cast<INT>( _fX + ( m_iFontWidth ) * 0.5f );
+	m_iFontY		= static_cast<INT>( _fY + ( _fHeight - m_iFontHeight ) * 0.5f );
+	
+	// Create Edit
+	SetRect(	&m_rtText,
+				m_iFontX,
+				m_iFontY,
+				static_cast<INT>( _fX + _fWidth ),
+				static_cast<INT>( _fY + _fHeight ) );
+	
+	CreateImage3D( m_img3DEdit, _fX, _fY, _fWidth, _fHeight, _imgParamEdit );
 
-	AddFileName( 0, imgCaret, L"Img\\Caret0.png", 500 );
-	AddFileName( 0, imgCaret, L"Img\\Caret1.png", 500 );
+	//	Init Font Info
+	m_iTextLength = 0;
+	ZeroMemory( m_pcText, sizeof( m_pcText ) );
 
-	CreateImage2D( m_Data.img2DCaret, imgCaret );
+	//	Create Caret
+	m_pGUICaret->Create( _imgParamCaret );
 }
+
+BOOL GUIEdit::Update( BOOL _bReturn )
+{	//	함수 포인터를 써서 할 수 있도록 하자
+	if( m_dStyle == EDT_STYLE_STATIC )
+	{
+		if( m_bFocus & _bReturn )
+			EnableFocus( FALSE );
+	}
+
+	if( m_dStyle == EDT_STYLE_DYNAMIC && _bReturn )
+	{
+		if( m_dState == EDT_STATE_NORMAL )
+		{
+			EnableFocus( FALSE );
+			SetState( EDT_STATE_HIDDEN );
+
+			return FALSE;
+		}
+		
+		if( m_dState == EDT_STATE_HIDDEN )
+		{	
+			SetState( EDT_STATE_NORMAL );
+			EnableFocus( TRUE );
+			
+			return TRUE;
+		}
+		
+	}
+	
+	if(	m_dState == EDT_STATE_DISABLE || m_dState == EDT_STATE_HIDDEN )return FALSE;
+
+	//	이것도 어서 싱글톤으로 만들어 EditManager에서 돌 수 있도록 하자
+	m_pGUICaret->Update();
+
+	return FALSE;
+}
+
+VOID GUIEdit::Render()
+{
+	if(	m_dState == EDT_STATE_HIDDEN )return;
+		
+	RenderImage3D( &m_img3DEdit );
+	
+	//	Set Font
+	GUIFont::GetInstance().Create( m_aFaceName, m_iFontWidth, m_iFontHeight, m_pd3dDevice );
+	GUIFont::GetInstance().Render( m_pcText, &m_rtText, 0xff000000 );
+
+	if( m_bFocus )
+		m_pGUICaret->Render();
+
+}
+
 
 VOID GUIEdit::SetStyle( DWORD _dStyle )
 {
 	switch( _dStyle )
 	{
-	case EDT_STATIC:
-		m_bActivate = TRUE;
+	case EDT_STYLE_STATIC:
+		m_dState = EDT_STATE_NORMAL;
 		break;
-	case EDT_DYNAMIC:
-		m_bActivate = FALSE;
+	case EDT_STYLE_DYNAMIC:
+		m_dState = EDT_STATE_HIDDEN;
 		break;
 	}
 
 	m_dStyle = _dStyle;
 }
 
+VOID GUIEdit::SetState( DWORD _dState )
+{
+	m_dState = _dState;
+}
+
+VOID GUIEdit::EnableFocus( BOOL _bEnable )
+{
+	if( m_dState == EDT_STATE_DISABLE || m_dState == EDT_STATE_HIDDEN )
+		return;
+
+	m_bFocus = _bEnable;
+
+	if( m_bFocus )
+	{
+		//	Connect Caret
+		FLOAT fFontX		= static_cast<FLOAT>( m_iFontX );
+		FLOAT fFontY		= static_cast<FLOAT>( m_iFontY );
+		FLOAT fFontWidth	= static_cast<FLOAT>( m_iFontWidth );
+		FLOAT fFontHeight	= static_cast<FLOAT>( m_iFontHeight );
+	
+		m_pGUICaret->ConnectText( m_pcText, fFontX, fFontY, fFontWidth, fFontHeight );
+	}
+	else
+	{
+		m_pGUICaret->DisconnectText();
+
+		m_bMessage = TRUE;
+	}
+}
+
 VOID GUIEdit::SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight )
 {
-	_tcscpy( m_aFaceName, _pFaceName );
+	_tcscpy_s( m_aFaceName, _pFaceName );
 	m_iFontWidth	= _iWidth;
 	m_iFontHeight	= _iHeight;
-
-	CreateGUICaret();
 }
 
-VOID GUIEdit::Create( GUIBase::IMAGEPARAM& _imgParam )
+VOID GUIEdit::SetText( LPWSTR _pcText )
 {
-	//	Set Font X, Y
-	m_iFontX	= static_cast<INT>( _imgParam.fX + ( m_iFontWidth ) * 0.5f );
-	m_iFontY	= static_cast<INT>( _imgParam.fY + ( _imgParam.fHeight - m_iFontHeight ) * 0.5f );
-	
-	// Create Texture Area
-	SetRect(	&m_Data.rtText,
-				m_iFontX,
-				m_iFontY,
-				static_cast<INT>( _imgParam.fX + _imgParam.fWidth ),
-				static_cast<INT>( _imgParam.fY + _imgParam.fHeight ) );
-
-	//	Create Imgae
-	CreateImage2D( m_Data.img2DBackground, _imgParam );
-
-	//	Test Caret Image2D
-	CreateGUICaret();
+	_tcscpy( m_pcText, _pcText );
 }
 
-VOID GUIEdit::Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, GUIBase::IMAGEPARAM& _imgParam )
+BOOL GUIEdit::TakeMessage( LPWSTR _pcText )
 {
-	//	Set Font X, Y
-	m_iFontX		= static_cast<INT>( _fX + ( m_iFontWidth ) * 0.5f );
-	m_iFontY		= static_cast<INT>( _fY + ( _fHeight - m_iFontHeight ) * 0.5f );
-	
-	// Create Edit
-	SetRect(	&m_Data.rtText,
-				m_iFontX,
-				m_iFontY,
-				static_cast<INT>( _fX + _fWidth ),
-				static_cast<INT>( _fY + _fHeight ) );
+	memcpy( _pcText, m_pcText, sizeof( m_pcText ) );
 
-	CreateImage2D( m_Data.img2DBackground, _fX, _fY, _fWidth, _fHeight, _imgParam );
-
-	//	Test Caret Image2D
-	GUIBase::IMAGEPARAM imgCaret;
-
-	imgCaret.dPivotType = GUIBase::GBS_TOPLEFT;
-	imgCaret.fX			= static_cast<FLOAT>( m_iFontX );
-	imgCaret.fY			= static_cast<FLOAT>( m_iFontY );
-	imgCaret.fWidth		= static_cast<FLOAT>( m_iFontWidth );
-	imgCaret.fHeight	= static_cast<FLOAT>( m_iFontHeight );
-
-	AddFileName( 0, imgCaret, L"Img\\Caret0.png", 500 );
-	AddFileName( 0, imgCaret, L"Img\\Caret1.png", 500 );
-
-	CreateImage2D( m_Data.img2DCaret, imgCaret );
-
-	// 버퍼 초기화
-	GUIWriting::GetInstance().Cleanup();
-
-}
-
-VOID GUIEdit::Update()
-{
-	INT iNum = 0;
-	
-	if( GUIWriting::GetInstance().GetText( m_Data.Str, iNum ) && m_dStyle == EDT_DYNAMIC )
+	if( m_bMessage )
 	{
-		if( iNum !=  0 )
-			m_bMessage	= TRUE;
-		
-		m_bActivate = !m_bActivate;
-		GUIWriting::GetInstance().Cleanup();
+		m_bMessage = FALSE;
+
+		if( m_dStyle == EDT_STYLE_DYNAMIC )
+		{
+			ZeroMemory( m_pcText, sizeof( m_pcText ) );
+			m_iTextLength = 0;
+		}
+		return TRUE;
 	}
 	
-	if( !m_bActivate )
-	{
-		GUIWriting::GetInstance().Cleanup();
-		return;
-	}
-
-	GUIFont::GetInstance().Create( m_aFaceName, m_iFontWidth, m_iFontHeight, m_pd3dDevice );
-	SIZE Size;
-	GUIFont::GetInstance().GetTextSize( m_Data.Str, Size );
-	m_Data.img2DCaret.vecPosition.x = static_cast<FLOAT>( m_iFontX + Size.cx );
+	return FALSE;
 }
 
-VOID GUIEdit::Render()
+BOOL GUIEdit::OnDown( INT _iX, INT _iY )
 {
-	if( !m_bActivate )
-		return;
-
-	RenderImage2D( &m_Data.img2DBackground );
-	RenderImage2D( &m_Data.img2DCaret );
-
-	GUIFont::GetInstance().Render( m_Data.Str, &m_Data.rtText, 0xff000000 );
-
-}
-
-BOOL GUIEdit::TakeMessage( LPWSTR _pStr )
-{
-
-	memcpy( _pStr, m_Data.Str, sizeof( m_Data.Str ) );
-
-	if( !m_bMessage || m_bActivate )
-		return FALSE;
-
-	m_bMessage = FALSE;
-
 	return TRUE;
 }
+
+BOOL GUIEdit::OnMove( INT _iX, INT _iY )
+{	//	GUICursor를 넣어 보자
+	return TRUE;
+}
+
+BOOL GUIEdit::OnUp( INT _iX, INT _iY )
+{
+	if( m_dState == EDT_STATE_DISABLE || m_dState == EDT_STATE_HIDDEN )return FALSE;
+	
+	if( IsPtOnMe( _iX, _iY ) ) 
+	{
+		EdtMessage = m_dID;
+		EnableFocus( TRUE );
+		return TRUE;
+	}
+	else
+		EnableFocus( FALSE );
+
+	return FALSE;
+}
+
+BOOL GUIEdit::IsPtOnMe( INT _iX, INT _iY )
+{
+	POINT pt = { _iX, _iY };
+
+	return ( PtInRect( &m_rtText, pt ) );
+}
+

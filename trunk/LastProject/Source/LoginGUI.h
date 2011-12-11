@@ -6,7 +6,7 @@ class Mouse;
 class GUIBase;
 class GUIBackground;
 class GUIBtnManager;
-class GUIEdit;
+class GUIEditManager;
 
 class LoginGUI
 {
@@ -49,7 +49,7 @@ private:
 	GUIBase*				m_pGUIBase;
 	GUIBackground*			m_pGUIBackground;
 	GUIBtnManager*			m_pGUIBtnManager;
-	GUIEdit*				m_pGUIEdit;
+	GUIEditManager*			m_pGUIEditManager;
 	
 	FLOAT					m_fX, m_fY;
 	FLOAT					m_fWidth, m_fHeight;

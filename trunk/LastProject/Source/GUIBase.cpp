@@ -66,7 +66,7 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, IMAGEPARAM& _imgParam )
 	INT iNumAnimation	= _imgParam.vec2FileName.size();
 	INT	iNumFrame		= 0;
 	if( iNumAnimation != 0 )
-		iNumFrame = _imgParam.vec2FileName[ 0 ].size();
+		iNumFrame = (*_imgParam.vec2FileName[ 0 ]).size();
 
 	//	Not FileName
 	if( iNumAnimation == 0 || iNumFrame == 0 )
@@ -100,18 +100,27 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, IMAGEPARAM& _imgParam )
 		
 		pGUITexture->pTex->UnlockRect( 0 );
 
-		_Image3D.vec2Tex.resize( 1 );
-		_Image3D.vec2Tex[ 0 ].push_back( pGUITexture );
+		//_Image3D.vec2Tex.resize( 1 );
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image3D.vec2Tex.push_back( pvecTexture );
+		(*_Image3D.vec2Tex[ 0 ]).push_back( pGUITexture );
 
 		return;
 	}
 	
 	//	Load Texture
-	_Image3D.vec2Tex.resize( iNumAnimation );
+	//GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+	//_Image3D.vec2Tex.push_back( pvecTexture );
+
 	for( INT j=0 ; j<iNumAnimation ; j++ )
 	{
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image3D.vec2Tex.push_back( pvecTexture );
+
+		iNumFrame = (*_imgParam.vec2FileName[ j ]).size();
+
 		for( INT i=0 ; i<iNumFrame ; i++ )
-			AddTexture( j, _Image3D, _imgParam.vec2FileName[ j ][ i ] );
+			AddTexture( j, _Image3D, (*_imgParam.vec2FileName[ j ])[ i ] );
 	}
 }
 
@@ -148,7 +157,7 @@ VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, IMAGEPARAM& _imgParam )
 	INT iNumAnimation	= _imgParam.vec2FileName.size();
 	INT	iNumFrame		= 0;
 	if( iNumAnimation != 0 )
-		iNumFrame = _imgParam.vec2FileName[ 0 ].size();
+		iNumFrame = (*_imgParam.vec2FileName[ 0 ]).size();
 
 	//	Not FileName
 	if( iNumAnimation == 0 || iNumFrame == 0 )
@@ -180,18 +189,29 @@ VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, IMAGEPARAM& _imgParam )
 		
 		pGUITexture->pTex->UnlockRect( 0 );
 
-		_Image2D.vec2Tex.resize( 1 );
-		_Image2D.vec2Tex[ 0 ].push_back( pGUITexture );
+		//_Image2D.vec2Tex.resize( 1 );
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image2D.vec2Tex.push_back( pvecTexture );
+
+		(*_Image2D.vec2Tex[ 0 ]).push_back( pGUITexture );
 
 		return;
 	}
 	
 	//	Load Texture
-	_Image2D.vec2Tex.resize( iNumAnimation );
+	//_Image2D.vec2Tex.resize( iNumAnimation );
+	//GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+	//_Image2D.vec2Tex.push_back( pvecTexture );
+
 	for( INT j=0 ; j<iNumAnimation ; j++ )
 	{
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image2D.vec2Tex.push_back( pvecTexture );
+
+		iNumFrame = (*_imgParam.vec2FileName[ j ]).size();
+
 		for( INT i=0 ; i<iNumFrame ; i++ )
-			AddTexture( j, _Image2D, _imgParam.vec2FileName[ j ][ i ] );
+			AddTexture( j, _Image2D, (*_imgParam.vec2FileName[ j ])[ i ] );
 	}
 
 }
@@ -207,11 +227,11 @@ VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 	SetMatrix( _pImage3D->vecScale, _pImage3D->vecRotate, _pImage3D->vecTrans );
 
 	//	SetTexture
-	LPGUITEXTURE pGUITexture = _pImage3D->vec2Tex[ _pImage3D->iCurrentAnimation ][ 0 ];
+	LPGUITEXTURE pGUITexture = (*_pImage3D->vec2Tex[ _pImage3D->iCurrentAnimation ])[ 0 ];
 	
 	if( _pImage3D->bAniPlay )
 	{
-		pGUITexture = _pImage3D->vec2Tex[ _pImage3D->iCurrentAnimation ][ _pImage3D->iCurrentFrame ];
+		pGUITexture = (*_pImage3D->vec2Tex[ _pImage3D->iCurrentAnimation ])[ _pImage3D->iCurrentFrame ];
 
 		_pImage3D->dCurrentTime = timeGetTime();
 
@@ -221,7 +241,7 @@ VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 	
 			_pImage3D->dBeginTime = _pImage3D->dCurrentTime;
 	
-			INT iFrameSize = _pImage3D->vec2Tex[ _pImage3D->iCurrentAnimation ].size();
+			INT iFrameSize = (*_pImage3D->vec2Tex[ _pImage3D->iCurrentAnimation ]).size();
 			if( _pImage3D->iCurrentFrame >= iFrameSize )
 				_pImage3D->iCurrentFrame = 0;
 		}
@@ -254,11 +274,11 @@ VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 VOID GUIBase::RenderImage2D( LPIMAGE2D _pImage2D )
 {
 	//	SetTexture
-	LPGUITEXTURE pGUITexture = _pImage2D->vec2Tex[ _pImage2D->iCurrentAnimation ][ 0 ];
+	LPGUITEXTURE pGUITexture = (*_pImage2D->vec2Tex[ _pImage2D->iCurrentAnimation ])[ 0 ];
 	
 	if( _pImage2D->bAniPlay )
 	{
-		pGUITexture = _pImage2D->vec2Tex[ _pImage2D->iCurrentAnimation ][ _pImage2D->iCurrentFrame ];
+		pGUITexture = (*_pImage2D->vec2Tex[ _pImage2D->iCurrentAnimation ])[ _pImage2D->iCurrentFrame ];
 
 		_pImage2D->dCurrentTime = timeGetTime();
 
@@ -268,7 +288,7 @@ VOID GUIBase::RenderImage2D( LPIMAGE2D _pImage2D )
 	
 			_pImage2D->dBeginTime = _pImage2D->dCurrentTime;
 	
-			INT iFrameSize = _pImage2D->vec2Tex[ _pImage2D->iCurrentAnimation ].size();
+			INT iFrameSize = (*_pImage2D->vec2Tex[ _pImage2D->iCurrentAnimation ]).size();
 			if( _pImage2D->iCurrentFrame >= iFrameSize )
 				_pImage2D->iCurrentFrame = 0;
 		}
@@ -406,6 +426,7 @@ HRESULT GUIBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppOutTexture, LPCWSTR
 					NULL,					//	저장하는 256 색 팔레트를 나타내는 PALETTEENTRY 구조체의 포인터
 					&(*_ppOutTexture) ) ) )	//	생성된 큐브 텍스처 개체를 나타내는 IDirect3DTexture9 인터페이스의 포인터 주소
 	{
+		CDebugConsole::GetInstance()->Messagef( L"%s\n", _FileName );
 		MessageBox( NULL, L"LoadTextureFromFile() Failed.", NULL, MB_OK );
 		return E_FAIL;
 	}
@@ -441,7 +462,7 @@ VOID GUIBase::AddTexture( INT _iNumAni, IMAGE3D& _Image3D, LPGUITEXTUREINFO _pGU
 							static_cast<UINT>( _Image3D.vecScale.y ),
 							D3DCOLOR_XRGB( 255, 0, 255 ) );
 
-	_Image3D.vec2Tex[ _iNumAni ].push_back( pGUITexture );
+	(*_Image3D.vec2Tex[ _iNumAni ]).push_back( pGUITexture );
 }
 
 VOID GUIBase::AddTexture( INT _iNumAni, IMAGE2D& _Image2D, LPGUITEXTUREINFO _pGUITextureInfo )
@@ -458,7 +479,7 @@ VOID GUIBase::AddTexture( INT _iNumAni, IMAGE2D& _Image2D, LPGUITEXTUREINFO _pGU
 							_Image2D.rtSource.bottom,
 							D3DCOLOR_XRGB( 255, 0, 255 ) );
 
-	_Image2D.vec2Tex[ _iNumAni ].push_back( pGUITexture );
+	(*_Image2D.vec2Tex[ _iNumAni ]).push_back( pGUITexture );
 }
 
 VOID GUIBase::AddFileName( INT _iNumAni, IMAGEPARAM& _imgParam, LPWSTR _pFileName, INT _iFrameSpeed )
@@ -471,14 +492,18 @@ VOID GUIBase::AddFileName( INT _iNumAni, IMAGEPARAM& _imgParam, LPWSTR _pFileNam
 
 	//	같으면 크기를 늘린다
 	if( _iNumAni == iNumAnimation )
-		_imgParam.vec2FileName.resize( _iNumAni + 1 );
+	{
+		GUITEXTUREINFOVECTOR* vecTextureInfo = new GUITEXTUREINFOVECTOR;
+		_imgParam.vec2FileName.push_back( vecTextureInfo );
+		//_imgParam.vec2FileName.resize( _iNumAni + 1 );
+	}
 
 	LPGUITEXTUREINFO pGUITextureInfo = new GUITEXTUREINFO;
 	lstrcpy( pGUITextureInfo->FileName, _pFileName );
 	
 	pGUITextureInfo->iFrameSpeed = _iFrameSpeed;
 
-	_imgParam.vec2FileName[ _iNumAni ].push_back( pGUITextureInfo );
+	(*_imgParam.vec2FileName[ _iNumAni ]).push_back( pGUITextureInfo );
 }
 
 VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, IMAGEPARAM& _imgParam )
@@ -538,7 +563,7 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, FLOAT _fX, FLOAT _fY, FLOAT _fWi
 	INT iNumAnimation	= _imgParam.vec2FileName.size();
 	INT	iNumFrame		= 0;
 	if( iNumAnimation != 0 )
-		iNumFrame = _imgParam.vec2FileName[ 0 ].size();
+		iNumFrame = (*_imgParam.vec2FileName[ 0 ]).size();
 
 	//	Not FileName
 	if( iNumAnimation == 0 || iNumFrame == 0 )
@@ -572,18 +597,28 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, FLOAT _fX, FLOAT _fY, FLOAT _fWi
 		
 		pGUITexture->pTex->UnlockRect( 0 );
 
-		_Image3D.vec2Tex.resize( 1 );
-		_Image3D.vec2Tex[ 0 ].push_back( pGUITexture );
+		//_Image3D.vec2Tex.resize( 1 );
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image3D.vec2Tex.push_back( pvecTexture );
+
+		(*_Image3D.vec2Tex[ 0 ]).push_back( pGUITexture );
 
 		return;
 	}
 	
 	//	Load Texture
-	_Image3D.vec2Tex.resize( iNumAnimation );
+	//GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+	//_Image3D.vec2Tex.push_back( pvecTexture );
+
 	for( INT j=0 ; j<iNumAnimation ; j++ )
 	{
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image3D.vec2Tex.push_back( pvecTexture );
+
+		iNumFrame = (*_imgParam.vec2FileName[ j ]).size();
+
 		for( INT i=0 ; i<iNumFrame ; i++ )
-			AddTexture( j, _Image3D, _imgParam.vec2FileName[ j ][ i ] );
+			AddTexture( j, _Image3D, (*_imgParam.vec2FileName[ j ])[ i ] );
 	}
 }
 VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, IMAGEPARAM& _imgParam )
@@ -619,7 +654,7 @@ VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, FLOAT _fX, FLOAT _fY, FLOAT _fWi
 	INT iNumAnimation	= _imgParam.vec2FileName.size();
 	INT	iNumFrame		= 0;
 	if( iNumAnimation != 0 )
-		iNumFrame = _imgParam.vec2FileName[ 0 ].size();
+		iNumFrame = (*_imgParam.vec2FileName[ 0 ]).size();
 
 	//	Not FileName
 	if( iNumAnimation == 0 || iNumFrame == 0 )
@@ -651,18 +686,29 @@ VOID GUIBase::CreateImage2D( IMAGE2D& _Image2D, FLOAT _fX, FLOAT _fY, FLOAT _fWi
 		
 		pGUITexture->pTex->UnlockRect( 0 );
 
-		_Image2D.vec2Tex.resize( 1 );
-		_Image2D.vec2Tex[ 0 ].push_back( pGUITexture );
+		//_Image2D.vec2Tex.resize( 1 );
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image2D.vec2Tex.push_back( pvecTexture );
+
+		(*_Image2D.vec2Tex[ 0 ]).push_back( pGUITexture );
 
 		return;
 	}
 	
 	//	Load Texture
-	_Image2D.vec2Tex.resize( iNumAnimation );
+	//_Image2D.vec2Tex.resize( iNumAnimation );
+	/*GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+	_Image2D.vec2Tex.push_back( pvecTexture );*/
+
 	for( INT j=0 ; j<iNumAnimation ; j++ )
 	{
+		GUITEXTUREVECTOR* pvecTexture = new GUITEXTUREVECTOR;
+		_Image2D.vec2Tex.push_back( pvecTexture );
+
+		iNumFrame = (*_imgParam.vec2FileName[ j ]).size();
+
 		for( INT i=0 ; i<iNumFrame ; i++ )
-			AddTexture( j, _Image2D, _imgParam.vec2FileName[ j ][ i ] );
+			AddTexture( j, _Image2D, (*_imgParam.vec2FileName[ j ])[ i ] );
 	}
 
 }

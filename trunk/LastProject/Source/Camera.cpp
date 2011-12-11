@@ -325,13 +325,20 @@ VOID CCamera::CreateEventCamera()
 	//	Test Create
 	//	Create CameraWork
 	m_pCameraWork = new CameraWork( m_pD3dDevice );
-	m_pCameraWork->Create();
-	D3DXVECTOR3 vecBox0( 364.0f, 10.0f, -777.0f ), vecBox1( -1456.0f, 300.0f, 1083.0f ), vecBox2( 934.0f, 250.0f, 2092.0f ), vecBox3( 231.0f, 100.0f, -580.0f );
-	D3DXVECTOR3 vecBox4( -46.0f, 10.0f, 770.0f ), vecBox5( 244.0f, 10.0f, -194.0f );
-	m_pCameraWork->SetPosition_Box4( vecBox0, vecBox1, vecBox2, vecBox3 );
-	m_pCameraWork->SetLookAtCourse_Box2( vecBox4, vecBox5 );
 
-	m_pCameraWork->SetWorkingPeriod( 22000 );
+	CameraWork::PARAMETER prmCameraWork;
+	
+	prmCameraWork.avecPosition[ 0 ] = D3DXVECTOR3( 364.0f, 10.0f, -777.0f );
+	prmCameraWork.avecPosition[ 1 ] = D3DXVECTOR3( -1456.0f, 300.0f, 1083.0f );
+	prmCameraWork.avecPosition[ 2 ] = D3DXVECTOR3( 934.0f, 250.0f, 2092.0f );
+	prmCameraWork.avecPosition[ 3 ] = D3DXVECTOR3( 231.0f, 100.0f, -580.0f );
+
+	prmCameraWork.avecLookAt[ 0 ] = D3DXVECTOR3( -46.0f, 10.0f, 770.0f );
+	prmCameraWork.avecLookAt[ 1 ] = D3DXVECTOR3( 244.0f, 10.0f, -194.0f );
+
+	m_pCameraWork->AddData( CWK_MAIN_EVENT0, &prmCameraWork );
+	m_pCameraWork->SelectData( CWK_MAIN_EVENT0 );
+	
 }
 
 VOID CCamera::UpdateEventCamera()
@@ -347,8 +354,8 @@ VOID CCamera::UpdateEventCamera()
 	m_pCameraWork->GetCameraPosition( vecCameraPosition );
 	m_pCameraWork->GetCameraLookAt( vecCameraLookAt );
 
-	D3DXVECTOR3		vecEyePt = vecCameraPosition; 
-	D3DXVECTOR3		vecLookatPt  = vecCameraLookAt;
+	D3DXVECTOR3		vecEyePt	= vecCameraPosition; 
+	D3DXVECTOR3		vecLookatPt	= vecCameraLookAt;
 	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );

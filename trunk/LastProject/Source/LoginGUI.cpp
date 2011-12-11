@@ -3,7 +3,7 @@
 #include "Mouse.h"
 #include "GUIBackground.h"
 #include "GUIBtnManager.h"
-#include "GUIEdit.h"
+#include "GUIEditManager.h"
 
 VOID LoginGUI::Initialize()
 {
@@ -11,7 +11,7 @@ VOID LoginGUI::Initialize()
 	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
 	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIBtnManager	= new GUIBtnManager( m_pD3dDevice, m_pSprite );
-	m_pGUIEdit			= new GUIEdit( m_pD3dDevice, m_pSprite );
+	m_pGUIEditManager	= new GUIEditManager( m_pD3dDevice, m_pSprite );
 }
 
 VOID LoginGUI::Release()
@@ -20,7 +20,7 @@ VOID LoginGUI::Release()
 	delete m_pGUIBase;
 	delete m_pGUIBackground;
 	delete m_pGUIBtnManager;
-	delete m_pGUIEdit;
+	delete m_pGUIEditManager;
 }
 
 VOID LoginGUI::CreateBackground()
@@ -80,12 +80,21 @@ VOID LoginGUI::CreateEdit()
 	FLOAT fWidth	= 400.0f;
 	FLOAT fHeight	= 150.0f;
 
-	GUIBase::IMAGEPARAM imgParam;
+	GUIBase::IMAGEPARAM imgParamEdit;
+	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\LoginScene\\Name_Edit.png" );
 
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LoginScene\\Name_Edit.png" );
+	GUIBase::IMAGEPARAM imgParamCaret;
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png" );
 
-	m_pGUIEdit->Create( fX, fY, fWidth, fHeight, imgParam );
-	m_pGUIEdit->SetFont( L"ÈÞ¸Õ¸ÅÁ÷Ã¼", 30, 80 );
+	m_pGUIEditManager->Create(	LOGIN_IP,
+								GUIEditManager::EDT_STATIC,
+								fX, fY, 
+								fWidth, fHeight, 
+								imgParamEdit,
+								imgParamCaret );
+	m_pGUIEditManager->SetFont( LOGIN_IP, L"ÈÞ¸Õ¸ÅÁ÷Ã¼", 30, 80 );
+	m_pGUIEditManager->SetText( LOGIN_IP, L"210.109.3.165" );
 }
 
 VOID LoginGUI::Create()
@@ -112,7 +121,7 @@ VOID LoginGUI::Update()
 	m_pMouse->Update();
 	m_pGUIBackground->Update();
 	m_pGUIBtnManager->Update( pt.x, pt.y );
-	m_pGUIEdit->Update();
+	m_pGUIEditManager->Update();
 
 	static BOOL bFirst = FALSE;
 	
@@ -143,22 +152,25 @@ VOID LoginGUI::Render()
 {
 	m_pGUIBackground->Render();
 	m_pGUIBtnManager->Render();
-	m_pGUIEdit->Render();
+	m_pGUIEditManager->Render();
 }
 
 VOID LoginGUI::OnDown( INT x, INT y )
 {
 	m_pGUIBtnManager->OnDown( x, y );
+	m_pGUIEditManager->OnDown( x, y );
 }
 
 VOID LoginGUI::OnMove( INT x, INT y )
 {
 	m_pGUIBtnManager->OnMove( x, y );
+	m_pGUIEditManager->OnMove( x, y );
 }
 
 VOID LoginGUI::OnUp( INT x, INT y )
 {
 	m_pGUIBtnManager->OnUp( x, y );
+	m_pGUIEditManager->OnUp( x, y );
 }
 
 VOID LoginGUI::Command( DWORD& _dOut )
@@ -168,6 +180,6 @@ VOID LoginGUI::Command( DWORD& _dOut )
 
 VOID LoginGUI::GetEditTexture( LPWSTR _pEditTexture )
 {
-	m_pGUIEdit->TakeMessage( _pEditTexture );
+	m_pGUIEditManager->TakeMessage( LOGIN_IP, _pEditTexture );
 }
 

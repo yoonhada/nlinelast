@@ -75,10 +75,10 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create Character
 	m_aData		= new DATA[ 4 ];
 
-	CreateData( &m_aData[ 0 ], L"Data\\CharData\\APPA_0.csav",	D3DXVECTOR3( 31.0f, 5.0f, 100.0f ) );
-	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM.csav",		D3DXVECTOR3(  10.0f, 5.0f, 100.0f ) );
-	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_0.csav", D3DXVECTOR3( -10.0f, 5.0f, 100.0f ) );
-	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_0.csav",	D3DXVECTOR3( -31.0f, 5.0f, 100.0f ) );
+	CreateData( &m_aData[ 0 ], L"Data\\CharData\\APPA_0.csav",	D3DXVECTOR3( 31.0f, 5.0f, 120.0f ) );
+	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM.csav",		D3DXVECTOR3(  10.0f, 5.0f, 120.0f ) );
+	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_0.csav", D3DXVECTOR3( -10.0f, 5.0f, 120.0f ) );
+	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_0.csav",	D3DXVECTOR3( -31.0f, 5.0f, 120.0f ) );
 	
 	//	Create Light
 	m_pLight = new CLight;

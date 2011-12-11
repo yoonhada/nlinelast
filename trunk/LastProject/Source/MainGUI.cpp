@@ -3,7 +3,7 @@
 #include "Mouse.h"
 #include "GUIBackground.h"
 #include "GUIListbox.h"
-#include "GUIEdit.h"
+#include "GUIEditManager.h"
 
 VOID MainGUI::Initialize()
 {
@@ -12,7 +12,7 @@ VOID MainGUI::Initialize()
 	m_pGUICharacterState	= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIMiniMap			= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pChatWindow			= new GUIListbox( m_pD3dDevice, m_pSprite );
-	m_pChatEdit				= new GUIEdit( m_pD3dDevice, m_pSprite );
+	m_pChatEdit				= new GUIEditManager( m_pD3dDevice, m_pSprite );
 }
 
 VOID MainGUI::Release()
@@ -58,9 +58,20 @@ VOID MainGUI::Create()
 
 	GUIBase::IMAGEPARAM imgParamEdit;
 	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\MainScene\\Edit.png" );
-	m_pChatEdit->Create( fX, fY, fWidth, fHeight, imgParamEdit );
-	m_pChatEdit->SetStyle( GUIEdit::EDT_DYNAMIC );
+	
+	GUIBase::IMAGEPARAM imgParamCaret;
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png" );
 
+	m_pChatEdit->Create(	MAIN_CHAT,
+							GUIEditManager::EDT_DYNAMIC,
+							fX, fY,
+							fWidth, 
+							fHeight, 
+							imgParamEdit,
+							imgParamCaret );
+	m_pChatEdit->SetFont( MAIN_CHAT, L"±Ã¼­", 20, 20 );
+	
 	fX		= 50.0f;
 	fY		= 300.0f;
 	fWidth	= 500.0f;
@@ -68,6 +79,7 @@ VOID MainGUI::Create()
 	GUIBase::IMAGEPARAM imgParamChat;
 	m_pGUIBase->AddFileName( 0, imgParamChat, L"Img\\MainScene\\Edit.png" );
 	m_pChatWindow->Create( fX, fY, fWidth, fHeight, imgParamChat );
+	m_pChatWindow->SetFont( L"±Ã¼­", 20, 20, 0x00ffffff );
 
 }
 
@@ -106,7 +118,7 @@ VOID MainGUI::Update()
 	}
 
 	TCHAR Str[ 1024 ];
-	if( m_pChatEdit->TakeMessage( Str ) )
+	if( m_pChatEdit->TakeMessage( MAIN_CHAT, Str ) )
 		m_pChatWindow->AddItem( Str );
 }
 
@@ -121,16 +133,19 @@ VOID MainGUI::Render()
 VOID MainGUI::OnDown( INT x, INT y )
 {
 	m_pChatWindow->OnDown( x, y );
+	m_pChatEdit->OnDown( x, y );
 }
 
 VOID MainGUI::OnMove( INT x, INT y )
 {
 	m_pChatWindow->OnMove( x, y );
+	m_pChatEdit->OnMove( x, y );
 }
 
 VOID MainGUI::OnUp( INT x, INT y )
 {
 	m_pChatWindow->OnUp( x, y );
+	m_pChatEdit->OnUp( x, y );
 }
 
 VOID MainGUI::Command( DWORD& _dOut )

@@ -2,7 +2,6 @@
 #include "LogoScene.h"
 #include "Charactor.h"
 #include "CameraWork.h"
-#include "GameEventCombo.h"
 
 VOID LogoScene::Initialize()
 {
@@ -19,7 +18,7 @@ VOID LogoScene::Initialize()
 	m_datLogo.dFrameSpeed	= 1200;
 
 	m_datScene.bActivate	= FALSE;
-	m_datScene.dFrameSpeed	= 2200;
+	m_datScene.dFrameSpeed	= 3000;
 }
 
 VOID LogoScene::Release()
@@ -43,48 +42,56 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	m_pLogo[ 0 ].Create( m_pD3dDevice );
 	m_pLogo[ 0 ].Load( L"Data/Logo/N_Beta.csav" );
 	m_pLogo[ 0 ].Set_Position( D3DXVECTOR3( 55.0f, 100.0f, 0.0f ) );
-	m_pLogo[ 0 ].Set_Angle( -MTP_FUN::Deg2Rad<210>::radians ); // D3DXToRadian( -30.0f ) );
+	m_pLogo[ 0 ].Set_Angle( -MTP_FUN::Deg2Rad<210>::radians );
 	m_pLogo[ 0 ].EnableShadow( FALSE );
 	
 	m_pLogo[ 1 ].Create( m_pD3dDevice );
 	m_pLogo[ 1 ].Load( L"Data/Logo/-_Beta.csav" );
 	m_pLogo[ 1 ].Set_Position( D3DXVECTOR3( 35.0f, 100.0f,-5.0f ) );
-	m_pLogo[ 1 ].Set_Angle( -MTP_FUN::Deg2Rad<15>::radians ); // D3DXToRadian( -15.0f ) );
+	m_pLogo[ 1 ].Set_Angle( -MTP_FUN::Deg2Rad<15>::radians );
 	m_pLogo[ 1 ].EnableShadow( FALSE );
 
 	m_pLogo[ 2 ].Create( m_pD3dDevice );
 	m_pLogo[ 2 ].Load( L"Data/Logo/L_Beta.csav" );
 	m_pLogo[ 2 ].Set_Position( D3DXVECTOR3( 15.0f, 100.0f,-10.0f ) );
-	m_pLogo[ 2 ].Set_Angle( MTP_FUN::Deg2Rad<90>::radians ); // D3DXToRadian( 90.0f ) );
+	m_pLogo[ 2 ].Set_Angle( MTP_FUN::Deg2Rad<90>::radians );
 	m_pLogo[ 2 ].EnableShadow( FALSE );
 
 	m_pLogo[ 3 ].Create( m_pD3dDevice );
 	m_pLogo[ 3 ].Load( L"Data/Logo/I_Beta.csav" );
 	m_pLogo[ 3 ].Set_Position( D3DXVECTOR3( -5.0f, 100.0f,-10.0f ) );
-	//m_pLogo[ 3 ].Set_Angle( MTP_FUN::Deg2Rad<0>::radians ); //D3DXToRadian( 0.0f ) );
+	//m_pLogo[ 3 ].Set_Angle( MTP_FUN::Deg2Rad<0>::radians );
 	m_pLogo[ 3 ].EnableShadow( FALSE );
 
 	m_pLogo[ 4 ].Create( m_pD3dDevice );
 	m_pLogo[ 4 ].Load( L"Data/Logo/N_Beta.csav" );
 	m_pLogo[ 4 ].Set_Position( D3DXVECTOR3(-25.0f, 100.0f,-5.0f ) );
-	m_pLogo[ 4 ].Set_Angle( MTP_FUN::Deg2Rad<195>::radians ); // D3DXToRadian( 7.5f ) );
+	m_pLogo[ 4 ].Set_Angle( MTP_FUN::Deg2Rad<195>::radians );
 	m_pLogo[ 4 ].EnableShadow( FALSE );
 
 	m_pLogo[ 5 ].Create( m_pD3dDevice );
 	m_pLogo[ 5 ].Load( L"Data/Logo/E_Beta.csav" );
 	m_pLogo[ 5 ].Set_Position( D3DXVECTOR3(-45.0f, 100.0f, 0.0f ) );
-	m_pLogo[ 5 ].Set_Angle( MTP_FUN::Deg2Rad<195>::radians ); //D3DXToRadian( 195.0f ) );
+	m_pLogo[ 5 ].Set_Angle( MTP_FUN::Deg2Rad<195>::radians );
 	m_pLogo[ 5 ].EnableShadow( FALSE );
 
 	//	Create CameraWork
 	m_pCameraWork = new CameraWork( m_pD3dDevice );
-	m_pCameraWork->Create();
-	D3DXVECTOR3 vecBox0( 89.0f, 10.0f, -306.0f ), vecBox1( 865.0f, 50.0f, 117.0f ), vecBox2( -115.0f, 100.0f, 570.0f ), vecBox3( -6.0f, 20.0f, 120.0f );
-	D3DXVECTOR3 vecBox4( -189.0f, 10.0f, -133.0f ), vecBox5( 4.0f, 10.0f, 0.0f );
-	m_pCameraWork->SetPosition_Box4( vecBox0, vecBox1, vecBox2, vecBox3 );
-	m_pCameraWork->SetLookAtCourse_Box2( vecBox4, vecBox5 );
 	
-	m_pCameraWork->SetWorkingPeriod( 5000 );
+	CameraWork::PARAMETER prmCameraWork;
+
+	prmCameraWork.avecPosition[ 0 ] = D3DXVECTOR3( 201.0f, 10.0f, -220.0f );
+	prmCameraWork.avecPosition[ 1 ] = D3DXVECTOR3( 466.0f, 50.0f, 68.0f );
+	prmCameraWork.avecPosition[ 2 ] = D3DXVECTOR3( -90.0f, 100.0f, 747.0f );
+	prmCameraWork.avecPosition[ 3 ] = D3DXVECTOR3( -6.0f, 20.0f, 120.0f );
+
+	prmCameraWork.avecLookAt[ 0 ] = D3DXVECTOR3( 7.0f, 10.0f, -6.0f );
+	prmCameraWork.avecLookAt[ 1 ] = D3DXVECTOR3( 4.0f, 10.0f, 0.0f );
+
+	m_pCameraWork->AddData( CWK_LOGO_EVENT, &prmCameraWork );
+	m_pCameraWork->SelectData( CWK_LOGO_EVENT );
+	m_pCameraWork->SetWholeWorkingPeriod( CWK_LOGO_EVENT, CameraWork::CWK_POSITION, 5000 );
+	m_pCameraWork->SetWholeWorkingPeriod( CWK_LOGO_EVENT, CameraWork::CWK_LOOKAT, 5000 );
 
 	//	Create Light
 	m_pLight = new CLight;
@@ -160,27 +167,30 @@ VOID LogoScene::Update()
 	}
 
 	m_pCameraWork->Update();
+	
 
-	/*static D3DXVECTOR3 vecBox0( 89.0f, 10.0f, -306.0f ), vecBox1( 865.0f, 50.0f, 117.0f ), vecBox2( -115.0f, 100.0f, 570.0f ), vecBox3( -6.0f, 90.0f, 79.0f );
+	/*m_pCameraWork->DebugUpdate();
+
+	static D3DXVECTOR3 vecBox0( 89.0f, 10.0f, -306.0f ), vecBox1( 865.0f, 50.0f, 117.0f ), vecBox2( -115.0f, 100.0f, 570.0f ), vecBox3( -6.0f, 90.0f, 79.0f );
 	static D3DXVECTOR3 vecBox4( -189.0f, 10.0f, -133.0f ), vecBox5( 4.0f, 10.0f, -33.0f );
 	
 	if( GetKeyState( 'A' ) &0x8000 )
-		vecBox0.x -= 1.0f;
+		vecBox4.x -= 1.0f;
 	if( GetKeyState( 'D' ) &0x8000 )
-		vecBox0.x += 1.0f;
+		vecBox4.x += 1.0f;
 	if( GetKeyState( 'S' ) &0x8000 )
-		vecBox0.z -= 1.0f;
+		vecBox4.z -= 1.0f;
 	if( GetKeyState( 'W' ) &0x8000 )
-		vecBox0.z += 1.0f;
+		vecBox4.z += 1.0f;
 
 	if( GetKeyState( 'F' ) &0x8000 )
-		vecBox1.x -= 1.0f;
+		vecBox5.x -= 1.0f;
 	if( GetKeyState( 'H' ) &0x8000 )
-		vecBox1.x += 1.0f;
+		vecBox5.x += 1.0f;
 	if( GetKeyState( 'G' ) &0x8000 )
-		vecBox1.z -= 1.0f;
+		vecBox5.z -= 1.0f;
 	if( GetKeyState( 'T' ) &0x8000 )
-		vecBox1.z += 1.0f;
+		vecBox5.z += 1.0f;
 
 	if( GetKeyState( 'J' ) &0x8000 )
 		vecBox2.x -= 1.0f;
@@ -200,8 +210,16 @@ VOID LogoScene::Update()
 	if( GetKeyState( VK_UP ) &0x8000 )
 		vecBox3.z += 1.0f;
 
-	m_pCameraWork->SetPosition_Box4( vecBox0, vecBox1, vecBox2, vecBox3 );
-	m_pCameraWork->SetLookAtCourse_Box2( vecBox4, vecBox5 );
+	CameraWork::PARAMETER prmCameraWork;
+	prmCameraWork.avecPosition[ 0 ] = vecBox0;
+	prmCameraWork.avecPosition[ 1 ] = vecBox1;
+	prmCameraWork.avecPosition[ 2 ] = vecBox2;
+	prmCameraWork.avecPosition[ 3 ] = vecBox3;
+
+	prmCameraWork.avecLookAt[ 0 ] = vecBox4;
+	prmCameraWork.avecLookAt[ 1 ] = vecBox5;
+
+	m_pCameraWork->DebugData( &prmCameraWork );
 
 	CDebugConsole::GetInstance()->Messagef( L"Box0 : %f %f %f\n", vecBox4.x, vecBox4.y, vecBox4.z );
 	CDebugConsole::GetInstance()->Messagef( L"Box1 : %f %f %f\n", vecBox5.x, vecBox5.y, vecBox5.z );
@@ -224,6 +242,8 @@ VOID LogoScene::Render()
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
+
+	//m_pCameraWork->DebugRender();
 
 	m_pLight->EnableLight();
 	m_pMatrices->SetupProjection();

@@ -63,8 +63,8 @@ public:
 		}
 	}GUITEXTURE, *LPGUITEXTURE;
 
-	typedef std::vector< LPGUITEXTURE >	 GUITEXTUREVECTOR;
-	typedef std::vector< GUITEXTUREVECTOR > GUITEXTUREVECTOR2;
+	typedef std::vector< LPGUITEXTURE >			GUITEXTUREVECTOR;
+	typedef std::vector< GUITEXTUREVECTOR* >	GUITEXTUREVECTOR2;
 
 	//	struct Image 
 	//	IMAGE -> IMAGE3D로 수정
@@ -110,8 +110,10 @@ public:
 			for( itE2=vec2Tex.begin() ; itE2!=vec2Tex.end() ; itE2++ )
 			{
 				GUITEXTUREVECTOR::iterator itE;
-				for( itE=itE2->begin() ; itE!=itE2->end() ; itE++ )
+				for( itE=(*itE2)->begin() ; itE!=(*itE2)->end() ; itE++ )
 					delete (*itE);
+
+				delete (*itE2);
 			}
 
 			pVB		= NULL;
@@ -147,9 +149,12 @@ public:
 			for( itE2=vec2Tex.begin() ; itE2!=vec2Tex.end() ; itE2++ )
 			{
 				GUITEXTUREVECTOR::iterator itE;
-				for( itE=itE2->begin() ; itE!=itE2->end() ; itE++ )
+				for( itE=(*itE2)->begin() ; itE!=(*itE2)->end() ; itE++ )
 					delete (*itE);
+
+				delete (*itE2);
 			}
+			
 		}
 	}IMAGE2D, *LPIMAGE2D;
 
@@ -161,8 +166,8 @@ public:
 		INT		iFrameSpeed;
 	}GUITEXTUREINFO, *LPGUITEXTUREINFO;
 
-	typedef std::vector< LPGUITEXTUREINFO >		GUITEXTUREINFOVECTOR;
-	typedef std::vector< GUITEXTUREINFOVECTOR >	GUITEXTUREINFOVECTOR2;
+	typedef std::vector< LPGUITEXTUREINFO >			GUITEXTUREINFOVECTOR;
+	typedef std::vector< GUITEXTUREINFOVECTOR* >	GUITEXTUREINFOVECTOR2;
 
 	typedef struct _IMAGEPARAM
 	{	//	fX, fY, fWidth, fHeight를 따로 나누는것은 고려해봐야 될 문제...
@@ -190,8 +195,12 @@ public:
 			for( itE2=vec2FileName.begin() ; itE2!=vec2FileName.end() ; itE2++ )
 			{
 				GUITEXTUREINFOVECTOR::iterator itE;
-				for( itE=itE2->begin() ; itE!=itE2->end() ; itE++ )
+				for( itE=(*itE2)->begin() ; itE!=(*itE2)->end() ; itE++ )
 					delete (*itE);
+
+				//	Test
+				delete (*itE2);
+				//	End
 			}
 		}
 	}IMAGEPARAM, *LPIMAGEPARAM;

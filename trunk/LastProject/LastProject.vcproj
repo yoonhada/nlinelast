@@ -811,6 +811,10 @@
 				Name="MainScene"
 				>
 				<File
+					RelativePath=".\Source\GUIMinimap.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\MainGUI.cpp"
 					>
 				</File>
@@ -1118,6 +1122,14 @@
 					RelativePath=".\Source\GUIEdit.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\GUIEditManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUIEditManager.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="GUIListbox"
@@ -1164,6 +1176,18 @@
 				</File>
 				<File
 					RelativePath=".\Source\GUIFont.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GUICaret"
+				>
+				<File
+					RelativePath=".\Source\GUICaret.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GUICaret.h"
 					>
 				</File>
 			</Filter>

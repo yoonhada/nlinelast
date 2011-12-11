@@ -7,109 +7,70 @@
 class CameraWork : public CameraWorkBase
 {
 private:
+	enum {	CWK_POSITION_BOX0 = 0, CWK_POSITION_BOX1, CWK_POSITION_BOX2, CWK_POSITION_BOX3,
+			CWK_LOOKAT_BOX0, CWK_LOOKAT_BOX1, 
+			CWK_POSITIONTOLOOKAT_BOX0, CWK_POSITIONTOLOOKAT_BOX1, 
+			CWK_END };
+
 	VOID		Initialize();
 	VOID		Release();
 
-	VOID		InitCameraPosition();
-	VOID		InitCameraLookAt();
-	VOID		InitPositionToLookAt();
-
-	VOID		SetPositionCourse(	D3DXVECTOR3& _vecPoint0, 
-									D3DXVECTOR3& _vecPoint1, 
-									D3DXVECTOR3& _vecPoint2, 
-									D3DXVECTOR3& _vecPoint3 );
-
-	BOOL		UpdatePosition();
-	BOOL		UpdateLookAt();
+	BOOL		UpdateInfo( LPINFO _pInfo, LPD3DXVECTOR3 _pvecPosition );
 
 public:
-	typedef struct _DATA
-	{	
-		IMAGE		imgCourse;
-		COURSEINFO	infCourse;
-
-		LPIMAGE		pimgBox;
-		INT			iNumBox;
-
-		IMAGE		imgBoxLink;
-		COURSEINFO	infBoxLink;
-
-		DWORD		dWorkingPeriod;
-
-		DWORD		dCurrentTime;
-		DWORD		dBeginTime;
-
-		INT			iIncIndex;
-		INT			iCurrentIndex;
-		INT			iNextIndex;
-
-		D3DXVECTOR3	vecCurrentPosition;
-
-		_DATA()
-		{
-			pimgBox = NULL;
-
-			dWorkingPeriod	= 5000;
-
-			dCurrentTime	= 0;
-			dBeginTime		= 0;
-
-			iIncIndex		= 1;
-			iCurrentIndex	= 0;
-			iNextIndex		= 1;
-
-			vecCurrentPosition	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-		}
-		~_DATA()
-		{
-			if( pimgBox != NULL )
-				delete[] pimgBox;
-
-			pimgBox = NULL;
-		}
-	}DATA, *LPDATA;
-
+	enum { CWK_POSITION = 0, CWK_LOOKAT };
 
 	CameraWork( LPDIRECT3DDEVICE9 _pd3dDevice ) : CameraWorkBase( _pd3dDevice )
 	{
 		this->Initialize();
 	}
-	~CameraWork()
+	virtual ~CameraWork()
 	{
 		this->Release();
 	}
 
-	VOID		Create();
-	BOOL		Update();
-	VOID		Render();
+	typedef struct _PARAMETER
+	{
+		D3DXVECTOR3	avecPosition[ 4 ];
+		D3DXVECTOR3	avecLookAt[ 2 ];
+	}PARAMETER, *LPPARAMETER;
 
-	VOID		SetPosition_Box4( D3DXVECTOR3& _vecPosition0, D3DXVECTOR3& _vecPosition1, D3DXVECTOR3& _vecPosition2, D3DXVECTOR3& _vecPosition3 );
-	VOID		SetLookAtCourse_Box2( D3DXVECTOR3& _vecPosition0, D3DXVECTOR3& _vecPosition1 );
-	VOID		SetWorkingPeriod( DWORD _dTime );
-	//VOID		AddWorkingPeriod( INT _iStartIndex, INT _iEndIndex, DWORD _dTime );
+	VOID		AddData( DWORD _dID, LPPARAMETER _pParameter );
+
+	//	전채 IncIndex, fIncInterporation를 조정
+	VOID		SetWholeWorkingPeriod( DWORD _dID,DWORD _dType, DWORD _dTime );
+	//	부분 fIncInterporation만 조정
+	VOID		SetPartWorkingPeriod( DWORD _dID, DWORD _dType, DWORD _dTime, INT _iStartIndex, INT _iEndIndex );
+
+	VOID		SelectData( DWORD _dID );
+
+	BOOL		Update();
 
 	VOID		GetCameraPosition( D3DXVECTOR3& _vecOut ){ _vecOut = m_vecCameraPosition; };
 	VOID		GetCameraLookAt( D3DXVECTOR3& _vecOut ){ _vecOut = m_vecCameraLookAt; };
 
+	VOID		DebugData( LPPARAMETER _pParameter );
+	VOID		DebugUpdate();
+	VOID		DebugRender();
+
 private:
-	DATA		m_datPosition;			//	Camera Position
-	DATA		m_datLookAt;			//	Camera LookAt
-	
-	DATA		m_datPositionToLookAt;	//	Link
+	DATAMAP			m_mapData;
+	LPDATA			m_pdatCurrent;
 
-	//	동일한 속도를 위한!
-	DWORD		m_dFrameSpeed;
-	
-	D3DXVECTOR3	m_vecCameraPosition;
-	D3DXVECTOR3 m_vecCameraLookAt;
+	DATA			m_datDebug;
 
-	DWORD		m_dColCamera;
-	DWORD		m_dColBox;
-	DWORD		m_dColBoxCourse;
-	DWORD		m_dColPositionCourse;
-	DWORD		m_dColLookAtCourse;
-	DWORD		m_dCameraLink;
-	DWORD		m_dColPositionToLookAt;
+	DWORD			m_dFrameSpeed;
+
+	IMAGE			m_aimgBoxs[ CWK_END ];
+	INFO			m_infBoxLink;
+	IMAGE			m_imgBoxLink;
+	IMAGE			m_imgPositionCourse;
+	IMAGE			m_imgLookAtCourse;
+	INFO			m_infPositionToLookAtLink;
+	IMAGE			m_imgPositionToLookAtLink;
+
+	D3DXVECTOR3		m_vecCameraPosition;
+	D3DXVECTOR3		m_vecCameraLookAt;
 
 public:
 
