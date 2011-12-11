@@ -201,7 +201,7 @@ BOOL CameraWork::UpdateInfo( LPINFO _pInfo, LPD3DXVECTOR3 _pvecPosition )
 		if( _pInfo->fInterporation > 1.0f )
 		{
 			_pInfo->iCurrentIndex		+= _pInfo->iIncIndex;
-			_pInfo->iNextIndex			+= _pInfo->iIncIndex;
+			_pInfo->iNextIndex			= _pInfo->iCurrentIndex + _pInfo->iIncIndex;
 
 			_pInfo->fInterporation		= _pInfo->fInterporation - floor( _pInfo->fInterporation );
 		}
