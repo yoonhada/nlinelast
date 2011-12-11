@@ -26,7 +26,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~HelpGUI()
+	virtual ~HelpGUI()
 	{
 		this->Release();
 	}

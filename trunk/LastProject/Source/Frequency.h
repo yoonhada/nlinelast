@@ -25,7 +25,7 @@ public:
 
 private:
 	CFrequency();
-	~CFrequency();
+	virtual ~CFrequency();
 
 	LARGE_INTEGER Frequency;
 	LARGE_INTEGER StartCounter, EndCounter;

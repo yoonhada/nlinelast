@@ -114,6 +114,11 @@ VOID CCharactor::CreateWeapon( INT nType )
 	m_pWeapon->Create();
 }
 
+VOID CCharactor::SetWeaponAni()
+{
+	m_pWeapon->SetWeaponAni();
+}
+
 VOID CCharactor::DestoryWeapon( )
 {
 	SAFE_DELETE( m_pWeapon );
@@ -647,6 +652,11 @@ VOID CCharactor::UpdateOtherPlayer(BOOL bKind)
 	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
 }
+
+//VOID CCharactor::UpdateWeapon()
+//{
+//	m_pWeapon->UpdateSRT();
+//}
 
 VOID CCharactor::UpdateMonsterPos( const D3DXVECTOR3& a_vPrePos, const D3DXVECTOR3& a_vPos, const FLOAT a_fAngle )
 {

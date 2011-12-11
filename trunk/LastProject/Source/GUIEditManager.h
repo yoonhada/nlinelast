@@ -22,7 +22,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~GUIEditManager()
+	virtual ~GUIEditManager()
 	{
 		this->Release();
 	}

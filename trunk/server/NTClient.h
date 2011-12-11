@@ -24,7 +24,7 @@ public:
 
 public:
 	CNTClient();
-	~CNTClient();
+	virtual ~CNTClient();
 
 	VOID Initialize();
 	VOID Close();

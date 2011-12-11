@@ -20,7 +20,7 @@ private:
 		this->Initialize();
 	}
 
-	~GUIFont()
+	virtual ~GUIFont()
 	{
 		this->Release();
 	}

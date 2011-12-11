@@ -94,7 +94,25 @@ VOID LoginGUI::CreateEdit()
 								imgParamEdit,
 								imgParamCaret );
 	m_pGUIEditManager->SetFont( LOGIN_IP, L"ÈÞ¸Õ¸ÅÁ÷Ã¼", 30, 80 );
-	m_pGUIEditManager->SetText( LOGIN_IP, L"210.109.3.165" );
+
+	FILE* pFile;
+	pFile = _wfopen( L"Data/IP.txt", L"r" );
+
+	if( NULL == pFile )
+	{
+		MessageBox(GHWND, L"IP File Load Error", NULL, MB_OK);
+		return ;
+	}
+
+	fseek( pFile, 0L, SEEK_SET );
+
+	WCHAR buffer[ 1024 ];
+
+	fwscanf( pFile, L"%s", buffer );
+
+	fclose(pFile);
+
+	m_pGUIEditManager->SetText( LOGIN_IP, buffer );
 }
 
 VOID LoginGUI::Create()

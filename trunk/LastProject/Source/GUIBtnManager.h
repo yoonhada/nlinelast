@@ -17,7 +17,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~GUIBtnManager()
+	virtual ~GUIBtnManager()
 	{
 		this->Release();
 	}

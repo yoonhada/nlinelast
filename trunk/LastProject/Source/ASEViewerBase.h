@@ -16,7 +16,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~ASEViewerBase()
+	virtual ~ASEViewerBase()
 	{
 		this->Release();
 	}
@@ -37,7 +37,7 @@ public:
 			pIB					= NULL;
 			pTex				= NULL;
 		}
-		~_DATA()
+		virtual ~_DATA()
 		{
 			SAFE_RELEASE( pVB );
 			SAFE_RELEASE( pIB );
@@ -61,7 +61,7 @@ public:
 		{
 			pNavGraphNode = NULL;
 		}
-		~_GRAPHINFO()
+		virtual ~_GRAPHINFO()
 		{
 			SAFE_DELETE_ARRAY( pNavGraphNode );
 		}

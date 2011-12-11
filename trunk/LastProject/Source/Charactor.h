@@ -181,6 +181,8 @@ private:
 public:
 	VOID EnableShadow( BOOL bEnable )	{ m_bShadowEnable = bEnable; }
 	BOOL AliveCheck(BOOL bState = -1);
+	VOID SetWeaponAni();
+	//VOID UpdateWeapon();
 };
 
 #endif

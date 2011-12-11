@@ -19,7 +19,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~LoadingGUI()
+	virtual ~LoadingGUI()
 	{
 		this->Release();
 	}

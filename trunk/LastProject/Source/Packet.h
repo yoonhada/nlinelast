@@ -12,7 +12,7 @@ public:
 
 public:
 	CPacket();
-	~CPacket();
+	virtual ~CPacket();
 
 	VOID	Copy( CHAR* a_pData, INT a_nSize );
 

@@ -14,7 +14,7 @@ private:
 	UINT			m_iVersion;
 
 	CSound();
-	~CSound();
+	virtual ~CSound();
 
 
 public:

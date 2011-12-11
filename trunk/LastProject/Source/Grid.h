@@ -29,7 +29,7 @@ public:
 
 
 	CGrid();
-	~CGrid();
+	virtual ~CGrid();
 	VOID Clear();
 	HRESULT Create() { return S_OK; }
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );

@@ -15,7 +15,9 @@ CCamera::CCamera()
 
 CCamera::~CCamera()
 {
-	SAFE_DELETE ( m_pCameraWork ); 
+	SAFE_DELETE ( m_pCameraWork[0] );
+	SAFE_DELETE ( m_pCameraWork[1] );
+	SAFE_DELETE_ARRAY ( m_pCameraWork ); 
 }
 
 VOID CCamera::Create( LPDIRECT3DDEVICE9 a_pD3dDevice ) 
@@ -44,46 +46,84 @@ VOID CCamera::Clear()
 	//m_fLock		= (D3DX_PI/2) - 0.05f;
 
 	m_fEffectValue = 0.0f;
+
+	m_pCameraWork = NULL;
 }
 
 VOID CCamera::SetCamera()
 {
 	if ( m_nEffect == MAP_WALK )
 	{
-		UpdateEventCamera();
-		
-		return;
-	}
+		if ( m_pCameraWork[0]->Update() == FALSE)
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.01f );
 
-	//상하 각도 고정
-	if ( m_fPitch < ( m_fHighAngle ) ) 
+			m_nEffect = NONE;
+		}
+
+		// Test Update
+		D3DXVECTOR3 vecCameraPosition, vecCameraLookAt;
+		m_pCameraWork[0]->GetCameraPosition( vecCameraPosition );
+		m_pCameraWork[0]->GetCameraLookAt( vecCameraLookAt );
+
+		D3DXVECTOR3		vecEyePt	= vecCameraPosition; 
+		D3DXVECTOR3		vecLookatPt	= vecCameraLookAt;
+		D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
+		D3DXMATRIXA16	matView;
+		D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
+		m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
+	}
+	else if ( m_nEffect == TARGET_SHOW )
 	{
-		m_fPitch = m_fHighAngle;
+		if ( m_pCameraWork[1]->Update() == FALSE)
+		{
+			m_nEffect = NONE;
+		}
+
+		// Test Update
+		D3DXVECTOR3 vecCameraPosition, vecCameraLookAt;
+		m_pCameraWork[1]->GetCameraPosition( vecCameraPosition );
+		m_pCameraWork[1]->GetCameraLookAt( vecCameraLookAt );
+
+		D3DXVECTOR3		vecEyePt	= vecCameraPosition; 
+		D3DXVECTOR3		vecLookatPt	= vecCameraLookAt;
+		D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
+		D3DXMATRIXA16	matView;
+		D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
+		m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 	}
-	if ( m_fPitch > ( m_fLowAngle ) ) 
+	else
 	{
-		m_fPitch = m_fLowAngle;
+		//상하 각도 고정
+		if ( m_fPitch < ( m_fHighAngle ) ) 
+		{
+			m_fPitch = m_fHighAngle;
+		}
+		if ( m_fPitch > ( m_fLowAngle ) ) 
+		{
+			m_fPitch = m_fLowAngle;
+		}
+
+		D3DXMATRIXA16   m;
+		m_vDir  = D3DXVECTOR3( 0.0f, 0.0f, -1.0f );
+		D3DXVec3TransformCoord( &m_vDir, &m_vDir, D3DXMatrixRotationX( &m, m_fPitch ) );
+		D3DXVec3TransformCoord( &m_vDir, &m_vDir, D3DXMatrixRotationY( &m, m_fYaw ) );
+
+		m_vEye = m_vLook;
+		m_vDir *= m_fZoom;
+		m_vEye -= m_vDir;
+		if ( m_vEye.y < 0.0f )
+			m_vEye.y = 0.0f;
+
+		D3DXMatrixLookAtLH( &m_matView, &m_vEye, &m_vLook, &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ) );
+		m_pD3dDevice->SetTransform( D3DTS_VIEW, &m_matView );
+		D3DXMatrixInverse( &m_matInvView, NULL, &m_matView );
+		D3DXVec3Normalize( &m_vDir, &(m_vEye - m_vLook ) );
+
+		m_vPreLook = m_vLook;	
+		m_vPreDir = m_vDir;	
+		m_vPreEye = m_vEye;
 	}
-
-	D3DXMATRIXA16   m;
-    m_vDir  = D3DXVECTOR3( 0.0f, 0.0f, -1.0f );
-    D3DXVec3TransformCoord( &m_vDir, &m_vDir, D3DXMatrixRotationX( &m, m_fPitch ) );
-    D3DXVec3TransformCoord( &m_vDir, &m_vDir, D3DXMatrixRotationY( &m, m_fYaw ) );
-
-    m_vEye = m_vLook;
-	m_vDir *= m_fZoom;
-    m_vEye -= m_vDir;
-	if ( m_vEye.y < 0.0f )
-		m_vEye.y = 0.0f;
-
-    D3DXMatrixLookAtLH( &m_matView, &m_vEye, &m_vLook, &D3DXVECTOR3( 0.0f, 1.0f, 0.0f ) );
-	m_pD3dDevice->SetTransform( D3DTS_VIEW, &m_matView );
-	D3DXMatrixInverse( &m_matInvView, NULL, &m_matView );
-	D3DXVec3Normalize( &m_vDir, &(m_vEye - m_vLook ) );
-
-	m_vPreLook = m_vLook;	
-	m_vPreDir = m_vDir;	
-	m_vPreEye = m_vEye;
 }
 
 
@@ -284,7 +324,9 @@ VOID CCamera::CreateEventCamera()
 {
 	//	Test Create
 	//	Create CameraWork
-	m_pCameraWork = new CameraWork( m_pD3dDevice );
+	m_pCameraWork = new CameraWork*[2];
+	m_pCameraWork[0] = new CameraWork( m_pD3dDevice );
+	m_pCameraWork[1] = new CameraWork( m_pD3dDevice );
 
 	CameraWork::PARAMETER prmCameraWork;
 	
@@ -296,9 +338,10 @@ VOID CCamera::CreateEventCamera()
 	prmCameraWork.avecLookAt[ 0 ] = D3DXVECTOR3( -46.0f, 10.0f, 770.0f );
 	prmCameraWork.avecLookAt[ 1 ] = D3DXVECTOR3( 244.0f, 10.0f, -194.0f );
 
-	m_pCameraWork->AddData( CWK_MAIN_EVENT0, &prmCameraWork );
-	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_POSITION, 5000 );
-	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_LOOKAT, 5000 );
+	m_pCameraWork[0]->AddData( CWK_MAIN_EVENT0, &prmCameraWork );
+	m_pCameraWork[0]->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_POSITION, 5000 );
+	m_pCameraWork[0]->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_LOOKAT, 5000 );
+	m_pCameraWork[0]->SelectData( CWK_MAIN_EVENT0 );
 
 	prmCameraWork.avecPosition[ 0 ] = D3DXVECTOR3( -184.0f, 289.0f, 666.0f );
 	prmCameraWork.avecPosition[ 1 ] = D3DXVECTOR3( -361.0f, 178.0f, 73.0f );
@@ -308,32 +351,8 @@ VOID CCamera::CreateEventCamera()
 	prmCameraWork.avecLookAt[ 0 ] = D3DXVECTOR3( -185.0f, 342.0f, 665.0f );
 	prmCameraWork.avecLookAt[ 1 ] = D3DXVECTOR3( -153.0f, 48.0f, 676.0f );
 	
-	m_pCameraWork->AddData( CWK_MAIN_EVENT1, &prmCameraWork );
-	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT1, CameraWork::CWK_POSITION, 2500 );
-	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT1, CameraWork::CWK_LOOKAT, 1300 );
-
-	m_pCameraWork->SelectData( CWK_MAIN_EVENT0 );
-	//m_pCameraWork->SelectData( CWK_MAIN_EVENT1 );
-	
-}
-
-VOID CCamera::UpdateEventCamera()
-{
-	if ( m_pCameraWork->Update() == FALSE)
-	{
-		m_nEffect = NONE;
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.01f );
-	}
-	
-	// Test Update
-	D3DXVECTOR3 vecCameraPosition, vecCameraLookAt;
-	m_pCameraWork->GetCameraPosition( vecCameraPosition );
-	m_pCameraWork->GetCameraLookAt( vecCameraLookAt );
-
-	D3DXVECTOR3		vecEyePt	= vecCameraPosition; 
-	D3DXVECTOR3		vecLookatPt	= vecCameraLookAt;
-	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
-	D3DXMATRIXA16	matView;
-	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
-	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
+	m_pCameraWork[1]->AddData( CWK_MAIN_EVENT1, &prmCameraWork );
+	m_pCameraWork[1]->SetWholeWorkingPeriod( CWK_MAIN_EVENT1, CameraWork::CWK_POSITION, 2500 );
+	m_pCameraWork[1]->SetWholeWorkingPeriod( CWK_MAIN_EVENT1, CameraWork::CWK_LOOKAT, 1300 );
+	m_pCameraWork[1]->SelectData( CWK_MAIN_EVENT1 );
 }

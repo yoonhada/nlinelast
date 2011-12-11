@@ -1445,6 +1445,33 @@ VOID CMonster::BreakNockdown()
 	m_pBox[6].BreakNockdown();
 }
 
+BOOL CMonster::BreakNockdown(BOOL IsLive)
+{
+	BOOL bRet = FALSE;
+	m_pBox[m_iBreakPart].BreakNockdown();
+
+	switch ( m_iBreakPart )
+	{
+	case 0:					// ¸Ó¸®
+		m_iBreakPart = 4;
+		break;
+	case 1:					// ¸ö
+		m_iBreakPart = 6;
+		bRet = TRUE;
+		break;
+	case 4:					// ÆÈ
+		m_iBreakPart = 5;
+		break;
+	case 5:					// ÆÈ
+		m_iBreakPart = 1;
+		break;
+	default:
+		break;
+	}
+
+	return bRet;
+}
+
 VOID CMonster::EnableShadow( BOOL bEnable )
 {
 	for( INT Loop = 0; Loop < m_iCharEditorMax; ++Loop )

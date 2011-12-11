@@ -51,7 +51,7 @@ private:
 public:
 	CTree();
 	CTree( NODE* _pRoot );
-	~CTree();
+	virtual ~CTree();
 
 	// Get
 	NODE* GetRoot ()				{ return m_pRoot; }

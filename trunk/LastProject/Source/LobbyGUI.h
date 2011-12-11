@@ -30,7 +30,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~LobbyGUI()
+	virtual ~LobbyGUI()
 	{
 		this->Release();
 	}

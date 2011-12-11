@@ -27,7 +27,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~ASEViewer()
+	virtual ~ASEViewer()
 	{
 		this->Release();
 	}

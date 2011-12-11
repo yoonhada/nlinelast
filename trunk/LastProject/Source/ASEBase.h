@@ -139,7 +139,7 @@ public:
 
 			MaterialREF		=	0;
 		}
-		~_GEOMOBJECTDATA()
+		virtual ~_GEOMOBJECTDATA()
 		{
 			SAFE_DELETE_ARRAY( pMeshVertex );
 			SAFE_DELETE_ARRAY( pMeshFace );
@@ -176,7 +176,7 @@ public:
 		{
 			pTextureFileName = NULL;
 		}
-		~_MATERIALDATA()
+		virtual ~_MATERIALDATA()
 		{
 			SAFE_DELETE_ARRAY( pTextureFileName );
 		}
@@ -209,7 +209,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~ASEBase()
+	virtual ~ASEBase()
 	{
 		this->Release();
 	}

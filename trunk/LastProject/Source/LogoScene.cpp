@@ -19,6 +19,10 @@ VOID LogoScene::Initialize()
 
 	m_datScene.bActivate	= FALSE;
 	m_datScene.dFrameSpeed	= 3000;
+
+	m_pD3dDevice = NULL;
+	m_pSprite = NULL;
+	m_hWnd = NULL;
 }
 
 VOID LogoScene::Release()
@@ -122,15 +126,6 @@ VOID LogoScene::Update()
 		m_scnState = IScene::SCENE_END;
 		return ;
 	}
-	//if( GetKeyState( VK_DOWN ) & 0x8001 )
-	//{
-	//	m_pLogo[ 0 ].BreakCubeAll();
-	//	m_pLogo[ 1 ].BreakCubeAll();
-	//	m_pLogo[ 2 ].BreakCubeAll();
-	//	m_pLogo[ 3 ].BreakCubeAll();
-	//	m_pLogo[ 4 ].BreakCubeAll();
-	//	m_pLogo[ 5 ].BreakCubeAll();
-	//}
 
 	static INT iNumLogo = 0;
 	
@@ -167,64 +162,6 @@ VOID LogoScene::Update()
 	}
 
 	m_pCameraWork->Update();
-	
-
-	/*m_pCameraWork->DebugUpdate();
-
-	static D3DXVECTOR3 vecBox0( 89.0f, 10.0f, -306.0f ), vecBox1( 865.0f, 50.0f, 117.0f ), vecBox2( -115.0f, 100.0f, 570.0f ), vecBox3( -6.0f, 90.0f, 79.0f );
-	static D3DXVECTOR3 vecBox4( -189.0f, 10.0f, -133.0f ), vecBox5( 4.0f, 10.0f, -33.0f );
-	
-	if( GetKeyState( 'A' ) &0x8000 )
-		vecBox4.x -= 1.0f;
-	if( GetKeyState( 'D' ) &0x8000 )
-		vecBox4.x += 1.0f;
-	if( GetKeyState( 'S' ) &0x8000 )
-		vecBox4.z -= 1.0f;
-	if( GetKeyState( 'W' ) &0x8000 )
-		vecBox4.z += 1.0f;
-
-	if( GetKeyState( 'F' ) &0x8000 )
-		vecBox5.x -= 1.0f;
-	if( GetKeyState( 'H' ) &0x8000 )
-		vecBox5.x += 1.0f;
-	if( GetKeyState( 'G' ) &0x8000 )
-		vecBox5.z -= 1.0f;
-	if( GetKeyState( 'T' ) &0x8000 )
-		vecBox5.z += 1.0f;
-
-	if( GetKeyState( 'J' ) &0x8000 )
-		vecBox2.x -= 1.0f;
-	if( GetKeyState( 'L' ) &0x8000 )
-		vecBox2.x += 1.0f;
-	if( GetKeyState( 'K' ) &0x8000 )
-		vecBox2.z -= 1.0f;
-	if( GetKeyState( 'I' ) &0x8000 )
-		vecBox2.z += 1.0f;
-
-	if( GetKeyState( VK_LEFT ) &0x8000 )
-		vecBox3.x -= 1.0f;
-	if( GetKeyState( VK_RIGHT ) &0x8000 )
-		vecBox3.x += 1.0f;
-	if( GetKeyState( VK_DOWN ) &0x8000 )
-		vecBox3.z -= 1.0f;
-	if( GetKeyState( VK_UP ) &0x8000 )
-		vecBox3.z += 1.0f;
-
-	CameraWork::PARAMETER prmCameraWork;
-	prmCameraWork.avecPosition[ 0 ] = vecBox0;
-	prmCameraWork.avecPosition[ 1 ] = vecBox1;
-	prmCameraWork.avecPosition[ 2 ] = vecBox2;
-	prmCameraWork.avecPosition[ 3 ] = vecBox3;
-
-	prmCameraWork.avecLookAt[ 0 ] = vecBox4;
-	prmCameraWork.avecLookAt[ 1 ] = vecBox5;
-
-	m_pCameraWork->DebugData( &prmCameraWork );
-
-	CDebugConsole::GetInstance()->Messagef( L"Box0 : %f %f %f\n", vecBox4.x, vecBox4.y, vecBox4.z );
-	CDebugConsole::GetInstance()->Messagef( L"Box1 : %f %f %f\n", vecBox5.x, vecBox5.y, vecBox5.z );
-	CDebugConsole::GetInstance()->Messagef( L"Box2 : %f %f %f\n", vecBox2.x, vecBox2.y, vecBox2.z );
-	CDebugConsole::GetInstance()->Messagef( L"Box3 : %f %f %f\n", vecBox3.x, vecBox3.y, vecBox3.z );*/
 }
 
 VOID LogoScene::Render()
@@ -236,19 +173,17 @@ VOID LogoScene::Render()
 	m_pCameraWork->GetCameraPosition( vecCameraPosition );
 	m_pCameraWork->GetCameraLookAt( vecCameraLookAt );
 
-	D3DXVECTOR3		vecEyePt/*( 0.0f, 1500.0f, 0.0f);*/ = vecCameraPosition; /*( 0.0f, 1020.0f, 100.0f );*/
-	D3DXVECTOR3		vecLookatPt/*( 1.0f, 1.0f, 1.0f );*/  = vecCameraLookAt; /*( 0.0f, 1000.0f, 0.0f );*/
+	D3DXVECTOR3		vecEyePt = vecCameraPosition;
+	D3DXVECTOR3		vecLookatPt = vecCameraLookAt;
 	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 
-	//m_pCameraWork->DebugRender();
-
 	m_pLight->EnableLight();
 	m_pMatrices->SetupProjection();
 
-	for( INT i=0; i<6; i++ )
+	for( INT i = 0; i < 6; i++ )
 	{
 		m_pLogo[ i ].Render();
 	}

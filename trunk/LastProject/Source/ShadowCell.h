@@ -5,7 +5,7 @@ class CShadowCell : virtual public IObject, public CObjectSRT
 {
 public:
 	CShadowCell(VOID);
-	~CShadowCell(VOID);
+	virtual ~CShadowCell(VOID);
 
 	VOID Clear();
 	HRESULT Create() { return S_OK; }

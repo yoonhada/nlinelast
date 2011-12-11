@@ -17,12 +17,12 @@ CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
 
 CWeapon::~CWeapon()
 {
-	if ( m_WeaponType.nType > NONE )
-	{
-		WCHAR buffer[64];
-		swprintf_s(buffer, 64, L"FRAME%d", m_WeaponType.nType );
-		PrivateProfile( buffer, WRITE );
-	}
+	//if ( m_WeaponType.nType > NONE )
+	//{
+	//	WCHAR buffer[64];
+	//	swprintf_s(buffer, 64, L"FRAME%d", m_WeaponType.nType );
+	//	PrivateProfile( buffer, WRITE );
+	//}
 
 	Release();
 }
@@ -317,11 +317,6 @@ VOID CWeapon::SetKeyB()
 		m_nState = EnumCharFrame::TEMP1;
 		m_pMap->SetAnimation( m_nState );
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
-
-		if ( CGameEvent::GetInstance()->GetPrevEvent() == CGameEvent::TUTORIAL_ATACK )
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 0.01f );
-		}
 	}
 }
 
@@ -511,4 +506,9 @@ VOID CWeapon::Set_Animation( INT _nState )
 VOID CWeapon::Set_nState( INT _nState ) 
 { 
 	m_pMap->SetAnimation( _nState ); 
+}
+
+VOID CWeapon::SetWeaponAni()
+{
+	m_pMap->AddAnimationData ( IDLE, EnumCharFrame::BASE, 0, 200, TRUE );
 }

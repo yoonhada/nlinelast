@@ -68,7 +68,7 @@ public:
 
 private:
 	CNetwork();
-	~CNetwork();
+	virtual ~CNetwork();
 
 
 public:

@@ -25,7 +25,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~MainGUI()
+	virtual ~MainGUI()
 	{
 		this->Release();
 	}

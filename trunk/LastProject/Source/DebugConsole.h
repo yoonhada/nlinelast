@@ -17,7 +17,7 @@ private:
 	{
 		this->Initialize();
 	}
-	~CDebugConsole()
+	virtual ~CDebugConsole()
 	{
 		this->Release();
 	}

@@ -80,6 +80,7 @@ VOID MenuScene::Update()
 		break;
 	case MENU_END:
 		m_scnState = IScene::SCENE_END;
+		PostMessage( GHWND, WM_DESTROY, NULL, NULL );
 		break;
 	}
 
