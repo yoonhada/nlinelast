@@ -21,7 +21,7 @@ class CMatrices : public CSingleton<CMatrices>
 
 public:
 	CMatrices(VOID);
-	~CMatrices(VOID);
+	virtual ~CMatrices(VOID);
 
 	VOID Clear();
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice, FLOAT a_fAspect );

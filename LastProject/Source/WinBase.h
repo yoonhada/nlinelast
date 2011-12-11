@@ -24,7 +24,7 @@ public:
 	{
 		Create();
 	}
-	~CWinBase()
+	virtual ~CWinBase()
 	{
 		Release();
 	}

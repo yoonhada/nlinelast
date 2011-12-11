@@ -61,7 +61,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~ASEParser()
+	virtual ~ASEParser()
 	{
 		this->Release();
 	}

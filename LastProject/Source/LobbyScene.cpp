@@ -54,6 +54,7 @@ VOID LobbyScene::CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecP
 VOID LobbyScene::CreateWeapon( INT _nKind )
 {
 	m_aData[ _nKind ].pCharacter->CreateWeapon( _nKind + 1 );
+	m_aData[ _nKind ].pCharacter->SetWeaponAni();
 }
 
 VOID LobbyScene::DestoryWeapon( INT _nKind )
@@ -116,7 +117,10 @@ VOID LobbyScene::Update()
 	m_pOptionScene->Update();
 
 	for( INT i=0 ; i<4 ; i++ )
+	{
 		m_aData[ i ].pCharacter->UpdateOtherPlayer( TRUE );
+		m_aData[ i ].pCharacter->Update();
+	}
 
 	CObjectManage * pOM = CObjectManage::GetInstance();
 	DWORD dID;

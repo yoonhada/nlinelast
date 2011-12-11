@@ -26,7 +26,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~MenuGUI()
+	virtual ~MenuGUI()
 	{
 		this->Release();
 	}

@@ -26,7 +26,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~StoryGUI()
+	virtual ~StoryGUI()
 	{
 		this->Release();
 	}

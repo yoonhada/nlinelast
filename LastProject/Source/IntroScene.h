@@ -7,7 +7,7 @@ class CIntroScene : public IScene
 {
 public:
 	CIntroScene();
-	~CIntroScene();
+	virtual ~CIntroScene();
 
 public:
 	VOID Clear();

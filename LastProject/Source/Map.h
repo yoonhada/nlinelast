@@ -30,7 +30,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~Map()
+	virtual ~Map()
 	{
 		this->Release();
 	}

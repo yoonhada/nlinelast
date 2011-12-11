@@ -48,10 +48,10 @@ private:
 	// Effect
 	INT m_nEffect;
 	FLOAT m_fEffectValue;
-	CameraWork * m_pCameraWork;
+	CameraWork ** m_pCameraWork;
 
 public:
-	enum { NONE = 0, SWING, WHAT, MAP_WALK, EVENTWORKEND, };
+	enum { NONE = 0, SWING, WHAT, MAP_WALK, TARGET_SHOW, };
 	CCamera();
 	virtual ~CCamera();
 

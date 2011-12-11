@@ -19,7 +19,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~TileMapBase()
+	virtual ~TileMapBase()
 	{
 		this->Release();
 	}

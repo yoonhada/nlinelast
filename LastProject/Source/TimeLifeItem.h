@@ -20,7 +20,7 @@ class CTimeLifeItem : public CCharactor
 {
 public:
 	CTimeLifeItem();
-	~CTimeLifeItem();
+	virtual ~CTimeLifeItem();
 
 	VOID Update();
 	VOID Render();

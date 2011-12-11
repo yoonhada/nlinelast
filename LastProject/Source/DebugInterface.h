@@ -6,7 +6,7 @@ class CDebugInterface : public CSingleton<CDebugInterface>
 	friend class CSingleton<CDebugInterface>;
 public:
 	CDebugInterface();
-	~CDebugInterface();
+	virtual ~CDebugInterface();
 
 	VOID Clear();
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );

@@ -23,7 +23,7 @@ public:
 		m_bLKeyDown			= false;
 		m_bLDrag			= false;
 	}
-	~Mouse(){}
+	virtual ~Mouse(){}
 
 	void Initialize( HWND a_hWnd );
 	void Update();

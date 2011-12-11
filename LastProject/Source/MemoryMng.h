@@ -15,7 +15,7 @@ public:
 		_CrtDumpMemoryLeaks();
 		//_CrtSetBreakAlloc( 2727983 );
     }
-    ~MemoryMng()
+    virtual ~MemoryMng()
     { 
         _ASSERTE(_CrtCheckMemory());
     }

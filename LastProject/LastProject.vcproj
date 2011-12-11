@@ -811,14 +811,6 @@
 				Name="MainScene"
 				>
 				<File
-					RelativePath=".\Source\GUIMinimap.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\GUIMinimap.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\MainGUI.cpp"
 					>
 				</File>

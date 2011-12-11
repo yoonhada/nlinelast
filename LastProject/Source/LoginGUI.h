@@ -28,7 +28,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~LoginGUI()
+	virtual ~LoginGUI()
 	{
 		this->Release();
 	}

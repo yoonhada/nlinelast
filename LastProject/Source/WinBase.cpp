@@ -202,28 +202,6 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	case WM_SIZE:
 		return 0;
 
-	case WM_TIMER:
-		switch ( wParam )
-		{
-		case CGameEvent::TUTORIAL_ATACK:
-			if (CGameEvent::GetInstance()->GetPrevEvent() == wParam )
-			{
-				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 0.01f );
-			}
-			KillTimer( GHWND, CGameEvent::TUTORIAL_ATACK );
-			break;
-		case CGameEvent::TUTORIAL_COMBO:
-			if (CGameEvent::GetInstance()->GetPrevEvent() == wParam )
-			{
-				//CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_END, 10.0f );
-			}
-
-			SetTimer( GHWND, CGameEvent::EVENT_COMBO, 30000, NULL );
-			SetTimer( GHWND, CGameEvent::EVENT_FAK, 30000, NULL );
-			KillTimer( GHWND, CGameEvent::TUTORIAL_COMBO );
-		}
-		return 0;
-
 	case WM_DESTROY:
 		CNetwork::GetInstance()->CS_CLIENT_DISCONNECT();
 		PostQuitMessage(0);

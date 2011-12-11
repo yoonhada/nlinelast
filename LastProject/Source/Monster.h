@@ -26,7 +26,7 @@ public:
 
 public:
 	CMonster();
-	~CMonster();
+	virtual ~CMonster();
 	VOID Clear();
 	VOID UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle );
 	VOID Update();
@@ -135,6 +135,7 @@ public:
 	VOID CreateAttackBoundBox();
 	VOID BreakCubeAll();
 	VOID BreakNockdown();
+	BOOL BreakNockdown( BOOL );
 	VOID EnableShadow( BOOL bEnable );
 
 private:

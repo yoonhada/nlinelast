@@ -5,7 +5,7 @@ class CLight
 {
 public:
 	CLight(VOID);
-	~CLight(VOID);
+	virtual ~CLight(VOID);
 
 	VOID Clear();
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );

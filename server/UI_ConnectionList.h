@@ -11,7 +11,7 @@ private:
 
 public:
 	CUI_ConnectionList();
-	~CUI_ConnectionList();
+	virtual ~CUI_ConnectionList();
 
 	VOID Draw();
 };

@@ -14,7 +14,7 @@ class CDirectX9
 {
 public:
 	CDirectX9();
-	~CDirectX9();
+	virtual ~CDirectX9();
 
 	VOID	Clear();
 	HRESULT	Create( HWND a_hWnd ); ///< ÃÊ±âÈ­

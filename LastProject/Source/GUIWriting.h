@@ -20,7 +20,7 @@ private:
 	{
 		this->Initialize();
 	}
-	~GUIWriting()
+	virtual ~GUIWriting()
 	{
 		this->Release();
 	}

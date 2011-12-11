@@ -33,7 +33,7 @@ public:
 		this->Initialize();
 	}
 
-	~COctTree2Array()
+	virtual ~COctTree2Array()
 	{
 		this->Release();
 	}

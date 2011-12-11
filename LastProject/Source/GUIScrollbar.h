@@ -19,7 +19,7 @@ public:
 		this->Initialize();
 	}
 
-	~GUIScrollbar()
+	virtual ~GUIScrollbar()
 	{
 		this->Release();
 	}

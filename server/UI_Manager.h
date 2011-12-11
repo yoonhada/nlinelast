@@ -14,7 +14,7 @@ private:
 
 public:
 	CUI_Manager();
-	~CUI_Manager();
+	virtual ~CUI_Manager();
 
 	VOID Initialize();
 

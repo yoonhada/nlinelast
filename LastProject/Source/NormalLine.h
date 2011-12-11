@@ -19,7 +19,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~NormalLine()
+	virtual ~NormalLine()
 	{
 		this->Release();
 	}

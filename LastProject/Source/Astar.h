@@ -82,7 +82,7 @@ private:
 
 public:
 	Astar();
-	~Astar();
+	virtual ~Astar();
 
 	VOID		Initialize( TileMap::LPINFO a_MapInfo );
 	VOID		clearMap();

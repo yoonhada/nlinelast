@@ -40,7 +40,7 @@ class CCharCube : public CCube
 {
 public:
 	CCharCube() {};
-	~CCharCube() {};
+	virtual ~CCharCube() {};
 
 public:
 	VOID Set_NumIndex( const INT a_iIndex, const INT a_iNumIndex )

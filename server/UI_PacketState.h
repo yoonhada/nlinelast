@@ -11,7 +11,7 @@ private:
 
 public:
 	CUI_PacketState();
-	~CUI_PacketState();
+	virtual ~CUI_PacketState();
 
 	VOID Draw();
 };

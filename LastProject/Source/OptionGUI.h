@@ -24,7 +24,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~OptionGUI()
+	virtual ~OptionGUI()
 	{
 		this->Release();
 	}

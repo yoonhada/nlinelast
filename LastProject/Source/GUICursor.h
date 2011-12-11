@@ -26,7 +26,7 @@ private:
 	{
 		this->Initialize();
 	}
-	~GUICursor()
+	virtual ~GUICursor()
 	{
 		this->Release();
 	}

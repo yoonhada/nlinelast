@@ -47,7 +47,7 @@ public:
 		this->Initialize();
 	}
 
-	~OctTree()
+	virtual ~OctTree()
 	{
 		this->Release();
 	}

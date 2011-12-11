@@ -49,8 +49,7 @@ private:
 	VOID PrivateProfile( LPWSTR lpwStr, BOOL = READ);
 	//VOID LoadAniFrame( LPWSTR lpwStr );
 
-public:
-	
+public:	
 	enum _WEAPON { NONE, SPANNER, FRYPEN, GUITAR, MAGICSTICK };
 	enum _ASEANI { IDLE = 1000, POST_IDLE };
 	CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice );
@@ -76,11 +75,13 @@ public:
 
 	VOID AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle );
 	
+	VOID SetWeaponAni();
 	INT Get_nFrame(INT = 0);
 	INT Get_nState();
 	D3DXVECTOR3 Get_Direction();
 	VOID Set_Animation( INT _nState );
 	VOID Set_nState( INT _nState );
+
 #ifdef _DEBUG
 	// Debug
 	LPDIRECT3DVERTEXBUFFER9 m_pTotalVB;   ///< 큐브 통합 버텍스

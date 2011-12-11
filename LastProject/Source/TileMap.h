@@ -48,7 +48,7 @@ public:
 	{
 		this->Initialize();
 	}
-	~TileMap()
+	virtual ~TileMap()
 	{
 		this->Release();
 	}

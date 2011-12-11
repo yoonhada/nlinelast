@@ -9,7 +9,7 @@ class CSceneManage : public CSingleton<CSceneManage>
 	friend class CSingleton<CSceneManage>;
 public:
 	CSceneManage();
-	~CSceneManage();
+	virtual ~CSceneManage();
 
 	//BOOL OrderChangeScene( IScene* a_pScene );
 
