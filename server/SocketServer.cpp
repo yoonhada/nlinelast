@@ -65,6 +65,7 @@ BOOL CSocketServer::Initialize()
 VOID CSocketServer::Clear()
 {
 	m_bExistHost = FALSE;
+	m_bGameStart = FALSE;
 	m_pHostClient = NULL;
 
 	m_iClientCount = 0;
@@ -386,6 +387,8 @@ VOID CSocketServer::CS_READY( CNTClient* pClient, CPacket& a_pk )
 
 VOID CSocketServer::CS_GAME_START( CNTClient* pClient, CPacket& a_pk )
 {
+	m_bGameStart = TRUE;
+
 	a_pk.Rewind();
 
 	pClient->Send( a_pk );
@@ -575,6 +578,15 @@ VOID CSocketServer::CS_MTOU_ATTACK( CNTClient* pClient, CPacket& pk )
 
 	SendToClient( pClient, pk );
 	cout << "MTOU Attack send" << endl;
+}
+
+
+VOID CSocketServer::CS_EVENT_ATTACK( CNTClient* pClient, CPacket& a_pk )
+{
+	a_pk.Rewind();
+
+	SendToClient( pClient, a_pk );
+	cout << "EVENT Attack send" << endl;
 }
 
 
@@ -836,7 +848,10 @@ UINT WINAPI CSocketServer::AcceptProc( VOID* p )
 		}
 		else
 		{
-			pServer->OnAccept( hSocket );
+			if( pServer->m_bGameStart == FALSE )
+			{
+				pServer->OnAccept( hSocket );
+			}
 		}
 	}
 

@@ -16,6 +16,7 @@ public:
 
 	CNTClient* m_pHostClient;
 	BOOL	m_bExistHost;
+	BOOL	m_bGameStart;
 	INT		m_iClientCount;
 	INT		m_iReadyCount;
 	INT		m_iLodingCompleteCount;
@@ -54,6 +55,7 @@ public:
 	VOID CS_MONSTER_MOVE( CNTClient* pClient, CPacket& pk );
 	VOID CS_UTOM_ATTACK( CNTClient* pClient, CPacket& pk );
 	VOID CS_MTOU_ATTACK( CNTClient* pClient, CPacket& pk );
+	VOID CS_EVENT_ATTACK( CNTClient* pClient, CPacket& a_pk );
 	VOID CS_PLAYER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk );
 	VOID CS_MONSTER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk );
 	VOID CS_MONSTER_ATTACK_ANIMATION2( CNTClient* pClient, CPacket& pk );
