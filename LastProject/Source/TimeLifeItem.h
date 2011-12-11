@@ -25,6 +25,7 @@ public:
 	VOID Update();
 	VOID Render();
 
+	VOID SetDying();
 	VOID SetActive( BOOL a_bActive );
 
 private:

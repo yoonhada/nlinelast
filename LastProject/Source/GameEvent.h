@@ -24,7 +24,7 @@ private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
 
 	// Const 
-	D3DXVECTOR3 m_vCharactorPosition[1][4];
+	D3DXVECTOR3 m_vCharactorPosition[2][4];
 	D3DXVECTOR3 m_vMonsterPosition[3];
 	D3DXVECTOR3 m_vWallPosition;
 

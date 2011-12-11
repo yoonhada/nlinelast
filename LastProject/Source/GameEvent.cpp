@@ -59,20 +59,27 @@ VOID CGameEvent::Clear()
 	m_pAttackPoint = NULL;
 	m_pShotedPoint = NULL;
 
-	m_nMonstersState = 4;
+	m_nMonstersState = PANDA | BEAR;
 
 	m_nPrevEvent = NONE;
 	m_nTutorial = -1;
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;
 
-	m_vCharactorPosition[0][0] = D3DXVECTOR3( 202.0f, 0.0f, -505.0f);
-	m_vCharactorPosition[0][1] = D3DXVECTOR3( 227.0f, 0.0f, -505.0f);
-	m_vCharactorPosition[0][2] = D3DXVECTOR3( 253.0f, 0.0f, -505.0f);
-	m_vCharactorPosition[0][3] = D3DXVECTOR3( 277.0f, 0.0f, -505.0f);
+	m_vCharactorPosition[0][0] = D3DXVECTOR3( 200.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[0][1] = D3DXVECTOR3( 225.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[0][2] = D3DXVECTOR3( 250.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[0][3] = D3DXVECTOR3( 275.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[1][0] = D3DXVECTOR3( 190.0f, 0.0f, -90.0f );
+	m_vCharactorPosition[1][1] = D3DXVECTOR3( 215.0f, 0.0f, -90.0f );
+	m_vCharactorPosition[1][2] = D3DXVECTOR3( 240.0f, 0.0f, -90.0f );
+	m_vCharactorPosition[1][3] = D3DXVECTOR3( 265.0f, 0.0f, -90.0f );
 
-	m_vMonsterPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 660.0f);
-	m_vMonsterPosition[1] = D3DXVECTOR3( -70.0f, 0.0f, 660.0f);
+	m_vMonsterPosition[0] = D3DXVECTOR3( 225.0f, 0.0f,-505.0f );
+	m_vMonsterPosition[1] = D3DXVECTOR3( 250.0f, 0.0f,-505.0f );
+
+	//m_vMonsterPosition[0] = D3DXVECTOR3(-100.0f, 0.0f, 660.0f);
+	//m_vMonsterPosition[1] = D3DXVECTOR3( -70.0f, 0.0f, 660.0f);
 	m_vMonsterPosition[2] = D3DXVECTOR3( -40.0f, 0.0f, 660.0f);
 
 	m_vWallPosition = D3DXVECTOR3( 241.4534f, 0.0f, -202.7f );

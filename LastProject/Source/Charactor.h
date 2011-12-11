@@ -148,9 +148,10 @@ private:
 	std::vector< CCharCube* > m_vectorCube;
 	//std::vector <CCharCube*>::iterator m_iterCube;
 
+protected:
+	BOOL		  m_bMonster;			///< 몬스터인지 아닌지 체크
 	D3DXMATRIXA16 m_matMultWorld;		///< 적용할 최종 행렬
 	D3DXMATRIXA16 m_matMonster;			///< 몬스터용 행렬
-	BOOL		  m_bMonster;			///< 몬스터인지 아닌지 체크
 	D3DXMATRIXA16 m_matControl;         ///< 조작 행렬
 
 	INT m_iLoop;

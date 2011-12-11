@@ -25,6 +25,7 @@ private:
 	BOOL					m_bComplate;
 	INT						m_nKindIndex;
 	INT						m_nKindEvent[4];
+
 public:
 	CGameEventCombo( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite);
 	virtual ~CGameEventCombo();

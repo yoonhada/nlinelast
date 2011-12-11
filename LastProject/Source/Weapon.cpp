@@ -321,8 +321,6 @@ VOID CWeapon::SetKeyB()
 		if ( CGameEvent::GetInstance()->GetTutorial( ) )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 0.01f );
-			if ( CObjectManage::GetInstance()->IsHost() )
-				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.1f );
 		}
 	}
 }
