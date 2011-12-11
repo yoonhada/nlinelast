@@ -211,6 +211,15 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 			}
 			KillTimer( GHWND, CGameEvent::TUTORIAL_ATACK );
 			break;
+		case CGameEvent::TUTORIAL_COMBO:
+			if (CGameEvent::GetInstance()->GetPrevEvent() == wParam )
+			{
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_END, 10.0f );
+			}
+
+			SetTimer( GHWND, CGameEvent::EVENT_COMBO, 30000, NULL );
+			SetTimer( GHWND, CGameEvent::EVENT_FAK, 30000, NULL );
+			KillTimer( GHWND, CGameEvent::TUTORIAL_COMBO );
 		}
 		return 0;
 

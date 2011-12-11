@@ -64,46 +64,74 @@ BOOL CPhysics::IntersectTri(const D3DXVECTOR3 &v0,
 	return bColl;
 }
 
-VOID CPhysics::Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP )
-{
-	D3DXVec3Normalize( &vN, &_vN );
-	// 2( ( N*L )N ) - L
-	_vOut = 2.0f * ( D3DXVec3Dot( &-_vP, &vN ) * vN ) + _vP;
-}
-
 VOID CPhysics::Reflect( D3DXVECTOR3& _vOut )
 {
 	D3DXVECTOR3 vP = _vOut;
 	D3DXVec3Normalize( &vN, &m_vColNormal );
-	
+
 	// 2( ( N*L )N ) - L
 	_vOut = 2.0f * ( D3DXVec3Dot( &-vP, &vN ) * vN ) + vP;
 }
 
-VOID CPhysics::Sliding( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP )
-{
-	D3DXVec3Normalize( &vN, &_vN );
+//
+//VOID CPhysics::Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP )
+//{
+//	D3DXVec3Normalize( &vN, &_vN );
+//	// 2( ( N*L )N ) - L
+//	_vOut = 2.0f * ( D3DXVec3Dot( &-_vP, &vN ) * vN ) + _vP;
+//}
+//
+//VOID CPhysics::Sliding( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP )
+//{
+//	D3DXVec3Normalize( &vN, &_vN );
+//
+//	// P - n ( n * P )
+//	_vOut = _vP - D3DXVec3Dot( &_vP, &vN ) * vN;
+//}
+//
+//VOID CPhysics::Sliding( D3DXVECTOR3& _vOut )
+//{
+//	D3DXVECTOR3 vP = _vOut;
+//	D3DXVec3Normalize( &vN, &m_vColNormal );
+//
+//	if ( _vOut.x == 0 && _vOut.y == 0 && _vOut.z == 0 )
+//	{
+//		_vOut = vN * m_fD_s;
+//	}
+//	else
+//	{
+//		// P - n ( n * P )
+//		_vOut = vP - D3DXVec3Dot( &vP, &vN ) * vN;
+//	}
+//}
 
-	// P - n ( n * P )
-	_vOut = _vP - D3DXVec3Dot( &_vP, &vN ) * vN;
-}
+//BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube)
+//{
+//	D3DXPLANE Plane;											//    v0----- v1
+//	D3DXVECTOR3 v[8];											//   /|      /|
+//	for ( int i = 0; i < 8; ++i )								//  v3------v2|
+//	{															//  | |     | |
+//		v[i] = _pCube->GetPosition( i );						//  | |v4---|-|v5
+//	}															//  |/      |/
+//																//  v7------v6
+//	for (int i = 0; i < 6; ++i)									
+//	{															// Plane A+B+C+D
+//		D3DXPlaneFromPoints( &Plane, 							// A = Nx		
+//							 &v[nVI[0][i][0]], 					// B = Ny
+//							 &v[nVI[0][i][1]], 					// C = Nz
+//							 &v[nVI[0][i][2]] );					// D = -(NdotX)	
+//		if (  D3DXPlaneDotCoord( &Plane, &vPos ) > 0 )
+//		{
+//			return FALSE;
+//		}
+//	}
+//
+//	return TRUE;
+//}
 
-VOID CPhysics::Sliding( D3DXVECTOR3& _vOut )
-{
-	D3DXVECTOR3 vP = _vOut;
-	D3DXVec3Normalize( &vN, &m_vColNormal );
-
-	if ( _vOut.x == 0 && _vOut.y == 0 && _vOut.z == 0 )
-	{
-		_vOut = vN * m_fD_s;
-	}
-	else
-	{
-		// P - n ( n * P )
-		_vOut = vP - D3DXVec3Dot( &vP, &vN ) * vN;
-	}
-}
-
+/************************************************************************/
+/*                                                                      */
+/************************************************************************/
 BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1, 
 						 const D3DXVECTOR3* SphereCenter2, FLOAT sphereRadius2 )
 {
@@ -118,30 +146,6 @@ BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1,
 		bRet = TRUE;
 
 	return bRet;
-}
-
-BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube)
-{
-	D3DXPLANE Plane;											//    v0----- v1
-	D3DXVECTOR3 v[8];											//   /|      /|
-	for ( int i = 0; i < 8; ++i )								//  v3------v2|
-	{															//  | |     | |
-		v[i] = _pCube->GetPosition( i );						//  | |v4---|-|v5
-	}															//  |/      |/
-																//  v7------v6
-	for (int i = 0; i < 6; ++i)									
-	{															// Plane A+B+C+D
-		D3DXPlaneFromPoints( &Plane, 							// A = Nx		
-							 &v[nVI[0][i][0]], 					// B = Ny
-							 &v[nVI[0][i][1]], 					// C = Nz
-							 &v[nVI[0][i][2]] );					// D = -(NdotX)	
-		if (  D3DXPlaneDotCoord( &Plane, &vPos ) > 0 )
-		{
-			return FALSE;
-		}
-	}
-
-	return TRUE;
 }
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 )
@@ -165,9 +169,6 @@ BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, con
 	return FALSE;
 }
 
-/************************************************************************/
-/*                                                                      */
-/************************************************************************/
 BOOL CPhysics::Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *pBB )
 {
 	vDir = vPosition + vDirection;
@@ -222,23 +223,4 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoun
 	}
 
 	return TRUE;
-}
-
-BOOL CPhysics::Collision( INT nIndex, const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube )
-{
-	D3DXVECTOR3 v[8];							
-	for ( int i = 0; i < 8; ++i )				
-	{											
-		v[i] = _pCube->GetPosition( i );		
-	}											
-
-	BOOL bRet;
-	bRet = IntersectTri ( v[nVI[0][nIndex][0]], v[nVI[0][nIndex][1]], v[nVI[0][nIndex][2]], vPosition, vDirection );
-	if (bRet == TRUE)
-	{
-		return TRUE;
-	}
-	bRet = IntersectTri ( v[nVI[1][nIndex][0]], v[nVI[1][nIndex][1]], v[nVI[1][nIndex][2]], vPosition, vDirection );
-
-	return bRet;
 }

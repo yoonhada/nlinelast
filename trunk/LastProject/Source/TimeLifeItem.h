@@ -27,10 +27,14 @@ public:
 
 	VOID SetDying();
 	VOID SetActive( BOOL a_bActive );
+	VOID Set_MonsterNumber( INT nNum )	{ m_iMonsterNumber = nNum; }
+
+	INT Get_MonsterNumber()							{ return m_iMonsterNumber; }
 
 private:
 	const FLOAT m_fLifeTime;
 	FLOAT m_fLife;
+	INT m_iMonsterNumber;
 };
 
 #endif
