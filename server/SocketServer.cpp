@@ -650,20 +650,19 @@ VOID CSocketServer::CS_MONSTER_LockOn( CNTClient* pClient, CPacket& pk )
 
 VOID CSocketServer::SC_INIT( CNTClient* pClient )
 {
-	// 접속한 유저에게 초기 좌표를 보내준다.
-	static FLOAT x = -100.0f;
-	static FLOAT z = 600.0f;
+	BOOL bHost;
 
 	// 호스트가 있는지 확인
 	if( m_bExistHost == FALSE )
 	{
 		m_bExistHost = TRUE;
+		bHost = TRUE;
 		m_pHostClient = pClient;
 		m_pHostClient->m_bHost = TRUE;
 	}
 	else
 	{
-		m_bExistHost = FALSE;
+		bHost = FALSE;
 		pClient->m_bHost = FALSE;
 	}
 
@@ -673,7 +672,7 @@ VOID CSocketServer::SC_INIT( CNTClient* pClient )
 
 	pk.Write( wMsgSize );
 	pk.Write( wMsgID );
-	pk.Write( pClient->m_bHost );
+	pk.Write( bHost );
 	pk.Write( pClient->m_Index );
 	pk.Write( m_iClientCount - 1 );
 
