@@ -30,7 +30,7 @@ VOID CTimeLifeItem::Update()
 		D3DXMatrixIdentity( &mat );
 		BreakQube( mat );
 		// 죽여놓고 옮기기.....   0, 0, 0, 
-		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
+//		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
 	}
 }
 

@@ -749,7 +749,7 @@ VOID CNetwork::CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
-	sendPk.Write( a_wMonsterNumber)
+	sendPk.Write( a_wMonsterNumber);
 	sendPk.Write( a_vDirection.x );
 	sendPk.Write( a_vDirection.y );
 	sendPk.Write( a_vDirection.z );

@@ -235,7 +235,7 @@ VOID CMainScene::Update()
 	}
 	if( CInput::GetInstance()->Get_NumKey( 1 ) )
 	{
-		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
+		m_pGameEvent->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.1f);
 	}
 	if( CInput::GetInstance()->Get_NumKey( 2 ) )
 	{
