@@ -785,7 +785,7 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 		CS_CHAT( pClient, pk );
 		break;
 
-	//  유저 이동
+	// 유저 이동
 	case MSG_PLAYER_MOVE:
 		CS_PLAYER_MOVE( pClient, pk );
 		break;
@@ -803,6 +803,11 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 	// 공격 : 몬스터 -> 유저
 	case MSG_MTOU_ATTACK:
 		CS_MTOU_ATTACK( pClient, pk );
+		break;
+
+	// 이벤트 공격
+	case MSG_EVENT_ATTACK:
+		CS_EVENT_ATTACK( pClient, pk );
 		break;
 
 	// 유저 애니메이션
