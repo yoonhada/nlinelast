@@ -35,19 +35,17 @@ public:
 
 
 	VOID Reflect( D3DXVECTOR3& _vOut );
-	VOID Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP );
-	VOID Sliding( D3DXVECTOR3& _vOut );
-	VOID Sliding( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP );
+	//VOID Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP );
+	//VOID Sliding( D3DXVECTOR3& _vOut );
+	//VOID Sliding( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP );
 
-	BOOL Collision( const D3DXVECTOR3* _vCenter1, FLOAT _fRadius1, const D3DXVECTOR3* _vCenter2, FLOAT _fRadius2 );
-	BOOL Collision( const D3DXVECTOR3 &vBegin, CBoundBox* _pCube2 );
+	//BOOL Collision( const D3DXVECTOR3 &vBegin, CBoundBox* _pCube2 );
 
-	BOOL Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 );
-	BOOL Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 );
+	//BOOL Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 );
 
 	// 111025
+	BOOL Collision( const D3DXVECTOR3* _vCenter1, FLOAT _fRadius1, const D3DXVECTOR3* _vCenter2, FLOAT _fRadius2 );
+	BOOL Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 );	
 	BOOL Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube );
 	BOOL Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoundBox *pBB );
-
-	BOOL Collision( INT nIndex, const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *_pCube );
 };

@@ -49,8 +49,6 @@ private:
 	CLight*					m_pLight;
 
 	// Charactor
-	CCharactor*				m_pMyCharactors;
-	CCharactor**			m_pOtherCharactors;
 	CCharactor*				m_pCharactors;
 	CMonster**				m_pMonster;
 	CTimeLifeItem *			m_pFirstAidKit;
@@ -75,6 +73,8 @@ private:
 	VOID CreateFirstAidKit();
 	VOID CreateWall();
 
+	VOID CheatKeys();
+
 	VOID TutorialAtack();
 	VOID TutorialAtackEnd();
 	VOID TutorialCombo();
@@ -90,8 +90,7 @@ private:
 	VOID EventDestoryCombo();
 	VOID EventFirstAidKit();
 	VOID MonsterBreakNockdown();
-
-	typedef int (*FuncType)(int,int);
+	VOID DoorBreakNockdown();
 };
 
 #endif

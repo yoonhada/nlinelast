@@ -36,6 +36,7 @@ VOID CCamera::Clear()
 	m_vPreEye	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vDir		= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 	m_vPreDir	= D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+
 	m_fZoom		= 80.0f;
 	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
@@ -246,35 +247,18 @@ VOID CCamera::UpdateMatrix()
 BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara )
 {
 	CTree * pTree = CTree::GetInstance();
-	std::vector<CBoundBox*> * vecBoundBox = pTree->GetMapVector( pTree->GetRoot(), a_vPosCharactor );
+	std::vector<CBoundBox*> * vecBoundBox = pTree->GetMapVector( pTree->GetRoot(), a_vPosCamera );
 	std::vector<CBoundBox*>::iterator Iter;
+	D3DXVECTOR3 vPos = a_vPosCamera;
 	D3DXVECTOR3 vDir = a_vPosCamera - a_vPosCharactor;
 
 	BOOL bColl = FALSE;
 	if ( vecBoundBox )
 	{
-		D3DXVECTOR3 vN( 0, 0, 1);
-		D3DXVECTOR3 vE( 1, 0, 0);
-		D3DXVECTOR3 vW(-1, 0, 0);
-		D3DXVECTOR3 vS( 0, 0,-1);
-
 		for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
-		{
-			INT nIndex = 1;
-			FLOAT fMin;
-			FLOAT fN = D3DXVec3Dot( &vDir, &vN );
-			FLOAT fE = D3DXVec3Dot( &vDir, &vE );
-			FLOAT fW = D3DXVec3Dot( &vDir, &vW );
-			FLOAT fS = D3DXVec3Dot( &vDir, &vS );
-
-			fMin = fN;
-			if ( fMin > fE )		{ fMin = fE; nIndex = 3; }
-			if ( fMin > fW )		{ fMin = fW; nIndex = 2; }
-			if ( fMin > fS )		{ fMin = fS; nIndex = 0; }
-			
-			if( CPhysics::GetInstance()->Collision( nIndex, a_vPosCharactor, vDir,  ( *Iter ) ) )
+		{			
+			if( CPhysics::GetInstance()->Collision( vPos, vDir, ( *Iter ) ) )
 			{
-				m_vEye = CPhysics::GetInstance()->m_vColPosition;
 				bColl = TRUE;
 				break;
 			}
@@ -288,34 +272,10 @@ VOID CCamera::CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXV
 {
 	if ( Collision( a_vPosCamera, a_vPosCharactor, a_fAngleChara ) )
 	{
-		//if( m_fZoom < m_fMaxZoom )
-		//{
-		//	m_fZoom += 5.0f;
-		//}
-
-
-		//m_fZoom += m_fZoomReduce;
-		//m_fZoomReduce = 0.0f;
-
 		SetCamera();
-		//CDebugConsole::GetInstance()->Messagef( L"Camera Coll \n" );
-		//CDebugConsole::GetInstance()->Messagef( L"Eye : %f %f %f \n", m_vEye.x, m_vEye.y, m_vEye.z );
 	}
 	else
 	{
-		//CDebugConsole::GetInstance()->Messagef( L"                 Camera not Coll \n" );
-		if( m_fZoom > m_fMinZoom )
-		{
-			//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
-			m_fZoom -= 5.0f;
-		}
-
-		//m_fZoomReduce += 1.0f;
-		//m_fZoom -= m_fZoomReduce;
-
-		//SetCamera();
-
-		//CDebugConsole::GetInstance()->Messagef( L"IN : %f / %f\n", m_fZoomReduce, m_fZoom );
 	}
 }
 

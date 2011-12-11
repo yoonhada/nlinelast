@@ -25,6 +25,7 @@ private:
 	D3DXVECTOR3		m_vPreDir;
 	D3DXVECTOR3		m_vEye;
 	D3DXVECTOR3		m_vPreEye;
+
 	FLOAT			m_fZoom;            ///< 캐릭터와 카메라의 거리
 	FLOAT			m_fZoomReduce;		///< 카메라와 오브젝트 충돌시 거리 감소치
 	const FLOAT		m_fMinZoom;			///< 줌 최소치

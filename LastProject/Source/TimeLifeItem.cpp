@@ -31,6 +31,10 @@ VOID CTimeLifeItem::Update()
 		BreakQube( mat );
 		// 죽여놓고 옮기기.....   0, 0, 0, 
 //		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
+
+		CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( CObjectManage::GetInstance()->Get_ClientNumber() ) );
+		CGameEvent::GetInstance()->Set_MonsterIndex( m_iMonsterNumber );
+
 	}
 }
 

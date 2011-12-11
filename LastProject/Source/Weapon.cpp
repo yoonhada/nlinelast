@@ -318,7 +318,7 @@ VOID CWeapon::SetKeyB()
 		m_pMap->SetAnimation( m_nState );
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		if ( CGameEvent::GetInstance()->GetTutorial( ) )
+		if ( CGameEvent::GetInstance()->GetPrevEvent() == CGameEvent::TUTORIAL_ATACK )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 0.01f );
 		}

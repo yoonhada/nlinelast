@@ -67,22 +67,22 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 HRESULT CObjectManage::LoadLoadingObject()
 {
 	m_pPanda = new CMonster;
-	m_pPanda->Set_MonsterNumber( 0 );
+	m_pPanda->Set_MonsterNumber( CGameEvent::PANDA );
 
 	m_pBear = new CMonster;
-	m_pBear->Set_MonsterNumber( 1 );
+	m_pBear->Set_MonsterNumber( CGameEvent::BEAR );
 
 	// Monster
 	m_pClown = new CMonster;
-	m_pClown->Set_MonsterNumber( 2 );
+	m_pClown->Set_MonsterNumber( CGameEvent::CLOWN );
 
 	m_pMonster = new CMonster*[3];
 	m_pMonster[0] = m_pPanda;
 	m_pMonster[1] = m_pBear;
 	m_pMonster[2] = m_pClown;
 
-	m_pFirstAidKit = new CTimeLifeItem[5];
-	m_pWall = new CTimeLifeItem;
+	m_pFirstAidKit = new CTimeLifeItem[4];
+	m_pWall = new CTimeLifeItem[3];
 
 	return S_OK;
 }
@@ -117,15 +117,15 @@ HRESULT CObjectManage::Release()
 {
 	SAFE_RELEASE( m_pSprite );
 
+	SAFE_DELETE( m_pASEViewer );
+
 	SAFE_DELETE_ARRAY( m_pCharactors );
 	SAFE_DELETE_ARRAY( m_pMonster );
-	//SAFE_DELETE_ARRAY( m_ppVirtualCharactors );
 	SAFE_DELETE( m_pClown );
 	SAFE_DELETE( m_pPanda );
 	SAFE_DELETE( m_pBear );
 	SAFE_DELETE_ARRAY( m_pFirstAidKit );
-	SAFE_DELETE( m_pWall );
-	SAFE_DELETE( m_pASEViewer );
+	SAFE_DELETE_ARRAY( m_pWall );
 
 	return S_OK;
 }

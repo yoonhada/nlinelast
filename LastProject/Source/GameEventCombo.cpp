@@ -152,8 +152,11 @@ VOID CGameEventCombo::Update()
 {
 	INT nPlayer = CGameEvent::GetInstance()->GetPlayerIndex();
 	
+	
 	if ( nPlayer >= 0 )
+	{
 		CheckKindEvent( nPlayer );	
+	}
 }
 
 VOID CGameEventCombo::Render()
@@ -192,18 +195,25 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 
 			break;
 		}
-	}
-
-	if ( bRet == TRUE )
-	{
-		if ( m_nKindIndex == 0x000F )
+		else
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.01f );
+			bRet = -1;
 		}
 	}
-	else if  ( bRet == FALSE )
+
+	if ( CObjectManage::GetInstance()->IsHost() )
 	{
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
+		if ( bRet == TRUE )
+		{
+			if ( m_nKindIndex == 0x000F )
+			{
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.01f );
+			}
+		}
+		else if  ( bRet == FALSE )
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
+		}
 	}
 
 	return bRet;
