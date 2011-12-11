@@ -313,6 +313,7 @@ VOID CCamera::CreateEventCamera()
 	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT1, CameraWork::CWK_LOOKAT, 1300 );
 
 	m_pCameraWork->SelectData( CWK_MAIN_EVENT0 );
+	m_pCameraWork->SelectData( CWK_MAIN_EVENT1 );
 	
 }
 
