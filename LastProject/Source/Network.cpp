@@ -861,6 +861,32 @@ VOID CNetwork::CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wDestroyCount, s
 }
 
 
+VOID CNetwork::CS_EVENT_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, WORD a_wDestroyCount, std::vector<WORD>& a_pList )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_EVENT_ATTACK;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	sendPk.Write( a_wMonsterNumber);
+	sendPk.Write( a_vDirection.x );
+	sendPk.Write( a_vDirection.y );
+	sendPk.Write( a_vDirection.z );
+	sendPk.Write( a_wDestroyCount );
+
+	for( WORD i=0; i<a_wDestroyCount; ++i )
+	{
+		sendPk.Write( a_pList[i] );
+	}
+
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );
+}
+
+
 VOID CNetwork::CS_Player_Attack_Animation( WORD a_wAnimationNumber )
 {
 	CPacket sendPk;

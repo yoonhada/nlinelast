@@ -160,7 +160,7 @@ VOID CObjectManage::Send_NetworkSendDestroyData( BOOL IsMonster, WORD wMonsterNu
 	}
 	else
 	{
-		CNetwork::GetInstance()->CS_EVENT_ATTACK( m_vDestroyDir, m_wDestroyCount[0], m_NetworkSendTempVector );
+		CNetwork::GetInstance()->CS_EVENT_ATTACK( wMonsterNumber, m_vDestroyDir, m_wDestroyCount[0], m_NetworkSendTempVector );
 	}
 
 	m_wTotalDestroyPart = 0;
