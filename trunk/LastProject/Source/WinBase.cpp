@@ -199,15 +199,19 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		return 0;
 
 	case WM_SIZE:
-		switch ( wParam )
-		{
-		case CGameEvent::TUTORIAL_COMBO:
-			break;
-		}
 		return 0;
 
 	case WM_TIMER:
-
+		switch ( wParam )
+		{
+		case CGameEvent::TUTORIAL_ATACK:
+			if (CGameEvent::GetInstance()->GetPrevEvent() == wParam )
+			{
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 0.01f );
+			}
+			KillTimer( GHWND, CGameEvent::TUTORIAL_ATACK );
+			break;
+		}
 		return 0;
 
 	case WM_DESTROY:

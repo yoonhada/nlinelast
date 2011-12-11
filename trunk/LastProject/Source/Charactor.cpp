@@ -75,7 +75,7 @@ VOID CCharactor::Clear()
 
 	m_chMonsterPart = 0;
 
-	m_fAtackMove = 50.0f;
+	m_fAtackMove = 60.0f;
 }
 
 HRESULT CCharactor::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
@@ -673,12 +673,6 @@ VOID CCharactor::UpdateMonsterMatrix( const D3DXMATRIXA16& a_matMonster )
 
 FLOAT CCharactor::AnimateAttack()
 {	
-	if (CInput::GetInstance()->Get_NumKey( 8 ))
-		m_fAtackMove += 1.0f;
-	if (CInput::GetInstance()->Get_NumKey( 9 ))
-		m_fAtackMove -= 1.0f;
-
-
 	FLOAT fRet = 0.0f;
 	FLOAT fFrameTime = CFrequency::GetInstance()->getFrametime();
 	
@@ -1065,9 +1059,10 @@ VOID CCharactor::BreakCubeAll()
 
 VOID CCharactor::BreakNockdown()
 {
+	INT nCount = 0;
 	if( m_bAliveCheck == TRUE )
 	{
-		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
+		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop, ++nCount )
 		{
 			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
 			{
@@ -1080,8 +1075,11 @@ VOID CCharactor::BreakNockdown()
 
 				if( m_bMonster )
 				{
-					D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					if ( ( nCount & 0x0007 ) == 0x0007)
+					{
+						D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster );
+						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					}
 				}
 				else
 				{

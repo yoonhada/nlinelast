@@ -128,12 +128,6 @@ VOID CCamera::SetView( const D3DXVECTOR3 &a_vLook, const D3DXVECTOR3 &a_vPreLook
 		fZoom -= 1.0f;
 	}
 
-	//for (int i = 0; i < 10; ++i)
-	//{
-	//	if( CInput::GetInstance()->Get_NumKey(i) )
-	//		SetEffect(i);
-	//}
-
 	vLook = a_vLook;
 	Effect( vLook );
 

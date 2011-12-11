@@ -14,6 +14,7 @@ CTimeLifeItem::CTimeLifeItem()
 : m_fLifeTime(1000)
 {
 	m_fLife = 0;
+	m_bMonster = TRUE;
 	CCharactor::AliveCheck(FALSE);
 }
 
@@ -23,22 +24,14 @@ CTimeLifeItem::~CTimeLifeItem()
 
 VOID CTimeLifeItem::Update()
 {
-	//if ( m_nLife > m_nLifeTime )
-	//{
-	//	m_nLife += CFrequency::GetInstance()->getFrametime();
-	//}
-	//else if ( m_nLife > -m_nLifeTime )
-	//{
-
-	//}
-	//else if ( m_nLife > -m_nLifeTime )
-	//{
-	//	m_nLife--;
-	//}
-	//else
-	//{
-	//	CCharactor::AliveCheck( FALSE );
-	//}
+	if ( CollisionAtk( ) )
+	{
+		D3DXMATRIXA16 mat;
+		D3DXMatrixIdentity( &mat );
+		BreakQube( mat );
+		// 죽여놓고 옮기기.....   0, 0, 0, 
+		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
+	}
 }
 
 VOID CTimeLifeItem::SetActive( BOOL a_bActive )
@@ -65,6 +58,7 @@ VOID CTimeLifeItem::Render()
 {
 	if ( AliveCheck() )
 	{
+		D3DXMatrixIdentity( &m_matMonster );
 		CCharactor::Render();
 	}
 }

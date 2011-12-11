@@ -233,13 +233,13 @@ VOID CMainScene::Update()
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.01f );
 		EventStateNetwork( CGameEvent::EVENT_MAP_CAMERA_WALK_END );
 	}
-	if( CInput::GetInstance()->Get_NumKey( 6 ) )
+	if( CInput::GetInstance()->Get_NumKey( 1 ) )
 	{
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
 	}
-	if( CInput::GetInstance()->Get_NumKey( 7 ) )
+	if( CInput::GetInstance()->Get_NumKey( 2 ) )
 	{
-		m_pCamera->SetEffect(1);
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_END, 0.01f );
 	}
 
 
@@ -309,7 +309,6 @@ VOID CMainScene::Update()
 
 	// 아이템 쓸까나??
 	m_pFirstAidKit->Update();
-
 	m_pWall->Update();
 
 	//m_pD3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );	
@@ -404,6 +403,13 @@ VOID CMainScene::EventInitCharState( INT nEvent )
 		m_pCharactors[2].Set_Position( m_pGameEvent->GetCharPosition( 0, 2 ) );
 		m_pCharactors[3].Set_Position( m_pGameEvent->GetCharPosition( 0, 3 ) );
 		break;
+	case CGameEvent::TUTORIAL_COMBO_END:
+		m_pCharactors[0].Set_Position( m_pGameEvent->GetCharPosition( 1, 0 ) );
+		m_pCharactors[1].Set_Position( m_pGameEvent->GetCharPosition( 1, 1 ) );
+		m_pCharactors[2].Set_Position( m_pGameEvent->GetCharPosition( 1, 2 ) );
+		m_pCharactors[3].Set_Position( m_pGameEvent->GetCharPosition( 1, 3 ) );
+		break;
+
 	default:
 		break;
 	}
@@ -417,6 +423,10 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
 		m_pWall->Set_Position( m_pGameEvent->GetWallPosition( 0 ) );
 		m_pWall->SetActive( TRUE );
+		break;
+	case CGameEvent::TUTORIAL_COMBO_END:
+		m_pWall->SetActive( FALSE );
+		m_pGameEvent->SetMonstersState( CGameEvent::BEAR | CGameEvent::PANDA );
 		break;
 	default:
 		break;
@@ -469,21 +479,34 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_MAP_CAMERA_WALK_END \n" );
-		if ( CGameEvent::GetInstance()->GetPrevEvent() == CGameEvent::EVENT_MAP_CAMERA_WALK )
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 1.0f );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 1.0f );
 		break;
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		// Do Something
 		TutorialAtack();
+		SetTimer( GHWND, CGameEvent::TUTORIAL_ATACK, 20000, NULL );
 		break;
 	case CGameEvent::TUTORIAL_ATACK_END:
 		TutorialAtackEnd();
+		if ( CObjectManage::GetInstance()->IsHost() )
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.1f );
+		}
 		break;
 	case CGameEvent::TUTORIAL_COMBO:
 		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
+		// Do something
+		TutorialCombo();
 		EventCombo();
+		break;
+	case CGameEvent::TUTORIAL_COMBO_END:
+		EventStateNetwork( nEvent );
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO_END \n" );
+		// Do something
+		EventDestoryCombo();
+		EventInitGameState( nEvent );
 		break;
 
 	case CGameEvent::EVENT_COMBO:
@@ -558,7 +581,7 @@ VOID CMainScene::EventInitGameState( INT nEvent )
 	EventInitCharState( nEvent );
 	EventInitMonsterState( nEvent );
 
-	CGameEvent::GetInstance()->SetMonstersState( CGameEvent::CLOWN );
+//	CGameEvent::GetInstance()->SetMonstersState( CGameEvent::CLOWN );
 }
 
 VOID CMainScene::EventMapCameraWalk( INT nEvent )
@@ -569,11 +592,17 @@ VOID CMainScene::EventMapCameraWalk( INT nEvent )
 VOID CMainScene::TutorialAtack()
 {
 	CGameEvent::GetInstance()->SetTutorial( 0 );
+	// 공격 콤보, 아이템설명
 }
 
 VOID CMainScene::TutorialAtackEnd()
 {
 	CGameEvent::GetInstance()->SetTutorial( -1 );
+}
+
+VOID CMainScene::TutorialCombo()
+{
+	// 신호등 설명창
 }
 
 VOID CMainScene::EventCombo()

@@ -77,6 +77,7 @@ private:
 
 	VOID TutorialAtack();
 	VOID TutorialAtackEnd();
+	VOID TutorialCombo();
 
 	VOID EventSwitch( INT nEvent );
 	VOID EventStateNetwork( INT nEvent );
