@@ -171,7 +171,15 @@ VOID CMainScene::CreateMonster()
 
 VOID CMainScene::MonsterBreakNockdown()
 {
-	m_pMonster[ CGameEvent::GetInstance()->GetMonsterIndex() ]->BreakNockdown();
+	if (CGameEvent::GetInstance()->GetMonsterState() == CGameEvent::CLOWN )
+	{
+		m_pMonster[ 2 ]->BreakNockdown();
+	}
+	else
+	{
+		m_pMonster[ 0 ]->BreakNockdown();
+		m_pMonster[ 1 ]->BreakNockdown();
+	}
 }
 
 VOID CMainScene::DoorBreakNockdown()
