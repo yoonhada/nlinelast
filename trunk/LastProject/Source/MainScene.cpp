@@ -294,8 +294,10 @@ VOID CMainScene::Update()
 	m_pOptionScene->Update();
 
 	CNetwork::GetInstance()->UpdateGame();
+
 	if ( m_pEventGUICombo )
 		m_pEventGUICombo->Update();
+
 	EventSwitch( m_pGameEvent->Update() );
 
 	CTree::GetInstance()->SetCharAtkClear();

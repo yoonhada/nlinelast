@@ -494,6 +494,8 @@ VOID CNetwork::SC_EVENT_ATTACK( CPacket& a_pk )
 	}
 
 	CObjectManage::GetInstance()->Get_Wall()[wMonsterNumber].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+	CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( static_cast<int>( wClientNumber ) ) );
+	CGameEvent::GetInstance()->Set_MonsterIndex( static_cast<int>( wMonsterNumber ) );
 }
 
 
