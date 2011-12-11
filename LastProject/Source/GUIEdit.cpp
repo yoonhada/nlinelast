@@ -181,6 +181,7 @@ VOID GUIEdit::SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight )
 VOID GUIEdit::SetText( LPWSTR _pcText )
 {
 	_tcscpy( m_pcText, _pcText );
+	m_iTextLength = _tcslen( m_pcText );
 }
 
 BOOL GUIEdit::TakeMessage( LPWSTR _pcText )
