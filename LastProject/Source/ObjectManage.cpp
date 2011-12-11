@@ -67,14 +67,14 @@ HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 HRESULT CObjectManage::LoadLoadingObject()
 {
 	m_pPanda = new CMonster;
-	m_pPanda->Set_MonsterNumber( CGameEvent::PANDA );
+	m_pPanda->Set_MonsterNumber( 0 );
 
 	m_pBear = new CMonster;
-	m_pBear->Set_MonsterNumber( CGameEvent::BEAR );
+	m_pBear->Set_MonsterNumber( 1 );
 
 	// Monster
 	m_pClown = new CMonster;
-	m_pClown->Set_MonsterNumber( CGameEvent::CLOWN );
+	m_pClown->Set_MonsterNumber( 2 );
 
 	m_pMonster = new CMonster*[3];
 	m_pMonster[0] = m_pPanda;
