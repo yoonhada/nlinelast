@@ -495,6 +495,10 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		}
 		break;
 	case CGameEvent::TUTORIAL_COMBO:
+		if ( CObjectManage::GetInstance()->IsHost() ) 
+		{		
+			CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() ); 
+		}
 		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
 		// Do something
