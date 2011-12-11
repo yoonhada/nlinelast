@@ -297,6 +297,21 @@ VOID CCamera::CreateEventCamera()
 	prmCameraWork.avecLookAt[ 1 ] = D3DXVECTOR3( 244.0f, 10.0f, -194.0f );
 
 	m_pCameraWork->AddData( CWK_MAIN_EVENT0, &prmCameraWork );
+	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_POSITION, 5000 );
+	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_LOOKAT, 5000 );
+
+	prmCameraWork.avecPosition[ 0 ] = D3DXVECTOR3( -184.0f, 289.0f, 666.0f );
+	prmCameraWork.avecPosition[ 1 ] = D3DXVECTOR3( -361.0f, 178.0f, 73.0f );
+	prmCameraWork.avecPosition[ 2 ] = D3DXVECTOR3( -340.0f, 58.0f, 1294.0f );
+	prmCameraWork.avecPosition[ 3 ] = D3DXVECTOR3( 69.0f, 80.0f, 669.0f );
+
+	prmCameraWork.avecLookAt[ 0 ] = D3DXVECTOR3( -185.0f, 342.0f, 665.0f );
+	prmCameraWork.avecLookAt[ 1 ] = D3DXVECTOR3( -153.0f, 48.0f, 676.0f );
+	
+	m_pCameraWork->AddData( CWK_MAIN_EVENT1, &prmCameraWork );
+	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT1, CameraWork::CWK_POSITION, 2500 );
+	m_pCameraWork->SetWholeWorkingPeriod( CWK_MAIN_EVENT1, CameraWork::CWK_LOOKAT, 1300 );
+
 	m_pCameraWork->SelectData( CWK_MAIN_EVENT0 );
 	
 }
