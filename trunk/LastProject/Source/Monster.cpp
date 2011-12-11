@@ -43,6 +43,10 @@ VOID CMonster::Clear()
 	m_bChangingAnimation = FALSE;
 	m_bAnimationEndCheck = FALSE;
 
+	m_iBreakedCubeCnt = 0;
+	m_iTotalBreakedCubeCnt = 0;
+	m_bGroggyState = FALSE;
+	
 	m_fTime = 0.0f;
 	m_fAttackTime = 0.0f;
 	m_fInterpolationTime = 0.0f;
@@ -936,7 +940,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		}
 	}
 
-	CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE );
+	CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE, m_iMonsterNumber );
 
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 

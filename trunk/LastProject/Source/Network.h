@@ -116,7 +116,7 @@ public:
 	VOID CS_CHAT( LPWSTR a_szText );
 	VOID CS_PLAYER_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST FLOAT& a_fAngle );
 	VOID CS_MONSTER_MOVEMENT( WORD a_iMonsterNumber, PathNode* a_pPath );
-	VOID CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
+	VOID CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList );
 	VOID CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );
 
 	VOID CS_Player_Attack_Animation( WORD a_wAnimationNumber );

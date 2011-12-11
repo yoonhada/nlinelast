@@ -165,6 +165,11 @@ private:
 	// AI 관리
 	StateMachine<CMonster>* m_pStateMachine;
 
+	// 파괴된 큐브 수
+	INT			m_iBreakedCubeCnt;
+	INT			m_iTotalBreakedCubeCnt;
+	BOOL		m_bGroggyState;
+
 	FLOAT		m_fTime;
 	FLOAT		m_fAttackTime;
 	FLOAT		m_fInterpolationTime;

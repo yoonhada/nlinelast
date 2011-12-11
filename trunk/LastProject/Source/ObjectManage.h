@@ -105,7 +105,7 @@ public:
 
 	VOID Set_PushBackNetworkSendTempVector( WORD a_wData);
 	VOID Set_NetworkSendDestroyData( CHAR a_cDestroyPart, WORD a_wDestroyCount, D3DXVECTOR3& a_vDestroyDir);
-	VOID Send_NetworkSendDestroyData(BOOL IsMonster );
+	VOID Send_NetworkSendDestroyData(BOOL IsMonster, WORD wMonsterNumber );
 
 	LobbyScene*		GetLobbyScene(){ return m_pLobbyScene; }
 	VOID			SetLobbyScene( LobbyScene* a_pLobbyScene ){ m_pLobbyScene = a_pLobbyScene; }

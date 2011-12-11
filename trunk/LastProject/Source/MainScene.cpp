@@ -257,7 +257,7 @@ VOID CMainScene::Update()
 		D3DXMatrixIdentity( &mat );
 		if ( pChar->BreakQube( mat ) )
 			m_pCamera->SetEffect( 1 );
-		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE );
+		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( FALSE, 0 );
 	}
 	CTree::GetInstance()->SetMonsAtkClear();
 

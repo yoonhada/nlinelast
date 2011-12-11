@@ -739,7 +739,8 @@ VOID CNetwork::CS_MONSTER_MOVEMENT( WORD a_iMonsterNumber, PathNode* a_pPath )
 #endif
 }
 
-VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList )
+
+VOID CNetwork::CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WORD a_wDestroyPart[], WORD a_wDestroyCount[], std::vector<WORD>& a_pList )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -748,6 +749,7 @@ VOID CNetwork::CS_UTOM_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wTotalParts, WOR
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
+	sendPk.Write( a_wMonsterNumber)
 	sendPk.Write( a_vDirection.x );
 	sendPk.Write( a_vDirection.y );
 	sendPk.Write( a_vDirection.z );
