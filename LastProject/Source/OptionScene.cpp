@@ -80,3 +80,10 @@ INT OptionScene::GetSceneState()
 {
 	return m_scnState;
 }
+
+BOOL OptionScene::IsActivate()
+{
+	BOOL bActivate = m_bHelpScene | m_bSetupScene;
+
+	return bActivate;
+}

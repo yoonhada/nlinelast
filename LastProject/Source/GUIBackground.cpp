@@ -33,11 +33,13 @@ BOOL GUIBackground::NextAnimation()
 	INT iAnimationSize = m_Data.Image3D.vec2Tex.size();
 	if( m_Data.Image3D.iCurrentAnimation + 1 >= iAnimationSize )
 	{
-		m_Data.Image3D.iCurrentAnimation = 0;
-		return FALSE;
+		m_Data.Image3D.iCurrentAnimation	= 0;
+		m_Data.Image3D.iCurrentFrame		= 0;
+		return TRUE;
 	}
 
 	m_Data.Image3D.iCurrentAnimation++;
+	m_Data.Image3D.iCurrentFrame = 0;
 
-	return TRUE;
+	return FALSE;
 }

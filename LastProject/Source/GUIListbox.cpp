@@ -20,6 +20,7 @@ VOID GUIListbox::Initialize()
 	_tcscpy_s( m_aFaceName, L"ÈÞ¸Õ¸ÅÁ÷Ã¼" );
 	m_iFontWidth	= 10;
 	m_iFontHeight	= 10;
+	m_dFontColor	= 0x00000000;
 
 	m_pGUIScrollbar		= new GUIScrollbar( GUIBase::m_pd3dDevice, GUIBase::m_pSprite );
 }
@@ -41,9 +42,9 @@ VOID GUIListbox::CopyTextureToItem( INT _iNumItem, LPIMAGE2D _pimg2DTexture, LPI
 	LPDIRECT3DSURFACE9	pItemDownSurface	= NULL;
 	LPDIRECT3DSURFACE9	pTextureSurface		= NULL;
 	
-	LPDIRECT3DTEXTURE9	ptexItemNormal	= _pimg2DItemNormal->vec2Tex[ 0 ][ 0 ]->pTex;
-	LPDIRECT3DTEXTURE9	ptexItemDown	= _pimg2DItemDown->vec2Tex[ 0 ][ 0 ]->pTex;
-	LPDIRECT3DTEXTURE9	ptexTexture		= _pimg2DTexture->vec2Tex[ 0 ][ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9	ptexItemNormal	= (*_pimg2DItemNormal->vec2Tex[ 0 ])[ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9	ptexItemDown	= (*_pimg2DItemDown->vec2Tex[ 0 ])[ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9	ptexTexture		= (*_pimg2DTexture->vec2Tex[ 0 ])[ 0 ]->pTex;
 	
 	ptexItemNormal->GetSurfaceLevel( 0, &pItemNormalSurface );
 	ptexItemDown->GetSurfaceLevel( 0, &pItemDownSurface );
@@ -76,9 +77,9 @@ VOID GUIListbox::CopyTextToItem( INT _iNumItem, LPIMAGE2D _pimg2DText, LPIMAGE2D
 	LPDIRECT3DSURFACE9	pItemDownSurface	= NULL;
 	LPDIRECT3DSURFACE9	pTextSurface		= NULL;
 	
-	LPDIRECT3DTEXTURE9	ptexItemNormal	= _pimg2DItemNormal->vec2Tex[ 0 ][ 0 ]->pTex;
-	LPDIRECT3DTEXTURE9	ptexItemDown	= _pimg2DItemDown->vec2Tex[ 0 ][ 0 ]->pTex;
-	LPDIRECT3DTEXTURE9	ptexText		= _pimg2DText->vec2Tex[ 0 ][ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9	ptexItemNormal	= (*_pimg2DItemNormal->vec2Tex[ 0 ])[ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9	ptexItemDown	= (*_pimg2DItemDown->vec2Tex[ 0 ])[ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9	ptexText		= (*_pimg2DText->vec2Tex[ 0 ])[ 0 ]->pTex;
 	
 	ptexItemNormal->GetSurfaceLevel( 0, &pItemNormalSurface );
 	ptexItemDown->GetSurfaceLevel( 0, &pItemDownSurface );
@@ -118,8 +119,8 @@ VOID GUIListbox::CopyItemToFront( INT _iIndex, LPIMAGE2D _pimg2DItem, LPIMAGE2D 
 	LPDIRECT3DSURFACE9	pFrontSurface	= NULL;
 	LPDIRECT3DSURFACE9	pItemSurface	= NULL;
 	
-	LPDIRECT3DTEXTURE9 ptexFront	= _pimg2DFront->vec2Tex[ 0 ][ 0 ]->pTex;
-	LPDIRECT3DTEXTURE9 ptexItem		= _pimg2DItem->vec2Tex[ 0 ][ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9 ptexFront	= (*_pimg2DFront->vec2Tex[ 0 ])[ 0 ]->pTex;
+	LPDIRECT3DTEXTURE9 ptexItem		= (*_pimg2DItem->vec2Tex[ 0 ])[ 0 ]->pTex;
 
 	ptexFront->GetSurfaceLevel( 0, &pFrontSurface );
 	ptexItem->GetSurfaceLevel( 0, &pItemSurface );
@@ -281,7 +282,7 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 	CreateImage2D( *pimg2DText, fTextX, fTextY, fTextWidth, fTextHeight, imgParamText ); 
 	
 	GUIFont::GetInstance().Create( m_aFaceName, m_iFontWidth, m_iFontHeight, m_pd3dDevice );
-	GUIFont::GetInstance().DrawOnTexture(	_Text, 0x00000000, pimg2DText->vec2Tex[ 0 ][ 0 ]->pTex, 
+	GUIFont::GetInstance().DrawOnTexture(	_Text, m_dFontColor, (*pimg2DText->vec2Tex[ 0 ])[ 0 ]->pTex, 
 											m_iFontX,
 											m_iFontY,
 											static_cast<INT>( fTextWidth ), 
@@ -428,9 +429,10 @@ VOID GUIListbox::OnUp( INT x, INT y )
 		m_pGUIScrollbar->OnUp( x, y );
 }
 
-VOID GUIListbox::SetFont(LPWSTR _pFaceName, INT _iWidth, INT _iHeight)
+VOID GUIListbox::SetFont(LPWSTR _pFaceName, INT _iWidth, INT _iHeight, DWORD _dColor )
 {
 	_tcscpy_s( m_aFaceName, _pFaceName );
 	m_iFontWidth	= _iWidth;
 	m_iFontHeight	= _iHeight;
+	m_dFontColor	= _dColor;
 }

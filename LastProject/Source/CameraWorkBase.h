@@ -2,10 +2,18 @@
 #ifndef _CAMERAWORKBASE_H_
 #define _CAMERAWORKBASE_H_
 
+#include <map>
+
 class CameraWorkBase
 {
 private:
 	LPDIRECT3DDEVICE9		m_pd3dDevice;
+
+	DWORD					m_dColBox;
+	DWORD					m_dColBoxLink;
+	DWORD					m_dColPosition;
+	DWORD					m_dColLookAt;
+	DWORD					m_dColPositionToLookAt;
 
 public:
 	typedef struct _VERTEX
@@ -18,7 +26,7 @@ public:
 
 	typedef struct _INDEX
 	{
-		DWORD		_0, _1;
+		DWORD	_0, _1;
 	}INDEX, *LPINDEX;
 
 	typedef struct _IMAGE
@@ -32,7 +40,7 @@ public:
 		D3DXVECTOR3				vecScale;
 		D3DXVECTOR3				vecRotate;
 		D3DXVECTOR3				vecTranslate;
-		
+
 		_IMAGE()
 		{
 			pVB		= NULL;
@@ -54,31 +62,64 @@ public:
 		}
 	}IMAGE, *LPIMAGE;
 
-	typedef struct _COURSEINFO
+	typedef struct _INFO
 	{
 		LPVERTEX	pVertex;
+		LPINDEX		pIndex;
 		FLOAT*		pfIncInterporation;
 
 		INT			iNumVertices;
+		INT			iNumIndices;
+		INT			iNumInterporation;
 
-		_COURSEINFO()
+		DWORD		dBeginTime;
+		DWORD		dCurrentTime;
+		
+		INT			iIncIndex;
+		INT			iCurrentIndex;
+		INT			iNextIndex;
+
+		FLOAT		fInterporation;
+
+		_INFO()
 		{
 			pVertex				= NULL;
+			pIndex				= NULL;
 			pfIncInterporation	= NULL;
 
-			iNumVertices		= 100;		//	초기값을 100으로 주자꾸나 기본적으로 있어야 되고 나중에 정밀도를 변경하는 것이니
+			dBeginTime		= 0;
+			dCurrentTime	= 0;
+
+			iIncIndex		= 1;
+			iCurrentIndex	= 0;
+			iNextIndex		= 1;
+
+			fInterporation	= 0.0f;
 		}
-		~_COURSEINFO()
+		~_INFO()
 		{
 			if( pVertex != NULL )
 				delete[] pVertex;
+			if( pIndex != NULL )
+				delete[] pIndex;
 			if( pfIncInterporation != NULL )
 				delete[] pfIncInterporation;
 
 			pVertex				= NULL;
+			pIndex				= NULL;
 			pfIncInterporation	= NULL;
 		}
-	}COURSEINFO, *LPCOURSEINFO;
+	}INFO, *LPINFO;
+
+	typedef struct _DATA
+	{
+		INFO		infPosition;
+		INFO		infLookAt;
+
+		D3DXVECTOR3	avecPoint[ 6 ];
+	}DATA, *LPDATA;
+
+	typedef std::map< DWORD, LPDATA > DATAMAP;
 
 private:
 	VOID		Initialize();
@@ -90,26 +131,31 @@ private:
 	HRESULT		CreateIB( LPDIRECT3DINDEXBUFFER9* _ppIB, INT _nIndex, INT _Size );
 	HRESULT		SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT _nIndex, INT _Size );
 
+	VOID		CheckNumVerticesOfLine4( INT& _iNumVertices );
+
+	VOID		SetMatrix( LPD3DXVECTOR3 _pvecScale, LPD3DXVECTOR3 _pvecRotate, LPD3DXVECTOR3 _pvecTranslate );
+
 public:
 	CameraWorkBase( LPDIRECT3DDEVICE9 _pd3dDevice ) : m_pd3dDevice( _pd3dDevice )
 	{
 		this->Initialize();
 	}
-	~CameraWorkBase()
+	
+	virtual ~CameraWorkBase()
 	{
 		this->Release();
 	}
 
-	VOID		SetMatrix( LPD3DXVECTOR3 _pvecScale, LPD3DXVECTOR3 _pvecRotate, LPD3DXVECTOR3 _pvecTranslate );
-	
-	VOID		CreateImage_Camera( LPIMAGE _pimgCamera, DWORD _dColor = 0xffffffff );
-	VOID		CreateImage_Box( LPIMAGE _pimgBox, DWORD _dColor = 0xffff00ff );
-	VOID		CreateImage_Course( LPIMAGE _pimgCourse, LPCOURSEINFO _pinfCourse );
-	
-	VOID		CreateBoxLink( LPIMAGE _pimgBoxLink, LPIMAGE _pimgBox, DWORD _dColor = 0xffff00ff );
-	//VOID		SetBoxPosition( LPD3DXVECTOR3 _vecBoxPosition, FLOAT _fX, FLOAT _fY, FLOAT _fZ );
+	VOID		CreateInfo_BezierCurve( LPINFO _pInfo, INT _iNumVertices, D3DXVECTOR3& _vecPoint0, D3DXVECTOR3& _vecPoint1, D3DXVECTOR3& _vecPoint2, D3DXVECTOR3& _vecPosint3 );
+	VOID		CreateInfo_Line2( LPINFO _pInfo, INT _iNumVertices, D3DXVECTOR3& _vecPoint0, D3DXVECTOR3& _vecPoint1 );
+	VOID		CreateInfo_Line4( LPINFO _pInfo, INT _iNumVertices, D3DXVECTOR3& _vecPoint0, D3DXVECTOR3& _vecPoint1, D3DXVECTOR3& _vecPoint2, D3DXVECTOR3& _vecPoint3 );
 
+	VOID		CreateImage( LPIMAGE _pImage, LPINFO _pInfo );
+	
 	VOID		RenderImage( LPIMAGE _pImage );
+
+	//	박스만 예외로 한다 찝찝하긴 하지만...뭐...별 수 없네
+	VOID		CreateImage_Box( LPIMAGE _pImage );
 
 };
 

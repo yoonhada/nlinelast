@@ -7,8 +7,8 @@ class GUIWriting
 private:
 	HWND		m_hWnd;
 
-	TCHAR		m_Str[ 1024 ];
-	INT			m_iNum;
+	LPWSTR		m_pText;
+	INT*		m_piTextLength;
 
 	BOOL		m_bReturn;
 
@@ -31,13 +31,12 @@ private:
 public:
 	VOID		IMEUpdate( WPARAM& _wParam, LPARAM& _lParam );
 	VOID		CHARUpdate( WPARAM& _wParam, LPARAM& _lParam );
-	BOOL		GetText( LPWSTR _pStr, INT& _iNum );	// Test
 
-	VOID		Cleanup();
+	BOOL		GetReturn();
 
-	//VOID			SetHWND( HWND& _hWnd );
-	//const HWND&		GetHWND();
-	//	문자열 길이를 넘기는 함수도 있어야 할듯	
+	VOID		ConnectText( LPWSTR _pText, INT* _piTextLength );
+	VOID		DisconnectText();
+
 };
 
 #endif

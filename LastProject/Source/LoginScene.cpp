@@ -110,3 +110,8 @@ VOID LoginScene::DefaultIP( CHAR * a_strIP )
 
 	fclose(pFile);
 }
+
+BOOL LoginScene::IsActivate()
+{
+	return m_bActivate;
+}

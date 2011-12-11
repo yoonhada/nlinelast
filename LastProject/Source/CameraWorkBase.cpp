@@ -3,70 +3,24 @@
 
 VOID CameraWorkBase::Initialize()
 {
+	m_dColBox				= D3DCOLOR_XRGB( 255, 127, 39 );	//	주
+	m_dColBoxLink			= D3DCOLOR_XRGB( 164, 0, 187 );	//	분홍
+	m_dColPosition			= D3DCOLOR_XRGB( 255, 255, 0 );		//	노
+	m_dColLookAt			= D3DCOLOR_XRGB( 0, 255, 0 );		//	초
+	m_dColPositionToLookAt	= D3DCOLOR_XRGB( 0, 0, 255 );		//	파
 }
 
 VOID CameraWorkBase::Release()
 {
 }
 
-VOID CameraWorkBase::CreateImage_Camera( LPIMAGE _pimgCamera, DWORD _dColor )
-{	//	Scale, Rotate, Translate로 변형 가능
-	//	Init Vertices, Indices
-	_pimgCamera->iNumVertices	= 8;
-	_pimgCamera->iNumIndices	= 12;
+VOID CameraWorkBase::CreateImage_Box( LPIMAGE _pImage )
+{
+	INT iNumVertices	= 8;
+	INT iNumIndices		= 12;
 
-	//	Init Vertex
-	VERTEX	aVertex[ 8 ];
-	
-	aVertex[ 0 ].vecPos = D3DXVECTOR3( -3.0f, 3.0f, -3.0f );
-	aVertex[ 1 ].vecPos = D3DXVECTOR3( 3.0f, 3.0f, -3.0f );
-	aVertex[ 2 ].vecPos = D3DXVECTOR3( -1.0f, 1.0f, 1.0f );
-	aVertex[ 3 ].vecPos = D3DXVECTOR3( 1.0f, 1.0f, 1.0f );
-	aVertex[ 4 ].vecPos = D3DXVECTOR3( -3.0f, -3.0f, -3.0f );
-	aVertex[ 5 ].vecPos = D3DXVECTOR3( 3.0f, -3.0f, -3.0f );
-	aVertex[ 6 ].vecPos = D3DXVECTOR3( -1.0f, -1.0f, 1.0f );
-	aVertex[ 7 ].vecPos = D3DXVECTOR3( 1.0f, -1.0f, 1.0f );
-
-	aVertex[ 0 ].dColor	= _dColor;
-	aVertex[ 1 ].dColor	= _dColor;
-	aVertex[ 2 ].dColor	= _dColor;
-	aVertex[ 3 ].dColor	= _dColor;
-	aVertex[ 4 ].dColor	= _dColor;
-	aVertex[ 5 ].dColor	= _dColor;
-	aVertex[ 6 ].dColor	= _dColor;
-	aVertex[ 7 ].dColor	= _dColor;
-
-	//	Init Index
-	INDEX	aIndex[ 12 ];
-	
-	aIndex[ 0 ]._0 = 0;		aIndex[ 0 ]._1 = 1;	
-	aIndex[ 1 ]._0 = 0;		aIndex[ 1 ]._1 = 2;	
-	aIndex[ 2 ]._0 = 2;		aIndex[ 2 ]._1 = 3;	
-	aIndex[ 3 ]._0 = 3;		aIndex[ 3 ]._1 = 1;	
-
-	aIndex[ 4 ]._0 = 0;		aIndex[ 4 ]._1 = 4;	
-	aIndex[ 5 ]._0 = 1;		aIndex[ 5 ]._1 = 5;	
-	aIndex[ 6 ]._0 = 2;		aIndex[ 6 ]._1 = 6;	
-	aIndex[ 7 ]._0 = 3;		aIndex[ 7 ]._1 = 7;	
-
-	aIndex[ 8 ]._0 = 4;		aIndex[ 8 ]._1 = 5;	
-	aIndex[ 9 ]._0 = 5;		aIndex[ 9 ]._1 = 7;	
-	aIndex[ 10 ]._0 = 6;	aIndex[ 10 ]._1 = 7;	
-	aIndex[ 11 ]._0 = 6;	aIndex[ 11 ]._1 = 4;	
-
-	//	Init VertexBuffer, IndexBuffer
-	CreateVB( &_pimgCamera->pVB, 8, sizeof( VERTEX ), VERTEX::FVF );
-	SetVB( _pimgCamera->pVB, aVertex, 8, sizeof( VERTEX ) );
-
-	CreateIB( &_pimgCamera->pIB, 12, sizeof( INDEX ) );
-	SetIB( _pimgCamera->pIB, aIndex, 12, sizeof( INDEX) );
-}
-
-VOID CameraWorkBase::CreateImage_Box( LPIMAGE _pimgBox, DWORD _dColor )
-{	//	Scale, Rotate, Translate로 변형 가능
-	//	Init Vertices, Indices
-	_pimgBox->iNumVertices	= 8;
-	_pimgBox->iNumIndices	= 12;
+	_pImage->iNumVertices	= iNumVertices;
+	_pImage->iNumIndices	= iNumIndices;
 
 	//	Init Vertex
 	VERTEX	aVertex[ 8 ];
@@ -80,14 +34,14 @@ VOID CameraWorkBase::CreateImage_Box( LPIMAGE _pimgBox, DWORD _dColor )
 	aVertex[ 6 ].vecPos = D3DXVECTOR3( -1.0f, -1.0f, 1.0f );
 	aVertex[ 7 ].vecPos = D3DXVECTOR3( 1.0f, -1.0f, 1.0f );
 
-	aVertex[ 0 ].dColor	= _dColor;
-	aVertex[ 1 ].dColor	= _dColor;
-	aVertex[ 2 ].dColor	= _dColor;
-	aVertex[ 3 ].dColor	= _dColor;
-	aVertex[ 4 ].dColor	= _dColor;
-	aVertex[ 5 ].dColor	= _dColor;
-	aVertex[ 6 ].dColor	= _dColor;
-	aVertex[ 7 ].dColor	= _dColor;
+	aVertex[ 0 ].dColor	= m_dColBox;
+	aVertex[ 1 ].dColor	= m_dColBox;
+	aVertex[ 2 ].dColor	= m_dColBox;
+	aVertex[ 3 ].dColor	= m_dColBox;
+	aVertex[ 4 ].dColor	= m_dColBox;
+	aVertex[ 5 ].dColor	= m_dColBox;
+	aVertex[ 6 ].dColor	= m_dColBox;
+	aVertex[ 7 ].dColor	= m_dColBox;
 
 	//	Init Index
 	INDEX	aIndex[ 12 ];
@@ -108,93 +62,319 @@ VOID CameraWorkBase::CreateImage_Box( LPIMAGE _pimgBox, DWORD _dColor )
 	aIndex[ 11 ]._0 = 6;	aIndex[ 11 ]._1 = 4;	
 
 	//	Init VertexBuffer, IndexBuffer
-	CreateVB( &_pimgBox->pVB, 8, sizeof( VERTEX ), VERTEX::FVF );
-	SetVB( _pimgBox->pVB, aVertex, 8, sizeof( VERTEX ) );
+	CreateVB( &_pImage->pVB, iNumVertices, sizeof( VERTEX ), VERTEX::FVF );
+	SetVB( _pImage->pVB, aVertex, iNumVertices, sizeof( VERTEX ) );
 
-	CreateIB( &_pimgBox->pIB, 12, sizeof( INDEX ) );
-	SetIB( _pimgBox->pIB, aIndex, 12, sizeof( INDEX) );
+	CreateIB( &_pImage->pIB, iNumIndices, sizeof( INDEX ) );
+	SetIB( _pImage->pIB, aIndex, iNumIndices, sizeof( INDEX) );
 }
 
-VOID CameraWorkBase::CreateImage_Course( LPIMAGE _pimgCourse, LPCOURSEINFO _pinfCourse )
-{	//	Scale, Rotate, Translate로 변형 불가
-	//	Vertex는 외부에서 받아온다
-	if( _pimgCourse->pVB == NULL && _pimgCourse->pIB == NULL )
-	{	//	처음 만들거나 iNumVertices정보가 변경되었을때
-		//	Create VertexBuffer
-		_pimgCourse->iNumVertices	= _pinfCourse->iNumVertices;
+VOID CameraWorkBase::CreateInfo_BezierCurve( LPINFO _pInfo, INT _iNumVertices, D3DXVECTOR3& _vecPoint0, D3DXVECTOR3& _vecPoint1, D3DXVECTOR3& _vecPoint2, D3DXVECTOR3& _vecPoint3 )
+{
+	if( _pInfo->pVertex == NULL || _pInfo->iNumVertices != _iNumVertices )
+	{	//	처음이거나 점의 갯수가 변했을때 새로 만든다
+		if( _pInfo->pVertex != NULL )
+			delete[] _pInfo->pVertex;
+		if( _pInfo->pIndex != NULL )
+			delete[] _pInfo->pIndex;
+		if( _pInfo->pfIncInterporation != NULL )
+			delete[] _pInfo->pfIncInterporation;
+
+		_pInfo->iNumVertices		= _iNumVertices;
+		_pInfo->iNumIndices			= _iNumVertices - 1;
+		_pInfo->iNumInterporation	= _iNumVertices;
+
+		_pInfo->pVertex				= new VERTEX[ _pInfo->iNumVertices ];
+		_pInfo->pIndex				= new INDEX[ _pInfo->iNumIndices ];
+		_pInfo->pfIncInterporation	= new FLOAT[ _pInfo->iNumInterporation ];
+
+		//	Init Index
+		for( INT i=0 ; i<_pInfo->iNumIndices ; i++ )
+		{
+			_pInfo->pIndex[ i ]._0 = i;
+			_pInfo->pIndex[ i ]._1 = i + 1;
+		}
+		//	Init IncInterporation
+		for( INT i=0 ; i<_pInfo->iNumInterporation ; i++ )
+			_pInfo->pfIncInterporation[ i ] = 0.1f;
+	}
+			
+	//	Set Vertex
+	LPVERTEX pVertex = _pInfo->pVertex;
+
+	//FLOAT fIncT = 1.0f / static_cast<FLOAT>( _iNumVertices );
+	FLOAT fIncT = 1.0f / static_cast<FLOAT>( _pInfo->iNumIndices );
+
+	INT i=0;
+	for( FLOAT t=0.0f ; t<1.0f ; t+=fIncT )
+	{
+		pVertex[ i ].vecPos.x = _vecPoint0.x * ( 1.0f - t ) * ( 1.0f - t ) * ( 1.0f - t ) + 
+								_vecPoint1.x * 3.0f * t * ( 1.0f - t ) * ( 1.0f - t ) + 
+								_vecPoint2.x * 3.0f * t * t * ( 1.0f - t ) +
+								_vecPoint3.x * t * t * t;
 		
-		CreateVB( &_pimgCourse->pVB, _pimgCourse->iNumVertices, sizeof( VERTEX ), VERTEX::FVF );
-		SetVB( _pimgCourse->pVB, _pinfCourse->pVertex, _pimgCourse->iNumVertices, sizeof( VERTEX ) );
+		pVertex[ i ].vecPos.y = _vecPoint0.y * ( 1.0f - t ) * ( 1.0f - t ) * ( 1.0f - t ) + 
+								_vecPoint1.y * 3.0f * t * ( 1.0f - t ) * ( 1.0f - t ) + 
+								_vecPoint2.y * 3.0f * t * t * ( 1.0f - t ) +
+								_vecPoint3.y * t * t * t;
+
+		pVertex[ i ].vecPos.z = _vecPoint0.z * ( 1.0f - t ) * ( 1.0f - t ) * ( 1.0f - t ) + 
+								_vecPoint1.z * 3.0f * t * ( 1.0f - t ) * ( 1.0f - t ) + 
+								_vecPoint2.z * 3.0f * t * t * ( 1.0f - t ) +
+								_vecPoint3.z * t * t * t;
+		
+		pVertex[ i ].dColor	= m_dColPosition;
+
+		i++;
+		//if( i >= _iNumVertices )
+		//	break;
+	}
+
+	pVertex[ _iNumVertices - 1 ].vecPos = _vecPoint3;
+	pVertex[ _iNumVertices - 1 ].dColor = m_dColPosition;
+}
+
+VOID CameraWorkBase::CreateInfo_Line2( LPINFO _pInfo, INT _iNumVertices, D3DXVECTOR3& _vecPoint0, D3DXVECTOR3& _vecPoint1 )
+{
+	if( _pInfo->pVertex == NULL || _pInfo->iNumVertices != _iNumVertices )
+	{	//	처음이거나 점의 갯수가 변했을때 새로 만든다
+		if( _pInfo->pVertex != NULL )
+			delete[] _pInfo->pVertex;
+		if( _pInfo->pIndex != NULL )
+			delete[] _pInfo->pIndex;
+		if( _pInfo->pfIncInterporation != NULL )
+			delete[] _pInfo->pfIncInterporation;
+
+		_pInfo->iNumVertices		= _iNumVertices;
+		_pInfo->iNumIndices			= _iNumVertices - 1;
+		_pInfo->iNumInterporation	= _iNumVertices;
+
+		_pInfo->pVertex				= new VERTEX[ _pInfo->iNumVertices ];
+		_pInfo->pIndex				= new INDEX[ _pInfo->iNumIndices ];
+		_pInfo->pfIncInterporation	= new FLOAT[ _pInfo->iNumInterporation ];
+
+		//	Init Index
+		for( INT i=0 ; i<_pInfo->iNumIndices ; i++ )
+		{
+			_pInfo->pIndex[ i ]._0 = i;
+			_pInfo->pIndex[ i ]._1 = i + 1;
+		}
+		//	Init IncInterporation
+		for( INT i=0 ; i<_pInfo->iNumInterporation ; i++ )
+			_pInfo->pfIncInterporation[ i ] = 0.1f;
+	}
+
+	//	Set Vertex
+	LPVERTEX pVertex = _pInfo->pVertex;
+	
+	FLOAT fNumIndices = static_cast<FLOAT>( _pInfo->iNumIndices );
+
+	FLOAT fIncX = ( _vecPoint1.x - _vecPoint0.x ) / fNumIndices;
+	FLOAT fIncY = ( _vecPoint1.y - _vecPoint0.y ) / fNumIndices;
+	FLOAT fIncZ = ( _vecPoint1.z - _vecPoint0.z ) / fNumIndices;
+
+	for( INT i=0 ; i<_iNumVertices ; i++ )
+	{
+		pVertex[ i ].vecPos.x = _vecPoint0.x + fIncX * static_cast<FLOAT>( i );
+		pVertex[ i ].vecPos.y = _vecPoint0.y + fIncY * static_cast<FLOAT>( i );
+		pVertex[ i ].vecPos.z = _vecPoint0.z + fIncZ * static_cast<FLOAT>( i );
+	}
+
+}
+
+VOID CameraWorkBase::CheckNumVerticesOfLine4( INT& _iNumVertices )
+{
+	INT iNumVertices = 4;
+
+	if( iNumVertices >= _iNumVertices )
+	{
+		_iNumVertices = iNumVertices;
+		return;
+	}
+
+	while( 1 )
+	{
+		iNumVertices = iNumVertices + iNumVertices - 1;
+
+		if( iNumVertices >= _iNumVertices )
+		{
+			_iNumVertices = iNumVertices;
+			return;
+		}
+	}
+}
+
+VOID CameraWorkBase::CreateInfo_Line4( LPINFO _pInfo, INT _iNumVertices, D3DXVECTOR3& _vecPoint0, D3DXVECTOR3& _vecPoint1, D3DXVECTOR3& _vecPoint2, D3DXVECTOR3& _vecPoint3 )
+{	
+	//	|				|				|				|	4		+ 4 - 1
+	//	|		|		|		|		|		|		|	7		+ 7 - 1
+	//	|	|	|	|	|	|	|	|	|	|	|	|	|	13		+ 13 - 1
+	//	| | | | | | | | | | | | | | | | | | | | | | | | |	25		+ 25 - 1
+	//	4개의 선이 동일한 갯수의 점을 가지고 있게 한다
+	CheckNumVerticesOfLine4( _iNumVertices );
+
+	if( _pInfo->pVertex == NULL || _pInfo->iNumVertices != _iNumVertices )
+	{	//	처음이거나 점의 갯수가 변했을때 새로 만든다
+		if( _pInfo->pVertex != NULL )
+			delete[] _pInfo->pVertex;
+		if( _pInfo->pIndex != NULL )
+			delete[] _pInfo->pIndex;
+		if( _pInfo->pfIncInterporation != NULL )
+			delete[] _pInfo->pfIncInterporation;
+
+		_pInfo->iNumVertices		= _iNumVertices;
+		_pInfo->iNumIndices			= _iNumVertices - 1;
+		_pInfo->iNumInterporation	= _iNumVertices;
+
+		_pInfo->pVertex				= new VERTEX[ _pInfo->iNumVertices ];
+		_pInfo->pIndex				= new INDEX[ _pInfo->iNumIndices ];
+		_pInfo->pfIncInterporation	= new FLOAT[ _pInfo->iNumInterporation ];
+
+		//	Init Index
+		for( INT i=0 ; i<_pInfo->iNumIndices ; i++ )
+		{
+			_pInfo->pIndex[ i ]._0 = i;
+			_pInfo->pIndex[ i ]._1 = i + 1;
+		}
+		//	Init IncInterporation
+		for( INT i=0 ; i<_pInfo->iNumInterporation ; i++ )
+			_pInfo->pfIncInterporation[ i ] = 0.1f;
+	}
+
+	
+	//	Init Vertex
+	LPVERTEX pVertex	= _pInfo->pVertex;
+
+	INT iIncVertices	= _iNumVertices / 3;
+	
+	INT iStartVertex	= 0;
+	INT iEndVertex		= 0;
+
+	FLOAT fIncVertices	= static_cast<FLOAT>( iIncVertices );
+
+	FLOAT fIncX = 0.0f, fIncY = 0.0f, fIncZ = 0.0f;
+
+	INT i = 0;
+	
+	//	Init Line 0
+	iStartVertex	= iIncVertices * 0;
+	iEndVertex		= iIncVertices * 1;
+
+	fIncX = ( _vecPoint1.x - _vecPoint0.x ) / fIncVertices;
+	fIncY = ( _vecPoint1.y - _vecPoint0.y ) / fIncVertices;
+	fIncZ = ( _vecPoint1.z - _vecPoint0.z ) / fIncVertices;
+
+	i = 0;
+	for( INT iIndex=iStartVertex ; iIndex<iEndVertex ; iIndex++ )
+	{
+		pVertex[ iIndex ].vecPos.x	= _vecPoint0.x + fIncX * static_cast<FLOAT>( i );
+		pVertex[ iIndex ].vecPos.y	= _vecPoint0.y + fIncY * static_cast<FLOAT>( i );
+		pVertex[ iIndex ].vecPos.z	= _vecPoint0.z + fIncZ * static_cast<FLOAT>( i );
+
+		pVertex[ iIndex ].dColor	= m_dColBoxLink;
+
+		i++;
+	}
+
+	//	Init Line 1
+	iStartVertex	= iIncVertices * 1;
+	iEndVertex		= iIncVertices * 2;
+
+	fIncX = ( _vecPoint2.x - _vecPoint1.x ) / fIncVertices;
+	fIncY = ( _vecPoint2.y - _vecPoint1.y ) / fIncVertices;
+	fIncZ = ( _vecPoint2.z - _vecPoint1.z ) / fIncVertices;
+
+	i = 0;
+	for( INT iIndex=iStartVertex ; iIndex<iEndVertex ; iIndex++ )
+	{
+		pVertex[ iIndex ].vecPos.x	= _vecPoint1.x + fIncX * static_cast<FLOAT>( i );
+		pVertex[ iIndex ].vecPos.y	= _vecPoint1.y + fIncY * static_cast<FLOAT>( i );
+		pVertex[ iIndex ].vecPos.z	= _vecPoint1.z + fIncZ * static_cast<FLOAT>( i );
+
+		pVertex[ iIndex ].dColor	= m_dColBoxLink;
+
+		i++;
+	}
+
+	//	Init Line 2
+	iStartVertex	= iIncVertices * 2;
+	iEndVertex		= iIncVertices * 3;
+
+	fIncX = ( _vecPoint3.x - _vecPoint2.x ) / fIncVertices;
+	fIncY = ( _vecPoint3.y - _vecPoint2.y ) / fIncVertices;
+	fIncZ = ( _vecPoint3.z - _vecPoint2.z ) / fIncVertices;
+
+	i = 0;
+	for( INT iIndex=iStartVertex ; iIndex<iEndVertex ; iIndex++ )
+	{
+		pVertex[ iIndex ].vecPos.x	= _vecPoint2.x + fIncX * static_cast<FLOAT>( i );
+		pVertex[ iIndex ].vecPos.y	= _vecPoint2.y + fIncY * static_cast<FLOAT>( i );
+		pVertex[ iIndex ].vecPos.z	= _vecPoint2.z + fIncZ * static_cast<FLOAT>( i );
+
+		pVertex[ iIndex ].dColor	= m_dColBoxLink;
+
+		i++;
+	}
+
+	pVertex[ iEndVertex ].vecPos = _vecPoint3;
+	pVertex[ iEndVertex ].dColor = m_dColBoxLink;
+
+}
+
+VOID CameraWorkBase::CreateImage( LPIMAGE _pImage, LPINFO _pInfo )
+{
+	//	Vertex는 외부에서 받아온다
+	if( _pImage->pVB == NULL && _pImage->pIB == NULL )
+	{	//	처음 만들거나 iNumVertices정보가 변경되었을때
+		
+		//	Create VertexBuffer
+		_pImage->iNumVertices	= _pInfo->iNumVertices;
+		
+		CreateVB( &_pImage->pVB, _pImage->iNumVertices, sizeof( VERTEX ), VERTEX::FVF );
+		SetVB( _pImage->pVB, _pInfo->pVertex, _pImage->iNumVertices, sizeof( VERTEX ) );
 
 		//	Create IndexBuffer
-		_pimgCourse->iNumIndices	= _pinfCourse->iNumVertices - 1;
+		_pImage->iNumIndices	= _pInfo->iNumIndices;
 
-		//	Line으로 그리는 것이니 항상 같음
-		LPINDEX pIndex = new INDEX[ _pimgCourse->iNumIndices ];
-
-		for( INT i=0 ; i<_pimgCourse->iNumIndices ; i++ )
-		{
-			pIndex[ i ]._0 = i;
-			pIndex[ i ]._1 = i + 1;
-		}
-
-		CreateIB( &_pimgCourse->pIB, _pimgCourse->iNumIndices, sizeof( INDEX ) );
-		SetIB( _pimgCourse->pIB, pIndex, _pimgCourse->iNumIndices, sizeof( INDEX) );
-
-		delete[] pIndex;
+		CreateIB( &_pImage->pIB, _pImage->iNumIndices, sizeof( INDEX ) );
+		SetIB( _pImage->pIB, _pInfo->pIndex, _pImage->iNumIndices, sizeof( INDEX) );
 
 		return;
 	}
 
 	LPVOID pVertices;
-	if( FAILED( _pimgCourse->pVB->Lock( 0, sizeof( VERTEX ) * _pimgCourse->iNumVertices, (LPVOID*)&pVertices, 0 ) ) )
+	if( FAILED( _pImage->pVB->Lock( 0, sizeof( VERTEX ) * _pInfo->iNumVertices, (LPVOID*)&pVertices, 0 ) ) )
 	{
 		MessageBox( NULL, L"CreateImage_Course(){ ... pVB->Lock failed ... }", NULL, MB_OK );
 		return;
 	}
 
-	memcpy( pVertices, _pinfCourse->pVertex, sizeof( VERTEX ) * _pinfCourse->iNumVertices );
+	memcpy( pVertices, _pInfo->pVertex, sizeof( VERTEX ) * _pInfo->iNumVertices );
 
-	_pimgCourse->pVB->Unlock();
-
+	_pImage->pVB->Unlock();
 }
 
 
-VOID CameraWorkBase::CreateBoxLink( LPIMAGE _pimgBoxLink, LPIMAGE _pimgBox, DWORD _dColor )
+VOID CameraWorkBase::RenderImage( LPIMAGE _pImage )
 {
-	//	Init Vertices, Indices
-	_pimgBoxLink->iNumVertices	= 4;
-	_pimgBoxLink->iNumIndices	= 3;
+	//	Set World Matrix
+	SetMatrix( &_pImage->vecScale, &_pImage->vecRotate, &_pImage->vecTranslate );
 
-	//	Init Vertex
-	VERTEX aVertex[ 4 ];
+	//	Light Off
+	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 
-	aVertex[ 0 ].vecPos = _pimgBox[ 0 ].vecTranslate;
-	aVertex[ 0 ].dColor	= _dColor;
+	m_pd3dDevice->SetStreamSource( 0, _pImage->pVB, 0, sizeof( VERTEX ) );
+	m_pd3dDevice->SetFVF( VERTEX::FVF );
+	m_pd3dDevice->SetIndices( _pImage->pIB );
+	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_LINELIST, 0, 0, _pImage->iNumVertices, 0, _pImage->iNumIndices );
 
-	aVertex[ 1 ].vecPos = _pimgBox[ 1 ].vecTranslate;
-	aVertex[ 1 ].dColor	= _dColor;
+	//	Light On
+	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
-	aVertex[ 2 ].vecPos = _pimgBox[ 2 ].vecTranslate;
-	aVertex[ 2 ].dColor	= _dColor;
-
-	aVertex[ 3 ].vecPos = _pimgBox[ 3 ].vecTranslate;
-	aVertex[ 3 ].dColor	= _dColor;
-
-	//	Init Index
-	INDEX aIndex[ 3 ];
-
-	aIndex[ 0 ]._0 = 0;		aIndex[ 0 ]._1 = 1;
-	aIndex[ 1 ]._0 = 1;		aIndex[ 1 ]._1 = 2;
-	aIndex[ 2 ]._0 = 2;		aIndex[ 2 ]._1 = 3;
-
-	//	Init VertexBuffer, IndexBuffer
-	CreateVB( &_pimgBoxLink->pVB, 4, sizeof( VERTEX ), VERTEX::FVF );
-	SetVB( _pimgBoxLink->pVB, aVertex, 4, sizeof( VERTEX ) );
-
-	CreateIB( &_pimgBoxLink->pIB, 3, sizeof( INDEX ) );
-	SetIB( _pimgBoxLink->pIB, aIndex, 3, sizeof( INDEX) );
-
+	//	Indentity World Matirx
+	D3DXMATRIX matWorld;
+	D3DXMatrixIdentity( &matWorld );
+	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 }
 
 VOID CameraWorkBase::SetMatrix( LPD3DXVECTOR3 _pvecScale, LPD3DXVECTOR3 _pvecRotate, LPD3DXVECTOR3 _pvecTranslate )
@@ -227,28 +407,6 @@ VOID CameraWorkBase::SetMatrix( LPD3DXVECTOR3 _pvecScale, LPD3DXVECTOR3 _pvecRot
 	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 }
 
-VOID CameraWorkBase::RenderImage( LPIMAGE _pImage )
-{
-	//	Set World Matrix
-	SetMatrix( &_pImage->vecScale, &_pImage->vecRotate, &_pImage->vecTranslate );
-
-	//	Light Off
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
-
-	m_pd3dDevice->SetStreamSource( 0, _pImage->pVB, 0, sizeof( VERTEX ) );
-	m_pd3dDevice->SetFVF( VERTEX::FVF );
-	m_pd3dDevice->SetIndices( _pImage->pIB );
-	m_pd3dDevice->DrawIndexedPrimitive( D3DPT_LINELIST, 0, 0, _pImage->iNumVertices, 0, _pImage->iNumIndices );
-
-	//	Light On
-	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
-
-	//	Indentity World Matirx
-	D3DXMATRIX matWorld;
-	D3DXMatrixIdentity( &matWorld );
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
-}
-
 HRESULT	CameraWorkBase::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, INT _Size, DWORD _FVF )
 {
 	if( FAILED( m_pd3dDevice->CreateVertexBuffer(	_nVertex * _Size,
@@ -258,7 +416,7 @@ HRESULT	CameraWorkBase::CreateVB( LPDIRECT3DVERTEXBUFFER9* _ppVB, INT _nVertex, 
 													&(*_ppVB),
 													NULL ) ) )
 	{
-		MessageBox( NULL, L"CreateVertexBuffer() failed.", NULL, MB_OK );
+		MessageBox( NULL, L"CameraWorkBase::CreateVertexBuffer() failed.", NULL, MB_OK );
 		return E_FAIL;
 	}
 
@@ -270,7 +428,7 @@ HRESULT	CameraWorkBase::SetVB( LPDIRECT3DVERTEXBUFFER9 _pVB, LPVOID _pvertices, 
 	LPVOID pvertices;
 	if( FAILED( _pVB->Lock( 0, _nVertex *  _Size, (VOID**)&pvertices, 0 ) ) )
 	{
-		MessageBox( NULL, L"m_pVB->Lock() failed.", NULL, MB_OK );
+		MessageBox( NULL, L"CameraWorkBase::m_pVB->Lock() failed.", NULL, MB_OK );
 		return E_FAIL;
 	}
 	
@@ -290,7 +448,7 @@ HRESULT	CameraWorkBase::CreateIB( LPDIRECT3DINDEXBUFFER9* _ppIB, INT _nIndex, IN
 													&(*_ppIB),
 													NULL ) ) )
 	{
-		MessageBox( NULL, TEXT("CreateIndexBuffer() failed."), NULL, MB_OK );
+		MessageBox( NULL, TEXT("CameraWorkBase::CreateIndexBuffer() failed."), NULL, MB_OK );
 		return E_FAIL;
 	}
 
@@ -302,7 +460,7 @@ HRESULT	CameraWorkBase::SetIB( LPDIRECT3DINDEXBUFFER9 _pIB, LPVOID _indices, INT
 	LPVOID pIndices;
 	if( FAILED( _pIB->Lock( 0, _nIndex * _Size, (VOID**)&pIndices, 0 ) ) )
 	{
-		MessageBox( NULL, L"m_pIB->Lock() failed.", NULL, MB_OK );
+		MessageBox( NULL, L"CameraWorkBase::m_pIB->Lock() failed.", NULL, MB_OK );
 		return E_FAIL;
 	}
 	

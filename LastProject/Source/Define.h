@@ -36,13 +36,22 @@ extern FLOAT FastRand2();
 #define WEAPONFILE L".\\WeaponFile.ini"
 
 // GUI Resource
-// GUI State
+// GUI Button
 enum GUIBTN { UP			= 100,	DOWN, DISABLE, 
 			  STORY_SKIP	= 1000, 
 			  MENU_START	= 1010,	MENU_END, 
 			  OPTION_HELP	= 1020,	OPTION_SETUP, 
 			  LOGIN_GO		= 1030,	LOGIN_EXIT, 
 			  LOBBY_START	= 1040,	LOBBY_READY, LOBBY_BACK, LOBBY_SELECT_1, LOBBY_SELECT_2, LOBBY_SELECT_3, LOBBY_SELECT_4
+};
+// GUI Edit
+enum GUIEDIT {	LOGIN_IP	= 2000,
+				LOBBY_CHAT	= 2010,
+				MAIN_CHAT	= 2020
+};
+// CameraWork Resource
+enum CAMERAWORK {	CWK_LOGO_EVENT		= 10000,
+					CWK_MAIN_EVENT0		= 10010 
 };
 
 namespace MTP_FUN

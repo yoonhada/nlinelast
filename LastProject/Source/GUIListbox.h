@@ -79,7 +79,7 @@ public:
 	VOID		OnMove( INT x, INT y );
 	VOID		OnUp( INT x, INT y );
 
-	VOID		SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight );
+	VOID		SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight, DWORD _dColor );
 
 private:
 	DATA			m_Data;
@@ -100,6 +100,7 @@ private:
 	TCHAR			m_aFaceName[ 1024 ];
 	INT				m_iFontX, m_iFontY;
 	INT				m_iFontWidth, m_iFontHeight;
+	DWORD			m_dFontColor;
 
 public:
 

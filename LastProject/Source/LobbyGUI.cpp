@@ -3,7 +3,7 @@
 #include "Mouse.h"
 #include "GUIBackground.h"
 #include "GUIBtnManager.h"
-#include "GUIEdit.h"
+#include "GUIEditManager.h"
 #include "GUIListbox.h"
 
 VOID LobbyGUI::Initialize()
@@ -15,7 +15,7 @@ VOID LobbyGUI::Initialize()
 	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
 	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIBtnManager	= new GUIBtnManager( m_pD3dDevice, m_pSprite );
-	m_pGUIEdit			= new GUIEdit( m_pD3dDevice, m_pSprite );
+	m_pGUIEditManager		= new GUIEditManager( m_pD3dDevice, m_pSprite );
 	m_pGUIListbox		= new GUIListbox( m_pD3dDevice, m_pSprite );
 }
 
@@ -27,7 +27,7 @@ VOID LobbyGUI::Release()
 	delete m_pGUIBase;
 	delete m_pGUIBackground;
 	delete m_pGUIBtnManager;
-	delete m_pGUIEdit;
+	delete m_pGUIEditManager;
 	delete m_pGUIListbox;
 }
 
@@ -133,13 +133,22 @@ VOID LobbyGUI::CreateEdit()
 	FLOAT fWidth	= 726.0f;
 	FLOAT fHeight	= 53.0f;
 
-	GUIBase::IMAGEPARAM imgParam;
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Edit.png" );
+	GUIBase::IMAGEPARAM imgParamEdit;
+	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\LobbyScene\\Edit.png" );
 
-	m_pGUIEdit->Create( fX, fY, fWidth, fHeight, imgParam );
-	m_pGUIEdit->SetStyle( GUIEdit::EDT_DYNAMIC );
-	m_pGUIEdit->SetFont( L"±Ã¼­", 20, 20 );
+	GUIBase::IMAGEPARAM imgParamCaret;
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png" );
+
+
+	m_pGUIEditManager->Create(	LOBBY_CHAT, 
+								GUIEditManager::EDT_DYNAMIC,
+								fX, fY, 
+								fWidth, fHeight, 
+								imgParamEdit, imgParamCaret );
+	m_pGUIEditManager->SetFont( LOBBY_CHAT, L"±Ã¼­", 20, 20 );
 }
+
 VOID LobbyGUI::CreateListbox()
 {
 	FLOAT fX		= 50.0f;
@@ -151,7 +160,8 @@ VOID LobbyGUI::CreateListbox()
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Listbox_Back.png" );
 
 	m_pGUIListbox->Create( fX, fY, fWidth, fHeight, imgParam );
-	m_pGUIListbox->SetFont( L"±Ã¼­", 20, 20 );
+	m_pGUIListbox->SetFont( L"±Ã¼­", 20, 20, 0x00ffffff );
+	
 }
 
 VOID LobbyGUI::Create()
@@ -178,7 +188,7 @@ VOID LobbyGUI::Update()
 	m_pMouse->Update();
 	m_pGUIBackground->Update();
 	m_pGUIBtnManager->Update( pt.x, pt.y );
-	m_pGUIEdit->Update();
+	m_pGUIEditManager->Update();
 	m_pGUIListbox->Update();
 
 	static BOOL bFirst = FALSE;
@@ -214,7 +224,7 @@ VOID LobbyGUI::Render()
 {
 	//m_pGUIBackground->Render();
 	m_pGUIBtnManager->Render();
-	m_pGUIEdit->Render();
+	m_pGUIEditManager->Render();
 	m_pGUIListbox->Render();
 }
 
@@ -222,18 +232,21 @@ VOID LobbyGUI::OnDown( INT x, INT y )
 {
 	m_pGUIBtnManager->OnDown( x, y );
 	m_pGUIListbox->OnDown( x, y );
+	m_pGUIEditManager->OnDown( x, y );
 }
 
 VOID LobbyGUI::OnMove( INT x, INT y )
 {
 	m_pGUIBtnManager->OnMove( x, y );
 	m_pGUIListbox->OnMove( x, y );
+	m_pGUIEditManager->OnMove( x, y );
 }
 
 VOID LobbyGUI::OnUp( INT x, INT y )
 {
 	m_pGUIBtnManager->OnUp( x, y );
 	m_pGUIListbox->OnUp( x, y );
+	m_pGUIEditManager->OnUp( x, y );
 }
 
 VOID LobbyGUI::Command( DWORD& _dOut )
@@ -263,7 +276,7 @@ VOID LobbyGUI::ChangeScene( DWORD _dID, DWORD _dState )
 
 BOOL LobbyGUI::TakeChattingMassage( LPWSTR _pText )
 {
-	if( m_pGUIEdit->TakeMessage( m_pStr ) )
+	if( m_pGUIEditManager->TakeMessage( LOBBY_CHAT, m_pStr ) )
 	{
 		m_pGUIListbox->AddItem( m_pStr );
 

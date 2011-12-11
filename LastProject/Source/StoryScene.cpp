@@ -28,17 +28,16 @@ VOID StoryScene::Update()
 {
 	m_pStoryGUI->Update();
 
-	BOOL bEndStory = TRUE;
-
 	DWORD dID;
 	m_pStoryGUI->Command( dID );
+	
 	switch( dID )
 	{
 	case STORY_SKIP:
-		bEndStory = m_pStoryGUI->NextBackgroundImage();
+		m_scnState = IScene::SCENE_END;
 		break;
 	}
-	if( !bEndStory )
+	if( m_pStoryGUI->IsEndAnimationImage() )
 		m_scnState = IScene::SCENE_END;
 }
 

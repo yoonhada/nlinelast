@@ -37,7 +37,7 @@ public:
 
 	VOID		Command( DWORD& _dOut );
 
-	BOOL		NextBackgroundImage();
+	BOOL		IsEndAnimationImage();
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
@@ -48,6 +48,8 @@ private:
 	GUIBase*				m_pGUIBase;
 	GUIBackground*			m_pGUIBackground;
 	GUIBtnManager*			m_pGUIBtnManager;
+
+	BOOL					m_bEndAnimationImage;
 
 public:
 

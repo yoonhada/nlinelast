@@ -12,6 +12,9 @@ VOID MenuScene::Initialize()
 	m_pMenuGUI			= NULL;
 	m_pOptionScene		= NULL;
 	m_pLoginScene		= NULL;
+	
+	m_bActOptionScene	= FALSE;
+	m_bActLoginScene	= FALSE;
 }
 
 VOID MenuScene::Release()
@@ -58,9 +61,15 @@ HRESULT MenuScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 }
 VOID MenuScene::Update()
 {
-	m_pMenuGUI->Update();
-	m_pOptionScene->Update();
-	m_pLoginScene->Update();
+	m_bActOptionScene	= m_pOptionScene->IsActivate();
+	m_bActLoginScene	= m_pLoginScene->IsActivate();
+
+	if( !m_bActOptionScene && !m_bActLoginScene )
+		m_pMenuGUI->Update();
+	if( !m_bActLoginScene )
+		m_pOptionScene->Update();
+	if( !m_bActOptionScene )
+		m_pLoginScene->Update();
 
 	DWORD dID;
 	m_pMenuGUI->Command( dID );
