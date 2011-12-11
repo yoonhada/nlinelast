@@ -199,7 +199,7 @@ VOID CMainScene::CreateWall()
 	{
 		m_pWall[Loop].Create( m_pD3dDevice );
 		m_pWall[Loop].Load( L"Data/CharData/Obstacle_0.csav" );
-		m_pFirstAidKit[Loop].Set_MonsterNumber( CGameEvent::DOOR_LEFT << Loop );
+		m_pWall[Loop].Set_MonsterNumber( CGameEvent::DOOR_LEFT << Loop );
 		CTree::GetInstance()->GetMonsVector()->push_back( m_pWall[Loop].GetBoundBox() );
 	}
 }
@@ -410,12 +410,19 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 	{
 	case CGameEvent::EVENT_MAP_CAMERA_WALK:
 	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
-		m_pWall->Set_Position( m_pGameEvent->GetWallPosition( 0 ) );
-		m_pWall->SetActive( TRUE );
+		for (int Loop = 0; Loop < 3; ++Loop )
+		{
+			m_pWall[Loop].Set_Position( m_pGameEvent->GetWallPosition( Loop ) );
+			m_pWall[Loop].SetActive( TRUE );
+		}
+		m_pGameEvent->SetMonstersState( CGameEvent::DOOR_LEFT | CGameEvent::DOOR_CENTER | CGameEvent::DOOR_RIGHT );
 		break;
 	case CGameEvent::TUTORIAL_COMBO_END:
-		m_pWall->Set_Position( m_pGameEvent->GetNonePosition( ) );
-		m_pWall->SetActive( FALSE );
+		for (int Loop = 0; Loop < 3; ++Loop )
+		{
+			m_pWall[Loop].Set_Position( m_pGameEvent->GetWallPosition( Loop ) );
+			m_pWall[Loop].SetActive( TRUE );
+		}
 		m_pGameEvent->SetMonstersState( CGameEvent::BEAR | CGameEvent::PANDA );
 		break;
 	default:
