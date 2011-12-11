@@ -28,7 +28,7 @@ VOID CMonster::Clear()
 	m_iSelectedCharEditor=0;
 	m_fBoxSize = 15.0f;
 	m_fBoxSizeDiv = (m_fBoxSize) * 0.5f;
-	m_iFrameMax = 10;
+	m_iFrameMax = 30;
 	m_iSelectedFrameNum = ANIM_STAND;
 	D3DXMatrixIdentity( &m_matControl );
 	m_vPreControl = D3DXVECTOR3(-250.0f, 0.0f, 650.0f);
