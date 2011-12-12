@@ -340,7 +340,8 @@ VOID CCamera::CreateEventCamera()
 
 	m_pCameraWork[0]->AddData( CWK_MAIN_EVENT0, &prmCameraWork );
 	m_pCameraWork[0]->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_POSITION, 5000 );
-	m_pCameraWork[0]->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_LOOKAT, 5000 );
+	m_pCameraWork[0]->SetPartWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_POSITION, 3000, 0, 20 );
+	m_pCameraWork[0]->SetWholeWorkingPeriod( CWK_MAIN_EVENT0, CameraWork::CWK_LOOKAT, 7000 );
 	m_pCameraWork[0]->SelectData( CWK_MAIN_EVENT0 );
 
 	prmCameraWork.avecPosition[ 0 ] = D3DXVECTOR3( -184.0f, 289.0f, 666.0f );
