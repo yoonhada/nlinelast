@@ -22,7 +22,10 @@ VOID DashReady::Enter( CMonster* a_pMonster )
 	CDebugConsole::GetInstance()->Messagef( L"DashReady : ANIM_DASH \n" );
 #endif
 
-	FLOAT fAngle = SetAngle( a_pMonster );
+	if( CObjectManage::GetInstance()->IsHost() == TRUE )
+	{
+		FLOAT fAngle = SetAngle( a_pMonster );
+	}
 }
 
 

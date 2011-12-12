@@ -239,10 +239,12 @@ VOID CMainScene::CheatKeys()
 	{
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
 	}
+/*
 	if( CInput::GetInstance()->Get_NumKey( 1 ) )
 	{
 		m_pGameEvent->AddEvent( CGameEvent::ENTER_CLOWN, 0.1f);
 	}
+*/
 }
 
 VOID CMainScene::Update()
