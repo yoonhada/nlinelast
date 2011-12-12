@@ -76,7 +76,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 
 	// 범위에 없으면 가장 가까운 목표 추격
 	else if( ( min >= 25.0f  && min <= 80.0f  ) ||
-			 ( min >= 120.0f && min <= 300.0f ) )
+			 ( min >= 120.0f && min <= 200.0f ) )
 	{
 		D3DXVECTOR3 vMonsterPos = a_pMonster->Get_Pos();
 		D3DXVECTOR3 vPlayerPos = pCharactors[Target].Get_CharaPos();
