@@ -239,12 +239,10 @@ VOID CMainScene::CheatKeys()
 	{
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
 	}
-/*
-	if( CInput::GetInstance()->Get_NumKey( 1 ) )
-	{
-		m_pGameEvent->AddEvent( CGameEvent::ENTER_CLOWN, 0.1f);
-	}
-*/
+	//if( CInput::GetInstance()->Get_NumKey(  ) )
+	//{
+	//	m_pGameEvent->AddEvent( CGameEvent::ENTER_CLOWN, 0.1f);
+	//}
 }
 
 VOID CMainScene::Update()
@@ -388,12 +386,12 @@ VOID	CMainScene::Render()
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
 	TwDraw();
-#endif
 
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
+#endif
 
 	if ( m_pEventGUICombo )
 		m_pEventGUICombo->Render();
@@ -595,6 +593,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	case CGameEvent::GAME_WIN_END:
 		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_WIN_END \n" );
+		MessageBox( GHWND, L"게임종료", L"축하", MB_OK );
 		break;
 	case CGameEvent::GAME_LOSE_END:
 		EventStateNetwork( nEvent );
