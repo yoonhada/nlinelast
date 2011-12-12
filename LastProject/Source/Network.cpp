@@ -491,6 +491,9 @@ VOID CNetwork::SC_EVENT_ATTACK( CPacket& a_pk )
 	for( WORD i=0; i<wDestroyCount; ++i )
 	{
 		a_pk.Read( &wList[i] );
+#ifdef _DEBUG
+		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyList : %d \n", wList[i] );
+#endif
 	}
 
 	CObjectManage::GetInstance()->Get_Wall()[wMonsterNumber].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
@@ -561,7 +564,7 @@ VOID CNetwork::SC_Monster_Attack_Animation2( CPacket& a_pk )
 	D3DXVECTOR3 vNextPos	= D3DXVECTOR3( fNextPosX, 0.0f, fNextPosZ );
 
 	CMonster** pMonster = CObjectManage::GetInstance()->Get_Monster();
-	pMonster[wMonsterNumber]->Set_Angle( D3DXToRadian( fDegree ) );
+	pMonster[wMonsterNumber]->Set_Angle( fDegree );
 	pMonster[wMonsterNumber]->Set_Pos( vPos );
 	pMonster[wMonsterNumber]->Set_TargetPos( vNextPos );
 	pMonster[wMonsterNumber]->Set_TargetDistance( fTargetDistance );
@@ -878,9 +881,16 @@ VOID CNetwork::CS_EVENT_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection,
 	sendPk.Write( a_vDirection.z );
 	sendPk.Write( a_wDestroyCount );
 
+#ifdef _DEBUG
+	CDebugConsole::GetInstance()->Messagef( L"Send DestroyCount : %d \n", a_wDestroyCount );
+#endif
+
 	for( WORD i=0; i<a_wDestroyCount; ++i )
 	{
 		sendPk.Write( a_pList[i] );
+#ifdef _DEBUG
+		CDebugConsole::GetInstance()->Messagef( L"Send DestroyList : %d \n", a_pList[i] );
+#endif
 	}
 
 	sendPk.CalcSize();
