@@ -68,6 +68,12 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pCamera = new CCamera;
 	m_pCamera->Create( m_pD3dDevice );
 
+	// GUI 생성
+	m_pMainGUI = new MainGUI( m_pD3dDevice, a_Sprite, a_hWnd );
+	m_pMainGUI->Create();
+	m_pOptionScene = new OptionScene;
+	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
+
 	//이벤트
 	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 	m_pGameEvent = CGameEvent::GetInstance();
@@ -81,6 +87,12 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pTileMap = new TileMap( m_pD3dDevice );
 	m_pTileMap->Create( D3DXVECTOR3( -510.0f, 0.0f, -950.0f ), D3DXVECTOR3( 510.0f, 0.0f, 950.0f ), 10.0f );
 	m_pTileMap->LoadBBXFile( L"ASE File/Map/Stage_Beta_Box.BBX" );
+
+	// GUI 초기화
+	for (int i = 0; i < MainGUI::MMP_END; ++i )
+	{
+		m_pMainGUI->SetMiniMapObjectVisible( i, FALSE );
+	}
 
 	//캐릭터 생성
 	m_nClientID = CObjectManage::GetInstance()->Get_ClientNumber();
@@ -108,11 +120,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
-	// GUI 생성
-	m_pMainGUI = new MainGUI( m_pD3dDevice, a_Sprite, a_hWnd );
-	m_pMainGUI->Create();
-	m_pOptionScene = new OptionScene;
-	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
 	CInput::GetInstance()->EnableInput( FALSE );
 
@@ -152,6 +159,8 @@ VOID CMainScene::CreateCharactor()
 		{
 			pChar = &( m_pCharactors[ nIndex ] );
 			CTree::GetInstance()->GetCharVector()->push_back( pChar->GetBoundBox() );
+
+			m_pMainGUI->SetMiniMapObjectVisible( nIndex, TRUE );
 		}
 	}
 }
@@ -165,6 +174,8 @@ VOID CMainScene::CreateMonster()
 		if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 		{
 			m_pMonster[ Loop ]->InitAniAndState();
+
+			//m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_PANDA + Loop, TRUE );
 		}
 	}
 }
@@ -213,6 +224,8 @@ VOID CMainScene::CreateFirstAidKit()
 		m_pFirstAidKit[Loop].Load( L"Data/CharData/FirstAidKit_1.csav" );
 		m_pFirstAidKit[Loop].Set_MonsterNumber( CGameEvent::ITEM_FAK1 << Loop );
 		CTree::GetInstance()->GetMonsVector()->push_back( m_pFirstAidKit[Loop].GetBoundBox() );		
+
+		//m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, TRUE );
 	}
 }
 
@@ -248,6 +261,7 @@ VOID CMainScene::CheatKeys()
 VOID CMainScene::Update()
 {
 	// 치트키 처리
+	D3DXVECTOR3 vPos;
 	CheatKeys();
 
 	CGameEvent::GetInstance()->IndexInit();
@@ -280,14 +294,18 @@ VOID CMainScene::Update()
 	INT nIndex;
 	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
-		if( Loop == m_nClientID )
-			continue;
-
 		nIndex = pOM->Get_CharTable( Loop );
-		if ( nIndex != -1 )
+		if ( nIndex == -1 )
+			continue;
+	
+		pChar = &( m_pCharactors[ nIndex ] );
+
+		vPos = pChar->Get_CharaPos();
+		m_pMainGUI->SetMiniMapObjectPosition( nIndex, &vPos );
+
+		if( Loop != m_nClientID )
 		{
-			pChar = &( m_pCharactors[ nIndex ] );
-			pChar->UpdateOtherPlayer();
+			pChar->UpdateOtherPlayer();			
 		}
 	}
 
@@ -296,6 +314,8 @@ VOID CMainScene::Update()
 		if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 		{
 			m_pMonster[Loop]->Update();
+			vPos = m_pMonster[Loop]->Get_Pos();
+			m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
 		}
 	}
 
@@ -303,6 +323,8 @@ VOID CMainScene::Update()
 	for ( int Loop = 0; Loop < 4; ++Loop )
 	{
 		m_pFirstAidKit[Loop].Update();
+		vPos = m_pFirstAidKit[Loop].Get_CharaPos();
+		m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
 	}
 
 	for ( int Loop = 0; Loop < 3; ++Loop )
@@ -387,11 +409,11 @@ VOID	CMainScene::Render()
 
 	TwDraw();
 
+#endif
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
-#endif
 
 	if ( m_pEventGUICombo )
 		m_pEventGUICombo->Render();
