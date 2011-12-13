@@ -10,10 +10,8 @@ private:
 	VOID		Initialize();
 	VOID		Release();
 
-	VOID		ChangeEvent( DWORD _dNextEvent );
-
 public:
-	GameEventTutorialManager( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite )
+	GameEventTutorialManager()
 	{
 		this->Initialize();
 	}
@@ -22,9 +20,12 @@ public:
 		this->Release();
 	}
 
-	VOID		Create();
+	VOID		Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite );
 	VOID		Update();
 	VOID		Render();
+
+	VOID		ChangeEvent( DWORD _dNextEvent );
+	VOID		EndEvent();
 
 private:
 	LPDIRECT3DDEVICE9	m_pd3dDevice;

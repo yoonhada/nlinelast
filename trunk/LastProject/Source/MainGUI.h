@@ -66,7 +66,7 @@ private:
 	GUIBackground*			m_pMmpObject[ 12 ];
 
 	FLOAT					m_fMapWidth,	m_fMapHeight;
-	FLOAT					m_fMmpRatioX,	m_MmpfRatioY;
+	FLOAT					m_fMmpRatioX,	m_fMmpRatioY;
 
 	FLOAT					m_fMmpX,		m_fMmpY;
 	FLOAT					m_fMmpWidth,	m_fMmpHeight;

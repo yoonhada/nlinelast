@@ -34,7 +34,7 @@ VOID GUIBackground::Render()
 
 VOID GUIBackground::SetPosition( LPD3DXVECTOR3 _pvecPosition )
 {
-	m_Data.Image3D.vecTrans = (*_pvecPosition);
+	Image3DTranslate( &m_Data.Image3D, _pvecPosition->x, _pvecPosition->y, _pvecPosition->z );
 }
 
 VOID GUIBackground::SetState( DWORD _dState )

@@ -107,6 +107,20 @@ VOID MainGUI::CreateMiniMap()
 
 	m_pMmpObject[ MMP_BEAR ]->Create( fX, fY, fWidth, fHeight, imgParamBear );
 
+	//	Set MiniMap Info
+	//m_fMapWidth		= 1676.6f;
+	//m_fMapHeight	= 938.1f;
+	m_fMapWidth		= 938.1f;
+	m_fMapHeight	= 1676.6f;
+	
+	m_fMmpX			= 1050.0f;
+	m_fMmpY			= 100.0f;
+	m_fMmpWidth		= 200.0f;
+	m_fMmpHeight	= 357.0f;
+
+	m_fMmpRatioX	= m_fMmpWidth / m_fMapWidth;
+	m_fMmpRatioY	= m_fMmpHeight / m_fMapHeight;
+
 }
 
 VOID MainGUI::Create()
@@ -154,7 +168,6 @@ VOID MainGUI::Create()
 	m_pChatWindow->Create( fX, fY, fWidth, fHeight, imgParamChat );
 	m_pChatWindow->SetFont( L"±Ã¼­", 20, 20, 0x00ffffff );
 
-	
 	CreateMiniMap();
 
 }
@@ -246,5 +259,13 @@ VOID MainGUI::SetMiniMapObjectVisible( INT _iIndex, BOOL _bVisible )
 
 VOID MainGUI::SetMiniMapObjectPosition( INT _iIndex, LPD3DXVECTOR3 _pvecPosition )
 {
-	m_pMmpObject[ _iIndex ]->SetPosition( _pvecPosition );
+	D3DXVECTOR3 vecPosition;
+	vecPosition.x = m_fMmpX + ( m_fMmpRatioX * _pvecPosition->x + m_fMmpWidth * 0.5f);
+	vecPosition.y = m_fMmpY + m_fMmpHeight - ( m_fMmpRatioY * _pvecPosition->z + m_fMmpHeight * 0.5f);
+	vecPosition.z = 0.0f;
+
+	m_pMmpObject[ _iIndex ]->SetPosition( &vecPosition );
+
+	if( _iIndex == MMP_MOM )
+		CDebugConsole::GetInstance()->Messagef( L"MOM : %f %f %f\n", vecPosition.x, vecPosition.y, vecPosition.z );
 }

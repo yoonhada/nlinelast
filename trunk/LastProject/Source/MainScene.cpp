@@ -315,7 +315,7 @@ VOID CMainScene::Update()
 		{
 			m_pMonster[Loop]->Update();
 			vPos = m_pMonster[Loop]->Get_Pos();
-			m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
+			//m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
 		}
 	}
 
@@ -324,7 +324,7 @@ VOID CMainScene::Update()
 	{
 		m_pFirstAidKit[Loop].Update();
 		vPos = m_pFirstAidKit[Loop].Get_CharaPos();
-		m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
+		//m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
 	}
 
 	for ( int Loop = 0; Loop < 3; ++Loop )
