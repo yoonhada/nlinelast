@@ -2,6 +2,7 @@
 #include "LogoScene.h"
 #include "Charactor.h"
 #include "CameraWork.h"
+#include "EfSurface.h"
 
 VOID LogoScene::Initialize()
 {
@@ -108,6 +109,10 @@ HRESULT LogoScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	//	Set Logo Time
 	m_datLogo.dBeginTime	= timeGetTime();
 
+	//m_pEff = new CEfSurface();
+	//m_pEff->Create( m_pD3dDevice );
+	//m_pEff->Restore();
+
 	return S_OK;
 }
 
@@ -162,6 +167,7 @@ VOID LogoScene::Update()
 	}
 
 	m_pCameraWork->Update();
+	//m_pEff->Update( m_pLogo );
 }
 
 VOID LogoScene::Render()
@@ -189,6 +195,7 @@ VOID LogoScene::Render()
 	}
 
 	m_pLight->DisableLight();
+	//m_pEff->Render();
 }
 
 INT LogoScene::GetSceneNext()

@@ -8,9 +8,10 @@ CEfSurface::CEfSurface()
 	m_pDev	= NULL;
 
 	m_pTx	=NULL;
-	m_pSf	=NULL;
+	m_pTxSf	=NULL;
+	m_pTxRs	=NULL;
 
-	m_iTxW	= 200;
+	m_iTxW	= 1024;
 }
 
 
@@ -29,46 +30,72 @@ INT CEfSurface::Create(LPDIRECT3DDEVICE9 pDev)
 	IDirect3DSurface9*	pBackSurface=NULL;
 	D3DSURFACE_DESC		dsc;
 
-	if( FAILED ( m_pDev->GetBackBuffer( 0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackSurface ) ) )
+	if(FAILED(m_pDev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackSurface)))
 		return-1;
-		
+
 	pBackSurface->GetDesc( &dsc );
 	pBackSurface->Release();
 
 	FLOAT sx = FLOAT(dsc.Width);
 	FLOAT sy = FLOAT(dsc.Height);
 
-	m_pVtx[0] =	VtxwDUV(    200.f,	    200.f,	0.f, 0.0005f,0.05f, 0xFFFFFF);
-	m_pVtx[1] =	VtxwDUV( sx-200.f,	    200.f,	0.f, 0.9995f,0.05f, 0xFFFFFF); 
-	m_pVtx[2] =	VtxwDUV(    200.f,	 sy-200.f,	0.f, 0.0005f,0.95f, 0xFFFFFF); 
-	m_pVtx[3] =	VtxwDUV( sx-200.f,	 sy-200.f,	0.f, 0.9995f,0.95f, 0xFFFFFF);
+	m_pVtx[0] =	VtxwDUV(   0.f,	  0.f,	0.f, 0.4f, 0.4f);
+	m_pVtx[1] =	VtxwDUV( 200.f,	  0.f,	0.f, 0.6f, 0.4f); 
+	m_pVtx[2] =	VtxwDUV(   0.f,	200.f,	0.f, 0.4f, 0.6f); 
+	m_pVtx[3] =	VtxwDUV( 200.f,	200.f,	0.f, 0.6f, 0.6f);
 
 	return 0;
 }
 
 void CEfSurface::Destroy()
 {
+	SAFE_RELEASE(	m_pTxSf	);
+	SAFE_RELEASE(	m_pTx	);
+	SAFE_RELEASE(	m_pTxRs	);
 }
 
 
 
 INT CEfSurface::Restore()
 {
-	m_pDev->CreateTexture(	m_iTxW, m_iTxW, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &m_pTx, NULL);
-	m_pTx->GetSurfaceLevel(0,&m_pSf);
+	IDirect3DSurface9*	pSrfc=NULL;
+	D3DSURFACE_DESC		dscColor;
+	D3DSURFACE_DESC		dscDepth;
+
+	if(FAILED(m_pDev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pSrfc)))
+		return-1;
+
+	pSrfc->GetDesc( &dscColor);
+	pSrfc->Release();
+
+	if(FAILED(m_pDev->GetDepthStencilSurface(&pSrfc)))
+		return -1;
+
+	pSrfc->GetDesc( &dscDepth);
+	pSrfc->Release();
+
+
+
+	D3DXCreateTexture(m_pDev, m_iTxW, m_iTxW, 1, D3DUSAGE_RENDERTARGET, dscColor.Format,  D3DPOOL_DEFAULT, &m_pTx);
+	m_pTx->GetSurfaceLevel(0,&m_pTxSf);
+
+	D3DSURFACE_DESC		dscTex;
+	m_pTxSf->GetDesc( &dscTex);
+
+
+	D3DXCreateRenderToSurface(m_pDev
+		, dscTex.Width
+		, dscTex.Height
+		, dscColor.Format
+		, TRUE
+		, dscDepth.Format, &m_pTxRs);
+
+
 
 	return 0;
 }
 
-
-void CEfSurface::Invalidate()
-{
-	SAFE_RELEASE( m_pSf	);
-	SAFE_RELEASE( m_pTx	);
-}
-
-
-INT CEfSurface::Update( ASEViewer * a_pAseViewer )
+INT CEfSurface::Update( IObject * a_pObject )
 {
 	HRESULT	hr=0;
 
@@ -83,25 +110,18 @@ INT CEfSurface::Update( ASEViewer * a_pAseViewer )
 	m_pDev->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pDev->SetTextureStageState(0,  D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
 
-	LPDIRECT3DSURFACE9	pSfOrgD = NULL;														// Back buffer Depth and stencil
-	LPDIRECT3DSURFACE9	pSfOrgT = NULL;														// Back buffer target
 
-	hr = m_pDev->GetRenderTarget(0, &pSfOrgT);
-	hr = m_pDev->GetDepthStencilSurface(&pSfOrgD);
-	hr = m_pDev->SetRenderTarget(0,m_pSf);
+	hr = m_pTxRs->BeginScene(m_pTxSf, NULL);
+	hr = m_pDev->Clear( 0L, NULL
+		, D3DCLEAR_TARGET | D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER
+		, 0xFF006699, 1.0f, 0L );
 
-	hr = m_pDev->Clear( 0L, NULL, D3DCLEAR_TARGET| D3DCLEAR_ZBUFFER, 0xFFFF0000, 1.0f, 0L );
+	
 
 	// Scene render
-	a_pAseViewer->Render();
-	//CObjectManage::GetInstance()->Get_Charactor()[CObjectManage::GetInstance()->Get_CharTable( 0 )].Render();
-	
-	
-	hr = m_pDev->SetRenderTarget(0,pSfOrgT);										//·»´õ Å¸°ÙÀ» ¿ø·¡ µ¥·Î.
-	hr = m_pDev->SetDepthStencilSurface(pSfOrgD);
-	
-	SAFE_RELEASE( pSfOrgT );
-	SAFE_RELEASE( pSfOrgD );
+	dynamic_cast<CCharactor *>(a_pObject)[0].Render();
+
+	hr = m_pTxRs->EndScene(D3DX_FILTER_NONE);
 
 	return 0;
 }
@@ -110,7 +130,6 @@ INT CEfSurface::Update( ASEViewer * a_pAseViewer )
 void CEfSurface::Render()
 {
 	m_pDev->SetRenderState( D3DRS_ZENABLE,   FALSE);
-
 	m_pDev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
 	m_pDev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
 

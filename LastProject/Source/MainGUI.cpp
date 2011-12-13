@@ -265,7 +265,4 @@ VOID MainGUI::SetMiniMapObjectPosition( INT _iIndex, LPD3DXVECTOR3 _pvecPosition
 	vecPosition.z = 0.0f;
 
 	m_pMmpObject[ _iIndex ]->SetPosition( &vecPosition );
-
-	if( _iIndex == MMP_MOM )
-		CDebugConsole::GetInstance()->Messagef( L"MOM : %f %f %f\n", vecPosition.x, vecPosition.y, vecPosition.z );
 }

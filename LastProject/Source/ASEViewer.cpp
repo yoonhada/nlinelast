@@ -23,7 +23,7 @@ VOID ASEViewer::Initialize()
 }
 
 
-VOID ASEViewer::Release()
+HRESULT ASEViewer::Release()
 {
 	SAFE_DELETE_ARRAY( m_pASEData );
 	SAFE_DELETE_ARRAY( m_pBBXData );
@@ -42,6 +42,8 @@ VOID ASEViewer::Release()
 		m_pBoundBoxVector.clear();
 		m_pBoundBoxVector.erase( m_pBoundBoxVector.begin(), m_pBoundBoxVector.end() );
 	}
+
+	return S_OK;
 }
 
 VOID ASEViewer::InitASE( LPWSTR _ASEFileName )

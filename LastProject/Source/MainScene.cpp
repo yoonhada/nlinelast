@@ -56,7 +56,7 @@ VOID	CMainScene::Clear()
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 
 
-	m_pCharView = new CEfSurface();
+	//m_pCharView = new CEfSurface();
 }
 
 HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprite, HWND a_hWnd )
@@ -75,7 +75,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//카메라 생성
 	m_pCamera = new CCamera;
 	m_pCamera->Create( m_pD3dDevice );
-	m_pCharView->Create( m_pD3dDevice );
+	//m_pCharView->Create( m_pD3dDevice );
+	//m_pCharView->Restore();
 
 	// GUI 생성
 	m_pMainGUI = new MainGUI( m_pD3dDevice, a_Sprite, a_hWnd );
@@ -149,7 +150,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 HRESULT CMainScene::Release()
 {
-	SAFE_DELETE( m_pCharView );
+	//SAFE_DELETE( m_pCharView );
 	SAFE_DELETE( m_pLight );
 	SAFE_DELETE( m_pAxis );
 	SAFE_DELETE( m_pOptionScene );
@@ -285,7 +286,7 @@ VOID CMainScene::Update()
 
 	CObjectManage * pOM = CObjectManage::GetInstance();
 	CCharactor * pChar;
-	pChar = &( m_pCharactors[ pOM->Get_CharTable( m_nClientID ) ]);
+	pChar = &( m_pCharactors[ pOM->Get_CharTable( m_nClientID ) ] );
 
 	// 캐릭터: 인풋 값 받아오기
 	pChar->UpdateByInput();
@@ -357,8 +358,6 @@ VOID CMainScene::Update()
 
 	m_pGameEventTutorialManager->Update();
 
-	CNetwork::GetInstance()->UpdateGame();
-
 	if ( m_pEventGUICombo )
 		m_pEventGUICombo->Update();
 
@@ -366,7 +365,8 @@ VOID CMainScene::Update()
 
 	CTree::GetInstance()->SetCharAtkClear();
 
-	m_pCharView->Update( m_pASEViewer );
+	//m_pCharView->Update( &( m_pCharactors[ pOM->Get_CharTable( m_nClientID ) ] ) );
+	//m_pCharView->Update( m_pASEViewer );
 }
 
 VOID	CMainScene::Render()
@@ -429,8 +429,8 @@ VOID	CMainScene::Render()
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
 	TwDraw();
-
 #endif
+
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();
@@ -440,75 +440,7 @@ VOID	CMainScene::Render()
 	if ( m_pEventGUICombo )
 		m_pEventGUICombo->Render();
 
-	m_pCharView->Render();
-}
-
-VOID CMainScene::StanRender()
-{
-	////////////////////////////////////////////////////////////////////////////
-	//// test
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILENABLE,    true);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILFUNC,      D3DCMP_ALWAYS);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILREF,       0x1);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILMASK,      0xffffffff);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILWRITEMASK, 0xffffffff);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILZFAIL,     D3DSTENCILOP_KEEP);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILFAIL,      D3DSTENCILOP_KEEP);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILPASS,      D3DSTENCILOP_REPLACE);
-
-	//// disable writes to the depth and back buffers
-	//m_pD3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
-	//m_pD3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-	//m_pD3dDevice->SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_ZERO);
-	//m_pD3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
-	//// draw the mirror to the stencil buffer
-	//m_pD3dDevice->SetStreamSource(0, VB, 0, sizeof(Vertex));
-	//m_pD3dDevice->SetFVF(Vertex::FVF);
-	//m_pD3dDevice->SetMaterial(&MirrorMtrl);
-	//m_pD3dDevice->SetTexture(0, MirrorTex);
-	//D3DXMATRIX I;
-	//D3DXMatrixIdentity(&I);
-	//m_pD3dDevice->SetTransform(D3DTS_WORLD, &I);
-	//m_pD3dDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 18, 2);
-
-	//// re-enable depth writes
-	//m_pD3dDevice->SetRenderState( D3DRS_ZWRITEENABLE, true );
-
-	//// only draw reflected teapot to the pixels where the mirror
-	//// was drawn to.
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILFUNC,  D3DCMP_EQUAL);
-	//m_pD3dDevice->SetRenderState(D3DRS_STENCILPASS,  D3DSTENCILOP_KEEP);
-
-	//// position reflection
-	//D3DXMATRIX W, T, R;
-	//D3DXPLANE plane(0.0f, 0.0f, 1.0f, 0.0f); // xy plane
-	//D3DXMatrixReflect(&R, &plane);
-
-	//D3DXMatrixTranslation(&T,
-	//	TeapotPosition.x, 
-	//	TeapotPosition.y,
-	//	TeapotPosition.z); 
-
-	//W = T * R;
-
-	//// clear depth buffer and blend the reflected teapot with the mirror
-	//m_pD3dDevice->Clear(0, 0, D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
-	//m_pD3dDevice->SetRenderState(D3DRS_SRCBLEND,  D3DBLEND_DESTCOLOR);
-	//m_pD3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
-
-	//// Finally, draw the reflected teapot
-	//m_pD3dDevice->SetTransform(D3DTS_WORLD, &W);
-	//m_pD3dDevice->SetMaterial(&TeapotMtrl);
-	//m_pD3dDevice->SetTexture(0, 0);
-
-	//m_pD3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
-	//Teapot->DrawSubset(0);
-
-	//// Restore render states.
-	//m_pD3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
-	//m_pD3dDevice->SetRenderState( D3DRS_STENCILENABLE, false);
-	//m_pD3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);	
+	//m_pCharView->Render();
 }
 
 INT CMainScene::GetSceneNext()
