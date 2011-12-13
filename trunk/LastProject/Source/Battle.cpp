@@ -52,7 +52,7 @@ VOID Battle::Execute( CMonster* a_pMonster )
 		// 회전 공격
 		else
 		{
-			if( a_pMonster->Get_MonsterNumber() == CGameEvent::CLOWN )
+			if( a_pMonster->Get_MonsterNumber() == 2/*CGameEvent::CLOWN*/ )
 			{
 				a_pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
 			}
