@@ -1249,19 +1249,19 @@ VOID CCharactor::LoadKindChar( INT nKind )
 	switch (nKind)
 	{
 	case 0:			// Papa
-		Load( L"Data/CharData/APPA_0.csav" );
+		Load( L"Data/CharData/APPA_1.csav" );
 		CreateWeapon( CWeapon::SPANNER );
 		break;
 	case 1:			// Mama
-		Load( L"Data/CharData/MOM.csav" );
+		Load( L"Data/CharData/MOM_1.csav" );
 		CreateWeapon( CWeapon::FRYPEN );
 		break;
 	case 2:			// Son
-		Load( L"Data/CharData/ADDLE_0.csav" );
+		Load( L"Data/CharData/ADDLE_1.csav" );
 		CreateWeapon( CWeapon::GUITAR );
 		break;
 	case 3:			// Dau
-		Load( L"Data/CharData/DDAL_0.csav" );
+		Load( L"Data/CharData/DDAL_1.csav" );
 		CreateWeapon( CWeapon::MAGICSTICK );
 		break;
 	}

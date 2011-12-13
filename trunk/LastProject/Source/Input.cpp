@@ -32,6 +32,7 @@ VOID CInput::Clear()
 
 	m_bF8button = m_bF9button = FALSE;
 	m_bESCKey = FALSE;
+	m_bLbutton = m_bRbutton = FALSE;
 
 	m_bEnable = TRUE;
 	ShowCursor( m_bEnable );
