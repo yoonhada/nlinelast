@@ -60,31 +60,6 @@ VOID CQube::Update( CBoundBox * pBB )
 		}
 	}
 
-	/*vecBoundBox = CTree::GetInstance()->GetCharVector();
-	if ( !( vecBoundBox == NULL || vecBoundBox->empty() ) )
-	{
-		vDir = m_vAccelerate + m_vMomentum;
-		Iter = vecBoundBox->begin();
-		while ( Iter != vecBoundBox->end() )
-		{			
-			if ( ( *Iter ) == pBB )
-			{
-				Iter++;
-				continue;
-			}
-
-			if( CPhysics::GetInstance()->Collision( m_vPos, vDir, ( *Iter ) ) )
-			{
-				CPhysics::GetInstance()->Reflect( m_vAccelerate );
-				CPhysics::GetInstance()->Reflect( m_vMomentum );
-				m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
-				m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
-			}
-
-			Iter++;
-		}
-	}*/
-
 	// 지면체크
 	vDir = m_vPos + m_vAccelerate + m_vMomentum;
 	if ( vDir.y < m_fSize )

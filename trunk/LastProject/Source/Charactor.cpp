@@ -418,36 +418,33 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 		while ( Iter != vecBoundBox->end() )
 		{
 			// 케릭터보다 높은곳 제외.
-			if ( (*Iter)->GetPosition(4).y > m_pBoundBox->GetPosition(0).y)
+			if ( (*Iter)->GetPosition( 4 ).y < m_pBoundBox->GetPosition( 0 ).y )
 			{
-				Iter++;
-				continue;
-			}
-
-			if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
-			{
-				a_vCollisionControl = D3DXVECTOR3(0, 0, 0);
-				break;
+				if ( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) ) 
+				{
+					a_vCollisionControl = D3DXVECTOR3(0, 0, 0);
+					break;
+				}
 			}
 			Iter++;
 		}
 	}
 
-	vecBoundBox = CTree::GetInstance()->GetMonsVector( );
-	if ( vecBoundBox != NULL && vecBoundBox->size() )
-	{
-		Iter = vecBoundBox->begin();
-		Iter++;
-		while ( Iter != vecBoundBox->end() )
-		{
-			if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
-			{
-				a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				return TRUE;
-			}
-			Iter++;
-		}
-	}
+	//vecBoundBox = CTree::GetInstance()->GetMonsVector( );
+	//if ( vecBoundBox != NULL && vecBoundBox->size() )
+	//{
+	//	Iter = vecBoundBox->begin();
+	//	Iter++;
+	//	while ( Iter != vecBoundBox->end() )
+	//	{
+	//		if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
+	//		{
+	//			a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//			return TRUE;
+	//		}
+	//		Iter++;
+	//	}
+	//}
 
 	return FALSE;
 }

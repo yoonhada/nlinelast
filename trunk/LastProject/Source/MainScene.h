@@ -33,7 +33,6 @@ public:
 	HRESULT			Release();
 	virtual VOID	Update();
 	virtual VOID	Render();
-	VOID			StanRender();
 
 	virtual INT		GetSceneNext();
 	virtual INT		GetSceneState();
@@ -98,9 +97,7 @@ private:
 	VOID MonsterBreakNockdown();
 	VOID DoorBreakNockdown();
 
-
-
-	CEfSurface * m_pCharView;
+	//CEfSurface * m_pCharView;
 };
 
 #endif

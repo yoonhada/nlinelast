@@ -421,9 +421,6 @@ VOID CCube::Update()
 
 VOID CCube::Render()
 {
-
-	
-
 	m_pD3dDevice->SetMaterial( &m_Mtrl );
 
 	//m_pD3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE);

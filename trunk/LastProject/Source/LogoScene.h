@@ -6,6 +6,7 @@
 
 class CCharactor;
 class CameraWork;
+class CEfSurface;
 
 class LogoScene : public IScene
 {
@@ -53,6 +54,8 @@ private:
 
 	DATA					m_datLogo;
 	DATA					m_datScene;
+
+	//CEfSurface	* m_pEff;
 
 public:
 };

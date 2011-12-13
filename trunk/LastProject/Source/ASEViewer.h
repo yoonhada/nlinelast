@@ -7,9 +7,12 @@
 class ASEParser;
 class BBXParser;
 
-class ASEViewer : public ASEViewerBase
+class ASEViewer : public ASEViewerBase, public virtual IObject
 {
 private:
+	virtual VOID	Clear() { Initialize(); }
+	virtual HRESULT Create() { return S_OK;}
+
 	VOID		Initialize();
 	
 	VOID		InitASE( LPWSTR _ASEFileName );
@@ -33,10 +36,10 @@ public:
 	}
 
 	VOID			Create( LPWSTR _ASEFileName, LPWSTR _BBXFileName );
-	VOID			Update();
-	VOID			Render();
+	virtual VOID	Update();
+	virtual VOID	Render();
 	VOID			Render( D3DXMATRIX& _matCharacter );
-	VOID			Release();
+	virtual HRESULT	Release();
 
 	INT				GetCurrentFrame();
 	BOOL			AddAnimationData( const DWORD _dType, DWORD _dID, INT _iStartFrame, INT _iEndFrame, BOOL _bLoop );
