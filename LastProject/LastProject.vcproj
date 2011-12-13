@@ -1091,6 +1091,14 @@
 		<Filter
 			Name="GUI"
 			>
+			<File
+				RelativePath=".\Source\EfSurface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\EfSurface.h"
+				>
+			</File>
 			<Filter
 				Name="GUIButton"
 				>

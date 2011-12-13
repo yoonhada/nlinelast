@@ -17,6 +17,7 @@ class CGameEventCombo;
 
 class MainGUI;
 class OptionScene;
+class CEfSurface;
 
 class CMainScene : public IScene
 {
@@ -30,6 +31,7 @@ public:
 	HRESULT			Release();
 	virtual VOID	Update();
 	virtual VOID	Render();
+	VOID			StanRender();
 
 	virtual INT		GetSceneNext();
 	virtual INT		GetSceneState();
@@ -91,6 +93,10 @@ private:
 	VOID EventFirstAidKit();
 	VOID MonsterBreakNockdown();
 	VOID DoorBreakNockdown();
+
+
+
+	CEfSurface * m_pCharView;
 };
 
 #endif
