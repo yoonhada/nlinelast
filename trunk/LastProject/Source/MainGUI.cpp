@@ -34,11 +34,11 @@ VOID MainGUI::CreateMiniMap()
 {
 	FLOAT fX		= 1050.0f;
 	FLOAT fY		= 100.0f;
-	FLOAT fWidth	= 200.0f;
-	FLOAT fHeight	= 357.0f;
+	FLOAT fWidth	= 208.0f;
+	FLOAT fHeight	= 340.0f;
 	
 	GUIBase::IMAGEPARAM imgParamMiniMap;
-	m_pGUIBase->AddFileName( 0, imgParamMiniMap, L"Img\\MainScene\\Minimap.jpg" );
+	m_pGUIBase->AddFileName( 0, imgParamMiniMap, L"Img\\MainScene\\MiniMap.png" );
 
 	m_pMiniMap->Create( fX, fY, fWidth, fHeight, imgParamMiniMap );
 
@@ -110,13 +110,13 @@ VOID MainGUI::CreateMiniMap()
 	//	Set MiniMap Info
 	//m_fMapWidth		= 1676.6f;
 	//m_fMapHeight	= 938.1f;
-	m_fMapWidth		= 938.1f;
-	m_fMapHeight	= 1676.6f;
+	m_fMapWidth		= 1138.0f;
+	m_fMapHeight	= 1800.0f;
 	
 	m_fMmpX			= 1050.0f;
 	m_fMmpY			= 100.0f;
-	m_fMmpWidth		= 200.0f;
-	m_fMmpHeight	= 357.0f;
+	m_fMmpWidth		= 208.0f;
+	m_fMmpHeight	= 340.0f;
 
 	m_fMmpRatioX	= m_fMmpWidth / m_fMapWidth;
 	m_fMmpRatioY	= m_fMmpHeight / m_fMapHeight;
