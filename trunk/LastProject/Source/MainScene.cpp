@@ -16,6 +16,9 @@
 #include "MainGUI.h"
 #include "OptionScene.h"
 
+#include "GameEventTutorial.h"
+#include "GameEventTutorialManager.h"
+
 // AI 테스트용
 #include "Seek.h"
 #include "Chase.h"
@@ -35,18 +38,20 @@ CMainScene::~CMainScene()
 
 VOID	CMainScene::Clear()
 {
-	m_pMatrices		= NULL;
-	m_pCamera		= NULL;
-	m_pD3dDevice	= NULL;
-	m_pCharactors	= NULL;
-	m_pAxis			= NULL;
-	m_pMonster		= NULL;
-	m_pTileMap		= NULL;
-	m_pASEViewer	= NULL;
+	m_pMatrices					= NULL;
+	m_pCamera					= NULL;
+	m_pD3dDevice				= NULL;
+	m_pCharactors				= NULL;
+	m_pAxis						= NULL;
+	m_pMonster					= NULL;
+	m_pTileMap					= NULL;
+	m_pASEViewer				= NULL;
 	
-	m_pMainGUI		= NULL;
-	m_pOptionScene	= NULL;
-	m_pEventGUICombo= NULL;
+	m_pMainGUI					= NULL;
+	m_pOptionScene				= NULL;
+	m_pEventGUICombo			= NULL;
+
+	m_pGameEventTutorialManager	= NULL;
 
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 
@@ -124,6 +129,10 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
+	//	튜토리얼
+	m_pGameEventTutorialManager = new GameEventTutorialManager();
+	m_pGameEventTutorialManager->Create( a_pD3dDevice, a_Sprite );
+
 
 	CInput::GetInstance()->EnableInput( FALSE );
 
@@ -147,6 +156,7 @@ HRESULT CMainScene::Release()
 	SAFE_DELETE( m_pMainGUI );
 	SAFE_DELETE( m_pTileMap );
 	SAFE_DELETE( m_pCamera );
+	SAFE_DELETE( m_pGameEventTutorialManager );
 
 	return S_OK;
 }
@@ -345,6 +355,8 @@ VOID CMainScene::Update()
 	m_pMainGUI->Update();
 	m_pOptionScene->Update();
 
+	m_pGameEventTutorialManager->Update();
+
 	CNetwork::GetInstance()->UpdateGame();
 
 	if ( m_pEventGUICombo )
@@ -422,6 +434,7 @@ VOID	CMainScene::Render()
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	m_pMainGUI->Render();
 	m_pOptionScene->Render();
+	m_pGameEventTutorialManager->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
 	if ( m_pEventGUICombo )
