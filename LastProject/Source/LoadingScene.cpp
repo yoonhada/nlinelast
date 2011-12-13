@@ -54,14 +54,14 @@ HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSpri
 
 	// Create Monster
 	m_pClown = CObjectManage::GetInstance()->Get_Clown();	// new CMonster;
-	m_pClown->Create( _pd3dDevice, L"Data/CharData/27_pierro_body_11_28" );
+	m_pClown->Create( _pd3dDevice, L"Data/CharData/27_pierro_body_12_12" );
 	m_pClown->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 81.0f ) );
 	m_pClown->Set_Angle( 2.49f );
 	m_pClown->ChangeAnimation( CMonster::ANIM_LODING );
 	m_pClown->EnableShadow( FALSE );
 
 	m_pPanda = CObjectManage::GetInstance()->Get_Panda();		// new CMonster;
-	m_pPanda->Create( _pd3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
+	m_pPanda->Create( _pd3dDevice, L"Data/CharData/11_16_pa_sm_v8" );
 	m_pPanda->Set_Pos( D3DXVECTOR3( -17.0f, 0.0f, 117.0f ) );
 	m_pPanda->Set_Angle( 5.44f );
 	m_pPanda->ChangeAnimation( CMonster::ANIM_LODING );
