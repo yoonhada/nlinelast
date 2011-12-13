@@ -10,6 +10,7 @@ VOID GameEventTutorial_SignalLight::Initialize()
 
 VOID GameEventTutorial_SignalLight::Release()
 {
+	SAFE_DELETE( m_pGUIBase );
 	SAFE_DELETE( m_pGUIBackground ); 
 }
 

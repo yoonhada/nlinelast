@@ -10,6 +10,7 @@ VOID GameEventTutorial_Combo::Initialize()
 
 VOID GameEventTutorial_Combo::Release()
 {
+	SAFE_DELETE( m_pGUIBase );
 	SAFE_DELETE( m_pGUIBackground ); 
 }
 

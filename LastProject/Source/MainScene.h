@@ -19,6 +19,8 @@ class MainGUI;
 class OptionScene;
 class CEfSurface;
 
+class GameEventTutorialManager;
+
 class CMainScene : public IScene
 {
 	friend class CGameEvent;
@@ -40,28 +42,30 @@ private:
 
 	enum ClassType { NONE, CHARACTOR, MONSTER };
 
-	LPDIRECT3DDEVICE9		m_pD3dDevice; ///< d3d9 디바이스
-	OptionScene*			m_pOptionScene;
-	MainGUI*				m_pMainGUI;
+	LPDIRECT3DDEVICE9			m_pD3dDevice; ///< d3d9 디바이스
+	OptionScene*				m_pOptionScene;
+	MainGUI*					m_pMainGUI;
 
 	// Equipment
-	CMatrices*				m_pMatrices;
-	CCamera*				m_pCamera;
-	Axis*					m_pAxis;
-	CLight*					m_pLight;
+	CMatrices*					m_pMatrices;
+	CCamera*					m_pCamera;
+	Axis*						m_pAxis;
+	CLight*						m_pLight;
 
 	// Charactor
-	CCharactor*				m_pCharactors;
-	CMonster**				m_pMonster;
-	CTimeLifeItem *			m_pFirstAidKit;
-	CTimeLifeItem *			m_pWall;
+	CCharactor*					m_pCharactors;
+	CMonster**					m_pMonster;
+	CTimeLifeItem *				m_pFirstAidKit;
+	CTimeLifeItem *				m_pWall;
 
 	// Map
-	TileMap*				m_pTileMap;
-	ASEViewer*				m_pASEViewer;
+	TileMap*					m_pTileMap;
+	ASEViewer*					m_pASEViewer;
 
-	CGameEvent*				m_pGameEvent;
-	CGameEventCombo *		m_pEventGUICombo;
+	CGameEvent*					m_pGameEvent;
+	CGameEventCombo *			m_pEventGUICombo;
+
+	GameEventTutorialManager*	m_pGameEventTutorialManager;
 
 	INT						m_iMaxCharaNum;
 	INT						m_nClientID;

@@ -13,7 +13,7 @@ public:
     { 
         _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 		_CrtDumpMemoryLeaks();
-		//_CrtSetBreakAlloc( 2727983 );
+		//_CrtSetBreakAlloc( 2921445 );
     }
     virtual ~MemoryMng()
     { 
