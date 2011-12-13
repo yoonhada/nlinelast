@@ -19,7 +19,7 @@ public:
 	GameEventTutorial() {}
 	virtual ~GameEventTutorial() {}
 
-	virtual VOID	Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_pSprite ) = 0;
+	virtual VOID	Create() = 0;
 	virtual VOID	Update() = 0;
 	virtual VOID	Render() = 0;
 
