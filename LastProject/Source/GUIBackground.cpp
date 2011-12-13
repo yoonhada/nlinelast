@@ -3,6 +3,7 @@
 
 VOID GUIBackground::Initialize()
 {
+	m_dState = GUIBackground::BGD_NORMAL;
 }
 
 VOID GUIBackground::Release()
@@ -25,7 +26,36 @@ VOID GUIBackground::Update()
 
 VOID GUIBackground::Render()
 {
+	if( m_dState == BGD_HIDDEN )
+		return;
+
 	RenderImage3D( &m_Data.Image3D );
+}
+
+VOID GUIBackground::SetPosition( LPD3DXVECTOR3 _pvecPosition )
+{
+	m_Data.Image3D.vecTrans = (*_pvecPosition);
+}
+
+VOID GUIBackground::SetState( DWORD _dState )
+{
+	m_dState = _dState;
+}
+
+BOOL GUIBackground::SelectAnimation( INT _iNumAni )
+{
+	INT iAnimationSize = m_Data.Image3D.vec2Tex.size();
+
+	if( _iNumAni >= iAnimationSize )
+	{
+		MessageBox( NULL, L"GUIBackground::SelectAnimation(){ _iNumAni >= iAnimationSize }", NULL, MB_OK );
+		return FALSE;
+	}
+
+	m_Data.Image3D.iCurrentAnimation	= _iNumAni;
+	m_Data.Image3D.iCurrentFrame		= 0;
+
+	return TRUE;
 }
 
 BOOL GUIBackground::NextAnimation()

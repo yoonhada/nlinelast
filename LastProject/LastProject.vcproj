@@ -452,6 +452,38 @@
 					RelativePath=".\Source\GameEventCombo.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorial.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorial_Combo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorial_Combo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorial_FirstAid.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorial_FirstAid.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorial_SignalLight.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorial_SignalLight.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventTutorialManager.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1202,6 +1234,10 @@
 		</Filter>
 		<File
 			RelativePath=".\ClassDiagram11.cd"
+			>
+		</File>
+		<File
+			RelativePath=".\Source\GameEventTutorialManager.cpp"
 			>
 		</File>
 		<File

@@ -1,0 +1,46 @@
+#pragma once
+#ifndef _GAMEEVENTTUTORIAL_FIRSTAID_H_
+#define _GAMEEVENTTUTORIAL_FIRSTAID_H_
+
+#include "GameEventTutorial.h"
+
+class GUIBase;
+class GUIBackground;
+
+class GameEventTutorial_FirstAid : public GameEventTutorial
+{
+private:
+	VOID		Initialize();
+	VOID		Release();
+
+public:
+	GameEventTutorial_FirstAid( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite ) : m_pd3dDevice( _pd3dDevice ), m_pSprite( _pSprite )
+	{
+		this->Initialize();
+	}
+	virtual ~GameEventTutorial_FirstAid()
+	{
+		this->Release();
+	}
+
+	virtual VOID		Create();
+	virtual VOID		Update();
+	virtual VOID		Render();
+
+	virtual DWORD		GetState();
+	virtual VOID		SetState( DWORD _dState );
+
+private:
+	LPDIRECT3DDEVICE9	m_pd3dDevice;
+	LPD3DXSPRITE		m_pSprite;
+
+	GUIBase*			m_pGUIBase;
+	GUIBackground*		m_pGUIBackground;
+
+	DWORD				m_dCurrentState;
+
+public:
+
+};
+
+#endif

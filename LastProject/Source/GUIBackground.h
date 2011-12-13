@@ -11,6 +11,8 @@ private:
 	VOID		Release();
 
 public:
+	enum { BGD_NORMAL = 3000, BGD_HIDDEN };
+
 	GUIBackground( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite ) : GUIBase( _pd3dDevice, _pSprite )
 	{
 		this->Initialize();
@@ -30,10 +32,15 @@ public:
 	VOID		Update();
 	VOID		Render();
 
+	VOID		SetPosition( LPD3DXVECTOR3 _pvecPosition );
+	VOID		SetState( DWORD _dState );
+	BOOL		SelectAnimation( INT _iNumAni );
 	BOOL		NextAnimation();
 
 private:
 	DATA		m_Data;
+
+	DWORD		m_dState;
 	
 public:
 
