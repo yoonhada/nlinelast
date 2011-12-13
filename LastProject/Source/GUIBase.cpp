@@ -49,8 +49,8 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, IMAGEPARAM& _imgParam )
 	switch( _imgParam.dPivotType )
 	{
 	case GBS_TOPLEFT:
-		_Image3D.vecTrans.x	= _imgParam.fX + _imgParam.fWidth * 0.5f + 0.5f;	//	중점을 옮기는 것
-		_Image3D.vecTrans.y	= _imgParam.fY + _imgParam.fHeight * 0.5f + 0.5f;	//	fX, fY가 사각형의 좌상단을 가리킨다
+		_Image3D.vecTrans.x	= _imgParam.fX + _imgParam.fWidth * 0.5f;	//	중점을 옮기는 것
+		_Image3D.vecTrans.y	= _imgParam.fY + _imgParam.fHeight * 0.5f;	//	fX, fY가 사각형의 좌상단을 가리킨다
 		break;
 	case GBS_CENTER:
 		_Image3D.vecTrans.x	= _imgParam.fX;
@@ -546,8 +546,8 @@ VOID GUIBase::CreateImage3D( IMAGE3D& _Image3D, FLOAT _fX, FLOAT _fY, FLOAT _fWi
 	switch( _imgParam.dPivotType )
 	{
 	case GBS_TOPLEFT:
-		_Image3D.vecTrans.x	= _fX + _fWidth * 0.5f + 0.5f;	//	중점을 옮기는 것
-		_Image3D.vecTrans.y	= _fY + _fHeight * 0.5f + 0.5f;	//	fX, fY가 사각형의 좌상단을 가리킨다
+		_Image3D.vecTrans.x	= _fX + _fWidth * 0.5f;	//	중점을 옮기는 것
+		_Image3D.vecTrans.y	= _fY + _fHeight * 0.5f;	//	fX, fY가 사각형의 좌상단을 가리킨다
 		break;
 	case GBS_CENTER:
 		_Image3D.vecTrans.x	= _fX;

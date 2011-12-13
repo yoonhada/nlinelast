@@ -741,15 +741,18 @@ VOID CMainScene::TutorialAtack()
 {
 	CGameEvent::GetInstance()->SetTutorial( TRUE );
 	// 공격 콤보, 아이템설명
+	m_pGameEventTutorialManager->ChangeEvent( GameEventTutorial::TUTORIAL_SIGNALLIGHT );
 }
 
 VOID CMainScene::TutorialAtackEnd()
 {
+	m_pGameEventTutorialManager->EndEvent();
 }
 
 VOID CMainScene::TutorialCombo()
 {
 	// 신호등 설명창	
+	m_pGameEventTutorialManager->ChangeEvent( GameEventTutorial::TUTORIAL_COMBO );
 }
 
 VOID CMainScene::EventCombo()
@@ -806,4 +809,5 @@ VOID CMainScene::EventDestoryCombo()
 VOID CMainScene::EventFirstAidKit()
 {
 	m_pFirstAidKit->SetActive( TRUE );
+	m_pGameEventTutorialManager->ChangeEvent( GameEventTutorial::TUTORIAL_FIRSTAID );
 }
