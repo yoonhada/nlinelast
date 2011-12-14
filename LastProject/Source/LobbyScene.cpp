@@ -87,6 +87,8 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 
 	//	Create Matrices
 	m_pMatrices = CMatrices::GetInstance();	
+
+	CSound::GetInstance()->PlayBGM( 0 );
 	
 	return S_OK;
 }
@@ -129,6 +131,7 @@ VOID LobbyScene::Update()
 	{
 	case LOBBY_START:
 		CNetwork::GetInstance()->CS_GAME_START();
+		CSound::GetInstance()->PlayEffect( 1 );
 		break;
 	case LOBBY_READY:
 		for( INT i=0 ; i<4 ; i++ )
@@ -149,11 +152,19 @@ VOID LobbyScene::Update()
 			CNetwork::GetInstance()->CS_READY( m_nCharSelect, FALSE );
 			m_nCharSelect = -1;
 		}
+
+		CSound::GetInstance()->PlayEffect( 1 );
 		break;
+
 	case LOBBY_BACK:
 		m_scnNext	= IScene::SCENE_MENU;
 		m_scnState	= IScene::SCENE_END;
+
+		CSound::GetInstance()->PlayEffect( 1 );
+		CNetwork::GetInstance()->Close();
+		CNetwork::DestoryInstance();
 		break;
+
 	case LOBBY_SELECT_1:
 	case LOBBY_SELECT_2:
 	case LOBBY_SELECT_3:
@@ -163,6 +174,8 @@ VOID LobbyScene::Update()
 			m_nCharSelect = dID - LOBBY_SELECT_1;
 			EnableRotate( dID - LOBBY_SELECT_1 );
 		}
+
+		CSound::GetInstance()->PlayEffect( 1 );
 		break;
 	}
 /*

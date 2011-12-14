@@ -1048,7 +1048,7 @@ VOID CMonster::AniInterpolation()
 
 	m_iChangeAnimationEndCheck = 0;
 	m_iChangeAnimationEndCheck2 = 0;
-	FLOAT Speed = 3.0f;
+	FLOAT Speed = 6.0f;
 	if( m_pFrame[m_iSelectedFrameNum].m_bAnimation == TRUE )
 	{
 
@@ -1542,7 +1542,8 @@ VOID CMonster::Set_ChaseNextData()
 	{
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			m_pStateMachine->ChangeState( Wait::GetInstance() );
+			//m_pStateMachine->ChangeState( Wait::GetInstance() );
+			m_pStateMachine->ChangeState( Seek::GetInstance() );
 		}
 		else
 		{

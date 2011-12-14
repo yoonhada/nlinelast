@@ -39,7 +39,13 @@ VOID CSound::Initialize()
 
 VOID CSound::Release()
 {
-	m_Result = FMOD_Sound_Release( m_pSound );
+	m_Result = FMOD_Sound_Release( m_pBGM );
+	ErrorCheck( m_Result );
+
+	m_Result = FMOD_Sound_Release( m_pEffectSound[0] );
+	ErrorCheck( m_Result );
+
+	m_Result = FMOD_Sound_Release( m_pEffectSound[1] );
 	ErrorCheck( m_Result );
 
 	m_Result = FMOD_System_Close( m_pSystem );
@@ -50,35 +56,46 @@ VOID CSound::Release()
 }
 
 
+VOID CSound::Update()
+{
+	// FMOD 상태를 업데이트
+	FMOD_System_Update( m_pSystem );
+}
+
+
 VOID CSound::LoadSoundFiles()
 {
 	// BGM
-//	m_Result = FMOD_System_CreateStream( m_pSystem, "c.ogg", FMOD_SOFTWARE | FMOD_CREATESTREAM, NULL, &m_pSound );
-//	ErrorCheck( m_Result );
+	m_Result = FMOD_System_CreateStream( m_pSystem, "Sound/BGM/cb_cardbattle_bgm.mp3", FMOD_SOFTWARE | FMOD_CREATESTREAM | FMOD_LOOP_NORMAL, NULL, &m_pBGM );
+	ErrorCheck( m_Result );
 
 	// EFFECT
-//	m_Result = FMOD_System_CreateSound( m_pSystem, "c.ogg", FMOD_HARDWARE | FMOD_CREATESAMPLE, NULL, &m_pSound );
-//	ErrorCheck( m_Result );
+	m_Result = FMOD_System_CreateSound( m_pSystem, "Sound/Effect/Dad_Attack.wav", FMOD_HARDWARE | FMOD_CREATESAMPLE | FMOD_LOOP_OFF, NULL, &m_pEffectSound[0] );
+	ErrorCheck( m_Result );
+
+	m_Result = FMOD_System_CreateSound( m_pSystem, "Sound/Effect/drip.wav", FMOD_HARDWARE | FMOD_CREATESAMPLE | FMOD_LOOP_OFF, NULL, &m_pEffectSound[1] );
+	ErrorCheck( m_Result );
 }
 
 
 VOID CSound::PlayBGM( INT a_iBGM )
 {
-	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pSound, FALSE, &m_pChannel );
+	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pBGM, FALSE, &m_pBGMChannel );
 	ErrorCheck( m_Result );
-
-	// FMOD 상태를 업데이트
-	FMOD_System_Update( m_pSystem );
 }
 
 
 VOID CSound::PlayEffect( INT a_iEffect )
 {
-	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pSound, FALSE, &m_pChannel );
+	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pEffectSound[a_iEffect], FALSE, &m_pEffectChannel );
 	ErrorCheck( m_Result );
+}
 
-	// FMOD 상태를 업데이트
-	FMOD_System_Update( m_pSystem );
+
+VOID CSound::StopBGM( INT a_iBGM )
+{
+	m_Result = FMOD_Channel_Stop( m_pBGMChannel );
+	ErrorCheck( m_Result );
 }
 
 
