@@ -278,10 +278,9 @@ VOID CMainScene::CheatKeys()
 
 VOID CMainScene::Update()
 {
-	// 치트키 처리
-	D3DXVECTOR3 vPos;
-	CheatKeys();
+	CNetwork::GetInstance()->UpdateGame();
 
+	D3DXVECTOR3 vPos;
 	CGameEvent::GetInstance()->IndexInit();
 
 	CObjectManage * pOM = CObjectManage::GetInstance();
