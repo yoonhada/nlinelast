@@ -17,13 +17,6 @@ CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
 
 CWeapon::~CWeapon()
 {
-	//if ( m_WeaponType.nType > NONE )
-	//{
-	//	WCHAR buffer[64];
-	//	swprintf_s(buffer, 64, L"FRAME%d", m_WeaponType.nType );
-	//	PrivateProfile( buffer, WRITE );
-	//}
-
 	Release();
 }
 
@@ -60,20 +53,12 @@ VOID CWeapon::Clear()
 
 	m_fScale = 0;
 	m_bAtkTime = FALSE;
-
-#ifdef _DEBUG
-	m_pCube = NULL;
-#endif
 }
 
 HRESULT CWeapon::Release()
 {
 	SAFE_DELETE( m_pMap );
-#ifdef _DEBUG
-	SAFE_DELETE( m_pCube );
-	SAFE_RELEASE( m_pTotalIB );
-	SAFE_RELEASE( m_pTotalVB );
-#endif // _DEBUG
+
 	return S_OK;
 }
 
@@ -156,50 +141,6 @@ VOID CWeapon::PrivateProfile( LPWSTR lpwStr, BOOL bRW )
 
 		m_nState = EnumCharFrame::BASE;
 	}
-#ifdef _GRAP
-	else
-	{
-		WCHAR buf[256];
-		WCHAR lpKeyName[256];
-		for (int i = 0; i < 10; ++i)
-		{
-			wsprintf( buf, L"%d", m_WeaponType.nFrameBegin[i] ); 
-			wsprintf( lpKeyName, L"Begin%d", i );
-			WritePrivateProfileString( lpwStr, lpKeyName,	buf, WEAPONFILE );
-		}
-		for (int i = 0; i < 10; ++i)
-		{
-			wsprintf( buf, L"%d", m_WeaponType.nFrameTime[i] );  
-			wsprintf( lpKeyName, L"Time%d", i );
-			WritePrivateProfileString( lpwStr, lpKeyName, buf, WEAPONFILE );
-		}
-		for (int i = 0; i < 10; ++i)
-		{
-			wsprintf( buf, L"%d", m_WeaponType.nFrameAtk[i] );   
-			wsprintf( lpKeyName, L"Atk%d", i );
-			WritePrivateProfileString( lpwStr, lpKeyName,	buf, WEAPONFILE );
-		}
-		for (int i = 0; i < 10; ++i)
-		{
-			wsprintf( buf, L"%d", m_WeaponType.nDelay[i] );	     
-			wsprintf( lpKeyName, L"Delay%d", i );
-			WritePrivateProfileString( lpwStr, lpKeyName,	buf, WEAPONFILE );
-		}
-		for (int i = 0; i < 10; ++i)
-		{
-			wsprintf( buf, L"%d", static_cast<INT>(m_WeaponType.vDir[i].x * 10.0f) );	     
-			wsprintf( lpKeyName, L"Dir%dX", i );
-			WritePrivateProfileString( lpwStr, lpKeyName, buf, WEAPONFILE );
-			wsprintf( buf, L"%d", static_cast<INT>(m_WeaponType.vDir[i].y * 10.0f) );	     
-			wsprintf( lpKeyName, L"Dir%dY", i );
-			WritePrivateProfileString( lpwStr, lpKeyName, buf, WEAPONFILE );
-			wsprintf( buf, L"%d", static_cast<INT>(m_WeaponType.vDir[i].z * 10.0f) );	     
-			wsprintf( lpKeyName, L"Dir%dZ", i );
-			WritePrivateProfileString( lpwStr, lpKeyName, buf, WEAPONFILE );
-		}
-
-	}
-#endif
 }
 
 HRESULT CWeapon::Create()
@@ -226,23 +167,6 @@ HRESULT CWeapon::Create()
 		break;
 	}
 
-#ifdef _DEBUG
-	m_pCube = new CCube();
-	if( FAILED( m_pD3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
-		0, CCube::CUBEVERTEX::FVF, D3DPOOL_MANAGED, &m_pTotalVB, NULL ) ) )
-	{
-		MessageBox(GHWND, L"Vertex Buffer Failed", NULL, MB_OK);
-	}
-
-	if( FAILED( m_pD3dDevice->CreateIndexBuffer( CCube::CUBEINDEX::IndexNum * sizeof( CCube::CUBEINDEX ), 
-		0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pTotalIB, NULL ) ) )
-	{
-		MessageBox(GHWND, L"Index Buffer Failed", NULL, MB_OK);
-	}
-
-	m_pCube->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, 0, 0 );
-	m_pCube->InitTexture( 0xFFFF0000 );
-#endif // _DEBUG
 	return S_OK;
 }
 
@@ -340,16 +264,6 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[3] );
 	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[4] );
 	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[5] );
-
-#ifdef _DEBUG
-	m_pCube->Set_ControlScale( 0, ( m_fBBSize[3] - m_fBBSize[0] ) * m_fScale );
-	m_pCube->Set_ControlScale( 1, ( m_fBBSize[4] - m_fBBSize[1] ) );
-	m_pCube->Set_ControlScale( 2, ( m_fBBSize[5] - m_fBBSize[2] ) * m_fScale );
-	m_pCube->Set_ControlRotate( 2, m_fZAng[m_nState] );
-	m_pCube->Set_ControlTranslate( 0, ( m_fBBSize[0] + m_fBBSize[3] ) * 0.5f );
-	m_pCube->Set_ControlTranslate( 1, ( m_fBBSize[1] + m_fBBSize[4] ) * 0.5f + 7.5f );
-	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[2] + m_fBBSize[5] ) * 0.5f - ( m_nState == EnumCharFrame::TEMP4 ? 0.0f : 7.5f ) );
-#endif // _DEBUG
 	
 	m_WeaponType.pBBA.SetDirection( m_WeaponType.vDir[m_nState] );
 }
@@ -357,36 +271,6 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 VOID CWeapon::Update()
 {
 	INT nCurrFrame = m_pMap->GetCurrentFrame();
-//
-//#ifdef _GRAP
-//	if( CInput::GetInstance()->Get_F9button() )
-//	{
-//		CInput::GetInstance()->Set_F9button(FALSE);
-//		OPENFILENAME OFN;
-//		WCHAR lpstrFile[MAX_PATH]=L"";
-//
-//		memset(&OFN, 0, sizeof(OPENFILENAME));
-//		OFN.lStructSize = sizeof(OPENFILENAME);
-//		OFN.hwndOwner=CWinBase::GetInstance()->Get_hWnd();
-//		OFN.lpstrFilter=TEXT("ASE ÆÄÀÏ(*.ASE)\0*.ASE\0");
-//		OFN.lpstrFile=lpstrFile;
-//		OFN.nMaxFile=MAX_PATH;
-//		if (GetOpenFileName(&OFN)!=0)
-//		{
-//			WCHAR* ptr = wcstok( lpstrFile, L"." );
-//			WCHAR Temp[255];
-//			wsprintf( Temp, L"%s.ASE", ptr );
-//
-//			m_pMap->Create( Temp, NULL );
-//		}
-//	}
-//	if( CInput::GetInstance()->Get_F8button() )
-//	{
-//		WCHAR buffer[64];
-//		swprintf_s(buffer, 64, L"FRAME%d", m_WeaponType.nType );
-//		PrivateProfile( buffer );
-//	}
-//#endif // _GRAP
 
 	if ( m_nState != EnumCharFrame::BASE )
 	{
@@ -407,8 +291,6 @@ VOID CWeapon::Update()
 	}
 
 	UpdateSRT();
-
-	//CDebugConsole::GetInstance()->Messagef(L"%d-%d\n", m_nState, nCurrFrame);
 }
 
 VOID CWeapon::UpdateSRT()
@@ -435,7 +317,6 @@ const D3DXMATRIXA16& CWeapon::Get_MatWorld()
 
 VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 {
-	//CDebugConsole::GetInstance()->Messagef("Weapon Current Frame %d \n", m_pMap->GetCurrentFrame() );
 	D3DMATERIAL9 mtrl;
 
 	mtrl.Diffuse = D3DXCOLOR( 0xFFFFFFFF );
@@ -447,19 +328,6 @@ VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 	m_pD3dDevice->SetMaterial( &mtrl );
 
 	m_pMap->Render( Get_MatWorld() * _matCharacter );	
-
-/*
-#ifdef _DEBUG
-	m_pD3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
-	m_pD3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
-	m_pD3dDevice->SetIndices( m_pTotalIB );
-
-	m_pCube->Update();
-	m_pCube->Calcul_MatWorld();
-	m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pCube->Get_MatWorld() * _matCharacter ) );
-	m_pCube->Render();
-#endif // _DEBUG
-*/
 }
 
 INT CWeapon::Get_nFrame(INT nType)

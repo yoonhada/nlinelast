@@ -84,13 +84,16 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pOptionScene = new OptionScene;
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
-	//이벤트
+	// 튜토리얼	// 이벤트
 	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 	m_pGameEvent = CGameEvent::GetInstance();
 	m_pGameEvent->Create( m_pD3dDevice, nMaxCharaNum );
 	m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
 	m_pEventGUICombo->Create();
 	m_pEventGUICombo->Clear();
+	m_pGameEventTutorialManager = new GameEventTutorialManager();
+	m_pGameEventTutorialManager->Create( a_pD3dDevice, a_Sprite );
+
 
 	//맵 생성
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
@@ -133,10 +136,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
-	//	튜토리얼
-	m_pGameEventTutorialManager = new GameEventTutorialManager();
-	m_pGameEventTutorialManager->Create( a_pD3dDevice, a_Sprite );
-
 
 	CInput::GetInstance()->EnableInput( FALSE );
 
@@ -161,6 +160,7 @@ HRESULT CMainScene::Release()
 	SAFE_DELETE( m_pTileMap );
 	SAFE_DELETE( m_pCamera );
 	SAFE_DELETE( m_pGameEventTutorialManager );
+	SAFE_DELETE( m_pEventGUICombo );
 
 	return S_OK;
 }
@@ -181,7 +181,7 @@ VOID CMainScene::CreateCharactor()
 			pChar = &( m_pCharactors[ nIndex ] );
 			CTree::GetInstance()->GetCharVector()->push_back( pChar->GetBoundBox() );
 
-			m_pMainGUI->SetMiniMapObjectVisible( nIndex, TRUE );
+			m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_DADDY + nIndex, TRUE );
 		}
 	}
 }
@@ -316,7 +316,7 @@ VOID CMainScene::Update()
 		pChar = &( m_pCharactors[ nIndex ] );
 
 		vPos = pChar->Get_CharaPos();
-		m_pMainGUI->SetMiniMapObjectPosition( nIndex, &vPos );
+		m_pMainGUI->SetMiniMapObjectPosition( MainGUI::MMP_DADDY + nIndex, &vPos );
 
 		if( Loop != m_nClientID )
 		{
@@ -330,7 +330,7 @@ VOID CMainScene::Update()
 		{
 			m_pMonster[Loop]->Update();
 			vPos = m_pMonster[Loop]->Get_Pos();
-			//m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
+			m_pMainGUI->SetMiniMapObjectPosition( MainGUI::MMP_PANDA + Loop, &vPos );
 		}
 	}
 
@@ -339,7 +339,7 @@ VOID CMainScene::Update()
 	{
 		m_pFirstAidKit[Loop].Update();
 		vPos = m_pFirstAidKit[Loop].Get_CharaPos();
-		//m_pMainGUI->SetMiniMapObjectPosition( Loop, &vPos );
+		m_pMainGUI->SetMiniMapObjectPosition( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, &vPos );
 	}
 
 	for ( int Loop = 0; Loop < 3; ++Loop )
@@ -512,6 +512,11 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 				m_pMonster[Loop]->GetFSM()->SetCurrentState( Seek::GetInstance() );
 			}
 
+			m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_PANDA + Loop, TRUE );
+		}
+		else
+		{
+			m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_PANDA + Loop, FALSE );
 		}
 	}
 }
