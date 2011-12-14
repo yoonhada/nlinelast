@@ -89,21 +89,19 @@ VOID CPhysics::Reflect( D3DXVECTOR3& _vOut )
 //	_vOut = _vP - D3DXVec3Dot( &_vP, &vN ) * vN;
 //}
 //
-//VOID CPhysics::Sliding( D3DXVECTOR3& _vOut )
-//{
-//	D3DXVECTOR3 vP = _vOut;
-//	D3DXVec3Normalize( &vN, &m_vColNormal );
-//
-//	if ( _vOut.x == 0 && _vOut.y == 0 && _vOut.z == 0 )
-//	{
-//		_vOut = vN * m_fD_s;
-//	}
-//	else
-//	{
-//		// P - n ( n * P )
-//		_vOut = vP - D3DXVec3Dot( &vP, &vN ) * vN;
-//	}
-//}
+VOID CPhysics::Sliding( D3DXVECTOR3& _vOut )
+{
+	D3DXVECTOR3 vP = _vOut;
+	D3DXVec3Normalize( &vN, &m_vColNormal );
+
+	FLOAT fN = D3DXVec3Dot(&vP, &vN);
+
+	if ( fN > 0.1f || fN < -0.1f )
+	{
+		// P - n ( n * P )
+		_vOut = vP - D3DXVec3Dot( &vP, &vN ) * vN;
+	}
+}
 
 //BOOL CPhysics::Collision( const D3DXVECTOR3 &vPos, CBoundBox *_pCube)
 //{
@@ -178,39 +176,61 @@ BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1,
 
 BOOL CPhysics::Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 )
 {
+	D3DXVECTOR3 vUp, v1, v2;
 	D3DXVECTOR3 vBox[4];
-	vBox[0] = _pCube2->GetPosition( 4 ) - _pCube2->GetPosition( 5 );
-	vBox[1] = _pCube2->GetPosition( 5 ) - _pCube2->GetPosition( 6 );
-	vBox[2] = _pCube2->GetPosition( 6 ) - _pCube2->GetPosition( 7 );
-	vBox[3] = _pCube2->GetPosition( 7 ) - _pCube2->GetPosition( 4 );
+	vBox[0] = _pCube2->GetPosition( 4 );
+	vBox[1] = _pCube2->GetPosition( 5 );
+	vBox[2] = _pCube2->GetPosition( 6 );
+	vBox[3] = _pCube2->GetPosition( 7 );
 
-	// TRUE 00
+	vBox[0].y = vBox[1].y = vBox[2].y = vBox[3].y = 0.0f;
 
-	if ( Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), _pCube2->GetPosition( 4 ), _pCube2->GetPosition( 5 ) ) ||
-		 Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), _pCube2->GetPosition( 5 ), _pCube2->GetPosition( 6 ) ) ||
-		 Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), _pCube2->GetPosition( 6 ), _pCube2->GetPosition( 7 ) ) ||
-		 Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), _pCube2->GetPosition( 7 ), _pCube2->GetPosition( 4 ) ) )
+	if ( Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), vBox[0], vBox[1] ) )
 	{
+		vUp = vBox[0];
+		vUp.y = 1.0f;
+
+		v1 = vUp - vBox[0];
+		v2 = vBox[1] - vBox[0];
+
+		D3DXVec3Cross( &m_vColNormal, &v1, &v2 );
+		return TRUE;
+	}
+	if ( Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), vBox[1], vBox[2] ) )
+	{
+		vUp = vBox[1];
+		vUp.y = 1.0f;
+
+		v1 = vUp - vBox[1];
+		v2 = vBox[2] - vBox[1];
+
+		D3DXVec3Cross( &m_vColNormal, &v1, &v2 );
+		return TRUE;
+	}
+	if ( Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), vBox[2], vBox[3] ) )
+	{
+		vUp = vBox[2];
+		vUp.y = 1.0f;
+
+		v1 = vUp - vBox[2];
+		v2 = vBox[3] - vBox[2];
+
+		D3DXVec3Cross( &m_vColNormal, &v1, &v2 );
+		return TRUE;
+	}
+	if ( Collision( _pCube1->GetPosition() + vDirection, _pCube1->GetSize( CBoundBox::PLUSX ), vBox[3], vBox[0] ) )
+	{
+		vUp = vBox[3];
+		vUp.y = 1.0f;
+
+		v1 = vUp - vBox[3];
+		v2 = vBox[0] - vBox[3];
+
+		D3DXVec3Cross( &m_vColNormal, &v1, &v2 );
 		return TRUE;
 	}
 
 	return FALSE;
-
-	//for ( int i = 0; i < 8; ++i)
-	//{
-	//	if( CPhysics::GetInstance()->Collision( _pCube1->GetPosition(i), vDirection, _pCube2 ) )
-	//	{
-	//		return TRUE;
-	//	}
-	//}
-	//for ( int i = 0; i < 8; ++i)
-	//{
-	//	if( CPhysics::GetInstance()->Collision( _pCube2->GetPosition(i), -vDirection, _pCube1 ) )
-	//	{
-	//		m_vColNormal = -m_vColNormal;
-	//		return TRUE;
-	//	}
-	//}
 }
 
 BOOL CPhysics::Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDirection, const CBoundBox *pBB )

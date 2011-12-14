@@ -252,7 +252,8 @@ VOID CMainScene::CreateWall()
 	for ( int Loop = 0; Loop < 3; ++Loop )
 	{
 		m_pWall[Loop].Create( m_pD3dDevice );
-		m_pWall[Loop].Load( L"Data/CharData/Obstacle_0.csav" );
+		if( Loop == 1 )		m_pWall[Loop].Load( L"Data/CharData/Obstacle_0.csav" );
+		else				m_pWall[Loop].Load( L"Data/CharData/Obstacle_1.csav" );
 		m_pWall[Loop].Set_MonsterNumber( CGameEvent::DOOR_LEFT << Loop );
 		CTree::GetInstance()->GetMonsVector()->push_back( m_pWall[Loop].GetBoundBox() );
 	}
@@ -305,8 +306,6 @@ VOID CMainScene::Update()
 	m_pCamera->SetView( pChar->Get_CharaPos2Camera(), pChar->Get_PreCharaPos2Camera(), 
 						10.0f, 75.0f, 
 						pChar->Get_CharaAngle(), CInput::GetInstance()->Get_MouseXRotate() );
-
-	m_pCamera->CheckObjectCollision( m_pCamera->GetEye(), pChar->Get_CharaPos(), pChar->Get_CharaAngle() );
 
 	// 다른 플레이어는 값으로 이동
 	INT nIndex;

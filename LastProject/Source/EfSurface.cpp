@@ -99,6 +99,7 @@ INT CEfSurface::Update( IObject * a_pObject )
 {
 	HRESULT	hr=0;
 
+	m_pDev->SetRenderState( D3DRS_LIGHTING, TRUE );
 	m_pDev->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
 	m_pDev->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
 
@@ -119,10 +120,10 @@ INT CEfSurface::Update( IObject * a_pObject )
 	
 
 	// Scene render
-	dynamic_cast<CCharactor *>(a_pObject)[0].Render();
+	a_pObject->Render();
 
 	hr = m_pTxRs->EndScene(D3DX_FILTER_NONE);
-
+	m_pDev->SetRenderState( D3DRS_LIGHTING, FALSE );
 	return 0;
 }
 

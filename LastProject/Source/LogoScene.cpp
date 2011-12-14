@@ -2,7 +2,7 @@
 #include "LogoScene.h"
 #include "Charactor.h"
 #include "CameraWork.h"
-#include "EfSurface.h"
+//#include "EfSurface.h"
 
 VOID LogoScene::Initialize()
 {
