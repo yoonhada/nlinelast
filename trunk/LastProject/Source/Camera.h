@@ -77,7 +77,8 @@ public:
 	D3DXMATRIXA16*	GetInvView()	{ return &m_matInvView; }
 	VOID UpdateMatrix();
 	
-	VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
+	VOID CheckObjectCollision( );
+	//VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
 
 	VOID SetEffect(INT nType);
 	VOID Effect( D3DXVECTOR3 & a_vLook );

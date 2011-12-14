@@ -6,7 +6,7 @@
 
 class CCharactor;
 class CameraWork;
-class CEfSurface;
+//class CEfSurface;
 
 class LogoScene : public IScene
 {

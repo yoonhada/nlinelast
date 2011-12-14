@@ -422,7 +422,7 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 			{
 				if ( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) ) 
 				{
-					a_vCollisionControl = D3DXVECTOR3(0, 0, 0);
+					CPhysics::GetInstance()->Sliding( a_vCollisionControl );
 					break;
 				}
 			}

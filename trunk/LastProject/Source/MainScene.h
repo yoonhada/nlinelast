@@ -17,7 +17,7 @@ class CGameEventCombo;
 
 class MainGUI;
 class OptionScene;
-class CEfSurface;
+//class CEfSurface;
 
 class GameEventTutorialManager;
 
