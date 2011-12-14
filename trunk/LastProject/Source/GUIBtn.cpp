@@ -162,7 +162,13 @@ VOID GUIBtn::OnMove( INT x, INT y )
 	{
 		// 누군가가 캡처를 하고 있는 상황에서는 핫 상태로 가지 말아야 한다.
 		if( !g_bCapture && ( m_Style & GBS_CHECK ) == 0 && IsPtOnMe( x, y ) )
+		{
+			if( m_State != GB_HOT )
+			{
+				CSound::GetInstance()->PlayEffect( 1 );
+			}
 			ChangeState(GB_HOT);
+		}
 	}
 	
 }

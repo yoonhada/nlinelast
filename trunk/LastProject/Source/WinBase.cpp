@@ -33,6 +33,7 @@ HRESULT CWinBase::Create()
 	CInput::GetInstance();
 	CPhysics::GetInstance();
 	CGameEvent::GetInstance();
+	CSound::GetInstance();
 
 	//트리 생성
 	FLOAT fSize = 1000.0f;
@@ -60,6 +61,7 @@ HRESULT CWinBase::Release()
 	CTree::DestoryInstance();
 	CDebugInterface::DestoryInstance();
 	CGameEvent::DestoryInstance();
+	CSound::DestoryInstance();
 
 #ifndef _NETWORK
 	WSACleanup();
@@ -229,6 +231,8 @@ VOID CWinBase::Update()
 
 	CInput::GetInstance()->Update( 50.0f, 150.0f, rFre.getFrametime() );
 	CSceneManage::GetInstance()->Update();
+
+	CSound::GetInstance()->Update();
 }
 
 VOID CWinBase::Render()
@@ -238,35 +242,4 @@ VOID CWinBase::Render()
 	CSceneManage::GetInstance()->Render();
 	
 	GetInstance()->m_pDX9->endScene();
-/*
-	// 메인씬인 경우 캐릭터 앞모습을 렌더링
-	if( CSceneManage::GetInstance()->GetCurrentScene() == IScene::SCENE_MAIN )
-	{
-		// 카메라 위치를 캐릭터 앞으로 옮긴다.
-		
-
-		RECT rtSrc, rtDest;
-		
-		rtSrc.left = ;
-		rtSrc.right = ;
-		rtSrc.top = ;
-		rtSrc.bottom = ;
-
-		rtDest.left = 0;
-		rtDest.right = 200;
-		rtDest.top = 0;
-		rtDest.bottom = 200;
-
-		if( !SUCCEEDED( GetInstance()->m_pDX9->GetDevice()->BeginScene() ) )
-		{
-			
-
-			// End Scene
-			GetInstance()->m_pDX9->GetDevice()->EndScene();
-		}
-
-		// 후면 버퍼 -> 실제 화면
-		GetInstance()->m_pDX9->GetDevice()->Present( &rtSrc, &rtDest, NULL, NULL );
-	}
-*/
 }

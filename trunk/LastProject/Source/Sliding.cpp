@@ -19,10 +19,14 @@ VOID Sliding::Enter( CMonster* a_pMonster )
 	if( a_pMonster->Get_MonsterNumber() == 2/*CGameEvent::CLOWN*/ )
 	{
 		a_pMonster->ChangeAnimation( CMonster::ANIM_SLIDING );
+
+		CSound::GetInstance()->PlayEffect( 0 );
 	}
 	else
 	{
 		a_pMonster->ChangeAnimation( CMonster::ANIM_MELEE_ATTACK );
+
+		CSound::GetInstance()->PlayEffect( 0 );
 	}
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Sliding : ANIM_SLIDING \n" );

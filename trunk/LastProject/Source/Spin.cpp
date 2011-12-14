@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "Spin.h"
-#include "Stiffen.h"
+#include "Groggy.h"
 
 #include "Monster.h"
 
@@ -21,6 +21,8 @@ VOID Spin::Enter( CMonster* a_pMonster )
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SPIN_ATTACK \n" );
 #endif
+
+	CSound::GetInstance()->PlayEffect( 0 );
 }
 
 
@@ -45,7 +47,7 @@ VOID Spin::Execute( CMonster* a_pMonster )
 		a_pMonster->Set_ClearTime();
 
 		// 경직 상태로
-		a_pMonster->GetFSM()->ChangeState( Stiffen::GetInstance() );
+		a_pMonster->GetFSM()->ChangeState( Groggy::GetInstance() );
 	}
 }
 

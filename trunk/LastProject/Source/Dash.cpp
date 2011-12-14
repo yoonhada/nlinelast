@@ -15,11 +15,20 @@ Dash* Dash::GetInstance()
 VOID Dash::Enter( CMonster* a_pMonster )
 {
 	a_pMonster->Set_DashData( a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos() );
-	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() * 0.015f );		// /10 * 0.15f
+	a_pMonster->Set_InterpolationTime( a_pMonster->Get_TargetDistance() * 0.01f );		// /10 * 0.1f
 
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
 		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH, a_pMonster->Get_Angle(), a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos(), a_pMonster->Get_TargetDistance() );
+	}
+
+	if( a_pMonster->Get_MonsterNumber() == 2 )
+	{
+		CSound::GetInstance()->PlayEffect( 0 );	
+	}
+	else
+	{
+		CSound::GetInstance()->PlayEffect( 0 );	
 	}
 }
 

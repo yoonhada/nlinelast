@@ -21,6 +21,15 @@ VOID Groggy::Enter( CMonster* a_pMonster )
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Groggy : ANIM_GROGGY \n" );
 #endif
+
+	if( a_pMonster->Get_MonsterNumber() == 2 )
+	{
+		CSound::GetInstance()->PlayEffect( 0 );
+	}
+	else
+	{
+		CSound::GetInstance()->PlayEffect( 0 );
+	}
 }
 
 

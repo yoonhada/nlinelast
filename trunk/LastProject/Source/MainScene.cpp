@@ -146,6 +146,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 
+	CSound::GetInstance()->PlayBGM( 0 );
 
 	return S_OK;
 }
@@ -235,6 +236,8 @@ VOID CMainScene::DoorBreakNockdown()
 	m_pWall[0].BreakNockdown();
 	m_pWall[1].BreakNockdown();
 	m_pWall[2].BreakNockdown();
+
+	CSound::GetInstance()->PlayEffect( 0 );
 }
 
 VOID CMainScene::CreateFirstAidKit()
