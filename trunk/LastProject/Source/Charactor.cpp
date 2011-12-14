@@ -430,21 +430,21 @@ BOOL CCharactor::Collision( D3DXVECTOR3& a_vCollisionControl )
 		}
 	}
 
-	//vecBoundBox = CTree::GetInstance()->GetMonsVector( );
-	//if ( vecBoundBox != NULL && vecBoundBox->size() )
-	//{
-	//	Iter = vecBoundBox->begin();
-	//	Iter++;
-	//	while ( Iter != vecBoundBox->end() )
-	//	{
-	//		if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
-	//		{
-	//			a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	//			return TRUE;
-	//		}
-	//		Iter++;
-	//	}
-	//}
+	vecBoundBox = CTree::GetInstance()->GetMonsVector( );
+	if ( vecBoundBox != NULL && vecBoundBox->size() )
+	{
+		Iter = vecBoundBox->begin();
+		Iter++;
+		while ( Iter != vecBoundBox->end() )
+		{
+			if( CPhysics::GetInstance()->Collision( m_pBoundBox, a_vCollisionControl, ( *Iter ) ) )
+			{
+				a_vCollisionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				return TRUE;
+			}
+			Iter++;
+		}
+	}
 
 	return FALSE;
 }
