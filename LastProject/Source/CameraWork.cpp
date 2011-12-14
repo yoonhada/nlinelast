@@ -160,6 +160,12 @@ VOID CameraWork::SelectData( DWORD _dID )
 
 	m_pdatCurrent = itE->second;
 
+	m_pdatCurrent->infLookAt.iCurrentIndex		= 0;
+	m_pdatCurrent->infLookAt.iNextIndex			= m_pdatCurrent->infLookAt.iIncIndex;
+
+	m_pdatCurrent->infPosition.iCurrentIndex	= 0;
+	m_pdatCurrent->infPosition.iNextIndex		= m_pdatCurrent->infPosition.iIncIndex;
+
 	//	Init Current Position
 	//m_pdatCurrent->infLookAt.vecCurrentPosition		= m_pdatCurrent->avecPoint[ CWK_LOOKAT_BOX0 ];
 	//m_pdatCurrent->infPosition.vecCurrentPosition	= m_pdatCurrent->avecPoint[ CWK_POSITION_BOX0 ];
@@ -292,4 +298,13 @@ VOID CameraWork::DebugRender()
 	RenderImage( &m_imgLookAtCourse );
 	RenderImage( &m_imgPositionToLookAtLink );
 
+}
+
+VOID CameraWork::EndWorking()
+{
+	if( m_pdatCurrent == NULL )
+		return;
+
+	m_pdatCurrent->infLookAt.iNextIndex		= m_pdatCurrent->infLookAt.iNumVertices;
+	m_pdatCurrent->infPosition.iNextIndex	= m_pdatCurrent->infPosition.iNumVertices;
 }
