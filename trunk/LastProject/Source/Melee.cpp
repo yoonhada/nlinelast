@@ -16,10 +16,19 @@ Melee* Melee::GetInstance()
 VOID Melee::Enter( CMonster* a_pMonster )
 {
 	// Melee 공격 애니메이션으로 바꾼다.
-	a_pMonster->ChangeAnimation( CMonster::ANIM_MELEE_ATTACK );
+	a_pMonster->ChangeAnimation( /*CMonster::ANIM_MELEE_ATTACK*/10 );
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Melee : ANIM_MELEE_ATTACK \n" );
 #endif
+
+	if( a_pMonster->Get_MonsterNumber() == 2 )
+	{
+		CSound::GetInstance()->PlayEffect( 0 );	
+	}
+	else
+	{
+		CSound::GetInstance()->PlayEffect( 0 );	
+	}
 }
 
 
