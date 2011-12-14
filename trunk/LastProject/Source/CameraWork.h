@@ -43,6 +43,7 @@ public:
 	VOID		SetPartWorkingPeriod( DWORD _dID, DWORD _dType, DWORD _dTime, INT _iStartIndex, INT _iEndIndex );
 
 	VOID		SelectData( DWORD _dID );
+	VOID		EndWorking();
 
 	BOOL		Update();
 
