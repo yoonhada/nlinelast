@@ -248,7 +248,7 @@ VOID CMonster::Load( WCHAR* a_pFileName )
 			fwscanf( pFile, L"%f %f %f %d", 
 				&m_pFrame[LoopFrame].m_pBoxData[Loop].m_vAniTransStartValue.z,
 				&m_pFrame[LoopFrame].m_pBoxData[Loop].m_vAniTransEndValue.z,
-				&m_pFrame[LoopFrame].m_vAniTransSpeed.z,
+				&m_pFrame[LoopFrame].m_pBoxData[Loop].m_vAniTransSpeed.z,
 				&m_pFrame[LoopFrame].m_pBoxData[Loop].m_bTransZReplay );
 
 			//회전 애니 x
@@ -978,65 +978,65 @@ VOID CMonster::ChangeAnimation( INT a_iAniNum )
 	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.y = m_fAngle;// + m_pFrame[m_iSelectedFrameNum].m_fRotation[1];
 	m_pFrame[m_iSelectedFrameNum].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_fRotation[2];
 
-	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
-	{
-		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[0];
-		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[1];
-		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[2];
+	//for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
+	//{
+	//	m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[0];
+	//	m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[1];
+	//	m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fTrans[2];
 
-		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.x = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[0];
-		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.y = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[1];
-		m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[2];
-		
-		vTransLength.x = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.x );
-		vTransLength.y = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.y );
-		vTransLength.z = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.z );
+	//	m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.x = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[0];
+	//	m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.y = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[1];
+	//	m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.z = m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fRotation[2];
+	//	
+	//	vTransLength.x = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.x ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.x );
+	//	vTransLength.y = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.y ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.y );
+	//	vTransLength.z = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniTransSave.z ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorTranslate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorTranslate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniTransStartValue.z );
 
-		vRotateLength.x = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.x ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.x );
-		vRotateLength.y = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.y ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.y );
-		vRotateLength.z = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.z ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.z );
+	//	vRotateLength.x = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.x ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.x - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.x ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.x );
+	//	vRotateLength.y = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.y ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.y - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.y ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.y );
+	//	vRotateLength.z = ABSDEF( m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateSave.z ) - ABSDEF( ( m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_fCharEditorRotate.z - m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_fCharEditorRotate.z ) + m_pFrame[m_iNextFrame].m_pBoxData[Loop].m_vAniRotateStartValue.z );
 
-		vTransLength.x = ABSDEF(vTransLength.x);
-		vTransLength.y = ABSDEF(vTransLength.y);
-		vTransLength.z = ABSDEF(vTransLength.z);
+	//	vTransLength.x = ABSDEF(vTransLength.x);
+	//	vTransLength.y = ABSDEF(vTransLength.y);
+	//	vTransLength.z = ABSDEF(vTransLength.z);
 
-		vRotateLength.x = ABSDEF(vRotateLength.x);
-		vRotateLength.y = ABSDEF(vRotateLength.y);
-		vRotateLength.z = ABSDEF(vRotateLength.z);
-		
-		if( m_fMaxInterpolationLength < vTransLength.x )
-		{
-			m_fMaxInterpolationLength = vTransLength.x;
-		}
+	//	vRotateLength.x = ABSDEF(vRotateLength.x);
+	//	vRotateLength.y = ABSDEF(vRotateLength.y);
+	//	vRotateLength.z = ABSDEF(vRotateLength.z);
+	//	
+	//	if( m_fMaxInterpolationLength < vTransLength.x )
+	//	{
+	//		m_fMaxInterpolationLength = vTransLength.x;
+	//	}
 
-		if( m_fMaxInterpolationLength < vTransLength.y )
-		{
-			m_fMaxInterpolationLength = vTransLength.y;
-		}
+	//	if( m_fMaxInterpolationLength < vTransLength.y )
+	//	{
+	//		m_fMaxInterpolationLength = vTransLength.y;
+	//	}
 
-		if( m_fMaxInterpolationLength < vTransLength.z )
-		{
-			m_fMaxInterpolationLength = vTransLength.z;
-		}
+	//	if( m_fMaxInterpolationLength < vTransLength.z )
+	//	{
+	//		m_fMaxInterpolationLength = vTransLength.z;
+	//	}
 
-		if( m_fMaxInterpolationLength < vRotateLength.x )
-		{
-			m_fMaxInterpolationLength = vRotateLength.x;
-			//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenX : %f \n ", m_fMaxInterpolationLength );
-		}
+	//	if( m_fMaxInterpolationLength < vRotateLength.x )
+	//	{
+	//		m_fMaxInterpolationLength = vRotateLength.x;
+	//		//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenX : %f \n ", m_fMaxInterpolationLength );
+	//	}
 
-		if( m_fMaxInterpolationLength < vRotateLength.y )
-		{
-			m_fMaxInterpolationLength = vRotateLength.y;
-			//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenY : %f \n ", m_fMaxInterpolationLength );
-		}
+	//	if( m_fMaxInterpolationLength < vRotateLength.y )
+	//	{
+	//		m_fMaxInterpolationLength = vRotateLength.y;
+	//		//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenY : %f \n ", m_fMaxInterpolationLength );
+	//	}
 
-		if( m_fMaxInterpolationLength < vRotateLength.z )
-		{
-			m_fMaxInterpolationLength = vRotateLength.z;
-			//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenZ : %f \n ", m_fMaxInterpolationLength );
-		}
-	}
+	//	if( m_fMaxInterpolationLength < vRotateLength.z )
+	//	{
+	//		m_fMaxInterpolationLength = vRotateLength.z;
+	//		//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenZ : %f \n ", m_fMaxInterpolationLength );
+	//	}
+	//}
 
 	
 }
@@ -1168,7 +1168,7 @@ VOID CMonster::AniInterpolation()
 		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[1];
 		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[2];
 		
-		////CDebugConsole::GetInstance()->Messagef( L"AniEndCheck : %d\n", m_iChangeAnimationEndCheck );
+		CDebugConsole::GetInstance()->Messagef( L"AniEndCheck : %d\n", m_iChangeAnimationEndCheck );
 	}
 
 	if( m_iChangeAnimationEndCheck == 0 )
