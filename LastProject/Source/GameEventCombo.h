@@ -13,6 +13,7 @@ class GUIBackground;
 class CGameEventCombo : public IObject
 {
 private:
+	enum { NONE, READY, COUNTING, RUN, FAIL, SUCCESS };
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
 	HWND					m_hWnd;
@@ -22,6 +23,7 @@ private:
 	GUIBackground*			m_pGUIForground;
 	GUIBackground*			m_pGUIButton[4];
 
+	FLOAT					m_fCount;
 	BOOL					m_bComplate;
 	INT						m_nKindIndex;
 	INT						m_nKindEvent[4];
@@ -36,13 +38,14 @@ public:
 	VOID Update();		///< Update
 	VOID Render();		///< Render
 
-	VOID AddCombo(INT nIndex, INT nKind)	{ m_nKindEvent[nIndex] = nKind; }
-
+	VOID Initialize();
+	VOID AddCombo(INT nIndex, INT nKind);
 	INT* GetKindEvet()						{ return m_nKindEvent; }
 	INT GetKindIndex()						{ return m_nKindIndex; }
 	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
 	BOOL CheckKindEvent( INT nKindEvent );
-
+	
+	VOID Start()							{ m_bComplate = READY; }
 	VOID Success();
 	VOID Fail();
 };

@@ -88,6 +88,9 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 	m_pGameEvent = CGameEvent::GetInstance();
 	m_pGameEvent->Create( m_pD3dDevice, nMaxCharaNum );
+	m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+	m_pEventGUICombo->Create();
+	m_pEventGUICombo->Clear();
 
 	//맵 생성
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
@@ -193,7 +196,7 @@ VOID CMainScene::CreateMonster()
 		{
 			m_pMonster[ Loop ]->InitAniAndState();
 
-			//m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_PANDA + Loop, TRUE );
+			m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_PANDA + Loop, TRUE );
 		}
 	}
 }
@@ -243,7 +246,7 @@ VOID CMainScene::CreateFirstAidKit()
 		m_pFirstAidKit[Loop].Set_MonsterNumber( CGameEvent::ITEM_FAK1 << Loop );
 		CTree::GetInstance()->GetMonsVector()->push_back( m_pFirstAidKit[Loop].GetBoundBox() );		
 
-		//m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, TRUE );
+		m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, TRUE );
 	}
 }
 
@@ -271,10 +274,6 @@ VOID CMainScene::CheatKeys()
 	{
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.1f);
 	}
-	//if( CInput::GetInstance()->Get_NumKey(  ) )
-	//{
-	//	m_pGameEvent->AddEvent( CGameEvent::ENTER_CLOWN, 0.1f);
-	//}
 }
 
 VOID CMainScene::Update()
@@ -357,8 +356,7 @@ VOID CMainScene::Update()
 
 	m_pGameEventTutorialManager->Update();
 
-	if ( m_pEventGUICombo )
-		m_pEventGUICombo->Update();
+	m_pEventGUICombo->Update();
 
 	EventSwitch( m_pGameEvent->Update() );
 
@@ -436,8 +434,7 @@ VOID	CMainScene::Render()
 	m_pGameEventTutorialManager->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
-	if ( m_pEventGUICombo )
-		m_pEventGUICombo->Render();
+	m_pEventGUICombo->Render();
 
 	//m_pCharView->Render();
 }
@@ -586,29 +583,25 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::EVENT_COMBO_SUCCESS:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_SUCCESS \n" );
-		if ( m_pEventGUICombo )
+		m_pEventGUICombo->Success();
+		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
-			m_pEventGUICombo->Success();
-			if ( CObjectManage::GetInstance()->IsHost() ) 
+			if ( CGameEvent::GetInstance()->GetTutorial() )
 			{
-				if ( CGameEvent::GetInstance()->GetTutorial() )
-				{
-					CGameEvent::GetInstance()->AddEvent( CGameEvent::DOOR_BREAK_NOCKDOWN, 0.01f );				
-					CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_END, 2.0f );
-				}
-				else
-				{
-					CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );				
-					CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
-					CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-				}
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::DOOR_BREAK_NOCKDOWN, 0.01f );				
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_END, 2.0f );
+			}
+			else
+			{
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );				
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
+				CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 			}
 		}		
 		break;
 	case CGameEvent::EVENT_COMBO_FAIL:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_FAIL \n" );
-		if ( m_pEventGUICombo )
-			m_pEventGUICombo->Fail();
+		m_pEventGUICombo->Fail();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
@@ -688,42 +681,36 @@ VOID CMainScene::TutorialCombo()
 
 VOID CMainScene::EventCombo()
 {
-	if ( !m_pEventGUICombo )
+	m_pEventGUICombo->Initialize();
+	m_pEventGUICombo->Start();
+
+	CObjectManage * pOM = CObjectManage::GetInstance();
+
+	if ( pOM->IsHost() )
 	{
-		CObjectManage * pOM = CObjectManage::GetInstance();
-
-		if ( pOM->IsHost() )
+		INT nClient = 0;
+		// 접속 클라이언트 찾기.
+		for ( int i = 0; i < 4; ++i )
 		{
-			m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, pOM->GetSprite() );
-
-			INT nClient = 0;
-			// 접속 클라이언트 찾기.
-			for ( int i = 0; i < 4; ++i )
+			if (pOM->Get_CharTable()[i] != -1 )
 			{
-				if (pOM->Get_CharTable()[i] != -1 )
-				{
-					nClient++;
-				}
+				nClient++;
 			}
-
-			INT nSelect;
-			for ( int i = 0; i < 4; ++i )
-			{
-				nSelect = static_cast<int>( FastRand2() * nClient );
-				m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[nSelect] + 1 );
-			}		
 		}
-		else
+
+		INT nSelect;
+		for ( int i = 0; i < 4; ++i )
 		{
-			m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, pOM->GetSprite() );
-
-			for ( int i = 0; i < 4; ++i )
-			{
-				m_pEventGUICombo->AddCombo( i, pOM->Get_EventTable()[i] );
-			}		
-		}
-
-		m_pEventGUICombo->Create();
+			nSelect = static_cast<int>( FastRand2() * nClient );
+			m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[nSelect] + 1 );
+		}		
+	}
+	else
+	{
+		for ( int i = 0; i < 4; ++i )
+		{
+			m_pEventGUICombo->AddCombo( i, pOM->Get_EventTable()[i] );
+		}		
 	}
 
 	if ( CObjectManage::GetInstance()->IsHost() ) 
@@ -734,7 +721,7 @@ VOID CMainScene::EventCombo()
 
 VOID CMainScene::EventDestoryCombo()
 {
-	SAFE_DELETE( m_pEventGUICombo );
+	m_pEventGUICombo->Initialize();
 }
 
 VOID CMainScene::EventFirstAidKit()
