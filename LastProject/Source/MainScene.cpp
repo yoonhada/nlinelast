@@ -553,7 +553,10 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
 		// Do something
 		TutorialCombo();
-		EventCombo();
+		if ( CObjectManage::GetInstance()->IsHost() )
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 5.0f );
+		}
 		EventStateNetwork( nEvent );
 		break;
 	case CGameEvent::TUTORIAL_COMBO_END:
@@ -563,10 +566,10 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventDestoryCombo();
 		EventInitGameState( nEvent );		
 		CGameEvent::GetInstance()->SetTutorial( FALSE );
-		if ( CObjectManage::GetInstance()->IsHost() )
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 30.0f );
-		}
+		//if ( CObjectManage::GetInstance()->IsHost() )
+		//{
+		//	CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 30.0f );
+		//}
 		break;
 	case CGameEvent::EVENT_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO \n" );
