@@ -286,6 +286,7 @@ VOID CNetwork::SC_EVENT_STATE( CPacket& a_pk )
 
 	// 이벤트 활성화
 	CGameEvent::GetInstance()->AddEvent( wEventID, 0.01f );
+	CDebugConsole::GetInstance()->Message("SC_EVENT_STATE\n\n");
 }
 
 
@@ -684,6 +685,7 @@ VOID CNetwork::CS_EVENT_STATE( WORD a_wEventID )
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );
+	CDebugConsole::GetInstance()->Message("CS_EVENT_STATE\n\n");
 }
 
 
