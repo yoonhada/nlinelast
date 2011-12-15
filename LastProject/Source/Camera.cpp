@@ -42,7 +42,7 @@ VOID CCamera::Clear()
 	m_fZoom		= 80.0f;
 	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
-	m_fPitch	= 0.0f;
+	m_fPitch	= -5.0f;
 	//m_fLock		= (D3DX_PI/2) - 0.05f;
 
 	m_fEffectValue = 0.0f;
