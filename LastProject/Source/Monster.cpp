@@ -1167,8 +1167,6 @@ VOID CMonster::AniInterpolation()
 		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[0];
 		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[1];
 		m_iChangeAnimationEndCheck += m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_bAniTransEndCheck[2];
-		
-		CDebugConsole::GetInstance()->Messagef( L"AniEndCheck : %d\n", m_iChangeAnimationEndCheck );
 	}
 
 	if( m_iChangeAnimationEndCheck == 0 )

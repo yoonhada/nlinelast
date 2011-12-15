@@ -121,12 +121,12 @@ VOID LogoScene::Update()
 	//·Î°í
 	for( INT i=0; i<6; i++ )
 	{
-		m_pLogo[ i ].Set_ControlTranslate( 1, /*1000.0f*/0.0f );
+		m_pLogo[ i ].Set_ControlTranslate( 1, /*1000.0f*/10.0f );
 		m_pLogo[ i ].UpdateOtherPlayer( TRUE );
 	}
 
 	D3DXVECTOR3 vPos;
-	if( GetKeyState( VK_LBUTTON ) & 0x8000 )
+	if( GetKeyState( VK_ESCAPE ) & 0x8000 )
 	{
 		m_scnState = IScene::SCENE_END;
 		return ;
@@ -142,7 +142,7 @@ VOID LogoScene::Update()
 		{
 			m_datLogo.dBeginTime = dCurrentTime;
 
-			m_pLogo[ iNumLogo ].BreakCubeAll();
+			m_pLogo[ iNumLogo ].BreakNockdown( 2.0f );
 
 			if( iNumLogo < 6 )
 				iNumLogo++;

@@ -11,7 +11,6 @@ CWeapon::CWeapon( LPDIRECT3DDEVICE9	_pd3dDevice )
 : m_pD3dDevice(_pd3dDevice)
 , m_pMap(NULL)
 {
-	m_pMap = new Map( _pd3dDevice );
 	Clear();
 }
 
@@ -145,6 +144,8 @@ VOID CWeapon::PrivateProfile( LPWSTR lpwStr, BOOL bRW )
 
 HRESULT CWeapon::Create()
 {
+	m_pMap = new Map( m_pD3dDevice );
+
 	switch ( m_WeaponType.nType )
 	{
 	case SPANNER:

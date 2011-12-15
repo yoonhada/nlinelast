@@ -1064,7 +1064,7 @@ VOID CCharactor::BreakCubeAll()
 	m_bAliveCheck = FALSE;
 }
 
-VOID CCharactor::BreakNockdown()
+VOID CCharactor::BreakNockdown( const FLOAT fPow )
 {
 	INT nCount = 0;
 	if( m_bAliveCheck == TRUE )
@@ -1085,12 +1085,12 @@ VOID CCharactor::BreakNockdown()
 					if ( ( nCount & 0x0007 ) == 0x0007)
 					{
 						D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster );
-						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+						m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, D3DXVECTOR3( 0, 0, 0 ), fPow );
 					}
 				}
 				else
 				{
-					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
+					m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( 0, 0, 0 ), fPow );
 				}
 			}
 		}
