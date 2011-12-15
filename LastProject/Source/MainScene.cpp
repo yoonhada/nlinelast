@@ -281,6 +281,7 @@ VOID CMainScene::CheatKeys()
 
 VOID CMainScene::Update()
 {
+	CheatKeys();
 	CNetwork::GetInstance()->UpdateGame();
 
 	D3DXVECTOR3 vPos;
@@ -536,13 +537,12 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::EVENT_MAP_CAMERA_WALK_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_MAP_CAMERA_WALK_END \n" );
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 1.0f );
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 5.0f );
 		break;
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		// Do Something
 		TutorialAtack( );
-		//SetTimer( GHWND, CGameEvent::TUTORIAL_ATACK, 30000, NULL );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 30.0f );
 		break;
 	case CGameEvent::TUTORIAL_ATACK_END:
@@ -569,6 +569,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventDestoryCombo();
 		EventInitGameState( nEvent );		
 		CGameEvent::GetInstance()->SetTutorial( FALSE );
+		m_pGameEventTutorialManager->EndEvent();
 		//if ( CObjectManage::GetInstance()->IsHost() )
 		//{
 		//	CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 30.0f );
@@ -579,7 +580,8 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventCombo();
 		EventStateNetwork( nEvent );
 		if ( CObjectManage::GetInstance()->IsHost() ) 
-		{		
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 30.0f );
 			CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() ); 
 		}
 		break;
@@ -675,7 +677,7 @@ VOID CMainScene::TutorialAtack()
 {
 	CGameEvent::GetInstance()->SetTutorial( TRUE );
 	// 공격 콤보, 아이템설명
-	m_pGameEventTutorialManager->ChangeEvent( GameEventTutorial::TUTORIAL_SIGNALLIGHT );
+	m_pGameEventTutorialManager->ChangeEvent( GameEventTutorial::TUTORIAL_COMBO );
 }
 
 VOID CMainScene::TutorialAtackEnd()
@@ -686,7 +688,7 @@ VOID CMainScene::TutorialAtackEnd()
 VOID CMainScene::TutorialCombo()
 {
 	// 신호등 설명창	
-	m_pGameEventTutorialManager->ChangeEvent( GameEventTutorial::TUTORIAL_COMBO );
+	m_pGameEventTutorialManager->ChangeEvent( GameEventTutorial::TUTORIAL_SIGNALLIGHT );
 }
 
 VOID CMainScene::EventCombo()
@@ -712,7 +714,7 @@ VOID CMainScene::EventCombo()
 		for ( int i = 0; i < 4; ++i )
 		{
 			nSelect = static_cast<int>( FastRand2() * nClient );
-			m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[nSelect] + 1 );
+			m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[nSelect] );
 		}		
 	}
 	else
