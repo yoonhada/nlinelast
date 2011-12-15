@@ -93,5 +93,4 @@ namespace MTP_FUN
 //#define GUIBTN_LOBBY_SELECT_2	1044
 //#define GUIBTN_LOBBY_SELECT_3	1045
 //#define GUIBTN_LOBBY_SELECT_4	1046
-
 #endif

@@ -685,7 +685,6 @@ VOID CNetwork::CS_EVENT_STATE( WORD a_wEventID )
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );
-	CDebugConsole::GetInstance()->Message("CS_EVENT_STATE\n\n");
 }
 
 

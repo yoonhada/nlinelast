@@ -66,7 +66,8 @@ VOID CGameEvent::Clear()
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;
 
-	m_vNonePosition = D3DXVECTOR3( 0.0f, 0.0f, -250.0f );
+	m_vNonePosition = D3DXVECTOR3( -100.0f, 0.0f, -250.0f );
+
 	m_vCharactorPosition[0][0] = D3DXVECTOR3( 200.0f, 0.0f,-505.0f );
 	m_vCharactorPosition[0][1] = D3DXVECTOR3( 225.0f, 0.0f,-505.0f );
 	m_vCharactorPosition[0][2] = D3DXVECTOR3( 250.0f, 0.0f,-505.0f );

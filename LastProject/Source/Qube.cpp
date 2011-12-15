@@ -4,7 +4,7 @@
 #include "Charactor.h"
 
 CQube::CQube()
-: m_fItemLift( 0.05f )
+: m_fItemLift( 0.01f )
 , m_vMomentum( 0.0f, 0.0f, 0.0f )
 , m_vAccelerate( 0.0f, 0.0f, 0.0f )
 , m_bVisiable( TRUE )
@@ -75,6 +75,9 @@ VOID CQube::Update( CBoundBox * pBB )
 		m_vMomentum *= CPhysics::GetInstance()->m_fElastic;
 		m_vRotateTemp *= CPhysics::GetInstance()->m_fElastic;
 		vDir = m_vPos + m_vMomentum;
+
+		if (m_vAccelerate.y < 0.5)
+			vDir.y = m_fSize;
 	}
 
 	m_vPos = vDir;
@@ -88,55 +91,7 @@ VOID CQube::Update( CBoundBox * pBB )
 	Set_ControlTranslate( 2, m_vPos.z );
 
 	Calcul_MatWorld();
-	//m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_matWorld );
 }
-
-//VOID CQube::Translate()
-//{
-//	
-//}
-//
-//BOOL CQube::Translate( std::list<CCube*> &_listCube )
-//{
-//	float fLength;
-//	D3DXVECTOR3 vec, vN, vP;
-//	std::list <CCube*>::iterator Iter;
-//	for ( Iter = _listCube.begin(); Iter != _listCube.end(); Iter++ )
-//	{
-//		vec = ( *Iter )->GetPosition() - m_vPos;
-//		fLength = D3DXVec3Length( &vec );
-//		if ( fLength < m_fSize + ( *Iter )->GetSize() )
-//		{
-//			CPhysics::GetInstance()->Reflect( m_vMomentum, vec, m_vMomentum );
-//		}		
-//	}
-//	return TRUE;
-//};
-//
-//BOOL CQube::Translate( INT nType )
-//{
-//	std::vector<IObject*> * vectorCube = CTree::GetInstance()->GetVector( m_vPos );
-//
-//	if ( vectorCube == NULL )
-//		return FALSE;
-//
-//	float fLength;
-//	D3DXVECTOR3 vec, vN, vP;
-//	std::vector <IObject*>::iterator Iter;
-//	CCube * pCube;
-//	for ( Iter = vectorCube->begin(); Iter != vectorCube->end(); Iter++ )
-//	{
-//		pCube = dynamic_cast<CCube*>( *Iter );
-//		vec = pCube->GetPosition() - m_vPos;
-//		fLength = D3DXVec3Length( &vec );
-//		if ( fLength < m_fSize + pCube->GetSize() )
-//		{
-//			CPhysics::GetInstance()->Reflect( m_vMomentum, vec, m_vMomentum );
-//		}		
-//	}
-//
-//	return TRUE;
-//};
 
 VOID CQube::RandMome( D3DXVECTOR3 vMomentum, FLOAT fRate )
 {
@@ -163,20 +118,22 @@ VOID CQube::RanderPos( FLOAT fRate )
 
 VOID CQube::RanderRotate( FLOAT fRate )
 {
-	INT n = static_cast<INT>( FastRand2() * 3.0f );
+	m_vRotateTemp.x = m_vAccelerate.z;
+	m_vRotateTemp.z = m_vAccelerate.x;
+	//INT n = static_cast<INT>( FastRand2() * 3.0f );
 
-	switch( n )
-	{
-	case 0:
-		m_vRotateTemp = D3DXVECTOR3( FastRand2() * fRate, FastRand2() * fRate, 0.0f );
-		break;
-	case 1:
-		m_vRotateTemp = D3DXVECTOR3( FastRand2() * fRate, 0.0f, FastRand2() * fRate );
-		break;
-	case 2:
-		m_vRotateTemp = D3DXVECTOR3( 0.0f, FastRand2() * fRate, FastRand2() * fRate );
-		break;
-	}
+	//switch( n )
+	//{
+	//case 0:
+	//	m_vRotateTemp = D3DXVECTOR3( FastRand2() * fRate, FastRand2() * fRate, 0.0f );
+	//	break;
+	//case 1:
+	//	m_vRotateTemp = D3DXVECTOR3( FastRand2() * fRate, 0.0f, FastRand2() * fRate );
+	//	break;
+	//case 2:
+	//	m_vRotateTemp = D3DXVECTOR3( 0.0f, FastRand2() * fRate, FastRand2() * fRate );
+	//	break;
+	//}
 }
 
 VOID CQube::RanderSize( FLOAT fRate )
