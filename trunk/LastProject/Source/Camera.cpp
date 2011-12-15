@@ -42,7 +42,7 @@ VOID CCamera::Clear()
 	m_fZoom		= 80.0f;
 	m_fZoomReduce = 0.0f;
 	m_fYaw		= 0.0f;
-	m_fPitch	= -5.0f;
+	m_fPitch	= -3.5f;
 	//m_fLock		= (D3DX_PI/2) - 0.05f;
 
 	m_fEffectValue = 0.0f;
@@ -56,8 +56,8 @@ VOID CCamera::SetCamera()
 	{
 		if ( m_pCameraWork[0]->Update() == FALSE)
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_MAP_CAMERA_WALK_END, 0.01f );
-
+			if( CObjectManage::GetInstance()->IsHost() )
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::MAP_WALK_END, 0.01f );
 			m_nEffect = NONE;
 		}
 

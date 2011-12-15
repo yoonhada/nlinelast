@@ -92,7 +92,7 @@ private:
 	VOID EventInitMonsterState( INT nEvent );
 	
 	VOID EventCombo();
-	VOID EventDestoryCombo();
+	VOID EventComboEnd();
 	VOID EventFirstAidKit();
 	VOID MonsterBreakNockdown();
 	VOID DoorBreakNockdown();

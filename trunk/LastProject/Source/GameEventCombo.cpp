@@ -109,13 +109,14 @@ VOID CGameEventCombo::Clear()
 	m_nKindEvent[2] = 6;
 	m_nKindEvent[3] = 9;
 
-	m_bComplate = NONE;
+	m_nState = NONE;
 }
 
 VOID CGameEventCombo::Initialize()
 {
+	m_fCount = 0.0f;
 	m_nKindIndex = 0;
-	m_bComplate = NONE;
+	m_nState = NONE;
 	m_pGUIBackground->SelectAnimation( 0 );
 	m_pGUIForground->SelectAnimation( 0 );
 	m_pGUIButton[0]->SelectAnimation( 0 );
@@ -126,26 +127,21 @@ VOID CGameEventCombo::Initialize()
 
 VOID CGameEventCombo::Update()
 {
-	if ( m_bComplate == NONE )
-	{
-		Initialize();
-	}
-	else if ( m_bComplate == READY )
-	{
-		m_fCount = 0.0f;
-		
+	if ( m_nState == READY )
+	{	
 		m_fCount += CFrequency::GetInstance()->getFrametime();
-		if ( m_fCount < 3.0f )
+		if ( m_fCount > 3.0f )
 		{
-			m_bComplate = COUNTING;
+			m_nState = COUNTING;
 		}
 	}
-	else if ( m_bComplate == COUNTING )
+	else if ( m_nState == COUNTING )
 	{
-		m_bComplate = RUN;
+		m_nState = RUN;
 	}
-	else if ( m_bComplate == RUN )
+	else if ( m_nState == RUN )
 	{
+
 		INT nPlayer = CGameEvent::GetInstance()->GetPlayerIndex();
 
 		if ( nPlayer >= 0 )
@@ -157,7 +153,7 @@ VOID CGameEventCombo::Update()
 
 VOID CGameEventCombo::Render()
 {
-	if ( m_bComplate != NONE )
+	if ( m_nState != NONE )
 	{
 		m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 		m_pGUIBackground->Render();
@@ -212,13 +208,13 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 		{
 			if ( m_nKindIndex == 0x000F )
 			{
-				m_bComplate = SUCCESS;
+				m_nState = SUCCESS;
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.01f );
 			}
 		}
 		else if  ( bRet == FALSE )
 		{
-			m_bComplate = FAIL;
+			m_nState = FAIL;
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
 		}
 	}

@@ -24,7 +24,7 @@ private:
 	GUIBackground*			m_pGUIButton[4];
 
 	FLOAT					m_fCount;
-	BOOL					m_bComplate;
+	INT						m_nState;
 	INT						m_nKindIndex;
 	INT						m_nKindEvent[4];
 
@@ -45,7 +45,7 @@ public:
 	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
 	BOOL CheckKindEvent( INT nKindEvent );
 	
-	VOID Start()							{ m_bComplate = READY; }
+	VOID Start()							{ m_nState = READY; }
 	VOID Success();
 	VOID Fail();
 };

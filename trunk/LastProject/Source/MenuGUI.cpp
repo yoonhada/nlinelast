@@ -38,7 +38,7 @@ VOID MenuGUI::CreateBackground()
 	imgParam.fHeight	= fHeight;
 
 	//m_pGUIBase->AddFileName( 0, imgParam, L"Img\\MenuScene\\Background.jpg" );
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\MenuScene\\Background.jpg" );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\MenuScene\\Background.png" );
 	
 	m_pGUIBackground->Create( imgParam );
 }
