@@ -56,7 +56,6 @@ private:
 	DATA					m_datScene;
 
 	//CEfSurface	* m_pEff;
-
 public:
 };
 
