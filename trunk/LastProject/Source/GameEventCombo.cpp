@@ -126,10 +126,13 @@ VOID CGameEventCombo::Initialize()
 
 VOID CGameEventCombo::Update()
 {
-	if ( m_bComplate == READY )
+	if ( m_bComplate == NONE )
+	{
+		Initialize();
+	}
+	else if ( m_bComplate == READY )
 	{
 		m_fCount = 0.0f;
-		Initialize();
 		
 		m_fCount += CFrequency::GetInstance()->getFrametime();
 		if ( m_fCount < 3.0f )
@@ -182,7 +185,7 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 		// ºó°÷ Ã£±â.
 		if ( !( ( 0x0001 << Loop ) & m_nKindIndex ) )
 		{
-			if ( ( nKindEvent + 1 ) == m_nKindEvent[Loop] )
+			if ( ( nKindEvent ) == m_nKindEvent[Loop] )
 			{
 				m_pGUIButton[Loop]->NextAnimation();
 				m_nKindIndex += ( 0x0001 << Loop );

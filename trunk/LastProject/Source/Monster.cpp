@@ -22,6 +22,7 @@ CMonster::~CMonster()
 
 VOID CMonster::Clear()
 {
+	m_pFrame = NULL;
 	m_iBreakPart = 0;
 	m_iMonsterNumber = 0;
 	m_iCharEditorMax = 7;
@@ -57,6 +58,7 @@ VOID CMonster::Clear()
 
 	m_pPath = NULL;
 	m_pBox = NULL;
+	m_pStateMachine = NULL;
 }
 
 HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
