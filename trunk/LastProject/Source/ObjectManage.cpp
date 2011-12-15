@@ -81,7 +81,7 @@ HRESULT CObjectManage::LoadLoadingObject()
 	m_pMonster[1] = m_pBear;
 	m_pMonster[2] = m_pClown;
 
-	m_pFirstAidKit = new CTimeLifeItem[4];
+	m_pFirstAidKit = new CTimeLifeItem[5];
 	m_pWall = new CTimeLifeItem[3];
 
 	return S_OK;
