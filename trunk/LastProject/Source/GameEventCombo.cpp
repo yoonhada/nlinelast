@@ -46,21 +46,25 @@ HRESULT CGameEventCombo::Create( )
 	fHeifor = 0.5f * 100.0f;
 	for (int Loop = 0; Loop < 4; ++Loop)
 	{
+		m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 1000 );
 		m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 		m_pGUIBase->AddFileName( 0, imgParam[Loop], L"Img\\Event\\EventF-1.png", 100000 );
 		m_pGUIBase->AddFileName( 1, imgParam[Loop], L"Img\\Event\\EventF-2.png", 1000 );
 		m_pGUIBase->AddFileName( 2, imgParam[Loop], L"Img\\Event\\EventF-3.png", 1000 );			
 		
+		m_pGUIBase->AddFileName( 3, imgParam[Loop], L"Img\\Event\\Event.png", 1000 );
 		m_pGUIBase->AddFileName( 3, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 		m_pGUIBase->AddFileName( 3, imgParam[Loop], L"Img\\Event\\EventM-1.png", 100000 );
 		m_pGUIBase->AddFileName( 4, imgParam[Loop], L"Img\\Event\\EventM-2.png", 1000 );			
 		m_pGUIBase->AddFileName( 5, imgParam[Loop], L"Img\\Event\\EventM-3.png", 1000 );
 
+		m_pGUIBase->AddFileName( 6, imgParam[Loop], L"Img\\Event\\Event.png", 1000 );
 		m_pGUIBase->AddFileName( 6, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 		m_pGUIBase->AddFileName( 6, imgParam[Loop], L"Img\\Event\\EventS-1.png", 100000 );
 		m_pGUIBase->AddFileName( 7, imgParam[Loop], L"Img\\Event\\EventS-2.png", 1000 );			
 		m_pGUIBase->AddFileName( 8, imgParam[Loop], L"Img\\Event\\EventS-3.png", 1000 );
 
+		m_pGUIBase->AddFileName( 9, imgParam[Loop], L"Img\\Event\\Event.png", 1000 );
 		m_pGUIBase->AddFileName( 9, imgParam[Loop], L"Img\\Event\\Event.png", 3000 );
 		m_pGUIBase->AddFileName( 9, imgParam[Loop], L"Img\\Event\\EventD-1.png", 100000 );
 		m_pGUIBase->AddFileName(10, imgParam[Loop], L"Img\\Event\\EventD-2.png", 1000 );			
@@ -73,12 +77,14 @@ HRESULT CGameEventCombo::Create( )
 			imgParam[Loop] );
 	}	
 
+	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\Event.png", 1000 );
 	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround3.png", 1000 );
 	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround2.png", 1000 );
 	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround1.png", 1000 );
 	m_pGUIBase->AddFileName( 0, imgParam[4], L"Img\\Event\\BackGround.png", 100000 );
 	m_pGUIBackground->Create( fWidth - fWidBac, fHeight - fHeiBac, fWidBac * 2.0f, fHeiBac * 2.0f, imgParam[4] );
 
+	m_pGUIBase->AddFileName( 0, imgParam[5], L"Img\\Event\\Event.png", 1000 );
 	m_pGUIBase->AddFileName( 0, imgParam[5], L"Img\\Event\\Empty.png", 1000 );
 	m_pGUIBase->AddFileName( 1, imgParam[5], L"Img\\Event\\ForgroundS-1.png", 500 );
 	m_pGUIBase->AddFileName( 1, imgParam[5], L"Img\\Event\\ForgroundS-2.png", 500 );
@@ -224,10 +230,12 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 
 VOID CGameEventCombo::Success()
 {
+	m_nState = SUCCESS;
 	m_pGUIForground->SelectAnimation( 1 );
 }
 
 VOID CGameEventCombo::Fail()
 {
+	m_nState = FAIL;
 	m_pGUIForground->SelectAnimation( 2 );
 }

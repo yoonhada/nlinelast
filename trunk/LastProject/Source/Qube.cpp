@@ -118,8 +118,8 @@ VOID CQube::RanderPos( FLOAT fRate )
 
 VOID CQube::RanderRotate( FLOAT fRate )
 {
-	m_vRotateTemp.x = m_vAccelerate.z;
-	m_vRotateTemp.z = m_vAccelerate.x;
+	m_vRotateTemp.x = -m_vAccelerate.z * 0.159154f;
+	m_vRotateTemp.z = m_vAccelerate.x * 0.159154f;
 	//INT n = static_cast<INT>( FastRand2() * 3.0f );
 
 	//switch( n )

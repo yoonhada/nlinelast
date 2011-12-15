@@ -90,6 +90,16 @@ VOID CGameEvent::Clear()
 
 }
 
+VOID CGameEvent::ClearEvent( )
+{
+	for ( Iter = m_listEvent.begin(); Iter != m_listEvent.end( ); Iter++ )
+	{
+		SAFE_DELETE( (*Iter) );
+	}
+
+	m_listEvent.erase( m_listEvent.begin(), m_listEvent.end() );
+}
+
 VOID CGameEvent::AddEvent( INT nKind, FLOAT fTime )
 {
 	BOOL bChk = FALSE;

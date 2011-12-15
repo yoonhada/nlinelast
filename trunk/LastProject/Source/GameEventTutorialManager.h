@@ -32,6 +32,7 @@ private:
 	LPD3DXSPRITE		m_pSprite;
 
 	GameEventTutorial*	m_pGameEventTutorial;
+	GameEventTutorial*	m_pGameEventTutorialItem[3];
 
 public:
 
