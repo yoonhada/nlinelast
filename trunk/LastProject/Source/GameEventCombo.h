@@ -13,7 +13,7 @@ class GUIBackground;
 class CGameEventCombo : public IObject
 {
 private:
-	enum { NONE, READY, COUNTING, RUN, FAIL, SUCCESS };
+	enum { NONE, READY, RUN, COUNTING, FAIL, SUCCESS };
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
 	HWND					m_hWnd;
@@ -21,6 +21,7 @@ private:
 	GUIBase*				m_pGUIBase;
 	GUIBackground*			m_pGUIBackground;
 	GUIBackground*			m_pGUIForground;
+	GUIBackground*			m_pGUICounting;
 	GUIBackground*			m_pGUIButton[4];
 
 	FLOAT					m_fCount;
