@@ -136,7 +136,7 @@ VOID CGameEventCombo::Initialize()
 }
 
 VOID CGameEventCombo::Update()
-{
+{	
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
 		if ( m_nState == READY )
