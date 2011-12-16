@@ -875,7 +875,7 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			vecBoundBox = CTree::GetInstance()->GetMonsAtkVector();	
 
 
-		if ( !(vecBoundBox != NULL && vecBoundBox->size()) )
+		if ( vecBoundBox == NULL || vecBoundBox->size() == 0 )
 		{
 			return bRet;
 		}
@@ -885,11 +885,12 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			if( m_vectorCube[Loop] == NULL )
 				continue;
 
-			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
-			{
-				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
-			}
-			else if( m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) != EnumCubeType::HIDEMEAT )
+			//if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			//{
+			//	m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
+			//}
+			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::MEAT &&
+				m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) == TRUE )
 			{
 				if ( vecBoundBox != NULL && vecBoundBox->size() )
 				{
@@ -1076,7 +1077,7 @@ VOID CCharactor::BreakNockdown( const FLOAT fPow )
 				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 			}
 
-			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) != EnumCubeType::BONE )
+			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::MEAT )
 			{
 				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
 
