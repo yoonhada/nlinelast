@@ -223,6 +223,8 @@ VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 	m_pd3dDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
 	m_pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
 
+	m_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+
 	//	Set World, Projection Matrix
 	SetMatrix( _pImage3D->vecScale, _pImage3D->vecRotate, _pImage3D->vecTrans );
 
