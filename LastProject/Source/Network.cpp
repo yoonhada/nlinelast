@@ -290,7 +290,7 @@ VOID CNetwork::SC_EVENT_STATE( CPacket& a_pk )
 }
 
 
-VOID CNetwork::SC_EVENT_COMBO( CPacket& a_pk )
+VOID CNetwork::SC_EVENT_COMBO_INFO( CPacket& a_pk )
 {
 	INT iEventKind[4];
 	a_pk.Read( &iEventKind[0] );
@@ -305,6 +305,12 @@ VOID CNetwork::SC_EVENT_COMBO( CPacket& a_pk )
 	nTable[3] = iEventKind[3];
 
 	CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, 0.01f );
+}
+
+
+VOID CNetwork::SC_EVENT_COMBO_ATTACK( CPacket& a_pk )
+{
+
 }
 
 
@@ -692,7 +698,7 @@ VOID CNetwork::CS_EVENT_COMBO( INT * a_iEventKind )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
-	WORD wMsgID = MSG_EVENT_COMBO;
+	WORD wMsgID = MSG_EVENT_COMBO_INFO;
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
@@ -1061,10 +1067,14 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		break;
 
 	// ÄÞº¸ Á¤º¸
-	case MSG_EVENT_COMBO:
-		SC_EVENT_COMBO( a_pk );
+	case MSG_EVENT_COMBO_INFO:
+		SC_EVENT_COMBO_INFO( a_pk );
 		break;
-
+/*
+	case MSG_EVENT_COMBO_ATTACK:
+		SC_EVENT_COMBO_ATTACK( a_pk );
+		break;
+*/
 	// ÄÞº¸ °á°ú
 	case MSG_EVENT_COMBO_RESULT:
 		SC_EVENT_COMBO_RESULT( a_pk );
