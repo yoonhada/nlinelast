@@ -329,6 +329,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\TestCube.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\TestCube.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\TimeLifeItem.cpp"
 					>
 				</File>
@@ -1009,6 +1017,14 @@
 			</File>
 			<File
 				RelativePath=".\Source\Melee2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\RocketPunch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\RocketPunch.h"
 				>
 			</File>
 			<File
