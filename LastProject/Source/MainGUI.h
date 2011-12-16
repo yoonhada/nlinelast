@@ -57,7 +57,6 @@ private:
 
 	Mouse*					m_pMouse;
 	GUIBase*				m_pGUIBase;
-	GUIBackground*			m_pGUICharacterState;
 	GUIListbox*				m_pChatWindow;
 	GUIEditManager*			m_pChatEdit;
 

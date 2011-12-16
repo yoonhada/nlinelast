@@ -2,30 +2,29 @@
 #ifndef _GAMEEVENTSCOREBOARD_H_
 #define _GAMEEVENTSCOREBOARD_H_
 
-#include <vector>
+#include "GUIBase.h"
 
-class GUIBase;
-class GUIBackground;
+#define MAX_POSITIONAL		10
+#define MAX_IDENTIFIER		4
 
-#define MAXPOSITIONALNUMBER		10
-#define MAXIDENTIFIER			4
-
-class GameEventScoreBoard
+class GameEventScoreBoard : public GUIBase
 {
 private:
 	VOID		Initialize();
 	VOID		Release();
 
-	VOID		InitIdentifierImage();
-	VOID		InitNumberImage();
+	VOID		CreateSceneImage();
+	VOID		CreateBackgroundImage();
+	VOID		CreateIdentifierImage();
+	VOID		CreateNumberImage();
 
-	INT			GetNumberOfDecimal( INT _iNumber );
-	VOID		LinkScore( INT _iPositionalNumber, GUIBackground* _apScore, INT* _aiScore );
-	
+	INT			GetNumberOfDecimal( INT  _iNumber );
+
 public:
+	enum { GES_NORMAL = 100, GES_GRAY, GES_HIDDEN };
 	enum { GES_DADDY = 0, GES_MOM, GES_SON, GES_DAUGHTER };
 
-	GameEventScoreBoard()
+	GameEventScoreBoard( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite ) : GUIBase( _pd3dDevice, _pSprite )
 	{
 		this->Initialize();
 	}
@@ -33,64 +32,70 @@ public:
 	{
 		this->Release();
 	}
-	
+
 	typedef struct _DATA
 	{
 		DWORD			dID;
 
-		GUIBackground*	pIdentifier;
+		LPIMAGE3D		pimg3DIdentifier;
 
-		GUIBackground*	apScore[ MAXPOSITIONALNUMBER ];
-		INT				aiScore[ MAXPOSITIONALNUMBER ];
+		LPIMAGE3D		apimg3DScore[ MAX_POSITIONAL ];
+		INT				aiScore[ MAX_POSITIONAL ];
 
 		INT				iPositionalNumber;
 		INT				iCurrentPositionalNumber;
 
 		DWORD			dBeginTime;
 		DWORD			dCurrentTime;
-		DWORD			dFrameSpeed;
-
+		
 		D3DXVECTOR3		vecTranslate;
 
 		_DATA()
 		{
-			dBeginTime			= 0;
-			dFrameSpeed			= 800;
+			dBeginTime					= 0;
 
-			for( INT i=0 ; i<MAXPOSITIONALNUMBER ; i++ )
+			iCurrentPositionalNumber	= 0;
+
+			for( INT i=0 ; i<MAX_POSITIONAL ; i++ )
 				aiScore[ i ] = 0;
 		}
 	}DATA, *LPDATA;
 
 	typedef std::vector< LPDATA > DATAVECTOR;
 
-	VOID		Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite );
+	VOID		Create();
 	VOID		Update();
 	VOID		Render();
 
 	VOID		AddData( DWORD _dID, DWORD _dIdentifier );
 	VOID		SetScore( DWORD _dID, INT _iScore );
 	
-private:
-	LPDIRECT3DDEVICE9	m_pd3dDevice;
-	LPD3DXSPRITE		m_pSprite;
+	VOID		Skip();
 
+	VOID		SetState( DWORD _dState );
+
+private:
 	DATAVECTOR			m_vecData;
 
-	GUIBase*			m_pGUIBase;
+	IMAGE2D				m_img2DScene;	//	È¸»ö
 
-	GUIBackground*		m_pIdentifier[ MAXIDENTIFIER ];
+	IMAGE3D				m_img3DBackground;
 
-	GUIBackground*		m_pDynamicNumber;
-	GUIBackground*		m_pStaticNumber[ MAXPOSITIONALNUMBER ];
+	IMAGE3D				m_aimg3DIdentifier[ MAX_IDENTIFIER ];
 
-	DWORD				m_dFrameSpeed;
+	IMAGE3D				m_img3DDynamicNumber;
+	IMAGE3D				m_aimg3DStaticNumber[ MAX_POSITIONAL ];
 
-	FLOAT				m_fX,			m_fY;
-	FLOAT				m_fWidth,		m_fHeight;
+	DWORD				m_dScoreFrameSpeed;
+	DWORD				m_dPositionalFrameSpeed;
+
+	FLOAT				m_fBgdX,		m_fBgdY;
+	FLOAT				m_fBgdWidth,	m_fBgdHeight;
 
 	FLOAT				m_fIdtWidth,	m_fIdtHeight;
 	FLOAT				m_fNumWidth,	m_fNumHeight;
+
+	DWORD				m_dState;
 
 public:
 
