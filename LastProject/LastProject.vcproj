@@ -452,6 +452,14 @@
 					RelativePath=".\Source\GameEventCombo.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\GameEventScoreBoard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\GameEventScoreBoard.h"
+					>
+				</File>
 				<Filter
 					Name="Tutorial"
 					>

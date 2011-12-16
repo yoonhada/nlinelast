@@ -240,8 +240,8 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 
 	IMAGEPARAM imgParamItemNormal, imgParamItemDown;
 	
-	AddFileName( 0, imgParamItemNormal, L"Img\\Listbox_Item_Normal.png" );
-	AddFileName( 0, imgParamItemDown, L"Img\\Listbox_Item_Down.png" );
+	AddFileName( 0, imgParamItemNormal, L"Img\\Listbox1.png" );
+	AddFileName( 0, imgParamItemDown, L"Img\\Listbox1.png" );
 
 	pItem->pimg2DNormal = new IMAGE2D;
 	pItem->pimg2DDown	= new IMAGE2D;
@@ -278,7 +278,7 @@ VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
 	fTextHeight	= fItemGap;
 
 	LPIMAGE2D pimg2DText = new IMAGE2D;
-	AddFileName( 0, imgParamText, L"Img\\Listbox_Item_Normal.png" );
+	AddFileName( 0, imgParamText, L"Img\\Listbox1.png" );
 	CreateImage2D( *pimg2DText, fTextX, fTextY, fTextWidth, fTextHeight, imgParamText ); 
 	
 	GUIFont::GetInstance().Create( m_aFaceName, m_iFontWidth, m_iFontHeight, m_pd3dDevice );
@@ -404,7 +404,7 @@ VOID GUIListbox::Update()
 
 VOID GUIListbox::Render()
 {
-	//RenderImage3D( &m_Data.img3DBackground );
+	RenderImage3D( &m_Data.img3DBackground );
 	RenderImage2D( &m_Data.img2DFront );	
 
 	if( m_bActScrollbar )
