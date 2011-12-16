@@ -182,34 +182,34 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 {
 	INT bRet = -1;
 
-	for ( INT Loop = 0; Loop < 4; ++Loop )
+	if ( CObjectManage::GetInstance()->IsHost() )
 	{
-		// ºó°÷ Ã£±â.
-		if ( !( ( 0x0001 << Loop ) & m_nKindIndex ) )
+		for ( INT Loop = 0; Loop < 4; ++Loop )
 		{
-			if ( ( nKindEvent ) == m_nKindEvent[Loop] )
+			// ºó°÷ Ã£±â.
+			if ( !( ( 0x0001 << Loop ) & m_nKindIndex ) )
 			{
-				m_pGUIButton[Loop]->NextAnimation();
-				m_nKindIndex += ( 0x0001 << Loop );
-				bRet = TRUE;
+				if ( ( nKindEvent ) == m_nKindEvent[Loop] )
+				{
+					m_pGUIButton[Loop]->NextAnimation();
+					m_nKindIndex += ( 0x0001 << Loop );
+					bRet = TRUE;
+				}
+				else
+				{
+					m_pGUIButton[Loop]->NextAnimation();
+					m_pGUIButton[Loop]->NextAnimation();
+					bRet = FALSE;
+				}
+
+				break;
 			}
 			else
 			{
-				m_pGUIButton[Loop]->NextAnimation();
-				m_pGUIButton[Loop]->NextAnimation();
-				bRet = FALSE;
+				bRet = -1;
 			}
-
-			break;
 		}
-		else
-		{
-			bRet = -1;
-		}
-	}
 
-	if ( CObjectManage::GetInstance()->IsHost() )
-	{
 		if ( bRet == TRUE )
 		{
 			if ( m_nKindIndex == 0x000F )
@@ -223,6 +223,10 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 			m_nState = FAIL;
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
 		}
+	}
+	else
+	{
+
 	}
 
 	return bRet;

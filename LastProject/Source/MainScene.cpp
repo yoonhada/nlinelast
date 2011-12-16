@@ -324,7 +324,7 @@ VOID CMainScene::Update()
 	m_pGameEventTutorialManager->Update();
 
 	m_pEventGUICombo->Update();
-
+	
 	EventSwitch( m_pGameEvent->Update() );
 
 	CTree::GetInstance()->SetCharAtkClear();
@@ -520,6 +520,8 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 VOID CMainScene::EventSwitch( INT nEvent )
 {
 	FLOAT fComboTime = 10.0f;
+	FLOAT fComboTerm = 5.0f;
+
 	switch ( nEvent )
 	{
 	case CGameEvent::SCENE_TUTORIAL:
@@ -545,7 +547,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, fComboTime );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + 5.0F );
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + fComboTerm );
 		}
 		break;
 	case CGameEvent::TUTORIAL_ATACK_END:
@@ -567,7 +569,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_FAIL, fComboTime );
-				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + 5.0f );
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + fComboTerm );
 			}
 		}		
 		break;
@@ -628,7 +630,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + 5.0F );
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 		}
 		break;
 	case CGameEvent::EVENT_COMBO:
@@ -638,7 +640,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, fComboTime );
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + 5.0f );
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 
 			CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() ); 
 		}
