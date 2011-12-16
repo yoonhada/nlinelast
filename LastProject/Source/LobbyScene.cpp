@@ -69,7 +69,7 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create GUI
 	m_pLobbyGUI		= new LobbyGUI( _pd3dDevice, _pSprite, _hWnd );
 	m_pOptionScene	= new OptionScene;
-	
+
 	m_pLobbyGUI->Create();
 	m_pOptionScene->Create( _pd3dDevice, _pSprite, _hWnd );
 
@@ -80,7 +80,7 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM_1.csav",	D3DXVECTOR3(  10.0f, 5.0f, 120.0f ) );
 	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_1.csav", D3DXVECTOR3( -10.0f, 5.0f, 120.0f ) );
 	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_1.csav",	D3DXVECTOR3( -31.0f, 5.0f, 120.0f ) );
-	
+
 	//	Create Light
 	m_pLight = new CLight;
 	m_pLight->Create( _pd3dDevice );
@@ -88,7 +88,8 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create Matrices
 	m_pMatrices = CMatrices::GetInstance();	
 
-	CSound::GetInstance()->PlayBGM( 0 );
+//	CSound::GetInstance()->PlayBGM( CSound::BGM_LOBBY );
+	CSound::GetInstance()->StopBGM( 0 );
 	
 	return S_OK;
 }
@@ -131,7 +132,7 @@ VOID LobbyScene::Update()
 	{
 	case LOBBY_START:
 		CNetwork::GetInstance()->CS_GAME_START();
-		CSound::GetInstance()->PlayEffect( 1 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_CLICKED );
 		break;
 	case LOBBY_READY:
 		for( INT i=0 ; i<4 ; i++ )
@@ -153,14 +154,14 @@ VOID LobbyScene::Update()
 			m_nCharSelect = -1;
 		}
 
-		CSound::GetInstance()->PlayEffect( 1 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_CLICKED );
 		break;
 
 	case LOBBY_BACK:
 		m_scnNext	= IScene::SCENE_MENU;
 		m_scnState	= IScene::SCENE_END;
 
-		CSound::GetInstance()->PlayEffect( 1 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_CLICKED );
 		CNetwork::GetInstance()->Close();
 		CNetwork::DestoryInstance();
 		break;
@@ -175,7 +176,7 @@ VOID LobbyScene::Update()
 			EnableRotate( dID - LOBBY_SELECT_1 );
 		}
 
-		CSound::GetInstance()->PlayEffect( 1 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_CLICKED );
 		break;
 	}
 /*

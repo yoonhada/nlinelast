@@ -146,7 +146,8 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 
-	CSound::GetInstance()->PlayBGM( 0 );
+//	CSound::GetInstance()->PlayBGM( 0 );
+	CSound::GetInstance()->StopBGM( 0 );
 
 	return S_OK;
 }

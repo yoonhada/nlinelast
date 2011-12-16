@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "Wait.h"
-#include "WaitInterPolation.h"
+#include "Seek.h"
 
 #include "Monster.h"
 
@@ -16,25 +16,20 @@ Wait* Wait::GetInstance()
 
 VOID Wait::Enter( CMonster* a_pMonster )
 {
-
+	a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 }
 
 
 VOID Wait::Execute( CMonster* a_pMonster )
 {
-/*
 	a_pMonster->Set_UpdateTime();
 
-	if( a_pMonster->Get_Time() >= 0.001f )
+	if( a_pMonster->Get_Time() >= 1.0f )
 	{
 		a_pMonster->Set_ClearTime();
-*/
-		// 대기 애니메이션으로 바꾼다.
-		a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 
-		// 경직상태가 끝나면 애니메이션 보간을 위해 보간 대기 상태로
-		a_pMonster->GetFSM()->ChangeState( WaitInterPolation::GetInstance() );
-//	}
+		a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+	}
 }
 
 

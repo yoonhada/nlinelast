@@ -3,6 +3,7 @@
 #include "LockOn.h"
 #include "Melee.h"
 #include "Melee2.h"
+#include "RocketPunch.h"
 
 #include "Charactor.h"
 #include "Monster.h"

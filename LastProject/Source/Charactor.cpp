@@ -486,7 +486,7 @@ BOOL CCharactor::CollisionAtk( )
 			Iter = vecBoundBox->begin();
 			vPos = ( *Iter )->GetPosition();
 			while ( Iter != vecBoundBox->end() )
-			{								
+			{
 				if( CPhysics::GetInstance()->Collision( &m_pBoundBox->GetPosition(), fRadius, &vPos, ( *Iter )->GetRadiusLong() ) )
 				{
 					return TRUE; 
@@ -943,6 +943,19 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			bRet = TRUE;
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
 			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
+
+			if( m_bMonster )
+			{
+				
+			}
+			else
+			{	
+				CObjectManage * pOM = CObjectManage::GetInstance();
+				INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
+				INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
+
+				CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_DAMAGED1 + iCharNumber + iRand );
+			}
 		}
 
 		m_fKnockBack = (FLOAT)nCount;

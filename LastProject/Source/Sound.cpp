@@ -39,14 +39,19 @@ VOID CSound::Initialize()
 
 VOID CSound::Release()
 {
-	m_Result = FMOD_Sound_Release( m_pBGM );
-	ErrorCheck( m_Result );
+	// BGM
+	for( INT i=0; i<BGM_END; ++i )
+	{
+		m_Result = FMOD_Sound_Release( m_pBGM[i] );
+		ErrorCheck( m_Result );
+	}
 
-	m_Result = FMOD_Sound_Release( m_pEffectSound[0] );
-	ErrorCheck( m_Result );
-
-	m_Result = FMOD_Sound_Release( m_pEffectSound[1] );
-	ErrorCheck( m_Result );
+	// Effect
+	for( INT i=0; i<EFFECT_END; ++i )
+	{
+		m_Result = FMOD_Sound_Release( m_pEffectSound[i] );
+		ErrorCheck( m_Result );
+	}
 
 	m_Result = FMOD_System_Close( m_pSystem );
 	ErrorCheck( m_Result );
@@ -65,22 +70,81 @@ VOID CSound::Update()
 
 VOID CSound::LoadSoundFiles()
 {
+	CHAR* BGMFile[BGM_END] = {
+		"Sound/BGM/cb_cardbattle_bgm.mp3",
+		"Sound/BGM/cb_cardbattle_bgm.mp3",
+		"Sound/BGM/cb_cardbattle_bgm.mp3",
+		"Sound/BGM/cb_cardbattle_bgm.mp3",
+	};
+
+	CHAR* EffectFile[EFFECT_END] = {
+		"Sound/Effect/drip.wav",
+		"Sound/Effect/drip.wav",
+
+		"Sound/Effect/Dad/Dad_Attack1.mp3",
+		"Sound/Effect/Mom/Mom_Attack1.mp3",
+		"Sound/Effect/Boy/Boy_Attack1.mp3",
+		"Sound/Effect/Girl/Girl_Attack1.mp3",
+
+		"Sound/Effect/Dad/Dad_Attack2.mp3",
+		"Sound/Effect/Mom/Mom_Attack2.mp3",
+		"Sound/Effect/Boy/Boy_Attack2.mp3",
+		"Sound/Effect/Girl/Girl_Attack2.mp3",
+
+		"Sound/Effect/Dad/Dad_Damaged1.mp3",
+		"Sound/Effect/Mom/Mom_Damaged1.mp3",
+		"Sound/Effect/Boy/Boy_Damaged1.mp3",
+		"Sound/Effect/Girl/Girl_Damaged1.mp3",
+
+		"Sound/Effect/Dad/Dad_Damaged2.mp3",
+		"Sound/Effect/Mom/Mom_Damaged2.mp3",
+		"Sound/Effect/Boy/Boy_Damaged2.mp3",
+		"Sound/Effect/Girl/Girl_Damaged2.mp3",
+
+		"Sound/Effect/Panda_Attack.wav",
+		"Sound/Effect/Clown_Attack.wav",
+
+		"Sound/Effect/Panda_Damaged.wav",
+		"Sound/Effect/Clown_Damaged.wav",
+
+		"Sound/Effect/Combo_Success.wav",
+		"Sound/Effect/Combo_Fail.wav",
+
+		"Sound/Effect/Event_Baby.wav",
+		"Sound/Effect/Event_Clown.wav",
+	};
+
+	for( INT i=0; i<BGM_END; ++i )
+	{
+		LoadBGMFiles( BGMFile[i], i );
+	}
+
+	for( INT i=0; i<EFFECT_END; ++i )
+	{
+		LoadEffectFiles( EffectFile[i], i );
+	}
+}
+
+
+VOID CSound::LoadBGMFiles( const CHAR* a_szFileName, INT a_i )
+{
 	// BGM
-	m_Result = FMOD_System_CreateStream( m_pSystem, "Sound/BGM/cb_cardbattle_bgm.mp3", FMOD_SOFTWARE | FMOD_CREATESTREAM | FMOD_LOOP_NORMAL, NULL, &m_pBGM );
+	m_Result = FMOD_System_CreateStream( m_pSystem, a_szFileName, FMOD_SOFTWARE | FMOD_CREATESTREAM | FMOD_LOOP_NORMAL, NULL, &m_pBGM[a_i] );
 	ErrorCheck( m_Result );
+}
 
+
+VOID CSound::LoadEffectFiles( const CHAR* a_szFileName, INT a_i )
+{
 	// EFFECT
-	m_Result = FMOD_System_CreateSound( m_pSystem, "Sound/Effect/Dad_Attack.wav", FMOD_HARDWARE | FMOD_CREATESAMPLE | FMOD_LOOP_OFF, NULL, &m_pEffectSound[0] );
-	ErrorCheck( m_Result );
-
-	m_Result = FMOD_System_CreateSound( m_pSystem, "Sound/Effect/drip.wav", FMOD_HARDWARE | FMOD_CREATESAMPLE | FMOD_LOOP_OFF, NULL, &m_pEffectSound[1] );
+	m_Result = FMOD_System_CreateSound( m_pSystem, a_szFileName, FMOD_HARDWARE | FMOD_CREATESAMPLE | FMOD_LOOP_OFF, NULL, &m_pEffectSound[a_i] );
 	ErrorCheck( m_Result );
 }
 
 
 VOID CSound::PlayBGM( INT a_iBGM )
 {
-	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pBGM, FALSE, &m_pBGMChannel );
+	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pBGM[a_iBGM], FALSE, &m_pBGMChannel );
 	ErrorCheck( m_Result );
 }
 

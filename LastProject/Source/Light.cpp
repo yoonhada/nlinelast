@@ -68,6 +68,7 @@ VOID CLight::EnableLight( D3DXVECTOR3 _vecDir )
 	ZeroMemory( &light, sizeof( D3DLIGHT9 ) );
 
 	light.Type = D3DLIGHT_DIRECTIONAL;
+/*
 	light.Diffuse.r = 0.5f;
 	light.Diffuse.g = 0.5f;
 	light.Diffuse.b = 0.5f;
@@ -82,6 +83,21 @@ VOID CLight::EnableLight( D3DXVECTOR3 _vecDir )
 	light.Specular.g = 0.5f;
 	light.Specular.b = 0.5f;
 	light.Specular.a = 0.5f;
+*/
+	light.Diffuse.r = 1.0f;
+	light.Diffuse.g = 1.0f;
+	light.Diffuse.b = 1.0f;
+	light.Diffuse.a = 1.0f;
+
+	light.Ambient.r = 1.0f;
+	light.Ambient.g = 1.0f;
+	light.Ambient.b = 1.0f;
+	light.Ambient.a = 1.0f;
+
+	light.Specular.r = 1.0f;
+	light.Specular.g = 1.0f;
+	light.Specular.b = 1.0f;
+	light.Specular.a = 1.0f;	
 
 	light.Position.x = 0.0f;
 	light.Position.y = 100.0f;

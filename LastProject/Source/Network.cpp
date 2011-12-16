@@ -308,7 +308,7 @@ VOID CNetwork::SC_EVENT_COMBO_INFO( CPacket& a_pk )
 }
 
 
-VOID CNetwork::SC_EVENT_COMBO_ATTACK( CPacket& a_pk )
+VOID CNetwork::SC_EVENT_COMBO_SLOT_STATE( CPacket& a_pk )
 {
 
 }
@@ -542,7 +542,7 @@ VOID CNetwork::SC_Monster_Attack_Animation( CPacket& a_pk )
 	}
 	else if( wAnimationNumber == CMonster::ANIM_DASH )
 	{
-		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Dash::GetInstance() );
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( DashReady::GetInstance() );
 	}
 }
 
@@ -1070,11 +1070,11 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	case MSG_EVENT_COMBO_INFO:
 		SC_EVENT_COMBO_INFO( a_pk );
 		break;
-/*
-	case MSG_EVENT_COMBO_ATTACK:
-		SC_EVENT_COMBO_ATTACK( a_pk );
+
+	case MSG_EVENT_COMBO_SLOT_STATE:
+		SC_EVENT_COMBO_SLOT_STATE( a_pk );
 		break;
-*/
+
 	// ÄÞº¸ °á°ú
 	case MSG_EVENT_COMBO_RESULT:
 		SC_EVENT_COMBO_RESULT( a_pk );

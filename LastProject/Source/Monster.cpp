@@ -7,6 +7,9 @@
 #include "Seek.h"
 #include "Wait.h"
 
+// 임시
+#include "Qube.h"
+
 CMonster::CMonster()
 {
 	Clear();
@@ -93,6 +96,8 @@ HRESULT CMonster::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, WCHAR* a_pFileName )
 	// AI
 	m_pStateMachine = new StateMachine<CMonster>( this );
 	//m_pStateMachine->SetCurrentState( Seek::GetInstance() );
+
+	m_pTestCube = new TestCube( a_pD3dDevice );
 
 	return S_OK;
 }
@@ -1289,6 +1294,31 @@ VOID CMonster::CreateAttackBoundBox()
 				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
 			}
 			break;
+
+		case ANIM_ROCKETPUNCH:
+			{
+				// 몬스터 공격 바운드 박스.
+				CBoundBox * m_pBBx = new CBoundBox;
+				m_pBBx->SetPosition( Get_Pos() );
+				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
+
+				m_pBBx->SetSize( 0, -25.0f );
+				m_pBBx->SetSize( 1, -25.0f );
+				m_pBBx->SetSize( 2, -25.0f );
+
+				m_pBBx->SetSize( 3, 25.0f );
+				m_pBBx->SetSize( 4, 25.0f );
+				m_pBBx->SetSize( 5, 25.0f );
+
+				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
+
+				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
+
+				// 임시
+				
+
+			}
+			break;
 		}
 //	}
 }
@@ -1424,6 +1454,9 @@ VOID CMonster::Render()
 	{
 		m_pBox[Loop].Render();
 	}
+
+	// 임시
+	m_pTestCube->Render();
 }
 
 VOID CMonster::BreakCubeAll()
@@ -1536,13 +1569,12 @@ VOID CMonster::Set_ChaseNextData()
 	m_iChaseCurrentX = m_pChaseNextPath->x;
 	m_iChaseCurrentZ = m_pChaseNextPath->y;
 
-	// 도착했으면 Seek 상태로
+	// 도착했으면 Seek 상태로, 최대 이동 타일수는 10
 	m_pChaseNextPath = m_pChaseNextPath->next;
 	if( m_pChaseNextPath->remainedNode <= 0 || m_iChaseTotalPathCnt - m_pChaseNextPath->remainedNode == 10 )
 	{
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			//m_pStateMachine->ChangeState( Wait::GetInstance() );
 			m_pStateMachine->ChangeState( Seek::GetInstance() );
 		}
 		else
