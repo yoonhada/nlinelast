@@ -25,7 +25,8 @@ public:
 		MSG_SERVER_CLOSE,
 
 		MSG_EVENT_STATE,
-		MSG_EVENT_COMBO,
+		MSG_EVENT_COMBO_INFO,
+//		MSG_EVENT_COMBO_,
 		MSG_EVENT_COMBO_RESULT,
 
 		MSG_CHAT,
@@ -90,7 +91,8 @@ public:
 	VOID SC_SERVER_CLOSE( CPacket& a_pk );
 
 	VOID SC_EVENT_STATE( CPacket& a_pk );
-	VOID SC_EVENT_COMBO( CPacket& a_pk );
+	VOID SC_EVENT_COMBO_INFO( CPacket& a_pk );
+	VOID SC_EVENT_COMBO_ATTACK( CPacket& a_pk );
 	VOID SC_EVENT_COMBO_RESULT( CPacket& a_pk );
 
 	VOID SC_CHAT( CPacket& a_pk );
