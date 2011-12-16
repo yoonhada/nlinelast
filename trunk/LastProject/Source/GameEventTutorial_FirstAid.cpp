@@ -18,13 +18,13 @@ VOID GameEventTutorial_FirstAid::Create()
 {
 	m_dCurrentState	= TUTORIAL_RUNNING;
 
-	FLOAT fX		= 800.0f;
-	FLOAT fY		= 400.0f;
-	FLOAT fWidth	= 200.0f;
-	FLOAT fHeight	= 200.0f;
+	FLOAT fX		= 850.0f;
+	FLOAT fY		= 350.0f;
+	FLOAT fWidth	= 400.0f;
+	FLOAT fHeight	= 700.0f;
 
 	GUIBase::IMAGEPARAM imgParam;
-	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\MainScene\\TutorialFirstAid.png" );
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\Event\\Tutorial\\TutorialFirstAid.png" );
 
 	m_pGUIBackground->Create( fX, fY, fWidth, fHeight, imgParam );
 }

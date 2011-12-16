@@ -9,7 +9,6 @@ VOID MainGUI::Initialize()
 {
 	m_pMouse				= new Mouse;
 	m_pGUIBase				= new GUIBase( m_pD3dDevice, m_pSprite );
-	m_pGUICharacterState	= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pChatWindow			= new GUIListbox( m_pD3dDevice, m_pSprite );
 	m_pChatEdit				= new GUIEditManager( m_pD3dDevice, m_pSprite );
 	
@@ -22,7 +21,6 @@ VOID MainGUI::Release()
 {
 	delete m_pMouse;
 	delete m_pGUIBase;
-	delete m_pGUICharacterState;
 	delete m_pChatWindow;
 	delete m_pChatEdit;
 	delete m_pMiniMap;
@@ -33,7 +31,7 @@ VOID MainGUI::Release()
 VOID MainGUI::CreateMiniMap()
 {
 	FLOAT fX		= 1050.0f;
-	FLOAT fY		= 100.0f;
+	FLOAT fY		= 70.0f;
 	FLOAT fWidth	= 208.0f;
 	FLOAT fHeight	= 340.0f;
 	
@@ -114,7 +112,7 @@ VOID MainGUI::CreateMiniMap()
 	m_fMapHeight	= 1800.0f;
 	
 	m_fMmpX			= 1050.0f;
-	m_fMmpY			= 100.0f;
+	m_fMmpY			= 70.0f;
 	m_fMmpWidth		= 208.0f;
 	m_fMmpHeight	= 340.0f;
 
@@ -132,12 +130,7 @@ VOID MainGUI::Create()
 	FLOAT fWidth	= 654.0f;
 	FLOAT fHeight	= 224.0f;
 
-	GUIBase::IMAGEPARAM imgParamCharacterState;
-
-	m_pGUIBase->AddFileName( 0, imgParamCharacterState, L"Img\\MainScene\\Character_State.png" );
 	
-	m_pGUICharacterState->Create( fX, fY, fWidth, fHeight, imgParamCharacterState );
-
 	fX		= 50.0f;
 	fY		= 800.0f;
 	fWidth	= 800.0f;
@@ -177,7 +170,6 @@ VOID MainGUI::Update()
 	POINT pt = m_pMouse->GetPosition();
 
 	m_pMouse->Update();
-	m_pGUICharacterState->Update();
 	m_pChatWindow->Update();
 	m_pChatEdit->Update();
 	
@@ -213,7 +205,6 @@ VOID MainGUI::Update()
 
 VOID MainGUI::Render()
 {
-	m_pGUICharacterState->Render();
 	m_pChatWindow->Render();
 	m_pChatEdit->Render();
 	

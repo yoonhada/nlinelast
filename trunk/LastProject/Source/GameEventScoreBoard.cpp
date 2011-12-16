@@ -1,23 +1,17 @@
 #include "stdafx.h"
 #include "GameEventScoreBoard.h"
-#include "GUIBackground.h"
 
 VOID GameEventScoreBoard::Initialize()
 {
-	m_pGUIBase			= NULL;
+	m_dState				= GES_HIDDEN;
 
-	for( INT i=0 ; i<MAXIDENTIFIER ; i++ )
-		m_pIdentifier[ i ] = NULL;
+	m_dScoreFrameSpeed		= 15;
+	m_dPositionalFrameSpeed	= 800;
 
-	m_pDynamicNumber	= NULL;
-
-	for( INT i=0 ; i<MAXPOSITIONALNUMBER ; i++ )
-		m_pStaticNumber[ i ] = NULL;
-
-	m_dFrameSpeed		= 15;
-
-	m_fX				= 400.0f;
-	m_fY				= 400.0f;
+	m_fBgdX				= 200.0f;
+	m_fBgdY				= 200.0f;
+	m_fBgdWidth			= 600.0f;
+	m_fBgdHeight		= 600.0f;
 
 	m_fIdtWidth			= 100.0f;
 	m_fIdtHeight		= 100.0f;
@@ -28,45 +22,57 @@ VOID GameEventScoreBoard::Initialize()
 
 VOID GameEventScoreBoard::Release()
 {
-	SAFE_DELETE( m_pGUIBase );
-
-	for( INT i=0 ; i<MAXIDENTIFIER ; i++ )
-		SAFE_DELETE( m_pIdentifier[ i ] );
-
-	SAFE_DELETE( m_pDynamicNumber );
-
-	for( INT i=0 ; i<MAXPOSITIONALNUMBER ; i++ )
-		SAFE_DELETE( m_pStaticNumber[ i ] );
-
 	DATAVECTOR::iterator itE;
 	for( itE = m_vecData.begin() ; itE != m_vecData.end() ; itE++ )
 		delete (*itE);
 	m_vecData.clear();
 }
 
-VOID GameEventScoreBoard::InitIdentifierImage()
+VOID GameEventScoreBoard::CreateSceneImage()
+{
+	//	Create Background
+	D3DVIEWPORT9 Vp;
+	m_pd3dDevice->GetViewport( &Vp );
+
+	FLOAT fWidth	= static_cast<FLOAT>( Vp.Width );
+	FLOAT fHeight	= static_cast<FLOAT>( Vp.Height );
+	
+	GUIBase::IMAGEPARAM imgParamScene;
+
+	AddFileName( 0, imgParamScene, L"Img\\Event\\ScoreBoard\\GrayScene.png" );
+	CreateImage2D( m_img2DScene, 0.0f, 0.0f, fWidth, fHeight, imgParamScene );
+}
+
+VOID GameEventScoreBoard::CreateBackgroundImage()
+{
+	GUIBase::IMAGEPARAM imgParamBackground;
+
+	AddFileName( 0, imgParamBackground, L"Img\\Event\\ScoreBoard\\Background.png" );
+	CreateImage3D( m_img3DBackground, m_fBgdX, m_fBgdY, m_fBgdWidth, m_fBgdHeight, imgParamBackground );
+}
+
+VOID GameEventScoreBoard::CreateIdentifierImage()
 {
 	FLOAT fX	= 0.0f;
 	FLOAT fY	= 0.0f;
 
 	//	Create Identifier
-	GUIBase::IMAGEPARAM imgParamIdentifier[ MAXIDENTIFIER ];
+	GUIBase::IMAGEPARAM imgParamIdentifier[ MAX_IDENTIFIER ];
 
-	m_pGUIBase->AddFileName( 0, imgParamIdentifier[ GES_DADDY ], L"Img\\Event\\ScoreBoard\\IdentifierDaddy.png" );
-	m_pIdentifier[ GES_DADDY ]->Create( fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_DADDY ] );
+	AddFileName( 0, imgParamIdentifier[ GES_DADDY ], L"Img\\Event\\ScoreBoard\\IdentifierDaddy.png" );
+	CreateImage3D( m_aimg3DIdentifier[ GES_DADDY ], fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_DADDY ] );
+	
+	AddFileName( 0, imgParamIdentifier[ GES_MOM ], L"Img\\Event\\ScoreBoard\\IdentifierMom.png" );
+	CreateImage3D( m_aimg3DIdentifier[ GES_MOM ], fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_MOM ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamIdentifier[ GES_MOM ], L"Img\\Event\\ScoreBoard\\IdentifierMom.png" );
-	m_pIdentifier[ GES_MOM ]->Create( fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_MOM ] );
+	AddFileName( 0, imgParamIdentifier[ GES_SON ], L"Img\\Event\\ScoreBoard\\IdentifierSon.png" );
+	CreateImage3D( m_aimg3DIdentifier[ GES_SON ], fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_SON ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamIdentifier[ GES_SON ], L"Img\\Event\\ScoreBoard\\IdentifierSon.png" );
-	m_pIdentifier[ GES_SON ]->Create( fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_SON ] );
-
-	m_pGUIBase->AddFileName( 0, imgParamIdentifier[ GES_DAUGHTER ], L"Img\\Event\\ScoreBoard\\IdentifierDaughter.png" );
-	m_pIdentifier[ GES_DAUGHTER ]->Create( fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_DAUGHTER ] );
-
+	AddFileName( 0, imgParamIdentifier[ GES_DAUGHTER ], L"Img\\Event\\ScoreBoard\\IdentifierDaughter.png" );
+	CreateImage3D( m_aimg3DIdentifier[ GES_DAUGHTER ], fX, fY, m_fIdtWidth, m_fIdtHeight, imgParamIdentifier[ GES_DAUGHTER ] );
 }
 
-VOID GameEventScoreBoard::InitNumberImage()
+VOID GameEventScoreBoard::CreateNumberImage()
 {
 	FLOAT fX	= 0.0f;
 	FLOAT fY	= 0.0f;
@@ -74,128 +80,150 @@ VOID GameEventScoreBoard::InitNumberImage()
 	//	 Create Dynamic Number
 	GUIBase::IMAGEPARAM imgParamDynamicNumber;
 
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\0.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\1.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\2.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\3.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\4.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\5.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\6.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\7.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\8.png", m_dFrameSpeed );
-	m_pGUIBase->AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\9.png", m_dFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\0.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\1.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\2.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\3.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\4.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\5.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\6.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\7.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\8.png", m_dScoreFrameSpeed );
+	AddFileName( 0, imgParamDynamicNumber, L"Img\\Event\\ScoreBoard\\9.png", m_dScoreFrameSpeed );
 
-	m_pDynamicNumber->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamDynamicNumber );
-
+	CreateImage3D( m_img3DDynamicNumber, fX, fY, m_fNumWidth, m_fNumHeight, imgParamDynamicNumber );
+	
 	//	Create Static Number
-	GUIBase::IMAGEPARAM imgParamStaticNumber[ MAXPOSITIONALNUMBER ];
+	GUIBase::IMAGEPARAM imgParamStaticNumber[ MAX_POSITIONAL ];
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 0 ], L"Img\\Event\\ScoreBoard\\0.png" );
-	m_pStaticNumber[ 0 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 0 ] );
+	AddFileName( 0, imgParamStaticNumber[ 0 ], L"Img\\Event\\ScoreBoard\\0.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 0 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 0 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 1 ], L"Img\\Event\\ScoreBoard\\1.png" );
-	m_pStaticNumber[ 1 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 1 ] );
+	AddFileName( 0, imgParamStaticNumber[ 1 ], L"Img\\Event\\ScoreBoard\\1.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 1 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 1 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 2 ], L"Img\\Event\\ScoreBoard\\2.png" );
-	m_pStaticNumber[ 2 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 2 ] );
+	AddFileName( 0, imgParamStaticNumber[ 2 ], L"Img\\Event\\ScoreBoard\\2.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 2 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 2 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 3 ], L"Img\\Event\\ScoreBoard\\3.png" );
-	m_pStaticNumber[ 3 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 3 ] );
+	AddFileName( 0, imgParamStaticNumber[ 3 ], L"Img\\Event\\ScoreBoard\\3.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 3 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 3 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 4 ], L"Img\\Event\\ScoreBoard\\4.png" );
-	m_pStaticNumber[ 4 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 4 ] );
+	AddFileName( 0, imgParamStaticNumber[ 4 ], L"Img\\Event\\ScoreBoard\\4.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 4 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 4 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 5 ], L"Img\\Event\\ScoreBoard\\5.png" );
-	m_pStaticNumber[ 5 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 5 ] );
+	AddFileName( 0, imgParamStaticNumber[ 5 ], L"Img\\Event\\ScoreBoard\\5.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 5 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 5 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 6 ], L"Img\\Event\\ScoreBoard\\6.png" );
-	m_pStaticNumber[ 6 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 6 ] );
+	AddFileName( 0, imgParamStaticNumber[ 6 ], L"Img\\Event\\ScoreBoard\\6.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 6 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 6 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 7 ], L"Img\\Event\\ScoreBoard\\7.png" );
-	m_pStaticNumber[ 7 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 7 ] );
+	AddFileName( 0, imgParamStaticNumber[ 7 ], L"Img\\Event\\ScoreBoard\\7.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 7 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 7 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 8 ], L"Img\\Event\\ScoreBoard\\8.png" );
-	m_pStaticNumber[ 8 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 8 ] );
+	AddFileName( 0, imgParamStaticNumber[ 8 ], L"Img\\Event\\ScoreBoard\\8.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 8 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 8 ] );
 
-	m_pGUIBase->AddFileName( 0, imgParamStaticNumber[ 9 ], L"Img\\Event\\ScoreBoard\\9.png" );
-	m_pStaticNumber[ 9 ]->Create( fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 9 ] );
+	AddFileName( 0, imgParamStaticNumber[ 9 ], L"Img\\Event\\ScoreBoard\\9.png" );
+	CreateImage3D( m_aimg3DStaticNumber[ 9 ], fX, fY, m_fNumWidth, m_fNumHeight, imgParamStaticNumber[ 9 ] );
 
 }
 
-
-
-VOID GameEventScoreBoard::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite )
+VOID GameEventScoreBoard::Create()
 {
-	//	New GUIBase
-	m_pGUIBase				= new GUIBase( m_pd3dDevice, m_pSprite );
-	
-	//	New Identifier
-	for( INT i=0 ; i<MAXIDENTIFIER ; i++ )
-		m_pIdentifier[ i ]	= new GUIBackground( m_pd3dDevice, m_pSprite );
-
-	//	New Dynamic Number
-	m_pDynamicNumber		= new GUIBackground( m_pd3dDevice, m_pSprite );
-	
-	//	New Static Number
-	for( INT i=0 ; i<MAXPOSITIONALNUMBER ; i++ )
-		m_pStaticNumber[ i ]= new GUIBackground( m_pd3dDevice, m_pSprite );
-
-	InitIdentifierImage();
-	InitNumberImage();
+	CreateSceneImage();
+	CreateBackgroundImage();
+	CreateIdentifierImage();
+	CreateNumberImage();
 }
 
 VOID GameEventScoreBoard::Update()
 {
-	INT iNumData = m_vecData.size();
+	if( m_dState == GES_HIDDEN || m_dState == GES_GRAY )
+		return;
 
-	for( INT i=0 ; i<iNumData ; i++ )
+	INT iDataSize = m_vecData.size();
+
+	for( INT i=0 ; i<iDataSize ; i++ )
 	{
 		m_vecData[ i ]->dCurrentTime = timeGetTime();
 
-		if( m_vecData[ i ]->dCurrentTime > m_vecData[ i ]->dBeginTime + m_vecData[ i ]->dFrameSpeed )
+		if( m_vecData[ i ]->dCurrentTime > m_vecData[ i ]->dBeginTime + m_dPositionalFrameSpeed )
 		{
 			m_vecData[ i ]->dBeginTime = m_vecData[ i ]->dCurrentTime;
 
-			m_vecData[ i ]->apScore[ m_vecData[ i ]->iCurrentPositionalNumber ] = m_pStaticNumber[ m_vecData[ i ]->aiScore[ m_vecData[ i ]->iCurrentPositionalNumber ] ];
+			m_vecData[ i ]->apimg3DScore[ m_vecData[ i ]->iCurrentPositionalNumber ] = &m_aimg3DStaticNumber[ m_vecData[ i ]->aiScore[ m_vecData[ i ]->iCurrentPositionalNumber ] ];
 
 			m_vecData[ i ]->iCurrentPositionalNumber++;
-			if( m_vecData[ i ]->iCurrentPositionalNumber >= m_vecData[ i ]->iPositionalNumber )
-				m_vecData[ i ]->iCurrentPositionalNumber = m_vecData[ i ]->iPositionalNumber;
+			if( m_vecData[ i ]->iCurrentPositionalNumber >= MAX_POSITIONAL )
+				m_vecData[ i ]->iCurrentPositionalNumber = MAX_POSITIONAL;
 		}
 	}
 }
 
 VOID GameEventScoreBoard::Render()
 {
+	if( m_dState == GES_HIDDEN )
+		return;
+
+	static INT iAlpha = 0;
+	if( iAlpha < 255 )
+		iAlpha += 1;
+	else
+		m_dState = GES_NORMAL;
+
+	RenderImage2D( &m_img2DScene, D3DCOLOR_ARGB( iAlpha, 255, 255, 255 ) );
+
+	if( m_dState == GES_GRAY )
+		return;
+	
+	RenderImage3D( &m_img3DBackground );
+
 	INT iNumData = m_vecData.size();
 
-	for( INT i=0 ; i<iNumData ; i++ )
+	for( INT j=0 ; j<iNumData ; j++ )
 	{
-		for( INT i=0 ; i<m_vecData[ i ]->iPositionalNumber ; i++ )
-		{
-			D3DXVECTOR3 vecPosition  = m_vecData[ i ]->vecTranslate;
-			vecPosition.x += i * 50.0f;
+		LPDATA	pData = m_vecData[ j ];
 
-			m_vecData[ i ]->apScore[ i ]->SetPosition( &vecPosition );
-			m_vecData[ i ]->apScore[ i ]->Render();
+		D3DXVECTOR3 vecPosition  = pData->vecTranslate;
+		Image3DTranslate( pData->pimg3DIdentifier, vecPosition.x, vecPosition.y, vecPosition.z );
+		RenderImage3D( pData->pimg3DIdentifier );
+
+		vecPosition.x += m_fIdtWidth;
+
+		INT l = MAX_POSITIONAL - 1;
+		for( INT i=0 ; i<MAX_POSITIONAL ; i++ )
+		{
+			vecPosition.x += 50.0f;
+
+			Image3DTranslate( pData->apimg3DScore[ l ], vecPosition.x, vecPosition.y, vecPosition.z );
+			RenderImage3D( pData->apimg3DScore[ l ] );
+
+			l--;
 		}
 	}
+	
 }
 
 VOID GameEventScoreBoard::AddData( DWORD _dID, DWORD _dIdentifier )
 {
-	if( _dIdentifier < 0 || _dIdentifier >= MAXIDENTIFIER )
+	if( _dIdentifier < 0 || _dIdentifier >= MAX_IDENTIFIER )
 	{
-		MessageBox( NULL, L"GameEventScoreBoard::AddData(){ _dIdentifier > 0 || _dIdentifier <= MAXIDENTIFIER }", NULL, MB_OK );
+		MessageBox( NULL, L"GameEventScoreBoard::AddData(){ _dIdentifier > 0 || _dIdentifier <= MAX_IDENTIFIER }", NULL, MB_OK );
 		return;
 	}
 
 	LPDATA pData = new DATA;
 
-	pData->pIdentifier = m_pIdentifier[ _dIdentifier ];
+	pData->dID				= _dID;
+	pData->pimg3DIdentifier	= &m_aimg3DIdentifier[ _dIdentifier ];
 
-	INT iNumData = m_vecData.size();
-	pData->vecTranslate = D3DXVECTOR3( m_fX, m_fY + static_cast<FLOAT>( iNumData * 100 ), 0.0f );
+	for( INT i=0 ; i<MAX_POSITIONAL ; i++ )
+		pData->apimg3DScore[ i ] = &m_img3DDynamicNumber;
+
+	INT iDataSize = m_vecData.size();
+	FLOAT fGapX	= 100.0f;
+	FLOAT fGapY = 100.0f * static_cast<FLOAT>( iDataSize + 1 );
+	pData->vecTranslate = D3DXVECTOR3( m_fBgdX + fGapX, m_fBgdY + fGapY, 0.0f );
 	
 	m_vecData.push_back( pData );
 }
@@ -241,7 +269,7 @@ VOID GameEventScoreBoard::SetScore( DWORD _dID, INT _iScore )
 	LPDATA pData = NULL;
 	
 	//	Find Data
-	for( INT i=0 ; i<MAXIDENTIFIER ; i++ )
+	for( INT i=0 ; i<MAX_IDENTIFIER ; i++ )
 	{
 		if( m_vecData[ i ]->dID == _dID )
 		{
@@ -250,7 +278,6 @@ VOID GameEventScoreBoard::SetScore( DWORD _dID, INT _iScore )
 		}
 	}
 
-	//	Set PositionalNumber
 	pData->iPositionalNumber = iDecimal;
 
 	//	Set Score
@@ -259,4 +286,14 @@ VOID GameEventScoreBoard::SetScore( DWORD _dID, INT _iScore )
 		INT  Multiplier = static_cast<INT>( pow( static_cast<DOUBLE>( 10 ), i ) );
 		pData->aiScore[ i ] = _iScore / Multiplier % 10; 
 	}
+}
+
+VOID GameEventScoreBoard::Skip()
+{
+	m_dPositionalFrameSpeed = 0;
+}
+
+VOID GameEventScoreBoard::SetState( DWORD _dState )
+{
+	m_dState = _dState;
 }

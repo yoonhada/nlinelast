@@ -273,7 +273,7 @@ VOID GUIBase::RenderImage3D( LPIMAGE3D _pImage3D )
 	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
 }
 
-VOID GUIBase::RenderImage2D( LPIMAGE2D _pImage2D )
+VOID GUIBase::RenderImage2D( LPIMAGE2D _pImage2D, DWORD _dColor )
 {
 	//	SetTexture
 	LPGUITEXTURE pGUITexture = (*_pImage2D->vec2Tex[ _pImage2D->iCurrentAnimation ])[ 0 ];
@@ -299,7 +299,7 @@ VOID GUIBase::RenderImage2D( LPIMAGE2D _pImage2D )
 	//	Draw
 	//	Begin, End를 다른 곳으로 옮기자
 	m_pSprite->Begin( D3DXSPRITE_ALPHABLEND );
-	m_pSprite->Draw( pGUITexture->pTex, &_pImage2D->rtSource, &_pImage2D->vecCenter, &_pImage2D->vecPosition, 0xffffffff  );
+	m_pSprite->Draw( pGUITexture->pTex, &_pImage2D->rtSource, &_pImage2D->vecCenter, &_pImage2D->vecPosition, _dColor  );
 	m_pSprite->End();
 }
 

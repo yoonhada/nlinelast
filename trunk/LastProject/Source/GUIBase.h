@@ -224,7 +224,7 @@ public:
 	VOID		CreateImage2D( IMAGE2D& _Image2D, FLOAT _fX, FLOAT _fY, FLOAT _fWidht, FLOAT _fHeight, IMAGEPARAM& _imgParam );
 
 	VOID		RenderImage3D( LPIMAGE3D _pImage3D );
-	VOID		RenderImage2D( LPIMAGE2D _pImage2D );
+	VOID		RenderImage2D( LPIMAGE2D _pImage2D, DWORD _dColor = 0xffffffff );
 
 	VOID		Image3DScale( LPIMAGE3D _pImage3D, FLOAT _fX, FLOAT _fY, FLOAT _fZ );
 	VOID		Image3DTranslate( LPIMAGE3D _pImage3D, FLOAT _fX, FLOAT _fY, FLOAT _fZ );
