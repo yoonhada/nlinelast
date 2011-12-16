@@ -76,10 +76,10 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create Character
 	m_aData		= new DATA[ 4 ];
 
-	CreateData( &m_aData[ 0 ], L"Data\\CharData\\APPA_1.csav",	D3DXVECTOR3(  31.0f, 5.0f, 120.0f ) );
-	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM_1.csav",	D3DXVECTOR3(  10.0f, 5.0f, 120.0f ) );
-	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_1.csav", D3DXVECTOR3( -10.0f, 5.0f, 120.0f ) );
-	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_1.csav",	D3DXVECTOR3( -31.0f, 5.0f, 120.0f ) );
+	CreateData( &m_aData[ 0 ], L"Data\\CharData\\APPA_1.csav",	D3DXVECTOR3(  31.0f, 0.0f, 135.0f ) );
+	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM_1.csav",	D3DXVECTOR3(  10.0f, 0.0f, 135.0f ) );
+	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_1.csav", D3DXVECTOR3( -10.0f, 0.0f, 135.0f ) );
+	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_1.csav",	D3DXVECTOR3( -31.0f, 0.0f, 135.0f ) );
 
 	//	Create Light
 	m_pLight = new CLight;
@@ -170,25 +170,16 @@ VOID LobbyScene::Update()
 	case LOBBY_SELECT_2:
 	case LOBBY_SELECT_3:
 	case LOBBY_SELECT_4:
-		if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
-		{
-			m_nCharSelect = dID - LOBBY_SELECT_1;
-			EnableRotate( dID - LOBBY_SELECT_1 );
-		}
+		//if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
+		//{
+		//	m_nCharSelect = dID - LOBBY_SELECT_1;
+		//	EnableRotate( dID - LOBBY_SELECT_1 );
+		//}
 
-		CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_CLICKED );
+		//CSound::GetInstance()->PlayEffect( 1 );
 		break;
 	}
-/*
-	if( GetKeyState( '1' ) & 0x8000 )
-		ChangeStateButton( GUIBTN_LOBBY_START, GUIBTN_NORMAL );
-	if( GetKeyState( '2' ) & 0x8000 )
-		ChangeStateButton( GUIBTN_LOBBY_START, GUIBTN_DISABLE );
-	if( GetKeyState( '3' ) & 0x8000 )
-		DisableRotate( 2 );
-	if( GetKeyState( '4' ) & 0x8000 )
-		DisableRotate( 3 );
-*/	
+
 	if( m_fChrRotate > 3140000.0f )
 		m_fChrRotate = 3.14f;
 
@@ -201,6 +192,15 @@ VOID LobbyScene::Update()
 		else
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
 	}
+	
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_1 ) == HOT )
+		EnableRotate( 0 );
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_2 ) == HOT )
+		EnableRotate( 1 );
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_3 ) == HOT )
+		EnableRotate( 2 );
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_4 ) == HOT )
+		EnableRotate( 3 );
 
 	//	Chatting Massage
 	WCHAR aStr[ 256 ] = { 0, };
@@ -213,10 +213,10 @@ VOID LobbyScene::Update()
 VOID LobbyScene::Render()
 {
 	//static FLOAT fX = 0.0f, fY = 0.0f, fZ = 180.0f;
-	static FLOAT fX = 0.0f, fY = 7.5f, fZ = 200.0f;
+	static FLOAT fX = 0.0f, fY = 4.5f, fZ = 200.0f;
 	
 	D3DXVECTOR3		vecEyePt( fX, fY, fZ );
-	D3DXVECTOR3		vecLookatPt( 0.0f, 0.0f, 0.0f );
+	D3DXVECTOR3		vecLookatPt( 0.0f, -10.0f, 0.0f );
 	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );

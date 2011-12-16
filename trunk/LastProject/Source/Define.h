@@ -37,7 +37,7 @@ extern FLOAT FastRand2();
 
 // GUI Resource
 // GUI Button
-enum GUIBTN { UP			= 100,	DOWN, DISABLE, 
+enum GUIBTN { UP			= 100,	DOWN, HOT, DISABLE, 
 			  STORY_SKIP	= 1000, 
 			  MENU_START	= 1010,	MENU_END, 
 			  OPTION_HELP	= 1020,	OPTION_SETUP, 
