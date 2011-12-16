@@ -9,9 +9,7 @@ class CSound : public CSingleton<CSound>
 public:
 	enum BGM_ID
 	{
-		BGM_START = 0,
-
-		BGM_MENU ,
+		BGM_MENU = 0,
 		BGM_LOBBY,
 		BGM_GAME,
 		BGM_EVENT,
@@ -21,19 +19,28 @@ public:
 
 	enum EFFECT_ID
 	{
-		EFFECT_START = 0,
-
+		EFFECT_BUTTON_OVER = 0,
 		EFFECT_BUTTON_CLICKED,
 
-		EFFECT_DAD_ATTACK,
-		EFFECT_MON_ATTACK,
-		EFFECT_BOY_ATTACK,
-		EFFECT_GIRL_ATTACK,
+		EFFECT_DAD_ATTACK1,
+		EFFECT_MON_ATTACK1,
+		EFFECT_BOY_ATTACK1,
+		EFFECT_GIRL_ATTACK1,
 
-		EFFECT_DAD_DAMAGED,
-		EFFECT_MOM_DAMAGED,
-		EFFECT_BOY_DAMAGED,
-		EFFECT_GIRL_DAMAGED,
+		EFFECT_DAD_ATTACK2,
+		EFFECT_MON_ATTACK2,
+		EFFECT_BOY_ATTACK2,
+		EFFECT_GIRL_ATTACK2,
+
+		EFFECT_DAD_DAMAGED1,
+		EFFECT_MOM_DAMAGED1,
+		EFFECT_BOY_DAMAGED1,
+		EFFECT_GIRL_DAMAGED1,
+
+		EFFECT_DAD_DAMAGED2,
+		EFFECT_MOM_DAMAGED2,
+		EFFECT_BOY_DAMAGED2,
+		EFFECT_GIRL_DAMAGED2,
 
 		EFFECT_PANDA_ATTACK,
 		EFFECT_CLOWN_ATTACK,
@@ -53,12 +60,13 @@ public:
 
 private:
 	FMOD_SYSTEM*	m_pSystem;
-	FMOD_SOUND*		m_pBGM;
-	FMOD_SOUND*		m_pEffectSound[2];
+	FMOD_SOUND*		m_pBGM[BGM_END];
+	FMOD_SOUND*		m_pEffectSound[EFFECT_END];
 	FMOD_CHANNEL*	m_pBGMChannel;
 	FMOD_CHANNEL*	m_pEffectChannel;
 	FMOD_RESULT		m_Result;
 	UINT			m_iVersion;
+
 
 	CSound();
 	virtual ~CSound();
@@ -70,12 +78,15 @@ public:
 
 	VOID Update();
 
+	VOID LoadSoundFiles();
+	VOID LoadBGMFiles( const CHAR* a_szFileName, INT a_i );
+	VOID LoadEffectFiles( const CHAR* a_szFileName, INT a_i );
+
 	VOID PlayBGM( INT a_iBGM );
 	VOID PlayEffect( INT a_iEffect );
 
 	VOID StopBGM( INT a_iBGM );
 
-	VOID LoadSoundFiles();
 	VOID ErrorCheck( FMOD_RESULT a_Result );
 	
 };

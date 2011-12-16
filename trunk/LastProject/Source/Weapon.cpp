@@ -182,9 +182,14 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::A;
 		m_pMap->SetAnimation( m_nState );
+
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CSound::GetInstance()->PlayEffect( 0 );
+		CObjectManage * pOM = CObjectManage::GetInstance();
+		INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
+		INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
+
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + iCharNumber + iRand );
 	}
 	else if ( m_nState == EnumCharFrame::ATTACK1 && 
 		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -193,9 +198,14 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK2;
 		m_pMap->SetAnimation( m_nState );
+
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CSound::GetInstance()->PlayEffect( 0 );
+		CObjectManage * pOM = CObjectManage::GetInstance();
+		INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
+		INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
+
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + iCharNumber + iRand );
 	}
 	else if ( m_nState == EnumCharFrame::BASE && nCurrFrame == 0 )
 	{
@@ -203,9 +213,14 @@ VOID CWeapon::SetKeyA()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::ATTACK1;
 		m_pMap->SetAnimation( m_nState );
+
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CSound::GetInstance()->PlayEffect( 0 );
+		CObjectManage * pOM = CObjectManage::GetInstance();
+		INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
+		INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
+
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + iCharNumber + iRand );
 	} 
 }
 

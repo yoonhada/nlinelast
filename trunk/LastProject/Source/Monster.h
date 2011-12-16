@@ -2,6 +2,7 @@
 #define _Monster_H_
 
 #include "StateMachine.h"
+#include "TestCube.h"
 
 class CCharactor;
 
@@ -21,6 +22,7 @@ public:
 		ANIM_GROGGY,
 		ANIM_EVENT,
 		ANIM_LODING,
+		ANIM_ROCKETPUNCH,
 	};
 
 
@@ -151,6 +153,8 @@ private:
 	VOID InterpolationTrans( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
 	VOID InterpolationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, FLOAT a_fSpeed, BOOL a_bReplay, FLOAT a_fFrameTime );
 
+	// 충돌 박스 표시용 임시
+	TestCube* m_pTestCube;
 
 	//몬스터 관리
 	INT	  m_iBreakPart;					///< 파괴부위..

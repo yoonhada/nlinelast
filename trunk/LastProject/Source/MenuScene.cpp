@@ -56,7 +56,7 @@ HRESULT MenuScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite,
 	//CNetwork::GetInstance()->ConnectToServer( szTemp, 20202 );
 	//CNetwork::GetInstance()->CS_LOGON( L"NickName" );
 
-	CSound::GetInstance()->PlayBGM( 0 );
+	CSound::GetInstance()->PlayBGM( CSound::BGM_MENU );
 
 	return S_OK;
 }
@@ -78,12 +78,12 @@ VOID MenuScene::Update()
 	{
 	case MENU_START:
 		m_pLoginScene->SetActivate( TRUE );
-		CSound::GetInstance()->PlayEffect( 1 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_CLICKED );
 		break;
 	case MENU_END:
 		m_scnState = IScene::SCENE_END;
 		PostMessage( GHWND, WM_DESTROY, NULL, NULL );
-		CSound::GetInstance()->PlayEffect( 1 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_CLICKED );
 		break;
 	}
 

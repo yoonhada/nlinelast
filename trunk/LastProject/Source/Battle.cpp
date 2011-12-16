@@ -1,11 +1,12 @@
 #include "stdafx.h"
 
 #include "Battle.h"
-#include "Seek.h"
 #include "LockOn.h"
 #include "Melee.h"
 #include "Spin.h"
+#include "RocketPunch.h"
 #include "DashReady.h"
+#include "Wait.h"
 
 #include "Charactor.h"
 #include "Monster.h"
@@ -62,17 +63,34 @@ VOID Battle::Execute( CMonster* a_pMonster )
 			}
 		}
 	}
-	// 대시 공격 범위면
+	// 원거리 공격 범위면
 	else if( fDistance > 80.0f && fDistance < 120.0f )
 	{
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH );
-		a_pMonster->GetFSM()->ChangeState( DashReady::GetInstance() );
+		// 삐에로면 대쉬, 로켓펀치 중 랜덤
+		if( a_pMonster->Get_MonsterNumber() == 2 )
+		{
+			if( FastRand2() < 0.5f )
+			{
+				CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH );
+				a_pMonster->GetFSM()->ChangeState( DashReady::GetInstance() );
+			}
+			else
+			{
+				CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_ROCKETPUNCH );
+				a_pMonster->GetFSM()->ChangeState( RocketPunch::GetInstance() );
+			}
+		}
+		// 판다면 대쉬
+		else
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH );
+			a_pMonster->GetFSM()->ChangeState( DashReady::GetInstance() );
+		}
 	}
-
-	// 공격범위가 아니면 다시 탐색 상태로
+	// 공격범위가 아니면 대기 상태로
 	else
 	{
-		a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+		a_pMonster->GetFSM()->ChangeState( Wait::GetInstance() );
 	}
 }
 

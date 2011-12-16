@@ -165,7 +165,7 @@ VOID GUIBtn::OnMove( INT x, INT y )
 		{
 			if( m_State != GB_HOT )
 			{
-				CSound::GetInstance()->PlayEffect( 1 );
+				CSound::GetInstance()->PlayEffect( CSound::EFFECT_BUTTON_OVER );
 			}
 			ChangeState(GB_HOT);
 		}
