@@ -25,10 +25,10 @@ VOID OptionGUI::CreateButton()
 	D3DVIEWPORT9 Vp;
 	m_pD3dDevice->GetViewport( &Vp );
 
-	FLOAT fX		= 1080.0f;
+	FLOAT fX		= 1120.0f;
 	FLOAT fY		= 0.0f;
-	FLOAT fWidth	= 79.0f;
-	FLOAT fHeight	= 79.0f;
+	FLOAT fWidth	= 55.0f;
+	FLOAT fHeight	= 55.0f;
 
 	imgSetupNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgSetupNormal.fX			= fX;
@@ -50,7 +50,7 @@ VOID OptionGUI::CreateButton()
 	imgSetupDown.fX			= fX;
 	imgSetupDown.fY			= fY;
 	imgSetupDown.fWidth		= fWidth;
-	imgSetupDown.fHeight		= fHeight;
+	imgSetupDown.fHeight	= fHeight;
 
 	m_pGUIBase->AddFileName( 0, imgSetupDown, L"Img\\OptionScene\\Setup_Down.png" );
 
@@ -66,10 +66,10 @@ VOID OptionGUI::CreateButton()
 
 	GUIBase::IMAGEPARAM imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable;
 	//	Background Next Button
-	fX		= 1180.0f;
+	fX		= 1200.0f;
 	fY		= 0.0f;
-	fWidth	= 79.0f;
-	fHeight	= 79.0f;
+	fWidth	= 55.0f;
+	fHeight	= 55.0f;
 
 	imgHelpNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgHelpNormal.fX			= fX;

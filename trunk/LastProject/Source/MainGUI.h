@@ -16,7 +16,7 @@ private:
 	VOID		Release();
 
 	
-	VOID		OnDown( INT x, INT y );
+	VOID		OnDown( INT  x, INT y );
 	VOID		OnMove( INT x, INT y );
 	VOID		OnUp( INT x, INT y );
 

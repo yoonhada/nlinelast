@@ -121,7 +121,7 @@ VOID CDirectX9::Release()
 VOID CDirectX9::beginScene()
 {
 	// Clear
-	m_pD3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 100, 100, 100 ), 1.0f, 0 );
+	m_pD3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
 
 	// Begin Scene
 	if ( !SUCCEEDED( m_pD3dDevice->BeginScene() ) )
