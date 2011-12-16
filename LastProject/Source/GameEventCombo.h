@@ -24,7 +24,7 @@ private:
 	GUIBackground*			m_pGUICounting;
 	GUIBackground*			m_pGUIButton[4];
 
-	FLOAT					m_fCount;
+	FLOAT					m_fCount, m_fTimeComp;
 	INT						m_nState;
 	INT						m_nKindIndex;
 	INT						m_nKindEvent[4];
@@ -46,6 +46,7 @@ public:
 	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
 	BOOL CheckKindEvent( INT nKindEvent );
 	
+	VOID SetTime( FLOAT fTime )				{ m_fTimeComp = fTime; }
 	VOID Start()							{ m_nState = READY; }
 	VOID Success();
 	VOID Fail();
