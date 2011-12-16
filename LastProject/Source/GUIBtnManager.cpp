@@ -148,3 +148,37 @@ VOID GUIBtnManager::Render()
 	for( INT i=0 ; i<m_iNumData ; i++ )
 		m_vecData[ i ]->pGUIBtn->Render();
 }
+
+DWORD GUIBtnManager::GetState( DWORD _dID )
+{
+	DWORD dState = 0;
+
+	for( INT i=0 ; i<m_iNumData ; i++ )
+	{
+		if( m_vecData[ i ]->ID == _dID )
+		{
+			dState = m_vecData[ i ]->pGUIBtn->GetState();
+			break;
+		}
+	}
+ 
+	switch( dState )
+	{
+	case GB_NORMAL:
+		dState = UP;
+		break;
+	case GB_HOT:
+		dState = HOT;
+		break;
+	case GB_DOWN:
+		dState = DOWN;
+		break;
+	case GB_DISABLE:
+		dState = DISABLE;
+		break;
+	case GB_HIDDEN:
+		break;
+	}
+
+	return dState;
+}

@@ -55,13 +55,28 @@ VOID LobbyGUI::CreateBackground()
 
 VOID LobbyGUI::CreateButton()
 {
+	//	Ready
+	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable;
+
+	FLOAT fX			= 1000.0f;
+	FLOAT fY			= 770.0f;
+	FLOAT fWidth		= 252.0f;
+	FLOAT fHeight		= 66.0f;
+	
+	m_pGUIBase->AddFileName( 0, imgReadyNormal,		L"Img\\LobbyScene\\Ready_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyHot,		L"Img\\LobbyScene\\Ready_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyDown,		L"Img\\LobbyScene\\Ready_Down.png" );
+	m_pGUIBase->AddFileName( 0, imgReadyDisable,	L"Img\\LobbyScene\\Ready_Down.png" );
+
+	m_pGUIBtnManager->Create( LOBBY_READY, 1, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable );
+
 	// Start Button
 	GUIBase::IMAGEPARAM imgStartNormal, imgStartHot, imgStartDown, imgStartDisable;
 
-	FLOAT fX		= 1000.0f;
-	FLOAT fY		= 770.0f;
-	FLOAT fWidth	= 252.0f;
-	FLOAT fHeight	= 66.0f;
+	fX		= 1000.0f;
+	fY		= 850.0f;
+	fWidth	= 252.0f;
+	fHeight	= 66.0f;
 
 	m_pGUIBase->AddFileName( 0, imgStartNormal,		L"Img\\LobbyScene\\Start_Normal.png" );
 	m_pGUIBase->AddFileName( 0, imgStartHot,		L"Img\\LobbyScene\\Start_Normal.png" );
@@ -75,7 +90,7 @@ VOID LobbyGUI::CreateButton()
 	GUIBase::IMAGEPARAM imgBackNormal, imgBackHot, imgBackDown, imgBackDisable;
 	
 	fX		= 1000.0f;
-	fY		= 850.0f;
+	fY		= 930.0f;
 	fWidth	= 252.0f;
 	fHeight	= 66.0f;
 
@@ -86,44 +101,29 @@ VOID LobbyGUI::CreateButton()
 
 	m_pGUIBtnManager->Create( LOBBY_BACK, 1, fX, fY, fWidth,fHeight, imgBackNormal, imgBackHot, imgBackDown, imgBackDisable );
 
-	//	Ready
-	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable;
-
-	fX			= 1000.0f;
-	fY			= 930.0f;
-	fWidth		= 252.0f;
-	fHeight		= 66.0f;
-	
-	m_pGUIBase->AddFileName( 0, imgReadyNormal,		L"Img\\LobbyScene\\Ready_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgReadyHot,		L"Img\\LobbyScene\\Ready_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgReadyDown,		L"Img\\LobbyScene\\Ready_Down.png" );
-	m_pGUIBase->AddFileName( 0, imgReadyDisable,	L"Img\\LobbyScene\\Ready_Down.png" );
-
-	m_pGUIBtnManager->Create( LOBBY_READY, 1, fX, fY, fWidth, fHeight, imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable );
-
 	//	Character Select
 	GUIBase::IMAGEPARAM imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable;
 
-	fX			= 20.0f;
+	fX			= 40.0f;
 	fY			= 190.0f;
 	fWidth		= 286.0f;
 	fHeight		= 339.0f;
 
-	m_pGUIBase->AddFileName( 0, imgSelectNormal,	L"Img\\LobbyScene\\Select_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgSelectHot,		L"Img\\LobbyScene\\Select_Normal.png" );
-	m_pGUIBase->AddFileName( 0, imgSelectDown,		L"Img\\LobbyScene\\Select_Normal.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectNormal,	L"Img\\LobbyScene\\Listbox1.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectHot,		L"Img\\LobbyScene\\Listbox1.png" );
+	m_pGUIBase->AddFileName( 0, imgSelectDown,		L"Img\\LobbyScene\\Listbox1.png" );
 	m_pGUIBase->AddFileName( 0, imgSelectDisable,	L"Img\\LobbyScene\\Select_Disable.png" );
 
-	m_pGUIBtnManager->Create( LOBBY_SELECT_1, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	m_pGUIBtnManager->Create( LOBBY_SELECT_1, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 320.0f;
-	m_pGUIBtnManager->Create( LOBBY_SELECT_2, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	fX += 310.0f;
+	m_pGUIBtnManager->Create( LOBBY_SELECT_2, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 320.0f;
-	m_pGUIBtnManager->Create( LOBBY_SELECT_3, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	fX += 310.0f;
+	m_pGUIBtnManager->Create( LOBBY_SELECT_3, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 320.0f;
-	m_pGUIBtnManager->Create( LOBBY_SELECT_4, 1, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
+	fX += 310.0f;
+	m_pGUIBtnManager->Create( LOBBY_SELECT_4, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 }
 
 VOID LobbyGUI::CreateEdit()
@@ -284,4 +284,9 @@ BOOL LobbyGUI::TakeChattingMassage( LPWSTR _pText )
 		return TRUE;
 	}
 	return FALSE;
+}
+
+DWORD LobbyGUI::GetButtonState( DWORD _dID )
+{
+	return m_pGUIBtnManager->GetState( _dID );
 }
