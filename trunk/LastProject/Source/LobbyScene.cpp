@@ -198,23 +198,11 @@ VOID LobbyScene::Update()
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, m_fChrRotate );
 		else
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
-	}
-	
-	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_1 ) == HOT )
-	{
-		EnableRotate( 0 );
-	}
-	else if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_2 ) == HOT )
-	{
-		EnableRotate( 1 );
-	}
-	else if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_3 ) == HOT )
-	{
-		EnableRotate( 2 );
-	}
-	else if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_4 ) == HOT )
-	{
-		EnableRotate( 3 );
+
+		if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_1 + i ) == HOT )
+		{
+			EnableRotate( i );
+		}
 	}
 
 	//	Chatting Massage

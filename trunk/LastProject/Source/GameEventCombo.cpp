@@ -25,6 +25,7 @@ HRESULT CGameEventCombo::Create( )
 	m_pGUIBase			= new GUIBase( m_pD3dDevice, m_pSprite );
 	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIForground		= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pGUICounting		= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIButton[0]		= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIButton[1]		= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIButton[2]		= new GUIBackground( m_pD3dDevice, m_pSprite );
@@ -128,7 +129,6 @@ VOID CGameEventCombo::Initialize()
 	m_nKindEvent[2] = 6;
 	m_nKindEvent[3] = 9;
 
-	m_pGUIBackground->SelectAnimation( 0 );
 	m_pGUIForground->SelectAnimation( 0 );
 	m_pGUICounting->SelectAnimation( 0 );
 	m_pGUIButton[0]->SelectAnimation( 0 );
@@ -137,32 +137,37 @@ VOID CGameEventCombo::Initialize()
 	m_pGUIButton[3]->SelectAnimation( 0 );
 }
 
+VOID CGameEventCombo::TimeUpdate( )
+{
+	m_fCount += CFrequency::GetInstance()->getFrametime();
+
+	if ( m_fCount >= m_fTimeComp )
+	{
+		m_nState = FAIL;
+	}
+	else if ( m_fCount + 1 >= m_fTimeComp )
+	{
+		m_pGUICounting->SelectAnimation( 3 );
+	}
+	else if ( m_fCount + 2 >= m_fTimeComp )
+	{
+		m_pGUICounting->SelectAnimation( 2 );
+	}
+	else if ( m_fCount + 3 >= m_fTimeComp )
+	{
+		m_pGUICounting->SelectAnimation( 1 );
+	}
+}
+
 VOID CGameEventCombo::Update()
 {	
 	//enum { NONE, READY, RUN, COUNTING, FAIL, SUCCESS };
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
-		m_fCount += CFrequency::GetInstance()->getFrametime();
-		if ( m_fCount >= m_fTimeComp )
-		{
-			m_nState = FAIL;
-		}
-		else if ( m_fCount + 1 >= m_fTimeComp )
-		{
-			m_pGUICounting->SelectAnimation( 3 );
-		}
-		else if ( m_fCount + 2 >= m_fTimeComp )
-		{
-			m_pGUICounting->SelectAnimation( 2 );
-		}
-		else if ( m_fCount + 3 >= m_fTimeComp )
-		{
-			m_pGUICounting->SelectAnimation( 1 );
-		}
-
 		if ( m_nState == READY )
 		{
 			m_nState = RUN;
+			TimeUpdate();
 		}
 		else if ( m_nState > RUN )
 		{
@@ -173,6 +178,7 @@ VOID CGameEventCombo::Update()
 			{
 				CheckKindEvent( nPlayer );	
 			}
+			TimeUpdate();
 		}
 	}
 }
