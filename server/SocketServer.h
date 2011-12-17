@@ -47,7 +47,8 @@ public:
 	VOID CS_CLIENT_DISCONNECT( CNTClient* pClient, CPacket& a_pk );
 
 	VOID CS_EVENT_STATE( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_EVENT_COMBO( CNTClient* pClient, CPacket& a_pk );
+	VOID CS_EVENT_COMBO_INFO( CNTClient* pClient, CPacket& a_pk );
+	VOID CS_EVENT_COMBO_SLOT_STATE( CNTClient* pClient, CPacket& a_pk );
 	VOID CS_EVENT_COMBO_RESULT( CNTClient* pClient, CPacket& a_pk );
 
 	VOID CS_CHAT( CNTClient* pClient, CPacket& pk );
