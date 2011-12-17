@@ -126,7 +126,7 @@ VOID LobbyScene::Update()
 	}
 
 	CObjectManage * pOM = CObjectManage::GetInstance();
-	DWORD dID;
+	DWORD dID = 0;
 	m_pLobbyGUI->Command( dID );
 	switch( dID )
 	{
@@ -169,15 +169,22 @@ VOID LobbyScene::Update()
 	case LOBBY_SELECT_1:
 	case LOBBY_SELECT_2:
 	case LOBBY_SELECT_3:
-	case LOBBY_SELECT_4:
-		//if ( m_nSelectState[pOM->Get_ClientNumber()] == -1 )
-		//{
-		//	m_nCharSelect = dID - LOBBY_SELECT_1;
-		//	EnableRotate( dID - LOBBY_SELECT_1 );
-		//}
+	case LOBBY_SELECT_4:		
+//		if ( m_nSelectState[pOM->Get_ClientNumber()] != -1 )
+		{
+			if( m_nCharSelect != -1 )
+			{
+				DestoryWeapon( m_nCharSelect );
+			}
 
-		//CSound::GetInstance()->PlayEffect( 1 );
+			m_nCharSelect = dID - LOBBY_SELECT_1;
+
+			CreateWeapon( m_nCharSelect );
+		}
+
+		CSound::GetInstance()->PlayEffect( 1 );
 		break;
+
 	}
 
 	if( m_fChrRotate > 3140000.0f )
@@ -194,13 +201,21 @@ VOID LobbyScene::Update()
 	}
 	
 	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_1 ) == HOT )
+	{
 		EnableRotate( 0 );
-	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_2 ) == HOT )
+	}
+	else if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_2 ) == HOT )
+	{
 		EnableRotate( 1 );
-	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_3 ) == HOT )
+	}
+	else if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_3 ) == HOT )
+	{
 		EnableRotate( 2 );
-	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_4 ) == HOT )
+	}
+	else if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_4 ) == HOT )
+	{
 		EnableRotate( 3 );
+	}
 
 	//	Chatting Massage
 	WCHAR aStr[ 256 ] = { 0, };
