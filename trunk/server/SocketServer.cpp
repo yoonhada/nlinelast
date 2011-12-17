@@ -429,11 +429,20 @@ VOID CSocketServer::CS_CLIENT_DISCONNECT( CNTClient* pClient, CPacket& a_pk )
 VOID CSocketServer::CS_EVENT_STATE( CNTClient* pClient, CPacket& a_pk )
 {
 	a_pk.Rewind();
-	SendToClient( pClient, a_pk ); 
+	SendToClient( pClient, a_pk );
+
+	cout << "CS_EVENT_STATE" << endl;
 }
 
 
-VOID CSocketServer::CS_EVENT_COMBO( CNTClient* pClient, CPacket& a_pk )
+VOID CSocketServer::CS_EVENT_COMBO_INFO( CNTClient* pClient, CPacket& a_pk )
+{
+	a_pk.Rewind();
+	SendToClient( pClient, a_pk );
+}
+
+
+VOID CSocketServer::CS_EVENT_COMBO_SLOT_STATE( CNTClient* pClient, CPacket& a_pk )
 {
 	a_pk.Rewind();
 	SendToClient( pClient, a_pk );
@@ -449,18 +458,6 @@ VOID CSocketServer::CS_EVENT_COMBO_RESULT( CNTClient* pClient, CPacket& a_pk )
 
 VOID CSocketServer::CS_CHAT( CNTClient* pClient, CPacket& pk )
 {
-/*
-	WCHAR szChat[256] = { 0, };
-	
-	pk.ReadString( szChat, 256 );
-
-	CPacket sendPk;
-	WORD wMsgSize = 0;
-	WORD wMsgType = MSG_CHAT;
-	sendPk.Write( wMsgSize );
-	sendPk.Write( wMsgType );
-	sendPk.WriteString( szChat, lstrlen( szChat ) );
-*/
 	pk.Rewind();
 	SendToClient( pClient, pk ); 
 }
@@ -770,8 +767,12 @@ VOID CSocketServer::ProcessPacket( CNTClient* pClient, CPacket& pk )
 		break;
 
 	// ÄÞº¸ Á¤º¸
-	case MSG_EVENT_COMBO:
-		CS_EVENT_COMBO( pClient, pk );
+	case MSG_EVENT_COMBO_INFO:
+		CS_EVENT_COMBO_INFO( pClient, pk );
+		break;
+
+	case MSG_EVENT_COMBO_SLOT_STATE:
+		CS_EVENT_COMBO_SLOT_STATE( pClient, pk );
 		break;
 
 	// ÄÞº¸ °á°ú
