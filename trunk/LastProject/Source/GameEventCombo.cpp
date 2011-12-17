@@ -91,8 +91,10 @@ HRESULT CGameEventCombo::Create( )
 HRESULT CGameEventCombo::Release()
 {
 	SAFE_DELETE ( m_pGUIBase );
-	SAFE_DELETE ( m_pGUIBackground );
+	SAFE_DELETE ( m_pGUICounting );
 	SAFE_DELETE ( m_pGUIForground );
+	SAFE_DELETE ( m_pGUIBackground );
+
 	SAFE_DELETE ( m_pGUIButton[0] );
 	SAFE_DELETE ( m_pGUIButton[1] );
 	SAFE_DELETE ( m_pGUIButton[2] );
@@ -137,21 +139,32 @@ VOID CGameEventCombo::Initialize()
 
 VOID CGameEventCombo::Update()
 {	
+	//enum { NONE, READY, RUN, COUNTING, FAIL, SUCCESS };
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
-		if ( m_nState == READY )
-		{	
-			m_fCount += CFrequency::GetInstance()->getFrametime();
-			if ( m_fCount > 3.0f )
-			{
-				m_nState = COUNTING;
-			}
+		m_fCount += CFrequency::GetInstance()->getFrametime();
+		if ( m_fCount >= m_fTimeComp )
+		{
+			m_nState = FAIL;
 		}
-		else if ( m_nState == COUNTING )
+		else if ( m_fCount + 1 >= m_fTimeComp )
+		{
+			m_pGUICounting->SelectAnimation( 3 );
+		}
+		else if ( m_fCount + 2 >= m_fTimeComp )
+		{
+			m_pGUICounting->SelectAnimation( 2 );
+		}
+		else if ( m_fCount + 3 >= m_fTimeComp )
+		{
+			m_pGUICounting->SelectAnimation( 1 );
+		}
+
+		if ( m_nState == READY )
 		{
 			m_nState = RUN;
 		}
-		else if ( m_nState == RUN )
+		else if ( m_nState > RUN )
 		{
 
 			INT nPlayer = CGameEvent::GetInstance()->GetPlayerIndex();
