@@ -190,7 +190,7 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		{
 			// 케릭터 선택 
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelectNumber;
-			pOM->GetLobbyScene()->CreateWeapon( pOM->GetLobbyScene()->m_nCharSelect );
+//			pOM->GetLobbyScene()->CreateWeapon( pOM->GetLobbyScene()->m_nCharSelect );
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, DOWN );
 		}
 		else
@@ -199,6 +199,7 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 			pOM->GetLobbyScene()->DestoryWeapon( pOM->GetLobbyScene()->m_nSelectState[wUserNumber] );
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, UP );
+			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_SELECT_1 + wSelectNumber, DISABLE );
 		}
 	}
 	else 
