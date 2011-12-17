@@ -90,7 +90,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pGameEvent->Create( m_pD3dDevice, nMaxCharaNum );
 	m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
 	m_pEventGUICombo->Create();
-	m_pEventGUICombo->Clear();
+	m_pEventGUICombo->Initialize();
 	m_pEventGUICombo->SetTime( 10.0f );
 	m_pGameEventTutorialManager = new GameEventTutorialManager();
 	m_pGameEventTutorialManager->Create( a_pD3dDevice, a_Sprite );
