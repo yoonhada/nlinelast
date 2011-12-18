@@ -96,6 +96,7 @@ HRESULT CGameEventCombo::Release()
 	SAFE_DELETE ( m_pGUIForground );
 	SAFE_DELETE ( m_pGUIBackground );
 
+	SAFE_DELETE ( m_pGUICounting );
 	SAFE_DELETE ( m_pGUIButton[0] );
 	SAFE_DELETE ( m_pGUIButton[1] );
 	SAFE_DELETE ( m_pGUIButton[2] );
