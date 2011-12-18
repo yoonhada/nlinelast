@@ -70,14 +70,14 @@ VOID CSound::Update()
 
 VOID CSound::LoadSoundFiles()
 {
-	CHAR* BGMFile[BGM_END] = {
+	const CHAR* BGMFiles[BGM_END] = {
 		"Sound/BGM/cb_cardbattle_bgm.mp3",
 		"Sound/BGM/cb_cardbattle_bgm.mp3",
-		"Sound/BGM/cb_cardbattle_bgm.mp3",
+		"Sound/BGM/MainBGM.mp3",
 		"Sound/BGM/cb_cardbattle_bgm.mp3",
 	};
 
-	CHAR* EffectFile[EFFECT_END] = {
+	const CHAR* EffectFiles[EFFECT_END] = {
 		"Sound/Effect/drip.wav",
 		"Sound/Effect/drip.wav",
 
@@ -116,12 +116,12 @@ VOID CSound::LoadSoundFiles()
 
 	for( INT i=0; i<BGM_END; ++i )
 	{
-		LoadBGMFiles( BGMFile[i], i );
+		LoadBGMFiles( BGMFiles[i], i );
 	}
 
 	for( INT i=0; i<EFFECT_END; ++i )
 	{
-		LoadEffectFiles( EffectFile[i], i );
+		LoadEffectFiles( EffectFiles[i], i );
 	}
 }
 

@@ -190,7 +190,7 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		{
 			// 케릭터 선택 
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelectNumber;
-//			pOM->GetLobbyScene()->CreateWeapon( pOM->GetLobbyScene()->m_nCharSelect );
+			pOM->GetLobbyScene()->CreateWeapon( pOM->GetLobbyScene()->m_nCharSelect );
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, DOWN );
 		}
 		else
