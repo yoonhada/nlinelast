@@ -75,6 +75,7 @@ private:
 	INT						m_scnNext;
 	INT						m_scnState;
 
+	VOID CreateComboEvent();
 	VOID CreateCharactor();
 	VOID CreateMonster();
 	VOID CreateFirstAidKit();

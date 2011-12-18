@@ -86,29 +86,9 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pOptionScene->Create( m_pD3dDevice, a_Sprite, a_hWnd );
 
 	// Æ©Åä¸®¾ó	// ÀÌº¥Æ®
-	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
-	m_pGameEvent = CGameEvent::GetInstance();
-	m_pGameEvent->Create( m_pD3dDevice, nMaxCharaNum );
-	m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
-	m_pEventGUICombo->Create();
-	m_pEventGUICombo->Initialize();
-	m_pEventGUICombo->SetTime( 15.0f );
 	m_pGameEventTutorialManager = new GameEventTutorialManager();
 	m_pGameEventTutorialManager->Create( a_pD3dDevice, a_Sprite );
-	m_pGameEventScoreBoard = new GameEventScoreBoard(m_pD3dDevice, CObjectManage::GetInstance()->GetSprite(), GHWND );
-	m_pGameEventScoreBoard->Create();
-	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_HIDDEN );
-	
-	INT nChar, nCount = 0;
-	for (int Loop = 0; Loop < 4; ++Loop)
-	{
-		nChar = CObjectManage::GetInstance()->Get_CharTable( Loop );
-
- 		if ( nChar > 0 )
-			m_pGameEventScoreBoard->AddData( nCount++, nChar );
-	}
-	
-
+	CreateComboEvent();
 
 	//¸Ê »ý¼º
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
@@ -180,6 +160,31 @@ HRESULT CMainScene::Release()
 	SAFE_DELETE( m_pEventGUICombo );
 
 	return S_OK;
+}
+
+
+VOID CMainScene::CreateComboEvent()
+{
+	INT nMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
+	m_pGameEvent = CGameEvent::GetInstance();
+	m_pGameEvent->Create( m_pD3dDevice, nMaxCharaNum );
+	m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+	m_pEventGUICombo->Create();
+	m_pEventGUICombo->Initialize();
+	m_pEventGUICombo->SetTime( 15.0f );
+	m_pGameEventScoreBoard = new GameEventScoreBoard(m_pD3dDevice, CObjectManage::GetInstance()->GetSprite(), GHWND );
+	m_pGameEventScoreBoard->Create();
+	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_HIDDEN );
+
+	INT nChar;
+	for (int Loop = 0; Loop < 4; ++Loop)
+	{
+		nChar = CObjectManage::GetInstance()->Get_CharTable( Loop );
+		if (nChar >= 0)
+		{
+			m_pGameEventScoreBoard->AddData( Loop, nChar );
+		}		
+	}
 }
 
 VOID CMainScene::CreateCharactor()
@@ -342,6 +347,15 @@ VOID CMainScene::Update()
 
 	m_pGameEventTutorialManager->Update();
 	m_pGameEventScoreBoard->Update();
+	
+	DWORD dID = 0;
+	m_pGameEventScoreBoard->Command( dID );
+	switch( dID )
+	{
+	case MAIN_SCORE:
+		GameEnd();
+		break;
+	}
 
 	m_pEventGUICombo->Update();
 	
@@ -777,13 +791,14 @@ VOID CMainScene::EventSwitch( INT nEvent )
 
 VOID CMainScene::GamePoint()
 {
-	INT nChar, nCount = 0;
+	INT nChar;
 	for (int Loop = 0; Loop < 4; ++Loop)
 	{
 		nChar = CObjectManage::GetInstance()->Get_CharTable( Loop );
-
-		if ( nChar > 0 )
-			m_pGameEventScoreBoard->SetScore( Loop, CGameEvent::GetInstance()->GetAttackPoint( Loop ) );
+		if (nChar >= 0)
+		{
+			m_pGameEventScoreBoard->AddData( Loop, CGameEvent::GetInstance()->GetAttackPoint( Loop ) );
+		}		
 	}
 
 	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_GRAY );
