@@ -73,7 +73,7 @@ VOID CSound::LoadSoundFiles()
 	const CHAR* BGMFiles[BGM_END] = {
 		"Sound/BGM/cb_cardbattle_bgm.mp3",
 		"Sound/BGM/cb_cardbattle_bgm.mp3",
-		"Sound/BGM/MainBGM.mp3",
+		"Sound/BGM/BGM_Game.mp3",
 		"Sound/BGM/cb_cardbattle_bgm.mp3",
 	};
 
