@@ -328,6 +328,9 @@ VOID CNetwork::SC_EVENT_COMBO_RESULT( CPacket& a_pk )
 	BOOL bResult;
 
 	a_pk.Read( &bResult );
+
+	CGameEvent::GetInstance()->AddEvent( CGameEvent::SC_EVENT_COMBO_RESULT, 0.01f );
+	CGameEvent::GetInstance()->SetResult( bResult );
 }
 
 

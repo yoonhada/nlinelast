@@ -13,7 +13,7 @@ class GUIBackground;
 class CGameEventCombo : public IObject
 {
 private:
-	enum { NONE, READY, RUN, COUNTING, FAIL, SUCCESS, END};
+	enum { NONE, READY, RUN, COUNTING, FAIL, SUCCESS, COUNTING1, COUNTING2, COUNTING3, END};
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
 	HWND					m_hWnd;
@@ -46,7 +46,8 @@ public:
 	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
 	BOOL CheckKindEvent( INT nKindEvent );
 	BOOL CheckClientKindEvent( INT nKindEvent, BOOL bResult );
-	
+	VOID EventComboResult( BOOL bResult );
+
 	VOID TimeUpdate( );
 	VOID SetTime( FLOAT fTime )				{ m_fTimeComp = fTime; }
 	VOID Start()							{ m_nState = READY; }
