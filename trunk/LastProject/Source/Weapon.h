@@ -35,14 +35,15 @@ private:
 	enum { READ, WRITE };
 
 	LPDIRECT3DDEVICE9 m_pD3dDevice;
+	INT m_nType;
 	INT m_nState;
 	INT m_nReversing;
 	WEAPONTYPE m_WeaponType;
 	Map * m_pMap;
 	BOOL m_bAtkTime, m_bAtkTimeReset;
 	FLOAT m_fScale;
-	FLOAT m_fZAng[10];
-	FLOAT m_fBBSize[6];
+	FLOAT m_fZAng[4][10];
+	FLOAT m_fBBSize[4][6];
 
 	VOID _GetProfileInt( INT *nOut, LPWSTR lpAppName, LPWSTR lpszBuf, INT nIndex, INT nDefault );
 	VOID _GetProfileVector( D3DXVECTOR3 *vVec, LPWSTR lpAppName, LPWSTR lpszBuf, INT, INT, INT, INT, FLOAT );
