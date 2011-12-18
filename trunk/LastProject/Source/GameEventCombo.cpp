@@ -259,13 +259,13 @@ BOOL CGameEventCombo::CheckClientKindEvent( INT nKindEvent, BOOL bResult )
 
 	if ( bResult )
 	{
-		m_pGUIButton[nKindEvent]->SelectAnimation( 1 );
+		m_pGUIButton[nKindEvent]->SelectAnimation( nKindEvent * 3 + 1 );
 		//m_pGUIButton[nKindEvent]->NextAnimation();
 		bRet = TRUE;
 	}
 	else
 	{
-		m_pGUIButton[nKindEvent]->SelectAnimation( 2 );
+		m_pGUIButton[nKindEvent]->SelectAnimation( nKindEvent * 3 + 2 );
 		//m_pGUIButton[nKindEvent]->NextAnimation();
 		bRet = FALSE;
 	}
