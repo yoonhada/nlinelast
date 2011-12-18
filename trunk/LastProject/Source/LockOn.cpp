@@ -206,19 +206,19 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 
 			a_pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
 		}
-		// Senpukyaku
-		else if( fRand >= 0.75f && fRand < 0.9f )
-		{
-			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_SENPUKYAKU_READY );
-
-			a_pMonster->GetFSM()->ChangeState( SenpukyakuReady::GetInstance() );
-		}
 		// Combo
-		else
+		else if( fRand >= 0.75f && fRand < 0.9f )
 		{
 			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_COMBO_ATTACK1 );
 
 			a_pMonster->GetFSM()->ChangeState( Combo1::GetInstance() );
+		}
+		// Senpukyaku
+		else
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_SENPUKYAKU_READY );
+
+			a_pMonster->GetFSM()->ChangeState( SenpukyakuReady::GetInstance() );
 		}
 	}
 	// ÆÇ´Ù
