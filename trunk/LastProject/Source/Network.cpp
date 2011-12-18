@@ -316,6 +316,10 @@ VOID CNetwork::SC_EVENT_COMBO_SLOT_STATE( CPacket& a_pk )
 
 	a_pk.Read( &wSlotNumber );
 	a_pk.Read( &bResult );
+
+	CGameEvent::GetInstance()->AddEvent( CGameEvent::SC_EVENT_COMBO_SLOT_STATE, 0.01f );
+	CGameEvent::GetInstance()->SetSlotNumber( wSlotNumber );
+	CGameEvent::GetInstance()->SetResult( bResult );
 }
 
 

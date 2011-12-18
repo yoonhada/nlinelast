@@ -557,13 +557,13 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::MAP_WALK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::MAP_WALK \n" );
-		EventStateNetwork( nEvent );
 		EventMapCameraWalk( CCamera::MAP_WALK );
 		break;
 	case CGameEvent::MAP_WALK_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::MAP_WALK_END \n" );
-		EventStateNetwork( nEvent );
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 5.0f );
+		//EventStateNetwork( nEvent );
+		if ( CObjectManage::GetInstance()->IsHost() )
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 5.0f );
 		break;
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
@@ -572,7 +572,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, fComboTime );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + fComboTerm );
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + 2.0f );
 		}
 		break;
 	case CGameEvent::TUTORIAL_ATACK_END:
@@ -632,10 +632,10 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventStateNetwork( nEvent );
 		m_pGameEventTutorialManager->EndEvent();
 		EventComboEnd();
-		if ( CObjectManage::GetInstance()->IsHost() )
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + fComboTerm );
-		}
+		//if ( CObjectManage::GetInstance()->IsHost() )
+		//{
+		//	CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + fComboTerm );
+		//}
 
 		EventInitGameState( nEvent );		
 		break;
@@ -760,6 +760,12 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_LOSE_END \n" );
 		//GameEnd();
+		break;
+
+	case CGameEvent::SC_EVENT_COMBO_SLOT_STATE:
+		m_pEventGUICombo->CheckClientKindEvent( 
+			CGameEvent::GetInstance()->GetSlotNumber(), 
+			CGameEvent::GetInstance()->GetResult() );
 		break;
 	default:
 		break;

@@ -172,7 +172,6 @@ VOID CGameEventCombo::Update()
 		}
 		else if ( m_nState == RUN )
 		{
-
 			INT nPlayer = CGameEvent::GetInstance()->GetPlayerIndex();
 
 			if ( nPlayer >= 0 )
@@ -228,6 +227,7 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 				bRet = FALSE;
 			}
 
+			CNetwork::GetInstance()->CS_EVENT_COMBO_SLOT_STATE(Loop, bRet);
 			break;
 		}
 		else
@@ -250,7 +250,26 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
 	}
 
-	// Net Send;;;;;;;;;;;;;;;;;;;;;;;
+	return bRet;
+}
+
+BOOL CGameEventCombo::CheckClientKindEvent( INT nKindEvent, BOOL bResult )
+{
+	INT bRet = -1;
+
+	if ( bResult )
+	{
+		m_pGUIButton[nKindEvent]->SelectAnimation( 1 );
+		//m_pGUIButton[nKindEvent]->NextAnimation();
+		bRet = TRUE;
+	}
+	else
+	{
+		m_pGUIButton[nKindEvent]->SelectAnimation( 2 );
+		//m_pGUIButton[nKindEvent]->NextAnimation();
+		bRet = FALSE;
+	}
+
 	return bRet;
 }
 
