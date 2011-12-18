@@ -34,6 +34,7 @@ public:
 	virtual ~CPhysics( void );
 
 
+	D3DXVECTOR3 GetColPosition()		{ return m_vColPosition; }
 	VOID Reflect( D3DXVECTOR3& _vOut );
 	//VOID Reflect( D3DXVECTOR3& _vOut, const D3DXVECTOR3& _vN, const D3DXVECTOR3& _vP );
 	VOID Sliding( D3DXVECTOR3& _vOut );
@@ -44,6 +45,7 @@ public:
 	//BOOL Collision( const CBoundBox* _pCube1, const CBoundBox* _pCube2 );
 
 	// 111025
+	BOOL Collision( const CBoundBox *pBB, const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vEnd );
 	BOOL Collision( const D3DXVECTOR3 &vPosition, FLOAT fRadius, const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &vEnd );
 	BOOL Collision( const D3DXVECTOR3* _vCenter1, FLOAT _fRadius1, const D3DXVECTOR3* _vCenter2, FLOAT _fRadius2 );
 	BOOL Collision( const CBoundBox* _pCube1, D3DXVECTOR3 &vDirection, const CBoundBox* _pCube2 );	

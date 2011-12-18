@@ -288,3 +288,47 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoun
 
 	return TRUE;
 }
+
+BOOL CPhysics::Collision( const CBoundBox *pBB, const D3DXVECTOR3 &vBegin, const D3DXVECTOR3 &a_vEnd )
+{
+	BOOL bRet = FALSE;
+	D3DXVECTOR3 vDir, vDirTemp, vEnd; 
+	FLOAT fRange, fRangeTemp;
+	vEnd = a_vEnd;
+
+	for ( i = 0; i < 8; ++i )
+	{
+		m_vBBPos[i] = pBB->GetPosition( i );
+	}
+
+	vDir = vEnd - vBegin;
+	fRange = D3DXVec3Length( &vDir );
+
+	for ( i = 0; i < 6; ++i )
+	{
+		if ( IntersectTri( m_vBBPos[nVI[0][i][0]], m_vBBPos[nVI[0][i][1]], m_vBBPos[nVI[0][i][2]], vBegin, vDir ) )
+		{
+			bRet = TRUE;
+			vDir = m_vColPosition - vBegin;
+			fRangeTemp = D3DXVec3Length( &vDirTemp );
+
+			if ( fRangeTemp < fRange )
+			{
+				fRange = fRangeTemp;
+			}
+		}
+		if ( IntersectTri( m_vBBPos[nVI[1][i][0]], m_vBBPos[nVI[1][i][1]], m_vBBPos[nVI[1][i][2]], vBegin, vDir ) )
+		{
+			bRet = TRUE;
+			vDir = m_vColPosition - vBegin;
+			fRangeTemp = D3DXVec3Length( &vDirTemp );
+
+			if ( fRangeTemp < fRange )
+			{
+				fRange = fRangeTemp;
+			}
+		}
+	}
+
+	return bRet;
+}

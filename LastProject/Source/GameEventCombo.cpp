@@ -80,7 +80,7 @@ HRESULT CGameEventCombo::Create( )
 	m_pGUIBase->AddFileName( 2, imgParam[5], L"Img\\Event\\ForgroundF.png", 1000 );
 	m_pGUIForground->Create( fWidth - fWidBac, fHeight - fHeiBac, fWidBac * 2.0f, fHeiBac * 2.0f, imgParam[5] );
 
-	m_pGUIBase->AddFileName( 0, imgParam[6], L"Img\\Event\\BackGround.png", 1000 );
+	m_pGUIBase->AddFileName( 0, imgParam[6], L"Img\\Event\\Empty.png", 1000 );
 	m_pGUIBase->AddFileName( 1, imgParam[6], L"Img\\Event\\BackGround3.png", 1000 );
 	m_pGUIBase->AddFileName( 2, imgParam[6], L"Img\\Event\\BackGround2.png", 1000 );
 	m_pGUIBase->AddFileName( 3, imgParam[6], L"Img\\Event\\BackGround1.png", 1000 );
@@ -135,6 +135,12 @@ VOID CGameEventCombo::Initialize()
 	m_pGUIButton[1]->SelectAnimation( 0 );
 	m_pGUIButton[2]->SelectAnimation( 0 );
 	m_pGUIButton[3]->SelectAnimation( 0 );
+
+	FLOAT					m_fCount, m_fTimeComp;
+	INT						m_nState;
+	INT						m_nKindIndex;
+	INT						m_nKindEvent[4];
+
 }
 
 VOID CGameEventCombo::TimeUpdate( )
@@ -169,7 +175,7 @@ VOID CGameEventCombo::Update()
 			m_nState = RUN;
 			TimeUpdate();
 		}
-		else if ( m_nState > RUN )
+		else if ( m_nState == RUN )
 		{
 
 			INT nPlayer = CGameEvent::GetInstance()->GetPlayerIndex();
@@ -255,12 +261,12 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 
 VOID CGameEventCombo::Success()
 {
-	m_nState = SUCCESS;
+	m_nState = END;
 	m_pGUIForground->SelectAnimation( 1 );
 }
 
 VOID CGameEventCombo::Fail()
 {
-	m_nState = FAIL;
+	m_nState = END;
 	m_pGUIForground->SelectAnimation( 2 );
 }

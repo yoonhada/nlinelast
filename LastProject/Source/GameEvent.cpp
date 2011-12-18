@@ -100,6 +100,26 @@ VOID CGameEvent::ClearEvent( )
 	m_listEvent.erase( m_listEvent.begin(), m_listEvent.end() );
 }
 
+VOID CGameEvent::ClearCombo()
+{
+	Iter = m_listEvent.begin();
+
+	while ( Iter != m_listEvent.end() )
+	{
+		if ( EVENT_COMBO <= (*Iter)->nKind &&  (*Iter)->nKind <= EVENT_COMBO_END )
+		{
+			delete *Iter;
+			*Iter = NULL;
+			//SAFE_DELETE( (*Iter) );
+			Iter = m_listEvent.erase( Iter );
+		}
+		else
+		{
+			Iter++;
+		}
+	}
+}
+
 VOID CGameEvent::AddEvent( INT nKind, FLOAT fTime )
 {
 	BOOL bChk = FALSE;
@@ -152,4 +172,14 @@ INT CGameEvent::Update()
 	}
 
 	return nEvent;
+}
+
+VOID CGameEvent::SetAttackPoint( INT nChar, INT nCount )
+{
+
+}
+
+VOID CGameEvent::SetShotedPoint( INT nChar, INT nCount )
+{
+
 }

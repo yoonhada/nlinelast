@@ -61,8 +61,8 @@ public:
 
 	VOID LoadKindChar( INT nKind );
 	VOID World2Model(D3DXVECTOR3& _vPosition);
-	VOID BreakCube(D3DXVECTOR3& _vPosition);
 	BOOL BreakQube(D3DXMATRIXA16 &mat);
+	VOID RepairCube();
 	VOID TestBreakCube();
 	VOID BreakCubeAll();
 	VOID BreakNockdown( const FLOAT fPow = 1.0f );
@@ -183,6 +183,8 @@ public:
 	BOOL AliveCheck(BOOL bState = -1);
 	VOID SetWeaponAni();
 	//VOID UpdateWeapon();
+
+	INT GetvCubeSize()					{ return m_vectorCube.size(); }
 };
 
 #endif

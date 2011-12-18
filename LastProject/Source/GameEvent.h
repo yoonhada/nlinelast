@@ -92,6 +92,7 @@ public:
 
 	VOID AddEvent( INT, FLOAT );
 	VOID ClearEvent();
+	VOID ClearCombo();
 	VOID IndexInit();
 	
 	// Get
@@ -111,4 +112,7 @@ public:
 	VOID SetMonstersState( INT a_nMonstersState){ m_nMonstersState = a_nMonstersState; }
 	VOID Set_PlayerIndex( INT a_nPlayerIndex )	{ m_nPlayerIndex = a_nPlayerIndex; }
 	VOID Set_MonsterIndex( INT a_nMonsterIndex ){ m_nMonsterIndex = a_nMonsterIndex; }
+
+	VOID SetAttackPoint( INT nChar, INT nCount );
+	VOID SetShotedPoint( INT nChar, INT nCount );
 };
