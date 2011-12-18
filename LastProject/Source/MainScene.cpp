@@ -95,7 +95,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pEventGUICombo->SetTime( 15.0f );
 	m_pGameEventTutorialManager = new GameEventTutorialManager();
 	m_pGameEventTutorialManager->Create( a_pD3dDevice, a_Sprite );
-	m_pGameEventScoreBoard = new GameEventScoreBoard(m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+	m_pGameEventScoreBoard = new GameEventScoreBoard(m_pD3dDevice, CObjectManage::GetInstance()->GetSprite(), GHWND );
 	m_pGameEventScoreBoard->Create();
 	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_HIDDEN );
 	
