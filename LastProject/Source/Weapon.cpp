@@ -30,28 +30,115 @@ VOID CWeapon::Clear()
 		m_WeaponType.vDir[i].x = m_WeaponType.vDir[i].y = m_WeaponType.vDir[i].z = 0.0f;
 	}
 
-	for (int i = 0; i < 4; ++i)
-	{
-		m_fZAng[i][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-		m_fZAng[i][1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-		m_fZAng[i][2] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-		m_fZAng[i][3] = -MTP_FUN::Deg2Rad<90>::radians;	// D3DXToRadian( -90.0f);
-		m_fZAng[i][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
-		m_fZAng[i][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-		m_fZAng[i][6] = MTP_FUN::Deg2Rad<45>::radians;		// D3DXToRadian( 45.0f);
-		m_fZAng[i][7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
-		m_fZAng[i][8] = MTP_FUN::Deg2Rad<135>::radians;	// D3DXToRadian( 135.0f);
-		m_fZAng[i][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	m_fZAng[i][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	//	m_fZAng[i][1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	//	m_fZAng[i][2] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	//	m_fZAng[i][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
+	//	m_fZAng[i][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
+	//	m_fZAng[i][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	//	m_fZAng[i][6] = MTP_FUN::Deg2Rad<45>::radians;		// D3DXToRadian( 45.0f);
+	//	m_fZAng[i][7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
+	//	m_fZAng[i][8] = MTP_FUN::Deg2Rad<135>::radians;	// D3DXToRadian( 135.0f);
+	//	m_fZAng[i][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 
-		// XYZ Min
-		m_fBBSize[i][0] =-10.5f;
-		m_fBBSize[i][1] =- 1.5f;
-		m_fBBSize[i][2] =-16.5f;
-		// XYZ Max
-		m_fBBSize[i][3] =  7.5f;
-		m_fBBSize[i][4] =  1.5f;
-		m_fBBSize[i][5] =  7.5f;
-	}
+	//	// XYZ Min
+	//	m_fBBSize[i][0] = -10.5f;
+	//	//m_fBBSize[i][1] =- 1.5f;
+	//	m_fBBSize[i][1] = -3.0f;
+	//	m_fBBSize[i][2] = -16.5f;
+	//	// XYZ Max
+	//	m_fBBSize[i][3] =  7.5f;
+	//	//m_fBBSize[i][4] =  1.5f;
+	//	m_fBBSize[i][4] =  3.0f;
+	//	m_fBBSize[i][5] =  7.5f;
+	//}
+
+	//	Daddy
+	m_fZAng[0][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[0][1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[0][2] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[0][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
+	m_fZAng[0][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
+	m_fZAng[0][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[0][6] = MTP_FUN::Deg2Rad<45>::radians;		// D3DXToRadian( 45.0f);
+	m_fZAng[0][7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
+	m_fZAng[0][8] = MTP_FUN::Deg2Rad<135>::radians;	// D3DXToRadian( 135.0f);
+	m_fZAng[0][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+
+	// XYZ Min
+	m_fBBSize[0][0] = -10.5f;
+	m_fBBSize[0][1] = -3.0f;
+	m_fBBSize[0][2] = -16.5f;
+	// XYZ Max
+	m_fBBSize[0][3] =  7.5f;
+	m_fBBSize[0][4] =  3.0f;
+	m_fBBSize[0][5] =  7.5f;
+
+	//	Mom
+	m_fZAng[1][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[1][1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[1][2] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[1][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
+	m_fZAng[1][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
+	m_fZAng[1][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[1][6] = MTP_FUN::Deg2Rad<45>::radians;		// D3DXToRadian( 45.0f);
+	m_fZAng[1][7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
+	m_fZAng[1][8] = MTP_FUN::Deg2Rad<135>::radians;	// D3DXToRadian( 135.0f);
+	m_fZAng[1][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+
+	// XYZ Min
+	m_fBBSize[1][0] = -10.5f;
+	m_fBBSize[1][1] = -5.0f;
+	m_fBBSize[1][2] = -16.5f;
+	// XYZ Max
+	m_fBBSize[1][3] =  7.5f;
+	m_fBBSize[1][4] =  5.0f;
+	m_fBBSize[1][5] =  7.5f;
+
+	//	Daugther
+	m_fZAng[2][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[2][1] = MTP_FUN::Deg2Rad<60>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[2][2] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[2][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
+	m_fZAng[2][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
+	m_fZAng[2][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[2][6] = MTP_FUN::Deg2Rad<135>::radians;		// D3DXToRadian( 45.0f);
+	m_fZAng[2][7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
+	m_fZAng[2][8] = MTP_FUN::Deg2Rad<45>::radians;	// D3DXToRadian( 135.0f);
+	m_fZAng[2][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+
+	// XYZ Min
+	m_fBBSize[2][0] = -10.5f;
+	m_fBBSize[2][1] = -5.0f;
+	m_fBBSize[2][2] = -16.5f;
+	// XYZ Max
+	m_fBBSize[2][3] =  7.5f;
+	m_fBBSize[2][4] =  5.0f;
+	m_fBBSize[2][5] =  7.5f;
+
+	//	Son
+	m_fZAng[3][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[3][1] = MTP_FUN::Deg2Rad<60>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[3][2] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[3][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
+	m_fZAng[3][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
+	m_fZAng[3][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+	m_fZAng[3][6] = MTP_FUN::Deg2Rad<135>::radians;		// D3DXToRadian( 45.0f);
+	m_fZAng[3][7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
+	m_fZAng[3][8] = MTP_FUN::Deg2Rad<45>::radians;	// D3DXToRadian( 135.0f);
+	m_fZAng[3][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
+
+	// XYZ Min
+	m_fBBSize[3][0] = -10.5f;
+	m_fBBSize[3][1] = -5.0f;
+	m_fBBSize[3][2] = -16.5f;
+	// XYZ Max
+	m_fBBSize[3][3] =  7.5f;
+	m_fBBSize[3][4] =  5.0f;
+	m_fBBSize[3][5] =  7.5f;
+
 	m_fScale = 0;
 	m_bAtkTime = FALSE;
 
