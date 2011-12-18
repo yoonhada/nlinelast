@@ -44,9 +44,9 @@ VOID LobbyGUI::CreateBackground()
 
 	imgParam.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgParam.fX			= 0.0f;
-	imgParam.fY			= 0.0f;
-	imgParam.fWidth		= fWidth;
-	imgParam.fHeight	= fHeight;
+	imgParam.fY			= 550.0f;
+	imgParam.fWidth		= 1280.0f;
+	imgParam.fHeight	= 474.0f;
 
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Background.png" );
 	
@@ -222,7 +222,7 @@ VOID LobbyGUI::Update()
 
 VOID LobbyGUI::Render()
 {
-	//m_pGUIBackground->Render();
+	m_pGUIBackground->Render();
 	m_pGUIBtnManager->Render();
 	m_pGUIEditManager->Render();
 	m_pGUIListbox->Render();
