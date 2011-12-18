@@ -115,4 +115,6 @@ public:
 
 	VOID SetAttackPoint( INT nChar, INT nCount );
 	VOID SetShotedPoint( INT nChar, INT nCount );
+	INT GetAttackPoint( INT nChar )				{ return m_pAttackPoint[nChar]; }
+	INT GetShotedPoint( INT nChar )				{ return m_pShotedPoint[nChar]; }
 };

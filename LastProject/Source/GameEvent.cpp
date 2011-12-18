@@ -176,10 +176,10 @@ INT CGameEvent::Update()
 
 VOID CGameEvent::SetAttackPoint( INT nChar, INT nCount )
 {
-
+	m_pAttackPoint[nChar] += nCount;
 }
 
 VOID CGameEvent::SetShotedPoint( INT nChar, INT nCount )
 {
-
+	m_pShotedPoint[nChar] -= nCount;
 }

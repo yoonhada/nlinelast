@@ -290,16 +290,21 @@ VOID CCamera::CheckObjectCollision( )
 	FLOAT fRange = 0.0f;
 	CTree * pTree = CTree::GetInstance();
 	std::vector<CBoundBox*> * vecBoundBox = pTree->GetMapVector( pTree->GetRoot(), m_vLook );
-	std::vector<CBoundBox*>::iterator Iter = vecBoundBox->begin();
+	std::vector<CBoundBox*>::iterator Iter;
 
-	while( Iter != vecBoundBox->end() )
+	if (vecBoundBox != NULL)
 	{
-		if ( CPhysics::GetInstance()->Collision( (*Iter), m_vLook, m_vEye ) )
-		{
-			m_vEye = CPhysics::GetInstance()->GetColPosition();
-		}
+		Iter = vecBoundBox->begin();
 
-		Iter++;
+		while( Iter != vecBoundBox->end() )
+		{
+			if ( CPhysics::GetInstance()->Collision( (*Iter), m_vLook, m_vEye ) )
+			{
+				m_vEye = CPhysics::GetInstance()->GetColPosition();
+			}
+
+			Iter++;
+		}
 	}
 }
 

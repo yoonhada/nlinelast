@@ -41,10 +41,10 @@ HRESULT CGameEventCombo::Create( )
 	GUIBase::IMAGEPARAM imgParam[7];
 
 	FLOAT fWidBac, fWidFor, fHeiBac, fHeifor;
-	fWidBac = 0.5f * 400.0f;
-	fHeiBac = 0.5f * 100.0f;
-	fWidFor = 0.5f * 100.0f;
-	fHeifor = 0.5f * 100.0f;
+	fWidBac = 0.5f * 567.0f;
+	fHeiBac = 0.5f * 198.0f;
+	fWidFor = 0.5f * 116.0f;
+	fHeifor = 0.5f * 112.0f;
 	
 	for (int Loop = 0; Loop < 4; ++Loop)
 	{
@@ -84,7 +84,7 @@ HRESULT CGameEventCombo::Create( )
 	m_pGUIBase->AddFileName( 1, imgParam[6], L"Img\\Event\\BackGround3.png", 1000 );
 	m_pGUIBase->AddFileName( 2, imgParam[6], L"Img\\Event\\BackGround2.png", 1000 );
 	m_pGUIBase->AddFileName( 3, imgParam[6], L"Img\\Event\\BackGround1.png", 1000 );
-	m_pGUICounting->Create( fWidth - fWidBac, fHeight - fHeiBac, fWidBac * 2.0f, fHeiBac * 2.0f + 200.0f, imgParam[6] );
+	m_pGUICounting->Create( fWidth - fWidBac, fHeight - fHeiBac, fWidBac * 2.0f, fHeiBac * 2.0f, imgParam[6] );
 	m_nKindIndex = 0;
 	return S_OK;
 }
@@ -135,12 +135,6 @@ VOID CGameEventCombo::Initialize()
 	m_pGUIButton[1]->SelectAnimation( 0 );
 	m_pGUIButton[2]->SelectAnimation( 0 );
 	m_pGUIButton[3]->SelectAnimation( 0 );
-
-	FLOAT					m_fCount, m_fTimeComp;
-	INT						m_nState;
-	INT						m_nKindIndex;
-	INT						m_nKindEvent[4];
-
 }
 
 VOID CGameEventCombo::TimeUpdate( )

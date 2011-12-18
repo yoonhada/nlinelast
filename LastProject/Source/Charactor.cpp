@@ -686,11 +686,17 @@ FLOAT CCharactor::AnimateAttack()
 	if( m_pWeapon->Get_nState() != EnumCharFrame::BASE )
 	{
 		if ( m_pWeapon->GetBoundBox().GetDirection().x < -0.1f )
+		{
 			m_iSelectedFrameNum = 3;
+		}
 		else if ( m_pWeapon->GetBoundBox().GetDirection().x > 0.1f )
+		{
 			m_iSelectedFrameNum = 1;
+		}
 		else
+		{
 			m_iSelectedFrameNum = 0;
+		}
 
 		// CURRENTFRAME, FRAMEBEGIN, FRAMETIME, FRAMEATK, DELAY
 		if ( m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEBEGIN ) + m_pWeapon->Get_nFrame( WEAPONTYPE::FRAMEATK ) > m_pWeapon->Get_nFrame( WEAPONTYPE::CURRENTFRAME ) &&
