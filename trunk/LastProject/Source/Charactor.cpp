@@ -1285,3 +1285,15 @@ VOID CCharactor::LoadKindChar( INT nKind )
 		break;
 	}
 }
+
+
+//	Test
+VOID CCharactor::UpdateRotateByWeapon( DWORD _dType )
+{
+	D3DXVECTOR3 a_vControl	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	FLOAT		a_fAngle	= 0.0f;
+
+	a_vControl	= CInput::GetInstance()->Get_Pos();
+	a_fAngle	= CInput::GetInstance()->Get_MouseYRotate();
+}
+//	End

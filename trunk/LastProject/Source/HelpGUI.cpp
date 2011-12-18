@@ -87,7 +87,7 @@ VOID HelpGUI::Update()
 
 	m_pMouse->Update();
 	m_pGUIBackground->Update();
-	m_pGUIListbox->Update();
+	m_pGUIListbox->Update( pt.x, pt.y );
 
 	static BOOL bFirst = FALSE;
 	

@@ -145,10 +145,10 @@ VOID GameEventScoreBoard::CreateButton()
 
 	IMAGEPARAM imgParamNormal, imgParamHot, imgParamDown, imgParamDisable;
 	
-	AddFileName( 0, imgParamNormal, L"Image\\ScoreBoard\\End_Normal.png" );
-	AddFileName( 0, imgParamHot, L"Image\\ScoreBoard\\End_Hot.png" );
-	AddFileName( 0, imgParamDown, L"Image\\ScoreBoard\\End_Down.png" );
-	AddFileName( 0, imgParamDisable, L"Image\\ScoreBorad\\End_Down.png" );
+	AddFileName( 0, imgParamNormal, L"Img\\Event\\ScoreBoard\\End_Normal.png" );
+	AddFileName( 0, imgParamHot, L"Img\\Event\\ScoreBoard\\End_Hot.png" );
+	AddFileName( 0, imgParamDown, L"Img\\Event\\ScoreBoard\\End_Down.png" );
+	AddFileName( 0, imgParamDisable, L"Img\\Event\\ScoreBorad\\End_Down.png" );
 
 	m_pGUIBtnManager->Create( MAIN_SCORE, 0, fX, fY, fWidth, fHeight, imgParamNormal, imgParamHot, imgParamDown, imgParamDisable );
 }

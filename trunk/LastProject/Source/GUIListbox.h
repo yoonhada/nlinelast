@@ -5,6 +5,7 @@
 #include "GUIBase.h"
 #include <list>
 
+class GUIBtnManager;
 class GUIScrollbar;
 
 class GUIListbox : public GUIBase
@@ -72,7 +73,7 @@ public:
 	VOID		Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, IMAGEPARAM& _imgBackground );
 	VOID		AddItem( LPWSTR _Text, LPWSTR _TextureFileName = NULL );
 	VOID		SetItemGap( INT _iItemGap );
-	VOID		Update();
+	VOID		Update( INT _iX, INT _iY );
 	VOID		Render();
 
 	VOID		OnDown( INT x, INT y );
@@ -82,6 +83,8 @@ public:
 	VOID		SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight, DWORD _dColor );
 
 private:
+	enum { GLB_BTN_UP = 6000, GLB_BTN_DOWN };
+
 	DATA			m_Data;
 	//ITEMLIST		m_lstItem;
 
@@ -94,6 +97,7 @@ private:
 	FLOAT			m_fX, m_fY;
 	FLOAT			m_fWidth, m_fHeight;
 
+	GUIBtnManager*	m_pGUIBtnManager;
 	GUIScrollbar*	m_pGUIScrollbar;
 	BOOL			m_bActScrollbar;
 

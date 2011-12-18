@@ -172,7 +172,7 @@ VOID MainGUI::Update()
 	POINT pt = m_pMouse->GetPosition();
 
 	m_pMouse->Update();
-	m_pChatWindow->Update();
+	m_pChatWindow->Update( pt.x, pt.y );
 	m_pChatEdit->Update();
 	
 

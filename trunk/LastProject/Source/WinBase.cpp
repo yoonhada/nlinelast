@@ -194,10 +194,10 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	{
 	case WM_CREATE:
 		//ZeroMemory(&dm,sizeof(DEVMODE));
-		//dm.dmSize = sizeof(DEVMODE);
-		//dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-		//dm.dmBitsPerPel= 16;
-		//dm.dmPelsWidth = 1280;
+		//dm.dmSize		= sizeof(DEVMODE);
+		//dm.dmFields		= DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		//dm.dmBitsPerPel	= 16;
+		//dm.dmPelsWidth	= 1280;
 		//dm.dmPelsHeight = 1024;
 		// if(ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
 		//	ChangeDisplaySettings(&dm, 0);

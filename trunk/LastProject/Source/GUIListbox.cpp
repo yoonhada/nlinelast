@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GUIListbox.h"
+#include "GUIBtnManager.h"
 #include "GUIScrollbar.h"
 #include "GUIFont.h"
 
@@ -22,11 +23,13 @@ VOID GUIListbox::Initialize()
 	m_iFontHeight	= 10;
 	m_dFontColor	= 0x00000000;
 
+	m_pGUIBtnManager	= new GUIBtnManager( GUIBase::m_pd3dDevice, GUIBase::m_pSprite );
 	m_pGUIScrollbar		= new GUIScrollbar( GUIBase::m_pd3dDevice, GUIBase::m_pSprite );
 }
 
 VOID GUIListbox::Release()
 {
+	delete m_pGUIBtnManager;
 	delete m_pGUIScrollbar;
 }
 
@@ -210,20 +213,49 @@ VOID GUIListbox::Create( FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fHeight, IM
 
 	imgThumb.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgThumb.fX			= _fX + _fWidth;
-	imgThumb.fY			= _fY;
+	imgThumb.fY			= _fY + 20;
 	imgThumb.fWidth		= 20.0f;
 	imgThumb.fHeight	= 20.0f;
 
 	imgBack.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgBack.fX			= _fX + _fWidth;
-	imgBack.fY			= _fY;
+	imgBack.fY			= _fY + 20.0f;
 	imgBack.fWidth		= 20.0f;
-	imgBack.fHeight		= _fHeight;
+	imgBack.fHeight		= _fHeight - 40.0f;
 	
 	AddFileName( 0, imgThumb, L"Img\\Scrollbar_Thumb.png" );
 	AddFileName( 0, imgBack, L"Img\\Scrollbar_Back.png" );
 
 	m_pGUIScrollbar->Create( imgThumb, imgBack );
+
+	//	Create Button
+	GUIBase::IMAGEPARAM imgParamUpNormal, imgParamUpDown, imgParamUpHot, imgParamUpDisable;
+
+	FLOAT fX			= _fX + _fWidth;
+	FLOAT fY			= _fY;
+	FLOAT fWidth		= 20.0f;
+	FLOAT fHeight		= 20.0f;
+
+	AddFileName( 0, imgParamUpNormal, L"Img\\arrow-up-Normal.png" );
+	AddFileName( 0, imgParamUpHot, L"Img\\arrow-up-Hot.png" );
+	AddFileName( 0, imgParamUpDown, L"Img\\arrow-up-Down.png" );
+	AddFileName( 0, imgParamUpDisable, L"Img\\arrow-up-Disable.png" );
+
+	m_pGUIBtnManager->Create( GLB_BTN_UP, 0, fX, fY, fWidth, fHeight, imgParamUpNormal, imgParamUpHot, imgParamUpDown, imgParamUpDisable );
+
+	GUIBase::IMAGEPARAM imgParamDownNormal, imgParamDownDown, imgParamDownHot, imgParamDownDisable;
+
+	fX			= _fX + _fWidth;
+	fY			= _fY + _fHeight - 20.0f;
+	fWidth		= 20.0f;
+	fHeight		= 20.0f;
+
+	AddFileName( 0, imgParamDownNormal, L"Img\\arrow-down-Normal.png" );
+	AddFileName( 0, imgParamDownHot, L"Img\\arrow-down-Hot.png" );
+	AddFileName( 0, imgParamDownDown, L"Img\\arrow-down-Down.png" );
+	AddFileName( 0, imgParamDownDisable, L"Img\\arrow-down-Disable.png" );
+
+	m_pGUIBtnManager->Create( GLB_BTN_DOWN, 0, fX, fY, fWidth, fHeight, imgParamDownNormal, imgParamDownHot, imgParamDownDown, imgParamDownDisable );
 }
 
 VOID GUIListbox::AddItem( LPWSTR _Text, LPWSTR _TextureFileName )
@@ -371,7 +403,7 @@ VOID GUIListbox::SetItemGap( INT _iItemGap )
 		
 }
 
-VOID GUIListbox::Update()
+VOID GUIListbox::Update( INT _iX, INT _iY )
 {
 	// Update Rear
 	INT iValue = m_pGUIScrollbar->GetValue();
@@ -398,7 +430,24 @@ VOID GUIListbox::Update()
 	}
 	
 	if( m_bActScrollbar )
+	{
 		m_pGUIScrollbar->Update();
+		m_pGUIBtnManager->Update( _iX, _iY );
+
+		INT iValue = m_pGUIScrollbar->GetValue();
+
+		if( m_pGUIBtnManager->GetState( GLB_BTN_UP ) == 2 )
+			iValue--;
+		if( m_pGUIBtnManager->GetState( GLB_BTN_DOWN ) == 2 )
+			iValue++;
+
+		if( 0 > iValue )
+			iValue = 0;
+		else if( iValue > m_pGUIScrollbar->GetMaxRange() )
+				iValue = m_pGUIScrollbar->GetMaxRange();
+
+		m_pGUIScrollbar->SetValue( iValue );
+	}
 	
 }
 
@@ -408,25 +457,37 @@ VOID GUIListbox::Render()
 	RenderImage2D( &m_Data.img2DFront );	
 
 	if( m_bActScrollbar )
+	{
 		m_pGUIScrollbar->Render();
+		m_pGUIBtnManager->Render();
+	}
 }
 
 VOID GUIListbox::OnDown( INT x, INT y )
 {
 	if( m_bActScrollbar )
+	{
+		m_pGUIBtnManager->OnDown( x, y );
 		m_pGUIScrollbar->OnDown( x, y );
+	}
 }
 
 VOID GUIListbox::OnMove( INT x, INT y )
 {
 	if( m_bActScrollbar )
+	{
+		m_pGUIBtnManager->OnMove( x, y );
 		m_pGUIScrollbar->OnMove( x, y );
+	}
 }
 
 VOID GUIListbox::OnUp( INT x, INT y )
 {
 	if( m_bActScrollbar )
+	{
+		m_pGUIBtnManager->OnUp( x, y );
 		m_pGUIScrollbar->OnUp( x, y );
+	}
 }
 
 VOID GUIListbox::SetFont(LPWSTR _pFaceName, INT _iWidth, INT _iHeight, DWORD _dColor )

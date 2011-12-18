@@ -59,6 +59,10 @@ public:
 	VOID UpdateOtherPlayer(BOOL);
 	VOID Render();
 
+	//	Test
+	VOID UpdateRotateByWeapon( DWORD _dType );
+	//	End
+
 	VOID LoadKindChar( INT nKind );
 	VOID World2Model(D3DXVECTOR3& _vPosition);
 	BOOL BreakQube(D3DXMATRIXA16 &mat);
