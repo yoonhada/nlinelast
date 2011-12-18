@@ -45,6 +45,7 @@ public:
 	INT GetKindIndex()						{ return m_nKindIndex; }
 	VOID ReSetKindIndex()						{ m_nKindIndex = 0; }
 	BOOL CheckKindEvent( INT nKindEvent );
+	BOOL CheckClientKindEvent( INT nKindEvent, BOOL bResult );
 	
 	VOID TimeUpdate( );
 	VOID SetTime( FLOAT fTime )				{ m_fTimeComp = fTime; }

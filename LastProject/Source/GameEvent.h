@@ -45,6 +45,10 @@ private:
 	std::list<EVENT*> m_listEvent;
 	std::list <EVENT*>::iterator Iter;
 
+	// CEvent
+	WORD m_wSlotNumber;
+	BOOL m_bResult;
+
 	CGameEvent();
 	virtual ~CGameEvent();
 
@@ -83,6 +87,8 @@ public:
 		SCENE_CLOWN = 3000, 
 		SCENE_CLOWN_END, 
 
+		NETWORK_ENUM = 9000, 
+		SC_EVENT_COMBO_SLOT_STATE, 
 	};
 
 	VOID Clear();
@@ -112,9 +118,14 @@ public:
 	VOID SetMonstersState( INT a_nMonstersState){ m_nMonstersState = a_nMonstersState; }
 	VOID Set_PlayerIndex( INT a_nPlayerIndex )	{ m_nPlayerIndex = a_nPlayerIndex; }
 	VOID Set_MonsterIndex( INT a_nMonsterIndex ){ m_nMonsterIndex = a_nMonsterIndex; }
-
 	VOID SetAttackPoint( INT nChar, INT nCount );
 	VOID SetShotedPoint( INT nChar, INT nCount );
+	VOID SetSlotNumber( WORD wSlotNumber )		{ m_wSlotNumber = wSlotNumber; }
+	VOID SetResult( BOOL bResult )				{ m_bResult = bResult; }
+
 	INT GetAttackPoint( INT nChar )				{ return m_pAttackPoint[nChar]; }
 	INT GetShotedPoint( INT nChar )				{ return m_pShotedPoint[nChar]; }
+	WORD GetSlotNumber()						{ return m_wSlotNumber; }
+	BOOL GetResult()							{ return m_bResult; }
+
 };
