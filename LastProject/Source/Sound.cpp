@@ -5,6 +5,9 @@
 
 CSound::CSound()
 {
+	m_fBGMVolume	= 0.5f;
+	m_fEffectVolume = 1.0f;
+
 	Initialize();
 }
 
@@ -146,12 +149,18 @@ VOID CSound::PlayBGM( INT a_iBGM )
 {
 	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pBGM[a_iBGM], FALSE, &m_pBGMChannel );
 	ErrorCheck( m_Result );
+
+	m_Result = FMOD_Channel_SetVolume( m_pBGMChannel, m_fBGMVolume );
+	ErrorCheck( m_Result );
 }
 
 
 VOID CSound::PlayEffect( INT a_iEffect )
 {
 	m_Result = FMOD_System_PlaySound( m_pSystem, FMOD_CHANNEL_FREE, m_pEffectSound[a_iEffect], FALSE, &m_pEffectChannel );
+	ErrorCheck( m_Result );
+
+	m_Result = FMOD_Channel_SetVolume( m_pEffectChannel, m_fEffectVolume );
 	ErrorCheck( m_Result );
 }
 

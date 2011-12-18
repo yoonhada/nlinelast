@@ -67,6 +67,8 @@ private:
 	FMOD_RESULT		m_Result;
 	UINT			m_iVersion;
 
+	FLOAT			m_fBGMVolume;
+	FLOAT			m_fEffectVolume;
 
 	CSound();
 	virtual ~CSound();
@@ -87,8 +89,10 @@ public:
 
 	VOID StopBGM( INT a_iBGM );
 
-	VOID ErrorCheck( FMOD_RESULT a_Result );
-	
+	VOID SetBGMVolume( FLOAT a_fVolume )		{ m_fBGMVolume = a_fVolume;	}
+	VOID SetEffectVolume( FLOAT a_fVolume )		{ m_fEffectVolume = a_fVolume; }
+
+	VOID ErrorCheck( FMOD_RESULT a_Result );	
 };
 
 
