@@ -88,8 +88,8 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create Matrices
 	m_pMatrices = CMatrices::GetInstance();	
 
-//	CSound::GetInstance()->PlayBGM( CSound::BGM_LOBBY );
 	CSound::GetInstance()->StopBGM( 0 );
+	CSound::GetInstance()->PlayBGM( CSound::BGM_LOBBY );
 	
 	return S_OK;
 }
@@ -169,8 +169,9 @@ VOID LobbyScene::Update()
 	case LOBBY_SELECT_1:
 	case LOBBY_SELECT_2:
 	case LOBBY_SELECT_3:
-	case LOBBY_SELECT_4:		
-//		if ( m_nSelectState[pOM->Get_ClientNumber()] != -1 )
+	case LOBBY_SELECT_4:
+/*
+		if ( m_nSelectState[pOM->Get_ClientNumber()] != -1 )
 		{
 			if( m_nCharSelect != -1 )
 			{
@@ -181,7 +182,8 @@ VOID LobbyScene::Update()
 
 			CreateWeapon( m_nCharSelect );
 		}
-
+*/
+		m_nCharSelect = dID - LOBBY_SELECT_1;
 		CSound::GetInstance()->PlayEffect( 1 );
 		break;
 
