@@ -16,10 +16,10 @@ VOID GameEventTutorial_SignalLight::Release()
 
 VOID GameEventTutorial_SignalLight::Create()
 {
-	FLOAT fX		= 850.0f;
-	FLOAT fY		= 350.0f;
-	FLOAT fWidth	= 400.0f;
-	FLOAT fHeight	= 700.0f;
+	FLOAT fX		= 873.0f;
+	FLOAT fY		= 498.0f;
+	FLOAT fWidth	= 407.0f;
+	FLOAT fHeight	= 526.0f;
 
 	GUIBase::IMAGEPARAM imgParam;
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\Event\\Tutorial\\TutorialSignalLight.png" );
