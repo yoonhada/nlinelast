@@ -972,6 +972,30 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Combo1.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo1.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo3.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo3.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Dash.cpp"
 				>
 			</File>
@@ -985,14 +1009,6 @@
 			</File>
 			<File
 				RelativePath=".\Source\DashReady.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\Groggy.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\Groggy.h"
 				>
 			</File>
 			<File
@@ -1020,6 +1036,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Melee3.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Melee3.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Melee4.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Melee4.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\RocketPunch.cpp"
 				>
 			</File>
@@ -1036,6 +1068,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Senpukyaku.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Senpukyaku.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\SenpukyakuReady.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\SenpukyakuReady.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Sliding.cpp"
 				>
 			</File>
@@ -1049,6 +1097,14 @@
 			</File>
 			<File
 				RelativePath=".\Source\Spin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\SpinGroggy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\SpinGroggy.h"
 				>
 			</File>
 			<File
