@@ -311,13 +311,19 @@ VOID CNetwork::SC_EVENT_COMBO_INFO( CPacket& a_pk )
 
 VOID CNetwork::SC_EVENT_COMBO_SLOT_STATE( CPacket& a_pk )
 {
+	WORD wSlotNumber;
+	BOOL bResult;
 
+	a_pk.Read( &wSlotNumber );
+	a_pk.Read( &bResult );
 }
 
 
 VOID CNetwork::SC_EVENT_COMBO_RESULT( CPacket& a_pk )
 {
-	
+	BOOL bResult;
+
+	a_pk.Read( &bResult );
 }
 
 
