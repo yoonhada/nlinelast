@@ -837,21 +837,6 @@ VOID CCharactor::World2Model(D3DXVECTOR3& _vPosition)
 	D3DXVec3TransformCoord( &_vPosition, &_vPosition, &matInv );
 }
 
-VOID CCharactor::BreakCube(D3DXVECTOR3& _vPosition)
-{
-	for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop )
-	{
-		if( m_vectorCube[Loop] == NULL ) 
-			continue; 
-		D3DXVECTOR3 v = m_vectorCube[Loop]->Get_Pos(m_iSelectedFrameNum);
-		if( v == _vPosition && m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) )
-		{
-			m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
-			m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, Get_MatWorld(), D3DXVECTOR3( FastRand2(), FastRand2(), FastRand2() ) );
-		}
-	}
-}
-
 BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 {
 	BOOL bRet = FALSE;
@@ -941,19 +926,23 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 		if( nCount != 0 )
 		{
 			bRet = TRUE;
+			CObjectManage * pOM = CObjectManage::GetInstance();
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
 			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
+			INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
 
 			if( m_bMonster )
 			{
-				
+				if ( pOM->IsHost() )
+				{
+					CGameEvent::GetInstance()->SetAttackPoint( iCharNumber, nCount );
+				}
 			}
 			else
-			{	
-				CObjectManage * pOM = CObjectManage::GetInstance();
-				INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
+			{					
+				
 				INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
-
+				CGameEvent::GetInstance()->SetShotedPoint( iCharNumber, GetvCubeSize() );
 				CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_DAMAGED1 + iCharNumber + iRand );
 			}
 		}
@@ -1178,8 +1167,21 @@ VOID CCharactor::TestBreakCube()
 			m_iAliveCount = 0;
 			m_bAliveCheck = TRUE;
 		}
+	}	
+}
+
+VOID CCharactor::RepairCube()
+{
+	if( m_bAliveCheck == TRUE )
+	{
+		for( INT Loop = 0; Loop < m_iCubeVectorSize; ++Loop )
+		{
+			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::MEAT )
+			{
+				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
+			}
+		}
 	}
-	
 }
 
 HRESULT CCharactor::InitTexture( DWORD a_Color, DWORD a_OutLineColor )

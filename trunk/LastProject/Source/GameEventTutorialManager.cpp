@@ -24,6 +24,7 @@ VOID GameEventTutorialManager::ChangeEvent( DWORD _dNextEvent )
 VOID GameEventTutorialManager::EndEvent()
 {
 	//SAFE_DELETE( m_pGameEventTutorial );
+	m_pGameEventTutorial = NULL;
 }
 
 VOID GameEventTutorialManager::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite )
