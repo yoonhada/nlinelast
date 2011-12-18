@@ -61,7 +61,7 @@ HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSpri
 	m_pClown->EnableShadow( FALSE );
 
 	m_pPanda = CObjectManage::GetInstance()->Get_Panda();		// new CMonster;
-	m_pPanda->Create( _pd3dDevice, L"Data/CharData/11_16_pa_sm_v8" );
+	m_pPanda->Create( _pd3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 	m_pPanda->Set_Pos( D3DXVECTOR3( -17.0f, 0.0f, 117.0f ) );
 	m_pPanda->Set_Angle( 5.44f );
 	m_pPanda->ChangeAnimation( CMonster::ANIM_LODING );

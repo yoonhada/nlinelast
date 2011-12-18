@@ -1211,70 +1211,15 @@ VOID CMonster::CreateAttackBoundBox()
 		switch( m_iSelectedFrameNum )
 		{
 		case ANIM_MELEE_ATTACK:
-			{
-				// 몬스터 공격 바운드 박스.
-				CBoundBox * m_pBBx = new CBoundBox;
-				m_pBBx->SetPosition( Get_Pos() );
-				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
-
-				m_pBBx->SetSize( 0, -25.0f );
-				m_pBBx->SetSize( 1, -25.0f );
-				m_pBBx->SetSize( 2, -25.0f );
-
-				m_pBBx->SetSize( 3,  25.0f );
-				m_pBBx->SetSize( 4,  25.0f );
-				m_pBBx->SetSize( 5,  25.0f );
-
-				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
-
-				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
-			}
-			break;
-
 		case ANIM_MELEE_ATTACK2:
-			{
-				// 몬스터 공격 바운드 박스.
-				CBoundBox * m_pBBx = new CBoundBox;
-				m_pBBx->SetPosition( Get_Pos() );
-				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
-
-				m_pBBx->SetSize( 0, -25.0f );
-				m_pBBx->SetSize( 1, -25.0f );
-				m_pBBx->SetSize( 2, -25.0f );
-
-				m_pBBx->SetSize( 3,  25.0f );
-				m_pBBx->SetSize( 4,  25.0f );
-				m_pBBx->SetSize( 5,  25.0f );
-
-				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
-
-				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
-			}
-			break;
-
+		case ANIM_MELEE_ATTACK3:
+		case ANIM_MELEE_ATTACK4:
 		case ANIM_SPIN_ATTACK:
-			{
-				// 몬스터 공격 바운드 박스.
-				CBoundBox * m_pBBx = new CBoundBox;
-				m_pBBx->SetPosition( Get_Pos() );
-				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
-
-				m_pBBx->SetSize( 0, -25.0f );
-				m_pBBx->SetSize( 1, -25.0f );
-				m_pBBx->SetSize( 2, -25.0f );
-
-				m_pBBx->SetSize( 3,  25.0f );
-				m_pBBx->SetSize( 4,  25.0f );
-				m_pBBx->SetSize( 5,  25.0f );
-
-				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
-
-				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
-			}
-			break;
-		
-
 		case ANIM_SLIDING:
+		case ANIM_COMBO_ATTACK1:
+		case ANIM_COMBO_ATTACK2:
+		case ANIM_COMBO_ATTACK3:
+		case ANIM_SENPUKYAKU:
 			{
 				// 몬스터 공격 바운드 박스.
 				CBoundBox * m_pBBx = new CBoundBox;
@@ -1313,10 +1258,6 @@ VOID CMonster::CreateAttackBoundBox()
 				m_pBBx->SetDirection( D3DXVECTOR3( 0.0f, -1.3f, -1.0f ) );
 
 				CTree::GetInstance()->GetMonsAtkVector()->push_back( m_pBBx );
-
-				// 임시
-				
-
 			}
 			break;
 		}
