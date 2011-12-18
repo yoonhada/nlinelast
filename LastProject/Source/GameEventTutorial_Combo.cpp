@@ -18,10 +18,10 @@ VOID GameEventTutorial_Combo::Create()
 {
 	m_dCurrentState	= TUTORIAL_RUNNING;
 
-	FLOAT fX		= 850.0f;
-	FLOAT fY		= 350.0f;
-	FLOAT fWidth	= 400.0f;
-	FLOAT fHeight	= 700.0f;
+	FLOAT fX		= 901.0f;
+	FLOAT fY		= 534.0f;
+	FLOAT fWidth	= 379.0f;
+	FLOAT fHeight	= 490.0f;
 
 	GUIBase::IMAGEPARAM imgParam;
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\Event\\Tutorial\\TutorialCombo.png" );

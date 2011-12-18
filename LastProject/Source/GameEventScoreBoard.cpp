@@ -1,8 +1,13 @@
 #include "stdafx.h"
 #include "GameEventScoreBoard.h"
+#include "Mouse.h"
+#include "GUIBtnManager.h"
 
 VOID GameEventScoreBoard::Initialize()
 {
+	m_pMouse				= new Mouse();
+	m_pGUIBtnManager		= new GUIBtnManager( m_pd3dDevice, m_pSprite );
+
 	m_dState				= GES_HIDDEN;
 
 	m_dScoreFrameSpeed		= 15;
@@ -22,6 +27,9 @@ VOID GameEventScoreBoard::Initialize()
 
 VOID GameEventScoreBoard::Release()
 {
+	delete m_pMouse;
+	delete m_pGUIBtnManager;
+
 	DATAVECTOR::iterator itE;
 	for( itE = m_vecData.begin() ; itE != m_vecData.end() ; itE++ )
 		delete (*itE);
@@ -128,12 +136,33 @@ VOID GameEventScoreBoard::CreateNumberImage()
 
 }
 
+VOID GameEventScoreBoard::CreateButton()
+{
+	FLOAT fX		= 50.0f;
+	FLOAT fY		= 50.0f;
+	FLOAT fWidth	= 350.0f;
+	FLOAT fHeight	= 97.0f;
+
+	IMAGEPARAM imgParamNormal, imgParamHot, imgParamDown, imgParamDisable;
+	
+	AddFileName( 0, imgParamNormal, L"Image\\ScoreBoard\\End_Normal.png" );
+	AddFileName( 0, imgParamHot, L"Image\\ScoreBoard\\End_Hot.png" );
+	AddFileName( 0, imgParamDown, L"Image\\ScoreBoard\\End_Down.png" );
+	AddFileName( 0, imgParamDisable, L"Image\\ScoreBorad\\End_Down.png" );
+
+	m_pGUIBtnManager->Create( MAIN_SCORE, 0, fX, fY, fWidth, fHeight, imgParamNormal, imgParamHot, imgParamDown, imgParamDisable );
+}
+
 VOID GameEventScoreBoard::Create()
 {
 	CreateSceneImage();
 	CreateBackgroundImage();
 	CreateIdentifierImage();
 	CreateNumberImage();
+
+	CreateButton();
+
+	m_pMouse->Initialize( m_hWnd );
 }
 
 VOID GameEventScoreBoard::Update()
@@ -141,6 +170,7 @@ VOID GameEventScoreBoard::Update()
 	if( m_dState == GES_HIDDEN || m_dState == GES_GRAY )
 		return;
 
+	//	Update Number
 	INT iDataSize = m_vecData.size();
 
 	for( INT i=0 ; i<iDataSize ; i++ )
@@ -158,6 +188,36 @@ VOID GameEventScoreBoard::Update()
 				m_vecData[ i ]->iCurrentPositionalNumber = MAX_POSITIONAL;
 		}
 	}
+	
+	//	Update Button
+	POINT pt = m_pMouse->GetPosition();
+
+	m_pMouse->Update();
+	m_pGUIBtnManager->Update( pt.x, pt.y );
+	
+	static BOOL bFirst = FALSE;
+	
+	if( m_pMouse->LButton_Down() )
+	{
+		if( bFirst == FALSE )
+		{
+			OnDown( pt.x, pt.y );
+			bFirst = TRUE;
+		}
+		//if( GrpBtn::g_bCapture == FALSE )
+		//{
+			//	버튼을 누르면 g_bCapture = TREU 가 된다
+			//	영역체크에 쓴다
+		//}
+	}
+	
+	OnMove( pt.x, pt.y );
+	
+	if( m_pMouse->LButton_Up() )
+	{
+		OnUp( pt.x, pt.y );
+		bFirst = FALSE;
+	}
 }
 
 VOID GameEventScoreBoard::Render()
@@ -165,6 +225,7 @@ VOID GameEventScoreBoard::Render()
 	if( m_dState == GES_HIDDEN )
 		return;
 
+	//	Render GrayScene
 	static INT iAlpha = 0;
 	if( iAlpha < 255 )
 		iAlpha += 1;
@@ -176,8 +237,10 @@ VOID GameEventScoreBoard::Render()
 	if( m_dState == GES_GRAY )
 		return;
 	
+	//	Render Background
 	RenderImage3D( &m_img3DBackground );
 
+	//	Render Identifier, ScoreNumber
 	INT iNumData = m_vecData.size();
 
 	for( INT j=0 ; j<iNumData ; j++ )
@@ -202,6 +265,8 @@ VOID GameEventScoreBoard::Render()
 		}
 	}
 	
+	//	Render Button
+	m_pGUIBtnManager->Render();
 }
 
 VOID GameEventScoreBoard::AddData( DWORD _dID, DWORD _dIdentifier )
@@ -293,7 +358,27 @@ VOID GameEventScoreBoard::Skip()
 	m_dPositionalFrameSpeed = 0;
 }
 
+VOID GameEventScoreBoard::Command( DWORD& _dOut )
+{
+	m_pGUIBtnManager->GetCommandID( _dOut );
+}
+
 VOID GameEventScoreBoard::SetState( DWORD _dState )
 {
 	m_dState = _dState;
+}
+
+VOID GameEventScoreBoard::OnDown( INT _iX, INT _iY )
+{
+	m_pGUIBtnManager->OnDown( _iX, _iY );
+}
+
+VOID GameEventScoreBoard::OnMove( INT _iX, INT _iY )
+{
+	m_pGUIBtnManager->OnMove( _iX, _iY );
+}
+
+VOID GameEventScoreBoard::OnUp( INT _iX, INT _iY )
+{
+	m_pGUIBtnManager->OnUp( _iX, _iY );
 }

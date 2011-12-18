@@ -30,8 +30,8 @@ VOID MainGUI::Release()
 
 VOID MainGUI::CreateMiniMap()
 {
-	FLOAT fX		= 1050.0f;
-	FLOAT fY		= 70.0f;
+	FLOAT fX		= 0.0f;
+	FLOAT fY		= 10.0f;
 	FLOAT fWidth	= 208.0f;
 	FLOAT fHeight	= 340.0f;
 	
@@ -111,8 +111,10 @@ VOID MainGUI::CreateMiniMap()
 	m_fMapWidth		= 1138.0f;
 	m_fMapHeight	= 1800.0f;
 	
-	m_fMmpX			= 1050.0f;
-	m_fMmpY			= 70.0f;
+	//m_fMmpX			= 1050.0f;
+	//m_fMmpY			= 70.0f;
+	m_fMmpX			= 0.0f;
+	m_fMmpY			= 10.0f;
 	m_fMmpWidth		= 208.0f;
 	m_fMmpHeight	= 340.0f;
 
@@ -131,9 +133,9 @@ VOID MainGUI::Create()
 	FLOAT fHeight	= 224.0f;
 
 	
-	fX		= 50.0f;
-	fY		= 800.0f;
-	fWidth	= 800.0f;
+	fX		= 5.0f;
+	fY		= 964.0f;
+	fWidth	= 450.0f;
 	fHeight	= 50.0f;
 
 	GUIBase::IMAGEPARAM imgParamEdit;
@@ -152,10 +154,10 @@ VOID MainGUI::Create()
 							imgParamCaret );
 	m_pChatEdit->SetFont( MAIN_CHAT, L"±Ã¼­", 20, 20 );
 	
-	fX		= 50.0f;
-	fY		= 300.0f;
-	fWidth	= 500.0f;
-	fHeight	= 400.0f;
+	fX		= 5.0f;
+	fY		= 704.0f;
+	fWidth	= 450.0f;
+	fHeight	= 250.0f;
 	GUIBase::IMAGEPARAM imgParamChat;
 	m_pGUIBase->AddFileName( 0, imgParamChat, L"Img\\MainScene\\Edit.png" );
 	m_pChatWindow->Create( fX, fY, fWidth, fHeight, imgParamChat );
