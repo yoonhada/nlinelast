@@ -18,6 +18,7 @@
 
 #include "GameEventTutorial.h"
 #include "GameEventTutorialManager.h"
+#include "GameEventScoreBoard.h"
 
 // AI 테스트용
 #include "Seek.h"
@@ -94,6 +95,20 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pEventGUICombo->SetTime( 15.0f );
 	m_pGameEventTutorialManager = new GameEventTutorialManager();
 	m_pGameEventTutorialManager->Create( a_pD3dDevice, a_Sprite );
+	m_pGameEventScoreBoard = new GameEventScoreBoard(m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
+	m_pGameEventScoreBoard->Create();
+	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_HIDDEN );
+	
+	INT nChar, nCount = 0;
+	for (int Loop = 0; Loop < 4; ++Loop)
+	{
+		nChar = CObjectManage::GetInstance()->Get_CharTable( Loop );
+
+ 		if ( nChar > 0 )
+			m_pGameEventScoreBoard->AddData( nCount++, nChar );
+	}
+	
+
 
 	//맵 생성
 	m_pASEViewer = CObjectManage::GetInstance()->Get_ASEViewer();
@@ -185,7 +200,7 @@ VOID CMainScene::CreateCharactor()
 
 			m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_DADDY + nIndex, TRUE );
 			
-			CGameEvent::GetInstance()->SetShotedPoint( Loop, pChar->GetvCubeSize() );
+			CGameEvent::GetInstance()->SetShotedPoint( Loop, -pChar->GetvCubeSize() );
 		}
 	}
 }
@@ -251,21 +266,22 @@ VOID CMainScene::Update()
 	CGameEvent::GetInstance()->IndexInit();
 	CNetwork::GetInstance()->UpdateGame();
 
-
 	CheatKeys();
 	CObjectManage * pOM = CObjectManage::GetInstance();
 	CCharactor * pChar;
 	pChar = &( m_pCharactors[ pOM->Get_CharTable( m_nClientID ) ] );
 
 	// 캐릭터: 인풋 값 받아오기
-	pChar->UpdateByInput();
+	pChar->UpdateByInput( );
 
 	if ( pChar->CollisionAtk( ) )
 	{
 		D3DXMATRIXA16 mat;
 		D3DXMatrixIdentity( &mat );
 		if ( pChar->BreakQube( mat ) )
+		{
 			m_pCamera->SetEffect( 1 );
+		}
 		pOM->Send_NetworkSendDestroyData( FALSE, 0 );
 	}
 
@@ -325,6 +341,7 @@ VOID CMainScene::Update()
 	m_pOptionScene->Update();
 
 	m_pGameEventTutorialManager->Update();
+	m_pGameEventScoreBoard->Update();
 
 	m_pEventGUICombo->Update();
 	
@@ -409,6 +426,7 @@ VOID	CMainScene::Render()
 	m_pD3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
 
 	m_pEventGUICombo->Render();
+	m_pGameEventScoreBoard->Render();
 
 	//m_pCharView->Render();
 }
@@ -595,7 +613,8 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::TUTORIAL_COMBO_SUCCESS:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO_SUCCESS \n" );
-		EventStateNetwork( nEvent );
+		EventStateNetwork( nEvent );		
+		DoorBreakNockdown();
 		if ( CGameEvent::GetInstance()->GetTutorial( ) == CGameEvent::TUTORIAL_COMBO )
 		{
 			CGameEvent::GetInstance()->SetTutorial( nEvent );
@@ -733,17 +752,32 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	case CGameEvent::GAME_WIN_END:
 		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_WIN_END \n" );
-		MessageBox( GHWND, L"게임종료", L"축하", MB_OK );
-		GameEnd();
+		GamePoint();
+		//MessageBox( GHWND, L"게임종료", L"축하", MB_OK );
+		//GameEnd();
 		break;
 	case CGameEvent::GAME_LOSE_END:
 		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_LOSE_END \n" );
-		GameEnd();
+		//GameEnd();
 		break;
 	default:
 		break;
 	}
+}
+
+VOID CMainScene::GamePoint()
+{
+	INT nChar, nCount = 0;
+	for (int Loop = 0; Loop < 4; ++Loop)
+	{
+		nChar = CObjectManage::GetInstance()->Get_CharTable( Loop );
+
+		if ( nChar > 0 )
+			m_pGameEventScoreBoard->SetScore( Loop, CGameEvent::GetInstance()->GetAttackPoint( Loop ) );
+	}
+
+	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_GRAY );
 }
 
 VOID CMainScene::GameEnd()

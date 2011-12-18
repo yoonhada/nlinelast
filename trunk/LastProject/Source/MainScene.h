@@ -14,6 +14,7 @@ class TileMap;
 class Axis;
 class CGameEvent;
 class CGameEventCombo;
+class GameEventScoreBoard;
 
 class MainGUI;
 class OptionScene;
@@ -65,6 +66,7 @@ private:
 	CGameEventCombo *			m_pEventGUICombo;
 
 	GameEventTutorialManager*	m_pGameEventTutorialManager;
+	GameEventScoreBoard*		m_pGameEventScoreBoard;
 
 	INT						m_iMaxCharaNum;
 	INT						m_nClientID;
@@ -97,6 +99,7 @@ private:
 	VOID MonsterBreakNockdown();
 	VOID DoorBreakNockdown();
 
+	VOID GamePoint();
 	VOID GameEnd();
 	//CEfSurface * m_pCharView;
 };
