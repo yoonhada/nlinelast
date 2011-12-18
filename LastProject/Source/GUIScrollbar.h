@@ -55,6 +55,8 @@ public:
 	VOID		OnMove( INT x, INT y );
 	VOID		OnDown( INT x, INT y );
 
+	INT			GetMaxRange(){ return m_Data.iMax; };
+
 	INT			GetValue(){ return m_Data.iValue; };
 	VOID		SetValue( INT _iValue ){ m_Data.iValue = _iValue; };
 

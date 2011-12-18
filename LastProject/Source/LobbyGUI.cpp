@@ -146,7 +146,7 @@ VOID LobbyGUI::CreateEdit()
 								fX, fY, 
 								fWidth, fHeight, 
 								imgParamEdit, imgParamCaret );
-	m_pGUIEditManager->SetFont( LOBBY_CHAT, L"±Ã¼­", 20, 20 );
+	m_pGUIEditManager->SetFont( LOBBY_CHAT, L"ÈÞ¸Õ¸ÅÁ÷Ã¼", 20, 20 );
 }
 
 VOID LobbyGUI::CreateListbox()
@@ -160,7 +160,7 @@ VOID LobbyGUI::CreateListbox()
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Listbox_Back.png" );
 
 	m_pGUIListbox->Create( fX, fY, fWidth, fHeight, imgParam );
-	m_pGUIListbox->SetFont( L"±Ã¼­", 20, 20, 0x00ffffff );
+	m_pGUIListbox->SetFont( L"ÈÞ¸Õ¸ÅÁ÷Ã¼", 20, 20, 0x00ffffff );
 	
 }
 
@@ -189,7 +189,7 @@ VOID LobbyGUI::Update()
 	m_pGUIBackground->Update();
 	m_pGUIBtnManager->Update( pt.x, pt.y );
 	m_pGUIEditManager->Update();
-	m_pGUIListbox->Update();
+	m_pGUIListbox->Update( pt.x, pt.y );
 
 	static BOOL bFirst = FALSE;
 	
