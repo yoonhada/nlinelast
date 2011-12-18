@@ -226,7 +226,7 @@ VOID LobbyScene::Render()
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 	
 	m_pMatrices->SetupProjection();
-	m_pLight->EnableLight( D3DXVECTOR3( 1.0f, 0.0f, -1.0f ) );
+	m_pLight->EnableCharacterLight( D3DXVECTOR3( 1.0f, 0.0f, -1.0f ) );
 
 	for( INT i=0 ; i<4 ; i++ )
 		m_aData[ i ].pCharacter->Render();
