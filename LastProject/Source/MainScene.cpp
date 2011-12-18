@@ -767,6 +767,9 @@ VOID CMainScene::EventSwitch( INT nEvent )
 			CGameEvent::GetInstance()->GetSlotNumber(), 
 			CGameEvent::GetInstance()->GetResult() );
 		break;
+	case CGameEvent::SC_EVENT_COMBO_RESULT:
+		m_pEventGUICombo->EventComboResult( CGameEvent::GetInstance()->GetResult() );
+		break;
 	default:
 		break;
 	}

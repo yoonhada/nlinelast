@@ -149,14 +149,17 @@ VOID CGameEventCombo::TimeUpdate( )
 	else if ( m_fCount + 1 >= m_fTimeComp )
 	{
 		m_pGUICounting->SelectAnimation( 3 );
+		CNetwork::GetInstance()->CS_EVENT_COMBO_RESULT( COUNTING1 );
 	}
 	else if ( m_fCount + 2 >= m_fTimeComp )
 	{
 		m_pGUICounting->SelectAnimation( 2 );
+		CNetwork::GetInstance()->CS_EVENT_COMBO_RESULT( COUNTING2 );
 	}
 	else if ( m_fCount + 3 >= m_fTimeComp )
 	{
 		m_pGUICounting->SelectAnimation( 1 );
+		CNetwork::GetInstance()->CS_EVENT_COMBO_RESULT( COUNTING3 );
 	}
 }
 
@@ -205,6 +208,30 @@ VOID CGameEventCombo::AddCombo(INT nIndex, INT nKind)
 	m_pGUIButton[nIndex]->SelectAnimation( nKind * 3 );
 }
 
+VOID CGameEventCombo::EventComboResult( BOOL bResult )
+{
+	switch(bResult)
+	{
+	case FAIL:
+		m_nState = FAIL;
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
+		break;
+	case SUCCESS:
+		m_nState = SUCCESS;
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.01f );
+		break;
+	case COUNTING1:
+		m_pGUICounting->SelectAnimation( 3 );
+		break;
+	case COUNTING2:
+		m_pGUICounting->SelectAnimation( 2 );
+		break;
+	case COUNTING3:
+		m_pGUICounting->SelectAnimation( 1 );
+		break;
+	}
+}
+
 BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 {
 	INT bRet = -1;
@@ -242,12 +269,14 @@ BOOL CGameEventCombo::CheckKindEvent( INT nKindEvent )
 		{
 			m_nState = SUCCESS;
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_SUCCESS, 0.01f );
+			CNetwork::GetInstance()->CS_EVENT_COMBO_RESULT( SUCCESS );
 		}
 	}
 	else if  ( bRet == FALSE )
 	{
 		m_nState = FAIL;
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, 0.01f );
+		CNetwork::GetInstance()->CS_EVENT_COMBO_RESULT( FAIL );
 	}
 
 	return bRet;
