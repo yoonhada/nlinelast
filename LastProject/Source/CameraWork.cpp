@@ -6,7 +6,7 @@ VOID CameraWork::Initialize()
 	m_pdatCurrent		= NULL;
 
 	//	30프레임 기준
-	m_dFrameSpeed		= 33;	
+	m_dFrameSpeed		= 16;	
 
 	for( INT i=0 ; i<CWK_END ; i++ )
 		CreateImage_Box( &m_aimgBoxs[ i ] );

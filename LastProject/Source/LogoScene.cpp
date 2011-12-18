@@ -186,7 +186,7 @@ VOID LogoScene::Render()
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 
-	m_pLight->EnableLight();
+	m_pLight->EnableCharacterLight();
 	m_pMatrices->SetupProjection();
 
 	for( INT i = 0; i < 6; i++ )

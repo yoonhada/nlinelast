@@ -10,6 +10,7 @@ public:
 	VOID Clear();
 	HRESULT Create( LPDIRECT3DDEVICE9 a_pD3dDevice );
 	VOID EnableLight( D3DXVECTOR3 _vecDir = D3DXVECTOR3( 1.0f, -1.0f, 0.0f ) );
+	VOID EnableCharacterLight( D3DXVECTOR3 _vecDir = D3DXVECTOR3( 1.0f, -1.0f, 0.0f ) );
 	VOID DisableLight();
 	//HRESULT Release();
 

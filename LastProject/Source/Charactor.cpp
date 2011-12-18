@@ -789,7 +789,7 @@ VOID CCharactor::Render()
 	//m_pD3dDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 	//m_pD3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
 	//m_pD3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-
+	
 	for( INT Loop=0; Loop<m_iCubeVectorSize; ++Loop )
 	{
 		if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) == TRUE )

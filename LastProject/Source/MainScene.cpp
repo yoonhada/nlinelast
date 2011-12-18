@@ -351,6 +351,8 @@ VOID	CMainScene::Render()
 	m_pASEViewer->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
 
+	m_pLight->EnableCharacterLight();
+
 	INT nIndex;
 	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
 	{
@@ -385,6 +387,8 @@ VOID	CMainScene::Render()
 			m_pWall[Loop].Render();
 		}
 	}
+
+	m_pLight->EnableLight();
 
 #ifdef _DEBUG
 	D3DXMATRIXA16 matWorld;

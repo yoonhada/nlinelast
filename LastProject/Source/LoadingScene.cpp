@@ -151,7 +151,7 @@ VOID LoadingScene::Render()
 	m_pD3dDevice->SetTransform( D3DTS_VIEW, &matView );
 	
 	m_pMatrices->SetupProjection();
-	m_pLight->EnableLight( D3DXVECTOR3( 0.0f, -1.0f, -150.0f ) );
+	m_pLight->EnableCharacterLight( D3DXVECTOR3( 0.0f, -1.0f, -150.0f ) );
 
 	//	Render Monster
 	m_pClown->Render();
