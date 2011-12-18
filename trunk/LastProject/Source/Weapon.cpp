@@ -52,12 +52,20 @@ VOID CWeapon::Clear()
 
 	m_fScale = 0;
 	m_bAtkTime = FALSE;
+
+#ifdef _DEBUG
+	m_pCube = NULL;
+#endif
 }
 
 HRESULT CWeapon::Release()
 {
 	SAFE_DELETE( m_pMap );
-
+#ifdef _DEBUG
+	SAFE_DELETE( m_pCube );
+	SAFE_RELEASE( m_pTotalIB );
+	SAFE_RELEASE( m_pTotalVB );
+#endif // _DEBUG
 	return S_OK;
 }
 
@@ -168,6 +176,23 @@ HRESULT CWeapon::Create()
 		break;
 	}
 
+#ifdef _DEBUG
+	m_pCube = new CCube();
+	if( FAILED( m_pD3dDevice->CreateVertexBuffer( CCube::CUBEVERTEX::VertexNum * sizeof( CCube::CUBEVERTEX ),
+		0, CCube::CUBEVERTEX::FVF, D3DPOOL_MANAGED, &m_pTotalVB, NULL ) ) )
+	{
+		MessageBox(GHWND, L"Vertex Buffer Failed", NULL, MB_OK);
+	}
+
+	if( FAILED( m_pD3dDevice->CreateIndexBuffer( CCube::CUBEINDEX::IndexNum * sizeof( CCube::CUBEINDEX ), 
+		0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pTotalIB, NULL ) ) )
+	{
+		MessageBox(GHWND, L"Index Buffer Failed", NULL, MB_OK);
+	}
+
+	m_pCube->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, 0, 0 );
+	m_pCube->InitTexture( 0xFFFF0000 );
+#endif // _DEBUG
 	return S_OK;
 }
 
@@ -292,6 +317,16 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[3] );
 	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[4] );
 	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[5] );
+
+#ifdef _DEBUG
+	m_pCube->Set_ControlScale( 0, ( m_fBBSize[3] - m_fBBSize[0] ) * m_fScale );
+	m_pCube->Set_ControlScale( 1, ( m_fBBSize[4] - m_fBBSize[1] ) );
+	m_pCube->Set_ControlScale( 2, ( m_fBBSize[5] - m_fBBSize[2] ) * m_fScale );
+	m_pCube->Set_ControlRotate( 2, m_fZAng[m_nState] );
+	m_pCube->Set_ControlTranslate( 0, ( m_fBBSize[0] + m_fBBSize[3] ) * 0.5f );
+	m_pCube->Set_ControlTranslate( 1, ( m_fBBSize[1] + m_fBBSize[4] ) * 0.5f + 7.5f );
+	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[2] + m_fBBSize[5] ) * 0.5f - ( m_nState == EnumCharFrame::TEMP4 ? 0.0f : 7.5f ) );
+#endif // _DEBUG
 	
 	m_WeaponType.pBBA.SetDirection( m_WeaponType.vDir[m_nState] );
 }
@@ -356,6 +391,19 @@ VOID CWeapon::Render( D3DXMATRIX _matCharacter )
 	m_pD3dDevice->SetMaterial( &mtrl );
 
 	m_pMap->Render( Get_MatWorld() * _matCharacter );	
+
+/*
+#ifdef _DEBUG
+	m_pD3dDevice->SetStreamSource( 0, m_pTotalVB, 0, sizeof( CCube::CUBEVERTEX ) );
+	m_pD3dDevice->SetFVF( CCube::CUBEVERTEX::FVF );
+	m_pD3dDevice->SetIndices( m_pTotalIB );
+
+	m_pCube->Update();
+	m_pCube->Calcul_MatWorld();
+	m_pD3dDevice->SetTransform( D3DTS_WORLD, &( m_pCube->Get_MatWorld() * _matCharacter ) );
+	m_pCube->Render();
+#endif // _DEBUG
+*/
 }
 
 INT CWeapon::Get_nFrame(INT nType)
