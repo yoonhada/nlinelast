@@ -713,6 +713,18 @@ VOID CNetwork::CS_EVENT_COMBO( INT * a_iEventKind )
 }
 
 
+VOID CNetwork::CS_EVENT_COMBO_SLOT_STATE( WORD a_wSlotNumber, BOOL a_bState )
+{
+	
+}
+
+
+VOID CNetwork::CS_EVENT_COMBO_RESULT( BOOL a_bResult )
+{
+	
+}
+
+
 VOID CNetwork::CS_CHAT( LPWSTR a_szText )
 {
 	CPacket sendPk;
