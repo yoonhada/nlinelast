@@ -1,32 +1,32 @@
 #include "stdafx.h"
 
-#include "Spin.h"
+#include "Senpukyaku.h"
 #include "SpinGroggy.h"
 
 #include "Monster.h"
 
 
-Spin* Spin::GetInstance()
+Senpukyaku* Senpukyaku::GetInstance()
 {
-	static Spin Instance;
+	static Senpukyaku Instance;
 
 	return &Instance;
 }
 
 
-VOID Spin::Enter( CMonster* a_pMonster )
+VOID Senpukyaku::Enter( CMonster* a_pMonster )
 {
 	// Spin 공격 애니메이션으로 바꾼다.
-	a_pMonster->ChangeAnimation( CMonster::ANIM_SPIN_ATTACK );
+	a_pMonster->ChangeAnimation( CMonster::ANIM_SENPUKYAKU );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SPIN_ATTACK \n" );
+	CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SENPUKYAKU \n" );
 #endif
 
 	CSound::GetInstance()->PlayEffect( 0 );
 }
 
 
-VOID Spin::Execute( CMonster* a_pMonster )
+VOID Senpukyaku::Execute( CMonster* a_pMonster )
 {
 	a_pMonster->Set_UpdateTime();
 	a_pMonster->Set_UpdateAttackTime();
@@ -52,7 +52,7 @@ VOID Spin::Execute( CMonster* a_pMonster )
 }
 
 
-VOID Spin::Exit( CMonster* a_pMonster )
+VOID Senpukyaku::Exit( CMonster* a_pMonster )
 {
 
 }

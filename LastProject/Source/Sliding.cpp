@@ -16,16 +16,14 @@ Sliding* Sliding::GetInstance()
 VOID Sliding::Enter( CMonster* a_pMonster )
 {
 	// Sliding 애니메이션으로 변경
-	if( a_pMonster->Get_MonsterNumber() == 2/*CGameEvent::CLOWN*/ )
-	{
-		a_pMonster->ChangeAnimation( CMonster::ANIM_SLIDING );
+	a_pMonster->ChangeAnimation( CMonster::ANIM_SLIDING );
 
+	if( a_pMonster->Get_MonsterNumber() == 2 )
+	{
 		CSound::GetInstance()->PlayEffect( 0 );
 	}
 	else
 	{
-		a_pMonster->ChangeAnimation( CMonster::ANIM_MELEE_ATTACK );
-
 		CSound::GetInstance()->PlayEffect( 0 );
 	}
 #ifdef _DEBUG

@@ -19,7 +19,12 @@ VOID Dash::Enter( CMonster* a_pMonster )
 
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH, a_pMonster->Get_Angle(), a_pMonster->Get_Pos(), a_pMonster->Get_TargetPos(), a_pMonster->Get_TargetDistance() );
+		CNetwork::GetInstance()->CS_Monster_Attack_Animation2( a_pMonster->Get_MonsterNumber(),
+															   CMonster::ANIM_DASH,
+															   a_pMonster->Get_Angle(),
+															   a_pMonster->Get_Pos(),
+															   a_pMonster->Get_TargetPos(),
+															   a_pMonster->Get_TargetDistance() );
 	}
 
 	if( a_pMonster->Get_MonsterNumber() == 2 )

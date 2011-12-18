@@ -3,6 +3,11 @@
 #include "LockOn.h"
 #include "Melee.h"
 #include "Melee2.h"
+#include "Melee3.h"
+#include "Melee4.h"
+#include "Spin.h"
+#include "SenpukyakuReady.h"
+#include "Combo1.h"
 #include "RocketPunch.h"
 
 #include "Charactor.h"
@@ -161,19 +166,77 @@ VOID LockOn::Execute( CMonster* a_pMonster )
 		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
 	}
 */
-	if( FastRand2() < 0.5f )
-	{
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK );
+	FLOAT fRand = FastRand2();
 
-		a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+	// »ß¿¡·Î
+	if( a_pMonster->Get_MonsterNumber() == 2 )
+	{
+		// Melee
+		if( fRand < 0.15f )
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK );
+
+			a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+		}
+		// Melee2
+		else if( fRand >= 0.15f && fRand < 0.3f )
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK2 );
+
+			a_pMonster->GetFSM()->ChangeState( Melee2::GetInstance() );
+		}
+		// Melee3
+		else if( fRand >= 0.3f && fRand < 0.45f )
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK3 );
+
+			a_pMonster->GetFSM()->ChangeState( Melee3::GetInstance() );
+		}
+		// Melee4
+		else if( fRand >= 0.45f && fRand < 0.6f )
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK4 );
+
+			a_pMonster->GetFSM()->ChangeState( Melee4::GetInstance() );
+		}
+		// Spin
+		else if( fRand >= 0.6f && fRand < 0.75f )
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_SPIN_ATTACK );
+
+			a_pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
+		}
+		// Senpukyaku
+		else if( fRand >= 0.75f && fRand < 0.9f )
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_SENPUKYAKU_READY );
+
+			a_pMonster->GetFSM()->ChangeState( SenpukyakuReady::GetInstance() );
+		}
+		// Combo
+		else
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_COMBO_ATTACK1 );
+
+			a_pMonster->GetFSM()->ChangeState( Combo1::GetInstance() );
+		}
 	}
+	// ÆÇ´Ù
 	else
 	{
-		CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK2 );
+		if( fRand < 0.5f )
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK );
 
-		a_pMonster->GetFSM()->ChangeState( Melee2::GetInstance() );
+			a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
+		}
+		else
+		{
+			CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_MELEE_ATTACK2 );
+
+			a_pMonster->GetFSM()->ChangeState( Melee2::GetInstance() );
+		}
 	}
-
 }
 
 

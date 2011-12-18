@@ -5,6 +5,7 @@
 #include "Melee.h"
 #include "Spin.h"
 #include "RocketPunch.h"
+#include "SenpukyakuReady.h"
 #include "DashReady.h"
 #include "Wait.h"
 
@@ -45,23 +46,7 @@ VOID Battle::Execute( CMonster* a_pMonster )
 	// 근접 공격범위 안에 들어왔으면 밀리나 회전 공격중 랜덤 선택
 	if( fDistance < 25.0f )
 	{
-		// 근접 공격
-		if( FastRand2() < 0.5f )
-		{
-			a_pMonster->GetFSM()->ChangeState( LockOn::GetInstance() );
-		}
-		// 회전 공격
-		else
-		{
-			if( a_pMonster->Get_MonsterNumber() == 2/*CGameEvent::CLOWN*/ )
-			{
-				a_pMonster->GetFSM()->ChangeState( Spin::GetInstance() );
-			}
-			else
-			{
-				a_pMonster->GetFSM()->ChangeState( Melee::GetInstance() );
-			}
-		}
+		a_pMonster->GetFSM()->ChangeState( LockOn::GetInstance() );
 	}
 	// 원거리 공격 범위면
 	else if( fDistance > 80.0f && fDistance < 120.0f )
