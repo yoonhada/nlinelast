@@ -715,13 +715,32 @@ VOID CNetwork::CS_EVENT_COMBO( INT * a_iEventKind )
 
 VOID CNetwork::CS_EVENT_COMBO_SLOT_STATE( WORD a_wSlotNumber, BOOL a_bState )
 {
-	
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_EVENT_COMBO_SLOT_STATE;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_wSlotNumber );
+	sendPk.Write( a_bState );
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );	
 }
 
 
 VOID CNetwork::CS_EVENT_COMBO_RESULT( BOOL a_bResult )
 {
-	
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_EVENT_COMBO_RESULT;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_bResult );
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );	
 }
 
 
