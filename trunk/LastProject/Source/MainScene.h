@@ -100,7 +100,8 @@ private:
 	VOID MonsterBreakNockdown();
 	VOID DoorBreakNockdown();
 
-	VOID GamePoint();
+	VOID GamePoint( INT );
+	//VOID GamePoint();
 	VOID GameEnd();
 	//CEfSurface * m_pCharView;
 };
