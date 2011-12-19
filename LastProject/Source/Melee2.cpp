@@ -27,7 +27,7 @@ VOID Melee2::Enter( CMonster* a_pMonster )
 	}
 	else
 	{
-		CSound::GetInstance()->PlayEffect( 0 );	
+		CSound::GetInstance()->PlayEffect( 0 );
 	}
 }
 

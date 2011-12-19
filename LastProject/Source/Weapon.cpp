@@ -299,11 +299,7 @@ VOID CWeapon::SetKeyA()
 
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CObjectManage * pOM = CObjectManage::GetInstance();
-		INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
-		INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
-
-		CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + iCharNumber + iRand );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
 	else if ( m_nState == EnumCharFrame::ATTACK1 && 
 		( nCurrFrame > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -315,11 +311,7 @@ VOID CWeapon::SetKeyA()
 
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CObjectManage * pOM = CObjectManage::GetInstance();
-		INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
-		INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
-
-		CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + iCharNumber + iRand );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
 	else if ( m_nState == EnumCharFrame::BASE && nCurrFrame == 0 )
 	{
@@ -352,7 +344,7 @@ VOID CWeapon::SetKeyB()
 		m_pMap->SetAnimation( m_nState );
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CSound::GetInstance()->PlayEffect( 0 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
 	//else if ( m_nState == EnumCharFrame::TEMP2 &&
 	//	( m_pMap->GetCurrentFrame() > ( m_WeaponType.nFrameBegin[m_nState] + m_WeaponType.nDelay[m_nState] ) ) && 
@@ -372,7 +364,7 @@ VOID CWeapon::SetKeyB()
 		m_pMap->SetAnimation( m_nState );
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CSound::GetInstance()->PlayEffect( 0 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
 	else if ( m_nState == EnumCharFrame::BASE  && nCurrFrame == 0 )
 	{
@@ -382,7 +374,7 @@ VOID CWeapon::SetKeyB()
 		m_pMap->SetAnimation( m_nState );
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
 
-		CSound::GetInstance()->PlayEffect( 0 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
 }
 

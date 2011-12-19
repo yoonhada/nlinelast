@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "Combo1.h"
-#include "Combo2.h"
+#include "Combo1Stiffen.h"
 #include "Monster.h"
 
 
@@ -40,7 +40,7 @@ VOID Combo1::Execute( CMonster* a_pMonster )
 		a_pMonster->CreateAttackBoundBox();
 
 		// 경직 상태로
-		a_pMonster->GetFSM()->ChangeState( Combo2::GetInstance() );
+		a_pMonster->GetFSM()->ChangeState( Combo1Stiffen::GetInstance() );
 	}
 }
 

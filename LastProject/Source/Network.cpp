@@ -211,13 +211,15 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 		{
 			// 다른 케릭터 선택, 선택차단....
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = wSelectNumber;
-			pOM->GetLobbyScene()->EnableRotate( wSelectNumber );
+			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_SELECT_1 + wSelectNumber, DISABLE  );
+//			pOM->GetLobbyScene()->EnableRotate( wSelectNumber );
 		}
 		else
 		{
 			// 다른 플레이어 선택해지,  차단 해지...
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
-			pOM->GetLobbyScene()->DisableRotate( wSelectNumber );
+			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_SELECT_1 + wSelectNumber, UP );
+//			pOM->GetLobbyScene()->DisableRotate( wSelectNumber );
 		}
 	}
 

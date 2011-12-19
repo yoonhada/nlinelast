@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "SpinGroggy.h"
-#include "Seek.h"
+#include "Stand.h"
 
 #include "Monster.h"
 
@@ -46,7 +46,7 @@ VOID SpinGroggy::Execute( CMonster* a_pMonster )
 		// 호스트이면 탐색 상태로
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
-			a_pMonster->GetFSM()->ChangeState( Seek::GetInstance() );
+			a_pMonster->GetFSM()->ChangeState( Stand::GetInstance() );
 		}
 		else
 		{
