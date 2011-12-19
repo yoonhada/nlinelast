@@ -202,10 +202,10 @@ VOID CNetwork::SC_READY( CPacket& a_pk )
 			pOM->GetLobbyScene()->DestoryWeapon( pOM->GetLobbyScene()->m_nSelectState[wUserNumber] );
 			pOM->GetLobbyScene()->m_nSelectState[wUserNumber] = -1;
 			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_READY, UP );
-			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_SELECT_1 + wSelectNumber, DISABLE );
+//			pOM->GetLobbyScene()->ChangeStateButton( LOBBY_SELECT_1 + wSelectNumber, DISABLE );
 		}
 	}
-	else 
+	else
 	{
 		if ( bSelect == TRUE )
 		{
