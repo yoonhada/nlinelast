@@ -22,6 +22,8 @@ VOID MenuScene::Release()
 	SAFE_DELETE( m_pMenuGUI );
 	SAFE_DELETE( m_pOptionScene );
 	SAFE_DELETE( m_pLoginScene );
+
+	CSound::GetInstance()->StopBGM( CSound::BGM_MENU );
 }
 
 HRESULT MenuScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd )
