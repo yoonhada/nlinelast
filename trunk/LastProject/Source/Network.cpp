@@ -9,9 +9,12 @@
 #include "Chase.h"
 #include "Melee.h"
 #include "Melee2.h"
+#include "Melee3.h"
+#include "Melee4.h"
 #include "Spin.h"
-#include "Dash.h"
+#include "Combo1.h"
 #include "DashReady.h"
+#include "SenpukyakuReady.h"
 #include "TimeLifeItem.h"
 
 
