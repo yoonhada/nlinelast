@@ -171,7 +171,7 @@ VOID LobbyScene::Update()
 	case LOBBY_SELECT_2:
 	case LOBBY_SELECT_3:
 	case LOBBY_SELECT_4:
-/*
+
 		if ( m_nSelectState[pOM->Get_ClientNumber()] != -1 )
 		{
 			if( m_nCharSelect != -1 )
@@ -183,7 +183,7 @@ VOID LobbyScene::Update()
 
 			CreateWeapon( m_nCharSelect );
 		}
-*/
+
 		m_nCharSelect = dID - LOBBY_SELECT_1;
 		CSound::GetInstance()->PlayEffect( 1 );
 		break;
@@ -201,12 +201,17 @@ VOID LobbyScene::Update()
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, m_fChrRotate );
 		else
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
-
-		if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_1 + i ) == HOT )
-		{
-			EnableRotate( i );
-		}
 	}
+	
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_1 ) == 1 )
+		EnableRotate( 0 );
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_2 ) == 1 )
+		EnableRotate( 1 );
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_3 ) == 1 )
+		EnableRotate( 2 );
+	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_4 ) == 1 )
+		EnableRotate( 3 );
+
 
 	//	Chatting Massage
 	WCHAR aStr[ 256 ] = { 0, };
@@ -215,8 +220,6 @@ VOID LobbyScene::Update()
 		CNetwork::GetInstance()->CS_CHAT( aStr );
 	}
 
-	if( GetKeyState( 'A' ) & 0x8000 )
-		this->ChangeStateButton( LOBBY_SELECT_1, DISABLE );
 }
 
 VOID LobbyScene::Render()
