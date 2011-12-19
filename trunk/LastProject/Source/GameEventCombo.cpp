@@ -35,8 +35,8 @@ HRESULT CGameEventCombo::Create( )
 	D3DVIEWPORT9 Vp;
 	m_pD3dDevice->GetViewport( &Vp );
 
-	FLOAT fWidth	= static_cast<FLOAT>( Vp.Width ) * 0.5f;
-	FLOAT fHeight	= static_cast<FLOAT>( Vp.Height ) * 0.33f;
+	FLOAT fWidth	= 0.50f * Vp.Width;
+	FLOAT fHeight	= 0.1888f * Vp.Height;
 
 	GUIBase::IMAGEPARAM imgParam[7];
 

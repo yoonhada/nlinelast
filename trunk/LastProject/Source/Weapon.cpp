@@ -101,7 +101,7 @@ VOID CWeapon::Clear()
 	m_fZAng[2][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 	m_fZAng[2][1] = MTP_FUN::Deg2Rad<60>::radians;		// D3DXToRadian( 0.0f);
 	m_fZAng[2][2] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 0.0f);
-	m_fZAng[2][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
+	m_fZAng[2][3] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
 	m_fZAng[2][4] = MTP_FUN::Deg2Rad<30>::radians;	// D3DXToRadian( -15.0f);
 	m_fZAng[2][5] = -MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 	m_fZAng[2][6] = MTP_FUN::Deg2Rad<0>::radians;		// D3DXToRadian( 45.0f);
@@ -392,11 +392,11 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	m_WeaponType.pBBA.SetAngleZ( m_fZAng[m_WeaponType.nType - 1][m_nState] );
 
 	m_WeaponType.pBBA.SetSize( 0, m_fBBSize[m_WeaponType.nType - 1][0] );
-	m_WeaponType.pBBA.SetSize( 1, m_fBBSize[m_WeaponType.nType - 1][1] );
+	m_WeaponType.pBBA.SetSize( 1, m_fBBSize[m_WeaponType.nType - 1][1] + 10.0f );
 	m_WeaponType.pBBA.SetSize( 2, m_fBBSize[m_WeaponType.nType - 1][2] );
 
 	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[m_WeaponType.nType - 1][3] );
-	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[m_WeaponType.nType - 1][4] );
+	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[m_WeaponType.nType - 1][4] + 10.0f );
 	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[m_WeaponType.nType - 1][5] );
 
 #ifdef _DEBUG
