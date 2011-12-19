@@ -881,8 +881,7 @@ VOID CMainScene::EventCombo()
 	{
 		for ( int i = 0; i < 4; ++i )
 		{
-			//m_pEventGUICombo->AddCombo( i, pOM->Get_EventTable()[i] );
-			m_pEventGUICombo->AddCombo( i, pOM->Get_CharTable()[i] );
+			m_pEventGUICombo->AddCombo( i, pOM->Get_EventTable()[i] );
 		}		
 	}
 
