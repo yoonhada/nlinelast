@@ -627,6 +627,12 @@ VOID CNetwork::SC_Monster_LockOn( CPacket& a_pk )
 }
 
 
+VOID CNetwork::SC_GAME_RESULT( CPacket& a_pk )
+{
+	
+}
+
+
 VOID CNetwork::CS_LOGON( LPWSTR a_szNickName )
 {
 	CPacket sendPk;
@@ -1059,6 +1065,23 @@ VOID CNetwork::CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle )
 }
 
 
+VOID CNetwork::CS_GAME_RESULT()
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_GAME_RESULT;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+
+
+	SendToServer( sendPk );
+#ifdef _DEBUG
+	CDebugConsole::GetInstance()->Messagef( L"GAME RESULT send \n ");
+#endif
+}
+
+
 VOID CNetwork::InsertPacket( CPacket& a_pk )
 {
 	EnterCriticalSection( &m_cs );
@@ -1194,6 +1217,11 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 	// 몬스터 각도
 	case MSG_MONSTER_LOCKON:
 		SC_Monster_LockOn( a_pk );
+		break;
+
+	// 게임 스코어
+	case MSG_GAME_RESULT:
+		SC_GAME_RESULT( a_pk );
 		break;
 	}
 }

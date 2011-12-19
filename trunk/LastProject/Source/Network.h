@@ -42,6 +42,8 @@ public:
 		MSG_MONSTER_ATTACK_ANIMATION2,
 		MSG_MONSTER_LOCKON,
 
+		MSG_GAME_RESULT,
+
 		MSG_END,
 	};
 
@@ -107,6 +109,8 @@ public:
 	VOID SC_Monster_Attack_Animation2( CPacket& a_pk );
 	VOID SC_Monster_LockOn( CPacket& a_pk );
 
+	VOID SC_GAME_RESULT( CPacket& a_pk );
+
 	// Client -> Server
 	VOID CS_LOGON( LPWSTR a_szNickName );
 	VOID CS_READY( WORD a_wSelect, BOOL a_bSelect );
@@ -130,6 +134,8 @@ public:
 	VOID CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnimationNumber );
 	VOID CS_Monster_Attack_Animation2( WORD a_wMonsterNumber, WORD a_wAnimationNumber, FLOAT a_fDegree, D3DXVECTOR3 a_vPos, D3DXVECTOR3 a_vNextPos, FLOAT a_fDistance );
 	VOID CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle );
+
+	VOID CS_GAME_RESULT();
 
 	BOOL SendToServer( CPacket& a_pk );
 
