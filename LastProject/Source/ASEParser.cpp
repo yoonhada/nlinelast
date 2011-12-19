@@ -210,22 +210,54 @@ VOID ASEParser::FrameMove()
 	//	Animation Test
 	if( m_dCurrentTime > m_dBeginTime + m_pSceneData->iFrameSpeed )
 	{
+		//	Inverse
+		BOOL bInverse = FALSE;
+
+		if( m_aniCurrent.iStartFrame > m_aniCurrent.iEndFrame )
+			bInverse = TRUE;
+		
 		//m_iCurrentFrame++;
-		DWORD dincFrame	= ( m_dCurrentTime - m_dBeginTime ) / m_pSceneData->iFrameSpeed;
-		m_iCurrentFrame += dincFrame;
+		//DWORD dincFrame	= ( m_dCurrentTime - m_dBeginTime ) / m_pSceneData->iFrameSpeed;
+		//m_iCurrentFrame += dincFrame;
+
+		INT iIncFrame	= ( m_dCurrentTime - m_dBeginTime ) / m_pSceneData->iFrameSpeed;
+		
+		if( bInverse )
+			iIncFrame *= -1;
+		
+		m_iCurrentFrame += iIncFrame;
+
 		m_dBeginTime	= m_dCurrentTime;
 
-		if( m_iCurrentFrame > m_aniCurrent.iEndFrame )
+		if( bInverse == FALSE )
 		{
-			if( !m_aniCurrent.bLoop )
+			if( m_iCurrentFrame > m_aniCurrent.iEndFrame )
 			{
-				m_aniCurrent.dID			= m_aniBase.dID;
-				m_aniCurrent.iStartFrame	= m_aniBase.dID;
-				m_aniCurrent.iEndFrame		= m_aniBase.iEndFrame;
-				m_aniCurrent.bLoop			= m_aniCurrent.bLoop;
+				if( !m_aniCurrent.bLoop )
+				{
+					m_aniCurrent.dID			= m_aniBase.dID;
+					m_aniCurrent.iStartFrame	= m_aniBase.dID;
+					m_aniCurrent.iEndFrame		= m_aniBase.iEndFrame;
+					m_aniCurrent.bLoop			= m_aniCurrent.bLoop;
+				}
+				m_iCurrentFrame = m_aniCurrent.iStartFrame;
 			}
-			m_iCurrentFrame = m_aniCurrent.iStartFrame;
 		}
+		else
+			if( bInverse == TRUE )
+			{
+				if( m_iCurrentFrame < m_aniCurrent.iEndFrame )
+				{
+					if( !m_aniCurrent.bLoop )
+					{
+						m_aniCurrent.dID			= m_aniBase.dID;
+						m_aniCurrent.iStartFrame	= m_aniBase.dID;
+						m_aniCurrent.iEndFrame		= m_aniBase.iEndFrame;
+						m_aniCurrent.bLoop			= m_aniCurrent.bLoop;
+					}
+					m_iCurrentFrame = m_aniCurrent.iStartFrame;
+				}
+			}
 	}
 	//	End
 }

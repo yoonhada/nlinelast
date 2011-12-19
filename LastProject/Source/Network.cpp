@@ -498,7 +498,7 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 
 	INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
-	CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + pOM->Get_CharTable( wClientNumber ) + iRand );
+	CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_DAMAGED1 + pOM->Get_CharTable( wClientNumber ) + iRand );
 }
 
 

@@ -66,27 +66,37 @@ VOID MainGUI::CreateMiniMap()
 	m_pMmpObject[ MMP_DAUGHTER ]->Create( fX, fY, fWidth, fHeight, imgParamDaughter );
 
 	GUIBase::IMAGEPARAM imgParamFirstAidKit0;
-	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_2.png" );
 
 	m_pMmpObject[ MMP_FIRSTAIDKIT_0 ]->Create( fX, fY, fWidth, fHeight, imgParamFirstAidKit0 );
 
 	GUIBase::IMAGEPARAM imgParamFirstAidKit1;
-	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit1, L"Img\\MainScene\\FirstAidKit.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit1, L"Img\\MainScene\\FirstAidKit_0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit1, L"Img\\MainScene\\FirstAidKit_1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit1, L"Img\\MainScene\\FirstAidKit_2.png" );
 
 	m_pMmpObject[ MMP_FIRSTAIDKIT_1 ]->Create( fX, fY, fWidth, fHeight, imgParamFirstAidKit1 );
 
 	GUIBase::IMAGEPARAM imgParamFirstAidKit2;
-	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit2, L"Img\\MainScene\\FirstAidKit.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit2, L"Img\\MainScene\\FirstAidKit_0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit2, L"Img\\MainScene\\FirstAidKit_1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit2, L"Img\\MainScene\\FirstAidKit_2.png" );
 
 	m_pMmpObject[ MMP_FIRSTAIDKIT_2 ]->Create( fX, fY, fWidth, fHeight, imgParamFirstAidKit2 );
 
 	GUIBase::IMAGEPARAM imgParamFirstAidKit3;
-	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit3, L"Img\\MainScene\\FirstAidKit.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit3, L"Img\\MainScene\\FirstAidKit_0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit3, L"Img\\MainScene\\FirstAidKit_1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit3, L"Img\\MainScene\\FirstAidKit_2.png" );
 
 	m_pMmpObject[ MMP_FIRSTAIDKIT_3 ]->Create( fX, fY, fWidth, fHeight, imgParamFirstAidKit3 );
 
 	GUIBase::IMAGEPARAM imgParamFirstAidKit4;
-	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit4, L"Img\\MainScene\\FirstAidKit.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit4, L"Img\\MainScene\\FirstAidKit_0.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit4, L"Img\\MainScene\\FirstAidKit_1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit4, L"Img\\MainScene\\FirstAidKit_2.png" );
 
 	m_pMmpObject[ MMP_FIRSTAIDKIT_4 ]->Create( fX, fY, fWidth, fHeight, imgParamFirstAidKit4 );
 

@@ -78,11 +78,11 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create Character
 	m_aData		= new DATA[ 4 ];
 
-	CreateData( &m_aData[ 0 ], L"Data\\CharData\\APPA_1.csav",	D3DXVECTOR3(  31.0f, 0.0f, 135.0f ) );
-	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM_1.csav",	D3DXVECTOR3(  10.0f, 0.0f, 135.0f ) );
-	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_1.csav", D3DXVECTOR3( -10.0f, 0.0f, 135.0f ) );
-	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_1.csav",	D3DXVECTOR3( -31.0f, 0.0f, 135.0f ) );
-
+	CreateData( &m_aData[ 0 ], L"Data\\CharData\\APPA_1.csav",	D3DXVECTOR3(  37.5f, 0.0f, 115.0f ) );
+	CreateData( &m_aData[ 1 ], L"Data\\CharData\\MOM_1.csav",	D3DXVECTOR3(  12.5f, 0.0f, 115.0f ) );
+	CreateData( &m_aData[ 2 ], L"Data\\CharData\\ADDLE_1.csav", D3DXVECTOR3( -12.5f, 0.0f, 115.0f ) );
+	CreateData( &m_aData[ 3 ], L"Data\\CharData\\DDAL_1.csav",	D3DXVECTOR3( -37.5f, 0.0f, 115.0f ) );
+	
 	//	Create Light
 	m_pLight = new CLight;
 	m_pLight->Create( _pd3dDevice );
@@ -200,7 +200,16 @@ VOID LobbyScene::Update()
 		if( m_aData[ i ].bRotate )
 			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, m_fChrRotate );
 		else
-			m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
+		{
+			if( i == 0 )//	Daddy
+				m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 2.85f );
+			if( i == 3 )//	Daughter
+				m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.43f );
+			if( i == 1 )//	Mom
+				m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
+			if( i == 2 )//	Son
+				m_aData[ i ].pCharacter->UpdateByValue( m_aData[ i ].vecPosition, 3.14f );
+		}
 	}
 	
 	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_1 ) == 1 )
@@ -225,10 +234,10 @@ VOID LobbyScene::Update()
 VOID LobbyScene::Render()
 {
 	//static FLOAT fX = 0.0f, fY = 0.0f, fZ = 180.0f;
-	static FLOAT fX = 0.0f, fY = 4.5f, fZ = 200.0f;
+	static FLOAT fX = 0.0f, fY = -3.0f, fZ = 200.0f;
 	
 	D3DXVECTOR3		vecEyePt( fX, fY, fZ );
-	D3DXVECTOR3		vecLookatPt( 0.0f, -10.0f, 0.0f );
+	D3DXVECTOR3		vecLookatPt( 0.0f, -7.0f, 0.0f );
 	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );
