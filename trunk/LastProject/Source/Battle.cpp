@@ -54,16 +54,18 @@ VOID Battle::Execute( CMonster* a_pMonster )
 		// 삐에로면 대쉬, 로켓펀치 중 랜덤
 		if( a_pMonster->Get_MonsterNumber() == 2 )
 		{
-			if( FastRand2() < 0.5f )
+//			if( FastRand2() < 0.5f )
 			{
 				CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_DASH );
 				a_pMonster->GetFSM()->ChangeState( DashReady::GetInstance() );
 			}
+/*
 			else
 			{
 				CNetwork::GetInstance()->CS_Monster_Attack_Animation( a_pMonster->Get_MonsterNumber(), CMonster::ANIM_ROCKETPUNCH );
 				a_pMonster->GetFSM()->ChangeState( RocketPunch::GetInstance() );
 			}
+*/
 		}
 		// 판다면 대쉬
 		else
