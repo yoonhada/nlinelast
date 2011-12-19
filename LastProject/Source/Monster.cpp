@@ -299,7 +299,7 @@ VOID CMonster::Load( WCHAR* a_pFileName )
 	{
 		wsprintf(wchTemp, L"%s_%d.csav", a_pFileName, Loop);
 		m_pBox[Loop].Load( wchTemp );
-
+		m_iTotalBreakedCubeCnt += m_pBox[Loop].GetvCubeSize();
 		CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[Loop].GetBoundBox() );
 	}
 }
@@ -933,16 +933,18 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	//	}
 	//}
 	
-	INT Loop = 0;
+	INT nCout, Loop = 0;
 	D3DXMATRIXA16 mat = Get_MatWorld();
 	for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
 	{
 		if ( m_pBox[Loop].CollisionAtk( ) )
 		{
-			if ( m_pBox[Loop].BreakQube( mat ) )
+			nCout = m_pBox[Loop].BreakQube( mat );
+			if ( nCout )
 			{
 				CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( CObjectManage::GetInstance()->Get_ClientNumber() ) );
 				CGameEvent::GetInstance()->Set_MonsterIndex( m_iMonsterNumber );
+				m_iBreakedCubeCnt += nCout;
 			}
 		}
 	}
@@ -967,6 +969,11 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	Set_ControlTranslate( 2, m_vControl.z );
 	Set_ControlRotate( 1, m_fAngle );
 	Calcul_MatWorld();
+
+	if ( m_iBreakedCubeCnt > ( m_iTotalBreakedCubeCnt * 5 ) >> 3 )
+	{				
+		CGameEvent::GetInstance()->SetDie( m_iMonsterNumber );
+	}
 }
 
 VOID CMonster::ChangeAnimation( INT a_iAniNum )
@@ -1404,12 +1411,20 @@ VOID CMonster::BreakCubeAll()
 {
 	for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
 	{
+		m_iBreakedCubeCnt += m_pBox[Loop].GetvCubeSize();
 		m_pBox[Loop].BreakCubeAll();
 	}
 }
 
+
+INT			m_iBreakedCubeCnt;
+INT			m_iTotalBreakedCubeCnt;
+
 VOID CMonster::BreakNockdown()
 {
+	m_iBreakedCubeCnt += 
+		m_pBox[0].GetvCubeSize() + m_pBox[1].GetvCubeSize() + m_pBox[2].GetvCubeSize() + 
+		m_pBox[3].GetvCubeSize() + m_pBox[4].GetvCubeSize() + m_pBox[5].GetvCubeSize() + m_pBox[6].GetvCubeSize();
 	m_pBox[0].BreakNockdown();
 	m_pBox[1].BreakNockdown();
 	m_pBox[2].BreakNockdown();
@@ -1580,12 +1595,4 @@ D3DXVECTOR3 CMonster::GetWorldPos( INT a_iX, INT a_iZ )
 	pos.z = 950.0f - 10.0f * a_iZ - 10.0f / 2;
 
 	return pos;
-}
-
-VOID CMonster::SetBoundBox()
-{
-	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[3].GetBoundBox() );
-	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[4].GetBoundBox() );
-	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[5].GetBoundBox() );
-	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[6].GetBoundBox() );
 }

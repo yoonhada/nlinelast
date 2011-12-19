@@ -75,6 +75,10 @@ private:
 	INT						m_scnNext;
 	INT						m_scnState;
 
+	FLOAT fComboTime;
+	FLOAT fComboTerm;
+
+
 	VOID CreateComboEvent();
 	VOID CreateCharactor();
 	VOID CreateMonster();

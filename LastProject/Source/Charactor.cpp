@@ -931,7 +931,7 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 		if( nCount != 0 )
 		{
-			bRet = TRUE;
+			bRet = nCount;
 			CObjectManage * pOM = CObjectManage::GetInstance();
 			CObjectManage::GetInstance()->Set_NetworkSendDestroyData( m_chMonsterPart, nCount, vDir );
 			//CNetwork::GetInstance()->CS_UTOM_ATTACK( m_chMonsterPart, NetworkSendTempVector.size(), NetworkSendTempVector, vDir );
@@ -1080,12 +1080,15 @@ VOID CCharactor::BreakNockdown( const FLOAT fPow )
 	{
 		for( INT Loop = 0; Loop<m_iCubeVectorSize; ++Loop, ++nCount )
 		{
-			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
+			if( m_vectorCube[Loop] != NULL && 
+				m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
 			{
 				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
 			}
 
-			if( m_vectorCube[Loop] != NULL && m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::MEAT )
+			if( m_vectorCube[Loop] != NULL && 
+				m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::MEAT &&
+				m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) == TRUE )
 			{
 				m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, FALSE );
 

@@ -59,7 +59,7 @@ VOID CWeapon::Clear()
 	m_fZAng[0][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 	m_fZAng[0][1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 	m_fZAng[0][2] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-	m_fZAng[0][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
+	m_fZAng[0][3] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
 	m_fZAng[0][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
 	m_fZAng[0][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 	m_fZAng[0][6] = MTP_FUN::Deg2Rad<45>::radians;		// D3DXToRadian( 45.0f);
@@ -68,12 +68,12 @@ VOID CWeapon::Clear()
 	m_fZAng[0][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 
 	// XYZ Min
-	m_fBBSize[0][0] = -10.5f;
-	m_fBBSize[0][1] = -3.0f;
-	m_fBBSize[0][2] = -16.5f;
+	m_fBBSize[0][0] = -15.5f;
+	m_fBBSize[0][1] = -5.0f;
+	m_fBBSize[0][2] = -15.5f;
 	// XYZ Max
-	m_fBBSize[0][3] =  7.5f;
-	m_fBBSize[0][4] =  3.0f;
+	m_fBBSize[0][3] =  15.5f;
+	m_fBBSize[0][4] =  5.0f;
 	m_fBBSize[0][5] =  7.5f;
 
 	//	Mom
@@ -365,6 +365,11 @@ VOID CWeapon::SetKeyB()
 		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState, CSound::EFFECT_WEAPON );
 
 		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
+
+		if ( CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_ATACK )
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, 1.0f );
+		}
 	}
 	else if ( m_nState == EnumCharFrame::BASE  && nCurrFrame == 0 )
 	{

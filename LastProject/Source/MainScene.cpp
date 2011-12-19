@@ -56,6 +56,8 @@ VOID	CMainScene::Clear()
 
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 
+	fComboTime = 30.0f;
+	fComboTerm = 15.0f;
 
 	//m_pCharView = new CEfSurface();
 }
@@ -172,7 +174,7 @@ VOID CMainScene::CreateComboEvent()
 	m_pEventGUICombo = new CGameEventCombo( m_pD3dDevice, CObjectManage::GetInstance()->GetSprite() );
 	m_pEventGUICombo->Create();
 	m_pEventGUICombo->Initialize();
-	m_pEventGUICombo->SetTime( 15.0f );
+	m_pEventGUICombo->SetTime( fComboTime );
 	m_pGameEventScoreBoard = new GameEventScoreBoard(m_pD3dDevice, CObjectManage::GetInstance()->GetSprite(), GHWND );
 	m_pGameEventScoreBoard->Create();
 	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_HIDDEN );
@@ -266,50 +268,35 @@ VOID CMainScene::CheatKeys()
 			m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.01f);
 		}
 
-		if (CInput::GetInstance()->Get_NumKey( 0 ) )
+		if( CInput::GetInstance()->Get_NumKey( 5 ) )
 		{
-			EventComboEnd();
 			m_pGameEvent->ClearEvent();
 			m_pGameEvent->AddEvent( CGameEvent::TUTORIAL_ATACK, 0.01f);
 		}
-		if (CInput::GetInstance()->Get_NumKey( 9 ) )
+		if( CInput::GetInstance()->Get_NumKey( 6 ) )
 		{
-			EventComboEnd();
+			CGameEvent::GetInstance()->SetTutorial( CGameEvent::TUTORIAL_ATACK );
 			m_pGameEvent->ClearEvent();
+			m_pGameEventTutorialManager->EndEvent();
 			m_pGameEvent->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.01f);
 		}
-		if (CInput::GetInstance()->Get_NumKey( 8 ) )
-		{
-			EventComboEnd();
-			m_pGameEvent->ClearEvent();
-			m_pGameEvent->AddEvent( CGameEvent::SCENE_BEAR, 0.01f);
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
-		}
-		if (CInput::GetInstance()->Get_NumKey( 7 ) )
-		{
-			EventComboEnd();
-			m_pGameEvent->ClearEvent();
-			m_pGameEvent->AddEvent( CGameEvent::SCENE_CLOWN, 0.01f);
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
-		}	
+
 	}
-	else 
+
+	if (CInput::GetInstance()->Get_NumKey( 0 ) )
 	{
-		if (CInput::GetInstance()->Get_NumKey( 0 ) )
-		{
-			EventComboEnd();
-			m_pGameEvent->ClearEvent();
-			m_pGameEvent->AddEvent( CGameEvent::SCENE_BEAR, 0.01f);
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
-		}
-		if (CInput::GetInstance()->Get_NumKey( 9 ) )
-		{
-			EventComboEnd();
-			m_pGameEvent->ClearEvent();
-			m_pGameEvent->AddEvent( CGameEvent::SCENE_CLOWN, 0.01f);
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
-		}	
+		EventComboEnd();
+		m_pGameEvent->ClearEvent();
+		m_pGameEvent->AddEvent( CGameEvent::SCENE_BEAR, 0.01f);
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
 	}
+	if (CInput::GetInstance()->Get_NumKey( 9 ) )
+	{
+		EventComboEnd();
+		m_pGameEvent->ClearEvent();
+		m_pGameEvent->AddEvent( CGameEvent::SCENE_CLOWN, 0.01f);
+		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
+	}	
 }
 
 VOID CMainScene::Update()
@@ -405,7 +392,7 @@ VOID CMainScene::Update()
 	}
 
 	m_pEventGUICombo->Update();
-	
+
 	EventSwitch( m_pGameEvent->Update() );
 
 	CTree::GetInstance()->SetCharAtkClear();
@@ -535,6 +522,12 @@ VOID CMainScene::EventInitCharState( INT nEvent )
 
 VOID CMainScene::EventInitMonsterState( INT nEvent )
 {
+	for (int Loop = 0; Loop < 3; ++Loop )
+	{
+		m_pWall[Loop].Set_Position( m_pGameEvent->GetNonePosition() );
+		m_pWall[Loop].SetActive( FALSE );
+	}
+
 	switch ( nEvent )
 	{
 	case CGameEvent::SCENE_TUTORIAL:
@@ -546,13 +539,6 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 			m_pWall[Loop].SetActive( TRUE );
 		}
 		
-		break;
-	case CGameEvent::SCENE_TUTORIAL_END:
-		for (int Loop = 0; Loop < 3; ++Loop )
-		{
-			m_pWall[Loop].Set_Position( m_pGameEvent->GetNonePosition() );
-			m_pWall[Loop].SetActive( FALSE );
-		}
 		break;
 	case CGameEvent::SCENE_BEAR:
 		m_pGameEvent->SetMonstersState( CGameEvent::BEAR | CGameEvent::PANDA );
@@ -584,7 +570,7 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 			if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 			{
 				m_pMonster[Loop]->Set_Pos( m_pGameEvent->GetMonsPosition( Loop ) );
-				m_pMonster[Loop]->Set_Angle( 0.0f );
+				m_pMonster[Loop]->Set_Angle( 90.0f );
 				m_pMonster[Loop]->ChangeAnimation( CMonster::ANIM_STAND );
 				m_pMonster[Loop]->EnableShadow( TRUE );
 				if( CObjectManage::GetInstance()->IsHost() == TRUE )
@@ -609,9 +595,6 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 
 VOID CMainScene::EventSwitch( INT nEvent )
 {
-	FLOAT fComboTime = 30.0f;
-	FLOAT fComboTerm = 15.0f;
-
 	switch ( nEvent )
 	{
 	case CGameEvent::SCENE_TUTORIAL:
@@ -626,9 +609,10 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::MAP_WALK_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::MAP_WALK_END \n" );
-		//EventStateNetwork( nEvent );
 		if ( CObjectManage::GetInstance()->IsHost() )
+		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 3.0f );
+		}
 		break;
 
 	case CGameEvent::TUTORIAL_ATACK:
@@ -636,15 +620,14 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
 		EventStateNetwork( nEvent );
 		TutorialAtack( );
-		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, fComboTime );
-		if ( CObjectManage::GetInstance()->IsHost() )
-		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + 2.0f );
-		}
 		break;
 	case CGameEvent::TUTORIAL_ATACK_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK_END \n" );
 		TutorialAtackEnd();
+		if ( CObjectManage::GetInstance()->IsHost() )
+		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.01f );
+		}
 		break;
 	case CGameEvent::TUTORIAL_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
@@ -666,10 +649,11 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		}		
 		break;
 	case CGameEvent::TUTORIAL_COMBO_FAIL:		
+		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO_FAIL \n" );
 		if ( CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_COMBO )
 		{
-			CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO_FAIL \n" );
-			EventStateNetwork( nEvent );
+			CGameEvent::GetInstance()->SetTutorial( nEvent );
+			EventStateNetwork( nEvent );			
 			m_pEventGUICombo->Fail();
 			
 			if ( CObjectManage::GetInstance()->IsHost() )
@@ -680,11 +664,12 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::TUTORIAL_COMBO_SUCCESS:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO_SUCCESS \n" );
-		EventStateNetwork( nEvent );		
-		DoorBreakNockdown();
 		if ( CGameEvent::GetInstance()->GetTutorial( ) == CGameEvent::TUTORIAL_COMBO )
 		{
 			CGameEvent::GetInstance()->SetTutorial( nEvent );
+			EventStateNetwork( nEvent );		
+			DoorBreakNockdown();
+			m_pEventGUICombo->Success();
 
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
@@ -699,18 +684,19 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventStateNetwork( nEvent );
 		m_pGameEventTutorialManager->EndEvent();
 		EventComboEnd();
-		EventInitGameState( nEvent );		
+		//EventInitGameState( nEvent );		
 		break;
 	case CGameEvent::SCENE_TUTORIAL_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::SCENE_TUTORIAL_END \n" );
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
 		EventStateNetwork( nEvent );
-		EventInitGameState( nEvent );
+		//EventInitGameState( nEvent );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_BEAR, 0.01f );
 		}
 		break;
+		//////////////////////////////////////////////////////////////////////////
 	case CGameEvent::SCENE_BEAR:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::SCENE_BEAR \n" );
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
@@ -723,20 +709,24 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		}
 		break;
 	case CGameEvent::SCENE_BEAR_END:
-		CGameEvent::GetInstance()->ClearEvent( );
 		m_pEventGUICombo->Initialize();
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_CLOWN, 0.01f );
 		}
 		break;
-//////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////
 	case CGameEvent::SCENE_CLOWN:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::SCENE_CLOWN \n" );
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
 		EventStateNetwork( nEvent );
 		EventMapCameraWalk( CCamera::TARGET_SHOW );
 		EventInitGameState( nEvent );
+		CGameEvent::GetInstance()->ClearEvent( );
+		if ( CObjectManage::GetInstance()->IsHost() )
+		{			
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
+		}
 		break;
 
 	case CGameEvent::EVENT_COMBO:
@@ -746,7 +736,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, fComboTime );
-			//CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 
 			CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() ); 
 		}
@@ -756,40 +746,33 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		m_pEventGUICombo->Fail();
 		if ( CObjectManage::GetInstance()->IsHost() ) 		
 		{
-			//if ( CGameEvent::GetInstance()->GetTutorial() < CGameEvent::SCENE_BEAR )
-			//{
-			//	CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_FAIL, 0.01f );
-			//}
-			//else
-			//{
-				CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
-				CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-			//}
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
+			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 		}
 		break;
 	case CGameEvent::EVENT_COMBO_SUCCESS:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_SUCCESS \n" );
-		m_pEventGUICombo->Success();
-		if ( CObjectManage::GetInstance()->IsHost() ) 
+		if ( CGameEvent::GetInstance()->GetTutorial() < CGameEvent::SCENE_BEAR )
 		{
-			if ( CGameEvent::GetInstance()->GetTutorial() < CGameEvent::SCENE_BEAR )
-			{
-				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_SUCCESS, 0.01f );
-			}
-			else
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_SUCCESS, 0.01f );
+		}
+		else
+		{
+			m_pEventGUICombo->Success();
+			if ( CObjectManage::GetInstance()->IsHost() ) 
 			{
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );				
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
 				CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-			}
-		}		
+			}		
+		}
 		break;
 	case CGameEvent::EVENT_COMBO_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_END \n" );		
 		EventComboEnd();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
+			//CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 		}
 		break;
@@ -855,7 +838,7 @@ VOID CMainScene::GamePoint( INT nEvent )
 
 VOID CMainScene::GameEnd()
 {
-	CInput::GetInstance()->EnableInput( TRUE );
+	CInput::GetInstance()->EnableInput( FALSE );
 	m_scnNext	= IScene::SCENE_MENU;
 	m_scnState	= IScene::SCENE_END;
 
@@ -935,7 +918,7 @@ VOID CMainScene::EventCombo()
 
 VOID CMainScene::EventComboEnd()
 {
-	CGameEvent::GetInstance()->ClearCombo();
+	//CGameEvent::GetInstance()->ClearCombo();
 	m_pEventGUICombo->Initialize();	
 }
 

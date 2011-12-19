@@ -36,7 +36,8 @@ private:
 
 	// Monster
 	INT m_nMonstersState;
-	
+	INT m_nDieMonsterNumber;
+
 	// Event
 	INT m_nPrevEvent;
 	INT m_nTutorial;
@@ -107,6 +108,7 @@ public:
 	INT GetMonsterIndex()								{ return m_nMonsterIndex; }
 	INT GetPlayerIndex()								{ return m_nPlayerIndex; }
 	INT GetMonsterState()								{ return m_nMonstersState; }
+	VOID SetMonsterLifeCheck();
 
 	D3DXVECTOR3& GetNonePosition( )							{ return m_vNonePosition; }
 	D3DXVECTOR3& GetCharPosition( INT nType, INT nIndex )	{ return m_vCharactorPosition[nType][nIndex]; }
@@ -122,10 +124,10 @@ public:
 	VOID SetShotedPoint( INT nChar, INT nCount );
 	VOID SetSlotNumber( WORD wSlotNumber )		{ m_wSlotNumber = wSlotNumber; }
 	VOID SetResult( BOOL bResult )				{ m_bResult = bResult; }
+	VOID SetDie( INT nMonsterNumber )			{ m_nDieMonsterNumber = nMonsterNumber; }
 
 	INT GetAttackPoint( INT nChar )				{ return m_pAttackPoint[nChar]; }
 	INT GetShotedPoint( INT nChar )				{ return m_pShotedPoint[nChar]; }
 	WORD GetSlotNumber()						{ return m_wSlotNumber; }
 	BOOL GetResult()							{ return m_bResult; }
-
 };

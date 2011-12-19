@@ -158,7 +158,7 @@ public:
 	VOID BreakNockdown();
 	BOOL BreakNockdown( BOOL );
 	VOID EnableShadow( BOOL bEnable );
-	VOID SetBoundBox();
+
 private:
 	VOID AniInterpolation();
 
