@@ -129,9 +129,9 @@ VOID LobbyGUI::CreateButton()
 VOID LobbyGUI::CreateEdit()
 {
 	FLOAT fX		= 40.0f;
-	FLOAT fY		= 860.0f;
-	FLOAT fWidth	= 726.0f;
-	FLOAT fHeight	= 53.0f;
+	FLOAT fY		= 934.0f;
+	FLOAT fWidth	= 690.0f;
+	FLOAT fHeight	= 50.0f;
 
 	GUIBase::IMAGEPARAM imgParamEdit;
 	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\LobbyScene\\Edit.png" );
@@ -151,16 +151,16 @@ VOID LobbyGUI::CreateEdit()
 
 VOID LobbyGUI::CreateListbox()
 {
-	FLOAT fX		= 50.0f;
+	FLOAT fX		= 40.0f;
 	FLOAT fY		= 590.0f;
-	FLOAT fWidth	= 722.0f;
-	FLOAT fHeight	= 259.0f;
+	FLOAT fWidth	= 690.0f;
+	FLOAT fHeight	= 334.0f;
 
 	GUIBase::IMAGEPARAM imgParam;
 	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\LobbyScene\\Listbox_Back.png" );
 
 	m_pGUIListbox->Create( fX, fY, fWidth, fHeight, imgParam );
-	m_pGUIListbox->SetFont( L"휴먼매직체", 20, 20, 0x00ffffff );
+	m_pGUIListbox->SetFont( L"휴먼매직체", 20, 20, 0x00000000 );
 	
 }
 

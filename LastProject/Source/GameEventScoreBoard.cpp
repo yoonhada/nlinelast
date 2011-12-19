@@ -13,16 +13,16 @@ VOID GameEventScoreBoard::Initialize()
 	m_dScoreFrameSpeed		= 15;
 	m_dPositionalFrameSpeed	= 800;
 
-	m_fBgdX				= 200.0f;
-	m_fBgdY				= 200.0f;
+	m_fBgdX				= 150.0f;
+	m_fBgdY				= 110.0f;
 	m_fBgdWidth			= 600.0f;
-	m_fBgdHeight		= 600.0f;
+	m_fBgdHeight		= 760.0f;
 
-	m_fIdtWidth			= 100.0f;
-	m_fIdtHeight		= 100.0f;
+	m_fIdtWidth			= 80.0f;
+	m_fIdtHeight		= 120.0f;
 
-	m_fNumWidth			= 50.0f;
-	m_fNumHeight		= 50.0f;
+	m_fNumWidth			= 40.0f;
+	m_fNumHeight		= 40.0f;
 }
 
 VOID GameEventScoreBoard::Release()
@@ -138,10 +138,10 @@ VOID GameEventScoreBoard::CreateNumberImage()
 
 VOID GameEventScoreBoard::CreateButton()
 {
-	FLOAT fX		= 50.0f;
-	FLOAT fY		= 50.0f;
-	FLOAT fWidth	= 350.0f;
-	FLOAT fHeight	= 97.0f;
+	FLOAT fX		= 750.0f;
+	FLOAT fY		= 530.0f;
+	FLOAT fWidth	= 320.0f;
+	FLOAT fHeight	= 80.0f;
 
 	IMAGEPARAM imgParamNormal, imgParamHot, imgParamDown, imgParamDisable;
 	
@@ -251,12 +251,12 @@ VOID GameEventScoreBoard::Render()
 		Image3DTranslate( pData->pimg3DIdentifier, vecPosition.x, vecPosition.y, vecPosition.z );
 		RenderImage3D( pData->pimg3DIdentifier );
 
-		vecPosition.x += m_fIdtWidth;
+		vecPosition.x += 240.0f;
 
 		INT l = MAX_POSITIONAL - 1;
 		for( INT i=0 ; i<MAX_POSITIONAL ; i++ )
 		{
-			vecPosition.x += 50.0f;
+			vecPosition.x += m_fNumWidth;
 
 			Image3DTranslate( pData->apimg3DScore[ l ], vecPosition.x, vecPosition.y, vecPosition.z );
 			RenderImage3D( pData->apimg3DScore[ l ] );
@@ -286,8 +286,8 @@ VOID GameEventScoreBoard::AddData( DWORD _dID, DWORD _dIdentifier )
 		pData->apimg3DScore[ i ] = &m_img3DDynamicNumber;
 
 	INT iDataSize = m_vecData.size();
-	FLOAT fGapX	= 100.0f;
-	FLOAT fGapY = 100.0f * static_cast<FLOAT>( iDataSize + 1 );
+	FLOAT fGapX	= 160.0f;
+	FLOAT fGapY = 200.0f + 120.0f * static_cast<FLOAT>( iDataSize + 1 );
 	pData->vecTranslate = D3DXVECTOR3( m_fBgdX + fGapX, m_fBgdY + fGapY, 0.0f );
 	
 	m_vecData.push_back( pData );
