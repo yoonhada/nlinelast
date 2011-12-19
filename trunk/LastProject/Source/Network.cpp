@@ -455,14 +455,15 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 			++k;
 		}
 
+		int nPlayer = CObjectManage::GetInstance()->Get_CharTable( static_cast<int>( wClientNumber ) );
 		CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", wDestroyPart, wDestroyCount );
 		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->Get_MonsterPart()[wDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
-		CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( static_cast<int>( wClientNumber ) ) );
+		CGameEvent::GetInstance()->Set_PlayerIndex( nPlayer );
 		CGameEvent::GetInstance()->Set_MonsterIndex( static_cast<int>( wMonsterNumber ) );
 
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
-			CGameEvent::GetInstance()->SetAttackPoint( wClientNumber, wDestroyCount );
+			CGameEvent::GetInstance()->SetAttackPoint( nPlayer, wDestroyCount );
 		}
 	}
 }
