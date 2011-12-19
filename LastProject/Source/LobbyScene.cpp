@@ -213,6 +213,9 @@ VOID LobbyScene::Update()
 	{
 		CNetwork::GetInstance()->CS_CHAT( aStr );
 	}
+
+	if( GetKeyState( 'A' ) & 0x8000 )
+		this->ChangeStateButton( LOBBY_SELECT_1, DISABLE );
 }
 
 VOID LobbyScene::Render()

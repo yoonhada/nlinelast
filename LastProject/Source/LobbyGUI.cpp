@@ -115,7 +115,7 @@ VOID LobbyGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgSelectDisable,	L"Img\\LobbyScene\\Select_Disable.png" );
 
 	m_pGUIBtnManager->Create( LOBBY_SELECT_1, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
-
+	
 	fX += 310.0f;
 	m_pGUIBtnManager->Create( LOBBY_SELECT_2, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
