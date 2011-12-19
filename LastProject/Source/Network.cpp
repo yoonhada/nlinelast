@@ -440,7 +440,7 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 	a_pk.Read( &fDirZ);
 	a_pk.Read( &wTotalParts );
 
-	for( WORD i=0; i<wTotalParts; ++i )
+	for( WORD i = 0; i < wTotalParts; ++i )
 	{
 		INT k = 0;
 		WORD wList[1000];
@@ -459,6 +459,11 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->Get_MonsterPart()[wDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 		CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( static_cast<int>( wClientNumber ) ) );
 		CGameEvent::GetInstance()->Set_MonsterIndex( static_cast<int>( wMonsterNumber ) );
+
+		if ( CObjectManage::GetInstance()->IsHost() )
+		{
+			CGameEvent::GetInstance()->SetAttackPoint( wClientNumber, wDestroyCount );
+		}
 	}
 }
 
