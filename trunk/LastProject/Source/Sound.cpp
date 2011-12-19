@@ -84,6 +84,8 @@ VOID CSound::LoadSoundFiles()
 		"Sound/Effect/drip.wav",
 		"Sound/Effect/drip.wav",
 
+		"Sound/Effect/Weapon.wav"
+
 		"Sound/Effect/Dad/Dad_Attack1.mp3",
 		"Sound/Effect/Mom/Mom_Attack1.mp3",
 		"Sound/Effect/Boy/Boy_Attack1.mp3",

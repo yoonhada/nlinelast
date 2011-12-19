@@ -980,11 +980,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Combo1Stiffen.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo1Stiffen.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Combo2.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Source\Combo2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo2Stiffen.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Combo2Stiffen.h"
 				>
 			</File>
 			<File
@@ -1105,6 +1121,14 @@
 			</File>
 			<File
 				RelativePath=".\Source\SpinGroggy.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Stand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Stand.h"
 				>
 			</File>
 			<File
