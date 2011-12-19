@@ -152,7 +152,7 @@ VOID MainGUI::Create()
 							fHeight, 
 							imgParamEdit,
 							imgParamCaret );
-	m_pChatEdit->SetFont( MAIN_CHAT, L"±Ã¼­", 20, 20 );
+	m_pChatEdit->SetFont( MAIN_CHAT, L"ÈŞ¸Õ¸ÅÁ÷Ã¼", 20, 20 );
 	
 	fX		= 5.0f;
 	fY		= 704.0f;
@@ -161,7 +161,7 @@ VOID MainGUI::Create()
 	GUIBase::IMAGEPARAM imgParamChat;
 	m_pGUIBase->AddFileName( 0, imgParamChat, L"Img\\MainScene\\Edit.png" );
 	m_pChatWindow->Create( fX, fY, fWidth, fHeight, imgParamChat );
-	m_pChatWindow->SetFont( L"±Ã¼­", 20, 20, 0x00ffffff );
+	m_pChatWindow->SetFont( L"ÈŞ¸Õ¸ÅÁ÷Ã¼", 20, 20, 0x00000000 );
 
 	CreateMiniMap();
 
