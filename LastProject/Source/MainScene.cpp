@@ -263,6 +263,10 @@ VOID CMainScene::CheatKeys()
 		m_pGameEvent->ClearEvent();
 		m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.01f);
 	}
+	if (CInput::GetInstance()->Get_NumKey( 9 ) )
+	{
+		m_pGameEvent->AddEvent( CGameEvent::GAME_WIN_END, 0.01f);
+	}
 }
 
 VOID CMainScene::Update()
@@ -795,7 +799,7 @@ VOID CMainScene::GamePoint()
 		nChar = CObjectManage::GetInstance()->Get_CharTable( Loop );
 		if (nChar >= 0)
 		{
-			m_pGameEventScoreBoard->AddData( Loop, CGameEvent::GetInstance()->GetAttackPoint( Loop ) );
+			m_pGameEventScoreBoard->SetScore( Loop, CGameEvent::GetInstance()->GetAttackPoint( nChar ) );
 		}		
 	}
 
