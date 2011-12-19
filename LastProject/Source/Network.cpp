@@ -554,9 +554,25 @@ VOID CNetwork::SC_Monster_Attack_Animation( CPacket& a_pk )
 	{
 		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Melee2::GetInstance() );
 	}
-	else if( wAnimationNumber == CMonster::ANIM_DASH )
+	else if( wAnimationNumber == CMonster::ANIM_MELEE_ATTACK3 )
 	{
-		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( DashReady::GetInstance() );
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Melee3::GetInstance() );
+	}
+	else if( wAnimationNumber == CMonster::ANIM_MELEE_ATTACK4 )
+	{
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Melee4::GetInstance() );
+	}
+	else if( wAnimationNumber == CMonster::ANIM_SPIN_ATTACK )
+	{
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Spin::GetInstance() );
+	}
+	else if( wAnimationNumber == CMonster::ANIM_COMBO_ATTACK1 )
+	{
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( Combo1::GetInstance() );
+	}
+	else if( wAnimationNumber == CMonster::ANIM_SENPUKYAKU_READY )
+	{
+		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->GetFSM()->ChangeState( SenpukyakuReady::GetInstance() );
 	}
 }
 
