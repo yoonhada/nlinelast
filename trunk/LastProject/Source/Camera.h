@@ -8,7 +8,6 @@ class CCamera
 private:
 	VOID Clear();
 	VOID SetCamera();
-	BOOL Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
 
 	LPDIRECT3DDEVICE9		m_pD3dDevice;              
 
@@ -78,7 +77,6 @@ public:
 	VOID UpdateMatrix();
 	
 	VOID CheckObjectCollision( );
-	//VOID CheckObjectCollision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara );
 
 	VOID SetEffect(INT nType);
 	VOID Effect( D3DXVECTOR3 & a_vLook );

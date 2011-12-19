@@ -13,7 +13,6 @@ class GUIBackground;
 class CGameEventCombo : public IObject
 {
 private:
-	enum { NONE, READY, RUN, COUNTING, FAIL, SUCCESS, COUNTING1, COUNTING2, COUNTING3, END};
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
 	HWND					m_hWnd;
@@ -30,6 +29,7 @@ private:
 	INT						m_nKindEvent[4];
 
 public:
+	enum { NONE, READY, RUN, COUNTING, FAIL, SUCCESS, COUNTING1, COUNTING2, COUNTING3, END};
 	CGameEventCombo( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite);
 	virtual ~CGameEventCombo();
 
@@ -53,4 +53,6 @@ public:
 	VOID Start()							{ m_nState = READY; }
 	VOID Success();
 	VOID Fail();
+	
+	const INT GetState()					{ return m_nState; }
 };

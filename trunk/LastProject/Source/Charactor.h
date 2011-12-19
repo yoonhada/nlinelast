@@ -188,7 +188,8 @@ public:
 	VOID SetWeaponAni();
 	//VOID UpdateWeapon();
 
-	INT GetvCubeSize()					{ return m_vectorCube.size(); }
+	INT GetvCubeSize()					/*{ return m_vectorCube.size(); }
+	INT GetCubeCount()				*/	{ return m_pObject->iCubeCount; }
 };
 
 #endif

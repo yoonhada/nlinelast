@@ -8,6 +8,7 @@
 #include "stdafx.h"
 #include "MainScene.h"
 #include "GameEvent.h"
+#include "Monster.h"
 
 using namespace std;
 
@@ -60,6 +61,7 @@ VOID CGameEvent::Clear()
 	m_pShotedPoint = NULL;
 
 	m_nMonstersState = NONE ;
+	m_nDieMonsterNumber = -1;
 
 	m_nPrevEvent = NONE;
 	m_nTutorial = -1;
@@ -150,6 +152,8 @@ VOID CGameEvent::IndexInit()
 
 INT CGameEvent::Update()
 {
+	SetMonsterLifeCheck();
+
 	INT nEvent = NONE;
 	if ( !m_listEvent.empty() )
 	{
@@ -172,6 +176,41 @@ INT CGameEvent::Update()
 	}
 
 	return nEvent;
+}
+
+VOID CGameEvent::SetMonsterLifeCheck()
+{
+	//m_nDieMonsterNumber
+	CMonster ** pMonster = CObjectManage::GetInstance()->Get_Monster();
+
+	if ( m_nMonstersState & CGameEvent::PANDA && m_nDieMonsterNumber == 0 )
+	{
+		pMonster[ 0 ]->BreakNockdown();
+		pMonster[ 0 ]->ChangeAnimation( CMonster::ANIM_STAND );
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			pMonster[ 0 ]->GetFSM()->SetCurrentState( NULL );
+		}
+	}	
+	if ( m_nMonstersState & CGameEvent::BEAR && m_nDieMonsterNumber == 1 )
+	{
+		pMonster[ 1 ]->BreakNockdown();
+		pMonster[ 1 ]->ChangeAnimation( CMonster::ANIM_STAND );
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			pMonster[ 1 ]->GetFSM()->SetCurrentState( NULL );
+		}
+	}	
+	if ( m_nMonstersState & CGameEvent::CLOWN && m_nDieMonsterNumber == 2 )
+	{
+		pMonster[ 2 ]->BreakNockdown();
+		pMonster[ 2 ]->ChangeAnimation( CMonster::ANIM_STAND );
+		if( CObjectManage::GetInstance()->IsHost() == TRUE )
+		{
+			pMonster[ 2 ]->GetFSM()->SetCurrentState( NULL );
+		}
+		AddEvent( CGameEvent::GAME_WIN_END, 2.0f );
+	}
 }
 
 VOID CGameEvent::SetAttackPoint( INT nChar, INT nCount )

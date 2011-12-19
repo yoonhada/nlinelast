@@ -308,37 +308,6 @@ VOID CCamera::CheckObjectCollision( )
 	}
 }
 
-BOOL CCamera::Collision( const D3DXVECTOR3& a_vPosCamera, const D3DXVECTOR3& a_vPosCharactor, const FLOAT a_fAngleChara )
-{
-	//CTree * pTree = CTree::GetInstance();
-	//std::vector<CBoundBox*> * vecBoundBox = pTree->GetMapVector( pTree->GetRoot(), a_vPosCharactor );
-	//std::vector<CBoundBox*>::iterator Iter;
-	//D3DXVECTOR3 vPos = a_vPosCamera;
-	//D3DXVECTOR3 vDir = a_vPosCamera - a_vPosCharactor;
-
-	//BOOL bColl = FALSE;
-	//if ( vecBoundBox )
-	//{
-	//	FLOAT fRadious;
-
-	//	for ( Iter = vecBoundBox->begin(); Iter != vecBoundBox->end(); ++Iter )
-	//	{
-	//		fRadious = (*Iter)->GetSize( CBoundBox::PLUSX );
-	//		if ( fRadious < (*Iter)->GetSize( CBoundBox::PLUSZ ) ) 
-	//		{
-	//			fRadious = (*Iter)->GetSize( CBoundBox::PLUSZ );
-	//		}
-
-	//		if ( CPhysics::GetInstance()->Collision( (*Iter)->GetPosition(), fRadious, a_vPosCharactor, a_vPosCamera ) )
-	//		{
-	//			bColl = TRUE;
-	//		}
-	//	}
-	//}
-
-	return TRUE;
-}
-
 VOID CCamera::CreateEventCamera()
 {
 	//	Test Create
