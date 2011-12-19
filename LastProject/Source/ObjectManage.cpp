@@ -45,6 +45,8 @@ VOID CObjectManage::Clear()
 	m_pLobbyScene = NULL;
 
 	m_wTotalDestroyPart = 0;
+
+	m_nEventTable[0] = m_nEventTable[1] = m_nEventTable[2] = m_nEventTable[3] = 0;
 }
 
 HRESULT CObjectManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
