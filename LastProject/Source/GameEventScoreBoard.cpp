@@ -15,8 +15,8 @@ VOID GameEventScoreBoard::Initialize()
 
 	m_fBgdX				= 150.0f;
 	m_fBgdY				= 110.0f;
-	m_fBgdWidth			= 600.0f;
-	m_fBgdHeight		= 760.0f;
+	m_fBgdWidth			= 1040.0f;
+	m_fBgdHeight		= 800.0f;
 
 	m_fIdtWidth			= 80.0f;
 	m_fIdtHeight		= 120.0f;
@@ -138,8 +138,8 @@ VOID GameEventScoreBoard::CreateNumberImage()
 
 VOID GameEventScoreBoard::CreateButton()
 {
-	FLOAT fX		= 750.0f;
-	FLOAT fY		= 530.0f;
+	FLOAT fX		= 530.0f;
+	FLOAT fY		= 760.0f;
 	FLOAT fWidth	= 320.0f;
 	FLOAT fHeight	= 80.0f;
 
@@ -251,7 +251,7 @@ VOID GameEventScoreBoard::Render()
 		Image3DTranslate( pData->pimg3DIdentifier, vecPosition.x, vecPosition.y, vecPosition.z );
 		RenderImage3D( pData->pimg3DIdentifier );
 
-		vecPosition.x += 240.0f;
+		vecPosition.x += 200.0f;
 
 		INT l = MAX_POSITIONAL - 1;
 		for( INT i=0 ; i<MAX_POSITIONAL ; i++ )
