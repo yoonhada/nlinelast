@@ -645,6 +645,15 @@ VOID CSocketServer::CS_MONSTER_LockOn( CNTClient* pClient, CPacket& pk )
 }
 
 
+VOID CSocketServer::CS_GAME_RESULT( CNTClient* pClient, CPacket& pk )
+{
+	pk.Rewind();
+	SendToClient( pClient, pk );
+
+	cout << "GAME RESULT send" << endl;
+}
+
+
 VOID CSocketServer::SC_INIT( CNTClient* pClient )
 {
 	BOOL bHost;

@@ -62,6 +62,8 @@ public:
 	VOID CS_MONSTER_ATTACK_ANIMATION2( CNTClient* pClient, CPacket& pk );
 	VOID CS_MONSTER_LockOn( CNTClient* pClient, CPacket& pk );
 
+	VOID CS_GAME_RESULT( CNTClient* pClient, CPacket& pk );
+
 	VOID SC_INIT( CNTClient* pClient );
 	VOID SC_CLIENT_DISCONNECT( CNTClient* pClient );
 
