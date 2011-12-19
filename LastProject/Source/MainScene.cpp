@@ -659,7 +659,6 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
 		EventStateNetwork( nEvent );
 		EventInitGameState( nEvent );
-		CGameEvent::GetInstance()->ClearEvent( );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_BEAR, 0.01f );
@@ -670,6 +669,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
 		EventInitGameState( nEvent );
 		EventStateNetwork( nEvent );
+		CGameEvent::GetInstance()->ClearEvent( );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{			
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
@@ -742,10 +742,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventComboEnd();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
-			if ( CObjectManage::GetInstance()->IsHost() ) 		
-			{
-				CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
-			}
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
 		}
 		break;

@@ -397,24 +397,24 @@ VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
 	m_WeaponType.pBBA.SetPosition( vPos );
 	m_WeaponType.pBBA.SetScale( m_fScale );
 	m_WeaponType.pBBA.SetAngleY( fAngle );
-	m_WeaponType.pBBA.SetAngleZ( m_fZAng[m_WeaponType.nType][m_nState] );
+	m_WeaponType.pBBA.SetAngleZ( m_fZAng[m_WeaponType.nType - 1][m_nState] );
 
-	m_WeaponType.pBBA.SetSize( 0, m_fBBSize[m_WeaponType.nType][0] );
-	m_WeaponType.pBBA.SetSize( 1, m_fBBSize[m_WeaponType.nType][1] );
-	m_WeaponType.pBBA.SetSize( 2, m_fBBSize[m_WeaponType.nType][2] );
+	m_WeaponType.pBBA.SetSize( 0, m_fBBSize[m_WeaponType.nType - 1][0] );
+	m_WeaponType.pBBA.SetSize( 1, m_fBBSize[m_WeaponType.nType - 1][1] );
+	m_WeaponType.pBBA.SetSize( 2, m_fBBSize[m_WeaponType.nType - 1][2] );
 
-	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[m_WeaponType.nType][3] );
-	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[m_WeaponType.nType][4] );
-	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[m_WeaponType.nType][5] );
+	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[m_WeaponType.nType - 1][3] );
+	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[m_WeaponType.nType - 1][4] );
+	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[m_WeaponType.nType - 1][5] );
 
 #ifdef _DEBUG
-	m_pCube->Set_ControlScale( 0, ( m_fBBSize[m_WeaponType.nType][3] - m_fBBSize[m_WeaponType.nType][0] ) * m_fScale );
-	m_pCube->Set_ControlScale( 1, ( m_fBBSize[m_WeaponType.nType][4] - m_fBBSize[m_WeaponType.nType][1] ) );
-	m_pCube->Set_ControlScale( 2, ( m_fBBSize[m_WeaponType.nType][5] - m_fBBSize[m_WeaponType.nType][2] ) * m_fScale );
-	m_pCube->Set_ControlRotate( 2, m_fZAng[m_WeaponType.nType][m_nState] );
-	m_pCube->Set_ControlTranslate( 0, ( m_fBBSize[m_WeaponType.nType][0] + m_fBBSize[m_WeaponType.nType][3] ) * 0.5f );
-	m_pCube->Set_ControlTranslate( 1, ( m_fBBSize[m_WeaponType.nType][1] + m_fBBSize[m_WeaponType.nType][4] ) * 0.5f + 7.5f );
-	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[m_WeaponType.nType][2] + m_fBBSize[m_WeaponType.nType][5] ) * 0.5f - ( m_nState == EnumCharFrame::TEMP4 ? 0.0f : 7.5f ) );
+	m_pCube->Set_ControlScale( 0, ( m_fBBSize[m_WeaponType.nType - 1][3] - m_fBBSize[m_WeaponType.nType - 1][0] ) * m_fScale );
+	m_pCube->Set_ControlScale( 1, ( m_fBBSize[m_WeaponType.nType - 1][4] - m_fBBSize[m_WeaponType.nType - 1][1] ) );
+	m_pCube->Set_ControlScale( 2, ( m_fBBSize[m_WeaponType.nType - 1][5] - m_fBBSize[m_WeaponType.nType - 1][2] ) * m_fScale );
+	m_pCube->Set_ControlRotate( 2, m_fZAng[m_WeaponType.nType - 1][m_nState] );
+	m_pCube->Set_ControlTranslate( 0, ( m_fBBSize[m_WeaponType.nType - 1][0] + m_fBBSize[m_WeaponType.nType - 1][3] ) * 0.5f );
+	m_pCube->Set_ControlTranslate( 1, ( m_fBBSize[m_WeaponType.nType - 1][1] + m_fBBSize[m_WeaponType.nType - 1][4] ) * 0.5f + 7.5f );
+	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[m_WeaponType.nType - 1][2] + m_fBBSize[m_WeaponType.nType - 1][5] ) * 0.5f - ( m_nState == EnumCharFrame::TEMP4 ? 0.0f : 7.5f ) );
 #endif // _DEBUG
 	
 	m_WeaponType.pBBA.SetDirection( m_WeaponType.vDir[m_nState] );
