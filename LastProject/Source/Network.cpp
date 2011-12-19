@@ -496,6 +496,9 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 	//CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
+
+	INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
+	CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + pOM->Get_CharTable( wClientNumber ) + iRand );
 }
 
 
@@ -538,14 +541,18 @@ VOID CNetwork::SC_Player_Attack_Animation( CPacket& a_pk )
 {
 	WORD wClientNumber;
 	WORD wAnimationNumber;
+	WORD wSoundNumber;
 
 	a_pk.Read( &wClientNumber );
 	a_pk.Read( &wAnimationNumber );
+	a_pk.Read( &wSoundNumber );
 
 	CObjectManage * pOM = CObjectManage::GetInstance();
 	CCharactor& rChar = pOM->Get_Charactor()[ pOM->Get_CharTable( wClientNumber ) ];
 
 	rChar.Set_WeaponAnimationState( wAnimationNumber );
+
+	CSound::GetInstance()->PlayEffect( wSoundNumber );
 }
 
 
@@ -993,7 +1000,7 @@ VOID CNetwork::CS_EVENT_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection,
 }
 
 
-VOID CNetwork::CS_Player_Attack_Animation( WORD a_wAnimationNumber )
+VOID CNetwork::CS_Player_Attack_Animation( WORD a_wAnimationNumber, WORD a_wSoundNumber )
 {
 	CPacket sendPk;
 	WORD wMsgSize = 0;
@@ -1003,6 +1010,7 @@ VOID CNetwork::CS_Player_Attack_Animation( WORD a_wAnimationNumber )
 	sendPk.Write( wMsgID );
 	sendPk.Write( CObjectManage::GetInstance()->Get_ClientNumber() );
 	sendPk.Write( a_wAnimationNumber );
+	sendPk.Write( a_wSoundNumber );
 
 	sendPk.CalcSize();
 

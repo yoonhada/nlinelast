@@ -297,7 +297,7 @@ VOID CWeapon::SetKeyA()
 		m_nState = EnumCharFrame::A;
 		m_pMap->SetAnimation( m_nState );
 
-		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState, CSound::EFFECT_WEAPON );
 
 		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
@@ -309,7 +309,7 @@ VOID CWeapon::SetKeyA()
 		m_nState = EnumCharFrame::ATTACK2;
 		m_pMap->SetAnimation( m_nState );
 
-		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState, CSound::EFFECT_WEAPON );
 
 		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
@@ -320,14 +320,14 @@ VOID CWeapon::SetKeyA()
 		m_nState = EnumCharFrame::ATTACK1;
 		m_pMap->SetAnimation( m_nState );
 
-		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
-
 		CObjectManage * pOM = CObjectManage::GetInstance();
 		INT iCharNumber = pOM->Get_CharTable( pOM->Get_ClientNumber() );
 		INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
 
+		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState, CSound::EFFECT_DAD_ATTACK1 + iCharNumber + iRand  );
+
 		CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_ATTACK1 + iCharNumber + iRand );
-	} 
+	}
 }
 
 VOID CWeapon::SetKeyB()
@@ -342,7 +342,7 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP4;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState, CSound::EFFECT_WEAPON );
 
 		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
@@ -362,7 +362,7 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP3;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState, CSound::EFFECT_WEAPON );
 
 		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}
@@ -372,7 +372,7 @@ VOID CWeapon::SetKeyB()
 		m_bAtkTime = FALSE;
 		m_nState = EnumCharFrame::TEMP1;
 		m_pMap->SetAnimation( m_nState );
-		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState );
+		CNetwork::GetInstance()->CS_Player_Attack_Animation( m_nState, CSound::EFFECT_WEAPON );
 
 		CSound::GetInstance()->PlayEffect( CSound::EFFECT_WEAPON );
 	}

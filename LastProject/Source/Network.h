@@ -130,7 +130,7 @@ public:
 	VOID CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD cDestroyCount, std::vector<WORD>& a_pList );
 	VOID CS_EVENT_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, WORD a_wDestroyCount, std::vector<WORD>& a_pList );
 
-	VOID CS_Player_Attack_Animation( WORD a_wAnimationNumber );
+	VOID CS_Player_Attack_Animation( WORD a_wAnimationNumber, WORD a_wSoundNumber );
 	VOID CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnimationNumber );
 	VOID CS_Monster_Attack_Animation2( WORD a_wMonsterNumber, WORD a_wAnimationNumber, FLOAT a_fDegree, D3DXVECTOR3 a_vPos, D3DXVECTOR3 a_vNextPos, FLOAT a_fDistance );
 	VOID CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle );
