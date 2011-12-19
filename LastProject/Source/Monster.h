@@ -158,7 +158,7 @@ public:
 	VOID BreakNockdown();
 	BOOL BreakNockdown( BOOL );
 	VOID EnableShadow( BOOL bEnable );
-
+	VOID SetBoundBox();
 private:
 	VOID AniInterpolation();
 
@@ -375,7 +375,6 @@ private:
 	FLOAT m_fSpeedRotate;				  ///< 보간 회전용 임시
 
 	BOOL m_bAnimationEndCheck;			  ///< 애니메이션 끝낫나 체크 FALSE = 끝남
-
 };
 
 #endif

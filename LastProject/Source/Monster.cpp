@@ -1581,3 +1581,11 @@ D3DXVECTOR3 CMonster::GetWorldPos( INT a_iX, INT a_iZ )
 
 	return pos;
 }
+
+VOID CMonster::SetBoundBox()
+{
+	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[3].GetBoundBox() );
+	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[4].GetBoundBox() );
+	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[5].GetBoundBox() );
+	CTree::GetInstance()->GetMonsVector()->push_back( m_pBox[6].GetBoundBox() );
+}

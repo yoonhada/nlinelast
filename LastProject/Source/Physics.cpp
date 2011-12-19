@@ -171,6 +171,7 @@ BOOL CPhysics::Collision(const D3DXVECTOR3* SphereCenter1, FLOAT sphereRadius1,
 	if( fDistance <= ( sphereRadius1 + sphereRadius2 ) )
 		bRet = TRUE;
 
+	D3DXVec3Normalize(&m_vColNormal, &vcTemp);
 	return bRet;
 }
 
