@@ -74,9 +74,9 @@ VOID GUIBtn::Render()
 
 VOID GUIBtn::SetState( eState _State )
 {
-	if ( ( m_Style & GBS_CHECK ) != 0 ) {	
+	//if ( ( m_Style & GBS_CHECK ) != 0 ) {	
 		ChangeState( _State );
-	}
+	//}
 }
 
 BOOL GUIBtn::IsPtOnMe( POINT pt )
