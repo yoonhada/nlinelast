@@ -629,7 +629,16 @@ VOID CNetwork::SC_Monster_LockOn( CPacket& a_pk )
 
 VOID CNetwork::SC_GAME_RESULT( CPacket& a_pk )
 {
-	
+	INT nValue[4];
+	a_pk.Read( &nValue[0] );
+	a_pk.Read( &nValue[1] );
+	a_pk.Read( &nValue[2] );
+	a_pk.Read( &nValue[3] );
+
+	for ( int i = 0; i < 4; ++i )
+	{
+		CGameEvent::GetInstance()->SetAttackPoint( i, nValue[i] );
+	}
 }
 
 
@@ -1073,8 +1082,11 @@ VOID CNetwork::CS_GAME_RESULT()
 
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
-
-
+	sendPk.Write( CGameEvent::GetInstance()->GetAttackPoint(0) );
+	sendPk.Write( CGameEvent::GetInstance()->GetAttackPoint(1) );
+	sendPk.Write( CGameEvent::GetInstance()->GetAttackPoint(2) );
+	sendPk.Write( CGameEvent::GetInstance()->GetAttackPoint(3) );
+	sendPk.CalcSize();
 	SendToServer( sendPk );
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"GAME RESULT send \n ");

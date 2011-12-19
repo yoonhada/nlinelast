@@ -767,16 +767,14 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		EventStateNetwork( nEvent );
 		break;
 	case CGameEvent::GAME_WIN_END:
-		EventStateNetwork( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_WIN_END \n" );
-		GamePoint();
-		//MessageBox( GHWND, L"게임종료", L"축하", MB_OK );
-		//GameEnd();
+		m_pGameEvent->ClearEvent();
+		GamePoint( nEvent );
 		break;
 	case CGameEvent::GAME_LOSE_END:
-		EventStateNetwork( nEvent );
+		m_pGameEvent->ClearEvent();
+		GamePoint( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_LOSE_END \n" );
-		//GameEnd();
 		break;
 
 	case CGameEvent::SC_EVENT_COMBO_SLOT_STATE:
@@ -792,8 +790,14 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	}
 }
 
-VOID CMainScene::GamePoint()
+VOID CMainScene::GamePoint( INT nEvent )
 {
+	if ( CObjectManage::GetInstance()->IsHost() )
+	{
+		CNetwork::GetInstance()->CS_GAME_RESULT();
+		EventStateNetwork( nEvent );
+	}
+
 	INT nChar;
 	for (int Loop = 0; Loop < 4; ++Loop)
 	{
@@ -907,7 +911,10 @@ VOID CMainScene::MonsterBreakNockdown()
 		{
 			m_pMonster[ 2 ]->GetFSM()->SetCurrentState( NULL );
 
-			CGameEvent::GetInstance()->AddEvent( CGameEvent::GAME_WIN_END, 2.0f );
+			if ( CObjectManage::GetInstance()->IsHost() )
+			{
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::GAME_WIN_END, 2.0f );
+			}			
 		}
 	}
 	else
