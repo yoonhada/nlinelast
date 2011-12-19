@@ -582,6 +582,7 @@ VOID CMainScene::EventSwitch( INT nEvent )
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
+		EventStateNetwork( nEvent );
 		TutorialAtack( );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK_END, fComboTime );
 		if ( CObjectManage::GetInstance()->IsHost() )
@@ -738,9 +739,9 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		break;
 	case CGameEvent::EVENT_COMBO_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_END \n" );		
+		EventComboEnd();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
-			EventComboEnd();
 			if ( CObjectManage::GetInstance()->IsHost() ) 		
 			{
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
