@@ -36,6 +36,8 @@ VOID LobbyScene::Release()
 
 	SAFE_DELETE( m_pLight );
 	//CTree::DestoryInstance();
+
+	CSound::GetInstance()->StopBGM( CSound::BGM_LOBBY );
 }
 
 VOID LobbyScene::CreateData( LPDATA _pData, LPWSTR _pFileName, D3DXVECTOR3 _vecPosition )
@@ -88,7 +90,6 @@ HRESULT LobbyScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite
 	//	Create Matrices
 	m_pMatrices = CMatrices::GetInstance();	
 
-	CSound::GetInstance()->StopBGM( 0 );
 	CSound::GetInstance()->PlayBGM( CSound::BGM_LOBBY );
 	
 	return S_OK;

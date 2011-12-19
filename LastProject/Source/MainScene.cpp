@@ -141,7 +141,6 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	CDebugConsole::GetInstance()->Messagef( L"**** MainScene Create End **** \n\n" );
 
-	CSound::GetInstance()->StopBGM( 0 );
 	CSound::GetInstance()->PlayBGM( CSound::BGM_GAME );
 
 	return S_OK;
@@ -158,6 +157,8 @@ HRESULT CMainScene::Release()
 	SAFE_DELETE( m_pCamera );
 	SAFE_DELETE( m_pGameEventTutorialManager );
 	SAFE_DELETE( m_pEventGUICombo );
+
+	CSound::GetInstance()->StopBGM( CSound::BGM_GAME );
 
 	return S_OK;
 }
