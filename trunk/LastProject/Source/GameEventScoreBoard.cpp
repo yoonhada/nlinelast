@@ -23,6 +23,9 @@ VOID GameEventScoreBoard::Initialize()
 
 	m_fNumWidth			= 40.0f;
 	m_fNumHeight		= 40.0f;
+
+	m_dEndingBeginTime		= 0;
+	m_dEndingFrameSpeed		= 5000;
 }
 
 VOID GameEventScoreBoard::Release()
@@ -34,6 +37,23 @@ VOID GameEventScoreBoard::Release()
 	for( itE = m_vecData.begin() ; itE != m_vecData.end() ; itE++ )
 		delete (*itE);
 	m_vecData.clear();
+}
+
+VOID GameEventScoreBoard::CreateEndingImage()
+{
+	//	Create Background
+	D3DVIEWPORT9 Vp;
+	m_pd3dDevice->GetViewport( &Vp );
+
+	FLOAT fWidth	= static_cast<FLOAT>( Vp.Width );
+	FLOAT fHeight	= static_cast<FLOAT>( Vp.Height );
+	
+	GUIBase::IMAGEPARAM imgParamEnding;
+
+	AddFileName( 0, imgParamEnding, L"Img\\Event\\ScoreBoard\\Ending_0.png", 300 );
+	AddFileName( 0, imgParamEnding, L"Img\\Event\\ScoreBoard\\Ending_1.png", 300 );
+
+	CreateImage2D( m_img2DEnding, 0.0f, 0.0f, fWidth, fHeight, imgParamEnding );
 }
 
 VOID GameEventScoreBoard::CreateSceneImage()
@@ -155,6 +175,7 @@ VOID GameEventScoreBoard::CreateButton()
 
 VOID GameEventScoreBoard::Create()
 {
+	CreateEndingImage();
 	CreateSceneImage();
 	CreateBackgroundImage();
 	CreateIdentifierImage();
@@ -167,7 +188,7 @@ VOID GameEventScoreBoard::Create()
 
 VOID GameEventScoreBoard::Update()
 {
-	if( m_dState == GES_HIDDEN || m_dState == GES_GRAY )
+	if( m_dState == GES_HIDDEN || m_dState == GES_GRAY || m_dState == GES_ENDING )
 		return;
 
 	//	Update Number
@@ -224,6 +245,17 @@ VOID GameEventScoreBoard::Render()
 {
 	if( m_dState == GES_HIDDEN )
 		return;
+
+	//	Render Ending
+	if( m_dState == GES_ENDING )
+	{
+		RenderImage2D( &m_img2DEnding );
+
+		DWORD dCurrentTime = timeGetTime();
+
+		if( dCurrentTime > m_dEndingBeginTime )
+			m_dState = GES_GRAY;
+	}
 
 	//	Render GrayScene
 	static INT iAlpha = 0;
@@ -366,6 +398,8 @@ VOID GameEventScoreBoard::Command( DWORD& _dOut )
 VOID GameEventScoreBoard::SetState( DWORD _dState )
 {
 	m_dState = _dState;
+
+	m_dEndingBeginTime = timeGetTime();
 }
 
 VOID GameEventScoreBoard::OnDown( INT _iX, INT _iY )

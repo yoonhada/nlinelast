@@ -30,6 +30,8 @@ public:
 	virtual INT		GetSceneNext();
 	virtual INT		GetSceneState();
 
+	VOID			SelectScene( DWORD _dScene );
+
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
 	LPD3DXSPRITE			m_pSprite;
@@ -46,6 +48,7 @@ private:
 
 	CMonster*				m_pClown;
 	CMonster*				m_pPanda;
+	CMonster*				m_pBrownBear;
 
 public:
 

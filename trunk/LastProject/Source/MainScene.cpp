@@ -215,7 +215,7 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::CreateMonster()
 {
-	m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_Brown_Bear_v6" );
+	//m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_Brown_Bear_v6" );
 
 	for( INT Loop = 0; Loop < 3; ++Loop )
 	{

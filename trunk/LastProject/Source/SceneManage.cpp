@@ -64,6 +64,8 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pScene->Create( m_pD3dDevice, m_pSprite, m_hWnd );
 	m_pLoadingScene->Create( m_pD3dDevice, m_pSprite, m_hWnd );
 
+	//m_pScene = m_pLoadingScene;
+
 	return S_OK;
 }
 
