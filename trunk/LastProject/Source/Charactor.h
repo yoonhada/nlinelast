@@ -70,6 +70,7 @@ public:
 	VOID TestBreakCube();
 	VOID BreakCubeAll();
 	VOID BreakNockdown( const FLOAT fPow = 1.0f );
+	VOID QubeATKEffect( const D3DXVECTOR3 &a_vPos );
 	VOID BreakListMake(INT, D3DXVECTOR3&);
 
 	const D3DXVECTOR3&	Get_CharaPos()		{ return m_vControl;	}

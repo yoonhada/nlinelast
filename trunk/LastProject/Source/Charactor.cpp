@@ -1179,6 +1179,12 @@ VOID CCharactor::TestBreakCube()
 	}	
 }
 
+VOID CCharactor::QubeATKEffect( const D3DXVECTOR3 &a_vPos )
+{
+	//D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster );
+	m_pModel->QubeATKEffect( /*m_matMultWorld, */a_vPos );
+}
+
 VOID CCharactor::RepairCube()
 {
 	if( m_bAliveCheck == TRUE )

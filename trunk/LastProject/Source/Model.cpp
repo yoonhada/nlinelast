@@ -127,3 +127,41 @@ VOID CModel::CreateRandom( CCharCube* a_pCube,
 
 	m_vectorQube.push_back( pQube );
 }
+
+VOID CModel::QubeATKEffect( /*const D3DXMATRIXA16& a_matChara, */const D3DXVECTOR3& a_vMome )
+{
+	INT nMax = 0;
+	DWORD dwColor = 0xFF000000;
+	DWORD dwOutLine1 = 0xFF0000FF;
+	DWORD dwOutLine2 = 0xFF000000;
+	FLOAT fAngle;
+	CQube * pQube = NULL;
+
+	D3DXVECTOR3 vec, vMome;
+
+	vec = a_vMome;
+	//D3DXVec3TransformCoord( &vec, &a_vMome, &a_matChara );
+
+	//D3DXMATRIXA16 mat = a_matChara;
+	//mat._41 = 0.0f;
+	//mat._42 = 0.0f;
+	//mat._43 = 0.0f;
+
+	for( int i=0; i < 100; ++i )
+	{
+		fAngle = D3DXToRadian( FastRand2() * 360.0f );
+		vMome = vec;
+		vMome.x += cosf( fAngle ) * 25.0f;
+		vMome.z += sinf( fAngle ) * 25.0f;
+
+		pQube = new CQube;
+		pQube->SetType(1);
+		pQube->SetPosition( vMome );
+		pQube->RandMome( D3DXVECTOR3( 0.0f, FastRand2() * 2.0f, 0.0f ), 1.6f );
+		pQube->RanderRotate();
+		pQube->Create( m_pD3dDevice, m_pTotalVB, m_pTotalIB, 0, 0, 0.5f );
+		pQube->InitTexture( dwColor, dwOutLine1 );
+
+		m_vectorQube.push_back( pQube );
+	}
+}
