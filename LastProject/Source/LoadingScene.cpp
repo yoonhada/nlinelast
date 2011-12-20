@@ -61,22 +61,22 @@ HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSpri
 	// Create Monster
 	m_pClown = CObjectManage::GetInstance()->Get_Clown();	// new CMonster;
 	m_pClown->Create( _pd3dDevice, L"Data/CharData/27_pierro_body_11_28" );
-	m_pClown->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 81.0f ) );
+	m_pClown->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 88.0f ) );
 	m_pClown->Set_Angle( 2.49f );
 	m_pClown->ChangeAnimation( CMonster::ANIM_LODING );
 	m_pClown->EnableShadow( FALSE );
 
 	m_pPanda = CObjectManage::GetInstance()->Get_Panda();		// new CMonster;
 	m_pPanda->Create( _pd3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
-	m_pPanda->Set_Pos( D3DXVECTOR3( -17.0f, 0.0f, 117.0f ) );
-	m_pPanda->Set_Angle( 5.44f );
+	m_pPanda->Set_Pos( D3DXVECTOR3( -4.0f, 0.0f, 126.0f ) );
+	m_pPanda->Set_Angle( 5.89f );
 	m_pPanda->ChangeAnimation( CMonster::ANIM_LODING );
 	m_pPanda->EnableShadow( FALSE );
 
 	m_pBrownBear = CObjectManage::GetInstance()->Get_Bear();		// new CMonster;
 	m_pBrownBear->Create( _pd3dDevice, L"Data/CharData/11_16_Brown_Bear_v6" );
-	m_pBrownBear->Set_Pos( D3DXVECTOR3( -17.0f, 0.0f, 150.0f ) );
-	m_pBrownBear->Set_Angle( 5.90f );
+	m_pBrownBear->Set_Pos( D3DXVECTOR3( -38.0f, 0.0f, 93.0f ) );
+	m_pBrownBear->Set_Angle( 4.949f );
 	m_pBrownBear->ChangeAnimation( CMonster::ANIM_LODING );
 	m_pBrownBear->EnableShadow( FALSE );
 
