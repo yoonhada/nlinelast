@@ -78,12 +78,14 @@ public:
 private:
 	std::vector <CBoundBox*> _vecChar;
 	std::vector <CBoundBox*> _vecMons;
+	std::vector <CBoundBox*> _vecItem;
 	std::vector <CBoundBox*> _vecCharAtk;
 	std::vector <CBoundBox*> _vecMonsAtk;
 
 public:
 	std::vector <CBoundBox*> * GetCharVector()		{ return &_vecChar; }
-	std::vector <CBoundBox*> * GetCharAtkVector()	{ return &_vecCharAtk; }
 	std::vector <CBoundBox*> * GetMonsVector()		{ return &_vecMons; }
+	std::vector <CBoundBox*> * GetItemVector()		{ return &_vecItem; }
+	std::vector <CBoundBox*> * GetCharAtkVector()	{ return &_vecCharAtk; }
 	std::vector <CBoundBox*> * GetMonsAtkVector()	{ return &_vecMonsAtk; }
 };

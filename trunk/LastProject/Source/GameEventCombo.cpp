@@ -176,7 +176,6 @@ VOID CGameEventCombo::Update()
 		else if ( m_nState == RUN )
 		{
 			INT nPlayer = CGameEvent::GetInstance()->GetPlayerIndex();
-
 			if ( nPlayer >= 0 )
 			{
 				CheckKindEvent( nPlayer );	

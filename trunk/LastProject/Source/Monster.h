@@ -154,6 +154,7 @@ public:
 	}
 
 	VOID CreateAttackBoundBox();
+	VOID RepairCube();
 	VOID BreakCubeAll();
 	VOID BreakNockdown();
 	BOOL BreakNockdown( BOOL );

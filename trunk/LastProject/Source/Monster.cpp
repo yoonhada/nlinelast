@@ -1467,6 +1467,14 @@ BOOL CMonster::BreakNockdown(BOOL IsLive)
 	return bRet;
 }
 
+VOID CMonster::RepairCube()
+{
+	for( INT Loop = 0; Loop < m_iCharEditorMax; ++Loop )
+	{
+		m_pBox[Loop].RepairCube();
+	}
+}
+
 VOID CMonster::QubeATKEffect( const D3DXVECTOR3 &a_vPos )
 {
 	m_pBox[0].QubeATKEffect( a_vPos );
