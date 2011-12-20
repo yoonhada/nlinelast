@@ -15,6 +15,34 @@ using namespace std;
 CGameEvent::CGameEvent( )
 : m_iMaxCharaNum ( 4 )
 {
+	m_vNonePosition = D3DXVECTOR3( -100.0f, 0.0f, -250.0f );
+
+	m_vCharactorPosition[0][0] = D3DXVECTOR3( 200.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[0][1] = D3DXVECTOR3( 225.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[0][2] = D3DXVECTOR3( 250.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[0][3] = D3DXVECTOR3( 275.0f, 0.0f,-505.0f );
+	m_vCharactorPosition[1][0] = D3DXVECTOR3( 190.0f, 0.0f, -90.0f );
+	m_vCharactorPosition[1][1] = D3DXVECTOR3( 215.0f, 0.0f, -90.0f );
+	m_vCharactorPosition[1][2] = D3DXVECTOR3( 240.0f, 0.0f, -90.0f );
+	m_vCharactorPosition[1][3] = D3DXVECTOR3( 265.0f, 0.0f, -90.0f );
+
+	//m_vMonsterPosition[0] = D3DXVECTOR3( 225.0f, 0.0f,-505.0f );
+	//m_vMonsterPosition[1] = D3DXVECTOR3( 250.0f, 0.0f,-505.0f );
+
+	m_vMonsterPosition[0] = D3DXVECTOR3( 120.0f, 0.0f, 180.0f);
+	m_vMonsterPosition[1] = D3DXVECTOR3( 170.0f, 0.0f, 180.0f);
+	m_vMonsterPosition[2] = D3DXVECTOR3( -100.0f, 0.0f, 623.0f);
+
+	m_vWallPosition[0] = D3DXVECTOR3( 183.4534f, 0.0f, -202.7f );
+	m_vWallPosition[1] = D3DXVECTOR3( 241.4534f, 0.0f, -202.7f );
+	m_vWallPosition[2] = D3DXVECTOR3( 298.4534f, 0.0f, -202.7f );
+
+	m_vItemPosition[0] = D3DXVECTOR3(- 65.8f, 0.0f, 208.5f );
+	m_vItemPosition[1] = D3DXVECTOR3( 291.1f, 0.0f, 529.0f );
+	m_vItemPosition[2] = D3DXVECTOR3(-336.0f, 0.0f, 488.0f );
+	m_vItemPosition[3] = D3DXVECTOR3( 176.4f, 0.0f, 792.9f );
+	m_vItemPosition[4] = D3DXVECTOR3(-177.8f, 0.0f, 803.8f );
+
 	Clear();
 }
 
@@ -68,27 +96,6 @@ VOID CGameEvent::Clear()
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;
 
-	m_vNonePosition = D3DXVECTOR3( -100.0f, 0.0f, -250.0f );
-
-	m_vCharactorPosition[0][0] = D3DXVECTOR3( 200.0f, 0.0f,-505.0f );
-	m_vCharactorPosition[0][1] = D3DXVECTOR3( 225.0f, 0.0f,-505.0f );
-	m_vCharactorPosition[0][2] = D3DXVECTOR3( 250.0f, 0.0f,-505.0f );
-	m_vCharactorPosition[0][3] = D3DXVECTOR3( 275.0f, 0.0f,-505.0f );
-	m_vCharactorPosition[1][0] = D3DXVECTOR3( 190.0f, 0.0f, -90.0f );
-	m_vCharactorPosition[1][1] = D3DXVECTOR3( 215.0f, 0.0f, -90.0f );
-	m_vCharactorPosition[1][2] = D3DXVECTOR3( 240.0f, 0.0f, -90.0f );
-	m_vCharactorPosition[1][3] = D3DXVECTOR3( 265.0f, 0.0f, -90.0f );
-
-	//m_vMonsterPosition[0] = D3DXVECTOR3( 225.0f, 0.0f,-505.0f );
-	//m_vMonsterPosition[1] = D3DXVECTOR3( 250.0f, 0.0f,-505.0f );
-
-	m_vMonsterPosition[0] = D3DXVECTOR3( 120.0f, 0.0f, 180.0f);
-	m_vMonsterPosition[1] = D3DXVECTOR3( 170.0f, 0.0f, 180.0f);
-	m_vMonsterPosition[2] = D3DXVECTOR3( -100.0f, 0.0f, 623.0f);
-
-	m_vWallPosition[0] = D3DXVECTOR3( 183.4534f, 0.0f, -202.7f );
-	m_vWallPosition[1] = D3DXVECTOR3( 241.4534f, 0.0f, -202.7f );
-	m_vWallPosition[2] = D3DXVECTOR3( 298.4534f, 0.0f, -202.7f );
 
 }
 

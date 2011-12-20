@@ -56,7 +56,7 @@ VOID	CMainScene::Clear()
 
 	m_iMaxCharaNum = CObjectManage::GetInstance()->Get_MaxCharaNum();
 
-	fComboTime = 30.0f;
+	fComboTime = 15.0f;
 	fComboTerm = 15.0f;
 
 	//m_pCharView = new CEfSurface();
@@ -230,14 +230,12 @@ VOID CMainScene::CreateMonster()
 
 VOID CMainScene::CreateFirstAidKit()
 {
-	for ( int Loop = 0; Loop < 4; ++Loop )
+	for ( int Loop = 0; Loop < 5; ++Loop )
 	{
 		m_pFirstAidKit[Loop].Create( m_pD3dDevice );
 		m_pFirstAidKit[Loop].Load( L"Data/CharData/FirstAidKit_1.csav" );
 		m_pFirstAidKit[Loop].Set_MonsterNumber( CGameEvent::ITEM_FAK1 << Loop );
 		CTree::GetInstance()->GetMonsVector()->push_back( m_pFirstAidKit[Loop].GetBoundBox() );		
-
-		//m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, TRUE );
 	}
 }
 
@@ -275,10 +273,17 @@ VOID CMainScene::CheatKeys()
 		}
 		if( CInput::GetInstance()->Get_NumKey( 6 ) )
 		{
+
 			CGameEvent::GetInstance()->SetTutorial( CGameEvent::TUTORIAL_ATACK );
 			m_pGameEvent->ClearEvent();
 			m_pGameEventTutorialManager->EndEvent();
 			m_pGameEvent->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.01f);
+		}
+		if( CInput::GetInstance()->Get_NumKey( 7 ) )
+		{
+			m_pGameEvent->ClearEvent();
+			m_pGameEventTutorialManager->EndEvent();
+			m_pGameEvent->AddEvent( CGameEvent::GAME_WIN_END, 0.01f);
 		}
 
 	}
@@ -361,7 +366,7 @@ VOID CMainScene::Update()
 	}
 
 	// 아이템 쓸까나??
-	for ( int Loop = 0; Loop < 4; ++Loop )
+	for ( int Loop = 0; Loop < 5; ++Loop )
 	{
 		m_pFirstAidKit[Loop].Update();
 		vPos = m_pFirstAidKit[Loop].Get_CharaPos();
@@ -381,7 +386,6 @@ VOID CMainScene::Update()
 
 	m_pGameEventTutorialManager->Update();
 	m_pGameEventScoreBoard->Update();
-	
 	DWORD dID = 0;
 	m_pGameEventScoreBoard->Command( dID );
 	switch( dID )
@@ -390,7 +394,7 @@ VOID CMainScene::Update()
 		GameEnd();
 		break;
 	}
-
+	
 	m_pEventGUICombo->Update();
 
 	EventSwitch( m_pGameEvent->Update() );
@@ -437,7 +441,7 @@ VOID	CMainScene::Render()
 		}
 	}
 	
-	for ( int Loop = 0; Loop < 3; ++Loop )
+	for ( int Loop = 0; Loop < 5; ++Loop )
 	{
 		if ( m_pGameEvent->GetMonsterState() & ( CGameEvent::ITEM_FAK1 << Loop ) )
 		{
@@ -564,7 +568,7 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 		}
 		break;
 	case CGameEvent::SCENE_CLOWN:
-		m_pGameEvent->SetMonstersState( CGameEvent::CLOWN );
+		m_pGameEvent->SetMonstersState( CGameEvent::CLOWN | 0x1F00 );
 		for ( int Loop = 0; Loop < 3; ++Loop )
 		{
 			if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
@@ -585,6 +589,23 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 				m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_PANDA + Loop, FALSE );
 			}
 		}
+
+		for ( int Loop = 0; Loop < 5; ++Loop )
+		{
+			if ( m_pGameEvent->GetMonsterState() & ( 0x0100 << Loop ) )
+			{
+				m_pFirstAidKit[Loop].Set_Position( m_pGameEvent->GetItemPosition( Loop ) );
+				m_pFirstAidKit[Loop].SetActive( TRUE );
+
+				m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, TRUE );
+			}
+			else
+			{
+				m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, FALSE );
+			}
+		}
+
+
 		break;
 	default:
 		break;
