@@ -833,7 +833,7 @@ VOID CMainScene::GamePoint( INT nEvent )
 		}		
 	}
 
-	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_GRAY );
+	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_ENDING );
 }
 
 VOID CMainScene::GameEnd()

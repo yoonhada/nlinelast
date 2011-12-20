@@ -13,16 +13,16 @@ VOID GameEventScoreBoard::Initialize()
 	m_dScoreFrameSpeed		= 15;
 	m_dPositionalFrameSpeed	= 800;
 
-	m_fBgdX				= 150.0f;
-	m_fBgdY				= 110.0f;
-	m_fBgdWidth			= 1040.0f;
-	m_fBgdHeight		= 800.0f;
+	m_fBgdX				= 290.0f;
+	m_fBgdY				= 470.0f;
+	m_fBgdWidth			= 750.0f;
+	m_fBgdHeight		= 470.0f;
 
 	m_fIdtWidth			= 80.0f;
 	m_fIdtHeight		= 120.0f;
 
-	m_fNumWidth			= 40.0f;
-	m_fNumHeight		= 40.0f;
+	m_fNumWidth			= 30.0f;
+	m_fNumHeight		= 30.0f;
 
 	m_dEndingBeginTime		= 0;
 	m_dEndingFrameSpeed		= 5000;
@@ -69,6 +69,17 @@ VOID GameEventScoreBoard::CreateSceneImage()
 
 	AddFileName( 0, imgParamScene, L"Img\\Event\\ScoreBoard\\GrayScene.png" );
 	CreateImage2D( m_img2DScene, 0.0f, 0.0f, fWidth, fHeight, imgParamScene );
+}
+
+VOID GameEventScoreBoard::CreateResultImage()
+{
+	GUIBase::IMAGEPARAM imgParamResult;
+
+	AddFileName( 0, imgParamResult, L"Img\\Event\\ScoreBoard\\Win.png", 100 );
+	AddFileName( 0, imgParamResult, L"Img\\Event\\ScoreBoard\\Win2.png", 100 );
+	AddFileName( 0, imgParamResult, L"Img\\Event\\ScoreBoard\\Win3.png", 100 );
+
+	CreateImage2D( m_img2DResult, 420.0f, 80.0f, 395.0f, 360.0f, imgParamResult );
 }
 
 VOID GameEventScoreBoard::CreateBackgroundImage()
@@ -158,10 +169,10 @@ VOID GameEventScoreBoard::CreateNumberImage()
 
 VOID GameEventScoreBoard::CreateButton()
 {
-	FLOAT fX		= 530.0f;
-	FLOAT fY		= 760.0f;
-	FLOAT fWidth	= 320.0f;
-	FLOAT fHeight	= 80.0f;
+	FLOAT fX		= 1100.0f;
+	FLOAT fY		= 850.0f;
+	FLOAT fWidth	= 150.0f;
+	FLOAT fHeight	= 150.0f;
 
 	IMAGEPARAM imgParamNormal, imgParamHot, imgParamDown, imgParamDisable;
 	
@@ -177,6 +188,7 @@ VOID GameEventScoreBoard::Create()
 {
 	CreateEndingImage();
 	CreateSceneImage();
+	CreateResultImage();
 	CreateBackgroundImage();
 	CreateIdentifierImage();
 	CreateNumberImage();
@@ -255,6 +267,8 @@ VOID GameEventScoreBoard::Render()
 
 		if( dCurrentTime > m_dEndingBeginTime + m_dEndingFrameSpeed )
 			m_dState = GES_GRAY;
+		else 
+			return;
 	}
 
 	//	Render GrayScene
@@ -272,6 +286,9 @@ VOID GameEventScoreBoard::Render()
 	//	Render Background
 	RenderImage3D( &m_img3DBackground );
 
+	//	Render Result
+	RenderImage2D( &m_img2DResult );
+
 	//	Render Identifier, ScoreNumber
 	INT iNumData = m_vecData.size();
 
@@ -283,7 +300,7 @@ VOID GameEventScoreBoard::Render()
 		Image3DTranslate( pData->pimg3DIdentifier, vecPosition.x, vecPosition.y, vecPosition.z );
 		RenderImage3D( pData->pimg3DIdentifier );
 
-		vecPosition.x += 200.0f;
+		vecPosition.x += 100.0f;
 
 		INT l = MAX_POSITIONAL - 1;
 		for( INT i=0 ; i<MAX_POSITIONAL ; i++ )
@@ -318,13 +335,13 @@ VOID GameEventScoreBoard::AddData( DWORD _dID, DWORD _dIdentifier )
 		pData->apimg3DScore[ i ] = &m_img3DDynamicNumber;
 
 	INT iDataSize = m_vecData.size();
-	FLOAT fGapX	= 160.0f;
-	FLOAT fGapY = 200.0f + 120.0f * static_cast<FLOAT>( iDataSize + 1 );
+	FLOAT fGapX	= 100.0f;
+	FLOAT fGapY = 50.0f + 120.0f * static_cast<FLOAT>( iDataSize + 1 );
 	pData->vecTranslate = D3DXVECTOR3( m_fBgdX + fGapX, m_fBgdY + fGapY, 0.0f );
 	
 	m_vecData.push_back( pData );
-}
-
+}	
+ 	
 INT GameEventScoreBoard::GetNumberOfDecimal( INT _iNumber )
 {
 	if( _iNumber < 0 )_iNumber = -_iNumber;

@@ -18,6 +18,7 @@ private:
 
 	VOID		CreateEndingImage();
 	VOID		CreateSceneImage();
+	VOID		CreateResultImage();
 	VOID		CreateBackgroundImage();
 	VOID		CreateIdentifierImage();
 	VOID		CreateNumberImage();
@@ -94,6 +95,8 @@ private:
 	IMAGE2D				m_img2DEnding;
 	DWORD				m_dEndingBeginTime;
 	DWORD				m_dEndingFrameSpeed;
+
+	IMAGE2D				m_img2DResult;
 
 	IMAGE2D				m_img2DScene;	//	È¸»ö
 
