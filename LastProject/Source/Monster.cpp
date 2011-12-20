@@ -1217,20 +1217,26 @@ VOID CMonster::CreateAttackBoundBox()
 		//프레임에 해당 하는 바운드 박스 생성
 		switch( m_iSelectedFrameNum )
 		{
-		case ANIM_MELEE_ATTACK:
-		case ANIM_MELEE_ATTACK2:
-		case ANIM_MELEE_ATTACK3:
-		case ANIM_MELEE_ATTACK4:
-		case ANIM_SPIN_ATTACK:
-		case ANIM_SLIDING:
-		case ANIM_COMBO_ATTACK1:
-		case ANIM_COMBO_ATTACK2:
+		case ANIM_MELEE_ATTACK:			// 양손
+		case ANIM_MELEE_ATTACK2:		// 오른손
+		case ANIM_MELEE_ATTACK3:		// 왼쪽
 		case ANIM_COMBO_ATTACK3:
+		case ANIM_SLIDING:				// 슬라이딩
+
+		case ANIM_MELEE_ATTACK4:		// 발차기
+		case ANIM_SPIN_ATTACK:			// 회전		
+		case ANIM_COMBO_ATTACK1:		// 연속기
+		case ANIM_COMBO_ATTACK2:
 		case ANIM_SENPUKYAKU:
 			{
+				// QubeATKEffect( Get_Pos() );
 				// 몬스터 공격 바운드 박스.
 				CBoundBox * m_pBBx = new CBoundBox;
-				m_pBBx->SetPosition( Get_Pos() );
+				D3DXVECTOR3 vec( 0.0f, 0.0f, -25.0f );
+				D3DXVec3TransformCoord( &vec, &vec, &Get_MatWorld() );
+				vec.y = 0.1f;
+				QubeATKEffect( vec );
+				m_pBBx->SetPosition( vec );
 				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
 
 				m_pBBx->SetSize( 0, -25.0f );
@@ -1251,7 +1257,11 @@ VOID CMonster::CreateAttackBoundBox()
 			{
 				// 몬스터 공격 바운드 박스.
 				CBoundBox * m_pBBx = new CBoundBox;
-				m_pBBx->SetPosition( Get_Pos() );
+				D3DXVECTOR3 vec( 0.0f, 0.0f, -70.0f );
+				vec += Get_Pos();
+				D3DXVec3TransformCoord( &vec, &vec, &Get_MatWorld() );
+				
+				m_pBBx->SetPosition( vec );
 				//m_pBBx->SetAngle( 0.0f, Get_Angle(), 0.0f );
 
 				m_pBBx->SetSize( 0, -25.0f );
@@ -1416,10 +1426,6 @@ VOID CMonster::BreakCubeAll()
 	}
 }
 
-
-INT			m_iBreakedCubeCnt;
-INT			m_iTotalBreakedCubeCnt;
-
 VOID CMonster::BreakNockdown()
 {
 	m_iBreakedCubeCnt += 
@@ -1459,6 +1465,11 @@ BOOL CMonster::BreakNockdown(BOOL IsLive)
 	}
 
 	return bRet;
+}
+
+VOID CMonster::QubeATKEffect( const D3DXVECTOR3 &a_vPos )
+{
+	m_pBox[0].QubeATKEffect( a_vPos );
 }
 
 VOID CMonster::EnableShadow( BOOL bEnable )

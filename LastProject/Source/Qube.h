@@ -28,6 +28,7 @@ public:
 	VOID RandMome( D3DXVECTOR3 vMomentum, FLOAT fRate = 0.5f );
 
 private:
+	INT			m_nType;			///< 큐브 종류
 	D3DXVECTOR3 m_vPos;				///< 중심좌표
 	D3DXVECTOR3 m_vAxisDir[3];		///< 큐브 세축의 단위벡터
 	D3DXVECTOR3 m_vRotateTemp;		///< 회전 변화량
@@ -58,7 +59,8 @@ public:
 	//}
 
 	// Set
-	VOID SetVisiable( BOOL bVisi)			{ m_bVisiable = bVisi; }
+	VOID SetType( INT nType )				{ m_nType = nType; }
+	VOID SetVisiable( BOOL bVisi )			{ m_bVisiable = bVisi; }
 	VOID SetPosition( D3DXVECTOR3 vec )		{ m_vPos = vec; }
 	//VOID SetCharMatrix( const D3DXMATRIXA16& a_matChara )
 	//{

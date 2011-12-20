@@ -10,6 +10,7 @@ CQube::CQube()
 , m_bVisiable( TRUE )
 , m_fSize( 0.5f )
 , m_fHeight( 0.0f )
+, m_nType(0)
 {
 	//Create( _pd3dDevice, a_pVB, a_pIB, a_iStartVB, a_iStartIB, a_fCubeSize );
 	m_vPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -28,7 +29,14 @@ CQube::~CQube()
 VOID CQube::Update( CBoundBox * pBB )
 {
 	// 속도를 위해 소멸속도 단순 계산
-	FLOAT fLen = ABSDEF( m_vAccelerate.x ) + ABSDEF( m_vAccelerate.y ) + ABSDEF( m_vAccelerate.z );
+	FLOAT fLen;
+	
+	if ( m_nType == 1 && m_vAccelerate.y < 0 )
+	{
+		m_bVisiable = FALSE;
+	}
+
+	fLen = ABSDEF( m_vAccelerate.x ) + ABSDEF( m_vAccelerate.y ) + ABSDEF( m_vAccelerate.z );
 	if ( m_fItemLift > fLen )
 	{
 		m_bVisiable = FALSE;
@@ -39,6 +47,7 @@ VOID CQube::Update( CBoundBox * pBB )
 	vDir = CPhysics::GetInstance()->m_vGAccel * CFrequency::GetInstance()->getFrametime() ;
 
 	m_vMomentum = m_vMomentum - vDir;
+
 
 	// 이동값 갱신
 	vDir = m_vPos + m_vAccelerate + m_vMomentum;

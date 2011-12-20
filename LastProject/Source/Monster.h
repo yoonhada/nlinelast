@@ -157,6 +157,7 @@ public:
 	VOID BreakCubeAll();
 	VOID BreakNockdown();
 	BOOL BreakNockdown( BOOL );
+	VOID QubeATKEffect( const D3DXVECTOR3 &a_vPos );
 	VOID EnableShadow( BOOL bEnable );
 
 private:
