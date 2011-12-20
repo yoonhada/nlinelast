@@ -234,10 +234,10 @@ VOID LobbyScene::Update()
 VOID LobbyScene::Render()
 {
 	//static FLOAT fX = 0.0f, fY = 0.0f, fZ = 180.0f;
-	static FLOAT fX = 0.0f, fY = -3.0f, fZ = 200.0f;
+	//static FLOAT fX = 0.0f, fY = 10.0f, fZ = 200.0f;
 	
-	D3DXVECTOR3		vecEyePt( fX, fY, fZ );
-	D3DXVECTOR3		vecLookatPt( 0.0f, -7.0f, 0.0f );
+	D3DXVECTOR3		vecEyePt( 0.0f, 10.0f, 200.0f );
+	D3DXVECTOR3		vecLookatPt( 0.0f, -30.0f, 0.0f );
 	D3DXVECTOR3		vecUpVec( 0.0f, 1.0f, 0.0f );
 	D3DXMATRIXA16	matView;
 	D3DXMatrixLookAtLH( &matView, &vecEyePt, &vecLookatPt, &vecUpVec );

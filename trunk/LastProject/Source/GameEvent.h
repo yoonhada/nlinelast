@@ -28,6 +28,7 @@ private:
 	D3DXVECTOR3 m_vCharactorPosition[2][4];
 	D3DXVECTOR3 m_vMonsterPosition[3];
 	D3DXVECTOR3 m_vWallPosition[3];
+	D3DXVECTOR3 m_vItemPosition[5];
 
 	// Char
 	INT m_iMaxCharaNum;
@@ -114,6 +115,7 @@ public:
 	D3DXVECTOR3& GetCharPosition( INT nType, INT nIndex )	{ return m_vCharactorPosition[nType][nIndex]; }
 	D3DXVECTOR3& GetMonsPosition( INT nIndex )				{ return m_vMonsterPosition[nIndex]; }
 	D3DXVECTOR3& GetWallPosition( INT nIndex )				{ return m_vWallPosition[nIndex]; }
+	D3DXVECTOR3& GetItemPosition( INT nIndex )				{ return m_vItemPosition[nIndex]; }
 
 	// Set
 	VOID SetTutorial( INT a_nTutorial )			{ m_nTutorial = a_nTutorial; }
