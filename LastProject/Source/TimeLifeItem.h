@@ -32,7 +32,6 @@ public:
 	INT Get_MonsterNumber()							{ return m_iMonsterNumber; }
 
 private:
-	const FLOAT m_fLifeTime;
 	FLOAT m_fLife;
 	INT m_iMonsterNumber;
 };

@@ -35,7 +35,6 @@ VOID CInput::Clear()
 	m_bLbutton = m_bRbutton = FALSE;
 
 	m_bEnable = TRUE;
-	ShowCursor( m_bEnable );
 
 	ZeroMemory( &m_MousePosOld, sizeof(m_MousePosOld) );
 	ZeroMemory( &m_MousePos, sizeof(m_MousePos) );
@@ -106,14 +105,20 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			if ( GetAsyncKeyState( VK_ESCAPE ) )		{ ++m_bESCKey;									}
 			else if ( GetAsyncKeyState( VK_LBUTTON ) )	{ ++m_bLbutton;									}
 			else if ( GetAsyncKeyState( VK_RBUTTON ) )	{ ++m_bRbutton;									}
-			else if ( GetAsyncKeyState( VK_F1 ) )		{ ++m_bF1button;								}
-			else if ( GetAsyncKeyState( VK_F8 ) )		{ ++m_bF8button;								}
-			else if ( GetAsyncKeyState( VK_F9 ) )		{ ++m_bF9button;								}
+			//else if ( GetAsyncKeyState( VK_F1 ) )		{ ++m_bF1button;								}
+			//else if ( GetAsyncKeyState( VK_F8 ) )		{ ++m_bF8button;								}
+			//else if ( GetAsyncKeyState( VK_F9 ) )		{ ++m_bF9button;								}
 			else
 			{
 				m_bESCKey = FALSE;
 				m_bLbutton = m_bRbutton = FALSE;
 				m_bF1button = m_bF8button = m_bF9button = FALSE;
+			}
+
+			for (int i = 0; i < 12; ++i)
+			{
+				if( GetAsyncKeyState( VK_F1 + i ) )		++m_bFunKey[i];
+				else									m_bFunKey[i] = FALSE;
 			}
 
 			for (int i = 0; i < 10; ++i)
@@ -142,14 +147,20 @@ VOID CInput::MouseMoveCenter()
 VOID CInput::EnableInput( BOOL bEnable )
 {
 	m_bEnable = bEnable; 
-
-	ShowCursor( !m_bEnable );
 }
 
 BOOL CInput::Get_NumKey( INT nInput )
 {
-	if (nInput >= 10 || nInput < 0)
-		return FALSE;
+	if ( 0 <= nInput && nInput <= 9 )
+		return (m_bNumKey[nInput] == TRUE);
 
-	return (m_bNumKey[nInput] == TRUE);
+	return FALSE;
+}
+
+BOOL CInput::Get_FunKey( INT nInput )
+{
+	if ( 1 <= nInput && nInput <= 12 )
+		return (m_bFunKey[nInput - 1] == TRUE);
+
+	return FALSE;
 }

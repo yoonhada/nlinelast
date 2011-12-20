@@ -56,7 +56,7 @@ private:
 	CCharactor*					m_pCharactors;
 	CMonster**					m_pMonster;
 	CTimeLifeItem *				m_pFirstAidKit;
-	CTimeLifeItem *				m_pWall;
+	CTimeLifeItem *				m_pDoor;
 
 	// Map
 	TileMap*					m_pTileMap;
@@ -92,6 +92,9 @@ private:
 	VOID TutorialCombo();
 
 	VOID EventSwitch( INT nEvent );
+	VOID EventSceneTutorial( INT nEvent );
+	VOID EventSceneBear( INT nEvent );
+	VOID EventSceneClown( INT nEvent );
 	VOID EventStateNetwork( INT nEvent );
 	VOID EventMapCameraWalk( INT nEvent );
 	VOID EventInitGameState( INT nEvent );

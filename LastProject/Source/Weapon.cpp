@@ -30,31 +30,6 @@ VOID CWeapon::Clear()
 		m_WeaponType.vDir[i].x = m_WeaponType.vDir[i].y = m_WeaponType.vDir[i].z = 0.0f;
 	}
 
-	//for (int i = 0; i < 4; ++i)
-	//{
-	//	m_fZAng[i][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-	//	m_fZAng[i][1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-	//	m_fZAng[i][2] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-	//	m_fZAng[i][3] = -MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( -90.0f);
-	//	m_fZAng[i][4] = -MTP_FUN::Deg2Rad<15>::radians;	// D3DXToRadian( -15.0f);
-	//	m_fZAng[i][5] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-	//	m_fZAng[i][6] = MTP_FUN::Deg2Rad<45>::radians;		// D3DXToRadian( 45.0f);
-	//	m_fZAng[i][7] = MTP_FUN::Deg2Rad<90>::radians;		// D3DXToRadian( 90.0f);
-	//	m_fZAng[i][8] = MTP_FUN::Deg2Rad<135>::radians;	// D3DXToRadian( 135.0f);
-	//	m_fZAng[i][9] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
-
-	//	// XYZ Min
-	//	m_fBBSize[i][0] = -10.5f;
-	//	//m_fBBSize[i][1] =- 1.5f;
-	//	m_fBBSize[i][1] = -3.0f;
-	//	m_fBBSize[i][2] = -16.5f;
-	//	// XYZ Max
-	//	m_fBBSize[i][3] =  7.5f;
-	//	//m_fBBSize[i][4] =  1.5f;
-	//	m_fBBSize[i][4] =  3.0f;
-	//	m_fBBSize[i][5] =  7.5f;
-	//}
-
 	//	Daddy
 	m_fZAng[0][0] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
 	m_fZAng[0][1] = MTP_FUN::Deg2Rad<30>::radians;		// D3DXToRadian( 0.0f);
@@ -69,12 +44,12 @@ VOID CWeapon::Clear()
 
 	// XYZ Min
 	m_fBBSize[0][0] = -15.5f;
-	m_fBBSize[0][1] = -5.0f;
+	m_fBBSize[0][1] = -2.0f;
 	m_fBBSize[0][2] = -15.5f;
 	// XYZ Max
 	m_fBBSize[0][3] =  15.5f;
-	m_fBBSize[0][4] =  5.0f;
-	m_fBBSize[0][5] =  7.5f;
+	m_fBBSize[0][4] =  2.0f;
+	m_fBBSize[0][5] =  3.75f;
 
 	//	Mom
 	m_fZAng[1][0] = MTP_FUN::Deg2Rad<0>::radians;		// D3DXToRadian( 0.0f);
@@ -167,14 +142,18 @@ VOID CWeapon::_GetProfileInt( INT *nOut, LPWSTR lpAppName, LPWSTR lpszBuf, INT n
 
 VOID CWeapon::_GetProfileVector( D3DXVECTOR3 *vVec, LPWSTR lpAppName, LPWSTR lpszBuf, INT nIndex, INT nDefaultX, INT nDefaultY, INT nDefaultZ, FLOAT fPower )
 {
+	INT nX, nY, nZ;
 	FLOAT x, y, z;
 	WCHAR lpKeyName[256];
 	wsprintf( lpKeyName, L"%s%dX", lpszBuf, nIndex );
-	x = fPower * GetPrivateProfileInt( lpAppName, lpKeyName, nDefaultX, WEAPONFILE );
+	nX = GetPrivateProfileInt( lpAppName, lpKeyName, nDefaultX, WEAPONFILE );
+	x = fPower * nX;
 	wsprintf( lpKeyName, L"%s%dY", lpszBuf, nIndex );
-	y = fPower * GetPrivateProfileInt( lpAppName, lpKeyName, nDefaultY, WEAPONFILE );
+	nY = GetPrivateProfileInt( lpAppName, lpKeyName, nDefaultY, WEAPONFILE );
+	y = fPower * nY;
 	wsprintf( lpKeyName, L"%s%dZ", lpszBuf, nIndex );
-	z = fPower * GetPrivateProfileInt( lpAppName, lpKeyName, nDefaultZ, WEAPONFILE );
+	nZ = GetPrivateProfileInt( lpAppName, lpKeyName, nDefaultZ, WEAPONFILE );
+	z = fPower * nZ;
 	vVec[nIndex] = D3DXVECTOR3(x, y, z); 
 }
 
@@ -383,38 +362,43 @@ VOID CWeapon::SetKeyB()
 	}
 }
 
-VOID CWeapon::AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle )
+VOID CWeapon::AddAtkBBx( FLOAT fAngle, D3DXMATRIX& mat)
 {
-	SetBBx( vPos, fAngle );
+	SetBBx( fAngle, mat );
 	CTree::GetInstance()->GetCharAtkVector()->push_back( &m_WeaponType.pBBA );
 }
 
-VOID CWeapon::SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle )
+VOID CWeapon::SetBBx( const FLOAT fAngle, D3DXMATRIX& mat)
 {
-	m_WeaponType.pBBA.SetPosition( vPos );
+	INT nType = m_WeaponType.nType - 1;
+	D3DXVECTOR3 vec( -3.75f, 7.5f, -3.75f );
+	D3DXVec3TransformCoord( &vec, &vec, &mat );
+	m_WeaponType.pBBA.SetPosition( vec );
 	m_WeaponType.pBBA.SetScale( m_fScale );
 	m_WeaponType.pBBA.SetAngleY( fAngle );
-	m_WeaponType.pBBA.SetAngleZ( m_fZAng[m_WeaponType.nType - 1][m_nState] );
+	m_WeaponType.pBBA.SetAngleZ( m_fZAng[nType][m_nState] );
 
-	m_WeaponType.pBBA.SetSize( 0, m_fBBSize[m_WeaponType.nType - 1][0] );
-	m_WeaponType.pBBA.SetSize( 1, m_fBBSize[m_WeaponType.nType - 1][1] + 10.0f );
-	m_WeaponType.pBBA.SetSize( 2, m_fBBSize[m_WeaponType.nType - 1][2] );
+	m_WeaponType.pBBA.SetSize( 0, m_fBBSize[nType][0] );
+	m_WeaponType.pBBA.SetSize( 1, m_fBBSize[nType][1] );
+	m_WeaponType.pBBA.SetSize( 2, m_fBBSize[nType][2] );
 
-	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[m_WeaponType.nType - 1][3] );
-	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[m_WeaponType.nType - 1][4] + 10.0f );
-	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[m_WeaponType.nType - 1][5] );
+	m_WeaponType.pBBA.SetSize( 3, m_fBBSize[nType][3] );
+	m_WeaponType.pBBA.SetSize( 4, m_fBBSize[nType][4] );
+	m_WeaponType.pBBA.SetSize( 5, m_fBBSize[nType][5] );
 
 #ifdef _DEBUG
-	m_pCube->Set_ControlScale( 0, ( m_fBBSize[m_WeaponType.nType - 1][3] - m_fBBSize[m_WeaponType.nType - 1][0] ) * m_fScale );
-	m_pCube->Set_ControlScale( 1, ( m_fBBSize[m_WeaponType.nType - 1][4] - m_fBBSize[m_WeaponType.nType - 1][1] ) );
-	m_pCube->Set_ControlScale( 2, ( m_fBBSize[m_WeaponType.nType - 1][5] - m_fBBSize[m_WeaponType.nType - 1][2] ) * m_fScale );
-	m_pCube->Set_ControlRotate( 2, m_fZAng[m_WeaponType.nType - 1][m_nState] );
-	m_pCube->Set_ControlTranslate( 0, ( m_fBBSize[m_WeaponType.nType - 1][0] + m_fBBSize[m_WeaponType.nType - 1][3] ) * 0.5f );
-	m_pCube->Set_ControlTranslate( 1, ( m_fBBSize[m_WeaponType.nType - 1][1] + m_fBBSize[m_WeaponType.nType - 1][4] ) * 0.5f + 7.5f );
-	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[m_WeaponType.nType - 1][2] + m_fBBSize[m_WeaponType.nType - 1][5] ) * 0.5f - ( m_nState == EnumCharFrame::TEMP4 ? 0.0f : 7.5f ) );
+	m_pCube->Set_ControlScale( 0, ( m_fBBSize[nType][3] - m_fBBSize[nType][0] ) * m_fScale );
+	m_pCube->Set_ControlScale( 1, ( m_fBBSize[nType][4] - m_fBBSize[nType][1] ) );
+	m_pCube->Set_ControlScale( 2, ( m_fBBSize[nType][5] - m_fBBSize[nType][2] ) * m_fScale );
+	m_pCube->Set_ControlRotate( 2, m_fZAng[nType][m_nState] );
+	m_pCube->Set_ControlTranslate( 0, ( m_fBBSize[nType][0] + m_fBBSize[nType][3] ) * 0.5f );
+	m_pCube->Set_ControlTranslate( 1, ( m_fBBSize[nType][1] + m_fBBSize[nType][4] ) * 0.5f + 7.5f );
+	m_pCube->Set_ControlTranslate( 2, ( m_fBBSize[nType][2] + m_fBBSize[nType][5] ) * 0.5f - ( m_nState == EnumCharFrame::TEMP4 ? 0.0f : 7.5f ) );
 #endif // _DEBUG
-	
-	m_WeaponType.pBBA.SetDirection( m_WeaponType.vDir[m_nState] );
+	mat._41 = mat._42 = mat._43 = 0.0f;
+	vec = m_WeaponType.vDir[m_nState];
+	D3DXVec3TransformCoord( &vec, &vec, &mat );
+	m_WeaponType.pBBA.SetDirection( vec );
 }
 
 VOID CWeapon::Update()

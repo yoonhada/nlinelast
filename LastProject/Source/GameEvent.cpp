@@ -92,6 +92,7 @@ VOID CGameEvent::Clear()
 	m_nDieMonsterNumber = -1;
 
 	m_nPrevEvent = NONE;
+	m_nScene = NONE;
 	m_nTutorial = -1;
 	m_nMonsterIndex = -1;
 	m_nPlayerIndex = -1;
@@ -218,14 +219,4 @@ VOID CGameEvent::SetMonsterLifeCheck()
 		}
 		AddEvent( CGameEvent::GAME_WIN_END, 2.0f );
 	}
-}
-
-VOID CGameEvent::SetAttackPoint( INT nChar, INT nCount )
-{
-	m_pAttackPoint[nChar] += nCount;
-}
-
-VOID CGameEvent::SetShotedPoint( INT nChar, INT nCount )
-{
-	m_pShotedPoint[nChar] -= nCount;
 }

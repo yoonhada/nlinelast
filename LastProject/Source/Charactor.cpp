@@ -777,9 +777,8 @@ VOID CCharactor::Update()
 		m_pWeapon->Update();
 		if ( m_pWeapon->GetAtkTime() == TRUE )
 		{
-			D3DXVECTOR3 vDir = Get_CharaPos();
-			vDir.y += ABSDEF( m_pBoundBox->GetSize( CBoundBox::MINUSY ) );
-			m_pWeapon->AddAtkBBx( vDir, m_fAngle );
+			D3DXMATRIX matWorld = Get_MatWorld();
+			m_pWeapon->AddAtkBBx( m_fAngle, matWorld );
 		}
 	}
 }
@@ -876,10 +875,6 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			if( m_vectorCube[Loop] == NULL )
 				continue;
 
-			//if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::BONE )
-			//{
-			//	m_vectorCube[Loop]->Set_Visible( EnumCharFrame::BASE, TRUE );
-			//}
 			if( m_vectorCube[Loop]->Get_Type( m_iSelectedFrameNum ) == EnumCubeType::MEAT &&
 				m_vectorCube[Loop]->Get_Visible( EnumCharFrame::BASE ) == TRUE )
 			{
@@ -887,8 +882,6 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 				{
 					Iter = vecBoundBox->begin();
 
-					//(*Iter)->GetPosVec();
-					// 케릭터 매트릭스 					
 					while( Iter != vecBoundBox->end() )
 					{
 						vPos = m_vectorCube[Loop]->Get_Pos( m_iSelectedFrameNum );
@@ -899,9 +892,9 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 							++nCount;
 							// 날아가는 방향 계산.
 							vPos = (*Iter)->GetDirection();	
-							D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
+							//D3DXVec3TransformCoord( &vPos, &vPos, &matDir );
 							//m_vKnockBack = vPos;
-							vPos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+							//vPos = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 							BreakListMake( Loop, vPos );
 							//NetworkSendTempVector.push_back( Loop );
 							CObjectManage::GetInstance()->Set_PushBackNetworkSendTempVector( static_cast<WORD>(Loop) );
@@ -990,7 +983,7 @@ VOID CCharactor::BreakListMake( INT Loop, D3DXVECTOR3& vDir )
 	if( m_bMonster )
 	{
 		D3DXMatrixMultiply( &m_matMultWorld, &Get_MatWorld(), &m_matMonster);
-		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir );
+		m_pModel->CreateRandom( m_vectorCube[Loop], m_iSelectedFrameNum, m_matMultWorld, vDir, 0.5f);
 	}
 	else
 	{
@@ -1069,8 +1062,6 @@ VOID CCharactor::BreakCubeAll()
 
 		}
 	}
-
-	m_bAliveCheck = FALSE;
 }
 
 VOID CCharactor::BreakNockdown( const FLOAT fPow )

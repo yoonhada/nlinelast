@@ -68,13 +68,14 @@ public:
 	VOID SetType(INT nType)		{ m_WeaponType.nType = nType; }
 	VOID SetKeyA();
 	VOID SetKeyB();
-	VOID SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle );
+	//VOID SetBBx( const D3DXVECTOR3& vPos, const FLOAT fAngle );
+	VOID SetBBx( const FLOAT fAngle, D3DXMATRIX& _matCharacter);
 
 	const D3DXMATRIXA16& Get_MatWorld();
 	CBoundBox GetBoundBox()		{ return m_WeaponType.pBBA; }
 	BOOL GetAtkTime()			{ return m_bAtkTime; }
 
-	VOID AddAtkBBx( D3DXVECTOR3 &vPos, FLOAT fAngle );
+	VOID AddAtkBBx( FLOAT fAngle, D3DXMATRIX& _matCharacter );
 	
 	VOID SetWeaponAni();
 	INT Get_nFrame(INT = 0);

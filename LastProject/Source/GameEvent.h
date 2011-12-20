@@ -40,6 +40,7 @@ private:
 	INT m_nDieMonsterNumber;
 
 	// Event
+	INT m_nScene;
 	INT m_nPrevEvent;
 	INT m_nTutorial;
 	INT m_nMonsterIndex;
@@ -55,6 +56,11 @@ private:
 	virtual ~CGameEvent();
 
 public:
+	enum { ENUM_FAMILY_0	= 0, ENUM_FAMILY_1, ENUM_FAMILY_2, ENUM_FAMILY_3, ENUM_FAMILY_END }; 
+	enum { ENUM_MONSTER_0	= 0, ENUM_MONSTER_1, ENUM_MONSTER_2, ENUM_MONSTER_END };
+	enum { ENUM_DOOR_0		= 0, ENUM_DOOR_1, ENUM_DOOR_2, ENUM_DOOR_END };
+	enum { ENUM_FAK_0		= 0, ENUM_FAK_1, ENUM_FAK_2, ENUM_FAK_3, ENUM_FAK_4, ENUM_FAK_END };
+
 	enum MonstersName {
 		EMPTY, 
 		PANDA		= 0x0001, 
@@ -71,8 +77,8 @@ public:
 	};
 	enum EventKind {
 		NONE = 0, 
-		
-		GAME_WIN_END, GAME_LOSE_END, 
+		GAME_HEALING, 
+		GAME_WIN_END, GAME_LOSE_END, GAME_END, 
 		EVENT_FAK, EVENT_FAK_END, 
 		MONSTER_BREAK_NOCKDOWN, DOOR_BREAK_NOCKDOWN, 	
 		EVENT_COMBO, EVENT_COMBO_SUCCESS, EVENT_COMBO_FAIL, EVENT_COMBO_END, 
@@ -90,7 +96,7 @@ public:
 		SCENE_CLOWN_END, 
 
 		NETWORK_ENUM = 9000, 
-		SC_EVENT_COMBO_SLOT_STATE, SC_EVENT_COMBO_RESULT
+		EVENT_COMBO_SLOTSTATE, EVENT_COMBO_RESULT, 
 	};
 
 	VOID Clear();
@@ -102,14 +108,14 @@ public:
 	VOID ClearEvent();
 	VOID ClearCombo();
 	VOID IndexInit();
-	
+
 	// Get
-	INT GetPrevEvent()									{ return m_nPrevEvent; }
-	INT GetTutorial()									{ return m_nTutorial; }
-	INT GetMonsterIndex()								{ return m_nMonsterIndex; }
-	INT GetPlayerIndex()								{ return m_nPlayerIndex; }
-	INT GetMonsterState()								{ return m_nMonstersState; }
-	VOID SetMonsterLifeCheck();
+	INT GetScene()					{ return m_nScene; }
+	INT GetPrevEvent()				{ return m_nPrevEvent; }
+	INT GetTutorial()				{ return m_nTutorial; }
+	INT GetMonsterIndex()			{ return m_nMonsterIndex; }
+	INT GetPlayerIndex()			{ return m_nPlayerIndex; }
+	INT GetMonsterState()			{ return m_nMonstersState; }
 
 	D3DXVECTOR3& GetNonePosition( )							{ return m_vNonePosition; }
 	D3DXVECTOR3& GetCharPosition( INT nType, INT nIndex )	{ return m_vCharactorPosition[nType][nIndex]; }
@@ -118,15 +124,17 @@ public:
 	D3DXVECTOR3& GetItemPosition( INT nIndex )				{ return m_vItemPosition[nIndex]; }
 
 	// Set
+	VOID SetScene(INT a_nScene )				{ m_nScene = a_nScene; }
 	VOID SetTutorial( INT a_nTutorial )			{ m_nTutorial = a_nTutorial; }
 	VOID SetMonstersState( INT a_nMonstersState){ m_nMonstersState = a_nMonstersState; }
 	VOID Set_PlayerIndex( INT a_nPlayerIndex )	{ m_nPlayerIndex = a_nPlayerIndex; }
 	VOID Set_MonsterIndex( INT a_nMonsterIndex ){ m_nMonsterIndex = a_nMonsterIndex; }
-	VOID SetAttackPoint( INT nChar, INT nCount );
-	VOID SetShotedPoint( INT nChar, INT nCount );
+	VOID SetAttackPoint( INT nChar, INT nCount ){ m_pAttackPoint[nChar] += nCount; }
+	VOID SetShotedPoint( INT nChar, INT nCount ){ m_pShotedPoint[nChar] -= nCount; }
 	VOID SetSlotNumber( WORD wSlotNumber )		{ m_wSlotNumber = wSlotNumber; }
 	VOID SetResult( BOOL bResult )				{ m_bResult = bResult; }
 	VOID SetDie( INT nMonsterNumber )			{ m_nDieMonsterNumber = nMonsterNumber; }
+	VOID SetMonsterLifeCheck();
 
 	INT GetAttackPoint( INT nChar )				{ return m_pAttackPoint[nChar]; }
 	INT GetShotedPoint( INT nChar )				{ return m_pShotedPoint[nChar]; }

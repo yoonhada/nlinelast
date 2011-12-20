@@ -37,6 +37,7 @@ public:
 	BOOL Get_F1button()			{ return ( m_bF1button == TRUE ); }
 	BOOL Get_F8button()			{ return ( m_bF8button == TRUE ); }
 	BOOL Get_F9button()			{ return ( m_bF9button == TRUE ); }
+	BOOL Get_FunKey(INT nInput);
 	BOOL Get_NumKey(INT nInput);
 
 	// Set
@@ -60,6 +61,7 @@ private:
 	BOOL		m_bF1button;
 	BOOL		m_bF8button;
 	BOOL		m_bF9button;
+	BOOL		m_bFunKey[12];
 	BOOL		m_bNumKey[10];
 	D3DXMATRIXA16 m_matMatrix;
 

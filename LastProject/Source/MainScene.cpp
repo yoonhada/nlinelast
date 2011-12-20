@@ -120,7 +120,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	CreateFirstAidKit();
 
 	// 잡동사니 생성
-	m_pWall = CObjectManage::GetInstance()->Get_Wall();
+	m_pDoor = CObjectManage::GetInstance()->Get_Wall();
 	CreateWall();
 	
 	//조명 생성
@@ -133,11 +133,11 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	// 프로젝션 설정
 	m_pMatrices->SetupProjection();
 
-
 	CInput::GetInstance()->EnableInput( FALSE );
 
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
+		CGameEvent::GetInstance()->SetTutorial( CGameEvent::SCENE_TUTORIAL );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_TUTORIAL, 0.01f );
 	}
 
@@ -180,7 +180,7 @@ VOID CMainScene::CreateComboEvent()
 	m_pGameEventScoreBoard->SetState( GameEventScoreBoard::GES_HIDDEN );
 
 	INT nChar;
-	for (int Loop = 0; Loop < 4; ++Loop)
+	for ( int Loop = CGameEvent::ENUM_FAMILY_0; Loop < CGameEvent::ENUM_FAMILY_END; ++Loop)
 	{
 		nChar = CObjectManage::GetInstance()->Get_CharTable( Loop );
 		if (nChar >= 0)
@@ -197,7 +197,7 @@ VOID CMainScene::CreateCharactor()
 	m_pCharactors = CObjectManage::GetInstance()->Get_Charactor();
 
 	INT nIndex;
-	for(INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_FAMILY_0; Loop < CGameEvent::ENUM_FAMILY_END; ++Loop)
 	{
 		nIndex = CObjectManage::GetInstance()->Get_CharTable(Loop);
 
@@ -215,9 +215,7 @@ VOID CMainScene::CreateCharactor()
 
 VOID CMainScene::CreateMonster()
 {
-	//m_pMonster[1]->Create( m_pD3dDevice, L"Data/CharData/11_16_Brown_Bear_v6" );
-
-	for( INT Loop = 0; Loop < 3; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_MONSTER_0; Loop < CGameEvent::ENUM_MONSTER_END; ++Loop)
 	{
 		if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 		{
@@ -230,24 +228,24 @@ VOID CMainScene::CreateMonster()
 
 VOID CMainScene::CreateFirstAidKit()
 {
-	for ( int Loop = 0; Loop < 5; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_FAK_0; Loop < CGameEvent::ENUM_FAK_END; ++Loop)
 	{
 		m_pFirstAidKit[Loop].Create( m_pD3dDevice );
 		m_pFirstAidKit[Loop].Load( L"Data/CharData/FirstAidKit_1.csav" );
-		m_pFirstAidKit[Loop].Set_MonsterNumber( CGameEvent::ITEM_FAK1 << Loop );
-		CTree::GetInstance()->GetMonsVector()->push_back( m_pFirstAidKit[Loop].GetBoundBox() );		
+		m_pFirstAidKit[Loop].Set_MonsterNumber( CGameEvent::ITEM_FAK1 );
+		CTree::GetInstance()->GetItemVector()->push_back( m_pFirstAidKit[Loop].GetBoundBox() );
 	}
 }
 
 VOID CMainScene::CreateWall()
 {
-	for ( int Loop = 0; Loop < 3; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_DOOR_0; Loop < CGameEvent::ENUM_DOOR_END; ++Loop)
 	{
-		m_pWall[Loop].Create( m_pD3dDevice );
-		if( Loop == 1 )		m_pWall[Loop].Load( L"Data/CharData/Obstacle_0.csav" );
-		else				m_pWall[Loop].Load( L"Data/CharData/Obstacle_1.csav" );
-		m_pWall[Loop].Set_MonsterNumber( CGameEvent::DOOR_LEFT << Loop );
-		CTree::GetInstance()->GetMonsVector()->push_back( m_pWall[Loop].GetBoundBox() );
+		m_pDoor[Loop].Create( m_pD3dDevice );
+		if( Loop == 1 )		m_pDoor[Loop].Load( L"Data/CharData/Obstacle_0.csav" );
+		else				m_pDoor[Loop].Load( L"Data/CharData/Obstacle_1.csav" );
+		m_pDoor[Loop].Set_MonsterNumber( CGameEvent::DOOR_LEFT );
+		CTree::GetInstance()->GetMonsVector()->push_back( m_pDoor[Loop].GetBoundBox() );
 	}
 }
 
@@ -255,23 +253,23 @@ VOID CMainScene::CheatKeys()
 {
 	if ( CObjectManage::GetInstance()->IsHost() == TRUE )
 	{
-		if( CInput::GetInstance()->Get_NumKey( 1 ) )
+		if( CInput::GetInstance()->Get_FunKey( 1 ) )
 		{
 			m_pGameEvent->ClearEvent();
 			m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.01f);
 		}
-		if( CInput::GetInstance()->Get_NumKey( 2 ) )
+		if( CInput::GetInstance()->Get_FunKey( 2 ) )
 		{
 			m_pGameEvent->ClearEvent();
 			m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.01f);
 		}
 
-		if( CInput::GetInstance()->Get_NumKey( 5 ) )
+		if( CInput::GetInstance()->Get_FunKey( 5 ) )
 		{
 			m_pGameEvent->ClearEvent();
 			m_pGameEvent->AddEvent( CGameEvent::TUTORIAL_ATACK, 0.01f);
 		}
-		if( CInput::GetInstance()->Get_NumKey( 6 ) )
+		if( CInput::GetInstance()->Get_FunKey( 6 ) )
 		{
 
 			CGameEvent::GetInstance()->SetTutorial( CGameEvent::TUTORIAL_ATACK );
@@ -279,7 +277,8 @@ VOID CMainScene::CheatKeys()
 			m_pGameEventTutorialManager->EndEvent();
 			m_pGameEvent->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.01f);
 		}
-		if( CInput::GetInstance()->Get_NumKey( 7 ) )
+
+		if( CInput::GetInstance()->Get_FunKey( 12 ) )
 		{
 			m_pGameEvent->ClearEvent();
 			m_pGameEventTutorialManager->EndEvent();
@@ -288,14 +287,14 @@ VOID CMainScene::CheatKeys()
 
 	}
 
-	if (CInput::GetInstance()->Get_NumKey( 0 ) )
+	if (CInput::GetInstance()->Get_FunKey( 9 ) )
 	{
 		EventComboEnd();
 		m_pGameEvent->ClearEvent();
 		m_pGameEvent->AddEvent( CGameEvent::SCENE_BEAR, 0.01f);
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
 	}
-	if (CInput::GetInstance()->Get_NumKey( 9 ) )
+	if (CInput::GetInstance()->Get_FunKey( 10 ) )
 	{
 		EventComboEnd();
 		m_pGameEvent->ClearEvent();
@@ -338,7 +337,8 @@ VOID CMainScene::Update()
 
 	// 다른 플레이어는 값으로 이동
 	INT nIndex;
-	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
+
+	for( INT Loop = CGameEvent::ENUM_FAMILY_0; Loop < CGameEvent::ENUM_FAMILY_END; ++Loop )
 	{
 		nIndex = pOM->Get_CharTable( Loop );
 		if ( nIndex == -1 )
@@ -355,7 +355,7 @@ VOID CMainScene::Update()
 		}
 	}
 
-	for ( int Loop = 0; Loop < 3; ++Loop )
+	for( INT Loop = CGameEvent::ENUM_MONSTER_0; Loop < CGameEvent::ENUM_MONSTER_END; ++Loop )
 	{
 		if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 		{
@@ -366,16 +366,17 @@ VOID CMainScene::Update()
 	}
 
 	// 아이템 쓸까나??
-	for ( int Loop = 0; Loop < 5; ++Loop )
+	for( INT Loop = CGameEvent::ENUM_FAK_0; Loop < CGameEvent::ENUM_FAK_END; ++Loop )
 	{
 		m_pFirstAidKit[Loop].Update();
 		vPos = m_pFirstAidKit[Loop].Get_CharaPos();
+		m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, m_pFirstAidKit[Loop].AliveCheck() );
 		m_pMainGUI->SetMiniMapObjectPosition( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, &vPos );
 	}
 
-	for ( int Loop = 0; Loop < 3; ++Loop )
+	for( INT Loop = CGameEvent::ENUM_DOOR_0; Loop < CGameEvent::ENUM_DOOR_END; ++Loop )
 	{
-		m_pWall[Loop].Update();
+		m_pDoor[Loop].Update();
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE + 1, Loop );
 	}
 	
@@ -384,25 +385,17 @@ VOID CMainScene::Update()
 	m_pMainGUI->Update();
 	m_pOptionScene->Update();
 
+	DWORD dID = 0;
 	m_pGameEventTutorialManager->Update();
 	m_pGameEventScoreBoard->Update();
-	DWORD dID = 0;
 	m_pGameEventScoreBoard->Command( dID );
-	switch( dID )
-	{
-	case MAIN_SCORE:
-		GameEnd();
-		break;
-	}
+	if ( dID == MAIN_SCORE ) { GameEnd(); }
 	
 	m_pEventGUICombo->Update();
 
 	EventSwitch( m_pGameEvent->Update() );
 
 	CTree::GetInstance()->SetCharAtkClear();
-
-	//m_pCharView->Update( &( m_pCharactors[ pOM->Get_CharTable( m_nClientID ) ] ) );
-	//m_pCharView->Update( m_pASEViewer );
 }
 
 VOID	CMainScene::Render()
@@ -411,11 +404,7 @@ VOID	CMainScene::Render()
 	m_pMatrices->SetupProjection();
 
 	m_pLight->EnableLight();
-/*
-#ifdef _DEBUG
-	m_pAxis->Render();
-#endif
-*/
+	
 	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
 	m_pASEViewer->Render();
 	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
@@ -423,7 +412,7 @@ VOID	CMainScene::Render()
 	m_pLight->EnableCharacterLight();
 
 	INT nIndex;
-	for( INT Loop = 0; Loop < m_iMaxCharaNum; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_FAMILY_0; Loop < CGameEvent::ENUM_FAMILY_END; ++Loop)
 	{
 		nIndex = CObjectManage::GetInstance()->Get_CharTable( Loop );
 		if ( nIndex != -1 )
@@ -433,7 +422,7 @@ VOID	CMainScene::Render()
 		}
 	}
 
-	for ( int Loop = 0; Loop < 3; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_MONSTER_0; Loop < CGameEvent::ENUM_MONSTER_END; ++Loop)
 	{
 		if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 		{
@@ -441,7 +430,7 @@ VOID	CMainScene::Render()
 		}
 	}
 	
-	for ( int Loop = 0; Loop < 5; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_FAK_0; Loop < CGameEvent::ENUM_FAK_END; ++Loop)
 	{
 		if ( m_pGameEvent->GetMonsterState() & ( CGameEvent::ITEM_FAK1 << Loop ) )
 		{
@@ -449,11 +438,11 @@ VOID	CMainScene::Render()
 		}
 	}
 	
-	for ( int Loop = 0; Loop < 3; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_DOOR_0; Loop < CGameEvent::ENUM_DOOR_END; ++Loop)
 	{
 		if ( m_pGameEvent->GetMonsterState() & ( CGameEvent::DOOR_LEFT << Loop ) )
 		{
-			m_pWall[Loop].Render();
+			m_pDoor[Loop].Render();
 		}
 	}
 
@@ -519,6 +508,16 @@ VOID CMainScene::EventInitCharState( INT nEvent )
 		m_pCharactors[2].Set_Position( m_pGameEvent->GetCharPosition( 1, 2 ) );
 		m_pCharactors[3].Set_Position( m_pGameEvent->GetCharPosition( 1, 3 ) );
 		break;
+	case CGameEvent::GAME_END:
+		m_pCharactors[0].RepairCube();
+		m_pCharactors[1].RepairCube();
+		m_pCharactors[2].RepairCube();
+		m_pCharactors[3].RepairCube();
+		m_pCharactors[0].Set_Position( D3DXVECTOR3( 0.0f, 0.0f, 0.0f ) );
+		m_pCharactors[1].Set_Position( D3DXVECTOR3( 0.0f, 0.0f, 0.0f ) );
+		m_pCharactors[2].Set_Position( D3DXVECTOR3( 0.0f, 0.0f, 0.0f ) );
+		m_pCharactors[3].Set_Position( D3DXVECTOR3( 0.0f, 0.0f, 0.0f ) );
+		break;
 	default:
 		break;
 	}
@@ -526,10 +525,10 @@ VOID CMainScene::EventInitCharState( INT nEvent )
 
 VOID CMainScene::EventInitMonsterState( INT nEvent )
 {
-	for (int Loop = 0; Loop < 3; ++Loop )
+	for ( int Loop = CGameEvent::ENUM_DOOR_0; Loop < CGameEvent::ENUM_DOOR_END; ++Loop)
 	{
-		m_pWall[Loop].Set_Position( m_pGameEvent->GetNonePosition() );
-		m_pWall[Loop].SetActive( FALSE );
+		m_pDoor[Loop].Set_Position( m_pGameEvent->GetNonePosition() );
+		m_pDoor[Loop].SetActive( FALSE );
 	}
 
 	switch ( nEvent )
@@ -537,16 +536,18 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 	case CGameEvent::SCENE_TUTORIAL:
 		m_pGameEvent->SetMonstersState( CGameEvent::DOOR_LEFT | CGameEvent::DOOR_CENTER | CGameEvent::DOOR_RIGHT );
 		
+		for ( int Loop = CGameEvent::ENUM_DOOR_0; Loop < CGameEvent::ENUM_DOOR_END; ++Loop)
 		for (int Loop = 0; Loop < 3; ++Loop )
 		{
-			m_pWall[Loop].Set_Position( m_pGameEvent->GetWallPosition( Loop ) );
-			m_pWall[Loop].SetActive( TRUE );
+			m_pDoor[Loop].Set_Position( m_pGameEvent->GetWallPosition( Loop ) );
+			m_pDoor[Loop].SetActive( TRUE );
 		}
 		
 		break;
 	case CGameEvent::SCENE_BEAR:
 		m_pGameEvent->SetMonstersState( CGameEvent::BEAR | CGameEvent::PANDA );
-		for ( int Loop = 0; Loop < 3; ++Loop )
+
+		for ( int Loop = CGameEvent::ENUM_MONSTER_0; Loop < CGameEvent::ENUM_MONSTER_END; ++Loop)
 		{
 			if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 			{
@@ -554,6 +555,7 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 				m_pMonster[Loop]->Set_Angle( 0.0f );
 				m_pMonster[Loop]->ChangeAnimation( CMonster::ANIM_STAND );
 				m_pMonster[Loop]->EnableShadow( TRUE );
+				m_pMonster[Loop]->RepairCube();
 				if( CObjectManage::GetInstance()->IsHost() == TRUE )
 				{
 					m_pMonster[Loop]->GetFSM()->SetCurrentState( Seek::GetInstance() );
@@ -566,10 +568,15 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 				m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_PANDA + Loop, FALSE );
 			}
 		}
+
+		for ( int Loop = CGameEvent::ENUM_DOOR_0; Loop < CGameEvent::ENUM_DOOR_END; ++Loop)
+		{
+			m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, FALSE );
+		}
 		break;
 	case CGameEvent::SCENE_CLOWN:
 		m_pGameEvent->SetMonstersState( CGameEvent::CLOWN | 0x1F00 );
-		for ( int Loop = 0; Loop < 3; ++Loop )
+		for ( int Loop = CGameEvent::ENUM_MONSTER_0; Loop < CGameEvent::ENUM_MONSTER_END; ++Loop)
 		{
 			if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 			{
@@ -577,6 +584,7 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 				m_pMonster[Loop]->Set_Angle( 90.0f );
 				m_pMonster[Loop]->ChangeAnimation( CMonster::ANIM_STAND );
 				m_pMonster[Loop]->EnableShadow( TRUE );
+				m_pMonster[Loop]->RepairCube();
 				if( CObjectManage::GetInstance()->IsHost() == TRUE )
 				{
 					m_pMonster[Loop]->GetFSM()->SetCurrentState( Seek::GetInstance() );
@@ -590,13 +598,13 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 			}
 		}
 
-		for ( int Loop = 0; Loop < 5; ++Loop )
+		for ( int Loop = CGameEvent::ENUM_FAK_0; Loop < CGameEvent::ENUM_FAK_END; ++Loop)
 		{
 			if ( m_pGameEvent->GetMonsterState() & ( 0x0100 << Loop ) )
 			{
 				m_pFirstAidKit[Loop].Set_Position( m_pGameEvent->GetItemPosition( Loop ) );
 				m_pFirstAidKit[Loop].SetActive( TRUE );
-
+				m_pFirstAidKit[Loop].RepairCube();
 				m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, TRUE );
 			}
 			else
@@ -604,7 +612,23 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 				m_pMainGUI->SetMiniMapObjectVisible( MainGUI::MMP_FIRSTAIDKIT_0 + Loop, FALSE );
 			}
 		}
+		break;
+	case CGameEvent::GAME_END:
+		m_pGameEvent->SetMonstersState( CGameEvent::NONE );
+		m_pMonster[0]->Set_Pos( D3DXVECTOR3( -4.0f, 0.0f, 126.0f ) );
+		m_pMonster[0]->Set_Angle( 5.89f );
+		m_pMonster[0]->EnableShadow( FALSE );
+		m_pMonster[0]->RepairCube();
 
+		m_pMonster[1]->Set_Pos( D3DXVECTOR3( -38.0f, 0.0f, 93.0f ) );
+		m_pMonster[1]->Set_Angle( 4.949f );
+		m_pMonster[1]->EnableShadow( FALSE );
+		m_pMonster[1]->RepairCube();
+
+		m_pMonster[2]->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 88.0f ) );
+		m_pMonster[2]->Set_Angle( 2.49f );
+		m_pMonster[2]->EnableShadow( FALSE );
+		m_pMonster[2]->RepairCube();
 
 		break;
 	default:
@@ -614,8 +638,36 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 
 }
 
+VOID CMainScene::EventSceneTutorial( INT nEvent )
+{
+
+}
+
+VOID CMainScene::EventSceneBear( INT nEvent )
+{
+
+}
+
+VOID CMainScene::EventSceneClown( INT nEvent )
+{
+
+}
+
 VOID CMainScene::EventSwitch( INT nEvent )
 {
+	if (CGameEvent::GetInstance()->GetScene() == CGameEvent::SCENE_TUTORIAL )
+	{
+		EventSceneTutorial( nEvent );
+	}
+	else if (CGameEvent::GetInstance()->GetScene() == CGameEvent::SCENE_BEAR )
+	{
+		EventSceneBear( nEvent );
+	}
+	else if (CGameEvent::GetInstance()->GetScene() == CGameEvent::SCENE_CLOWN )
+	{
+		EventSceneClown( nEvent );
+	}
+
 	switch ( nEvent )
 	{
 	case CGameEvent::SCENE_TUTORIAL:
@@ -812,23 +864,39 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		DoorBreakNockdown();
 		EventStateNetwork( nEvent );
 		break;
+
+
+	/************************************************************************/
+	/*                                                                      */
+	/************************************************************************/
+	case CGameEvent::GAME_HEALING:
+		for ( INT Loop = 0; Loop < 5; ++Loop )
+		{
+			if ( CGameEvent::GetInstance()->GetMonsterIndex() & 0xFF00 )
+			{
+				CCharactor * pChar;
+				pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ] );
+				pChar->RepairCube();
+			}
+		}
+		break;
 	case CGameEvent::GAME_WIN_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_WIN_END \n" );
 		m_pGameEvent->ClearEvent();
 		GamePoint( nEvent );
 		break;
-	case CGameEvent::GAME_LOSE_END:
+	case CGameEvent::GAME_LOSE_END:		
 		m_pGameEvent->ClearEvent();
 		GamePoint( nEvent );
 		CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_LOSE_END \n" );
 		break;
 
-	case CGameEvent::SC_EVENT_COMBO_SLOT_STATE:
+	case CGameEvent::EVENT_COMBO_SLOTSTATE:
 		m_pEventGUICombo->CheckClientKindEvent( 
 			CGameEvent::GetInstance()->GetSlotNumber(), 
 			CGameEvent::GetInstance()->GetResult() );
 		break;
-	case CGameEvent::SC_EVENT_COMBO_RESULT:
+	case CGameEvent::EVENT_COMBO_RESULT:
 		m_pEventGUICombo->EventComboResult( CGameEvent::GetInstance()->GetResult() );
 		break;
 	default:
@@ -859,12 +927,14 @@ VOID CMainScene::GamePoint( INT nEvent )
 
 VOID CMainScene::GameEnd()
 {
-	CInput::GetInstance()->EnableInput( FALSE );
+	CInput::GetInstance()->EnableInput( TRUE );
 	m_scnNext	= IScene::SCENE_MENU;
 	m_scnState	= IScene::SCENE_END;
 
 	CNetwork::GetInstance()->Close();
 	CNetwork::DestoryInstance();
+
+	EventInitGameState( CGameEvent::GAME_END);
 }
 
 VOID CMainScene::EventStateNetwork( INT nEvent )
@@ -982,9 +1052,9 @@ VOID CMainScene::MonsterBreakNockdown()
 
 VOID CMainScene::DoorBreakNockdown()
 {
-	m_pWall[0].BreakNockdown();
-	m_pWall[1].BreakNockdown();
-	m_pWall[2].BreakNockdown();
+	m_pDoor[0].BreakNockdown();
+	m_pDoor[1].BreakNockdown();
+	m_pDoor[2].BreakNockdown();
 
 	CSound::GetInstance()->PlayEffect( 0 );
 }
