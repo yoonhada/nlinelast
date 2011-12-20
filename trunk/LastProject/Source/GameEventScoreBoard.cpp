@@ -253,7 +253,7 @@ VOID GameEventScoreBoard::Render()
 
 		DWORD dCurrentTime = timeGetTime();
 
-		if( dCurrentTime > m_dEndingBeginTime )
+		if( dCurrentTime > m_dEndingBeginTime + m_dEndingFrameSpeed )
 			m_dState = GES_GRAY;
 	}
 
