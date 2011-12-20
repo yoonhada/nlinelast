@@ -15,6 +15,7 @@ VOID LoadingScene::Initialize()
 
 	m_pClown		= NULL;
 	m_pPanda		= NULL;
+	m_pBrownBear	= NULL;
 }
 
 VOID LoadingScene::Release()
@@ -29,6 +30,11 @@ VOID LoadingScene::Release()
 	m_pPanda->Set_Angle( 0.0f );
 	m_pPanda->ChangeAnimation( CMonster::ANIM_STAND );
 	m_pPanda->EnableShadow( TRUE );
+
+	m_pBrownBear->Set_Pos( D3DXVECTOR3( 0, 0, 0 ) );
+	m_pBrownBear->Set_Angle( 0.0f );
+	m_pBrownBear->ChangeAnimation( CMonster::ANIM_STAND );
+	m_pBrownBear->EnableShadow( TRUE );
 
 	SAFE_DELETE( m_pLoadingGUI );
 
@@ -66,6 +72,14 @@ HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSpri
 	m_pPanda->Set_Angle( 5.44f );
 	m_pPanda->ChangeAnimation( CMonster::ANIM_LODING );
 	m_pPanda->EnableShadow( FALSE );
+
+	m_pBrownBear = CObjectManage::GetInstance()->Get_Bear();		// new CMonster;
+	m_pBrownBear->Create( _pd3dDevice, L"Data/CharData/11_16_Brown_Bear_v6" );
+	m_pBrownBear->Set_Pos( D3DXVECTOR3( -17.0f, 0.0f, 150.0f ) );
+	m_pBrownBear->Set_Angle( 5.90f );
+	m_pBrownBear->ChangeAnimation( CMonster::ANIM_LODING );
+	m_pBrownBear->EnableShadow( FALSE );
+
 	return S_OK;
 }
 
@@ -77,58 +91,66 @@ VOID LoadingScene::Update()
 	//m_pClown->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pPanda->Update();
 	//m_pPanda->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
+	m_pBrownBear->Update();
 
-	/*static D3DXVECTOR3 vecClown( 19.0f, 0.0f, 81.0f ), vecPanda( -17.0f, 0.0f, 117.0f );
-	static FLOAT		fClown = 2.49f, fPanda = 5.44f;
-	
-	CDebugConsole::GetInstance()->Messagef( L"Clown : %f, %f, %f, %f\n", vecClown.x, vecClown.y, vecClown.z, fClown );
-	CDebugConsole::GetInstance()->Messagef( L"Panda : %f, %f, %f, %f\n", vecPanda.x, vecPanda.y, vecPanda.z, fPanda );
+	//static D3DXVECTOR3 vecClown( 19.0f, 0.0f, 81.0f ), vecPanda( -17.0f, 0.0f, 117.0f ), vecBrownBear( -17.0f, 0.0f, 150.0f );
+	//static FLOAT		fClown = 2.49f, fPanda = 5.44f, fBrownBear = 5.9f;
+	//
+	//CDebugConsole::GetInstance()->Messagef( L"Clown : %f, %f, %f, %f\n", vecClown.x, vecClown.y, vecClown.z, fClown );
+	//CDebugConsole::GetInstance()->Messagef( L"Panda : %f, %f, %f, %f\n", vecPanda.x, vecPanda.y, vecPanda.z, fPanda );
+	//CDebugConsole::GetInstance()->Messagef( L"BrownBear : %f, %f, %f, %f\n", vecBrownBear.x, vecBrownBear.y, vecBrownBear.z, fBrownBear );
 
-	if( GetKeyState( '1' ) & 0x8000 )
-		vecClown.x += 1.0f;
-	if( GetKeyState( '2' ) & 0x8000 )
-		vecClown.x -= 1.0f;
-	if( GetKeyState( '3' ) & 0x8000 )
-		vecClown.y += 1.0f;
-	if( GetKeyState( '4' ) & 0x8000 )
-		vecClown.y -= 1.0f;
-	if( GetKeyState( '5' ) & 0x8000 )
-		vecClown.z += 1.0f;
-	if( GetKeyState( '6' ) & 0x8000 )
-		vecClown.z -= 1.0f;
-	if( GetKeyState( '7' ) & 0x8000 )
-		fClown += 0.05f;
-	if( GetKeyState( '8' ) & 0x8000 )
-		fClown -= 0.05f;
-	
+	//if( GetKeyState( 'A' ) & 0x8000 )
+	//	vecClown.x += 1.0f;
+	//if( GetKeyState( 'D' ) & 0x8000 )
+	//	vecClown.x -= 1.0f;
+	//if( GetKeyState( 'W' ) & 0x8000 )
+	//	vecClown.z += 1.0f;
+	//if( GetKeyState( 'S' ) & 0x8000 )
+	//	vecClown.z -= 1.0f;
+	//if( GetKeyState( 'Q' ) & 0x8000 )
+	//	fClown += 0.05f;
+	//if( GetKeyState( 'E' ) & 0x8000 )
+	//	fClown -= 0.05f;
 
-	if( GetKeyState( 'Q' ) & 0x8000 )
-		vecPanda.x += 1.0f;
-	if( GetKeyState( 'W' ) & 0x8000 )
-		vecPanda.x -= 1.0f;
-	if( GetKeyState( 'E' ) & 0x8000 )
-		vecPanda.y += 1.0f;
-	if( GetKeyState( 'R' ) & 0x8000 )
-		vecPanda.y -= 1.0f;
-	if( GetKeyState( 'T' ) & 0x8000 )
-		vecPanda.z += 1.0f;
-	if( GetKeyState( 'Y' ) & 0x8000 )
-		vecPanda.z -= 1.0f;
-	if( GetKeyState( 'U' ) & 0x8000 )
-		fPanda += 0.05f;
-	if( GetKeyState( 'I' ) & 0x8000 )
-		fPanda -= 0.05f;
+	//if( GetKeyState( 'H' ) & 0x8000 )
+	//	vecPanda.x += 1.0f;
+	//if( GetKeyState( 'F' ) & 0x8000 )
+	//	vecPanda.x -= 1.0f;
+	//if( GetKeyState( 'T' ) & 0x8000 )
+	//	vecPanda.z += 1.0f;
+	//if( GetKeyState( 'G' ) & 0x8000 )
+	//	vecPanda.z -= 1.0f;
+	//if( GetKeyState( 'R' ) & 0x8000 )
+	//	fPanda += 0.05f;
+	//if( GetKeyState( 'Y' ) & 0x8000 )
+	//	fPanda -= 0.05f;
 
-	m_pClown->Set_Pos( vecClown );
-	m_pPanda->Set_Pos( vecPanda );
+	//if( GetKeyState( 'L' ) & 0x8000 )
+	//	vecBrownBear.x += 1.0f;
+	//if( GetKeyState( 'J' ) & 0x8000 )
+	//	vecBrownBear.x -= 1.0f;
+	//if( GetKeyState( 'I' ) & 0x8000 )
+	//	vecBrownBear.z += 1.0f;
+	//if( GetKeyState( 'K' ) & 0x8000 )
+	//	vecBrownBear.z -= 1.0f;
+	//if( GetKeyState( 'O' ) & 0x8000 )
+	//	fBrownBear += 0.05f;
+	//if( GetKeyState( 'U' ) & 0x8000 )
+	//	fBrownBear -= 0.05f;
 
-	m_pClown->Set_Angle( fClown );
-	m_pPanda->Set_Angle( fPanda );*/
+	//m_pClown->Set_Pos( vecClown );
+	//m_pPanda->Set_Pos( vecPanda );
+	//m_pBrownBear->Set_Pos( vecBrownBear );
+
+	//m_pClown->Set_Angle( fClown );
+	//m_pPanda->Set_Angle( fPanda );
+	//m_pBrownBear->Set_Angle( fBrownBear );
 }
 
 VOID LoadingScene::Render()
 {
-	static FLOAT fX = 10.0f, fY = 48.0f, fZ = 224.0f;
+	static FLOAT fX = 10.0f, fY = 55.0f, fZ = 224.0f;
 
 	/*if( GetKeyState( 'Z' ) & 0x8000 )
 		fX += 1.0f;
@@ -156,6 +178,7 @@ VOID LoadingScene::Render()
 	//	Render Monster
 	m_pClown->Render();
 	m_pPanda->Render();
+	m_pBrownBear->Render();
 
 	m_pLight->DisableLight();
 	

@@ -16,6 +16,7 @@ private:
 	VOID		Initialize();
 	VOID		Release();
 
+	VOID		CreateEndingImage();
 	VOID		CreateSceneImage();
 	VOID		CreateBackgroundImage();
 	VOID		CreateIdentifierImage();
@@ -29,7 +30,7 @@ private:
 	VOID		OnUp( INT _iX, INT _iY );
 
 public:
-	enum { GES_NORMAL = 100, GES_GRAY, GES_HIDDEN };
+	enum { GES_NORMAL = 100, GES_GRAY, GES_ENDING, GES_HIDDEN };
 	enum { GES_DADDY = 0, GES_MOM, GES_SON, GES_DAUGHTER };
 
 	GameEventScoreBoard( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSprite, HWND _hWnd ) 
@@ -89,6 +90,10 @@ private:
 	HWND				m_hWnd;
 
 	DATAVECTOR			m_vecData;
+
+	IMAGE2D				m_img2DEnding;
+	DWORD				m_dEndingBeginTime;
+	DWORD				m_dEndingFrameSpeed;
 
 	IMAGE2D				m_img2DScene;	//	È¸»ö
 
