@@ -31,45 +31,46 @@ public:
 
 	BOOL Initialize();
 	VOID Clear();
-	BOOL StartServer( WORD Port );
+	BOOL StartServer( WORD a_wPort );
 	VOID Stop();
 
 	VOID UpdateFrame();
 
-	VOID OnAccept( SOCKET hSocket );
+	VOID OnAccept( SOCKET a_hSocket );
 	VOID OnServerClose();
-	VOID OnClientClose( CNTClient* pClient );
+	VOID OnClientClose( CNTClient* a_pClient );
 
-	VOID CS_LOGON( CNTClient* pClient, CPacket& pk );
-	VOID CS_READY( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_GAME_START( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_LODING_COMPLETE( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_CLIENT_DISCONNECT( CNTClient* pClient, CPacket& a_pk );
+	VOID CS_LOGON( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_READY( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_GAME_START( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_LODING_COMPLETE( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_CLIENT_DISCONNECT( CNTClient* a_pClient, CPacket& a_pk );
 
-	VOID CS_EVENT_STATE( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_EVENT_COMBO_INFO( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_EVENT_COMBO_SLOT_STATE( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_EVENT_COMBO_RESULT( CNTClient* pClient, CPacket& a_pk );
+	VOID CS_EVENT_STATE( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_EVENT_COMBO_INFO( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_EVENT_COMBO_SLOT_STATE( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_EVENT_COMBO_RESULT( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_EVENT_HEAL( CNTClient* a_pClient, CPacket& a_pk );
 
-	VOID CS_CHAT( CNTClient* pClient, CPacket& pk );
-	VOID CS_PLAYER_MOVE( CNTClient* pClient, CPacket& pk );
-	VOID CS_MONSTER_MOVE( CNTClient* pClient, CPacket& pk );
-	VOID CS_UTOM_ATTACK( CNTClient* pClient, CPacket& pk );
-	VOID CS_MTOU_ATTACK( CNTClient* pClient, CPacket& pk );
-	VOID CS_EVENT_ATTACK( CNTClient* pClient, CPacket& a_pk );
-	VOID CS_PLAYER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk );
-	VOID CS_MONSTER_ATTACK_ANIMATION( CNTClient* pClient, CPacket& pk );
-	VOID CS_MONSTER_ATTACK_ANIMATION2( CNTClient* pClient, CPacket& pk );
-	VOID CS_MONSTER_LockOn( CNTClient* pClient, CPacket& pk );
+	VOID CS_CHAT( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_PLAYER_MOVE( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_MONSTER_MOVE( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_UTOM_ATTACK( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_MTOU_ATTACK( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_EVENT_ATTACK( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_PLAYER_ATTACK_ANIMATION( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_MONSTER_ATTACK_ANIMATION( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_MONSTER_ATTACK_ANIMATION2( CNTClient* a_pClient, CPacket& a_pk );
+	VOID CS_MONSTER_LockOn( CNTClient* a_pClient, CPacket& a_pk );
 
-	VOID CS_GAME_RESULT( CNTClient* pClient, CPacket& pk );
+	VOID CS_GAME_RESULT( CNTClient* a_pClient, CPacket& a_pk );
 
-	VOID SC_INIT( CNTClient* pClient );
-	VOID SC_CLIENT_DISCONNECT( CNTClient* pClient );
+	VOID SC_INIT( CNTClient* a_pClient );
+	VOID SC_CLIENT_DISCONNECT( CNTClient* a_pClient );
 
 	VOID SendToClient( CNTClient* a_pClient, CPacket& a_pk );
 
-	VOID ProcessPacket( CNTClient* pClient, CPacket& pk );
+	VOID ProcessPacket( CNTClient* a_pClient, CPacket& a_pk );
 
 
 	static UINT WINAPI AcceptProc( VOID* p );
