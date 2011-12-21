@@ -345,6 +345,11 @@ VOID CNetwork::SC_EVENT_HEAL( CPacket& a_pk )
 
 	a_pk.Read( &wClientNumber );
 
+	CCharactor * pChar;
+	
+	pChar = &( CObjectManage::GetInstance()->Get_Charactor()[ CObjectManage::GetInstance()->Get_CharTable( wClientNumber ) ] );
+	pChar->RepairCube();
+
 }
 
 

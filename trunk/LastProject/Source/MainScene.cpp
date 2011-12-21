@@ -137,6 +137,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
+		CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_TUTORIAL );
 		CGameEvent::GetInstance()->SetTutorial( CGameEvent::SCENE_TUTORIAL );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_TUTORIAL, 0.01f );
 	}
@@ -258,11 +259,6 @@ VOID CMainScene::CheatKeys()
 			m_pGameEvent->ClearEvent();
 			m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.01f);
 		}
-		if( CInput::GetInstance()->Get_FunKey( 2 ) )
-		{
-			m_pGameEvent->ClearEvent();
-			m_pGameEvent->AddEvent( CGameEvent::EVENT_COMBO, 0.01f);
-		}
 
 		if( CInput::GetInstance()->Get_FunKey( 5 ) )
 		{
@@ -271,7 +267,6 @@ VOID CMainScene::CheatKeys()
 		}
 		if( CInput::GetInstance()->Get_FunKey( 6 ) )
 		{
-
 			CGameEvent::GetInstance()->SetTutorial( CGameEvent::TUTORIAL_ATACK );
 			m_pGameEvent->ClearEvent();
 			m_pGameEventTutorialManager->EndEvent();
@@ -291,6 +286,7 @@ VOID CMainScene::CheatKeys()
 	{
 		EventComboEnd();
 		m_pGameEvent->ClearEvent();
+		CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_BEAR );
 		m_pGameEvent->AddEvent( CGameEvent::SCENE_BEAR, 0.01f);
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
 	}
@@ -298,6 +294,7 @@ VOID CMainScene::CheatKeys()
 	{
 		EventComboEnd();
 		m_pGameEvent->ClearEvent();
+		CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_CLOWN );
 		m_pGameEvent->AddEvent( CGameEvent::SCENE_CLOWN, 0.01f);
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 30.0f );
 	}	
@@ -688,8 +685,10 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 			CGameEvent::GetInstance()->SetTutorial( nEvent );
 			TutorialCombo();
 		}		
-		if ( CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_COMBO )
-		{			
+		if ( CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_COMBO ||
+			 CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_COMBO_FAIL )
+		{
+			CGameEvent::GetInstance()->SetTutorial( nEvent );
 			EventCombo();			
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
@@ -712,6 +711,7 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 			}
 		}
 		break;
+	case CGameEvent::EVENT_COMBO_SUCCESS:
 	case CGameEvent::TUTORIAL_COMBO_SUCCESS:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO_SUCCESS \n" );
 		if ( CGameEvent::GetInstance()->GetTutorial( ) == CGameEvent::TUTORIAL_COMBO )
@@ -723,6 +723,7 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
+				CGameEvent::GetInstance()->ClearEvent();
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_END, 3.0f );
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_TUTORIAL_END, 4.0f );
 			}
@@ -743,10 +744,19 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 		//EventInitGameState( nEvent );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
+			CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_BEAR );
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_BEAR, 0.01f );
 		}
 		break;
-		//////////////////////////////////////////////////////////////////////////
+	default:
+		break;
+	}
+}
+
+VOID CMainScene::EventSceneBear( INT nEvent )
+{
+	switch ( nEvent )
+	{
 	case CGameEvent::SCENE_BEAR:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::SCENE_BEAR \n" );
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
@@ -854,7 +864,7 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 				CCharactor * pChar;
 				pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ] );
 				pChar->RepairCube();
-				//CNetwork::GetInstance()->CS_EVENT_HEALING( m_nClientID );
+				CNetwork::GetInstance()->CS_EVENT_HEAL( m_nClientID );
 			}
 		}
 		break;
@@ -877,14 +887,7 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 	case CGameEvent::EVENT_COMBO_RESULT:
 		m_pEventGUICombo->EventComboResult( CGameEvent::GetInstance()->GetResult() );
 		break;
-	default:
-		break;
-	}
-}
-
-VOID CMainScene::EventSceneBear( INT nEvent )
-{
-
+		}
 }
 
 VOID CMainScene::EventSceneClown( INT nEvent )
