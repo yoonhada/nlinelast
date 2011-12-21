@@ -620,15 +620,21 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 		m_pMonster[0]->EnableShadow( FALSE );
 		m_pMonster[0]->RepairCube();
 
+		m_pMonster[0]->GetFSM()->ChangeState( NULL );
+
 		m_pMonster[1]->Set_Pos( D3DXVECTOR3( -38.0f, 0.0f, 93.0f ) );
 		m_pMonster[1]->Set_Angle( 4.949f );
 		m_pMonster[1]->EnableShadow( FALSE );
 		m_pMonster[1]->RepairCube();
 
+		m_pMonster[1]->GetFSM()->ChangeState( NULL );
+
 		m_pMonster[2]->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 88.0f ) );
 		m_pMonster[2]->Set_Angle( 2.49f );
 		m_pMonster[2]->EnableShadow( FALSE );
 		m_pMonster[2]->RepairCube();
+
+		m_pMonster[2]->GetFSM()->ChangeState( NULL );
 
 		break;
 	default:
@@ -659,7 +665,6 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_ATACK, 3.0f );
 		}
 		break;
-
 	case CGameEvent::TUTORIAL_ATACK:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK \n" );
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
@@ -849,6 +854,7 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 				CCharactor * pChar;
 				pChar = &( m_pCharactors[ CObjectManage::GetInstance()->Get_CharTable( m_nClientID ) ] );
 				pChar->RepairCube();
+				//CNetwork::GetInstance()->CS_EVENT_HEALING( m_nClientID );
 			}
 		}
 		break;
