@@ -64,7 +64,7 @@ VOID StoryGUI::CreateButton()
 {
 	GUIBase::IMAGEPARAM imgNormal, imgHot, imgDown, imgDisable;
 
-	//	Background Next Button
+	//	Background Skip Button
 	FLOAT fX		= 1150.0f;
 	FLOAT fY		= 900.0f;
 	FLOAT fWidth	= 121.0f;
@@ -76,6 +76,24 @@ VOID StoryGUI::CreateButton()
 	m_pGUIBase->AddFileName( 0, imgDisable, L"Img\\StoryScene\\Skip_Down.png" );
 
 	m_pGUIBtnManager->Create( STORY_SKIP, 0, fX, fY, fWidth, fHeight, imgNormal, imgHot, imgDown, imgDisable );
+
+	//	Background Next Button
+	D3DVIEWPORT9 Vp;
+	m_pD3dDevice->GetViewport( &Vp );
+
+	fX		= 0.0f;
+	fY		= 0.0f;
+	fWidth	= static_cast<FLOAT>( Vp.Width );
+	fHeight	= static_cast<FLOAT>( Vp.Height ) - 114.0f;
+
+	GUIBase::IMAGEPARAM imgParamNextNormal, imgParamNextHot, imgParamNextDown, imgParamNextDIsable;
+
+	m_pGUIBase->AddFileName( 0, imgParamNextNormal, L"Img\\StoryScene\\Next.png" );
+	m_pGUIBase->AddFileName( 0, imgParamNextHot, L"Img\\StoryScene\\Next.png" );
+	m_pGUIBase->AddFileName( 0, imgParamNextDown, L"Img\\StoryScene\\Next.png" );
+	m_pGUIBase->AddFileName( 0, imgParamNextDIsable, L"Img\\StoryScene\\Next.png" );
+
+	m_pGUIBtnManager->Create( STORY_NEXT, 1, fX, fY, fWidth, fHeight, imgParamNextNormal, imgParamNextHot, imgParamNextDown, imgParamNextDIsable );
 }
 
 VOID StoryGUI::Create()
@@ -139,10 +157,6 @@ VOID StoryGUI::OnMove( INT x, INT y )
 VOID StoryGUI::OnUp( INT x, INT y )
 {
 	m_pGUIBtnManager->OnUp( x, y );
-
-	m_bEndAnimationImage = m_pGUIBackground->NextAnimation();
-
-	CSound::GetInstance()->PlayEffect( CSound::STROY_STORY1 + m_pGUIBackground->GetCurrentAnimation() - 1 );
 }
 
 VOID StoryGUI::Command( DWORD& _dOut )
@@ -153,4 +167,11 @@ VOID StoryGUI::Command( DWORD& _dOut )
 BOOL StoryGUI::IsEndAnimationImage()
 {
 	return m_bEndAnimationImage;
+}
+
+VOID StoryGUI::NextBackgroundImage()
+{
+	m_bEndAnimationImage = m_pGUIBackground->NextAnimation();
+
+	CSound::GetInstance()->PlayEffect( CSound::STROY_STORY1 + m_pGUIBackground->GetCurrentAnimation() - 1 );
 }

@@ -53,6 +53,11 @@ VOID GUIEdit::Create( DWORD _dID, FLOAT _fX, FLOAT _fY, FLOAT _fWidth, FLOAT _fH
 	// Init ID
 	m_dID = _dID;
 
+	m_fX		= _fX;
+	m_fY		= _fY;
+	m_fWidth	= _fWidth;
+	m_fHeight	= _fHeight;
+
 	//	Set Font X, Y
 	m_iFontX		= static_cast<INT>( _fX + ( m_iFontWidth ) * 0.5f );
 	m_iFontY		= static_cast<INT>( _fY + ( _fHeight - m_iFontHeight ) * 0.5f );
@@ -160,8 +165,11 @@ VOID GUIEdit::EnableFocus( BOOL _bEnable )
 		FLOAT fFontY		= static_cast<FLOAT>( m_iFontY );
 		FLOAT fFontWidth	= static_cast<FLOAT>( m_iFontWidth );
 		FLOAT fFontHeight	= static_cast<FLOAT>( m_iFontHeight );
+
+		fFontX	= m_fX + ( fFontWidth ) * 0.5f;
+		fFontY	= m_fY + ( m_fHeight - fFontHeight ) * 0.5f;
 	
-		m_pGUICaret->ConnectText( m_pcText, fFontX, fFontY, fFontWidth, fFontHeight );
+		m_pGUICaret->ConnectText( m_pcText, fFontX, fFontY, fFontWidth, fFontHeight+ 5.0f );
 	}
 	else
 	{
@@ -176,6 +184,17 @@ VOID GUIEdit::SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight )
 	_tcscpy_s( m_aFaceName, _pFaceName );
 	m_iFontWidth	= _iWidth;
 	m_iFontHeight	= _iHeight;
+
+	//	Set Font X, Y
+	m_iFontX		= static_cast<INT>( m_fX + ( m_iFontWidth ) * 0.5f );
+	m_iFontY		= static_cast<INT>( m_fY + ( m_fHeight - m_iFontHeight ) * 0.5f );
+	
+	// Create Edit
+	SetRect(	&m_rtText,
+				m_iFontX,
+				m_iFontY,
+				static_cast<INT>( m_fX + m_fWidth ),
+				static_cast<INT>( m_fY + m_fHeight ) );
 }
 
 VOID GUIEdit::SetText( LPWSTR _pcText )

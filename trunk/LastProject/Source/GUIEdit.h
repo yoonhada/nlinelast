@@ -62,6 +62,8 @@ private:
 	RECT			m_rtEdit;
 	IMAGE3D			m_img3DEdit;
 	
+	FLOAT			m_fX,		m_fY;
+	FLOAT			m_fWidth,	m_fHeight;
 	//	Font Info
 	TCHAR			m_aFaceName[ 1024 ];
 	INT				m_iFontX, m_iFontY;

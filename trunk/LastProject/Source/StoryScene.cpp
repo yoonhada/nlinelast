@@ -36,6 +36,9 @@ VOID StoryScene::Update()
 	case STORY_SKIP:
 		m_scnState = IScene::SCENE_END;
 		break;
+	case STORY_NEXT:
+		m_pStoryGUI->NextBackgroundImage();
+		break;
 	}
 	if( m_pStoryGUI->IsEndAnimationImage() )
 		m_scnState = IScene::SCENE_END;

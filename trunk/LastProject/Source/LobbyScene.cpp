@@ -247,7 +247,7 @@ VOID LobbyScene::Render()
 
 	for( INT i=0 ; i<4 ; i++ )
 		m_aData[ i ].pCharacter->Render();
-	
+
 	m_pLight->DisableLight();
 	m_pLobbyGUI->Render();
 	m_pOptionScene->Render();

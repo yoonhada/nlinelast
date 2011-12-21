@@ -64,6 +64,7 @@ HRESULT CSceneManage::Create( LPDIRECT3DDEVICE9 a_pD3dDevice )
 	m_pScene->Create( m_pD3dDevice, m_pSprite, m_hWnd );
 	m_pLoadingScene->Create( m_pD3dDevice, m_pSprite, m_hWnd );
 
+	m_pLoadingScene->SelectScene( IScene::SCENE_LOGO );
 	//m_pScene = m_pLoadingScene;
 
 	return S_OK;
@@ -158,6 +159,7 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 		break;
 	}
 
+	m_pLoadingScene->SelectScene( _scnNext );
 	//m_pNextScene	= m_pScene;
 	m_pScene		= m_pLoadingScene;
 
