@@ -1112,6 +1112,8 @@ VOID CMainScene::MonsterBreakNockdown()
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::GAME_WIN_END, 5.0f );
+
+				CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DEATH );
 			}			
 		}
 	}

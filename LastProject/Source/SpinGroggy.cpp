@@ -28,11 +28,20 @@ VOID SpinGroggy::Enter( CMonster* a_pMonster )
 
 VOID SpinGroggy::Execute( CMonster* a_pMonster )
 {
+	static FLOAT fTime = 0.0f;
+	fTime += CFrequency::GetInstance()->getFrametime();
+	if( fTime >= 1.2f )
+	{
+		fTime = 0.0f;
+
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DOWN );
+	}
+
 	a_pMonster->Set_UpdateTime();
 
 	// 그로기 상태가 끝났으면 다시 탐색 상태로
 	FLOAT t = a_pMonster->Get_Time();
-	if( t >= 4.0f )
+	if( t >= 2.0f )
 	{
 		a_pMonster->Set_ClearTime();
 
@@ -45,8 +54,6 @@ VOID SpinGroggy::Execute( CMonster* a_pMonster )
 		{
 			a_pMonster->GetFSM()->ChangeState( NULL );
 		}
-
-		CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DOWN );
 	}
 }
 
