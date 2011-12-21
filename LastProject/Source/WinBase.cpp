@@ -193,14 +193,14 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	switch (message) 
 	{
 	case WM_CREATE:
-		ZeroMemory(&dm,sizeof(DEVMODE));
+		/*ZeroMemory(&dm,sizeof(DEVMODE));
 		dm.dmSize		= sizeof(DEVMODE);
 		dm.dmFields		= DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 		dm.dmBitsPerPel	= 16;
 		dm.dmPelsWidth	= 1280;
 		dm.dmPelsHeight = 1024;
 		 if(ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
-			ChangeDisplaySettings(&dm, 0);
+			ChangeDisplaySettings(&dm, 0);*/
 
 		GUIFont::GetInstance().SetHWND( hWnd );
 		return 0;
@@ -216,7 +216,7 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		return 0;
 
 	case WM_DESTROY:
-		ChangeDisplaySettings(NULL, 0);
+		/*ChangeDisplaySettings(NULL, 0);*/
 		CNetwork::GetInstance()->CS_CLIENT_DISCONNECT();
 		PostQuitMessage(0);
 		CWinBase::DestoryInstance();
