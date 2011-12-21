@@ -336,7 +336,7 @@ VOID GameEventScoreBoard::AddData( DWORD _dID, DWORD _dIdentifier )
 
 	INT iDataSize = m_vecData.size();
 	FLOAT fGapX	= 100.0f;
-	FLOAT fGapY = 50.0f + 120.0f * static_cast<FLOAT>( iDataSize + 1 );
+	FLOAT fGapY = 50.0f + 100.0f * static_cast<FLOAT>( iDataSize + 1 );
 	pData->vecTranslate = D3DXVECTOR3( m_fBgdX + fGapX, m_fBgdY + fGapY, 0.0f );
 	
 	m_vecData.push_back( pData );
