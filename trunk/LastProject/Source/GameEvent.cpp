@@ -31,7 +31,7 @@ CGameEvent::CGameEvent( )
 
 	m_vMonsterPosition[0] = D3DXVECTOR3( 120.0f, 0.0f, 180.0f);
 	m_vMonsterPosition[1] = D3DXVECTOR3( 170.0f, 0.0f, 180.0f);
-	m_vMonsterPosition[2] = D3DXVECTOR3( -100.0f, 0.0f, 623.0f);
+	m_vMonsterPosition[2] = D3DXVECTOR3( -100.0f, 0.0f, 680.0f);
 
 	m_vWallPosition[0] = D3DXVECTOR3( 183.4534f, 0.0f, -202.7f );
 	m_vWallPosition[1] = D3DXVECTOR3( 241.4534f, 0.0f, -202.7f );

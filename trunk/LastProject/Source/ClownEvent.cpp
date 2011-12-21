@@ -15,7 +15,6 @@ ClownEvent* ClownEvent::GetInstance()
 
 VOID ClownEvent::Enter( CMonster* a_pMonster )
 {
-	// Spin 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_EVENT_CLOWN );
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"ClownEvent : ANIM_EVENT_CLOWN \n" );
