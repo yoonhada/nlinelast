@@ -386,7 +386,7 @@ VOID CMainScene::Update()
 
 	//	Chatting Massage
 	INT iChar = pOM->Get_CharTable( pOM->Get_ClientNumber() );
-
+/*
 	WCHAR szName[16] = { 0, };
 	if( iChar == 0 )
 	{
@@ -404,14 +404,14 @@ VOID CMainScene::Update()
 	{
 		lstrcpy( szName, L"µþ: " );
 	}
-
+*/
 	WCHAR szStr[ 256 ] = { 0, };
 	WCHAR szChat[ 512 ] = { 0, };
 	if( m_pMainGUI->TakeChattingMassage( szStr ) )
 	{
-		lstrcpy( szChat, szName );
-		lstrcat( szChat, szStr );
-		CNetwork::GetInstance()->CS_CHAT( szChat );
+//		lstrcpy( szChat, szName );
+//		lstrcat( szChat, szStr );
+		CNetwork::GetInstance()->CS_CHAT( szStr );
 	}
 }
 
