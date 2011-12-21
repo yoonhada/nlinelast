@@ -26,7 +26,7 @@ HRESULT CWinBase::Create()
 	m_pDX9 = new CDirectX9;
 	CSceneManage::GetInstance();
 	CObjectManage::GetInstance();
-	CDebugConsole::GetInstance();
+	//CDebugConsole::GetInstance();
 	//CDebugConsole::GetInstance()->SetPosition( CDebugConsole::CSL_TR, TRUE );
 	CFrequency::GetInstance();
 	//CTextureManage::GetInstance();
@@ -53,7 +53,7 @@ HRESULT CWinBase::Release()
 	CMatrices::DestoryInstance();
 	CSceneManage::DestoryInstance();
 	CObjectManage::DestoryInstance();
-	CDebugConsole::DestoryInstance();
+	//CDebugConsole::DestoryInstance();
 	CFrequency::DestoryInstance();
 	//CTextureManage::DestoryInstance();
 	CInput::DestoryInstance();
