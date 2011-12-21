@@ -691,15 +691,15 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 
 		if ( CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_ATACK )
 		{
-			CGameEvent::GetInstance()->SetTutorial( nEvent );
+			CGameEvent::GetInstance()->SetTutorial( CGameEvent::TUTORIAL_COMBO );
 			TutorialCombo();
 		}		
 		if ( CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_COMBO ||
 			 CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_COMBO_FAIL )
 		{
-			CGameEvent::GetInstance()->SetTutorial( nEvent );
+			CGameEvent::GetInstance()->SetTutorial( CGameEvent::TUTORIAL_COMBO );
 			EventCombo();			
-			EventStateNetwork( nEvent );
+			EventStateNetwork( CGameEvent::TUTORIAL_COMBO );
 
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
