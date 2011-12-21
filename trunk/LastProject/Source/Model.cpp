@@ -101,7 +101,7 @@ VOID CModel::CreateRandom( CCharCube* a_pCube,
 {
 
 	INT nMax = 0;
-	DWORD dwColor = 0xFF000000;
+	DWORD dwColor = 0xFFFFFFFF;
 	DWORD dwOutLine1 = 0xFF0000FF;
 	DWORD dwOutLine2 = 0xFF000000;
 	CQube * pQube = NULL;
