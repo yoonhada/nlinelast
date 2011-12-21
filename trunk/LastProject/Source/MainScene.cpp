@@ -405,14 +405,16 @@ VOID CMainScene::Update()
 		lstrcpy( szName, L"µþ: " );
 	}
 */
+/*
 	WCHAR szStr[ 256 ] = { 0, };
-//	WCHAR szChat[ 512 ] = { 0, };
+	WCHAR szChat[ 512 ] = { 0, };
 	if( m_pMainGUI->TakeChattingMassage( szStr ) )
 	{
-//		lstrcpy( szChat, szName );
-//		lstrcat( szChat, szStr );
+		lstrcpy( szChat, szName );
+		lstrcat( szChat, szStr );
 		CNetwork::GetInstance()->CS_CHAT( szStr );
 	}
+*/
 }
 
 VOID	CMainScene::Render()
