@@ -19,7 +19,7 @@ VOID SpinGroggy::Enter( CMonster* a_pMonster )
 	// Spin 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_SPIN_GROGGY );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Groggy : ANIM_SPIN_GROGGY \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Groggy : ANIM_SPIN_GROGGY \n" );
 #endif
 
 	CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DOWN );

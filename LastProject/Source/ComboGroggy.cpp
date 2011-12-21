@@ -19,7 +19,7 @@ VOID ComboGroggy::Enter( CMonster* a_pMonster )
 	// Spin 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_COMBO_GROGGY );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"ComboGroggy : ANIM_COMBO_GROGGY \n" );
+	////CDebugConsole::GetInstance()->Messagef( L"ComboGroggy : ANIM_COMBO_GROGGY \n" );
 #endif
 }
 

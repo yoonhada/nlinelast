@@ -428,7 +428,7 @@ HRESULT GUIBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppOutTexture, LPCWSTR
 					NULL,					//	저장하는 256 색 팔레트를 나타내는 PALETTEENTRY 구조체의 포인터
 					&(*_ppOutTexture) ) ) )	//	생성된 큐브 텍스처 개체를 나타내는 IDirect3DTexture9 인터페이스의 포인터 주소
 	{
-		CDebugConsole::GetInstance()->Messagef( L"%s\n", _FileName );
+		////CDebugConsole::GetInstance()->Messagef( L"%s\n", _FileName );
 		MessageBox( NULL, L"LoadTextureFromFile() Failed.", NULL, MB_OK );
 		return E_FAIL;
 	}

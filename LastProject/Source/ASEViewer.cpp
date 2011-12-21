@@ -61,7 +61,7 @@ VOID ASEViewer::InitASE( LPWSTR _ASEFileName )
 
 	for( INT i=0 ; i<m_iNumASEData ; i++ )
 	{
-		//CDebugConsole::GetInstance()->Messagef( L"%d\n", i );
+		////CDebugConsole::GetInstance()->Messagef( L"%d\n", i );
 		CreateDataFromASE( i );
 	}
 }

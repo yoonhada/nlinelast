@@ -94,8 +94,8 @@ BOOL OctTree::SubDivide( INT _iLevel )
 		AREA	ChildArea[ 8 ];
 		SetChildArea( ChildArea );
 
-		/*//CDebugConsole::GetInstance()->Messagef( L"[ Parent ] Min x : %f y : %f z : %f\n", m_Area.vMin.x, m_Area.vMin.y, m_Area.vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ Parent ] Max x : %f y : %f z : %f\n", m_Area.vMax.x, m_Area.vMax.y, m_Area.vMax.z );*/
+		/*////CDebugConsole::GetInstance()->Messagef( L"[ Parent ] Min x : %f y : %f z : %f\n", m_Area.vMin.x, m_Area.vMin.y, m_Area.vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ Parent ] Max x : %f y : %f z : %f\n", m_Area.vMax.x, m_Area.vMax.y, m_Area.vMax.z );*/
 		
 		//	Up
 		m_pChild[ LUF ] = AddChild( ChildArea[ LUF ].vMin, ChildArea[ LUF ].vMax );
@@ -103,17 +103,17 @@ BOOL OctTree::SubDivide( INT _iLevel )
 		m_pChild[ RUF ] = AddChild( ChildArea[ RUF ].vMin, ChildArea[ RUF ].vMax );
 		m_pChild[ RUB ] = AddChild( ChildArea[ RUB ].vMin, ChildArea[ RUB ].vMax );
 
-		/*//CDebugConsole::GetInstance()->Messagef( L"[ LUF ] Min x : %f y : %f z : %f\n", ChildArea[ LUF ].vMin.x, ChildArea[ LUF ].vMin.y, ChildArea[ LUF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LUF ] Max x : %f y : %f z : %f\n", ChildArea[ LUF ].vMax.x, ChildArea[ LUF ].vMax.y, ChildArea[ LUF ].vMax.z );
+		/*////CDebugConsole::GetInstance()->Messagef( L"[ LUF ] Min x : %f y : %f z : %f\n", ChildArea[ LUF ].vMin.x, ChildArea[ LUF ].vMin.y, ChildArea[ LUF ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ LUF ] Max x : %f y : %f z : %f\n", ChildArea[ LUF ].vMax.x, ChildArea[ LUF ].vMax.y, ChildArea[ LUF ].vMax.z );
 
-		//CDebugConsole::GetInstance()->Messagef( L"[ LUB ] Min x : %f y : %f z : %f\n", ChildArea[ LUB ].vMin.x, ChildArea[ LUB ].vMin.y, ChildArea[ LUB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LUB ] Max x : %f y : %f z : %f\n", ChildArea[ LUB ].vMax.x, ChildArea[ LUB ].vMax.y, ChildArea[ LUB ].vMax.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ LUB ] Min x : %f y : %f z : %f\n", ChildArea[ LUB ].vMin.x, ChildArea[ LUB ].vMin.y, ChildArea[ LUB ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ LUB ] Max x : %f y : %f z : %f\n", ChildArea[ LUB ].vMax.x, ChildArea[ LUB ].vMax.y, ChildArea[ LUB ].vMax.z );
 
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUF ] Min x : %f y : %f z : %f\n", ChildArea[ RUF ].vMin.x, ChildArea[ RUF ].vMin.y, ChildArea[ RUF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUF ] Max x : %f y : %f z : %f\n", ChildArea[ RUF ].vMax.x, ChildArea[ RUF ].vMax.y, ChildArea[ RUF ].vMax.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ RUF ] Min x : %f y : %f z : %f\n", ChildArea[ RUF ].vMin.x, ChildArea[ RUF ].vMin.y, ChildArea[ RUF ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ RUF ] Max x : %f y : %f z : %f\n", ChildArea[ RUF ].vMax.x, ChildArea[ RUF ].vMax.y, ChildArea[ RUF ].vMax.z );
 
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUB ] Min x : %f y : %f z : %f\n", ChildArea[ RUB ].vMin.x, ChildArea[ RUB ].vMin.y, ChildArea[ RUB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RUB ] Max x : %f y : %f z : %f\n", ChildArea[ RUB ].vMax.x, ChildArea[ RUB ].vMax.y, ChildArea[ RUB ].vMax.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ RUB ] Min x : %f y : %f z : %f\n", ChildArea[ RUB ].vMin.x, ChildArea[ RUB ].vMin.y, ChildArea[ RUB ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ RUB ] Max x : %f y : %f z : %f\n", ChildArea[ RUB ].vMax.x, ChildArea[ RUB ].vMax.y, ChildArea[ RUB ].vMax.z );
 		*/
 
 		//	Down
@@ -122,17 +122,17 @@ BOOL OctTree::SubDivide( INT _iLevel )
 		m_pChild[ RDF ] = AddChild( ChildArea[ RDF ].vMin, ChildArea[ RDF ].vMax );
 		m_pChild[ RDB ] = AddChild( ChildArea[ RDB ].vMin, ChildArea[ RDB ].vMax );
 
-		/*//CDebugConsole::GetInstance()->Messagef( L"[ LDF ] Min x : %f y : %f z : %f\n", ChildArea[ LDF ].vMin.x, ChildArea[ LDF ].vMin.y, ChildArea[ LDF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LDF ] Max x : %f y : %f z : %f\n", ChildArea[ LDF ].vMax.x, ChildArea[ LDF ].vMax.y, ChildArea[ LDF ].vMax.z );
+		/*////CDebugConsole::GetInstance()->Messagef( L"[ LDF ] Min x : %f y : %f z : %f\n", ChildArea[ LDF ].vMin.x, ChildArea[ LDF ].vMin.y, ChildArea[ LDF ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ LDF ] Max x : %f y : %f z : %f\n", ChildArea[ LDF ].vMax.x, ChildArea[ LDF ].vMax.y, ChildArea[ LDF ].vMax.z );
 
-		//CDebugConsole::GetInstance()->Messagef( L"[ LDB ] Min x : %f y : %f z : %f\n", ChildArea[ LDB ].vMin.x, ChildArea[ LDB ].vMin.y, ChildArea[ LDB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ LDB ] Max x : %f y : %f z : %f\n", ChildArea[ LDB ].vMax.x, ChildArea[ LDB ].vMax.y, ChildArea[ LDB ].vMax.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ LDB ] Min x : %f y : %f z : %f\n", ChildArea[ LDB ].vMin.x, ChildArea[ LDB ].vMin.y, ChildArea[ LDB ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ LDB ] Max x : %f y : %f z : %f\n", ChildArea[ LDB ].vMax.x, ChildArea[ LDB ].vMax.y, ChildArea[ LDB ].vMax.z );
 
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDF ] Min x : %f y : %f z : %f\n", ChildArea[ RDF ].vMin.x, ChildArea[ RDF ].vMin.y, ChildArea[ RDF ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDF ] Max x : %f y : %f z : %f\n", ChildArea[ RDF ].vMax.x, ChildArea[ RDF ].vMax.y, ChildArea[ RDF ].vMax.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ RDF ] Min x : %f y : %f z : %f\n", ChildArea[ RDF ].vMin.x, ChildArea[ RDF ].vMin.y, ChildArea[ RDF ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ RDF ] Max x : %f y : %f z : %f\n", ChildArea[ RDF ].vMax.x, ChildArea[ RDF ].vMax.y, ChildArea[ RDF ].vMax.z );
 
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDB ] Min x : %f y : %f z : %f\n", ChildArea[ RDB ].vMin.x, ChildArea[ RDB ].vMin.y, ChildArea[ RDB ].vMin.z );
-		//CDebugConsole::GetInstance()->Messagef( L"[ RDB ] Max x : %f y : %f z : %f\n", ChildArea[ RDB ].vMax.x, ChildArea[ RDB ].vMax.y, ChildArea[ RDB ].vMax.z );*/
+		////CDebugConsole::GetInstance()->Messagef( L"[ RDB ] Min x : %f y : %f z : %f\n", ChildArea[ RDB ].vMin.x, ChildArea[ RDB ].vMin.y, ChildArea[ RDB ].vMin.z );
+		////CDebugConsole::GetInstance()->Messagef( L"[ RDB ] Max x : %f y : %f z : %f\n", ChildArea[ RDB ].vMax.x, ChildArea[ RDB ].vMax.y, ChildArea[ RDB ].vMax.z );*/
 
 		return TRUE;
 	}

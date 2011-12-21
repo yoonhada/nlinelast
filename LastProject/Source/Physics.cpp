@@ -243,7 +243,7 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vPosition, const D3DXVECTOR3 &vDire
 		m_vBBPos[i] = pBB->GetPosition( i );
 	}
 
-	//CDebugConsole::GetInstance()->MessageQube(m_vBBPos);
+	////CDebugConsole::GetInstance()->MessageQube(m_vBBPos);
 	for ( i = 0; i < 6; ++i )
 	{
 		D3DXPlaneFromPoints(&m_plane, &m_vBBPos[nVI[0][i][0]], &m_vBBPos[nVI[0][i][1]], &m_vBBPos[nVI[0][i][2]] );	
@@ -279,7 +279,7 @@ BOOL CPhysics::Collision( const D3DXVECTOR3 &vCenter, FLOAT fRadius, const CBoun
 		
 		if ( m_fD_s < fRadius )
 		{
-			CDebugConsole::GetInstance()->Messagef("%d : %0.2f\n", i, m_fD_s);
+			//CDebugConsole::GetInstance()->Messagef("%d : %0.2f\n", i, m_fD_s);
 		}
 		else
 		{

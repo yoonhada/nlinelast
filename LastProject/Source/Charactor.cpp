@@ -614,7 +614,7 @@ VOID CCharactor::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 
 	//CDebugInterface::GetInstance()->AddMessageFloat( "PreAngle", m_fPreAngle  );
 	//CDebugInterface::GetInstance()->AddMessageFloat( "NowAngle", m_fAngle  );
-	//CDebugConsole::GetInstance()->Messagef( L"Pre Angle : %f , Now Angle : %f \n", m_fPreAngle, m_fAngle );
+	////CDebugConsole::GetInstance()->Messagef( L"Pre Angle : %f , Now Angle : %f \n", m_fPreAngle, m_fAngle );
 
 	m_vPreControl.y = m_fPreAngle;
 	m_vControl.y = m_fAngle;
@@ -628,8 +628,8 @@ VOID CCharactor::UpdateOtherPlayer()
 	m_fNetTime += CFrequency::GetInstance()->getFrametime();
 
 	D3DXVec3Lerp( &m_vLerpControl, &m_vPreControl, &m_vControl, m_fNetTime / NETWORK_RECV_TIME );
-	////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
-	////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
+	//////CDebugConsole::GetInstance()->Messagef( L"Lerp Pos: %f %f\n", m_vLerpControl.x, m_vLerpControl.z );
+	//////CDebugConsole::GetInstance()->Messagef( L"%f\n", CFrequency::GetInstance()->getTime() );
 	m_pWeapon->UpdateSRT();
 
 	Set_ControlTranslate( 0, m_vLerpControl.x );

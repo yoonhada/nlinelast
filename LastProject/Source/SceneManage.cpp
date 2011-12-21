@@ -96,11 +96,11 @@ HRESULT CSceneManage::Release()
 
 UINT WINAPI CSceneManage::ThreadFunc(LPVOID lParam)
 {
-	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading Start**\n" );
+	//CDebugConsole::GetInstance()->Messagef( L"**Thread Loading Start**\n" );
 	//GetInstance()->m_pNextScene->Create( GetInstance()->m_pD3dDevice );
 	//GetInstance()->m_pLoadingScene->Render();
 	GetInstance()->m_pNextScene->Create( GetInstance()->m_pD3dDevice, GetInstance()->m_pSprite, GetInstance()->m_hWnd );
-	CDebugConsole::GetInstance()->Messagef( L"**Thread Loading End**\n" );
+	//CDebugConsole::GetInstance()->Messagef( L"**Thread Loading End**\n" );
 
 	return 0;
 }
@@ -136,25 +136,25 @@ VOID CSceneManage::ChangeScene( INT _scnNext )
 	switch( _scnNext )
 	{
 	case IScene::SCENE_LOGO:
-		CDebugConsole::GetInstance()->Messagef( L"SCENE_LOGO\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"SCENE_LOGO\n" );
 		m_pNextScene = new LogoScene;
 		break;
 	case IScene::SCENE_STORY:
-		CDebugConsole::GetInstance()->Messagef( L"SCENE_STORY\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"SCENE_STORY\n" );
 		m_pNextScene = new StoryScene;
 		break;
 	case IScene::SCENE_MENU:
-		CDebugConsole::GetInstance()->Messagef( L"SCENE_MENU\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"SCENE_MENU\n" );
 		m_pNextScene = new MenuScene;
 		break;
 	case IScene::SCENE_LOBBY:
-		CDebugConsole::GetInstance()->Messagef( L"SCENE_LOBBY\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"SCENE_LOBBY\n" );
 		m_pNextScene = new LobbyScene;
 		// Use NetWork
 		CObjectManage::GetInstance()->SetLobbyScene( dynamic_cast<LobbyScene*>( m_pNextScene ) );
 		break;
 	case IScene::SCENE_MAIN:
-		CDebugConsole::GetInstance()->Messagef( L"SCENE_MAIN\n" );
+		//CDebugConsole::GetInstance()->Messagef( L"SCENE_MAIN\n" );
 		m_pNextScene = new CMainScene;
 		break;
 	}

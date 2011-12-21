@@ -19,7 +19,7 @@ VOID DashReady::Enter( CMonster* a_pMonster )
 	// Dash 애니메이션으로 변경
 	a_pMonster->ChangeAnimation( CMonster::ANIM_DASH );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"DashReady : ANIM_DASH \n" );
+	////CDebugConsole::GetInstance()->Messagef( L"DashReady : ANIM_DASH \n" );
 #endif
 
 	if( CObjectManage::GetInstance()->IsHost() == TRUE )

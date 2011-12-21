@@ -30,7 +30,7 @@ VOID CSound::Initialize()
 	if( m_iVersion < FMOD_VERSION )
 	{
 #ifndef _DEBUG
-		CDebugConsole::GetInstance()->Messagef( L"FMOD Error: old version FMOD. \n" );
+		//CDebugConsole::GetInstance()->Messagef( L"FMOD Error: old version FMOD. \n" );
 #endif
 	}
 
@@ -205,7 +205,7 @@ VOID CSound::ErrorCheck( FMOD_RESULT a_Result )
 	if( a_Result != FMOD_OK )
 	{
 #ifdef _DEBUG
-		CDebugConsole::GetInstance()->Messagef( L"FMOD Error: (%d) %s \n", m_Result, FMOD_ErrorString( a_Result ) );
+		//CDebugConsole::GetInstance()->Messagef( L"FMOD Error: (%d) %s \n", m_Result, FMOD_ErrorString( a_Result ) );
 #endif
 	}
 }

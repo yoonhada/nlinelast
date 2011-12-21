@@ -18,7 +18,7 @@ VOID Combo3::Enter( CMonster* a_pMonster )
 	// Melee 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_COMBO_ATTACK3 );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Melee2 : ANIM_COMBO_ATTACK3 \n" );
+	////CDebugConsole::GetInstance()->Messagef( L"Melee2 : ANIM_COMBO_ATTACK3 \n" );
 #endif
 
 	CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_ATTACK1 + rand() % 3 );	

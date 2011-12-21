@@ -17,7 +17,7 @@ VOID ClownEvent::Enter( CMonster* a_pMonster )
 {
 	a_pMonster->ChangeAnimation( CMonster::ANIM_EVENT_CLOWN );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"ClownEvent : ANIM_EVENT_CLOWN \n" );
+	////CDebugConsole::GetInstance()->Messagef( L"ClownEvent : ANIM_EVENT_CLOWN \n" );
 #endif
 }
 
