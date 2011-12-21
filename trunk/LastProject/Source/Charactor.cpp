@@ -914,7 +914,7 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 			}
 			else
 			{
-				if (nCount > 150)
+				if (nCount > 100)
 				{
 					break;
 				}
