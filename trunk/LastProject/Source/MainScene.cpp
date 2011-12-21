@@ -268,6 +268,7 @@ VOID CMainScene::CheatKeys()
 			m_pGameEvent->ClearEvent();
 			m_pGameEventTutorialManager->EndEvent();
 			m_pGameEvent->AddEvent( CGameEvent::GAME_WIN_END, 0.01f);
+			m_pMonster[2]->GetFSM()->ChangeState( NULL );
 		}
 
 	}
