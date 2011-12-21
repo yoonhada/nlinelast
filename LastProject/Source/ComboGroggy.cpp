@@ -30,7 +30,7 @@ VOID ComboGroggy::Execute( CMonster* a_pMonster )
 
 	// 그로기 상태가 끝났으면 다시 탐색 상태로
 	FLOAT t = a_pMonster->Get_Time();
-	if( t >= 8.0f )
+	if( t >= 6.0f )
 	{
 		a_pMonster->Set_ClearTime();
 

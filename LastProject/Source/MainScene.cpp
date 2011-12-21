@@ -568,7 +568,7 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 			if ( m_pGameEvent->GetMonsterState() & ( 0x0001 << Loop ) )
 			{
 				m_pMonster[Loop]->Set_Pos( m_pGameEvent->GetMonsPosition( Loop ) );
-				m_pMonster[Loop]->Set_Angle( 90.0f );
+				m_pMonster[Loop]->Set_Angle( D3DXToRadian( 270.0f ) );
 				m_pMonster[Loop]->ChangeAnimation( CMonster::ANIM_STAND );
 				m_pMonster[Loop]->EnableShadow( TRUE );
 				m_pMonster[Loop]->RepairCube();
@@ -622,6 +622,8 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 		m_pMonster[2]->RepairCube();
 
 		m_pMonster[2]->GetFSM()->ChangeState( NULL );
+
+		CSound::GetInstance->PlayEffect( CSound::EFFECT_CLOWN_DEATH );
 
 		break;
 	default:
