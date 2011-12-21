@@ -137,11 +137,11 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	m_pMatrices->SetupProjection();
 
 	CInput::GetInstance()->EnableInput( FALSE );
+	CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_TUTORIAL );
+	CGameEvent::GetInstance()->SetTutorial( CGameEvent::SCENE_TUTORIAL );
 
 	if ( CObjectManage::GetInstance()->IsHost() )
 	{
-		CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_TUTORIAL );
-		CGameEvent::GetInstance()->SetTutorial( CGameEvent::SCENE_TUTORIAL );
 		CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_TUTORIAL, 0.01f );
 	}
 
