@@ -972,6 +972,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\ClownEvent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\ClownEvent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\Combo1.cpp"
 				>
 			</File>
@@ -1009,6 +1017,14 @@
 			</File>
 			<File
 				RelativePath=".\Source\Combo3.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\ComboGroggy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\ComboGroggy.h"
 				>
 			</File>
 			<File
