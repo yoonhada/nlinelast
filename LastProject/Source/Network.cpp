@@ -1219,6 +1219,11 @@ VOID CNetwork::ProcessPacket( CPacket& a_pk )
 		SC_EVENT_COMBO_RESULT( a_pk );
 		break;
 
+	// Èú
+	case MSG_EVENT_HEAL:
+		SC_EVENT_HEAL( a_pk );
+		break;
+
 	// Ã¤ÆÃ
 	case MSG_CHAT:
 		SC_CHAT( a_pk );
