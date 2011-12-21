@@ -79,6 +79,7 @@ VOID CSound::LoadSoundFiles()
 		"Sound/BGM/BGM_Game.mp3",
 		"Sound/BGM/BGM_Bear.mp3",	
 		"Sound/BGM/BGM_Piero.mp3",
+		"Sound/BGM/BGM_Victory.mp3",
 	};
 
 	const CHAR* EffectFiles[EFFECT_END] = {
