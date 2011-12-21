@@ -54,9 +54,9 @@ VOID OptionScene::Update()
 		m_bSetupScene	= !m_bSetupScene;
 		m_bHelpScene	= FALSE;
 		break;
-	case OPTION_HELP:
-		m_bHelpScene	= !m_bHelpScene;
-		m_bSetupScene	= FALSE;
+	//case OPTION_HELP:
+	//	m_bHelpScene	= !m_bHelpScene;
+	//	m_bSetupScene	= FALSE;
 		break;
 	}
 }

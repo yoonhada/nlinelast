@@ -11,6 +11,9 @@ VOID SetupGUI::Initialize()
 	m_pGUIBackground	= new GUIBackground( m_pD3dDevice, m_pSprite );
 	m_pGUIEffectSound	= new GUIScrollbar( m_pD3dDevice, m_pSprite );
 	m_pGUIBackSound		= new GUIScrollbar( m_pD3dDevice, m_pSprite );
+	
+	m_pBGM				= new GUIBackground( m_pD3dDevice, m_pSprite );
+	m_pEFFECT			= new GUIBackground( m_pD3dDevice, m_pSprite );
 }
 
 VOID SetupGUI::Release()
@@ -20,6 +23,8 @@ VOID SetupGUI::Release()
 	delete m_pGUIBackground;
 	delete m_pGUIEffectSound;
 	delete m_pGUIBackSound;
+	delete m_pBGM;
+	delete m_pEFFECT;
 }
 
 VOID SetupGUI::CreateBackground()
@@ -49,7 +54,7 @@ VOID SetupGUI::CreateScrollbar()
 	GUIBase::IMAGEPARAM imgBackParam;
 
 	imgThumbParam.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgThumbParam.fX			= m_fX + 100.0f;
+	imgThumbParam.fX			= m_fX + 170.0f;
 	imgThumbParam.fY			= m_fY + 100.0f;
 	imgThumbParam.fWidth		= 50.0f;
 	imgThumbParam.fHeight		= 50.0f;
@@ -57,7 +62,7 @@ VOID SetupGUI::CreateScrollbar()
 	m_pGUIBase->AddFileName( 0, imgThumbParam, L"Img\\SetupScene\\Scrollbar_Thumb.png" );
 
 	imgBackParam.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgBackParam.fX			= m_fX + 100.0f;
+	imgBackParam.fX			= m_fX + 170.0f;
 	imgBackParam.fY			= m_fY + 100.0f;
 	imgBackParam.fWidth		= 300.0f;
 	imgBackParam.fHeight	= 50.0f;
@@ -71,13 +76,13 @@ VOID SetupGUI::CreateScrollbar()
 //	CSound::GetInstance()->SetEffectVolume( 1.0f );
 
 	imgThumbParam.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgThumbParam.fX			= m_fX + 100.0f;
+	imgThumbParam.fX			= m_fX + 170.0f;
 	imgThumbParam.fY			= m_fY + 300.0f;
 	imgThumbParam.fWidth		= 50.0f;
 	imgThumbParam.fHeight		= 50.0f;
 
 	imgBackParam.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgBackParam.fX			= m_fX + 100.0f;
+	imgBackParam.fX			= m_fX + 170.0f;
 	imgBackParam.fY			= m_fY + 300.0f;
 	imgBackParam.fWidth		= 300.0f;
 	imgBackParam.fHeight	= 50.0f;
@@ -87,6 +92,36 @@ VOID SetupGUI::CreateScrollbar()
 	m_pGUIBackSound->SetRange( 0, 10 );
 	m_pGUIBackSound->SetValue( 3 );
 //	CSound::GetInstance()->SetBGMVolume( 0.5f );
+}
+
+VOID SetupGUI::CreateBGM()
+{
+	//	Create Background
+	FLOAT fWidth	= 113.0f;
+	FLOAT fHeight	= 56.0f;
+	FLOAT fX		= 420.0f;
+	FLOAT fY		= 350.0f;
+	
+	GUIBase::IMAGEPARAM imgParam;
+
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\SetupScene\\BGM.png" );
+	
+	m_pBGM->Create( fX, fY, fWidth, fHeight, imgParam );
+}
+
+VOID SetupGUI::CreateEFFECT()
+{
+	//	Create Background
+	FLOAT fWidth	= 113.0f;
+	FLOAT fHeight	= 56.0f;
+	FLOAT fX		= 420.0f;
+	FLOAT fY		= 550.0f;
+	
+	GUIBase::IMAGEPARAM imgParam;
+
+	m_pGUIBase->AddFileName( 0, imgParam, L"Img\\SetupScene\\EFFECT.png" );
+	
+	m_pEFFECT->Create( fX, fY, fWidth, fHeight, imgParam );
 }
 
 VOID SetupGUI::Create()
@@ -103,7 +138,8 @@ VOID SetupGUI::Create()
 
 	CreateBackground();
 	CreateScrollbar();
-
+	CreateBGM();
+	CreateEFFECT();
 
 }
 
@@ -115,6 +151,8 @@ VOID SetupGUI::Update()
 	m_pGUIBackground->Update();
 	m_pGUIEffectSound->Update();
 	m_pGUIBackSound->Update();
+	m_pBGM->Update();
+	m_pEFFECT->Update();
 
 	static BOOL bFirst = FALSE;
 	
@@ -164,6 +202,8 @@ VOID SetupGUI::Render()
 	m_pGUIBackground->Render();
 	m_pGUIEffectSound->Render();
 	m_pGUIBackSound->Render();
+	m_pBGM->Render();
+	m_pEFFECT->Render();
 }
 
 VOID SetupGUI::OnDown( INT x, INT y )

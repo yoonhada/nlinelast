@@ -15,6 +15,8 @@ private:
 
 	VOID		CreateBackground();
 	VOID		CreateScrollbar();
+	VOID		CreateBGM();
+	VOID		CreateEFFECT();
 	
 	VOID		OnDown( INT x, INT y );
 	VOID		OnMove( INT x, INT y );
@@ -49,6 +51,10 @@ private:
 	GUIBackground*			m_pGUIBackground;
 	GUIScrollbar*			m_pGUIEffectSound;
 	GUIScrollbar*			m_pGUIBackSound;
+
+	
+	GUIBackground*			m_pBGM;
+	GUIBackground*			m_pEFFECT;
 
 	FLOAT					m_fX, m_fY;
 	FLOAT					m_fWidth, m_fHeight;
