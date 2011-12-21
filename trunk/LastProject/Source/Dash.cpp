@@ -26,15 +26,6 @@ VOID Dash::Enter( CMonster* a_pMonster )
 															   a_pMonster->Get_TargetPos(),
 															   a_pMonster->Get_TargetDistance() );
 	}
-
-	if( a_pMonster->Get_MonsterNumber() == 2 )
-	{
-		CSound::GetInstance()->PlayEffect( 0 );	
-	}
-	else
-	{
-		CSound::GetInstance()->PlayEffect( 0 );	
-	}
 }
 
 
@@ -47,6 +38,7 @@ VOID Dash::Execute( CMonster* a_pMonster )
 	if( t >= a_pMonster->Get_InterpolationTime() )
 	{
 		a_pMonster->Set_ClearTime();
+		a_pMonster->Set_ClearSoundTime();
 
 		a_pMonster->GetFSM()->ChangeState( Sliding::GetInstance() );
 	}
@@ -56,6 +48,14 @@ VOID Dash::Execute( CMonster* a_pMonster )
 
 		D3DXVec3Lerp( &vPos, &a_pMonster->Get_DashStartPos(), &a_pMonster->Get_DashEndPos(), t / a_pMonster->Get_InterpolationTime() );
 		a_pMonster->Set_Pos( vPos );
+
+		a_pMonster->Set_UpdateSoundTime();
+		FLOAT fSoundTime = a_pMonster->Get_SoundTime();
+		if( fSoundTime >= 0.2f )
+		{
+			a_pMonster->Set_ClearSoundTime();
+			CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_MOVE1 + rand() % 3 );
+		}
 	}
 }
 

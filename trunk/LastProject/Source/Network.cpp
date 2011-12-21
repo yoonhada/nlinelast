@@ -339,6 +339,15 @@ VOID CNetwork::SC_EVENT_COMBO_RESULT( CPacket& a_pk )
 }
 
 
+VOID CNetwork::SC_EVENT_HEAL( CPacket& a_pk )
+{
+	WORD wClientNumber;
+
+	a_pk.Read( &wClientNumber );
+
+}
+
+
 VOID CNetwork::SC_CHAT( CPacket& a_pk )
 {
 	WCHAR szText[256] = { 0, };
@@ -800,6 +809,21 @@ VOID CNetwork::CS_EVENT_COMBO_RESULT( BOOL a_bResult )
 	sendPk.Write( wMsgSize );
 	sendPk.Write( wMsgID );
 	sendPk.Write( a_bResult );
+	sendPk.CalcSize();
+
+	SendToServer( sendPk );	
+}
+
+
+VOID CNetwork::CS_EVENT_HEAL( WORD a_wClientNumber )
+{
+	CPacket sendPk;
+	WORD wMsgSize = 0;
+	WORD wMsgID = MSG_EVENT_HEAL;
+
+	sendPk.Write( wMsgSize );
+	sendPk.Write( wMsgID );
+	sendPk.Write( a_wClientNumber );
 	sendPk.CalcSize();
 
 	SendToServer( sendPk );	

@@ -68,7 +68,7 @@ VOID SetupGUI::CreateScrollbar()
 	m_pGUIEffectSound->SetStyle( GUIScrollbar::SCL_HROZ );
 	m_pGUIEffectSound->SetRange( 0, 10 );
 	m_pGUIEffectSound->SetValue( 10 );
-	CSound::GetInstance()->SetEffectVolume( 1.0f );
+//	CSound::GetInstance()->SetEffectVolume( 1.0f );
 
 	imgThumbParam.dPivotType	= GUIBase::GBS_TOPLEFT;
 	imgThumbParam.fX			= m_fX + 100.0f;
@@ -85,8 +85,8 @@ VOID SetupGUI::CreateScrollbar()
 	m_pGUIBackSound->Create( imgThumbParam, imgBackParam );
 	m_pGUIBackSound->SetStyle( GUIScrollbar::SCL_HROZ );
 	m_pGUIBackSound->SetRange( 0, 10 );
-	m_pGUIBackSound->SetValue( 5 );
-	CSound::GetInstance()->SetBGMVolume( 0.5f );
+	m_pGUIBackSound->SetValue( 3 );
+//	CSound::GetInstance()->SetBGMVolume( 0.5f );
 }
 
 VOID SetupGUI::Create()
@@ -148,6 +148,7 @@ VOID SetupGUI::Update()
 	{
 		CSound::GetInstance()->SetBGMVolume( fBGM );
 		fBGMVolume = fBGM;
+		
 	}
 
 	FLOAT fEffect = m_pGUIEffectSound->GetValue() * 0.1f;

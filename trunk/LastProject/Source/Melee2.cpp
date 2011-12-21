@@ -23,11 +23,11 @@ VOID Melee2::Enter( CMonster* a_pMonster )
 
 	if( a_pMonster->Get_MonsterNumber() == 2 )
 	{
-		CSound::GetInstance()->PlayEffect( 0 );	
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_ATTACK1 + rand() % 3 );
 	}
 	else
 	{
-		CSound::GetInstance()->PlayEffect( 0 );
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_PANDA_ATTACK1 );
 	}
 }
 

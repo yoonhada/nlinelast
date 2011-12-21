@@ -80,6 +80,7 @@ public:
 
 	VOID Set_ClearTime()							{ m_fTime = 0.0f; }
 	VOID Set_ClearAttackTime()						{ m_fAttackTime = 0.0f; }
+	VOID Set_ClearSoundTime()						{ m_fSoundTime = 0.0f; }
 
 	VOID Set_UpdateTime()
 	{
@@ -89,6 +90,11 @@ public:
 	VOID Set_UpdateAttackTime()
 	{
 		m_fAttackTime += CFrequency::GetInstance()->getFrametime();
+	}
+
+	VOID Set_UpdateSoundTime()
+	{
+		m_fSoundTime += CFrequency::GetInstance()->getFrametime();
 	}
 
 	VOID Set_InterpolationTime( FLOAT a_fTime )		{ m_fInterpolationTime = a_fTime; }
@@ -138,6 +144,7 @@ public:
 
 	FLOAT			Get_Time()						{ return m_fTime; }
 	FLOAT			Get_AttackTime()				{ return m_fAttackTime; }
+	FLOAT			Get_SoundTime()					{ return m_fSoundTime; }
 	FLOAT			Get_InterpolationTime()			{ return m_fInterpolationTime; }
 	D3DXVECTOR3&	Get_Pos()						{ return m_vControl; }
 	INT				Get_Target()					{ return m_iTarget; }
@@ -198,6 +205,7 @@ private:
 
 	FLOAT		m_fTime;
 	FLOAT		m_fAttackTime;
+	FLOAT		m_fSoundTime;
 	FLOAT		m_fInterpolationTime;
 
 	// Dash

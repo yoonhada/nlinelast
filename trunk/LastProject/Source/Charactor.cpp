@@ -938,9 +938,9 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 				}
 			}
 			else
-			{					
-				
-				INT iRand = ( FastRand2() < 0.5f ) ? 0 : 4;
+			{
+				FLOAT fRand = FastRand2();
+				INT iRand = ( fRand < 0.5f ) ? 0 : 4;
 				CGameEvent::GetInstance()->SetShotedPoint( iCharNumber, GetvCubeSize() );
 				CSound::GetInstance()->PlayEffect( CSound::EFFECT_DAD_DAMAGED1 + iCharNumber + iRand );
 			}

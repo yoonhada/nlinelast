@@ -37,6 +37,8 @@ public:
 	BOOL		SelectAnimation( INT _iNumAni );
 	BOOL		NextAnimation();
 
+	INT			GetCurrentAnimation()	{ return m_Data.Image3D.iCurrentAnimation; }
+
 private:
 	DATA		m_Data;
 

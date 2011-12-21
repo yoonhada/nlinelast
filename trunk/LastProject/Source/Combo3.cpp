@@ -21,14 +21,7 @@ VOID Combo3::Enter( CMonster* a_pMonster )
 	CDebugConsole::GetInstance()->Messagef( L"Melee2 : ANIM_COMBO_ATTACK3 \n" );
 #endif
 
-	if( a_pMonster->Get_MonsterNumber() == 2 )
-	{
-		CSound::GetInstance()->PlayEffect( 0 );	
-	}
-	else
-	{
-		CSound::GetInstance()->PlayEffect( 0 );	
-	}
+	CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_ATTACK1 + rand() % 3 );	
 }
 
 
