@@ -689,7 +689,7 @@ BOOL ASEParser::GetNodeName( LPWSTR _sLine )
 
 		TCHAR	str[ 516 ];
 		wsprintf( str, L"NODE_NAME : %s\n", m_pGeomObjectData[ m_iCurrentGeomObjectIndex ].pNodeName );
-		////CDebugConsole::GetInstance()->Message( str );
+		CDebugConsole::GetInstance()->Message( str );
 
 		return TRUE;
 	}//	End keyword[ 1 ]
