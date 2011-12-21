@@ -85,13 +85,13 @@ VOID CWeapon::Clear()
 	m_fZAng[2][9] = MTP_FUN::Deg2Rad<90>::radians;	
 
 	// XYZ Min
-	m_fBBSize[1][0] = -15.5f;
-	m_fBBSize[1][1] = -5.0f;
-	m_fBBSize[1][2] = -10.5f;
+	m_fBBSize[2][0] = -15.5f;
+	m_fBBSize[2][1] = -5.0f;
+	m_fBBSize[2][2] = -10.5f;
 	// XYZ Max
-	m_fBBSize[1][3] =  15.5f;
-	m_fBBSize[1][4] =  5.0f;
-	m_fBBSize[1][5] =  3.75f;
+	m_fBBSize[2][3] =  15.5f;
+	m_fBBSize[2][4] =  5.0f;
+	m_fBBSize[2][5] =  3.75f;
 
 	//	Daugther
 	m_fZAng[3][0] = MTP_FUN::Deg2Rad<0>::radians;	
@@ -106,13 +106,13 @@ VOID CWeapon::Clear()
 	m_fZAng[3][9] = MTP_FUN::Deg2Rad<90>::radians;	
 
 	// XYZ Min
-	m_fBBSize[0][0] = -15.5f;
-	m_fBBSize[0][1] = -2.0f;
-	m_fBBSize[0][2] = -15.5f;
+	m_fBBSize[3][0] = -15.5f;
+	m_fBBSize[3][1] = -2.0f;
+	m_fBBSize[3][2] = -15.5f;
 	// XYZ Max
-	m_fBBSize[0][3] =  15.5f;
-	m_fBBSize[0][4] =  2.0f;
-	m_fBBSize[0][5] =  3.75f;
+	m_fBBSize[3][3] =  15.5f;
+	m_fBBSize[3][4] =  2.0f;
+	m_fBBSize[3][5] =  3.75f;
 
 	m_fScale = 0;
 	m_bAtkTime = FALSE;
