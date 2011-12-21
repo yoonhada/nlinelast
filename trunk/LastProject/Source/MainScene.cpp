@@ -684,6 +684,7 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.01f );
 		}
 		break;
+	case CGameEvent::EVENT_COMBO:
 	case CGameEvent::TUTORIAL_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO \n" );
 		EventStateNetwork( nEvent );
@@ -791,7 +792,6 @@ VOID CMainScene::EventSceneBear( INT nEvent )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, fComboTime );
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
-
 			CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() ); 
 		}
 		break;
