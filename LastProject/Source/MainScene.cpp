@@ -20,9 +20,12 @@
 #include "GameEventTutorialManager.h"
 #include "GameEventScoreBoard.h"
 
-// AI 테스트용
+// AI
+#include "Stand.h"
 #include "Seek.h"
 #include "Chase.h"
+#include "ClownEvent.h"
+#include "ComboGroggy.h"
 
 CMainScene::CMainScene()
 {
@@ -363,7 +366,7 @@ VOID CMainScene::Update()
 		m_pDoor[Loop].Update();
 		CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE + 1, Loop );
 	}
-	
+
 	m_pASEViewer->Update();
 
 	m_pMainGUI->Update();
@@ -836,9 +839,19 @@ VOID CMainScene::EventSceneClown( INT nEvent )
 		{			
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 		}
+		m_pMonster[2]->GetFSM()->ChangeState( ClownEvent::GetInstance() );
 		CSound::GetInstance()->PlayBGM( CSound::BGM_PIERO );
 		break;
 	case CGameEvent::TARGET_SHOW_END:
+		m_pMonster[2]->ChangeAnimation( CMonster::ANIM_STAND );
+		if( CObjectManage::GetInstance()->IsHost() )
+		{
+			m_pMonster[2]->GetFSM()->ChangeState( Stand::GetInstance() );
+		}
+		else
+		{
+			m_pMonster[2]->GetFSM()->ChangeState( NULL );
+		}
 
 		break;
 	case CGameEvent::EVENT_COMBO:
@@ -850,7 +863,7 @@ VOID CMainScene::EventSceneClown( INT nEvent )
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_FAIL, fComboTime );
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 
-			CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() ); 
+			CNetwork::GetInstance()->CS_EVENT_COMBO( m_pEventGUICombo->GetKindEvet() );
 		}
 		break;
 	case CGameEvent::EVENT_COMBO_FAIL:
@@ -872,7 +885,8 @@ VOID CMainScene::EventSceneClown( INT nEvent )
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );				
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
-		}		
+		}
+		m_pMonster[2]->GetFSM()->ChangeState( ComboGroggy::GetInstance() );
 		break;
 	case CGameEvent::EVENT_COMBO_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_END \n" );		

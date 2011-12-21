@@ -39,8 +39,8 @@ public:
 		ANIM_UNUSED8,
 		ANIM_UNUSED9,
 		ANIM_UNUSED10,
-		ANIM_UNUSED11,	
-		ANIM_EVENT,					// 콤보 이벤트 성공
+		ANIM_EVENT_CLOWN,
+		ANIM_COMBO_GROGGY,			// 콤보 이벤트 성공
 		ANIM_LODING,				// 로딩
 	};
 

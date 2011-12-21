@@ -77,7 +77,7 @@ VOID CSound::LoadSoundFiles()
 		"Sound/BGM/BGM_Menu.mp3",
 		"Sound/BGM/BGM_Lobby.mp3",
 		"Sound/BGM/BGM_Game.mp3",
-		"Sound/BGM/BGM_Bear.ogg",	
+		"Sound/BGM/BGM_Bear.mp3",	
 		"Sound/BGM/BGM_Piero.mp3",
 	};
 
