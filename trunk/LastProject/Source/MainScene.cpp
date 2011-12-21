@@ -679,6 +679,7 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 	case CGameEvent::TUTORIAL_ATACK_END:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_ATACK_END \n" );
 		TutorialAtackEnd();
+		EventStateNetwork( nEvent );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 0.01f );
