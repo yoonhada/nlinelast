@@ -35,6 +35,7 @@ VOID GUIWriting::CHARUpdate( WPARAM& _wParam, LPARAM& _lParam )
 {
 	if( _wParam == VK_RETURN )
 		m_bReturn = TRUE;
+	
 	if( m_pText == NULL )
 		return;
 
@@ -52,7 +53,7 @@ VOID GUIWriting::CHARUpdate( WPARAM& _wParam, LPARAM& _lParam )
 		m_pText[ (*m_piTextLength)++ ] = static_cast<TCHAR>( _wParam );
 		break;
 	}
-
+	
 }
 
 BOOL GUIWriting::GetReturn()

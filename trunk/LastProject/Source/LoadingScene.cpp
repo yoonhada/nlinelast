@@ -213,6 +213,7 @@ VOID LoadingScene::SelectScene( DWORD _dScene )
 	switch( _dScene )
 	{
 	case IScene::SCENE_LOGO:
+	case IScene::SCENE_STORY:
 		m_pClown->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 88.0f ) );
 		m_pClown->Set_Angle( 2.49f );
 		m_pClown->ChangeAnimation( CMonster::ANIM_LODING );
@@ -228,9 +229,9 @@ VOID LoadingScene::SelectScene( DWORD _dScene )
 		m_pBrownBear->ChangeAnimation( CMonster::ANIM_LODING );
 		m_bBrownBear = TRUE;
 		break;
-	case IScene::SCENE_STORY:
-		break;
 	case IScene::SCENE_MENU:
+	case IScene::SCENE_LOBBY:
+	case IScene::SCENE_MAIN:
 		m_bClown = FALSE;
 
 		m_pPanda->Set_Pos( D3DXVECTOR3( 30.0f, 0.0f, 80.0f ) );
@@ -242,10 +243,6 @@ VOID LoadingScene::SelectScene( DWORD _dScene )
 		m_pBrownBear->Set_Angle( 3.39f );
 		m_pBrownBear->ChangeAnimation( CMonster::ANIM_LOADING1 );
 		m_bBrownBear = TRUE;
-		break;
-	case IScene::SCENE_LOBBY:
-		break;
-	case IScene::SCENE_MAIN:
 		break;
 	}
 
