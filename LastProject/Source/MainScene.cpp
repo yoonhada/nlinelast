@@ -642,7 +642,7 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 		m_pMonster[2]->RepairCube();
 		m_pMonster[2]->GetFSM()->ChangeState( NULL );
 
-		CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DEATH );
+//		CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DEATH );
 
 		break;
 	default:
