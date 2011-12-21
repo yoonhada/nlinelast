@@ -589,7 +589,7 @@ VOID CCharactor::UpdateByInput(  )
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
 	m_fAngle = a_fAngle;
-
+	m_vLerpControl = m_vControl;
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
@@ -821,9 +821,9 @@ VOID CCharactor::Render()
 	{
 		m_pShadowCell->Set_ControlScale( 0, 10.0f );
 		m_pShadowCell->Set_ControlScale( 2, 10.0f );
-		m_pShadowCell->Set_ControlTranslate( 0, m_vControl.x );
+		m_pShadowCell->Set_ControlTranslate( 0, m_vLerpControl.x );
 		m_pShadowCell->Set_ControlTranslate( 1, 0.51f );
-		m_pShadowCell->Set_ControlTranslate( 2, m_vControl.z );
+		m_pShadowCell->Set_ControlTranslate( 2, m_vLerpControl.z );
 		m_pShadowCell->Calcul_MatWorld();
 		m_pD3dDevice->SetTransform( D3DTS_WORLD, &m_pShadowCell->Get_MatWorld() );
 		m_pShadowCell->Render( );
