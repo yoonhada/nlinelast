@@ -72,8 +72,8 @@ VOID MainGUI::CreateMiniMap()
 
 	GUIBase::IMAGEPARAM imgParamFirstAidKit0;
 	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_0.png", 100 );
-	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_1.png" );
-	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_2.png" );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_1.png", 100 );
+	m_pGUIBase->AddFileName( 0, imgParamFirstAidKit0, L"Img\\MainScene\\FirstAidKit_2.png", 100 );
 
 	m_pMmpObject[ MMP_FIRSTAIDKIT_0 ]->Create( fX, fY, fWidth, fHeight, imgParamFirstAidKit0 );
 
