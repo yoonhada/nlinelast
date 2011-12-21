@@ -122,6 +122,7 @@ public:
 
 	VOID SetBGMVolume( FLOAT a_fVolume )		{ m_fBGMVolume = a_fVolume; FMOD_Channel_SetVolume( m_pBGMChannel, m_fBGMVolume ); }
 	VOID SetEffectVolume( FLOAT a_fVolume )		{ m_fEffectVolume = a_fVolume; }
+	FLOAT GetEffectVolume( )					{ return m_fEffectVolume; }
 };
 
 
