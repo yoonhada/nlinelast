@@ -14,6 +14,7 @@ public:
 		BGM_GAME,
 		BGM_BEAR,
 		BGM_PIERO,
+		BGM_VICTORY,
 
 		BGM_END,
 	};
