@@ -100,7 +100,7 @@ VOID SetupGUI::CreateBGM()
 	FLOAT fWidth	= 113.0f;
 	FLOAT fHeight	= 56.0f;
 	FLOAT fX		= 420.0f;
-	FLOAT fY		= 350.0f;
+	FLOAT fY		= 550.0f;
 	
 	GUIBase::IMAGEPARAM imgParam;
 
@@ -115,7 +115,7 @@ VOID SetupGUI::CreateEFFECT()
 	FLOAT fWidth	= 113.0f;
 	FLOAT fHeight	= 56.0f;
 	FLOAT fX		= 420.0f;
-	FLOAT fY		= 550.0f;
+	FLOAT fY		= 350.0f;
 	
 	GUIBase::IMAGEPARAM imgParam;
 
