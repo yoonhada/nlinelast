@@ -485,9 +485,9 @@ VOID CMonster::AnimationTotalRotate( INT a_iXYZ, FLOAT a_fStart, FLOAT a_fEnd, F
 		break;
 	}
 
-	////CDebugConsole::GetInstance()->Messagef( L"Total X rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[0] );
-	////CDebugConsole::GetInstance()->Messagef( L"Total Y rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[1] );
-	////CDebugConsole::GetInstance()->Messagef( L"Total Z rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[2] );
+	//////CDebugConsole::GetInstance()->Messagef( L"Total X rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[0] );
+	//////CDebugConsole::GetInstance()->Messagef( L"Total Y rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[1] );
+	//////CDebugConsole::GetInstance()->Messagef( L"Total Z rotation : %f\n", m_pFrame[m_iSelectedFrameNum].m_fRotation[2] );
 
 }
 
@@ -839,7 +839,7 @@ VOID CMonster::InterpolationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, 
 	//m_fLengthRotate = ABSDEF( ABSDEF(a_fStart) + ABSDEF(a_fEnd) );
 	//m_fSpeedRotate = m_fMaxInterpolationLength / m_fLengthRotate;
 
-	////CDebugConsole::GetInstance()->Messagef( L"fLen : %f / interLen : %f / fspeed : %f\n", fLength, m_fMaxInterpolationLength, fSpeed );
+	//////CDebugConsole::GetInstance()->Messagef( L"fLen : %f / interLen : %f / fspeed : %f\n", fLength, m_fMaxInterpolationLength, fSpeed );
 
 	//시작이 끝 보다 작을때
 	if( a_fStart < a_fEnd)
@@ -891,7 +891,7 @@ VOID CMonster::InterpolationRotate( INT a_iLoopNum, INT a_iXYZ, FLOAT a_fStart, 
 		break;
 	}
 
-	////CDebugConsole::GetInstance()->Messagef( L"a_iLoopNum : %d / Rotation XYZ : %d / EndCheck : %d\n", a_iLoopNum, a_iXYZ, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] );
+	//////CDebugConsole::GetInstance()->Messagef( L"a_iLoopNum : %d / Rotation XYZ : %d / EndCheck : %d\n", a_iLoopNum, a_iXYZ, m_pFrame[m_iSelectedFrameNum].m_pBoxData[a_iLoopNum].m_bAniRotateEndCheck[a_iXYZ] );
 }
 
 VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
@@ -917,7 +917,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 		D3DXVec3Normalize(&m_vSideStepVector, &m_vSideStepVector);
 		m_vColissionControl += (m_vSideStepVector * a_vControl.x);
 	}
-	////CDebugConsole::GetInstance()->Messagef( L"CharCollision Pos: %f %f %f\n", m_vColissionControl.x, m_vColissionControl.y, m_vColissionControl.z );
+	//////CDebugConsole::GetInstance()->Messagef( L"CharCollision Pos: %f %f %f\n", m_vColissionControl.x, m_vColissionControl.y, m_vColissionControl.z );
 
 	//BOOL bCol = FALSE;
 	//for( INT Loop=0; Loop<m_iCharEditorMax; ++Loop )
@@ -926,10 +926,10 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	//	if( m_pBox[Loop].Collision( m_vColissionControl ) == TRUE )
 	//	{
 	//		bCol = TRUE;
-	//		////CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d\n ", Loop, bCol );
+	//		//////CDebugConsole::GetInstance()->Messagef( L"Loop: %d bCol: %d\n ", Loop, bCol );
 	//		//m_vColissionControl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	//		
-	//		////CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
+	//		//////CDebugConsole::GetInstance()->Messagef( L"Char Pos: %f %f %f\n", m_pBox[Loop].Get_CharaPos().x, m_pBox[Loop].Get_CharaPos().y, m_pBox[Loop].Get_CharaPos().z );
 	//		break;
 	//	}
 	//}
@@ -1063,19 +1063,19 @@ VOID CMonster::ChangeAnimation( INT a_iAniNum )
 	//	if( m_fMaxInterpolationLength < vRotateLength.x )
 	//	{
 	//		m_fMaxInterpolationLength = vRotateLength.x;
-	//		//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenX : %f \n ", m_fMaxInterpolationLength );
+	//		//if( m_fMaxInterpolationLength > 10.0f ) ////CDebugConsole::GetInstance()->Messagef( L" RotLenX : %f \n ", m_fMaxInterpolationLength );
 	//	}
 
 	//	if( m_fMaxInterpolationLength < vRotateLength.y )
 	//	{
 	//		m_fMaxInterpolationLength = vRotateLength.y;
-	//		//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenY : %f \n ", m_fMaxInterpolationLength );
+	//		//if( m_fMaxInterpolationLength > 10.0f ) ////CDebugConsole::GetInstance()->Messagef( L" RotLenY : %f \n ", m_fMaxInterpolationLength );
 	//	}
 
 	//	if( m_fMaxInterpolationLength < vRotateLength.z )
 	//	{
 	//		m_fMaxInterpolationLength = vRotateLength.z;
-	//		//if( m_fMaxInterpolationLength > 10.0f ) //CDebugConsole::GetInstance()->Messagef( L" RotLenZ : %f \n ", m_fMaxInterpolationLength );
+	//		//if( m_fMaxInterpolationLength > 10.0f ) ////CDebugConsole::GetInstance()->Messagef( L" RotLenZ : %f \n ", m_fMaxInterpolationLength );
 	//	}
 	//}
 
@@ -1085,7 +1085,7 @@ VOID CMonster::ChangeAnimation( INT a_iAniNum )
 VOID CMonster::AniInterpolation()
 {
 
-	////CDebugConsole::GetInstance()->Messagef( L"InterLength : %f \n", m_fMaxInterpolationLength );
+	//////CDebugConsole::GetInstance()->Messagef( L"InterLength : %f \n", m_fMaxInterpolationLength );
 
 	m_iChangeAnimationEndCheck = 0;
 	m_iChangeAnimationEndCheck2 = 0;
@@ -1310,11 +1310,11 @@ VOID CMonster::CreateAttackBoundBox()
 
 VOID CMonster::Update()
 {
-	//CDebugConsole::GetInstance()->Messagef( L"ChangingAnimation : %d\n", m_bChangingAnimation );
-	//CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck : %d\n", m_iChangeAnimationEndCheck );
-	//CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck2 : %d\n", m_iChangeAnimationEndCheck2 );
-	//CDebugConsole::GetInstance()->Messagef( L"SelectedFrame : %d\n", m_iSelectedFrameNum );
-	//CDebugConsole::GetInstance()->Messagef( L"bAnimationEnd : %d\n", m_bAnimationEndCheck );
+	////CDebugConsole::GetInstance()->Messagef( L"ChangingAnimation : %d\n", m_bChangingAnimation );
+	////CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck : %d\n", m_iChangeAnimationEndCheck );
+	////CDebugConsole::GetInstance()->Messagef( L"AnimationEndCheck2 : %d\n", m_iChangeAnimationEndCheck2 );
+	////CDebugConsole::GetInstance()->Messagef( L"SelectedFrame : %d\n", m_iSelectedFrameNum );
+	////CDebugConsole::GetInstance()->Messagef( L"bAnimationEnd : %d\n", m_bAnimationEndCheck );
 
 	if( m_bChangingAnimation == FALSE )
 	{
@@ -1413,8 +1413,8 @@ VOID CMonster::Update()
 					CFrequency::GetInstance()->getFrametime() );
 			}
 
-			////CDebugConsole::GetInstance()->Messagef( L"Loop : %d / Start : %f \n", Loop, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x );
-			////CDebugConsole::GetInstance()->Messagef( L"Loop : %d / End : %f \n", Loop, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x );
+			//////CDebugConsole::GetInstance()->Messagef( L"Loop : %d / Start : %f \n", Loop, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x );
+			//////CDebugConsole::GetInstance()->Messagef( L"Loop : %d / End : %f \n", Loop, m_pFrame[m_iSelectedFrameNum].m_pBoxData[Loop].m_vAniRotateStartValue.x );
 
 			//m_pBox[Loop].Update();
 			m_pBox[Loop].Calcul_MatWorld();

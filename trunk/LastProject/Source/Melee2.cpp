@@ -18,7 +18,7 @@ VOID Melee2::Enter( CMonster* a_pMonster )
 	// Melee 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_MELEE_ATTACK2 );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Melee2 : ANIM_MELEE_ATTACK2 \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Melee2 : ANIM_MELEE_ATTACK2 \n" );
 #endif
 
 	if( a_pMonster->Get_MonsterNumber() == 2 )

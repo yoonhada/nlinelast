@@ -101,9 +101,9 @@ VOID LoadingScene::Update()
 	//static D3DXVECTOR3 vecClown( 19.0f, 0.0f, 81.0f ), vecPanda( 0.0f, 0.0f, 81.0f ), vecBrownBear( 0.0f, 0.0f, 81.0f );
 	//static FLOAT		fClown = 0.0f, fPanda = 3.14f, fBrownBear = 3.14f;
 	//
-	//CDebugConsole::GetInstance()->Messagef( L"Clown : %f, %f, %f, %f\n", vecClown.x, vecClown.y, vecClown.z, fClown );
-	//CDebugConsole::GetInstance()->Messagef( L"Panda : %f, %f, %f, %f\n", vecPanda.x, vecPanda.y, vecPanda.z, fPanda );
-	//CDebugConsole::GetInstance()->Messagef( L"BrownBear : %f, %f, %f, %f\n", vecBrownBear.x, vecBrownBear.y, vecBrownBear.z, fBrownBear );
+	////CDebugConsole::GetInstance()->Messagef( L"Clown : %f, %f, %f, %f\n", vecClown.x, vecClown.y, vecClown.z, fClown );
+	////CDebugConsole::GetInstance()->Messagef( L"Panda : %f, %f, %f, %f\n", vecPanda.x, vecPanda.y, vecPanda.z, fPanda );
+	////CDebugConsole::GetInstance()->Messagef( L"BrownBear : %f, %f, %f, %f\n", vecBrownBear.x, vecBrownBear.y, vecBrownBear.z, fBrownBear );
 
 	//if( GetKeyState( 'A' ) & 0x8000 )
 	//	vecClown.x += 1.0f;

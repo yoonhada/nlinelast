@@ -94,7 +94,7 @@ HRESULT ASEViewerBase::LoadTextureFromFile( LPDIRECT3DTEXTURE9* _ppTexture, LPCW
 	
 	TCHAR	str[ 1024 ];
 	wsprintf( str, L"LoadTexture : %s\n", FileName );
-	//CDebugConsole::GetInstance()->Message( str );
+	////CDebugConsole::GetInstance()->Message( str );
 
 	return S_OK;
 

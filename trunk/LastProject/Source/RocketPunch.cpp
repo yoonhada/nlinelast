@@ -24,7 +24,7 @@ VOID RocketPunch::Enter( CMonster* a_pMonster )
 	// Melee 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_ROCKETPUNCH );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"RocketPunch : ANIM_ROCKETPUNCH \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"RocketPunch : ANIM_ROCKETPUNCH \n" );
 #endif
 
 	if( a_pMonster->Get_MonsterNumber() == 2 )

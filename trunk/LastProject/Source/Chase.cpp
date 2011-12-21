@@ -24,7 +24,7 @@ VOID Chase::Enter( CMonster* a_pMonster )
 	// 이동 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_MOVE );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Chase : ANIM_MOVE \n" );
+	////CDebugConsole::GetInstance()->Messagef( L"Chase : ANIM_MOVE \n" );
 #endif
 }
 

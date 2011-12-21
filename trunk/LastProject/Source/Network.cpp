@@ -118,7 +118,7 @@ VOID CNetwork::SC_INIT( CPacket& a_pk )
 
 	CObjectManage::GetInstance()->Set_Host( host );
 	CObjectManage::GetInstance()->Set_ClientNumber( user_no );
-	//CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
+	////CDebugConsole::GetInstance()->Messagef( L"HOST : %d Number : %d\n" , host, user_no );
 	CCharactor * pCharactors = CObjectManage::GetInstance()->Get_Charactor();
 	// 유저수 만큼 루프
 	for( WORD i=0; i<userCount; ++i )
@@ -170,7 +170,7 @@ VOID CNetwork::SC_ADD_USER( CPacket& a_pk )
 	{
 		CObjectManage::GetInstance()->GetLobbyScene()->EnableButton( LOBBY_START, FALSE );
 	}
-	//CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
+	////CDebugConsole::GetInstance()->Messagef( L"New User Number : %d\n" , wNumber );
 }
 
 
@@ -292,7 +292,7 @@ VOID CNetwork::SC_EVENT_STATE( CPacket& a_pk )
 
 	// 이벤트 활성화
 	CGameEvent::GetInstance()->AddEvent( wEventID, 0.01f );
-	CDebugConsole::GetInstance()->Message("SC_EVENT_STATE\n\n");
+	//CDebugConsole::GetInstance()->Message("SC_EVENT_STATE\n\n");
 }
 
 
@@ -388,7 +388,7 @@ VOID CNetwork::SC_PLAYER_MOVEMENT( CPacket& a_pk )
 		if( pCharactors[Loop]->Get_ClientNumber() == number  )
 		{
 			pCharactors[Loop]->UpdateByValue( m_vMove, angle );
-			//CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
+			////CDebugConsole::GetInstance()->Messagef( L"Move Number : %d / Recv Pos : %f %f %f \n", number, x, z, angle );
 			break;
 		}
 	}
@@ -465,12 +465,12 @@ VOID CNetwork::SC_UTOM_ATTACK( CPacket& a_pk )
 		for( WORD j=0; j<wDestroyCount; ++j )
 		{
 			a_pk.Read( &wList[k] );
-			CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[k] );
+			//CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[k] );
 			++k;
 		}
 
 		int nPlayer = CObjectManage::GetInstance()->Get_CharTable( static_cast<int>( wClientNumber ) );
-		CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", wDestroyPart, wDestroyCount );
+		//CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", wDestroyPart, wDestroyCount );
 		CObjectManage::GetInstance()->Get_Monster()[wMonsterNumber]->Get_MonsterPart()[wDestroyPart].RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 		CGameEvent::GetInstance()->Set_PlayerIndex( nPlayer );
 		CGameEvent::GetInstance()->Set_MonsterIndex( static_cast<int>( wMonsterNumber ) );
@@ -500,14 +500,14 @@ VOID CNetwork::SC_MTOU_ATTACK( CPacket& a_pk )
 	for( WORD i=0; i<wDestroyCount; ++i )
 	{
 		a_pk.Read( &wList[i] );
-		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount List : %d\n", wList[i] );
 	}
 
 	CObjectManage * pOM = CObjectManage::GetInstance();
 	CCharactor& rChar = pOM->Get_Charactor()[ pOM->Get_CharTable( wClientNumber ) ];
 
 	rChar.RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
-	//CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
+	////CDebugConsole::GetInstance()->Messagef( L"Rcv Part:wDestroyCount : %d : %d\n", cDestroyPart, wDestroyCount );
 
 	//CObjectManage::GetInstance()->Get_CharactorList()[wClientNumber]->RecvBreakList( wDestroyCount, wList, D3DXVECTOR3( fDirX, fDirY, fDirZ ) );
 
@@ -533,7 +533,7 @@ VOID CNetwork::SC_EVENT_ATTACK( CPacket& a_pk )
 	a_pk.Read( &wDestroyCount );
 
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount : %d \n", wDestroyCount );
+	//CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyCount : %d \n", wDestroyCount );
 #endif
 
 	WORD wList[1000];
@@ -541,7 +541,7 @@ VOID CNetwork::SC_EVENT_ATTACK( CPacket& a_pk )
 	{
 		a_pk.Read( &wList[i] );
 #ifdef _DEBUG
-		CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyList : %d \n", wList[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Rcv wDestroyList : %d \n", wList[i] );
 #endif
 	}
 
@@ -681,7 +681,7 @@ VOID CNetwork::CS_LOGON( LPWSTR a_szNickName )
 
 	SendToServer( sendPk );
 #ifndef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"LOGON send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"LOGON send \n" );
 #endif
 }
 
@@ -701,7 +701,7 @@ VOID CNetwork::CS_READY( WORD a_wSelect, BOOL a_bSelect )
 
 	SendToServer( sendPk );
 #ifndef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"READY send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"READY send \n" );
 #endif
 }
 
@@ -718,7 +718,7 @@ VOID CNetwork::CS_GAME_START()
 
 	SendToServer( sendPk );
 #ifndef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"GAME START send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"GAME START send \n" );
 #endif
 }
 
@@ -736,7 +736,7 @@ VOID CNetwork::CS_LODING_COMPLETE()
 
 	SendToServer( sendPk );
 #ifndef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"LODING COMPLETE send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"LODING COMPLETE send \n" );
 #endif
 }
 
@@ -846,7 +846,7 @@ VOID CNetwork::CS_CHAT( LPWSTR a_szText )
 
 	SendToServer( sendPk );
 #ifndef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"CHAT send \n " );
+	//CDebugConsole::GetInstance()->Messagef( L"CHAT send \n " );
 #endif
 }
 
@@ -866,7 +866,7 @@ VOID CNetwork::CS_PLAYER_MOVEMENT( CONST FLOAT& a_fX, CONST FLOAT& a_fZ, CONST F
 
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	//CDebugConsole::GetInstance()->Messagef( L"****MOV \n " );
+	////CDebugConsole::GetInstance()->Messagef( L"****MOV \n " );
 #endif
 }
 
@@ -902,7 +902,7 @@ VOID CNetwork::CS_MONSTER_MOVEMENT( WORD a_iMonsterNumber, PathNode* a_pPath )
 
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"MONSTER MOVEMENT send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"MONSTER MOVEMENT send \n" );
 #endif
 }
 
@@ -923,7 +923,7 @@ VOID CNetwork::CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, 
 	sendPk.Write( a_wTotalParts );
 
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Send TotalParts : %d \n", a_wTotalParts );
+	//CDebugConsole::GetInstance()->Messagef( L"Send TotalParts : %d \n", a_wTotalParts );
 #endif
 
 	INT k = 0;
@@ -933,8 +933,8 @@ VOID CNetwork::CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, 
 		sendPk.Write( a_wDestroyCount[i] );
 
 #ifdef _DEBUG
-		CDebugConsole::GetInstance()->Messagef( L"Send DestroyPart : %d \n", a_wDestroyPart[i] );
-		CDebugConsole::GetInstance()->Messagef( L"Send DestroyCount : %d \n", a_wDestroyCount[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Send DestroyPart : %d \n", a_wDestroyPart[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Send DestroyCount : %d \n", a_wDestroyCount[i] );
 #endif
 
 		for( WORD j=0; j<a_wDestroyCount[i]; ++j )
@@ -942,7 +942,7 @@ VOID CNetwork::CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, 
 			sendPk.Write( a_pList[k] );
 
 #ifdef _DEBUG
-			CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[k] );
+			//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[k] );
 #endif
 			++k;
 		}
@@ -953,9 +953,9 @@ VOID CNetwork::CS_UTOM_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection, 
 	SendToServer( sendPk );
 
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Packet Length : %d \n", sendPk.GetLength() );
-	CDebugConsole::GetInstance()->Messagef( L"Send Size : %d \n", wMsgSize );
-	CDebugConsole::GetInstance()->Messagef( L"****C-ATK \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Packet Length : %d \n", sendPk.GetLength() );
+	//CDebugConsole::GetInstance()->Messagef( L"Send Size : %d \n", wMsgSize );
+	//CDebugConsole::GetInstance()->Messagef( L"****C-ATK \n" );
 #endif
 }
 
@@ -975,7 +975,7 @@ VOID CNetwork::CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wDestroyCount, s
 	sendPk.Write( a_wDestroyCount );
 
 #ifdef _DEBUG
-	//CDebugConsole::GetInstance()->Messagef( L"cDestroyCount : %d \n", a_wDestroyCount );
+	////CDebugConsole::GetInstance()->Messagef( L"cDestroyCount : %d \n", a_wDestroyCount );
 #endif
 
 	for( WORD i=0; i<a_wDestroyCount; ++i )
@@ -983,7 +983,7 @@ VOID CNetwork::CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wDestroyCount, s
 		sendPk.Write( a_pList[i] );
 
 #ifdef _DEBUG
-	//CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
+	////CDebugConsole::GetInstance()->Messagef( L"Send cDestroy List : %d\n", a_pList[i] );
 #endif
 	}
 	
@@ -991,7 +991,7 @@ VOID CNetwork::CS_MTOU_ATTACK( D3DXVECTOR3 a_vDirection, WORD a_wDestroyCount, s
 
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"M-ATK \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"M-ATK \n" );
 #endif
 }
 
@@ -1012,14 +1012,14 @@ VOID CNetwork::CS_EVENT_ATTACK( WORD a_wMonsterNumber, D3DXVECTOR3 a_vDirection,
 	sendPk.Write( a_wDestroyCount );
 
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Send DestroyCount : %d \n", a_wDestroyCount );
+	//CDebugConsole::GetInstance()->Messagef( L"Send DestroyCount : %d \n", a_wDestroyCount );
 #endif
 
 	for( WORD i=0; i<a_wDestroyCount; ++i )
 	{
 		sendPk.Write( a_pList[i] );
 #ifdef _DEBUG
-		CDebugConsole::GetInstance()->Messagef( L"Send DestroyList : %d \n", a_pList[i] );
+		//CDebugConsole::GetInstance()->Messagef( L"Send DestroyList : %d \n", a_pList[i] );
 #endif
 	}
 
@@ -1045,7 +1045,7 @@ VOID CNetwork::CS_Player_Attack_Animation( WORD a_wAnimationNumber, WORD a_wSoun
 
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Player ATK ANI send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Player ATK ANI send \n" );
 #endif
 }
 
@@ -1065,7 +1065,7 @@ VOID CNetwork::CS_Monster_Attack_Animation( WORD a_wMonsterNumber, WORD a_wAnima
 
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI send \n" );
 #endif
 }
 
@@ -1091,7 +1091,7 @@ VOID CNetwork::CS_Monster_Attack_Animation2( WORD a_wMonsterNumber, WORD a_wAnim
 
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI2 send \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Monster ATK ANI2 send \n" );
 #endif
 }
 
@@ -1112,7 +1112,7 @@ VOID CNetwork::CS_Monster_LockOn( WORD a_wMonsterNumber, FLOAT a_fAngle )
 	SendToServer( sendPk );
 
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Monster LockOn send \n ");
+	//CDebugConsole::GetInstance()->Messagef( L"Monster LockOn send \n ");
 #endif
 }
 
@@ -1132,7 +1132,7 @@ VOID CNetwork::CS_GAME_RESULT()
 	sendPk.CalcSize();
 	SendToServer( sendPk );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"GAME RESULT send \n ");
+	//CDebugConsole::GetInstance()->Messagef( L"GAME RESULT send \n ");
 #endif
 }
 
@@ -1363,7 +1363,7 @@ UINT WINAPI RecvThread( LPVOID a_p )
 		if( nSize == SOCKET_ERROR )
 		{
 #ifdef _DEBUG
-			CDebugConsole::GetInstance()->Messagef( "recv Error :  \n", WSAGetLastError() );
+			//CDebugConsole::GetInstance()->Messagef( "recv Error :  \n", WSAGetLastError() );
 #endif
 			break;
 		}
@@ -1372,7 +1372,7 @@ UINT WINAPI RecvThread( LPVOID a_p )
 		if( nSize == 0 )
 		{
 #ifdef _DEBUG
-			CDebugConsole::GetInstance()->Messagef( "Disconnected \n" );
+			//CDebugConsole::GetInstance()->Messagef( "Disconnected \n" );
 #endif
 			pNetwork->Close();
 			break;

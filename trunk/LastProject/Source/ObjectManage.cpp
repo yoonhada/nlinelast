@@ -134,7 +134,7 @@ HRESULT CObjectManage::Release()
 
 VOID CObjectManage::Set_PushBackNetworkSendTempVector( WORD a_wData )
 {
-	//CDebugConsole::GetInstance()->Messagef( L"PushBack Size : %d / Data : %d\n", m_NetworkSendTempVector.size(), a_wData );
+	////CDebugConsole::GetInstance()->Messagef( L"PushBack Size : %d / Data : %d\n", m_NetworkSendTempVector.size(), a_wData );
 	m_NetworkSendTempVector.push_back(a_wData);
 }
 

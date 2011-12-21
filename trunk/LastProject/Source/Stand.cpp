@@ -18,7 +18,7 @@ VOID Stand::Enter( CMonster* a_pMonster )
 	// Melee 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Stand : ANIM_STAND \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Stand : ANIM_STAND \n" );
 #endif
 }
 

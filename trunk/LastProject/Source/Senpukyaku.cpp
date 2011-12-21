@@ -19,7 +19,7 @@ VOID Senpukyaku::Enter( CMonster* a_pMonster )
 	// Spin 공격 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_SENPUKYAKU );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SENPUKYAKU \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SENPUKYAKU \n" );
 #endif
 }
 

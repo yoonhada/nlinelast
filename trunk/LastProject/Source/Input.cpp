@@ -87,7 +87,7 @@ VOID CInput::Update( FLOAT a_fCameraMoveSpeed, FLOAT a_fCameraRotateSpeed,
 			// Y축 회전 값
 			m_fYRotate = D3DXToRadian( m_vRotate.x * 0.075f );
 			m_fXRotate = D3DXToRadian( m_vRotate.y * 0.075f );
-			//CDebugConsole::GetInstance()->Messagef( "Input : %f\n", m_fXRotate );
+			////CDebugConsole::GetInstance()->Messagef( "Input : %f\n", m_fXRotate );
 
 			// 마우스를 윈도우의 중앙으로 초기화
 			MouseMoveCenter();

@@ -21,7 +21,7 @@ VOID Seek::Enter( CMonster* a_pMonster )
 	// 대기 애니메이션으로 바꾼다.
 	a_pMonster->ChangeAnimation( CMonster::ANIM_STAND );
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Seek : ANIM_STAND \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Seek : ANIM_STAND \n" );
 #endif
 
 	Astar::GetInstance()->ClearWall( a_pMonster->Get_ChaseTotalPathCnt(), a_pMonster->Get_Path() );
@@ -111,7 +111,7 @@ VOID Seek::Execute( CMonster* a_pMonster )
 		DWORD oldTime = timeGetTime();
 		PathNode* path = Astar::GetInstance()->findPath( StartX, StartZ, EndX, EndZ );
 		FLOAT time = ( timeGetTime() - oldTime ) * 0.001f;
-		CDebugConsole::GetInstance()->Messagef( "Search Time : %f \n", time );
+		//CDebugConsole::GetInstance()->Messagef( "Search Time : %f \n", time );
 
 #ifdef _DEBUG
 

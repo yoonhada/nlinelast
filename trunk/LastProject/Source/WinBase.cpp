@@ -27,7 +27,7 @@ HRESULT CWinBase::Create()
 	CSceneManage::GetInstance();
 	CObjectManage::GetInstance();
 	CDebugConsole::GetInstance();
-	CDebugConsole::GetInstance()->SetPosition( CDebugConsole::CSL_TR, TRUE );
+	//CDebugConsole::GetInstance()->SetPosition( CDebugConsole::CSL_TR, TRUE );
 	CFrequency::GetInstance();
 	//CTextureManage::GetInstance();
 	CInput::GetInstance();

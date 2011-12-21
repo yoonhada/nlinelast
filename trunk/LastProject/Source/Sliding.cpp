@@ -19,7 +19,7 @@ VOID Sliding::Enter( CMonster* a_pMonster )
 	a_pMonster->ChangeAnimation( CMonster::ANIM_SLIDING );
 
 #ifdef _DEBUG
-	CDebugConsole::GetInstance()->Messagef( L"Sliding : ANIM_SLIDING \n" );
+	//CDebugConsole::GetInstance()->Messagef( L"Sliding : ANIM_SLIDING \n" );
 #endif
 }
 
