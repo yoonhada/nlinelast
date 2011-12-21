@@ -77,6 +77,7 @@ VOID CCamera::SetCamera()
 	{
 		if ( m_pCameraWork[1]->Update() == FALSE)
 		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::TARGET_SHOW_END, 0.01f );		
 			m_nEffect = NONE;
 		}
 
