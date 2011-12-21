@@ -755,9 +755,9 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 		CGameEvent::GetInstance()->SetTutorial( nEvent );
 		EventStateNetwork( nEvent );
 		//EventInitGameState( nEvent );
+		CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_BEAR );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
-			CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_BEAR );
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_BEAR, 0.01f );
 		}
 		break;
@@ -830,9 +830,9 @@ VOID CMainScene::EventSceneBear( INT nEvent )
 
 	case CGameEvent::SCENE_BEAR_END:
 		m_pEventGUICombo->Initialize();
+		CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_CLOWN );
 		if ( CObjectManage::GetInstance()->IsHost() )
 		{
-			CGameEvent::GetInstance()->SetScene( CGameEvent::SCENE_CLOWN );
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_CLOWN, 0.01f );
 		}
 		CSound::GetInstance()->StopBGM( CSound::BGM_BEAR );
