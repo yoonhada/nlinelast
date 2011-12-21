@@ -389,9 +389,9 @@ VOID	CMainScene::Render()
 
 	m_pLight->EnableLight();
 	
-	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
+	//m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
 	m_pASEViewer->Render();
-	m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
+	//m_pD3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
 
 	m_pLight->EnableCharacterLight();
 
@@ -838,7 +838,9 @@ VOID CMainScene::EventSceneClown( INT nEvent )
 		}
 		CSound::GetInstance()->PlayBGM( CSound::BGM_PIERO );
 		break;
+	case CGameEvent::TARGET_SHOW_END:
 
+		break;
 	case CGameEvent::EVENT_COMBO:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO \n" );
 		EventStateNetwork( nEvent );
@@ -863,8 +865,10 @@ VOID CMainScene::EventSceneClown( INT nEvent )
 	case CGameEvent::EVENT_COMBO_SUCCESS:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::EVENT_COMBO_SUCCESS \n" );
 		m_pEventGUICombo->Success();
+		CGameEvent::GetInstance()->ClearCombo();
 		if ( CObjectManage::GetInstance()->IsHost() ) 
 		{
+			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::MONSTER_BREAK_NOCKDOWN, 2.0f );				
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO_END, 3.0f );
 			CNetwork::GetInstance()->CS_EVENT_STATE( nEvent ); 
@@ -881,11 +885,6 @@ VOID CMainScene::EventSceneClown( INT nEvent )
 	case CGameEvent::MONSTER_BREAK_NOCKDOWN:
 		CDebugConsole::GetInstance()->Message( "CGameEvent::MONSTER_BREAK_NOCKDOWN \n" );
 		MonsterBreakNockdown();
-		EventStateNetwork( nEvent );
-		break;
-	case CGameEvent::DOOR_BREAK_NOCKDOWN:
-		CDebugConsole::GetInstance()->Message( "CGameEvent::DOOR_BREAK_NOCKDOWN \n" );
-		DoorBreakNockdown();
 		EventStateNetwork( nEvent );
 		break;
 	case CGameEvent::GAME_HEALING:
@@ -1061,9 +1060,10 @@ VOID CMainScene::EventFirstAidKit()
 
 VOID CMainScene::MonsterBreakNockdown()
 {
-	if (CGameEvent::GetInstance()->GetMonsterState() == CGameEvent::CLOWN )
+	if ( CGameEvent::GetInstance()->GetMonsterState() & CGameEvent::CLOWN )
 	{
 		if ( m_pMonster[ 2 ]->BreakNockdown( TRUE ) && CObjectManage::GetInstance()->IsHost() )
+
 		{
 			m_pMonster[ 2 ]->GetFSM()->SetCurrentState( NULL );
 
