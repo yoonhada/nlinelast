@@ -126,7 +126,8 @@ VOID MainGUI::CreateMiniMap()
 	m_fMmpX			= 0.0f;
 	m_fMmpY			= 10.0f;
 	m_fMmpWidth		= 208.0f;
-	m_fMmpHeight	= 340.0f;
+	//m_fMmpHeight	= 340.0f;
+	m_fMmpHeight	= 332.0f;
 
 	m_fMmpRatioX	= m_fMmpWidth / m_fMapWidth;
 	m_fMmpRatioY	= m_fMmpHeight / m_fMapHeight;
@@ -152,8 +153,8 @@ VOID MainGUI::Create()
 	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\MainScene\\Edit.png" );
 	
 	GUIBase::IMAGEPARAM imgParamCaret;
-	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png" );
-	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png", 700 );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png", 700 );
 
 	m_pChatEdit->Create(	MAIN_CHAT,
 							GUIEditManager::EDT_DYNAMIC,

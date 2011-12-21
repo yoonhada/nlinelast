@@ -59,7 +59,7 @@ VOID LobbyGUI::CreateButton()
 	GUIBase::IMAGEPARAM imgReadyNormal, imgReadyHot, imgReadyDown, imgReadyDisable;
 
 	FLOAT fX			= 1000.0f;
-	FLOAT fY			= 770.0f;
+	FLOAT fY			= /*770.0f*/590.0f;
 	FLOAT fWidth		= 252.0f;
 	FLOAT fHeight		= 66.0f;
 	
@@ -74,7 +74,7 @@ VOID LobbyGUI::CreateButton()
 	GUIBase::IMAGEPARAM imgStartNormal, imgStartHot, imgStartDown, imgStartDisable;
 
 	fX		= 1000.0f;
-	fY		= 850.0f;
+	fY		= /*850.0f*/670.0f;
 	fWidth	= 252.0f;
 	fHeight	= 66.0f;
 
@@ -104,10 +104,10 @@ VOID LobbyGUI::CreateButton()
 	//	Character Select
 	GUIBase::IMAGEPARAM imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable;
 
-	fX			= 40.0f;
-	fY			= 190.0f;
-	fWidth		= 286.0f;
-	fHeight		= 339.0f;
+	fX			= 120.0f;
+	fY			= 250.0f;
+	fWidth		= 220.0f;
+	fHeight		= 230.0f;
 
 	m_pGUIBase->AddFileName( 0, imgSelectNormal,	L"Img\\LobbyScene\\Listbox1.png" );
 	m_pGUIBase->AddFileName( 0, imgSelectHot,		L"Img\\LobbyScene\\Listbox1.png" );
@@ -116,13 +116,13 @@ VOID LobbyGUI::CreateButton()
 
 	m_pGUIBtnManager->Create( LOBBY_SELECT_1, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 	
-	fX += 310.0f;
+	fX = 400.0f;
 	m_pGUIBtnManager->Create( LOBBY_SELECT_2, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 310.0f;
+	fX = 670.0f;
 	m_pGUIBtnManager->Create( LOBBY_SELECT_3, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 
-	fX += 310.0f;
+	fX = 930.0f;
 	m_pGUIBtnManager->Create( LOBBY_SELECT_4, 0, fX, fY, fWidth,fHeight, imgSelectNormal, imgSelectHot, imgSelectDown, imgSelectDisable );
 }
 
@@ -137,8 +137,9 @@ VOID LobbyGUI::CreateEdit()
 	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\LobbyScene\\Edit.png" );
 
 	GUIBase::IMAGEPARAM imgParamCaret;
-	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png" );
-	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png" );
+	imgParamCaret.dPivotType = GUIBase::GBS_TOPLEFT;
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png", 700 );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png", 700 );
 
 
 	m_pGUIEditManager->Create(	LOBBY_CHAT, 

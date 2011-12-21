@@ -84,8 +84,8 @@ VOID LoginGUI::CreateEdit()
 	m_pGUIBase->AddFileName( 0, imgParamEdit, L"Img\\LoginScene\\Name_Edit.png" );
 
 	GUIBase::IMAGEPARAM imgParamCaret;
-	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png" );
-	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png" );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Caret0.png", 700 );
+	m_pGUIBase->AddFileName( 0, imgParamCaret, L"Img\\Listbox1.png", 700 );
 
 	m_pGUIEditManager->Create(	LOGIN_IP,
 								GUIEditManager::EDT_STATIC,

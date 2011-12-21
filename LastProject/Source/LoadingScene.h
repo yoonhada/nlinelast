@@ -50,6 +50,10 @@ private:
 	CMonster*				m_pPanda;
 	CMonster*				m_pBrownBear;
 
+	BOOL					m_bClown;
+	BOOL					m_bPanda;
+	BOOL					m_bBrownBear;
+
 public:
 
 };

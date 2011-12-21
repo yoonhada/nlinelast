@@ -37,6 +37,7 @@ public:
 
 	VOID		Command( DWORD& _dOut );
 
+	VOID		NextBackgroundImage();
 	BOOL		IsEndAnimationImage();
 
 private:

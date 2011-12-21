@@ -216,7 +216,7 @@ LRESULT CALLBACK CWinBase::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		return 0;
 
 	case WM_DESTROY:
-		//ChangeDisplaySettings(NULL, 0);
+	/*	ChangeDisplaySettings(NULL, 0);*/
 		CNetwork::GetInstance()->CS_CLIENT_DISCONNECT();
 		PostQuitMessage(0);
 		CWinBase::DestoryInstance();

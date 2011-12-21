@@ -16,6 +16,11 @@ VOID LoadingScene::Initialize()
 	m_pClown		= NULL;
 	m_pPanda		= NULL;
 	m_pBrownBear	= NULL;
+
+	m_bClown		= FALSE;
+	m_bPanda		= FALSE;
+	m_bBrownBear	= FALSE;
+
 }
 
 VOID LoadingScene::Release()
@@ -63,21 +68,21 @@ HRESULT LoadingScene::Create( LPDIRECT3DDEVICE9 _pd3dDevice, LPD3DXSPRITE _pSpri
 	m_pClown->Create( _pd3dDevice, L"Data/CharData/27_pierro_body_11_28" );
 	m_pClown->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 88.0f ) );
 	m_pClown->Set_Angle( 2.49f );
-	m_pClown->ChangeAnimation( CMonster::ANIM_LODING );
+	m_pClown->ChangeAnimation( /*CMonster::ANIM_LODING*/ CMonster::ANIM_LOADING1 );
 	m_pClown->EnableShadow( FALSE );
 
 	m_pPanda = CObjectManage::GetInstance()->Get_Panda();		// new CMonster;
 	m_pPanda->Create( _pd3dDevice, L"Data/CharData/11_16_pa_sm_v6" );
 	m_pPanda->Set_Pos( D3DXVECTOR3( -4.0f, 0.0f, 126.0f ) );
 	m_pPanda->Set_Angle( 5.89f );
-	m_pPanda->ChangeAnimation( CMonster::ANIM_LODING );
+	m_pPanda->ChangeAnimation( /*CMonster::ANIM_LODING*/CMonster::ANIM_LOADING1 );
 	m_pPanda->EnableShadow( FALSE );
 
 	m_pBrownBear = CObjectManage::GetInstance()->Get_Bear();		// new CMonster;
 	m_pBrownBear->Create( _pd3dDevice, L"Data/CharData/11_16_Brown_Bear_v6" );
 	m_pBrownBear->Set_Pos( D3DXVECTOR3( -38.0f, 0.0f, 93.0f ) );
 	m_pBrownBear->Set_Angle( 4.949f );
-	m_pBrownBear->ChangeAnimation( CMonster::ANIM_LODING );
+	m_pBrownBear->ChangeAnimation( /*CMonster::ANIM_LODING*/CMonster::ANIM_LOADING1 );
 	m_pBrownBear->EnableShadow( FALSE );
 
 	return S_OK;
@@ -93,8 +98,8 @@ VOID LoadingScene::Update()
 	//m_pPanda->UpdateByValue( D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f );
 	m_pBrownBear->Update();
 
-	//static D3DXVECTOR3 vecClown( 19.0f, 0.0f, 81.0f ), vecPanda( -17.0f, 0.0f, 117.0f ), vecBrownBear( -17.0f, 0.0f, 150.0f );
-	//static FLOAT		fClown = 2.49f, fPanda = 5.44f, fBrownBear = 5.9f;
+	//static D3DXVECTOR3 vecClown( 19.0f, 0.0f, 81.0f ), vecPanda( 0.0f, 0.0f, 81.0f ), vecBrownBear( 0.0f, 0.0f, 81.0f );
+	//static FLOAT		fClown = 0.0f, fPanda = 3.14f, fBrownBear = 3.14f;
 	//
 	//CDebugConsole::GetInstance()->Messagef( L"Clown : %f, %f, %f, %f\n", vecClown.x, vecClown.y, vecClown.z, fClown );
 	//CDebugConsole::GetInstance()->Messagef( L"Panda : %f, %f, %f, %f\n", vecPanda.x, vecPanda.y, vecPanda.z, fPanda );
@@ -139,6 +144,10 @@ VOID LoadingScene::Update()
 	//if( GetKeyState( 'U' ) & 0x8000 )
 	//	fBrownBear -= 0.05f;
 
+
+	////if( fBrownBear > 6.28f ) fBrownBear = 0.0f;
+	////fBrownBear += 0.01f;
+
 	//m_pClown->Set_Pos( vecClown );
 	//m_pPanda->Set_Pos( vecPanda );
 	//m_pBrownBear->Set_Pos( vecBrownBear );
@@ -176,9 +185,12 @@ VOID LoadingScene::Render()
 	m_pLight->EnableCharacterLight( D3DXVECTOR3( 0.0f, -1.0f, -150.0f ) );
 
 	//	Render Monster
-	m_pClown->Render();
-	m_pPanda->Render();
-	m_pBrownBear->Render();
+	if( m_bClown )
+		m_pClown->Render();
+	if( m_bPanda )
+		m_pPanda->Render();
+	if( m_bBrownBear )
+		m_pBrownBear->Render();
 
 	m_pLight->DisableLight();
 	
@@ -194,4 +206,48 @@ INT LoadingScene::GetSceneNext()
 INT LoadingScene::GetSceneState()
 {
 	return m_scnState;
+}
+
+VOID LoadingScene::SelectScene( DWORD _dScene )
+{	
+	switch( _dScene )
+	{
+	case IScene::SCENE_LOGO:
+		m_pClown->Set_Pos( D3DXVECTOR3( 19.0f, 0.0f, 88.0f ) );
+		m_pClown->Set_Angle( 2.49f );
+		m_pClown->ChangeAnimation( CMonster::ANIM_LODING );
+		m_bClown = TRUE;
+
+		m_pPanda->Set_Pos( D3DXVECTOR3( -4.0f, 0.0f, 126.0f ) );
+		m_pPanda->Set_Angle( 5.89f );
+		m_pPanda->ChangeAnimation( CMonster::ANIM_LODING );
+		m_bPanda = TRUE;
+
+		m_pBrownBear->Set_Pos( D3DXVECTOR3( -38.0f, 0.0f, 93.0f ) );
+		m_pBrownBear->Set_Angle( 4.949f );
+		m_pBrownBear->ChangeAnimation( CMonster::ANIM_LODING );
+		m_bBrownBear = TRUE;
+		break;
+	case IScene::SCENE_STORY:
+		break;
+	case IScene::SCENE_MENU:
+		m_bClown = FALSE;
+
+		m_pPanda->Set_Pos( D3DXVECTOR3( 30.0f, 0.0f, 80.0f ) );
+		m_pPanda->Set_Angle( 2.39f );
+		m_pPanda->ChangeAnimation( CMonster::ANIM_LOADING1 );
+		m_bPanda = TRUE;
+
+		m_pBrownBear->Set_Pos( D3DXVECTOR3( -9.0f, 0.0f, 79.0f ) );
+		m_pBrownBear->Set_Angle( 3.39f );
+		m_pBrownBear->ChangeAnimation( CMonster::ANIM_LOADING1 );
+		m_bBrownBear = TRUE;
+		break;
+	case IScene::SCENE_LOBBY:
+		break;
+	case IScene::SCENE_MAIN:
+		break;
+	}
+
+
 }
