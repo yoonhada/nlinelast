@@ -12,7 +12,8 @@ public:
 		BGM_MENU = 0,
 		BGM_LOBBY,
 		BGM_GAME,
-		BGM_EVENT,
+		BGM_BEAR,
+		BGM_PIERO,
 
 		BGM_END,
 	};

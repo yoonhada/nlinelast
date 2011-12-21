@@ -5,7 +5,7 @@
 
 CSound::CSound()
 {
-	m_fBGMVolume	= 0.1f;
+	m_fBGMVolume	= 0.2f;
 	m_fEffectVolume = 0.8f;
 
 	Initialize();
@@ -74,9 +74,10 @@ VOID CSound::Update()
 VOID CSound::LoadSoundFiles()
 {
 	const CHAR* BGMFiles[BGM_END] = {
-		"Sound/BGM/cb_cardbattle_bgm.mp3",
-		"Sound/BGM/cb_cardbattle_bgm.mp3",
+		"Sound/BGM/BGM_Menu.mp3",
+		"Sound/BGM/BGM_Lobby.mp3",
 		"Sound/BGM/BGM_Game.mp3",
+		"Sound/BGM/BGM_Bear.ogg",	
 		"Sound/BGM/BGM_Piero.mp3",
 	};
 
