@@ -220,14 +220,12 @@ VOID LobbyScene::Update()
 	if( m_pLobbyGUI->GetButtonState( LOBBY_SELECT_4 ) == 1 )
 		EnableRotate( 3 );
 
-
 	//	Chatting Massage
 	WCHAR aStr[ 256 ] = { 0, };
 	if( m_pLobbyGUI->TakeChattingMassage( aStr ) )
 	{
 		CNetwork::GetInstance()->CS_CHAT( aStr );
 	}
-
 }
 
 VOID LobbyScene::Render()

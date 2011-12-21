@@ -383,6 +383,36 @@ VOID CMainScene::Update()
 	EventSwitch( m_pGameEvent->Update() );
 
 	CTree::GetInstance()->SetCharAtkClear();
+
+	//	Chatting Massage
+	INT iChar = pOM->Get_CharTable( pOM->Get_ClientNumber() );
+
+	WCHAR szName[16] = { 0, };
+	if( iChar == 0 )
+	{
+		lstrcpy( szName, L"아빠: " );
+	}
+	else if( iChar == 1 )
+	{
+		lstrcpy( szName, L"엄마: " );
+	}
+	else if( iChar == 2 )
+	{
+		lstrcpy( szName, L"아들: " );
+	}
+	else
+	{
+		lstrcpy( szName, L"딸: " );
+	}
+
+	WCHAR szStr[ 256 ] = { 0, };
+	WCHAR szChat[ 512 ] = { 0, };
+	if( m_pMainGUI->TakeChattingMassage( szStr ) )
+	{
+		lstrcpy( szChat, szName );
+		lstrcat( szChat, szStr );
+		CNetwork::GetInstance()->CS_CHAT( szChat );
+	}
 }
 
 VOID	CMainScene::Render()
@@ -615,8 +645,6 @@ VOID CMainScene::EventInitMonsterState( INT nEvent )
 	default:
 		break;
 	}
-
-
 }
 
 VOID CMainScene::EventSceneTutorial( INT nEvent )

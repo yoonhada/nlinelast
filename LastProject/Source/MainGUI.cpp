@@ -7,6 +7,10 @@
 
 VOID MainGUI::Initialize()
 {
+	m_pStr = new TCHAR[ 1024 ];
+	ZeroMemory( m_pStr, sizeof( TCHAR ) * 1024 );
+
+
 	m_pMouse				= new Mouse;
 	m_pGUIBase				= new GUIBase( m_pD3dDevice, m_pSprite );
 	m_pChatWindow			= new GUIListbox( m_pD3dDevice, m_pSprite );
@@ -26,6 +30,7 @@ VOID MainGUI::Release()
 	delete m_pMiniMap;
 	for( INT i=0 ; i<MMP_END ; i++ )
 		delete m_pMmpObject[ i ];
+	SAFE_DELETE( m_pStr );
 }
 
 VOID MainGUI::CreateMiniMap()
@@ -211,9 +216,9 @@ VOID MainGUI::Update()
 		bFirst = FALSE;
 	}
 
-	TCHAR Str[ 1024 ];
-	if( m_pChatEdit->TakeMessage( MAIN_CHAT, Str ) )
-		m_pChatWindow->AddItem( Str );
+	//TCHAR Str[ 1024 ];
+	//if( m_pChatEdit->TakeMessage( MAIN_CHAT, Str ) )
+	//	m_pChatWindow->AddItem( Str );
 }
 
 VOID MainGUI::Render()
@@ -269,4 +274,16 @@ VOID MainGUI::SetMiniMapObjectPosition( INT _iIndex, LPD3DXVECTOR3 _pvecPosition
 	vecPosition.z = 0.0f;
 
 	m_pMmpObject[ _iIndex ]->SetPosition( &vecPosition );
+}
+
+BOOL MainGUI::TakeChattingMassage( LPWSTR _pText )
+{
+	if( this->m_pChatEdit->TakeMessage( MAIN_CHAT, m_pStr ) )
+	{
+		this->m_pChatWindow->AddItem( m_pStr );
+
+		_tcscpy( _pText, m_pStr );
+		return TRUE;
+	}
+	return FALSE;
 }

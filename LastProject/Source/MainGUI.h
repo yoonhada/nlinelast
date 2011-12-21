@@ -49,6 +49,7 @@ public:
 	//	MiniMap
 	VOID		SetMiniMapObjectVisible( INT _iIndex, BOOL _bVisible );
 	VOID		SetMiniMapObjectPosition( INT _iIndex, LPD3DXVECTOR3 _pvecPosition );
+	BOOL		TakeChattingMassage( LPWSTR _pText );
 
 private:
 	LPDIRECT3DDEVICE9		m_pD3dDevice;
@@ -59,6 +60,8 @@ private:
 	GUIBase*				m_pGUIBase;
 	GUIListbox*				m_pChatWindow;
 	GUIEditManager*			m_pChatEdit;
+
+	LPWSTR					m_pStr;
 
 	//	MiniMap Data
 	GUIBackground*			m_pMiniMap;
