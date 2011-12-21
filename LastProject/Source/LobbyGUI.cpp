@@ -143,7 +143,7 @@ VOID LobbyGUI::CreateEdit()
 
 
 	m_pGUIEditManager->Create(	LOBBY_CHAT, 
-								GUIEditManager::EDT_DYNAMIC,
+		GUIEditManager::EDT_STATIC,
 								fX, fY, 
 								fWidth, fHeight, 
 								imgParamEdit, imgParamCaret );
@@ -280,6 +280,8 @@ BOOL LobbyGUI::TakeChattingMassage( LPWSTR _pText )
 	if( m_pGUIEditManager->TakeMessage( LOBBY_CHAT, m_pStr ) )
 	{
 		m_pGUIListbox->AddItem( m_pStr );
+
+		m_pGUIEditManager->TextClear( LOBBY_CHAT );
 
 		_tcscpy( _pText, m_pStr );
 		return TRUE;

@@ -67,6 +67,8 @@ public:
 	VOID		SetText( DWORD _dID, LPWSTR _pcText );
 	VOID		SetFont( DWORD _dID, LPWSTR _pFaceName, INT _iWidth, INT _iHeight ); 
 	BOOL		TakeMessage( DWORD _dID, LPWSTR _pcText );
+	BOOL		GetFocus( DWORD _dID );
+	VOID		TextClear( DWORD _dID );
 
 private:
 	LPDIRECT3DDEVICE9		m_pd3dDevice;

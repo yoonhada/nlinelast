@@ -193,3 +193,27 @@ VOID GUIEditManager::Render()
 	for( INT i=0 ; i<m_iNumData ; i++ )
 		m_vecData[ i ]->pGUIEdit->Render();
 }
+
+BOOL GUIEditManager::GetFocus( DWORD _dID )
+{
+	for( INT i=0 ; i<m_iNumData ; i++ )
+	{
+		if( m_vecData[ i ]->ID == _dID )
+		{
+			return m_vecData[ i ]->pGUIEdit->GetFocus();
+		}
+	}
+
+	return FALSE;
+}
+
+VOID GUIEditManager::TextClear( DWORD _dID )
+{
+	for( INT i=0 ; i<m_iNumData ; i++ )
+	{
+		if( m_vecData[ i ]->ID == _dID )
+		{
+			m_vecData[ i ]->pGUIEdit->TextClear();
+		}
+	}
+}

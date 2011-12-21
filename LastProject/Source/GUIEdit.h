@@ -40,6 +40,7 @@ public:
 	VOID			SetFont( LPWSTR _pFaceName, INT _iWidth, INT _iHeight );
 	VOID			SetText( LPWSTR _pcText );
 	BOOL			TakeMessage( LPWSTR _pcText );
+	VOID			TextClear();
 	
 	LPWSTR			GetText(){ return m_pcText; };
 	INT*			GetTextLength(){ return &m_iTextLength; };

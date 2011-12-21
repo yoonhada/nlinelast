@@ -170,12 +170,18 @@ VOID GUIEdit::EnableFocus( BOOL _bEnable )
 		fFontY	= m_fY + ( m_fHeight - fFontHeight ) * 0.5f;
 	
 		m_pGUICaret->ConnectText( m_pcText, fFontX, fFontY, fFontWidth, fFontHeight+ 5.0f );
+
+		if( m_dStyle == EDT_STYLE_DYNAMIC )
+			CInput::GetInstance()->EnableInput( TRUE );
 	}
 	else
 	{
 		m_pGUICaret->DisconnectText();
 
 		m_bMessage = TRUE;
+
+		if( m_dStyle == EDT_STYLE_DYNAMIC )
+			CInput::GetInstance()->EnableInput( FALSE );
 	}
 }
 
@@ -243,7 +249,9 @@ BOOL GUIEdit::OnUp( INT _iX, INT _iY )
 		return TRUE;
 	}
 	else
+	{
 		EnableFocus( FALSE );
+	}
 
 	return FALSE;
 }
@@ -255,3 +263,9 @@ BOOL GUIEdit::IsPtOnMe( INT _iX, INT _iY )
 	return ( PtInRect( &m_rtText, pt ) );
 }
 
+
+VOID GUIEdit::TextClear()
+{
+	ZeroMemory( m_pcText, sizeof( m_pcText ) );
+	m_iTextLength = 0;
+}
