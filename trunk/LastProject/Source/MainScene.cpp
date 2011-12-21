@@ -385,7 +385,7 @@ VOID CMainScene::Update()
 	CTree::GetInstance()->SetCharAtkClear();
 
 	//	Chatting Massage
-	INT iChar = pOM->Get_CharTable( pOM->Get_ClientNumber() );
+//	INT iChar = pOM->Get_CharTable( pOM->Get_ClientNumber() );
 /*
 	WCHAR szName[16] = { 0, };
 	if( iChar == 0 )
@@ -406,7 +406,7 @@ VOID CMainScene::Update()
 	}
 */
 	WCHAR szStr[ 256 ] = { 0, };
-	WCHAR szChat[ 512 ] = { 0, };
+//	WCHAR szChat[ 512 ] = { 0, };
 	if( m_pMainGUI->TakeChattingMassage( szStr ) )
 	{
 //		lstrcpy( szChat, szName );
