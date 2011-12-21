@@ -40,8 +40,7 @@ public:
 
 private:
 
-	enum ClassType { NONE, CHARACTOR, MONSTER };
-
+	//enum ClassType { NONE, CHARACTOR, MONSTER };
 	LPDIRECT3DDEVICE9			m_pD3dDevice; ///< d3d9 디바이스
 	OptionScene*				m_pOptionScene;
 	MainGUI*					m_pMainGUI;
@@ -95,6 +94,7 @@ private:
 	VOID EventSceneTutorial( INT nEvent );
 	VOID EventSceneBear( INT nEvent );
 	VOID EventSceneClown( INT nEvent );
+
 	VOID EventStateNetwork( INT nEvent );
 	VOID EventMapCameraWalk( INT nEvent );
 	VOID EventInitGameState( INT nEvent );
@@ -108,9 +108,7 @@ private:
 	VOID DoorBreakNockdown();
 
 	VOID GamePoint( INT );
-	//VOID GamePoint();
 	VOID GameEnd();
-	//CEfSurface * m_pCharView;
 };
 
 #endif

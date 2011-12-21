@@ -907,14 +907,14 @@ BOOL CCharactor::BreakQube( D3DXMATRIXA16 &mat )
 
 			if( !m_bMonster )
 			{
-				if (nCount > 100)
+				if (nCount > 125 )
 				{
 					break;
 				}
 			}
 			else
 			{
-				if (nCount > 100)
+				if (nCount > 50)
 				{
 					break;
 				}

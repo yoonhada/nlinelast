@@ -113,6 +113,7 @@ HRESULT CMainScene::Create( LPDIRECT3DDEVICE9 a_pD3dDevice, LPD3DXSPRITE a_Sprit
 	//캐릭터 생성
 	m_nClientID = CObjectManage::GetInstance()->Get_ClientNumber();
 	CreateCharactor();
+	EventInitCharState( CGameEvent::SCENE_TUTORIAL );
 
 	//몬스터 생성
 	m_pMonster = CObjectManage::GetInstance()->Get_Monster();
