@@ -25,7 +25,8 @@ VOID OptionGUI::CreateButton()
 	D3DVIEWPORT9 Vp;
 	m_pD3dDevice->GetViewport( &Vp );
 
-	FLOAT fX		= 1120.0f;
+	//FLOAT fX		= 1120.0f;
+	FLOAT fX		= 1200.0f;
 	FLOAT fY		= 0.0f;
 	FLOAT fWidth	= 55.0f;
 	FLOAT fHeight	= 55.0f;
@@ -64,46 +65,46 @@ VOID OptionGUI::CreateButton()
 
 	m_pGUIBtnManager->Create( OPTION_SETUP, 0, imgSetupNormal, imgSetupHot, imgSetupDown, imgSetupDisable );
 
-	GUIBase::IMAGEPARAM imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable;
-	//	Background Next Button
-	fX		= 1200.0f;
-	fY		= 0.0f;
-	fWidth	= 55.0f;
-	fHeight	= 55.0f;
+	//GUIBase::IMAGEPARAM imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable;
+	////	Background Next Button
+	//fX		= 1200.0f;
+	//fY		= 0.0f;
+	//fWidth	= 55.0f;
+	//fHeight	= 55.0f;
 
-	imgHelpNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgHelpNormal.fX			= fX;
-	imgHelpNormal.fY			= fY;
-	imgHelpNormal.fWidth		= fWidth;
-	imgHelpNormal.fHeight		= fHeight;
+	//imgHelpNormal.dPivotType	= GUIBase::GBS_TOPLEFT;
+	//imgHelpNormal.fX			= fX;
+	//imgHelpNormal.fY			= fY;
+	//imgHelpNormal.fWidth		= fWidth;
+	//imgHelpNormal.fHeight		= fHeight;
 
-	m_pGUIBase->AddFileName( 0, imgHelpNormal, L"Img\\OptionScene\\Help_Normal.png" );
+	//m_pGUIBase->AddFileName( 0, imgHelpNormal, L"Img\\OptionScene\\Help_Normal.png" );
 
-	imgHelpHot.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgHelpHot.fX			= fX;
-	imgHelpHot.fY			= fY;
-	imgHelpHot.fWidth		= fWidth;
-	imgHelpHot.fHeight		= fHeight;
+	//imgHelpHot.dPivotType	= GUIBase::GBS_TOPLEFT;
+	//imgHelpHot.fX			= fX;
+	//imgHelpHot.fY			= fY;
+	//imgHelpHot.fWidth		= fWidth;
+	//imgHelpHot.fHeight		= fHeight;
 
-	m_pGUIBase->AddFileName( 0, imgHelpHot, L"Img\\OptionScene\\Help_Normal.png" );
+	//m_pGUIBase->AddFileName( 0, imgHelpHot, L"Img\\OptionScene\\Help_Normal.png" );
 
-	imgHelpDown.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgHelpDown.fX			= fX;
-	imgHelpDown.fY			= fY;
-	imgHelpDown.fWidth		= fWidth;
-	imgHelpDown.fHeight		= fHeight;
+	//imgHelpDown.dPivotType	= GUIBase::GBS_TOPLEFT;
+	//imgHelpDown.fX			= fX;
+	//imgHelpDown.fY			= fY;
+	//imgHelpDown.fWidth		= fWidth;
+	//imgHelpDown.fHeight		= fHeight;
 
-	m_pGUIBase->AddFileName( 0, imgHelpDown, L"Img\\OptionScene\\Help_Down.png" );
+	//m_pGUIBase->AddFileName( 0, imgHelpDown, L"Img\\OptionScene\\Help_Down.png" );
 
-	imgHelpDisable.dPivotType	= GUIBase::GBS_TOPLEFT;
-	imgHelpDisable.fX			= fX;
-	imgHelpDisable.fY			= fY;
-	imgHelpDisable.fWidth		= fWidth;
-	imgHelpDisable.fHeight		= fHeight;
+	//imgHelpDisable.dPivotType	= GUIBase::GBS_TOPLEFT;
+	//imgHelpDisable.fX			= fX;
+	//imgHelpDisable.fY			= fY;
+	//imgHelpDisable.fWidth		= fWidth;
+	//imgHelpDisable.fHeight		= fHeight;
 
-	m_pGUIBase->AddFileName( 0, imgHelpDisable, L"Img\\OptionScene\\Help_Down.png" );
+	//m_pGUIBase->AddFileName( 0, imgHelpDisable, L"Img\\OptionScene\\Help_Down.png" );
 
-	m_pGUIBtnManager->Create( OPTION_HELP, 0, imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable );
+	//m_pGUIBtnManager->Create( OPTION_HELP, 0, imgHelpNormal, imgHelpHot, imgHelpDown, imgHelpDisable );
 }
 
 VOID OptionGUI::Create()

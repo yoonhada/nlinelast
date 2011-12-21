@@ -49,6 +49,7 @@ private:
 	GUIBackground*			m_pGUIBackground;
 	GUIListbox*				m_pGUIListbox;
 
+
 	FLOAT					m_fX, m_fY;
 	FLOAT					m_fWidth, m_fHeight;
 

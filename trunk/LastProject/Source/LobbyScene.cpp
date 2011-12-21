@@ -106,7 +106,7 @@ VOID LobbyScene::EnableRotate( INT _iIndex )
 	m_aData[ _iIndex ].bRotate	= TRUE;
 	
 	m_fChrRotate = 3.14f;
-	m_fIncRotate = 0.005f;
+	m_fIncRotate = 0.01f;
 }
 
 VOID LobbyScene::DisableRotate( INT _iIndex )
