@@ -25,6 +25,8 @@ VOID CTimeLifeItem::Update()
 {
 	if ( CollisionAtk( ) )
 	{
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_HIT );
+
 		if ( m_iMonsterNumber & 0x00F0 )
 		{
 			D3DXMATRIXA16 mat;
@@ -39,7 +41,6 @@ VOID CTimeLifeItem::Update()
 			m_fLife = 3.0f;
 			BreakCubeAll();
 		}
-
 	}
 	if ( m_fLife > 0.0f )
 	{

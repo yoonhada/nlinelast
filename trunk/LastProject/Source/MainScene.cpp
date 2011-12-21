@@ -767,6 +767,8 @@ VOID CMainScene::EventSceneBear( INT nEvent )
 		{			
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 		}
+		CSound::GetInstance()->StopBGM( CSound::BGM_GAME );
+		CSound::GetInstance()->PlayBGM( CSound::BGM_BEAR );
 		break;
 	case CGameEvent::SCENE_BEAR_END:
 		m_pEventGUICombo->Initialize();
@@ -774,6 +776,7 @@ VOID CMainScene::EventSceneBear( INT nEvent )
 		{
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::SCENE_CLOWN, 0.01f );
 		}
+		CSound::GetInstance()->StopBGM( CSound::BGM_BEAR );
 		break;
 		//////////////////////////////////////////////////////////////////////////
 	case CGameEvent::SCENE_CLOWN:
@@ -787,6 +790,7 @@ VOID CMainScene::EventSceneBear( INT nEvent )
 		{			
 			CGameEvent::GetInstance()->AddEvent( CGameEvent::EVENT_COMBO, fComboTime + fComboTerm );
 		}
+		CSound::GetInstance()->PlayBGM( CSound::BGM_PIERO );
 		break;
 
 	case CGameEvent::EVENT_COMBO:
