@@ -53,6 +53,7 @@ VOID CMonster::Clear()
 	
 	m_fTime = 0.0f;
 	m_fAttackTime = 0.0f;
+	m_fSoundTime = 0.0f;
 	m_fInterpolationTime = 0.0f;
 	m_iTarget = -1;
 	m_iTargetPos[0] = 0;
@@ -934,6 +935,7 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 	//}
 	
 	INT nCout, Loop = 0;
+	BOOL bCollision = FALSE;
 	D3DXMATRIXA16 mat = Get_MatWorld();
 	for( Loop = 0; Loop < m_iCharEditorMax; ++Loop )
 	{
@@ -945,25 +947,50 @@ VOID CMonster::UpdateByValue( D3DXVECTOR3& a_vControl, FLOAT a_fAngle )
 				CGameEvent::GetInstance()->Set_PlayerIndex( CObjectManage::GetInstance()->Get_CharTable( CObjectManage::GetInstance()->Get_ClientNumber() ) );
 				CGameEvent::GetInstance()->Set_MonsterIndex( m_iMonsterNumber );
 				m_iBreakedCubeCnt += nCout;
+
+				bCollision = TRUE;
+			}
+		}
+	}
+
+	// 몬스터 피격됨
+	if( bCollision )
+	{
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_HIT );
+
+		// 판다
+		if( m_iMonsterNumber == 0 || m_iMonsterNumber == 1 )
+		{
+			if( FastRand2() < 0.25f )
+			{
+				CSound::GetInstance()->PlayEffect( CSound::EFFECT_PANDA_DAMAGED1 );
+			}
+		}
+		// 삐에로
+		else if( m_iMonsterNumber == 2 )
+		{
+			if( FastRand2() < 0.25f )
+			{
+				CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DAMAGED1 + rand() % 4 );
 			}
 		}
 	}
 
 	CObjectManage::GetInstance()->Send_NetworkSendDestroyData( TRUE, m_iMonsterNumber );
-
+/*
 	CDebugInterface::GetInstance()->AddMessageFloat( "MonsterAngle", m_fAngle );
 
 	static FLOAT fTemp = 11.0f;
 	CDebugInterface::GetInstance()->AddMessageFloat( "TempAngle", fTemp );
-
+*/
 	m_vPreControl = m_vControl;
 	m_vControl += m_vColissionControl;
-
+/*
 	CDebugInterface::GetInstance()->AddMessageVector( "MonsterPos", m_vControl );
 
 	static D3DXVECTOR3 Temp(10.0f,10.0f,10.f);
 	CDebugInterface::GetInstance()->AddMessageVector( "TempPos", Temp );
-
+*/
 	Set_ControlTranslate( 0, m_vControl.x );
 	Set_ControlTranslate( 1, m_vControl.y );
 	Set_ControlTranslate( 2, m_vControl.z );
@@ -1548,6 +1575,8 @@ VOID CMonster::Set_ChaseNextData()
 	m_pChaseNextPath = m_pChaseNextPath->next;
 	if( m_pChaseNextPath->remainedNode <= 0 || m_iChaseTotalPathCnt - m_pChaseNextPath->remainedNode == 10 )
 	{
+		Set_ClearSoundTime();
+
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
 			m_pStateMachine->ChangeState( Seek::GetInstance() );

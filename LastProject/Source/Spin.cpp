@@ -22,7 +22,7 @@ VOID Spin::Enter( CMonster* a_pMonster )
 	CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SPIN_ATTACK \n" );
 #endif
 
-	CSound::GetInstance()->PlayEffect( 0 );
+	CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_LAUGH1 );
 }
 
 
@@ -38,6 +38,8 @@ VOID Spin::Execute( CMonster* a_pMonster )
 
 		// 공격 충돌 박스 생성
 		a_pMonster->CreateAttackBoundBox();
+
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_SWING_BIG );
 	}
 
 	// 공격이 끝났으면

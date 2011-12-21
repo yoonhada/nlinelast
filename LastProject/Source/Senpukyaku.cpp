@@ -21,8 +21,6 @@ VOID Senpukyaku::Enter( CMonster* a_pMonster )
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SENPUKYAKU \n" );
 #endif
-
-	CSound::GetInstance()->PlayEffect( 0 );
 }
 
 
@@ -38,11 +36,13 @@ VOID Senpukyaku::Execute( CMonster* a_pMonster )
 
 		// 공격 충돌 박스 생성
 		a_pMonster->CreateAttackBoundBox();
+
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_SWING_BIG );
 	}
 
 	// 공격이 끝났으면
 	FLOAT t = a_pMonster->Get_Time();
-	if( t >= 2.0f )
+	if( t >= 4.0f )
 	{
 		a_pMonster->Set_ClearTime();
 

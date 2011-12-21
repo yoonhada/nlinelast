@@ -5,7 +5,7 @@
 
 CSound::CSound()
 {
-	m_fBGMVolume	= 0.5f;
+	m_fBGMVolume	= 0.3f;
 	m_fEffectVolume = 1.0f;
 
 	Initialize();
@@ -81,10 +81,13 @@ VOID CSound::LoadSoundFiles()
 	};
 
 	const CHAR* EffectFiles[EFFECT_END] = {
-		"Sound/Effect/drip.wav",
-		"Sound/Effect/drip.wav",
+		"Sound/Effect/ButtonOver.wav",
+		"Sound/Effect/ButtonClicked.wav",
 
-		"Sound/Effect/weapon001.wav",
+		"Sound/Effect/SwingSmall.ogg",
+		"Sound/Effect/SwingBig.ogg",
+
+		"Sound/Effect/Hit.ogg",
 
 		"Sound/Effect/Dad/Dad_Attack1.mp3",
 		"Sound/Effect/Mom/Mom_Attack1.mp3",
@@ -106,17 +109,39 @@ VOID CSound::LoadSoundFiles()
 		"Sound/Effect/Boy/Boy_Damaged2.mp3",
 		"Sound/Effect/Girl/Girl_Damaged2.mp3",
 
-		"Sound/Effect/Panda_Attack.wav",
-		"Sound/Effect/Clown_Attack.wav",
+		"Sound/Effect/Panda/Panda_Attack1.ogg",
+		"Sound/Effect/Panda/Panda_Damaged1.ogg",
 
-		"Sound/Effect/Panda_Damaged.wav",
-		"Sound/Effect/Clown_Damaged.wav",
+		"Sound/Effect/Clown/Clown_Laugh1.ogg",
+		"Sound/Effect/Clown/Clown_Laugh2.ogg",
+		"Sound/Effect/Clown/Clown_Down.ogg",
+		"Sound/Effect/Clown/Clown_Move1.ogg",
+		"Sound/Effect/Clown/Clown_Move2.ogg",
+		"Sound/Effect/Clown/Clown_Move3.ogg",
+		"Sound/Effect/Clown/Clown_Attack1.ogg",
+		"Sound/Effect/Clown/Clown_Attack2.ogg",
+		"Sound/Effect/Clown/Clown_Attack3.ogg",
+		"Sound/Effect/Clown/Clown_Damaged1.ogg",
+		"Sound/Effect/Clown/Clown_Damaged2.ogg",
+		"Sound/Effect/Clown/Clown_Damaged3.ogg",
+		"Sound/Effect/Clown/Clown_Damaged4.ogg",
+		"Sound/Effect/Clown/Clown_Death.ogg",
 
-		"Sound/Effect/Combo_Success.wav",
-		"Sound/Effect/Combo_Fail.wav",
-
-		"Sound/Effect/Event_Baby.wav",
-		"Sound/Effect/Event_Clown.wav",
+		"Sound/Story/Story1.ogg",
+		"Sound/Story/Story2.ogg",
+		"Sound/Story/Story3.ogg",
+		"Sound/Story/Story4.ogg",
+		"Sound/Story/Story5.ogg",
+		"Sound/Story/Story6.ogg",
+		"Sound/Story/Story7.ogg",
+		"Sound/Story/Story8.ogg",
+		"Sound/Story/Story9.ogg",
+		"Sound/Story/Story10.ogg",
+		"Sound/Story/Story11.ogg",
+		"Sound/Story/Story12.ogg",
+		"Sound/Story/Story13.ogg",
+		"Sound/Story/Story14.ogg",
+		"Sound/Story/Story15.ogg",
 	};
 
 	for( INT i=0; i<BGM_END; ++i )

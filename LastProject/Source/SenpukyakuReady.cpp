@@ -21,8 +21,6 @@ VOID SenpukyakuReady::Enter( CMonster* a_pMonster )
 #ifdef _DEBUG
 	CDebugConsole::GetInstance()->Messagef( L"Spin : ANIM_SENPUKYAKU_READY \n" );
 #endif
-
-	CSound::GetInstance()->PlayEffect( 0 );
 }
 
 

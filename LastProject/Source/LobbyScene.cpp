@@ -185,7 +185,6 @@ VOID LobbyScene::Update()
 		}
 
 		m_nCharSelect = dID - LOBBY_SELECT_1;
-		CSound::GetInstance()->PlayEffect( 1 );
 		break;
 
 	}

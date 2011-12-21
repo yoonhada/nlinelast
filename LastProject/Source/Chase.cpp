@@ -31,15 +31,32 @@ VOID Chase::Enter( CMonster* a_pMonster )
 
 VOID Chase::Execute( CMonster* a_pMonster )
 {
+	// 0.5초 마다 발자국 소리
+	a_pMonster->Set_UpdateSoundTime();
+	FLOAT fSoundTime = a_pMonster->Get_SoundTime();
+	if( fSoundTime >= 0.5f )
+	{
+		a_pMonster->Set_ClearSoundTime();
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_MOVE1 + rand() % 3 );
+	}
+
 	a_pMonster->Set_UpdateTime();
 
 	FLOAT t = a_pMonster->Get_Time();
-
 	if( t >= 0.25f )
 	{
 		a_pMonster->Set_ClearTime();
 
 		a_pMonster->Set_ChaseNextData();
+
+		// 10% 확률로 삐에로 웃음소리
+		if( a_pMonster->Get_MonsterNumber() == 2 )
+		{
+			if( FastRand2() < 0.1f )
+			{
+				CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_LAUGH1 );
+			}
+		}
 	}
 	else
 	{

@@ -22,14 +22,7 @@ VOID SpinGroggy::Enter( CMonster* a_pMonster )
 	CDebugConsole::GetInstance()->Messagef( L"Groggy : ANIM_SPIN_GROGGY \n" );
 #endif
 
-	if( a_pMonster->Get_MonsterNumber() == 2 )
-	{
-		CSound::GetInstance()->PlayEffect( 0 );
-	}
-	else
-	{
-		CSound::GetInstance()->PlayEffect( 0 );
-	}
+	CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DOWN );
 }
 
 
@@ -43,7 +36,7 @@ VOID SpinGroggy::Execute( CMonster* a_pMonster )
 	{
 		a_pMonster->Set_ClearTime();
 
-		// 호스트이면 탐색 상태로
+		// 호스트이면 대기 상태로
 		if( CObjectManage::GetInstance()->IsHost() == TRUE )
 		{
 			a_pMonster->GetFSM()->ChangeState( Stand::GetInstance() );
@@ -52,6 +45,8 @@ VOID SpinGroggy::Execute( CMonster* a_pMonster )
 		{
 			a_pMonster->GetFSM()->ChangeState( NULL );
 		}
+
+		CSound::GetInstance()->PlayEffect( CSound::EFFECT_CLOWN_DOWN );
 	}
 }
 
