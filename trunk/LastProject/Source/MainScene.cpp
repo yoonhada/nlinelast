@@ -962,6 +962,8 @@ VOID CMainScene::EventSwitch( INT nEvent )
 		//CDebugConsole::GetInstance()->Message( "CGameEvent::GAME_WIN_END \n" );
 		m_pGameEvent->ClearEvent();
 		GamePoint( nEvent );
+		CSound::GetInstance()->StopBGM( CSound::BGM_PIERO );
+		CSound::GetInstance()->PlayBGM( CSound::BGM_VICTORY );
 		break;
 	case CGameEvent::GAME_LOSE_END:		
 		m_pGameEvent->ClearEvent();
@@ -1013,9 +1015,6 @@ VOID CMainScene::GameEnd()
 	CNetwork::DestoryInstance();
 
 	EventInitGameState( CGameEvent::GAME_END);
-
-	CSound::GetInstance()->PlayBGM( CSound::BGM_PIERO );
-	CSound::GetInstance()->PlayBGM( CSound::BGM_VICTORY );
 }
 
 VOID CMainScene::EventStateNetwork( INT nEvent )

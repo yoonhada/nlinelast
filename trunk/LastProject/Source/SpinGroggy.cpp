@@ -30,7 +30,7 @@ VOID SpinGroggy::Execute( CMonster* a_pMonster )
 {
 	static FLOAT fTime = 0.0f;
 	fTime += CFrequency::GetInstance()->getFrametime();
-	if( fTime >= 1.2f )
+	if( fTime >= 1.01f )
 	{
 		fTime = 0.0f;
 

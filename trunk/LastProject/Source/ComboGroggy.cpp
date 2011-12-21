@@ -26,7 +26,7 @@ VOID ComboGroggy::Enter( CMonster* a_pMonster )
 
 VOID ComboGroggy::Execute( CMonster* a_pMonster )
 {
-	static fTime = 0.0f;
+	static FLOAT fTime = 0.0f;
 	fTime += CFrequency::GetInstance()->getFrametime();
 	if( fTime >= 3.5f )
 	{
