@@ -250,7 +250,8 @@ BOOL GUIEdit::OnUp( INT _iX, INT _iY )
 	}
 	else
 	{
-		EnableFocus( FALSE );
+		if( m_bFocus != FALSE )
+			EnableFocus( FALSE );
 	}
 
 	return FALSE;
