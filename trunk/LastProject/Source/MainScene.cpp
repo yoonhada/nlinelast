@@ -704,22 +704,23 @@ VOID CMainScene::EventSceneTutorial( INT nEvent )
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_FAIL, fComboTime );
-				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + 5.0f );
+				//CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, fComboTime + 5.0f );
 			}
 		}		
 		break;
-	case CGameEvent::EVENT_COMBO_FAIL:		
+	case CGameEvent::EVENT_COMBO_FAIL:
 	case CGameEvent::TUTORIAL_COMBO_FAIL:		
 		CDebugConsole::GetInstance()->Message( "CGameEvent::TUTORIAL_COMBO_FAIL \n" );
 		if ( CGameEvent::GetInstance()->GetTutorial() == CGameEvent::TUTORIAL_COMBO )
 		{
-			CGameEvent::GetInstance()->SetTutorial( nEvent );
-			EventStateNetwork( nEvent );			
+			CGameEvent::GetInstance()->SetTutorial( CGameEvent::TUTORIAL_COMBO_FAIL );
+			EventStateNetwork( CGameEvent::TUTORIAL_COMBO_FAIL );			
 			m_pEventGUICombo->Fail();
 
 			if ( CObjectManage::GetInstance()->IsHost() )
 			{
 				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO_END, 3.0f );
+				CGameEvent::GetInstance()->AddEvent( CGameEvent::TUTORIAL_COMBO, 5.0f );
 			}
 		}
 		break;
