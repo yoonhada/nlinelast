@@ -165,7 +165,7 @@ HRESULT CMainScene::Release()
 	SAFE_DELETE( m_pGameEventTutorialManager );
 	SAFE_DELETE( m_pEventGUICombo );
 
-	CSound::GetInstance()->StopBGM( CSound::BGM_GAME );
+	CSound::GetInstance()->StopBGM( CSound::BGM_VICTORY );
 
 	return S_OK;
 }
@@ -1013,6 +1013,9 @@ VOID CMainScene::GameEnd()
 	CNetwork::DestoryInstance();
 
 	EventInitGameState( CGameEvent::GAME_END);
+
+	CSound::GetInstance()->PlayBGM( CSound::BGM_PIERO );
+	CSound::GetInstance()->PlayBGM( CSound::BGM_VICTORY );
 }
 
 VOID CMainScene::EventStateNetwork( INT nEvent )
